@@ -1,88 +1,57 @@
-Return-Path: <linux-mips+bounces-13382-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-13383-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id uCvDKyGhqWnGAwEAu9opvQ
-	(envelope-from <linux-mips+bounces-13382-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Thu, 05 Mar 2026 16:28:33 +0100
+	id aG3XFsMYqmlfLAEAu9opvQ
+	(envelope-from <linux-mips+bounces-13383-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Fri, 06 Mar 2026 00:58:59 +0100
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1D064214857
-	for <lists+linux-mips@lfdr.de>; Thu, 05 Mar 2026 16:28:33 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5C92221994F
+	for <lists+linux-mips@lfdr.de>; Fri, 06 Mar 2026 00:58:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id A8AC33019FEE
-	for <lists+linux-mips@lfdr.de>; Thu,  5 Mar 2026 15:25:44 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 88ED83004D2E
+	for <lists+linux-mips@lfdr.de>; Thu,  5 Mar 2026 23:58:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4F5E13A1CFE;
-	Thu,  5 Mar 2026 15:25:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BBD7135AC23;
+	Thu,  5 Mar 2026 23:58:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nroach44.id.au header.i=@nroach44.id.au header.b="j93PyeIa";
-	dkim=pass (2048-bit key) header.d=nroach44.id.au header.i=@nroach44.id.au header.b="j93PyeIa";
-	dkim=pass (2048-bit key) header.d=nroach44.id.au header.i=@nroach44.id.au header.b="j6HEjp58"
+	dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b="Tvl2j1qU"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from arcturus.nroach44.id.au (arcturus.nroach44.id.au [45.32.188.33])
+Received: from mail.zytor.com (terminus.zytor.com [198.137.202.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0DBE137BE99;
-	Thu,  5 Mar 2026 15:25:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.32.188.33
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C1641C8604;
+	Thu,  5 Mar 2026 23:58:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.136
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772724342; cv=none; b=l4+wipB9lVpDJfHdBCXds7Z8s6ZnvLimM8DQXRWmQvkUUv3xLCAlcltVo2+0j+QeDPpw1Yyjh1V64TsTf+1vQFhkf4Xvhac8kFdvJsK3LxwdehClYtUJU4sSwu5eW8Q+ISeOnu1bk7EIZrx3EDl3Yw8J4qAYoHtFNFAMOkJeXC0=
+	t=1772755133; cv=none; b=D5l+i0EawE79q3VKc/LV1SfdvJ2aX42twEQYA+CJNH69XX3gk2tNQNjNdIoEsdo9HGMi/4frIuEHA89E+8oG4mHRPsCP8ax++jougCdfKzgX+EzyEDoqPm4mO+n8IQL541NxwFzR/0Tr9pSeGHKQfgO1dUW4Dn1A4O2i65936Qs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772724342; c=relaxed/simple;
-	bh=YYARtrHKCTb0FOK3T5y+Ihj4HwkDUufhHFrwTteinjk=;
+	s=arc-20240116; t=1772755133; c=relaxed/simple;
+	bh=u0ruzJeL3Oj2CLeQWfVQGRmFR0siTaOoU1kaON5tpco=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=PtCXEyOEcsivj9Wc/3NtWbU4hWCBsZGW7Vfeov0lD8wl54uB9j7BFpuL4UhxJeg+7rmf6SWohvzrRDzzUpCI5RWVB3MahuMi78G1cMtM7cDrORYbPYKR8sRteqMm8wWqwyhnWP0WHvrzS4/cVbjpaNbijTho+VGEOPp/XA3nc2s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=nroach44.id.au; spf=pass smtp.mailfrom=nroach44.id.au; dkim=pass (2048-bit key) header.d=nroach44.id.au header.i=@nroach44.id.au header.b=j93PyeIa; dkim=pass (2048-bit key) header.d=nroach44.id.au header.i=@nroach44.id.au header.b=j93PyeIa; dkim=pass (2048-bit key) header.d=nroach44.id.au header.i=@nroach44.id.au header.b=j6HEjp58; arc=none smtp.client-ip=45.32.188.33
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=nroach44.id.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nroach44.id.au
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=nroach44.id.au;
-	s=dYX2HNEqNNRL; t=1772723874;
-	bh=YYARtrHKCTb0FOK3T5y+Ihj4HwkDUufhHFrwTteinjk=;
+	 In-Reply-To:Content-Type; b=JQv3bGOTUi6DwYbJXc9A+Vs1FrYDqosWQ+vo9s6YAa+LG8NMDJcLUE2m5RlwU1HDWUUjFKnuTcysrJjjpXcO3EKk2W+k6KMY0pU4fLECt/Hhq7F5Lf7CJjzEjNad8uq9K0meRAb323dTYaecmXAcPcpuLe79NRBIiow9KmJ/caI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com; spf=pass smtp.mailfrom=zytor.com; dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b=Tvl2j1qU; arc=none smtp.client-ip=198.137.202.136
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zytor.com
+Received: from [172.27.2.41] (c-76-133-66-138.hsd1.ca.comcast.net [76.133.66.138])
+	(authenticated bits=0)
+	by mail.zytor.com (8.18.1/8.17.1) with ESMTPSA id 625Nw4w04152111
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
+	Thu, 5 Mar 2026 15:58:06 -0800
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 625Nw4w04152111
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
+	s=2026022301; t=1772755088;
+	bh=qJtO9dV/a12LOlMN5IETBh0hhQHpj32DpsR053nFryw=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=j93PyeIa/hxoYbwJlySesQT/hFW0bGnjxUp7PlaU1q9wLYvh5tZuSAvv70c9Xo97V
-	 i0SruMJ0Aqkg6uWPmI7WYOVKXJenYEdOYIWKtc3Spc7eBvxarkFKh8KHnB/tYFYWv/
-	 Ky/buNeoRpU30D5NW43F3c0QCIXrhM61fBeEYHJLtLW+stjkIaV5Bo7a70j6qppEuJ
-	 qVEGMPUNxHVlhOOTVilrGfhIJQxOi6A3uGZ/iNbaeysJGcCvVcpTvdwJm08RifXh5y
-	 DTErYcQmsuHkJKTw5r7BOKvp96+v/VzByzoz0Aj2h0iHWH+P5DdEAvAUFhJKsvWQ91
-	 NX9T1XyUjt9dQ==
-Received: from arcturus.nroach44.id.au (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
-	(No client certificate requested)
-	by arcturus.nroach44.id.au (Postfix) with ESMTPS id 969113115A;
-	Thu,  5 Mar 2026 23:17:54 +0800 (AWST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=nroach44.id.au;
-	s=dYX2HNEqNNRL; t=1772723874;
-	bh=YYARtrHKCTb0FOK3T5y+Ihj4HwkDUufhHFrwTteinjk=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=j93PyeIa/hxoYbwJlySesQT/hFW0bGnjxUp7PlaU1q9wLYvh5tZuSAvv70c9Xo97V
-	 i0SruMJ0Aqkg6uWPmI7WYOVKXJenYEdOYIWKtc3Spc7eBvxarkFKh8KHnB/tYFYWv/
-	 Ky/buNeoRpU30D5NW43F3c0QCIXrhM61fBeEYHJLtLW+stjkIaV5Bo7a70j6qppEuJ
-	 qVEGMPUNxHVlhOOTVilrGfhIJQxOi6A3uGZ/iNbaeysJGcCvVcpTvdwJm08RifXh5y
-	 DTErYcQmsuHkJKTw5r7BOKvp96+v/VzByzoz0Aj2h0iHWH+P5DdEAvAUFhJKsvWQ91
-	 NX9T1XyUjt9dQ==
-Received: by arcturus.nroach44.id.au (Postfix, from userid 5555)
-	id 7C45E31155; Thu,  5 Mar 2026 23:17:54 +0800 (AWST)
-X-Spam-Level: 
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=nroach44.id.au;
-	s=dYX2HNEqNNRL; t=1772723852;
-	bh=YYARtrHKCTb0FOK3T5y+Ihj4HwkDUufhHFrwTteinjk=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=j6HEjp58CAncqr+uwXPGkZ8lbR369/LG+98D/0XTHkVG3l29sNkU52WgCB9M9dhew
-	 gfYeHT+jf9fW3OfG/GF2ck8167gHXSBgmfi6zT9ikR3LMg0qsPoY8nZSWjrMI8OJMj
-	 kMd1y8ytlCPRepikIB3G0QISj/p2xbEqBa0pK59UYEzty8JgqZBIuj16Yj6eh2Rwin
-	 RqmxUyGdqP+iWTSqkWn4TEleHa5tBEEY1MFUvIEGuDv8GfTrCrGQcMjfyPuSXM+3gd
-	 YedViadoD7BXyM4xh27Cob7Y7tDuZ5rBOkg4Zdw1yQSY4SCVwDPQ2Y427CbPT0C5YX
-	 UV5C2DMMj3FPw==
-Received: from [IPV6:2403:5814:4228:10:6097:a659:11f5:50c] (unknown [IPv6:2403:5814:4228:10:6097:a659:11f5:50c])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
-	(No client certificate requested)
-	by arcturus.nroach44.id.au (Postfix) with ESMTPSA id 3DB73308D6;
-	Thu,  5 Mar 2026 23:17:30 +0800 (AWST)
-Message-ID: <9dfc93b5-8269-4c72-aedc-2a1d5311b4a5@nroach44.id.au>
-Date: Thu, 5 Mar 2026 23:17:28 +0800
+	b=Tvl2j1qUAzEOzpzYcXQS0HDWX3adrrEh8wGU4v6g3BKySEWm3C2C7N7KAEslkCD/E
+	 j0mWPPahQcrnUpYonuB/XqRZBRARS5nEmqhvWuzwTipZgTaSbKeFgyWaowiUd42153
+	 W7MStsBNkxFELd7Ua0ug4CAdu1aF7aWnHPLKAnKGLgvygP3YPLayYTvsiXAb3FaFZT
+	 JKrUtuYJyk4iWE4XrNI9xqZLO4q9kEtp3+p0jqjDQ721IZmuf1wgsaxQhQozEAFd76
+	 RGAdRJL6GAk2KUvF8L9JrLDfa7jSFNoyWL3JroGMHmBAm94WVUO71tOQTKh8CZxiYj
+	 iqR+oML2O5VlA==
+Message-ID: <2e609a1b-62de-4688-b363-58025ab9e703@zytor.com>
+Date: Thu, 5 Mar 2026 15:57:59 -0800
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -90,182 +59,108 @@ List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v6 00/14] sparc64: vdso: Switch to the generic vDSO
- library
-To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>,
- Andy Lutomirski <luto@kernel.org>,
- Vincenzo Frascino <vincenzo.frascino@arm.com>, Arnd Bergmann
- <arnd@arndb.de>, "David S. Miller" <davem@davemloft.net>,
- Andreas Larsson <andreas@gaisler.com>, Nick Alcock <nick.alcock@oracle.com>,
- John Stultz <jstultz@google.com>, Stephen Boyd <sboyd@kernel.org>,
- John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
- Shuah Khan <shuah@kernel.org>, Catalin Marinas <catalin.marinas@arm.com>,
- Will Deacon <will@kernel.org>, Theodore Ts'o <tytso@mit.edu>,
- "Jason A. Donenfeld" <Jason@zx2c4.com>, Russell King
- <linux@armlinux.org.uk>, Madhavan Srinivasan <maddy@linux.ibm.com>,
- Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>,
- Huacai Chen <chenhuacai@kernel.org>, WANG Xuerui <kernel@xen0n.name>,
- Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
- Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>,
- Alexander Gordeev <agordeev@linux.ibm.com>,
- Christian Borntraeger <borntraeger@linux.ibm.com>,
- Sven Schnelle <svens@linux.ibm.com>, Shannon Nelson <sln@onemain.com>,
- Thomas Gleixner <tglx@kernel.org>, Christophe Leroy <chleroy@kernel.org>
-Cc: linux-kernel@vger.kernel.org, sparclinux@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
- linux-mips@vger.kernel.org, linux-s390@vger.kernel.org,
- Arnd Bergmann <arnd@kernel.org>
-References: <20260304-vdso-sparc64-generic-2-v6-0-d8eb3b0e1410@linutronix.de>
-Content-Language: en-US
-From: Nathaniel Roach <nroach44@nroach44.id.au>
-In-Reply-To: <20260304-vdso-sparc64-generic-2-v6-0-d8eb3b0e1410@linutronix.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Subject: Re: [PATCH 1/7] x86/vdso: Respect COMPAT_32BIT_TIME
+To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
+Cc: Arnd Bergmann <arnd@arndb.de>, Andy Lutomirski <luto@kernel.org>,
+        Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Madhavan Srinivasan <maddy@linux.ibm.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <chleroy@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linuxppc-dev@lists.ozlabs.org, linux-mips@vger.kernel.org
+References: <20260227-vdso-compat_32bit_time-v1-0-3f0286a7bac3@linutronix.de>
+ <20260227-vdso-compat_32bit_time-v1-1-3f0286a7bac3@linutronix.de>
+ <c29f5e70-bd17-4e1b-a005-5a3282e70075@app.fastmail.com>
+ <03cd1e21-a2f2-46a1-a674-cbaef9712016@app.fastmail.com>
+ <20260227103226-cc3bb32c-0107-4c09-b81a-ca33ea03ad5c@linutronix.de>
+ <49b7c9f9-198a-49f7-880b-6ae74d7bd985@zytor.com>
+ <20260304081505-a2a3a376-20c9-46cb-8dc9-2c4deec1a55e@linutronix.de>
+ <6909A81E-AE50-459C-9604-3EEAEFE3838E@zytor.com>
+ <20260305080950-ff43457b-0551-480f-916e-6c252e6a64af@linutronix.de>
+Content-Language: en-US, sv-SE
+From: "H. Peter Anvin" <hpa@zytor.com>
+In-Reply-To: <20260305080950-ff43457b-0551-480f-916e-6c252e6a64af@linutronix.de>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Rspamd-Queue-Id: 1D064214857
+X-Rspamd-Queue-Id: 5C92221994F
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[nroach44.id.au,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
-	R_DKIM_ALLOW(-0.20)[nroach44.id.au:s=dYX2HNEqNNRL];
+	DMARC_POLICY_ALLOW(-0.50)[zytor.com,none];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
+	R_DKIM_ALLOW(-0.20)[zytor.com:s=2026022301];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-13382-lists,linux-mips=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	FREEMAIL_TO(0.00)[linutronix.de,kernel.org,arm.com,arndb.de,davemloft.net,gaisler.com,oracle.com,google.com,physik.fu-berlin.de,mit.edu,zx2c4.com,armlinux.org.uk,linux.ibm.com,ellerman.id.au,gmail.com,xen0n.name,alpha.franken.de,onemain.com];
+	TAGGED_FROM(0.00)[bounces-13383-lists,linux-mips=lfdr.de];
+	RCVD_COUNT_THREE(0.00)[4];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	DKIM_TRACE(0.00)[nroach44.id.au:+];
-	RCPT_COUNT_TWELVE(0.00)[39];
+	FREEMAIL_CC(0.00)[arndb.de,kernel.org,redhat.com,alien8.de,linux.intel.com,armlinux.org.uk,arm.com,linux.ibm.com,ellerman.id.au,gmail.com,alpha.franken.de,vger.kernel.org,lists.infradead.org,lists.ozlabs.org];
+	RCPT_COUNT_TWELVE(0.00)[21];
 	MIME_TRACE(0.00)[0:+];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	FROM_HAS_DN(0.00)[];
-	TO_DN_SOME(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[6];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[nroach44@nroach44.id.au,linux-mips@vger.kernel.org];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
-	TAGGED_RCPT(0.00)[linux-mips];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[hpa@zytor.com,linux-mips@vger.kernel.org];
+	DKIM_TRACE(0.00)[zytor.com:+];
 	MID_RHS_MATCH_FROM(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[nroach44.id.au:dkim,nroach44.id.au:email,nroach44.id.au:mid,tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo,linutronix.de:email]
+	TAGGED_RCPT(0.00)[linux-mips];
+	TO_DN_SOME(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[zytor.com:dkim,zytor.com:mid,sin.lore.kernel.org:rdns,sin.lore.kernel.org:helo]
 X-Rspamd-Action: no action
 
-No (new) issues seen on SPARC T5-2.
+On 2026-03-05 01:24, Thomas Weißschuh wrote:
+> 
+>> Weak references would be a way to work around the link failures. 
+> 
+> I am still not sure where "the link failures" should be coming from.
+> The only sense I can make out of it, is if somebody manually and directly links
+> to vdso.so. Like in the following example:
+> 
+> $ cat test.c 
+> #include <stdio.h>
+> 
+> #include <linux/time.h>
+> 
+> int __vdso_clock_gettime(__kernel_clockid_t clock, struct __kernel_timespec *ts);
+> 
+> int main(void)
+> {
+> 	struct __kernel_timespec ts;
+> 	int ret;
+> 
+> 	printf("__vdso_clock_gettime=%p\n", __vdso_clock_gettime);
+> 
+> 	ret = __vdso_clock_gettime(CLOCK_REALTIME, &ts);
+> 	printf("ret=%d\n", ret);
+> }
+> $ gcc test.c /lib/modules/$(uname -r)/vdso/vdso64.so
+> $ ./a.out 
+> __vdso_clock_gettime=0x7ff6ba2eeb80
+> ret=0
+> 
+> This actually works on glibc (not on musl). But it is highly non-standard and
+> relies on multiple implementation details. Furthermore it can fail to run on
+> systems without a vDSO, as mentioned before.
+> 
+> Is this the usage pattern you have in mind?
+> Do you know of anybody doing things this way?
+> 
 
-On 4/3/26 15:48, Thomas Weißschuh wrote:
-> The generic vDSO provides a lot common functionality shared between
-> different architectures. SPARC is the last architecture not using it,
-> preventing some necessary code cleanup.
->
-> Make use of the generic infrastructure.
->
-> Follow-up to and replacement for Arnd's SPARC vDSO removal patches:
-> https://lore.kernel.org/lkml/20250707144726.4008707-1-arnd@kernel.org/
->
-> SPARC64 can not map .bss into userspace, so the vDSO datapages are
-> switched over to be allocated dynamically.
->
-> Tested on a Niagara T4 and QEMU.
->
-> This has emantic conflicts with
-> * "vdso: Reject absolute relocations during build" [0]
-> * "vDSO: Respect COMPAT_32BIT_TIME" [1]
->
-> But I expect both other serieses to need more discussions.
->
-> [0] https://lore.kernel.org/lkml/20250812-vdso-absolute-reloc-v4-0-61a8b615e5ec@linutronix.de/
-> [1] https://lore.kernel.org/lkml/20260227-vdso-compat_32bit_time-v1-0-3f0286a7bac3@linutronix.de/
->
-> Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
-Tested-by: Nathaniel Roach <nroach44@nroach44.id.au> # SPARC T5-2
-> ---
-> Changes in v6:
-> - Provide statically allocated during early boot to avoid canges to the rng core
-> - Use non-compound data pages
-> - Reword commit messages
-> - Rebase on v7.0-rc1
-> - Link to v5: https://lore.kernel.org/r/20251106-vdso-sparc64-generic-2-v5-0-97ff2b6542f7@linutronix.de
->
-> Changes in v5:
-> - Merge the patches for 'struct page' mapping and dynamic allocation
-> - Zero out newly-allocated data pages
-> - Pick up review tags
-> - Link to v4: https://lore.kernel.org/r/20251014-vdso-sparc64-generic-2-v4-0-e0607bf49dea@linutronix.de
->
-> Changes in v4:
-> - Rebase on v6.18-rc1.
-> - Keep inclusion of asm/clocksource.h from linux/clocksource.h
-> - Reword description of "s390/time: Set up vDSO datapage later"
-> - Link to v3: https://lore.kernel.org/r/20250917-vdso-sparc64-generic-2-v3-0-3679b1bc8ee8@linutronix.de
->
-> Changes in v3:
-> - Allocate vDSO data pages dynamically (and lots of preparations for that)
-> - Drop clock_getres()
-> - Fix 32bit clock_gettime() syscall fallback
-> - Link to v2: https://lore.kernel.org/r/20250815-vdso-sparc64-generic-2-v2-0-b5ff80672347@linutronix.de
->
-> Changes in v2:
-> - Rebase on v6.17-rc1
-> - Drop RFC state
-> - Fix typo in commit message
-> - Drop duplicate 'select GENERIC_TIME_VSYSCALL'
-> - Merge "sparc64: time: Remove architecture-specific clocksource data" into the
->    main conversion patch. It violated the check in __clocksource_register_scale()
-> - Link to v1: https://lore.kernel.org/r/20250724-vdso-sparc64-generic-2-v1-0-e376a3bd24d1@linutronix.de
->
-> ---
-> Arnd Bergmann (1):
->        clocksource: remove ARCH_CLOCKSOURCE_DATA
->
-> Thomas Weißschuh (13):
->        vdso/datastore: Reduce scope of some variables in vvar_fault()
->        vdso/datastore: Drop inclusion of linux/mmap_lock.h
->        vdso/datastore: Allocate data pages dynamically
->        sparc64: vdso: Link with -z noexecstack
->        sparc64: vdso: Remove obsolete "fake section table" reservation
->        sparc64: vdso: Replace code patching with runtime conditional
->        sparc64: vdso: Move hardware counter read into header
->        sparc64: vdso: Move syscall fallbacks into header
->        sparc64: vdso: Introduce vdso/processor.h
->        sparc64: vdso: Switch to the generic vDSO library
->        sparc64: vdso2c: Drop sym_vvar_start handling
->        sparc64: vdso2c: Remove symbol handling
->        sparc64: vdso: Implement clock_gettime64()
->
->   arch/sparc/Kconfig                         |   3 +-
->   arch/sparc/include/asm/clocksource.h       |   9 -
->   arch/sparc/include/asm/processor.h         |   3 +
->   arch/sparc/include/asm/processor_32.h      |   2 -
->   arch/sparc/include/asm/processor_64.h      |  25 --
->   arch/sparc/include/asm/vdso.h              |   2 -
->   arch/sparc/include/asm/vdso/clocksource.h  |  10 +
->   arch/sparc/include/asm/vdso/gettimeofday.h | 184 ++++++++++++++
->   arch/sparc/include/asm/vdso/processor.h    |  41 ++++
->   arch/sparc/include/asm/vdso/vsyscall.h     |  10 +
->   arch/sparc/include/asm/vvar.h              |  75 ------
->   arch/sparc/kernel/Makefile                 |   1 -
->   arch/sparc/kernel/time_64.c                |   6 +-
->   arch/sparc/kernel/vdso.c                   |  69 ------
->   arch/sparc/vdso/Makefile                   |   8 +-
->   arch/sparc/vdso/vclock_gettime.c           | 380 ++---------------------------
->   arch/sparc/vdso/vdso-layout.lds.S          |  26 +-
->   arch/sparc/vdso/vdso.lds.S                 |   2 -
->   arch/sparc/vdso/vdso2c.c                   |  24 --
->   arch/sparc/vdso/vdso2c.h                   |  45 +---
->   arch/sparc/vdso/vdso32/vdso32.lds.S        |   4 +-
->   arch/sparc/vdso/vma.c                      | 274 ++-------------------
->   include/linux/clocksource.h                |   6 +-
->   include/linux/vdso_datastore.h             |   6 +
->   init/main.c                                |   2 +
->   kernel/time/Kconfig                        |   4 -
->   lib/vdso/datastore.c                       |  97 +++++---
->   27 files changed, 375 insertions(+), 943 deletions(-)
-> ---
-> base-commit: f02e02079ac56b44ff89d4c2189cf7185ab794f3
-> change-id: 20250722-vdso-sparc64-generic-2-25f2e058e92c
->
-> Best regards,
+Yes, and yes, I do.
+
+	-hpa
+
 
