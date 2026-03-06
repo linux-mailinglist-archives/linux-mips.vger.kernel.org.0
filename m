@@ -1,156 +1,174 @@
-Return-Path: <linux-mips+bounces-13385-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-13386-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id eA6DBRCiqmlLUgEAu9opvQ
-	(envelope-from <linux-mips+bounces-13385-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Fri, 06 Mar 2026 10:44:48 +0100
+	id YM2QDyWkqml6UwEAu9opvQ
+	(envelope-from <linux-mips+bounces-13386-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Fri, 06 Mar 2026 10:53:41 +0100
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8288B21E262
-	for <lists+linux-mips@lfdr.de>; Fri, 06 Mar 2026 10:44:47 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id B097821E40F
+	for <lists+linux-mips@lfdr.de>; Fri, 06 Mar 2026 10:53:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 1D27A3079E04
-	for <lists+linux-mips@lfdr.de>; Fri,  6 Mar 2026 09:42:31 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 20750300D151
+	for <lists+linux-mips@lfdr.de>; Fri,  6 Mar 2026 09:53:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D2C2133DEFC;
-	Fri,  6 Mar 2026 09:42:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6813134CFBD;
+	Fri,  6 Mar 2026 09:53:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="TM4Rdzu3";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="oyC+xISo"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="I4rHZx4z"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04CCD346A1F;
-	Fri,  6 Mar 2026 09:42:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 873D234BA24
+	for <linux-mips@vger.kernel.org>; Fri,  6 Mar 2026 09:53:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.84.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772790149; cv=none; b=savcRgxf9Ugj89j7ZN1jRgnCd6OZWe1O4YVstwiNq4oeEh3txWkQwUMzYXHUBi6U1A0MCQ9WE7pnNewt9TiFEOQM90H2O6VRyoET2SDu0jxtsVB7bS+3gAbzibpbit+cq1GrsD7Jm5q4LNGcPORrtPde4AhraS/2txFddfg33ls=
+	t=1772790818; cv=none; b=s6aRMa5HZZNH90FadoA6WOVtFsYphFSJUuKrNLmmHv+rf+fTaxnFnbye59AH6qfomFl1bA0BlJArE4S/MzvIv/QibG1es2vHTdHXw0CsevkNaFExnTmTIRfCtVV0DN8S3yUM7HKmPAaOMiBaMqwsw8zgjjO/e07m6gcLWegFODY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772790149; c=relaxed/simple;
-	bh=l6/+FLfbq6/klEmgA7dAJy4HabCQKDwdeXH2tR6UEwc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=OwanlCakSQ4P9KIgCNjR9hEZrAUylwRiUbppI00ZGyLJ6DQNtaRQM5UGkQV4ubKxiVAy+xp6m8VLid6niOTqPaAwNzF+IczlVEvuRwuWUIM7JTeiusza8KNE+gFBcgsmkJwww4IbKO6Qo1jTvFXpby0IBx/53WfJv5SjmxDhaa4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=TM4Rdzu3; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=oyC+xISo; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
-Date: Fri, 6 Mar 2026 10:42:25 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1772790145;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=c5VUW8trjR/pt+wAGhG4nPXpBxsgItrdqPqtSJUhNGo=;
-	b=TM4Rdzu39Bd9EAADRCXrB648dHPFDbYqmHJbCPos+LO9cH+N8pmFEyN+hOFtV9Kt8vFREp
-	Vz2d+r04CS5ZPWOfQLcxGiyBvVHBxYRUtF0f1J9roudzSb1xR2chbQbxJSmHaEE+zr5Dkh
-	L980N3PTaFG/bNJvDDtnHT5s+qCpSi2kJ0polx7Ls3enbAQiD1TTXRK44vYDO2YjkASHPU
-	NcseRSNfevWaqtFyIOePiKkptS7YvDO+KHjX9sQrWXgbEsq3RysABGWDsVTq2zH0syqzaW
-	c2ZSYUco1APMwU44ZlLCRzJW8URBj5+vvYNvPlfpPRcw72zg8BDv8lqMl8a+Rw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1772790145;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=c5VUW8trjR/pt+wAGhG4nPXpBxsgItrdqPqtSJUhNGo=;
-	b=oyC+xISo6E2zXVjIcJcEaqD5pbEEgZsXJW0zYYh1sU9SGKFdilGyiunD6wDIAtY/VR2cdj
-	CPkN1r8IejPumgBA==
-From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-To: "H. Peter Anvin" <hpa@zytor.com>
-Cc: Arnd Bergmann <arnd@arndb.de>, Andy Lutomirski <luto@kernel.org>, 
-	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, Russell King <linux@armlinux.org.uk>, 
-	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
-	Madhavan Srinivasan <maddy@linux.ibm.com>, Michael Ellerman <mpe@ellerman.id.au>, 
-	Nicholas Piggin <npiggin@gmail.com>, Christophe Leroy <chleroy@kernel.org>, 
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, Vincenzo Frascino <vincenzo.frascino@arm.com>, 
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linuxppc-dev@lists.ozlabs.org, linux-mips@vger.kernel.org
-Subject: Re: [PATCH 1/7] x86/vdso: Respect COMPAT_32BIT_TIME
-Message-ID: <20260306103113-ae63c668-2921-4ac1-84f6-35fbc8a6397d@linutronix.de>
-References: <20260227-vdso-compat_32bit_time-v1-0-3f0286a7bac3@linutronix.de>
- <20260227-vdso-compat_32bit_time-v1-1-3f0286a7bac3@linutronix.de>
- <c29f5e70-bd17-4e1b-a005-5a3282e70075@app.fastmail.com>
- <03cd1e21-a2f2-46a1-a674-cbaef9712016@app.fastmail.com>
- <20260227103226-cc3bb32c-0107-4c09-b81a-ca33ea03ad5c@linutronix.de>
- <49b7c9f9-198a-49f7-880b-6ae74d7bd985@zytor.com>
- <20260304081505-a2a3a376-20c9-46cb-8dc9-2c4deec1a55e@linutronix.de>
- <6909A81E-AE50-459C-9604-3EEAEFE3838E@zytor.com>
- <20260305080950-ff43457b-0551-480f-916e-6c252e6a64af@linutronix.de>
- <2e609a1b-62de-4688-b363-58025ab9e703@zytor.com>
+	s=arc-20240116; t=1772790818; c=relaxed/simple;
+	bh=MGscHgx6g0Kyjb/Dbg7zd1PKMmnGEYmPerQWSUJ4YSw=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Subject:Cc:To:From:
+	 References:In-Reply-To; b=H0t+l50yrYjEP663pP9udPvOnjsySIdggnzImGVp2vuOyIWRd4IOWluT7fOlbSWPXTac/WEUBzZkVmRKFp2xP0gwn9+IqvB3NUXPoH2Xjml9gWhxGOPcAwrgHnhAq2eFnEM5jeVclJTfw+pujoduf6HjATn/E67gL0almQQxt6Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=I4rHZx4z; arc=none smtp.client-ip=185.246.84.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+	by smtpout-02.galae.net (Postfix) with ESMTPS id 0FF9B1A2D21;
+	Fri,  6 Mar 2026 09:53:35 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+	by smtpout-01.galae.net (Postfix) with ESMTPS id CD9DC5FF92;
+	Fri,  6 Mar 2026 09:53:34 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 76EE0103686D3;
+	Fri,  6 Mar 2026 10:53:31 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
+	t=1772790814; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 content-transfer-encoding:in-reply-to:references;
+	bh=5RJBgtzNyxvtnzocOQgo9J2Pq7huKj3drCoezVGyEt0=;
+	b=I4rHZx4zGkNwJX3sRziLW8/w48B7XzfTTIdpDtB9Z/DVZ0Qkzw7VFGCNFFfMN5GMhvVQT/
+	UAWgtlf9Lh77mCcTwttMWQXMmcbBVGjgYuJ/kwV0N9wIkzW+uGcRC5vl66xy16DxnxnROA
+	6vpf5SV7c6/w2V7/RKwuE4J2Gv8FXh2EQK1+fhskQ2rqVyPo72Gh5FcTzY8uMDI0jDyNpD
+	HAZyMCQQlpsliKjhdIBgaSWX2xeryvcWRoznyPLj1wnP3wL8Go53J3aZ/lNAESLP/tbgnm
+	p0qVN/N1Y63MR1jbTPX9EOrYU2kDo9P0wqK1R9BDDBijEA1Ty3hbyCIuS+kkqA==
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <2e609a1b-62de-4688-b363-58025ab9e703@zytor.com>
-X-Rspamd-Queue-Id: 8288B21E262
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Fri, 06 Mar 2026 10:53:30 +0100
+Message-Id: <DGVLW7BWVMKI.2VNIVUKG4DAUA@bootlin.com>
+Subject: Re: [PATCH v7 2/2] phy: Add driver for EyeQ5 Ethernet PHY wrapper
+Cc: "Vinod Koul" <vkoul@kernel.org>, "Neil Armstrong"
+ <neil.armstrong@linaro.org>, <linux-phy@lists.infradead.org>,
+ <linux-kernel@vger.kernel.org>, <linux-mips@vger.kernel.org>, "Vladimir
+ Kondratiev" <vladimir.kondratiev@mobileye.com>, "Gregory CLEMENT"
+ <gregory.clement@bootlin.com>, =?utf-8?q?Beno=C3=AEt_Monin?=
+ <benoit.monin@bootlin.com>, "Tawfik Bayouk" <tawfik.bayouk@mobileye.com>,
+ "Thomas Petazzoni" <thomas.petazzoni@bootlin.com>, "Luca Ceresoli"
+ <luca.ceresoli@bootlin.com>
+To: "Vladimir Oltean" <olteanv@gmail.com>, =?utf-8?q?Th=C3=A9o_Lebrun?=
+ <theo.lebrun@bootlin.com>
+From: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
+X-Mailer: aerc 0.21.0-0-g5549850facc2
+References: <20260225-macb-phy-v7-0-e5211a61db56@bootlin.com>
+ <20260225-macb-phy-v7-0-e5211a61db56@bootlin.com>
+ <20260225-macb-phy-v7-2-e5211a61db56@bootlin.com>
+ <20260225-macb-phy-v7-2-e5211a61db56@bootlin.com>
+ <20260227171446.mqygrv35s5jdae46@skbuf>
+In-Reply-To: <20260227171446.mqygrv35s5jdae46@skbuf>
+X-Last-TLS-Session-Version: TLSv1.3
+X-Rspamd-Queue-Id: B097821E40F
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-2.16 / 15.00];
+X-Spamd-Result: default: False [-1.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[linutronix.de,none];
-	R_DKIM_ALLOW(-0.20)[linutronix.de:s=2020,linutronix.de:s=2020e];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+	DMARC_POLICY_ALLOW(-0.50)[bootlin.com,reject];
+	MV_CASE(0.50)[];
+	R_DKIM_ALLOW(-0.20)[bootlin.com:s=dkim];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FREEMAIL_CC(0.00)[arndb.de,kernel.org,redhat.com,alien8.de,linux.intel.com,armlinux.org.uk,arm.com,linux.ibm.com,ellerman.id.au,gmail.com,alpha.franken.de,vger.kernel.org,lists.infradead.org,lists.ozlabs.org];
-	TAGGED_FROM(0.00)[bounces-13385-lists,linux-mips=lfdr.de];
-	FROM_HAS_DN(0.00)[];
-	RCVD_COUNT_THREE(0.00)[3];
-	RCVD_TLS_LAST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-13386-lists,linux-mips=lfdr.de];
 	MIME_TRACE(0.00)[0:+];
+	RCVD_TLS_LAST(0.00)[];
+	FREEMAIL_TO(0.00)[gmail.com,bootlin.com];
+	RECEIVED_HELO_LOCALHOST(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	DKIM_TRACE(0.00)[linutronix.de:+];
-	MISSING_XM_UA(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[21];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[thomas.weissschuh@linutronix.de,linux-mips@vger.kernel.org];
+	DKIM_TRACE(0.00)[bootlin.com:+];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
-	TAGGED_RCPT(0.00)[linux-mips];
+	FROM_HAS_DN(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[13];
+	RCVD_COUNT_FIVE(0.00)[6];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[theo.lebrun@bootlin.com,linux-mips@vger.kernel.org];
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
 	MID_RHS_MATCH_FROM(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	TAGGED_RCPT(0.00)[linux-mips];
+	NEURAL_HAM(-0.00)[-1.000];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TO_DN_SOME(0.00)[]
 X-Rspamd-Action: no action
 
-On Thu, Mar 05, 2026 at 03:57:59PM -0800, H. Peter Anvin wrote:
-> On 2026-03-05 01:24, Thomas Weißschuh wrote:
-> > 
-> >> Weak references would be a way to work around the link failures. 
-> > 
-> > I am still not sure where "the link failures" should be coming from.
-> > The only sense I can make out of it, is if somebody manually and directly links
-> > to vdso.so. Like in the following example:
+Hello Vladimir,
 
-(...)
+On Fri Feb 27, 2026 at 6:14 PM CET, Vladimir Oltean wrote:
+> On Wed, Feb 25, 2026 at 05:54:41PM +0100, Th=C3=A9o Lebrun wrote:
+>> +static int eq5_phy_set_mode(struct phy *phy, enum phy_mode mode, int su=
+bmode)
+>> +{
+>> +	struct eq5_phy_inst *inst =3D phy_get_drvdata(phy);
+>> +
+>> +	if (eq5_phy_validate(phy, mode, submode, NULL))
+>> +		return -EOPNOTSUPP;
+>
+> Propagate the phy_validate() return code, don't generate your own.
+> -EINVAL should be preferable to -EOPNOTSUPP, so that callers can
+> distinguish between "phy_set_mode() not implemented" and "phy_set_mode()
+> failed".
 
-> > This actually works on glibc (not on musl). But it is highly non-standard and
-> > relies on multiple implementation details. Furthermore it can fail to run on
-> > systems without a vDSO, as mentioned before.
-> > 
-> > Is this the usage pattern you have in mind?
-> > Do you know of anybody doing things this way?
-> > 
-> 
-> Yes, and yes, I do.
+ACK. I had made the decision to explicitely override the return value
+but indeed EOPNOTSUPP isn't the cleverest option. Will fix.
 
-Thanks.
+> (yeah, phy_set_mode() was made optional a while ago, IMO incorrectly,
+> but that's another story)
+>
+>> +
+>> +	if (submode =3D=3D inst->phy_interface)
+>> +		return 0;
+>
+> I think this simple comparison fails to serve its intended purpose
+> (avoid PHY reset when not changing modes) for RGMII modes, of which
+> there exist 4 variants.
 
-Do you know why it is done this way? Are these applications public and
-if so, could you point me to them?
-In case we stub out the vDSO functions with ENOSYS, would these
-applications be able to handle that error gracefully?
+Yes!
 
-Personally I am still in favor of removing these functions completely
-when !COMPAT_32BIT_TIME.
+> Maybe:
+> 	if ((phy_interface_mode_is_rgmii(submode) &&
+> 	     phy_interface_mode_is_rgmii(inst->phy_interface)) ||
+> 	    submode =3D=3D inst->phy_interface)
+> 		return 0;
+>
+> Does the EyeQ5 platform support internal RGMII delays? If yes, which
+> layer enables them? The Generic PHY?
 
+You are on point. We shouldn't care about the RGMII delays inside the
+generic PHY driver. What we deal with here is a wrapper to the actual
+net PHY behind the scenes. The net PHY is dealing with delays, we can
+ignore them in the generic PHY driver.
 
-Thomas
+Will fix, either with your solution or with a custom two state enum that
+can do SGMII or RGMII (will represent all RGMII delay variants). I'll
+experiment with both and send what looks better.
+
+Thanks,
+
+--
+Th=C3=A9o Lebrun, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
+
 
