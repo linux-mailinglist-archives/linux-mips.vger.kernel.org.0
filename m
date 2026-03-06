@@ -1,166 +1,127 @@
-Return-Path: <linux-mips+bounces-13383-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-13384-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id aG3XFsMYqmlfLAEAu9opvQ
-	(envelope-from <linux-mips+bounces-13383-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Fri, 06 Mar 2026 00:58:59 +0100
+	id CIYsE08lqmmUMAEAu9opvQ
+	(envelope-from <linux-mips+bounces-13384-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Fri, 06 Mar 2026 01:52:31 +0100
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5C92221994F
-	for <lists+linux-mips@lfdr.de>; Fri, 06 Mar 2026 00:58:58 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id E137921A081
+	for <lists+linux-mips@lfdr.de>; Fri, 06 Mar 2026 01:52:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 88ED83004D2E
-	for <lists+linux-mips@lfdr.de>; Thu,  5 Mar 2026 23:58:55 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 48235301DEDF
+	for <lists+linux-mips@lfdr.de>; Fri,  6 Mar 2026 00:52:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BBD7135AC23;
-	Thu,  5 Mar 2026 23:58:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7DAA52F12D4;
+	Fri,  6 Mar 2026 00:52:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b="Tvl2j1qU"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Q7B3JtXo"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail.zytor.com (terminus.zytor.com [198.137.202.136])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C1641C8604;
-	Thu,  5 Mar 2026 23:58:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.136
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5980E8635D;
+	Fri,  6 Mar 2026 00:52:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772755133; cv=none; b=D5l+i0EawE79q3VKc/LV1SfdvJ2aX42twEQYA+CJNH69XX3gk2tNQNjNdIoEsdo9HGMi/4frIuEHA89E+8oG4mHRPsCP8ax++jougCdfKzgX+EzyEDoqPm4mO+n8IQL541NxwFzR/0Tr9pSeGHKQfgO1dUW4Dn1A4O2i65936Qs=
+	t=1772758348; cv=none; b=M5ZelEbonqKAArqLBWZWdkxGkgMakDWEMcoUbrEz6ZHXj6oaHAMP/ksGMWuLTwjGe5t68O9f2UvtB8EUGKy2V85OgqR/8Ja+cQVp4jTm2Vxz974/GB+8KVivgqvRaphC8WXmJkYGEKNC6W2IYlDMHtOXsLnDzOBgRcwhMGhqREc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772755133; c=relaxed/simple;
-	bh=u0ruzJeL3Oj2CLeQWfVQGRmFR0siTaOoU1kaON5tpco=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=JQv3bGOTUi6DwYbJXc9A+Vs1FrYDqosWQ+vo9s6YAa+LG8NMDJcLUE2m5RlwU1HDWUUjFKnuTcysrJjjpXcO3EKk2W+k6KMY0pU4fLECt/Hhq7F5Lf7CJjzEjNad8uq9K0meRAb323dTYaecmXAcPcpuLe79NRBIiow9KmJ/caI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com; spf=pass smtp.mailfrom=zytor.com; dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b=Tvl2j1qU; arc=none smtp.client-ip=198.137.202.136
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zytor.com
-Received: from [172.27.2.41] (c-76-133-66-138.hsd1.ca.comcast.net [76.133.66.138])
-	(authenticated bits=0)
-	by mail.zytor.com (8.18.1/8.17.1) with ESMTPSA id 625Nw4w04152111
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
-	Thu, 5 Mar 2026 15:58:06 -0800
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 625Nw4w04152111
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
-	s=2026022301; t=1772755088;
-	bh=qJtO9dV/a12LOlMN5IETBh0hhQHpj32DpsR053nFryw=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=Tvl2j1qUAzEOzpzYcXQS0HDWX3adrrEh8wGU4v6g3BKySEWm3C2C7N7KAEslkCD/E
-	 j0mWPPahQcrnUpYonuB/XqRZBRARS5nEmqhvWuzwTipZgTaSbKeFgyWaowiUd42153
-	 W7MStsBNkxFELd7Ua0ug4CAdu1aF7aWnHPLKAnKGLgvygP3YPLayYTvsiXAb3FaFZT
-	 JKrUtuYJyk4iWE4XrNI9xqZLO4q9kEtp3+p0jqjDQ721IZmuf1wgsaxQhQozEAFd76
-	 RGAdRJL6GAk2KUvF8L9JrLDfa7jSFNoyWL3JroGMHmBAm94WVUO71tOQTKh8CZxiYj
-	 iqR+oML2O5VlA==
-Message-ID: <2e609a1b-62de-4688-b363-58025ab9e703@zytor.com>
-Date: Thu, 5 Mar 2026 15:57:59 -0800
+	s=arc-20240116; t=1772758348; c=relaxed/simple;
+	bh=UUTNhv8aBYJM/+Attg0iaFqxl2VS+N9B5RaZRXbfJ04=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=K4c0IAKPGF4R2MgPF++3NEkfQdT2FHyNbfBPOrhHxAerkFP3abNcOAWiN16NGbT4jzik6wzCr6Qn4NjBVHloeFM+BPCjRSh9azRJyAcazuwyUpNbn+0VQ9VxRy8Pm9l+99+vTCgJy7Fd1RTj0MGXNykqsQaBWZXYAFuD1/sXQ5k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Q7B3JtXo; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 74260C116C6;
+	Fri,  6 Mar 2026 00:52:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1772758348;
+	bh=UUTNhv8aBYJM/+Attg0iaFqxl2VS+N9B5RaZRXbfJ04=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Q7B3JtXoHw4e+m0A/AhSwnw76iAsusTDdOsHm2ncK+OPWd8zHgsJmWpAcLHapHweM
+	 7qZ2YghVZ6xlvSWlZrVvT8005RnbfzAU2YcXDnAGCXUzk/bILdtbSR406VhRq1jbti
+	 F1K5jy2Didd6Bt6HYl0nFZk8EU2w8sJSQalTvdPDLkLSGd75uDwNK/tWnk1aRPhca7
+	 CEgJt5MMhoNs8IC7RFor2TTA6Bs4AMExPJAMi2sgA3AGTisaMZWna8QDqIxhg+9hau
+	 JuVhvcMqkbwlIUp5TCDzUzG9tYTdShA1Ov+MCYb20P4LGaujgmjQB1pAax3MfosuMG
+	 F/Gosp8CzqdTQ==
+Date: Thu, 5 Mar 2026 18:52:25 -0600
+From: "Rob Herring (Arm)" <robh@kernel.org>
+To: Binbin Zhou <zhoubinbin@loongson.cn>
+Cc: Krzysztof Kozlowski <krzk+dt@kernel.org>, dmaengine@vger.kernel.org,
+	Huacai Chen <chenhuacai@kernel.org>,
+	Huacai Chen <chenhuacai@loongson.cn>,
+	Xuerui Wang <kernel@xen0n.name>, Frank Li <Frank.Li@kernel.org>,
+	devicetree@vger.kernel.org, linux-mips@vger.kernel.org,
+	Binbin Zhou <zhoubb.aaron@gmail.com>, loongarch@lists.linux.dev,
+	Keguang Zhang <keguang.zhang@gmail.com>,
+	Conor Dooley <conor+dt@kernel.org>, Vinod Koul <vkoul@kernel.org>
+Subject: Re: [PATCH v3 5/6] dt-bindings: dmaengine: Add Loongson
+ Multi-Channel DMA controller
+Message-ID: <177275834494.880921.341794128592716386.robh@kernel.org>
+References: <cover.1771989595.git.zhoubinbin@loongson.cn>
+ <37c29c43b8acb406a3d20c4575da7d4f1163d812.1771989596.git.zhoubinbin@loongson.cn>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/7] x86/vdso: Respect COMPAT_32BIT_TIME
-To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-Cc: Arnd Bergmann <arnd@arndb.de>, Andy Lutomirski <luto@kernel.org>,
-        Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Madhavan Srinivasan <maddy@linux.ibm.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <chleroy@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linuxppc-dev@lists.ozlabs.org, linux-mips@vger.kernel.org
-References: <20260227-vdso-compat_32bit_time-v1-0-3f0286a7bac3@linutronix.de>
- <20260227-vdso-compat_32bit_time-v1-1-3f0286a7bac3@linutronix.de>
- <c29f5e70-bd17-4e1b-a005-5a3282e70075@app.fastmail.com>
- <03cd1e21-a2f2-46a1-a674-cbaef9712016@app.fastmail.com>
- <20260227103226-cc3bb32c-0107-4c09-b81a-ca33ea03ad5c@linutronix.de>
- <49b7c9f9-198a-49f7-880b-6ae74d7bd985@zytor.com>
- <20260304081505-a2a3a376-20c9-46cb-8dc9-2c4deec1a55e@linutronix.de>
- <6909A81E-AE50-459C-9604-3EEAEFE3838E@zytor.com>
- <20260305080950-ff43457b-0551-480f-916e-6c252e6a64af@linutronix.de>
-Content-Language: en-US, sv-SE
-From: "H. Peter Anvin" <hpa@zytor.com>
-In-Reply-To: <20260305080950-ff43457b-0551-480f-916e-6c252e6a64af@linutronix.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Rspamd-Queue-Id: 5C92221994F
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <37c29c43b8acb406a3d20c4575da7d4f1163d812.1771989596.git.zhoubinbin@loongson.cn>
+X-Rspamd-Queue-Id: E137921A081
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-2.16 / 15.00];
+X-Spamd-Result: default: False [0.34 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
+	MID_CONTAINS_FROM(1.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[zytor.com,none];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
-	R_DKIM_ALLOW(-0.20)[zytor.com:s=2026022301];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-13383-lists,linux-mips=lfdr.de];
-	RCVD_COUNT_THREE(0.00)[4];
+	RCPT_COUNT_TWELVE(0.00)[14];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	FREEMAIL_CC(0.00)[arndb.de,kernel.org,redhat.com,alien8.de,linux.intel.com,armlinux.org.uk,arm.com,linux.ibm.com,ellerman.id.au,gmail.com,alpha.franken.de,vger.kernel.org,lists.infradead.org,lists.ozlabs.org];
-	RCPT_COUNT_TWELVE(0.00)[21];
+	FREEMAIL_CC(0.00)[kernel.org,vger.kernel.org,loongson.cn,xen0n.name,gmail.com,lists.linux.dev];
+	TAGGED_FROM(0.00)[bounces-13384-lists,linux-mips=lfdr.de];
+	RCVD_TLS_LAST(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
 	MIME_TRACE(0.00)[0:+];
 	FROM_HAS_DN(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	TO_DN_SOME(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[hpa@zytor.com,linux-mips@vger.kernel.org];
-	DKIM_TRACE(0.00)[zytor.com:+];
-	MID_RHS_MATCH_FROM(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[robh@kernel.org,linux-mips@vger.kernel.org];
+	DKIM_TRACE(0.00)[kernel.org:+];
+	TAGGED_RCPT(0.00)[linux-mips,dt];
+	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[linux-mips];
-	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[zytor.com:dkim,zytor.com:mid,sin.lore.kernel.org:rdns,sin.lore.kernel.org:helo]
+	MISSING_XM_UA(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:rdns,sto.lore.kernel.org:helo,loongson.cn:email]
 X-Rspamd-Action: no action
 
-On 2026-03-05 01:24, Thomas Weißschuh wrote:
+
+On Wed, 25 Feb 2026 15:41:10 +0800, Binbin Zhou wrote:
+> The Loongson-2K0300/Loongson-2K3000 have built-in multi-channel DMA
+> controllers, which are similar except for some of the register offsets
+> and number of channels.
 > 
->> Weak references would be a way to work around the link failures. 
+> Obviously, this is quite different from the APB DMA controller used in
+> the Loongson-2K0500/Loongson-2K1000, such as the latter being a
+> single-channel DMA controller.
 > 
-> I am still not sure where "the link failures" should be coming from.
-> The only sense I can make out of it, is if somebody manually and directly links
-> to vdso.so. Like in the following example:
+> To avoid cluttering a single dt-binding file, add a new yaml file.
 > 
-> $ cat test.c 
-> #include <stdio.h>
-> 
-> #include <linux/time.h>
-> 
-> int __vdso_clock_gettime(__kernel_clockid_t clock, struct __kernel_timespec *ts);
-> 
-> int main(void)
-> {
-> 	struct __kernel_timespec ts;
-> 	int ret;
-> 
-> 	printf("__vdso_clock_gettime=%p\n", __vdso_clock_gettime);
-> 
-> 	ret = __vdso_clock_gettime(CLOCK_REALTIME, &ts);
-> 	printf("ret=%d\n", ret);
-> }
-> $ gcc test.c /lib/modules/$(uname -r)/vdso/vdso64.so
-> $ ./a.out 
-> __vdso_clock_gettime=0x7ff6ba2eeb80
-> ret=0
-> 
-> This actually works on glibc (not on musl). But it is highly non-standard and
-> relies on multiple implementation details. Furthermore it can fail to run on
-> systems without a vDSO, as mentioned before.
-> 
-> Is this the usage pattern you have in mind?
-> Do you know of anybody doing things this way?
+> Signed-off-by: Binbin Zhou <zhoubinbin@loongson.cn>
+> ---
+>  .../bindings/dma/loongson,ls2k0300-dma.yaml   | 81 +++++++++++++++++++
+>  MAINTAINERS                                   |  3 +-
+>  2 files changed, 83 insertions(+), 1 deletion(-)
+>  create mode 100644 Documentation/devicetree/bindings/dma/loongson,ls2k0300-dma.yaml
 > 
 
-Yes, and yes, I do.
-
-	-hpa
+Reviewed-by: Rob Herring (Arm) <robh@kernel.org>
 
 
