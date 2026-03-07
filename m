@@ -1,159 +1,225 @@
-Return-Path: <linux-mips+bounces-13398-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-13399-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id YEW5BdQ+q2lnbgEAu9opvQ
-	(envelope-from <linux-mips+bounces-13398-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Fri, 06 Mar 2026 21:53:40 +0100
+	id L3RCKrmaq2kLewEAu9opvQ
+	(envelope-from <linux-mips+bounces-13399-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Sat, 07 Mar 2026 04:25:45 +0100
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id 193BC227A2D
-	for <lists+linux-mips@lfdr.de>; Fri, 06 Mar 2026 21:53:39 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 024A1229DCD
+	for <lists+linux-mips@lfdr.de>; Sat, 07 Mar 2026 04:25:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 368903009E06
-	for <lists+linux-mips@lfdr.de>; Fri,  6 Mar 2026 20:53:36 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 4830E304521B
+	for <lists+linux-mips@lfdr.de>; Sat,  7 Mar 2026 03:25:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DB62B481641;
-	Fri,  6 Mar 2026 20:53:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b="EQ2m+UyI"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 02E8D30DED5;
+	Sat,  7 Mar 2026 03:25:42 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail.zytor.com (terminus.zytor.com [198.137.202.136])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5821D371D13;
-	Fri,  6 Mar 2026 20:53:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.136
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A4F0A309DC4;
+	Sat,  7 Mar 2026 03:25:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772830413; cv=none; b=cVKzGUaC6Vz+zi+Kvr9Pfq9gFJXN7PwZnh+BP9TOkHJMAUlO1eT9AT4vOlGk/8aK31rYpQskT8RmcIdvC5UyDLy7TqxNKhTBSPbLfKqyxZNrG+HqgUBDDyUQcUAcOKt+1dkgTIVpSXQLtgs548Fs+CsV+1vGXtGSO1J4l9I/Aek=
+	t=1772853941; cv=none; b=EQR6jVIO6DK3rpkVuL7ESoUnLHavNwMYI8UI0j1oLw5JuT6l3U/v80LGlcC2A9Rb4i3vbFn7+3LtWLCBCFU8TaS3qNSA3BEc9YXzb8szSxz0SQPH2XuQd54i3nlo1dhe3ECYflQb0pITIx0A4VaoQPnWSKAIr6n9Un6hkYo6rBQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772830413; c=relaxed/simple;
-	bh=t5jttNPZKFxy6e3UDlTOBng4frqdcf3GdkXXjwI4w+M=;
-	h=Date:From:To:CC:Subject:In-Reply-To:References:Message-ID:
-	 MIME-Version:Content-Type; b=CeAjK4256ekRG6WizX3sZxyXcQ0Z0Y5rxObX4ShbfYVhj+sX8d073q1YA4HjZQcdRFxdrkY8USBwUa3ge2bnRJnnGudWl3+Fyodqzf4UzpF9wuGUx+rw9JKfnZAy1iDS2XOLHdCvL8C/vVHjUIop5GpjGfFT18WUOs/73zTaNzc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com; spf=pass smtp.mailfrom=zytor.com; dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b=EQ2m+UyI; arc=none smtp.client-ip=198.137.202.136
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zytor.com
-Received: from ehlo.thunderbird.net (c-76-133-66-138.hsd1.ca.comcast.net [76.133.66.138])
-	(authenticated bits=0)
-	by mail.zytor.com (8.18.1/8.17.1) with ESMTPSA id 626KqRb51958825
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
-	Fri, 6 Mar 2026 12:52:28 -0800
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 626KqRb51958825
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
-	s=2026022301; t=1772830352;
-	bh=t5jttNPZKFxy6e3UDlTOBng4frqdcf3GdkXXjwI4w+M=;
-	h=Date:From:To:CC:Subject:In-Reply-To:References:From;
-	b=EQ2m+UyIgHt4NPpBkDK9oDRl5sriE4QzwZICCF14NYbr9o9jnA4P5x6Ki7PI/c1Pq
-	 MuB2CVSSZ1iN8/dlczEbnC0/V+ODW0STv+tMDFCGAqTNta3kvUwK3wx7igCIxtYepf
-	 WP4Xgt2sBbl4oyXlo1NEh/P7iQ1F8nGYKsh0x45/4ix+F4yHgCtkuzJkzYrwYPKOfj
-	 ZGBQDFMVCSRv3f1XvPA5D4Ut5gSR5N9/iNyb0omf0tkCFi13Z6kw+SSDHf0RObIZBO
-	 eFidDjr3ZT6lb7idOI/GLFTlUAcnpNsbe7YnJMV2SZmCjXKy6cCOrXgsYEUmxi7GJ3
-	 06pqSMGXttJhQ==
-Date: Fri, 06 Mar 2026 12:52:21 -0800
-From: "H. Peter Anvin" <hpa@zytor.com>
-To: =?ISO-8859-1?Q?Thomas_Wei=DFschuh?= <thomas.weissschuh@linutronix.de>
-CC: Arnd Bergmann <arnd@arndb.de>, Andy Lutomirski <luto@kernel.org>,
-        Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Madhavan Srinivasan <maddy@linux.ibm.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <chleroy@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linuxppc-dev@lists.ozlabs.org, linux-mips@vger.kernel.org
-Subject: Re: [PATCH 1/7] x86/vdso: Respect COMPAT_32BIT_TIME
-User-Agent: K-9 Mail for Android
-In-Reply-To: <20260306103113-ae63c668-2921-4ac1-84f6-35fbc8a6397d@linutronix.de>
-References: <20260227-vdso-compat_32bit_time-v1-0-3f0286a7bac3@linutronix.de> <20260227-vdso-compat_32bit_time-v1-1-3f0286a7bac3@linutronix.de> <c29f5e70-bd17-4e1b-a005-5a3282e70075@app.fastmail.com> <03cd1e21-a2f2-46a1-a674-cbaef9712016@app.fastmail.com> <20260227103226-cc3bb32c-0107-4c09-b81a-ca33ea03ad5c@linutronix.de> <49b7c9f9-198a-49f7-880b-6ae74d7bd985@zytor.com> <20260304081505-a2a3a376-20c9-46cb-8dc9-2c4deec1a55e@linutronix.de> <6909A81E-AE50-459C-9604-3EEAEFE3838E@zytor.com> <20260305080950-ff43457b-0551-480f-916e-6c252e6a64af@linutronix.de> <2e609a1b-62de-4688-b363-58025ab9e703@zytor.com> <20260306103113-ae63c668-2921-4ac1-84f6-35fbc8a6397d@linutronix.de>
-Message-ID: <F10E5A68-4D63-41A5-B281-3AD52FF6F6D8@zytor.com>
+	s=arc-20240116; t=1772853941; c=relaxed/simple;
+	bh=Xi6c1dAck5ti3ckerzYqQncj4PWvRvHDU6pbAFkcqmY=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=PjOcVKIE7ETwyW25ntNJqbZ8d4puDtxiofe0AEEYUkZxnf7jiQNNPVXSKnll8F2ozPhgdI6l/C09bWWqbjgs44i+EkhFOlNmmPi+wWnPoVlO7B6+oyXpdvix95Nxu9m80++qQXCKigNEKAThlW13J5SHRZpDTBdE8tgEPWAozAE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
+Received: from loongson.cn (unknown [223.64.68.227])
+	by gateway (Coremail) with SMTP id _____8CxacKpmqtpC2cYAA--.6584S3;
+	Sat, 07 Mar 2026 11:25:29 +0800 (CST)
+Received: from kernelserver (unknown [223.64.68.227])
+	by front1 (Coremail) with SMTP id qMiowJCx2+ClmqtpI+BPAA--.21248S2;
+	Sat, 07 Mar 2026 11:25:26 +0800 (CST)
+From: Binbin Zhou <zhoubinbin@loongson.cn>
+To: Binbin Zhou <zhoubb.aaron@gmail.com>,
+	Huacai Chen <chenhuacai@loongson.cn>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Vinod Koul <vkoul@kernel.org>,
+	Frank Li <Frank.Li@kernel.org>,
+	dmaengine@vger.kernel.org
+Cc: Huacai Chen <chenhuacai@kernel.org>,
+	Xuerui Wang <kernel@xen0n.name>,
+	loongarch@lists.linux.dev,
+	devicetree@vger.kernel.org,
+	Keguang Zhang <keguang.zhang@gmail.com>,
+	linux-mips@vger.kernel.org,
+	Binbin Zhou <zhoubinbin@loongson.cn>
+Subject: [PATCH v4 0/6] dmaengine: Add Loongson Multi-Channel DMA controller support
+Date: Sat,  7 Mar 2026 11:25:09 +0800
+Message-ID: <cover.1772853681.git.zhoubinbin@loongson.cn>
+X-Mailer: git-send-email 2.52.0
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Rspamd-Queue-Id: 193BC227A2D
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:qMiowJCx2+ClmqtpI+BPAA--.21248S2
+X-CM-SenderInfo: p2kr3uplqex0o6or00hjvr0hdfq/1tbiAQETCGmqbMIYzgAAsg
+X-Coremail-Antispam: 1Uk129KBj93XoWxJF1xtry3ZFy7GF43CF1xJFc_yoW5KFW7pF
+	WfA3s3GFWUtF43uwn3JFy8Ar15Aa4fJrZxWa9rZw1UCryDu3yUZr1Fk3WjqF47ArW5GFW2
+	qFWkGF48CF4UGrcCm3ZEXasCq-sJn29KB7ZKAUJUUUU8529EdanIXcx71UUUUU7KY7ZEXa
+	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
+	0xBIdaVrnRJUUUkjb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
+	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+	0_Jr0_Gr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_
+	Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6xACxx1l5I
+	8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r106r15McIj6I8E87Iv67AK
+	xVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41l42xK82IYc2Ij64
+	vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8G
+	jcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2I
+	x0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK
+	8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I
+	0E14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x07jUsqXUUUUU=
+X-Rspamd-Queue-Id: 024A1229DCD
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-2.16 / 15.00];
+X-Spamd-Result: default: False [1.54 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
+	MID_CONTAINS_FROM(1.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[zytor.com,none];
-	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
-	R_DKIM_ALLOW(-0.20)[zytor.com:s=2026022301];
+	R_MISSING_CHARSET(0.50)[];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-13398-lists,linux-mips=lfdr.de];
-	RCVD_COUNT_THREE(0.00)[4];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	FREEMAIL_CC(0.00)[arndb.de,kernel.org,redhat.com,alien8.de,linux.intel.com,armlinux.org.uk,arm.com,linux.ibm.com,ellerman.id.au,gmail.com,alpha.franken.de,vger.kernel.org,lists.infradead.org,lists.ozlabs.org];
-	RCPT_COUNT_TWELVE(0.00)[21];
 	MIME_TRACE(0.00)[0:+];
-	FROM_HAS_DN(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	NEURAL_HAM(-0.00)[-0.973];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[hpa@zytor.com,linux-mips@vger.kernel.org];
-	DKIM_TRACE(0.00)[zytor.com:+];
-	MID_RHS_MATCH_FROM(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[linux-mips];
+	RCPT_COUNT_TWELVE(0.00)[15];
+	TAGGED_FROM(0.00)[bounces-13399-lists,linux-mips=lfdr.de];
+	RCVD_TLS_LAST(0.00)[];
+	DMARC_NA(0.00)[loongson.cn];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	FREEMAIL_CC(0.00)[kernel.org,xen0n.name,lists.linux.dev,vger.kernel.org,gmail.com,loongson.cn];
+	FREEMAIL_TO(0.00)[gmail.com,loongson.cn,kernel.org,vger.kernel.org];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
 	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[zytor.com:dkim,zytor.com:mid,sin.lore.kernel.org:rdns,sin.lore.kernel.org:helo]
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[zhoubinbin@loongson.cn,linux-mips@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[5];
+	R_DKIM_NA(0.00)[];
+	NEURAL_HAM(-0.00)[-0.893];
+	TAGGED_RCPT(0.00)[linux-mips,dt];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[loongson.cn:mid,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo]
 X-Rspamd-Action: no action
 
-On March 6, 2026 1:42:25 AM PST, "Thomas Wei=C3=9Fschuh" <thomas=2Eweisssch=
-uh@linutronix=2Ede> wrote:
->On Thu, Mar 05, 2026 at 03:57:59PM -0800, H=2E Peter Anvin wrote:
->> On 2026-03-05 01:24, Thomas Wei=C3=9Fschuh wrote:
->> >=20
->> >> Weak references would be a way to work around the link failures=2E=
-=20
->> >=20
->> > I am still not sure where "the link failures" should be coming from=
-=2E
->> > The only sense I can make out of it, is if somebody manually and dire=
-ctly links
->> > to vdso=2Eso=2E Like in the following example:
->
->(=2E=2E=2E)
->
->> > This actually works on glibc (not on musl)=2E But it is highly non-st=
-andard and
->> > relies on multiple implementation details=2E Furthermore it can fail =
-to run on
->> > systems without a vDSO, as mentioned before=2E
->> >=20
->> > Is this the usage pattern you have in mind?
->> > Do you know of anybody doing things this way?
->> >=20
->>=20
->> Yes, and yes, I do=2E
->
->Thanks=2E
->
->Do you know why it is done this way? Are these applications public and
->if so, could you point me to them?
->In case we stub out the vDSO functions with ENOSYS, would these
->applications be able to handle that error gracefully?
->
->Personally I am still in favor of removing these functions completely
->when !COMPAT_32BIT_TIME=2E
->
->
->Thomas
+Hi all:
 
-I think I agree with you (and sadly, no, I can't point at them directly=2E=
-)
+This patchset introduces the Loongson multi-channel DMA controller,
+which is present in the Loongson-2K0300 and Loongson-2K3000 processors.
+
+It is a multi-channel controller that enables data transfers from memory
+to memory, device to memory, and memory to device, as well as channel
+prioritization configurable through the channel configuration registers.
+
+Additionally, since multiple distinct types of DMA controllers exist on
+the Loongson platform, I have attempted to consolidate all Loongson DMA
+drivers into a new directory named `Loongson` for easier management.
+
+Thanks.
+Binbin
+
+===========
+V4:
+- Rebase on dmaengine/next tree;
+- Add Reviewed-by tags from Frank and Rob, thanks;
+
+patch(1/6):
+ - Add `depends on` restrictions.
+
+patch(6/6):
+ - Move loongson2_cmc_dma_config{..} close to its users.
+
+Link to V3:
+https://lore.kernel.org/dmaengine/cover.1771989595.git.zhoubinbin@loongson.cn/
+
+V3:
+- Rebase on dmaengine/next tree;
+
+patch(1/6):
+ - Keep alphabet order;
+
+patch(2/6):
+ - Add Reviewed-by tag from Frank, thanks;
+
+patch(3/6)/(4/6):
+ - New patches, format loongson2-apb-dma driver code;
+
+patch(5/6):
+ - Add description for `interrupts` property;
+
+patch(6/6):
+ - Use ffs() helper make the code cleaner;
+ - Refact loongson2_cmc_dma_chan_irq();
+ - Simplify locking with guard() and scoped_guard();
+ - kzalloc()->kzalloc_flex().
+
+Link to V2:
+https://lore.kernel.org/all/cover.1770605931.git.zhoubinbin@loongson.cn/
+
+V2:
+patch(1/4):
+ - Update loongson1-apb-dma.c entry in MAINTAINERS.
+
+patch(2/4):
+ - New patch, use dmaenginem_async_device_register() helper.
+
+patch(3/4):
+ - `additionalProperties: false` replaced by
+   `unevaluatedProperties: false`.
+
+patch(4/4):
+ - Rename filename as loongson2-apb-cmc-dma.c;
+ - Rename Kconfig item as LOONGSON2_APB_CMC_DMA;
+ - Rename the variable prefix as `loongson2_cmc_dma`;
+ - Use dmaenginem_async_device_register() helper;
+ - Drop 'dma_' prefix in struct loongson2_mdma_chan_reg;
+ - Use struct_size();
+
+Link to V1:
+https://lore.kernel.org/all/cover.1770119693.git.zhoubinbin@loongson.cn/
+
+Binbin Zhou (6):
+  dmaengine: loongson: New directory for Loongson DMA controllers
+    drivers
+  dmaengine: loongson: loongson2-apb: Convert to
+    dmaenginem_async_device_register()
+  dmaengine: loongson: loongson2-apb: Convert to devm_clk_get_enabled()
+  dmaengine: loongson: loongson2-apb: Simplify locking with guard() and
+    scoped_guard()
+  dt-bindings: dmaengine: Add Loongson Multi-Channel DMA controller
+  dmaengine: loongson: New driver for the Loongson Multi-Channel DMA
+    controller
+
+ .../bindings/dma/loongson,ls2k0300-dma.yaml   |  81 ++
+ MAINTAINERS                                   |   7 +-
+ drivers/dma/Kconfig                           |  25 +-
+ drivers/dma/Makefile                          |   3 +-
+ drivers/dma/loongson/Kconfig                  |  41 +
+ drivers/dma/loongson/Makefile                 |   4 +
+ .../dma/{ => loongson}/loongson1-apb-dma.c    |   4 +-
+ drivers/dma/loongson/loongson2-apb-cmc-dma.c  | 730 ++++++++++++++++++
+ .../dma/{ => loongson}/loongson2-apb-dma.c    |  93 +--
+ 9 files changed, 903 insertions(+), 85 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/dma/loongson,ls2k0300-dma.yaml
+ create mode 100644 drivers/dma/loongson/Kconfig
+ create mode 100644 drivers/dma/loongson/Makefile
+ rename drivers/dma/{ => loongson}/loongson1-apb-dma.c (99%)
+ create mode 100644 drivers/dma/loongson/loongson2-apb-cmc-dma.c
+ rename drivers/dma/{ => loongson}/loongson2-apb-dma.c (91%)
+
+
+base-commit: c8e9b1d9febc83ee94944695a07cfd40a1b29743
+-- 
+2.52.0
+
 
