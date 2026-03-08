@@ -1,193 +1,137 @@
-Return-Path: <linux-mips+bounces-13408-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-13409-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id uYDdFbTZrGlovQEAu9opvQ
-	(envelope-from <linux-mips+bounces-13408-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Sun, 08 Mar 2026 03:06:44 +0100
+	id Ng6MFSRHrWkl0wEAu9opvQ
+	(envelope-from <linux-mips+bounces-13409-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Sun, 08 Mar 2026 10:53:40 +0100
 X-Original-To: lists+linux-mips@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id AABA822E4F4
-	for <lists+linux-mips@lfdr.de>; Sun, 08 Mar 2026 03:06:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id B528F22F3E2
+	for <lists+linux-mips@lfdr.de>; Sun, 08 Mar 2026 10:53:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id C3D2C300F10D
-	for <lists+linux-mips@lfdr.de>; Sun,  8 Mar 2026 02:06:40 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 55D9B300A74C
+	for <lists+linux-mips@lfdr.de>; Sun,  8 Mar 2026 09:53:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EF1EE35BDB2;
-	Sun,  8 Mar 2026 02:06:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A379536C0AF;
+	Sun,  8 Mar 2026 09:53:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Mgbz/zYw"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RTvqX2Cq"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97E1A35B634;
-	Sun,  8 Mar 2026 02:06:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DF0B24337B;
+	Sun,  8 Mar 2026 09:53:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772935599; cv=none; b=HPE/XRI0nukzFG+wL+4T5qQ6kOiRJxI/UFweUi1XDbwzOdNCrJLG3UK0aOW9VqqPo4Pa9ki3xgoOdYRReyeNEtZT4Kb/Ktn+wRSuoCmXzcCc8j7ahKU9ZZ9LNE4k/KgNMIFUO8OL2ZP0r7gLGD23zX005WeCpweh63DXJ0sd0cU=
+	t=1772963617; cv=none; b=MEcJU7IWgTwMfTLOzFLXh5qbHeVMte4mtCLP/FKgNiwW23Ys+SlZkWG/IByE1fz6lXH277pUr/gUqVtJ9EaynpIStGV3LgrkIZ+VJHQjbDj8KlzylVu9tvAteH7JmXaPymj7xzHKnwF7WuqKzZmx0lf9MYT4bla4AtlJcgwYdtE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772935599; c=relaxed/simple;
-	bh=giRqWk7pth7htlw/kAdoXs6485fAk6mlmbYY0pBBaUw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=RoJFplEewIeQIhqtVhjba/xB2WQkgn8ThhsEEqk++F8/3R7YrYJBGy1AZKAYj79D17TJJqjijGvd+BP2/EEPRCE18MWh+l8T/jIhB0ZShBmofAIEHQkUWTUL0vE9aNGsQfdnYHY6q+e8Tth0BHDFjDXmgvhGvKv9i4GI+AYW0Cc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Mgbz/zYw; arc=none smtp.client-ip=198.175.65.20
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1772935598; x=1804471598;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=giRqWk7pth7htlw/kAdoXs6485fAk6mlmbYY0pBBaUw=;
-  b=Mgbz/zYwqrnMwHY7d7rWuTMv5HN7w8mSPYQ9PRZshOyJdJtSsmvLL6Hy
-   TZ/oi2Zn97NuiWqfaTEQbCP39fjEI2zNK1olWomzHfKrjErWPsYHU8EwE
-   kuCPwN8TPJ4SXHy/YGktKVX8IR56FzIKOuxPPaZ8C/XdRsbwH2SWNprkV
-   XQDJ6Ererybs42qcvBQFLX4IcQs38LESsm87ZZBIf2MDSUQgj2A1rh1qk
-   JUBm+7OjeLyWBnKRLJ0B2XzO/Sa7P0AgCKTQcJiqpfqvaGZb3jEEt90+A
-   YUA1jSa6fyg6/xZrycB7p8OD1k3RUgVGN1a6gdYHlK7kenEHXJw3E74P5
-   g==;
-X-CSE-ConnectionGUID: 66OGJ/3nRSqI52iscPptiw==
-X-CSE-MsgGUID: 0/Hht5UiRN64iQfXOqnBrA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11722"; a="73698370"
-X-IronPort-AV: E=Sophos;i="6.23,107,1770624000"; 
-   d="scan'208";a="73698370"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2026 18:06:37 -0800
-X-CSE-ConnectionGUID: twwjLKsfTKSm1fOsBzm82g==
-X-CSE-MsgGUID: hS775U/kQ0qL7q9xVa9jcA==
-X-ExtLoop1: 1
-Received: from lkp-server01.sh.intel.com (HELO 058beb05654c) ([10.239.97.150])
-  by fmviesa003.fm.intel.com with ESMTP; 07 Mar 2026 18:06:34 -0800
-Received: from kbuild by 058beb05654c with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1vz3XL-000000002pF-1fGw;
-	Sun, 08 Mar 2026 02:06:31 +0000
-Date: Sun, 8 Mar 2026 10:06:29 +0800
-From: kernel test robot <lkp@intel.com>
-To: =?iso-8859-1?Q?Th=E9o?= Lebrun <theo.lebrun@bootlin.com>,
-	Vinod Koul <vkoul@kernel.org>,
-	Neil Armstrong <neil.armstrong@linaro.org>
-Cc: oe-kbuild-all@lists.linux.dev, linux-phy@lists.infradead.org,
-	linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
-	Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>,
-	Gregory CLEMENT <gregory.clement@bootlin.com>,
-	=?iso-8859-1?Q?Beno=EEt?= Monin <benoit.monin@bootlin.com>,
-	Tawfik Bayouk <tawfik.bayouk@mobileye.com>,
-	Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-	Luca Ceresoli <luca.ceresoli@bootlin.com>,
-	=?iso-8859-1?Q?Th=E9o?= Lebrun <theo.lebrun@bootlin.com>
-Subject: Re: [PATCH v8] phy: Add driver for EyeQ5 Ethernet PHY wrapper
-Message-ID: <202603081000.NLJ9u8XA-lkp@intel.com>
-References: <20260306-macb-phy-v8-1-b5c48ee61402@bootlin.com>
+	s=arc-20240116; t=1772963617; c=relaxed/simple;
+	bh=YpZtJeyi3j9I0kfeXGeyMC/v7uGkAInhYxZIAZcLHiQ=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=MUt/xVo9SbeSRAqZ/rs9+RcbR4UyJyAHjGZ0i9O35nvSTOqXvefa7TMz1QeBHBGwEEV3Nj8W+OAFvUYsHERlrJICjAikwedLJ6qzZL7fVAEckKBogIzPv0jqvI3fAsXZ+ntMSTmhxfvOVtTZv8zuD9gHeTFFWTcyNZkKMD6boVY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RTvqX2Cq; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32853C116C6;
+	Sun,  8 Mar 2026 09:53:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1772963617;
+	bh=YpZtJeyi3j9I0kfeXGeyMC/v7uGkAInhYxZIAZcLHiQ=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+	b=RTvqX2CqsybrPAeVVoaqazFAFJGPkzei6O1n7GY6qEkv/iYa6ukUEu/sS4eQnM78A
+	 WR5rowPbwDsAaeuq0az4AZS+jNa1eDlcvcmtDEo4J5x4dcJzgLMVLTVrEZ+lzMLSxU
+	 px2sMA+SBJpkVYHNsU67xLXUuQNCwCuG4YSCNz/IfeBpO+1szqfsy7b1FRJ4MqgKa6
+	 yXz2NjoRBL66CBeMhyDgnE46+3zNstyZJhWXSiuvddb27D2U2gtOMJTvF2vFsUawZR
+	 W1rTO+qCe73tKbQbVsFX21SE4hm/nJcevFlDr8H/aqUhD85PPNTu7m/JQsikdRK5+Q
+	 QGQqHRMjy0UDg==
+From: Thomas Gleixner <tglx@kernel.org>
+To: Daniel J Blueman <daniel@quora.org>
+Cc: LKML <linux-kernel@vger.kernel.org>, "Paul E. McKenney"
+ <paulmck@kernel.org>, John Stultz <jstultz@google.com>, Waiman Long
+ <longman@redhat.com>, Peter Zijlstra <peterz@infradead.org>, Daniel
+ Lezcano <daniel.lezcano@linaro.org>, Stephen Boyd <sboyd@kernel.org>,
+ x86@kernel.org, "Gautham R. Shenoy" <gautham.shenoy@amd.com>, Jiri Wiesner
+ <jwiesner@suse.de>, Scott Hamilton <scott.hamilton@eviden.com>, Helge
+ Deller <deller@gmx.de>, linux-parisc@vger.kernel.org, Thomas Bogendoerfer
+ <tsbogend@alpha.franken.de>, linux-mips@vger.kernel.org
+Subject: Re: [patch 5/5] clocksource: Rewrite watchdog code completely
+In-Reply-To: <87ms0zva5i.ffs@tglx>
+References: <20260123230651.688818373@kernel.org>
+ <20260123231521.926490888@kernel.org>
+ <CAMVG2ssXZKmw-YTKB5=CvhEofKeyEfaBCDZbyzfUcm2+P5rQsQ@mail.gmail.com>
+ <87jywvfkrs.ffs@tglx>
+ <CAMVG2ssvadzUUoZw9xdYdZ4T5Sz+xdcQnXmU2NkR0N_yqieT=w@mail.gmail.com>
+ <87ms0zva5i.ffs@tglx>
+Date: Sun, 08 Mar 2026 10:53:33 +0100
+Message-ID: <871phu3aw2.ffs@tglx>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20260306-macb-phy-v8-1-b5c48ee61402@bootlin.com>
-X-Rspamd-Queue-Id: AABA822E4F4
+Content-Type: text/plain
+X-Rspamd-Queue-Id: B528F22F3E2
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-1.16 / 15.00];
-	MID_CONTAINS_FROM(1.00)[];
+X-Spamd-Result: default: False [2.84 / 15.00];
+	MID_END_EQ_FROM_USER_PART(4.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
+	MID_RHS_NOT_FQDN(0.50)[];
+	R_MISSING_CHARSET(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
 	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10];
-	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-13408-lists,linux-mips=lfdr.de];
-	FROM_HAS_DN(0.00)[];
+	TAGGED_FROM(0.00)[bounces-13409-lists,linux-mips=lfdr.de];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[16];
 	MIME_TRACE(0.00)[0:+];
-	DKIM_TRACE(0.00)[intel.com:+];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	FREEMAIL_CC(0.00)[vger.kernel.org,kernel.org,google.com,redhat.com,infradead.org,linaro.org,amd.com,suse.de,eviden.com,gmx.de,alpha.franken.de];
+	RCVD_COUNT_THREE(0.00)[4];
 	MISSING_XM_UA(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[lkp@intel.com,linux-mips@vger.kernel.org];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[6];
+	NEURAL_HAM(-0.00)[-0.661];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[tglx@kernel.org,linux-mips@vger.kernel.org];
+	DKIM_TRACE(0.00)[kernel.org:+];
 	TAGGED_RCPT(0.00)[linux-mips];
-	NEURAL_HAM(-0.00)[-0.952];
-	RCPT_COUNT_TWELVE(0.00)[14];
-	TO_DN_SOME(0.00)[]
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TO_DN_SOME(0.00)[];
+	FROM_HAS_DN(0.00)[]
 X-Rspamd-Action: no action
 
-Hi Théo,
+Daniel!
 
-kernel test robot noticed the following build warnings:
+On Mon, Feb 23 2026 at 14:53, Thomas Gleixner wrote:
+> On Sun, Feb 15 2026 at 20:18, Daniel J Blueman wrote:
+>> On Mon, 2 Feb 2026 at 19:27, Thomas Gleixner <tglx@kernel.org> wrote:
+>> Good step forward! We can also reduce remote cacheline invalidation by
+>> putting 'seq' into the cacheline after 'cpu_ts' by reordering:
+>
+> Good point.
+>
+>> With that said, with your latest change on the 1920 thread setup,
+>> WATCHDOG_READOUT_MAX_US 1000 is still needed to avoid timeouts during
+>> the previous adverse workload, however some timeouts are still seen
+>> during massive parallel process teardowns.
+>>
+>> To limit overhead, perhaps it is sufficient to set the timeout to
+>> 100us, avoid retries (as the hardware thread may continue to be busy
+>> and will be rechecked later anyway), and log timeouts at the debug
+>> level if at all.
+>
+> Something like the below should work even with 50us. I left the print at
+> INFO level for now. We can either change it to pr_info_once() or to
+> debug as you said.
 
-[auto build test WARNING on next-20260305]
-[cannot apply to linus/master v7.0-rc2 v7.0-rc1 v6.19 v7.0-rc2]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Any chance you can give this a test ride on that 1920 thread
+monstrosity?
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Th-o-Lebrun/phy-Add-driver-for-EyeQ5-Ethernet-PHY-wrapper/20260307-034032
-base:   next-20260305
-patch link:    https://lore.kernel.org/r/20260306-macb-phy-v8-1-b5c48ee61402%40bootlin.com
-patch subject: [PATCH v8] phy: Add driver for EyeQ5 Ethernet PHY wrapper
-config: arm-randconfig-r111-20260308 (https://download.01.org/0day-ci/archive/20260308/202603081000.NLJ9u8XA-lkp@intel.com/config)
-compiler: arm-linux-gnueabi-gcc (GCC) 10.5.0
-sparse: v0.6.5-rc1
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260308/202603081000.NLJ9u8XA-lkp@intel.com/reproduce)
+Thanks,
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202603081000.NLJ9u8XA-lkp@intel.com/
-
-sparse warnings: (new ones prefixed by >>)
->> drivers/phy/phy-eyeq5-eth.c:246:14: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected void [noderef] __iomem *base @@     got void * @@
-   drivers/phy/phy-eyeq5-eth.c:246:14: sparse:     expected void [noderef] __iomem *base
-   drivers/phy/phy-eyeq5-eth.c:246:14: sparse:     got void *
-
-vim +246 drivers/phy/phy-eyeq5-eth.c
-
-   230	
-   231	static int eq5_phy_probe(struct auxiliary_device *adev,
-   232				 const struct auxiliary_device_id *id)
-   233	{
-   234		struct device *dev = &adev->dev;
-   235		struct phy_provider *provider;
-   236		struct eq5_phy_private *priv;
-   237		void __iomem *base;
-   238		int ret;
-   239	
-   240		priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
-   241		if (!priv)
-   242			return -ENOMEM;
-   243	
-   244		dev_set_drvdata(dev, priv);
-   245	
- > 246		base = dev_get_platdata(dev);
-   247	
-   248		ret = eq5_phy_probe_phy(dev, priv, 0, base, EQ5_PHY0_GP,
-   249					EQ5_PHY0_SGMII, true);
-   250		if (ret)
-   251			return ret;
-   252	
-   253		ret = eq5_phy_probe_phy(dev, priv, 1, base, EQ5_PHY1_GP,
-   254					EQ5_PHY1_SGMII, false);
-   255		if (ret)
-   256			return ret;
-   257	
-   258		provider = devm_of_phy_provider_register(dev, eq5_phy_xlate);
-   259		if (IS_ERR(provider))
-   260			return dev_err_probe(dev, PTR_ERR(provider),
-   261					     "registering provider failed\n");
-   262	
-   263		return 0;
-   264	}
-   265	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+        tglx
 
