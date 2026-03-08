@@ -1,69 +1,65 @@
-Return-Path: <linux-mips+bounces-13409-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-13410-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id Ng6MFSRHrWkl0wEAu9opvQ
-	(envelope-from <linux-mips+bounces-13409-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Sun, 08 Mar 2026 10:53:40 +0100
+	id EBIqBPVJrWkv1AEAu9opvQ
+	(envelope-from <linux-mips+bounces-13410-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Sun, 08 Mar 2026 11:05:41 +0100
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id B528F22F3E2
-	for <lists+linux-mips@lfdr.de>; Sun, 08 Mar 2026 10:53:39 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id C350722F46D
+	for <lists+linux-mips@lfdr.de>; Sun, 08 Mar 2026 11:05:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 55D9B300A74C
-	for <lists+linux-mips@lfdr.de>; Sun,  8 Mar 2026 09:53:38 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id A546A30068D8
+	for <lists+linux-mips@lfdr.de>; Sun,  8 Mar 2026 10:05:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A379536C0AF;
-	Sun,  8 Mar 2026 09:53:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8DCAE36CDFA;
+	Sun,  8 Mar 2026 10:05:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RTvqX2Cq"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="M+Cnyi2J"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DF0B24337B;
-	Sun,  8 Mar 2026 09:53:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B37A313E10;
+	Sun,  8 Mar 2026 10:05:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772963617; cv=none; b=MEcJU7IWgTwMfTLOzFLXh5qbHeVMte4mtCLP/FKgNiwW23Ys+SlZkWG/IByE1fz6lXH277pUr/gUqVtJ9EaynpIStGV3LgrkIZ+VJHQjbDj8KlzylVu9tvAteH7JmXaPymj7xzHKnwF7WuqKzZmx0lf9MYT4bla4AtlJcgwYdtE=
+	t=1772964335; cv=none; b=AupgW7lbWQ6KBtNMd/wnsfJuLyrs1/hR/PvSE4rWRFYGrZhWAh9CcIswuRA1wbav8uBdNCX4EBhn6wEnERsb59rXuicxcy2YA+LP7We9vd1HpzVbhxhJxGvUPslu6yyIGy16mqn7JhIMCmmZ/KNVSqwENOKyzFEmf2t+ITVBVlY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772963617; c=relaxed/simple;
-	bh=YpZtJeyi3j9I0kfeXGeyMC/v7uGkAInhYxZIAZcLHiQ=;
+	s=arc-20240116; t=1772964335; c=relaxed/simple;
+	bh=Xz0WAimiw69MUDVftaaBOxgwbGiOR05HC5RyG8iQnGI=;
 	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=MUt/xVo9SbeSRAqZ/rs9+RcbR4UyJyAHjGZ0i9O35nvSTOqXvefa7TMz1QeBHBGwEEV3Nj8W+OAFvUYsHERlrJICjAikwedLJ6qzZL7fVAEckKBogIzPv0jqvI3fAsXZ+ntMSTmhxfvOVtTZv8zuD9gHeTFFWTcyNZkKMD6boVY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RTvqX2Cq; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32853C116C6;
-	Sun,  8 Mar 2026 09:53:35 +0000 (UTC)
+	 MIME-Version:Content-Type; b=E5UKOeN98p4Cig9OavV0F80LMKdTgnnePfdHpGOeroAlugiRT8J4QwXT0fLaaecenNUdHG0eVNlIzOqajEkhMKG26WMdN+mTBbeD/l8whaDx2TBn4OWtiZehbDbBwnYj0da/omwOfQOiFYH1yYES4XgViMmu7WBWQTd1QVeJERc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=M+Cnyi2J; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0208DC116C6;
+	Sun,  8 Mar 2026 10:05:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1772963617;
-	bh=YpZtJeyi3j9I0kfeXGeyMC/v7uGkAInhYxZIAZcLHiQ=;
+	s=k20201202; t=1772964334;
+	bh=Xz0WAimiw69MUDVftaaBOxgwbGiOR05HC5RyG8iQnGI=;
 	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-	b=RTvqX2CqsybrPAeVVoaqazFAFJGPkzei6O1n7GY6qEkv/iYa6ukUEu/sS4eQnM78A
-	 WR5rowPbwDsAaeuq0az4AZS+jNa1eDlcvcmtDEo4J5x4dcJzgLMVLTVrEZ+lzMLSxU
-	 px2sMA+SBJpkVYHNsU67xLXUuQNCwCuG4YSCNz/IfeBpO+1szqfsy7b1FRJ4MqgKa6
-	 yXz2NjoRBL66CBeMhyDgnE46+3zNstyZJhWXSiuvddb27D2U2gtOMJTvF2vFsUawZR
-	 W1rTO+qCe73tKbQbVsFX21SE4hm/nJcevFlDr8H/aqUhD85PPNTu7m/JQsikdRK5+Q
-	 QGQqHRMjy0UDg==
+	b=M+Cnyi2JPN32ViN1ElLtfAYiQe8n4Tw9ps3EXm1n34NTRyGWuPzeRfG7DwoFehIpq
+	 wN4EDJmEC6A5xXfP0yPAxRW3rrSi4Pvk17pNPxJzUX0iiR9k+y2Ue9GiYc0NJic4yY
+	 H9Nb2xFGZfuoaOKo0iPxjxgWCCkPMtoN4arj1z19bs6fFkZnTfrsOlqRH/bg0s/El7
+	 b/hL6x+gr0cISrCYkNIkvHP8zwh1In7ytoR9YOhAQ12eIHQILWaIMPQRhI+nXPYO/z
+	 NLqn/8fkFHWwDMmbRo7D5jdv3lnbkpd4YzWy8nQSLXnLuxDIwpr0g6gLQHRwO3X90G
+	 5f+VjZkljDeJg==
 From: Thomas Gleixner <tglx@kernel.org>
-To: Daniel J Blueman <daniel@quora.org>
+To: Jiri Wiesner <jwiesner@suse.de>
 Cc: LKML <linux-kernel@vger.kernel.org>, "Paul E. McKenney"
  <paulmck@kernel.org>, John Stultz <jstultz@google.com>, Waiman Long
  <longman@redhat.com>, Peter Zijlstra <peterz@infradead.org>, Daniel
  Lezcano <daniel.lezcano@linaro.org>, Stephen Boyd <sboyd@kernel.org>,
- x86@kernel.org, "Gautham R. Shenoy" <gautham.shenoy@amd.com>, Jiri Wiesner
- <jwiesner@suse.de>, Scott Hamilton <scott.hamilton@eviden.com>, Helge
- Deller <deller@gmx.de>, linux-parisc@vger.kernel.org, Thomas Bogendoerfer
- <tsbogend@alpha.franken.de>, linux-mips@vger.kernel.org
+ x86@kernel.org, "Gautham R. Shenoy" <gautham.shenoy@amd.com>, Daniel J
+ Blueman <daniel@quora.org>, Scott Hamilton <scott.hamilton@eviden.com>,
+ Helge Deller <deller@gmx.de>, linux-parisc@vger.kernel.org, Thomas
+ Bogendoerfer <tsbogend@alpha.franken.de>, linux-mips@vger.kernel.org
 Subject: Re: [patch 5/5] clocksource: Rewrite watchdog code completely
-In-Reply-To: <87ms0zva5i.ffs@tglx>
+In-Reply-To: <aZ87wpdHJ5vajYoL@incl>
 References: <20260123230651.688818373@kernel.org>
- <20260123231521.926490888@kernel.org>
- <CAMVG2ssXZKmw-YTKB5=CvhEofKeyEfaBCDZbyzfUcm2+P5rQsQ@mail.gmail.com>
- <87jywvfkrs.ffs@tglx>
- <CAMVG2ssvadzUUoZw9xdYdZ4T5Sz+xdcQnXmU2NkR0N_yqieT=w@mail.gmail.com>
- <87ms0zva5i.ffs@tglx>
-Date: Sun, 08 Mar 2026 10:53:33 +0100
-Message-ID: <871phu3aw2.ffs@tglx>
+ <20260123231521.926490888@kernel.org> <aZ87wpdHJ5vajYoL@incl>
+Date: Sun, 08 Mar 2026 11:05:31 +0100
+Message-ID: <87y0k21vro.ffs@tglx>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -71,7 +67,7 @@ List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain
-X-Rspamd-Queue-Id: B528F22F3E2
+X-Rspamd-Queue-Id: C350722F46D
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [2.84 / 15.00];
 	MID_END_EQ_FROM_USER_PART(4.00)[];
@@ -79,57 +75,122 @@ X-Spamd-Result: default: False [2.84 / 15.00];
 	MID_RHS_NOT_FQDN(0.50)[];
 	R_MISSING_CHARSET(0.50)[];
 	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
 	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-13409-lists,linux-mips=lfdr.de];
 	FORGED_SENDER_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-13410-lists,linux-mips=lfdr.de];
+	FREEMAIL_CC(0.00)[vger.kernel.org,kernel.org,google.com,redhat.com,infradead.org,linaro.org,amd.com,quora.org,eviden.com,gmx.de,alpha.franken.de];
 	RCVD_TLS_LAST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[16];
 	MIME_TRACE(0.00)[0:+];
-	FREEMAIL_CC(0.00)[vger.kernel.org,kernel.org,google.com,redhat.com,infradead.org,linaro.org,amd.com,suse.de,eviden.com,gmx.de,alpha.franken.de];
+	RCPT_COUNT_TWELVE(0.00)[16];
 	RCVD_COUNT_THREE(0.00)[4];
 	MISSING_XM_UA(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	NEURAL_HAM(-0.00)[-0.661];
 	PRECEDENCE_BULK(0.00)[];
 	FROM_NEQ_ENVFROM(0.00)[tglx@kernel.org,linux-mips@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
 	DKIM_TRACE(0.00)[kernel.org:+];
-	TAGGED_RCPT(0.00)[linux-mips];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	NEURAL_HAM(-0.00)[-0.619];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TAGGED_RCPT(0.00)[linux-mips];
 	TO_DN_SOME(0.00)[];
-	FROM_HAS_DN(0.00)[]
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo]
 X-Rspamd-Action: no action
 
-Daniel!
+On Wed, Feb 25 2026 at 19:13, Jiri Wiesner wrote:
+> On Sat, Jan 24, 2026 at 12:18:01AM +0100, Thomas Gleixner wrote:
+>> To address this and bring back sanity to the watchdog, rewrite the code
+>> completely with a different approach:
+>> 
+>>   1) Restrict the validation against a reference clocksource to the boot
+>>      CPU, which is usually the CPU/Socket closest to the legacy block which
+>>      contains the reference source (HPET/ACPI-PM timer).
+>
+> The UEFI picks the boot CPU so the kernel does not have control over
+> that. On the other hand, I think the CPU that is connected to the
+> southbridge chip (by DMI or PCIe) will be selected in the majority of
+> UEFI implementations.
 
-On Mon, Feb 23 2026 at 14:53, Thomas Gleixner wrote:
-> On Sun, Feb 15 2026 at 20:18, Daniel J Blueman wrote:
->> On Mon, 2 Feb 2026 at 19:27, Thomas Gleixner <tglx@kernel.org> wrote:
->> Good step forward! We can also reduce remote cacheline invalidation by
->> putting 'seq' into the cacheline after 'cpu_ts' by reordering:
->
-> Good point.
->
->> With that said, with your latest change on the 1920 thread setup,
->> WATCHDOG_READOUT_MAX_US 1000 is still needed to avoid timeouts during
->> the previous adverse workload, however some timeouts are still seen
->> during massive parallel process teardowns.
->>
->> To limit overhead, perhaps it is sufficient to set the timeout to
->> 100us, avoid retries (as the hardware thread may continue to be busy
->> and will be rechecked later anyway), and log timeouts at the debug
->> level if at all.
->
-> Something like the below should work even with 50us. I left the print at
-> INFO level for now. We can either change it to pr_info_once() or to
-> debug as you said.
+Picking a remote node CPU would be insane, but yes BIOSes are insane by
+definition.
 
-Any chance you can give this a test ride on that 1920 thread
-monstrosity?
+> There is one issue: What if the reference clocksource itself
+> experiences time skew? I have seen a case like this with the sgi_rtc
+> clocksource. I created a debugging kernel with the HPET as a second
+> watchdog (not affecting the decisions by the watchdog) and got this
+> result:
+
+>> clocksource: timekeeping watchdog on CPU118: Marking clocksource 'tsc' as unstable because the skew is too large:
+>> clocksource: 'sgi_rtc' wd_nsec: 511302794 wd_now: 1cb50e4c4b wd_last: 1ca7097111 mask: ffffffffffffff
+>> clocksource: 'hpet' wd2_nsec: 512005960 wd2_now: 65892719 wd2_last: 64c5d684 mask: ffffffff
+>> clocksource: 'tsc' cs_nsec: 512006458 cs_now: 86b5982cb1 cs_last: 867581bbab mask: ffffffffffffffff
+>> clocksource: 'tsc' skewed 703664 ns (0 ms) over watchdog 'sgi_rtc' interval of 511302794 ns (511 ms)
+>> clocksource: 'tsc' is current clocksource.
+>> tsc: Marking TSC unstable due to clocksource watchdog
+>> clocksource: Checking clocksource tsc synchronization from CPU 610 to CPUs 0-609,611-767.
+>> clocksource: Switched to clocksource sgi_rtc
+>
+> The intervals measured by the TSC and the HPET match very well; the
+> sgi_rtc is off. Even the new implementation of the clocksource
+> watchdog would be susceptible to the reference clocksource
+> experiencing time skew. I think the clocksource watchdog needs to make
+> the assumption that the reference clocksource is right, and the onus
+> should be on hardware developers to make sure the reference
+> clocksource is accurate. In reality, one has to resort to disabling
+> the reference clocksource experiencing time skew or, at least,
+> decreasing the rating of that clocksource.
+
+Yes, we have to make the assumption that the watchdog clocksource is
+actually stable and accurate. If the sgi_rtc is un-reliable, then it
+should be rated down. AFAICT it is per blade and I have no idea how
+synchronized it is accross blades.
+
+>> +static bool watchdog_check_freq(struct clocksource *cs, bool reset_pending)
+>> +{
+>> +		/*
+>> +		 * Calculate and validate the skew against the allowed PPM
+>> +		 * value of the maximum delta plus the watchdog readout
+>> +		 * time.
+>> +		 */
+>> +		if (abs(wd_delta - cs_delta) < (max_delta >> ppm_shift) + wd_seq)
+>> +			return true;
+>
+> Making the threshold proportional to the length of the interval
+> resolves the issue with the (previously) fixed threshold and the
+> interval being stretched on account of the timer running later than
+> when it was meant to expire.
+
+Indeed.
+
+>> +static void watchdog_check_result(struct clocksource *cs)
+>>  {
+>> -	struct clocksource *cs;
+>> +	switch (watchdog_data.result) {
+>> +	case WD_SUCCESS:
+>> +		clocksource_tick_stable(cs);
+>> +		clocksource_enable_highres(cs);
+>> +		return;
+>>  
+>> -	list_for_each_entry(cs, &watchdog_list, wd_list)
+>> +	case WD_FREQ_TIMEOUT:
+>> +		watchdog_print_freq_timeout(cs);
+>> +		/* Try again later and invalidate the reference timestamps. */
+>>  		cs->flags &= ~CLOCK_SOURCE_WATCHDOG;
+>> -}
+>> +		return;
+
+> I like that the new clocksource watchdog is far less punishing. A
+> clocksource may be marked unstable only when the readout latency is
+> below 50 us (and there is time skew or unsynchronized CPU
+> sockets). There is no need for skipping watchdog checks to mitigate
+> the clocksource being marked unstable on account of quite possibly
+> unrelated readout latency, SMIs or vCPU preemption.
+
+That was the design goal of that rewrite. Glad you like it.
 
 Thanks,
 
