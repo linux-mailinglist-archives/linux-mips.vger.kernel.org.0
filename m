@@ -1,466 +1,189 @@
-Return-Path: <linux-mips+bounces-13430-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-13431-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id qOwDDWXbrmm/JQIAu9opvQ
-	(envelope-from <linux-mips+bounces-13430-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Mon, 09 Mar 2026 15:38:29 +0100
+	id 6PqWMGDhrmmoJgIAu9opvQ
+	(envelope-from <linux-mips+bounces-13431-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Mon, 09 Mar 2026 16:04:00 +0100
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id ABC1423AA78
-	for <lists+linux-mips@lfdr.de>; Mon, 09 Mar 2026 15:38:28 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2CDEF23B35B
+	for <lists+linux-mips@lfdr.de>; Mon, 09 Mar 2026 16:04:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 14B9C3031AF1
-	for <lists+linux-mips@lfdr.de>; Mon,  9 Mar 2026 14:37:59 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 18EEE308C2D7
+	for <lists+linux-mips@lfdr.de>; Mon,  9 Mar 2026 14:58:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AA0AB3D333C;
-	Mon,  9 Mar 2026 14:37:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CB6DE3D6699;
+	Mon,  9 Mar 2026 14:58:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="LHdyTiGr"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="F5HPZAT9";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="M05MtgxA"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E41E93B531C;
-	Mon,  9 Mar 2026 14:37:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.171.202.116
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3EE6A3D6663
+	for <linux-mips@vger.kernel.org>; Mon,  9 Mar 2026 14:58:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773067073; cv=none; b=tEMiBRZwe3Mgp/bL+kLticAgEzuoRPA+jV/jl27nsAAiwnso7EmNd+Pa5K/B2WfjQT7YUH3WzVj6STe4KJSzPbc2OvGkQO0dx/pDnYYqQDgrpsGALvxmSPsbSwNNOQmC/9demtRL9cqletoDgB0wuQtepPXyyX72b3Gm215Sclg=
+	t=1773068293; cv=none; b=kPEQaShovMdnUTIRSdAle44yI6Aly+GbHaUmU/hDgR3D11v5jH088vFrgaTlfcRcHEIHtH4FstPVpJuG90ONs23hx37hSbuXRcw80/v7Uh5o6fBAKGMLWRBPPfv5U8otwipS4+K0Zs2TupmMu+x+9eFPoa0h8mI2VkHHxpRMXV0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773067073; c=relaxed/simple;
-	bh=36gpqweckQuwig/VTbNshI12gGxp4mxbbamVYCxghKY=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=eLAgCmUFEVX/gNZkxE5IsZ18ie/biK/C0A7udFYkIoRAikcGI2h0juU8/kbLve0m2SNsN6Efnc8xURMjSqw3DnIAK5vtYKuXBT5ZFOjXvR0CHLwolxwQf8HY+zVtde37BxLo+/tQZJ5yLF8K76pEsDHTvm3cBTEL5R3QAiDmkVk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=LHdyTiGr; arc=none smtp.client-ip=185.171.202.116
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-04.galae.net (Postfix) with ESMTPS id BD5ECC42878;
-	Mon,  9 Mar 2026 14:38:10 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id 5E5F15FFB8;
-	Mon,  9 Mar 2026 14:37:50 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id A46F710369A24;
-	Mon,  9 Mar 2026 15:37:48 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1773067069; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding:in-reply-to:references;
-	bh=s59uMvTFEuSOWz+yJUE8MxE0epOkB5QW4cN16/Yd3Vs=;
-	b=LHdyTiGrYErClrAVzOJV8Cbx3M49OwUXcng7G+KUcOjeHJeaQT/emGTUOwOgMoGBEWx5kf
-	enBY/sGQBV28uxBgfiC/sq57NN769wyl9yqL29T3URKYGdK0x1keukMFb3i7+QiztiAGHt
-	Fb+81jSsqm4eXjHqI+V1fU9neDRuoz4ppubAJaS0qeWgMHrDcVIUfOjFR2tmJF1v8nLOk2
-	CqdgGJILCDeKYrl09XNB0DvzzLY34aDUEKoHdzqR4JC/bxKXe88TqP22Dxr1KpFHOWyBBv
-	tdqI2B3ZivNUMOD+4xfntUxBPsAVt3qBcvfaAKrMQAHB68ZoCaZdiK6gDAkNzw==
-From: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
-Date: Mon, 09 Mar 2026 15:37:34 +0100
-Subject: [PATCH v9] phy: Add driver for EyeQ5 Ethernet PHY wrapper
+	s=arc-20240116; t=1773068293; c=relaxed/simple;
+	bh=wJPB7UPd7El25mJdue1MKD7YwBnP+67VFnImxa+295c=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=OlSl6OI5l8oe13vltIK0h+B3tCVoYOiX4h0tfyEKLWpa+9x5GqEdFb7E7BIPjLhDk5b20gA7RidL8tYR+r48eZ9f1EIbD40Niz9WDS7N42cn602dIiExvMf06D0NkrF2V7x1vQ22/y+36OOGrPaiTZNjee0W/4ng0U0DA/I4CIk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=F5HPZAT9; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=M05MtgxA; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1773068290;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=H1BNKFyRsZcHlEZIOZ9hlANGFti9fPCQQJkxNtYA6no=;
+	b=F5HPZAT9m+7LgzjRXaLwLcPRJ7C2c9y4OMRftQ6DNzZNsvYVwuxs/F/6ehRuD6h6UxbCxq
+	upBkvx2KePZJQN00R3JbqgHwj70AOgfGcRtG+Kxlvu3etoXtIKHdwikhS5w375vkcUnX+M
+	4d6oAhoFX7EHbvoc65bSwKiE7UnMfZI=
+Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com
+ [209.85.160.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-42-GsGQPF5BPrGJMg8hW1hTcA-1; Mon, 09 Mar 2026 10:58:07 -0400
+X-MC-Unique: GsGQPF5BPrGJMg8hW1hTcA-1
+X-Mimecast-MFC-AGG-ID: GsGQPF5BPrGJMg8hW1hTcA_1773068286
+Received: by mail-qt1-f199.google.com with SMTP id d75a77b69052e-50923a9bec8so4897301cf.3
+        for <linux-mips@vger.kernel.org>; Mon, 09 Mar 2026 07:58:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=redhat.com; s=google; t=1773068286; x=1773673086; darn=vger.kernel.org;
+        h=user-agent:in-reply-to:content-transfer-encoding
+         :content-disposition:mime-version:references:message-id:subject:cc
+         :to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=H1BNKFyRsZcHlEZIOZ9hlANGFti9fPCQQJkxNtYA6no=;
+        b=M05MtgxAvJdt+JBg+1HHMdpJDPkmUTfnvmGGa8WHt4moBkW7XQL52Vw+jZhpJgNntp
+         RaQjvZPC/gVfqol1teZMDwuJiH/CvBSsQzEeZtY2aHdwQMxwa2BBUmcndH/rUycYUlMO
+         0CErWrFO2Hz5bjUhMgVXQDeYKqonDestivCln+m2zvEljBFeQHyW6nvY5G4rAF8cN87R
+         lN/e4fYKLl7w81zKnLRr899dBrtMybFkhsbnyP7N/yk1JGSqZVC/KbHqwBw8mNf3Mqwm
+         lszS+Me4x2Q1LD8Hi5Te29gPp5xhGLS7hDDxmGnK2HarlL3iHk/BQUx3Rv8AophqhoeT
+         CiZg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1773068286; x=1773673086;
+        h=user-agent:in-reply-to:content-transfer-encoding
+         :content-disposition:mime-version:references:message-id:subject:cc
+         :to:from:date:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=H1BNKFyRsZcHlEZIOZ9hlANGFti9fPCQQJkxNtYA6no=;
+        b=NsV5c6UYFoNZWkdjEM8Y3XgbZ1hz7lCetMDjAKoQ2tkSselBJN4jtXzUGSWXxSZbSQ
+         RVWbKxO9NzNqy1DYNJOskFTopKKIH6nqFO8C1dOBQ1H19B097/0uzZoKkKzX/K/Um/G7
+         mzBYPS4jcprTZxZ6tHRnHi3q0UjTXWT1tTtZLD065E2oatExON2WhEfe8Ui/L4a1n5WK
+         E/KXXm0Xd9P58RaXF8YTnzAPE/iYxKqt4i3ighXqJmRTQLFTMvYfLL45LPr1185PwDaa
+         eonyDOZWQHhOh544p9NfbIgCCUk8mCO5u/bYDsps8M23OP+5guyuDyoclXBH/2wQds/n
+         UMTQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVAAtlTm+XZpO3+2vp/4u3HYEJQONiLoA0qcdAa+XVccXMdYtRS0/WYx1fIG3NpLVasRgCOA0hs9GIV@vger.kernel.org
+X-Gm-Message-State: AOJu0YwuuPcymHA/+NgFylW9KV1HR7oh0gQ/y2HNxbt8FvnuNmKsfcwE
+	RscvfjAQrOVdEVZS7PpjQuQSV9aLIky+N2bZ4QKr9HstC+haK3N6MR/foL1kSXJGzrJ4PUVjm6O
+	9FHp3eu+BIrvIRljgEmLCr2s59/pWU2eDk5sf2JaL1ret9GFAT2B/zZtHk8PmdYk=
+X-Gm-Gg: ATEYQzxtpRl7LmUiYMayy5TTZXJmU7Sn31iVZ00QTGUAGH2A6ukdWrS6l5VU/btYLYt
+	5rGJOAMEz22m5p+xhjLlW6+rZi58minhtq9QXmQiFzfEwm6rHbutg0QS++fyanUO81GnT9lHiaz
+	rTLQopYM8/K7Fm45WFlUJzTvl82Irq6dEey4gPUlsNItGRI+aPkD6n/EVrO52uMM28I3yH1P5V4
+	LdoG45PnBUFhNzF918lYpz9JszRzPwI6+2ayis1SoOTDmQSj57RrIILu91swbrYe0YWw6nDS4aV
+	HE1XJk5VQ6kX7+5FMIvWo/c4J7ZdVVC7GuXnWBLGyFHNkWIiPZZpIYvef8UZlXzbBeVpjwHg3Ew
+	Jjv/NDkiOC0r0D8VLi5w6zhvGxjazL/BUpLUnpMCrEiXbtHtf6BZtt2ly
+X-Received: by 2002:ac8:7dc1:0:b0:4f1:ba0b:90 with SMTP id d75a77b69052e-508f46e67d2mr142736441cf.8.1773068286439;
+        Mon, 09 Mar 2026 07:58:06 -0700 (PDT)
+X-Received: by 2002:ac8:7dc1:0:b0:4f1:ba0b:90 with SMTP id d75a77b69052e-508f46e67d2mr142735841cf.8.1773068285876;
+        Mon, 09 Mar 2026 07:58:05 -0700 (PDT)
+Received: from redhat.com (c-73-183-52-120.hsd1.pa.comcast.net. [73.183.52.120])
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-509009ad4basm50577251cf.11.2026.03.09.07.58.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 09 Mar 2026 07:58:05 -0700 (PDT)
+Date: Mon, 9 Mar 2026 10:58:03 -0400
+From: Brian Masney <bmasney@redhat.com>
+To: =?iso-8859-1?Q?Beno=EEt?= Monin <benoit.monin@bootlin.com>
+Cc: Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>,
+	Gregory CLEMENT <gregory.clement@bootlin.com>,
+	=?iso-8859-1?Q?Th=E9o?= Lebrun <theo.lebrun@bootlin.com>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>,
+	Philipp Zabel <p.zabel@pengutronix.de>,
+	Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>,
+	Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+	Tawfik Bayouk <tawfik.bayouk@mobileye.com>,
+	linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+	linux-mips@vger.kernel.org
+Subject: Re: [PATCH v4 03/10] clk: fixed-factor: Rework initialization with
+ parent clocks
+Message-ID: <aa7f-yq6e4WpxNrU@redhat.com>
+References: <20260304-clk-eyeq7-v4-0-9d6bd9d24bec@bootlin.com>
+ <20260304-clk-eyeq7-v4-3-9d6bd9d24bec@bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-Message-Id: <20260309-macb-phy-v9-1-5afd87d9db43@bootlin.com>
-References: <20260309-macb-phy-v9-0-5afd87d9db43@bootlin.com>
-In-Reply-To: <20260309-macb-phy-v9-0-5afd87d9db43@bootlin.com>
-To: Vinod Koul <vkoul@kernel.org>, 
- Neil Armstrong <neil.armstrong@linaro.org>
-Cc: linux-phy@lists.infradead.org, linux-kernel@vger.kernel.org, 
- linux-mips@vger.kernel.org, 
- Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>, 
- Gregory CLEMENT <gregory.clement@bootlin.com>, 
- =?utf-8?q?Beno=C3=AEt_Monin?= <benoit.monin@bootlin.com>, 
- Tawfik Bayouk <tawfik.bayouk@mobileye.com>, 
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
- Luca Ceresoli <luca.ceresoli@bootlin.com>, 
- =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
-X-Mailer: b4 0.15-dev
-X-Last-TLS-Session-Version: TLSv1.3
-X-Rspamd-Queue-Id: ABC1423AA78
+In-Reply-To: <20260304-clk-eyeq7-v4-3-9d6bd9d24bec@bootlin.com>
+User-Agent: Mutt/2.2.14 (2025-02-20)
+X-Rspamd-Queue-Id: 2CDEF23B35B
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-2.16 / 15.00];
+X-Spamd-Result: default: False [-0.66 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[bootlin.com,reject];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
-	R_DKIM_ALLOW(-0.20)[bootlin.com:s=dkim];
+	DMARC_POLICY_ALLOW(-0.50)[redhat.com,quarantine];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_DKIM_ALLOW(-0.20)[redhat.com:s=mimecast20190719,redhat.com:s=google];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-13430-lists,linux-mips=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
-	RECEIVED_HELO_LOCALHOST(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	DKIM_TRACE(0.00)[bootlin.com:+];
-	RCPT_COUNT_TWELVE(0.00)[12];
 	MIME_TRACE(0.00)[0:+];
+	RCPT_COUNT_TWELVE(0.00)[21];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-13431-lists,linux-mips=lfdr.de];
+	DKIM_TRACE(0.00)[redhat.com:+];
+	RCVD_TLS_LAST(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	FROM_HAS_DN(0.00)[];
 	TO_DN_SOME(0.00)[];
 	RCVD_COUNT_FIVE(0.00)[6];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[theo.lebrun@bootlin.com,linux-mips@vger.kernel.org];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
-	NEURAL_HAM(-0.00)[-0.988];
-	TAGGED_RCPT(0.00)[linux-mips];
+	FROM_NEQ_ENVFROM(0.00)[bmasney@redhat.com,linux-mips@vger.kernel.org];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	NEURAL_HAM(-0.00)[-0.976];
+	TAGGED_RCPT(0.00)[linux-mips,dt];
 	MID_RHS_MATCH_FROM(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo,bootlin.com:dkim,bootlin.com:email,bootlin.com:mid]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,bootlin.com:email]
 X-Rspamd-Action: no action
 
-EyeQ5 embeds a system-controller called OLB. It features many unrelated
-registers, and some of those are registers used to configure the
-integration of the RGMII/SGMII Cadence PHY used by MACB/GEM instances.
+On Wed, Mar 04, 2026 at 04:25:17PM +0100, BenoÓt Monin wrote:
+> Use the same sequence as clk-divider, clk-gate and other to set the
+> parent_names, parent_hws and parent_data in the init struct when
+> registering a fixed-factor clock. The number of parent clocks is now
+> only set to one if a parent clock is provided.
+> 
+> Previously the number of parent clocks was always one, forcing callers
+> of __clk_hw_register_fixed_factor() to provide a dummy parent_data
+> struct with an invalid clock index in case they were not provided with
+> a non-NULL parent_name or parent_hw. Drop this dummy parent_data as is
+> not necessary anymore.
+> 
+> This change only has a small impact on mis-configured fixed-factor. Now a
+> call to clk_hw_register_fixed_factor() with a NULL parent will register
+> a fixed-factor with zero parent while previously it was registered with
+> one invalid parent. In both cases the rate of the fixed-factor is 0Hz
+> but it is no longer shown as orphaned.
+> 
+> This has no impact on properly configured fixed-factors clocks.
+> 
+> Signed-off-by: BenoÓt Monin <benoit.monin@bootlin.com>
 
-Wrap in a neat generic PHY provider, exposing two PHYs with standard
-phy_init() / phy_set_mode() / phy_power_on() operations.
-
-Reviewed-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
-Signed-off-by: Th√©o Lebrun <theo.lebrun@bootlin.com>
----
- MAINTAINERS                 |   1 +
- drivers/phy/Kconfig         |  13 ++
- drivers/phy/Makefile        |   1 +
- drivers/phy/phy-eyeq5-eth.c | 280 ++++++++++++++++++++++++++++++++++++++++++++
- 4 files changed, 295 insertions(+)
-
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 55af015174a5..6bc2ae3bbd4b 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -17812,6 +17812,7 @@ F:	arch/mips/boot/dts/mobileye/
- F:	arch/mips/configs/eyeq5_defconfig
- F:	arch/mips/mobileye/board-epm5.its.S
- F:	drivers/clk/clk-eyeq.c
-+F:	drivers/phy/phy-eyeq5-eth.c
- F:	drivers/pinctrl/pinctrl-eyeq5.c
- F:	drivers/reset/reset-eyeq.c
- F:	include/dt-bindings/clock/mobileye,eyeq5-clk.h
-diff --git a/drivers/phy/Kconfig b/drivers/phy/Kconfig
-index 3970aa1f300f..cb973a5c0d28 100644
---- a/drivers/phy/Kconfig
-+++ b/drivers/phy/Kconfig
-@@ -67,6 +67,19 @@ config PHY_CAN_TRANSCEIVER
- 	  functional modes using gpios and sets the attribute max link
- 	  rate, for CAN drivers.
- 
-+config PHY_EYEQ5_ETH
-+	tristate "Ethernet PHY Driver on EyeQ5"
-+	depends on OF
-+	depends on MACH_EYEQ5 || COMPILE_TEST
-+	select AUXILIARY_BUS
-+	select GENERIC_PHY
-+	default MACH_EYEQ5
-+	help
-+	  Enable this to support the Ethernet PHY integrated on EyeQ5.
-+	  It supports both RGMII and SGMII. Registers are located in a
-+	  shared register region called OLB. If M is selected, the
-+	  module will be called phy-eyeq5-eth.
-+
- config PHY_GOOGLE_USB
- 	tristate "Google Tensor SoC USB PHY driver"
- 	select GENERIC_PHY
-diff --git a/drivers/phy/Makefile b/drivers/phy/Makefile
-index f49d83f00a3d..05be5759cd10 100644
---- a/drivers/phy/Makefile
-+++ b/drivers/phy/Makefile
-@@ -9,6 +9,7 @@ obj-$(CONFIG_GENERIC_PHY)		+= phy-core.o
- obj-$(CONFIG_GENERIC_PHY_MIPI_DPHY)	+= phy-core-mipi-dphy.o
- obj-$(CONFIG_PHY_AIROHA_PCIE)		+= phy-airoha-pcie.o
- obj-$(CONFIG_PHY_CAN_TRANSCEIVER)	+= phy-can-transceiver.o
-+obj-$(CONFIG_PHY_EYEQ5_ETH)		+= phy-eyeq5-eth.o
- obj-$(CONFIG_PHY_GOOGLE_USB)		+= phy-google-usb.o
- obj-$(CONFIG_USB_LGM_PHY)		+= phy-lgm-usb.o
- obj-$(CONFIG_PHY_LPC18XX_USB_OTG)	+= phy-lpc18xx-usb-otg.o
-diff --git a/drivers/phy/phy-eyeq5-eth.c b/drivers/phy/phy-eyeq5-eth.c
-new file mode 100644
-index 000000000000..c03d77c360f7
---- /dev/null
-+++ b/drivers/phy/phy-eyeq5-eth.c
-@@ -0,0 +1,280 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+
-+#include <linux/auxiliary_bus.h>
-+#include <linux/bitfield.h>
-+#include <linux/bits.h>
-+#include <linux/delay.h>
-+#include <linux/device.h>
-+#include <linux/err.h>
-+#include <linux/errno.h>
-+#include <linux/gfp_types.h>
-+#include <linux/init.h>
-+#include <linux/io.h>
-+#include <linux/iopoll.h>
-+#include <linux/mod_devicetable.h>
-+#include <linux/module.h>
-+#include <linux/of.h>
-+#include <linux/phy.h>
-+#include <linux/phy/phy.h>
-+#include <linux/slab.h>
-+#include <linux/types.h>
-+
-+#define EQ5_PHY_COUNT	2
-+
-+#define EQ5_PHY0_GP	0x128
-+#define EQ5_PHY1_GP	0x12c
-+#define EQ5_PHY0_SGMII	0x134
-+#define EQ5_PHY1_SGMII	0x138
-+
-+#define EQ5_GP_TX_SWRST_DIS	BIT(0)		// Tx SW reset
-+#define EQ5_GP_TX_M_CLKE	BIT(1)		// Tx M clock enable
-+#define EQ5_GP_SYS_SWRST_DIS	BIT(2)		// Sys SW reset
-+#define EQ5_GP_SYS_M_CLKE	BIT(3)		// Sys clock enable
-+#define EQ5_GP_SGMII_MODE	BIT(4)		// SGMII mode
-+#define EQ5_GP_RGMII_DRV	GENMASK(8, 5)	// RGMII drive strength
-+
-+#define EQ5_SGMII_PWR_EN	BIT(0)
-+#define EQ5_SGMII_RST_DIS	BIT(1)
-+#define EQ5_SGMII_PLL_EN	BIT(2)
-+#define EQ5_SGMII_SIG_DET_SW	BIT(3)
-+#define EQ5_SGMII_PWR_STATE	BIT(4)
-+#define EQ5_SGMII_PLL_ACK	BIT(18)
-+#define EQ5_SGMII_PWR_STATE_ACK	GENMASK(24, 20)
-+
-+/*
-+ * Instead of storing a phy_interface_t, we store this enum.
-+ *
-+ * We do not deal with RGMII timings in this generic PHY driver,
-+ * it is all handled inside the net PHY.
-+ */
-+enum eq5_phy_submode {
-+	EQ5_PHY_SUBMODE_SGMII,
-+	EQ5_PHY_SUBMODE_RGMII,
-+};
-+
-+struct eq5_phy_inst {
-+	struct device		*dev;
-+	struct phy		*phy;
-+	void __iomem		*gp, *sgmii;
-+	enum eq5_phy_submode	submode;
-+	bool			sgmii_support;
-+};
-+
-+struct eq5_phy_private {
-+	struct eq5_phy_inst	phys[EQ5_PHY_COUNT];
-+};
-+
-+static int eq5_phy_exit(struct phy *phy)
-+{
-+	struct eq5_phy_inst *inst = phy_get_drvdata(phy);
-+
-+	writel(0, inst->gp);
-+	writel(0, inst->sgmii);
-+	udelay(5); /* settling time */
-+	return 0;
-+}
-+
-+static int eq5_phy_init(struct phy *phy)
-+{
-+	struct eq5_phy_inst *inst = phy_get_drvdata(phy);
-+	u32 reg;
-+
-+	/*
-+	 * Hardware stops listening to our instructions once it is started.
-+	 * It must be reset to reconfigure it.
-+	 */
-+	eq5_phy_exit(phy);
-+
-+	reg = EQ5_GP_TX_SWRST_DIS | EQ5_GP_TX_M_CLKE |
-+	      EQ5_GP_SYS_SWRST_DIS | EQ5_GP_SYS_M_CLKE |
-+	      FIELD_PREP(EQ5_GP_RGMII_DRV, 0x9);
-+	writel(reg, inst->gp);
-+
-+	return 0;
-+}
-+
-+static int eq5_phy_power_on(struct phy *phy)
-+{
-+	struct eq5_phy_inst *inst = phy_get_drvdata(phy);
-+	u32 reg;
-+
-+	if (inst->submode == EQ5_PHY_SUBMODE_SGMII) {
-+		writel(readl(inst->gp) | EQ5_GP_SGMII_MODE, inst->gp);
-+
-+		reg = EQ5_SGMII_PWR_EN | EQ5_SGMII_RST_DIS | EQ5_SGMII_PLL_EN;
-+		writel(reg, inst->sgmii);
-+
-+		if (readl_poll_timeout(inst->sgmii, reg,
-+				       reg & EQ5_SGMII_PLL_ACK, 1, 100)) {
-+			dev_err(inst->dev, "PLL timeout\n");
-+			return -ETIMEDOUT;
-+		}
-+
-+		reg = readl(inst->sgmii);
-+		reg |= EQ5_SGMII_PWR_STATE | EQ5_SGMII_SIG_DET_SW;
-+		writel(reg, inst->sgmii);
-+	} else {
-+		writel(readl(inst->gp) & ~EQ5_GP_SGMII_MODE, inst->gp);
-+		writel(0, inst->sgmii);
-+	}
-+
-+	return 0;
-+}
-+
-+static int eq5_phy_power_off(struct phy *phy)
-+{
-+	struct eq5_phy_inst *inst = phy_get_drvdata(phy);
-+
-+	writel(readl(inst->gp) & ~EQ5_GP_SGMII_MODE, inst->gp);
-+	writel(0, inst->sgmii);
-+
-+	return 0;
-+}
-+
-+static int eq5_phy_validate(struct phy *phy, enum phy_mode mode, int submode,
-+			    union phy_configure_opts *opts)
-+{
-+	struct eq5_phy_inst *inst = phy_get_drvdata(phy);
-+
-+	if (mode != PHY_MODE_ETHERNET)
-+		return -EINVAL;
-+
-+	if (phy_interface_mode_is_rgmii(submode))
-+		return 0;
-+
-+	if (inst->sgmii_support && submode == PHY_INTERFACE_MODE_SGMII)
-+		return 0;
-+
-+	return -EINVAL;
-+}
-+
-+static int eq5_phy_set_mode(struct phy *phy, enum phy_mode mode, int submode)
-+{
-+	struct eq5_phy_inst *inst = phy_get_drvdata(phy);
-+	enum eq5_phy_submode target_submode;
-+	int ret;
-+
-+	ret = eq5_phy_validate(phy, mode, submode, NULL);
-+	if (ret)
-+		return ret;
-+
-+	if (submode == PHY_INTERFACE_MODE_SGMII)
-+		target_submode = EQ5_PHY_SUBMODE_SGMII;
-+	else
-+		target_submode = EQ5_PHY_SUBMODE_RGMII;
-+
-+	if (target_submode == inst->submode)
-+		return 0;
-+
-+	inst->submode = target_submode;
-+
-+	if (phy->power_count) {
-+		eq5_phy_init(phy);
-+		return eq5_phy_power_on(phy);
-+	}
-+
-+	return 0;
-+}
-+
-+static const struct phy_ops eq5_phy_ops = {
-+	.init		= eq5_phy_init,
-+	.exit		= eq5_phy_exit,
-+	.power_on	= eq5_phy_power_on,
-+	.power_off	= eq5_phy_power_off,
-+	.set_mode	= eq5_phy_set_mode,
-+	.validate	= eq5_phy_validate,
-+};
-+
-+static struct phy *eq5_phy_xlate(struct device *dev,
-+				 const struct of_phandle_args *args)
-+{
-+	struct eq5_phy_private *priv = dev_get_drvdata(dev);
-+
-+	if (args->args_count != 1 || args->args[0] >= EQ5_PHY_COUNT)
-+		return ERR_PTR(-EINVAL);
-+
-+	return priv->phys[args->args[0]].phy;
-+}
-+
-+static int eq5_phy_probe_phy(struct device *dev, struct eq5_phy_private *priv,
-+			     unsigned int index, void __iomem *base,
-+			     unsigned int gp, unsigned int sgmii,
-+			     bool sgmii_support)
-+{
-+	struct eq5_phy_inst *inst = &priv->phys[index];
-+	struct phy *phy;
-+
-+	phy = devm_phy_create(dev, dev->of_node, &eq5_phy_ops);
-+	if (IS_ERR(phy))
-+		return dev_err_probe(dev, PTR_ERR(phy),
-+				     "failed to create PHY %u\n", index);
-+
-+	inst->dev = dev;
-+	inst->phy = phy;
-+	inst->gp = base + gp;
-+	inst->sgmii = base + sgmii;
-+	inst->sgmii_support = sgmii_support;
-+	phy_set_drvdata(phy, inst);
-+
-+	/*
-+	 * Init inst->submode based on probe hardware state, allowing
-+	 * consumers to power us on without first setting the mode.
-+	 */
-+	if (sgmii_support && (readl(inst->gp) & EQ5_GP_SGMII_MODE))
-+		inst->submode = EQ5_PHY_SUBMODE_SGMII;
-+	else
-+		inst->submode = EQ5_PHY_SUBMODE_RGMII;
-+
-+	return 0;
-+}
-+
-+static int eq5_phy_probe(struct auxiliary_device *adev,
-+			 const struct auxiliary_device_id *id)
-+{
-+	struct device *dev = &adev->dev;
-+	struct phy_provider *provider;
-+	struct eq5_phy_private *priv;
-+	void __iomem *base;
-+	int ret;
-+
-+	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
-+	if (!priv)
-+		return -ENOMEM;
-+
-+	dev_set_drvdata(dev, priv);
-+
-+	base = (void __iomem *)dev_get_platdata(dev);
-+
-+	ret = eq5_phy_probe_phy(dev, priv, 0, base, EQ5_PHY0_GP,
-+				EQ5_PHY0_SGMII, true);
-+	if (ret)
-+		return ret;
-+
-+	ret = eq5_phy_probe_phy(dev, priv, 1, base, EQ5_PHY1_GP,
-+				EQ5_PHY1_SGMII, false);
-+	if (ret)
-+		return ret;
-+
-+	provider = devm_of_phy_provider_register(dev, eq5_phy_xlate);
-+	if (IS_ERR(provider))
-+		return dev_err_probe(dev, PTR_ERR(provider),
-+				     "registering provider failed\n");
-+
-+	return 0;
-+}
-+
-+static const struct auxiliary_device_id eq5_phy_id_table[] = {
-+	{ .name = "clk_eyeq.phy" },
-+	{}
-+};
-+MODULE_DEVICE_TABLE(auxiliary, eq5_phy_id_table);
-+
-+static struct auxiliary_driver eq5_phy_driver = {
-+	.probe = eq5_phy_probe,
-+	.id_table = eq5_phy_id_table,
-+};
-+module_auxiliary_driver(eq5_phy_driver);
-+
-+MODULE_DESCRIPTION("EyeQ5 Ethernet PHY driver");
-+MODULE_AUTHOR("Th√©o Lebrun <theo.lebrun@bootlin.com>");
-+MODULE_LICENSE("GPL");
-
--- 
-2.53.0
+Reviewed-by: Brian Masney <bmasney@redhat.com>
 
 
