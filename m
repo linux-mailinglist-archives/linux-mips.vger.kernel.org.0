@@ -1,233 +1,186 @@
-Return-Path: <linux-mips+bounces-13414-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-13415-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 4NtWGomArmlfFQIAu9opvQ
-	(envelope-from <linux-mips+bounces-13414-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Mon, 09 Mar 2026 09:10:49 +0100
+	id EJQTIJCHrmnKFgIAu9opvQ
+	(envelope-from <linux-mips+bounces-13415-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Mon, 09 Mar 2026 09:40:48 +0100
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2C7DF23559D
-	for <lists+linux-mips@lfdr.de>; Mon, 09 Mar 2026 09:10:49 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id D4AE3235955
+	for <lists+linux-mips@lfdr.de>; Mon, 09 Mar 2026 09:40:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 7FFB83033E76
-	for <lists+linux-mips@lfdr.de>; Mon,  9 Mar 2026 08:05:22 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 90670303FF0D
+	for <lists+linux-mips@lfdr.de>; Mon,  9 Mar 2026 08:39:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1794035CBC4;
-	Mon,  9 Mar 2026 08:05:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8543A3126AD;
+	Mon,  9 Mar 2026 08:39:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MAx4Hi9R"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WdSRqv1l"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74EF63446DE
-	for <linux-mips@vger.kernel.org>; Mon,  9 Mar 2026 08:05:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.218.48
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773043520; cv=pass; b=FQO2DhpoykXYR9D+B8SYESbEtJrO6Z52Rttuk/Uxf5Ua0qOxtkfTWI9Kx9L6/2RFaXoZJIRmjxiklPCioZ60ZvwzIMa1HaaLpMKYSpsbipBSSglhAgh1EOR9lr/8bVUybe2t+rUKdd6s4m9RZLiYkGnIJuQExGQMCeFE6kcP3w8=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773043520; c=relaxed/simple;
-	bh=9rRUzy7I4Yn9TKSxdiDUjmYRtwSYsMyZ7fp/5IbO/q4=;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C7A830DD38
+	for <linux-mips@vger.kernel.org>; Mon,  9 Mar 2026 08:39:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1773045565; cv=none; b=j8ErZw7RS1SgXTkiWBNgcOa59/Y/N4/ccv1HzqKrAwu11vazxPMSXDkMWhegza8JxJg3l63ptMMbUWvJQ2DTn4CVKIUvAJn1JwnjHjlp1cb7+0kNqHkoVKngSKg2Ua/rh/WfFrYz4s2R81IS2SR2HobHZ1qFFiu7GYJJej8GKjo=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1773045565; c=relaxed/simple;
+	bh=lmhRRii9BO7pCks+UXBWncpJDHHvOFHDr/1FU5tS2Dc=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=uu2JSfgICf0wgdtXoR1Uv/nN5t2F34iDXAialzUosY0dCONnBqEMCrqat0vvOvjX2d3n4rjIrI/agqpQg0A5F/y3jDk8ZQVaxbPiOeEGHQ9mt2UwNuivNn9wEMlPr1wUJKRK+Ga4EEpYkU/42ifts4LPlquajDucbOUc1ai+GY8=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MAx4Hi9R; arc=pass smtp.client-ip=209.85.218.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-b932fe2e1a7so1476066266b.1
-        for <linux-mips@vger.kernel.org>; Mon, 09 Mar 2026 01:05:17 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1773043516; cv=none;
-        d=google.com; s=arc-20240605;
-        b=UC0RZWX7DtZzoK4vXMuCVk6+F+6T8m4AgkkJyZGqnWPzMXX94CNenVrmi7lJZZCwZA
-         fhDuVIquuTa5XSnGf3kBt3/KqZWENytb9uDKsMjEtfkqjHOlBmKJh4/woycxL90fWtgP
-         KqsHqrgs8OVh3mjZmABapE8ZUDTtspHAYhrnYGscU7gLEkYCbYzWFfb0IoGoNO1IfUWC
-         XErjFxnacsM7HMhE/H1JK6cQH1pgp93JCf7QUbe/8veGBVz+whz1kq1G8T2reMUPtiO6
-         BH58cNzzStyWEr6jk8et/8Pl7HMR54ZWCtbhQLmNJcZ05GqTxcmDwXBFyx8BNszu0Oyc
-         gkeQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=fRzvHdv5ruH/JD72yB5V1Ivp7J4AaqZR7aIdb2pmk7E=;
-        fh=jZxFDnCedJvHOCGb5ZTIZVC9tDhDison4FEeJIba3EI=;
-        b=NB+vBzHTnvHhaUF1jZOld35/BDLZ9d+Yuvq+1ENgc2Gqqbp5dDJNTBl2mG4Xfhwh39
-         eUmT4a+1/ZCTJiQ1jb2e+3YxAngsZF7xRpAyV5cApvaS7sYVIefb3tZHxUIZh8Xoa+M2
-         ialpDD3FPuV2LVl5pzkFtVkygboLOYYgf1Kib5ALOdlcjD0tZCCyxLfUA1ICx4LO9s9e
-         5X9jSj3/EoxhFh0PTUPbMEInb5K/9e4CNbSaGyD5VluL8cuTp2tHy1T4Al13qtNxrrKL
-         pANXBUIeVCswzly7jMzyhrtOdPE+wtFBGZLk6hZ1VYkBsp7MOu0rCO329LBsaFDTwF+C
-         JnNQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1773043516; x=1773648316; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=fRzvHdv5ruH/JD72yB5V1Ivp7J4AaqZR7aIdb2pmk7E=;
-        b=MAx4Hi9RxMreRTgf25Ojtq5AG7m7gIV/tqxFeHXNpVdUzSLUev3oGKpJm8MkCdeBWd
-         V6WraHNYY9IpCCte7d0KmJk4Rw6ZHPuTvXIrwpaF80CXe0kRICihs95nddO+blWdaKho
-         FLshdXU6RJwto4UOW43mY0o0KYdk7qaO9Yb+DVuEleX8WrSn9UnAkXN6WYsQFsBZ+VSS
-         eHEprYT9E33a89JZKF6F00lq1j63VN2AOIMTYBWdkrOcybsGFKIh6Bc3fUOUcHdeX0h0
-         HTLkRf3/EMN/3s9Ybb/zlhf3yoY1Qng4nhdzun0q7XJvAhhlvGwE9ZCHO6KOQ1LM0WOz
-         4kGQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1773043516; x=1773648316;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=fRzvHdv5ruH/JD72yB5V1Ivp7J4AaqZR7aIdb2pmk7E=;
-        b=NqyP95smbF33H52rCD4iDqFGs5zW7pxBgQGhaIN5lFfv+ag/cofzvCRgQ0QLT0ABmP
-         pzxGSPDxn9gNuf354KU1H2EG4lfmBOkePYkxqDvDQkFoF5cdTZWmTzIL3Bek3TRSBlOP
-         Yd3zQKifecbsbYMEKC63FgA6vVGJUI/LAwCQELmgx/+Kno1FHO1MPlkgn5aRyDDnWYnH
-         gYbkjlmwVpeInzya8PorPSvjGD4BPLYDZh+cFefNtXp4ZNvO+1Z568LyT+D62rBowIbI
-         h7KDh4eFnyqwocEfOMtQpVHi3BDh36p0x7Zj3J8r+zuGHfq7orbnflixUQpvi9jWZ694
-         6vAg==
-X-Forwarded-Encrypted: i=1; AJvYcCVYiyw8dTKOeUiXWuMF41zWPCLUUNgoveY9YrHl/IZ7QNY3q42D6jQdvnzEJqDDggPJKNucbQ0hpMvm@vger.kernel.org
-X-Gm-Message-State: AOJu0YxPUKYYJ+zFfRlBy14jKdRUReOLHBZtEuhx8ApZQ0AdMJTxRpS5
-	+bdvhBpQvrQpf8zg4Oswg8OtvqFo6phsw3aOUOFCOJP1CgqAO8TZaiheKoNRxMK9dnZJgdb4HLZ
-	CSfzLuVX84o4JT4wIsOWmWqWo9OdvKg4=
-X-Gm-Gg: ATEYQzyVDWE46RVAFnMJcGUbhInGT9D0pbkH0cQmyLieqhkLmgH7xdy1pxb5zsQlTND
-	zEliCi4JGkSlndKKBjOxXq9Dd8RpvmFtQbuG2vIhG+5/IIcp/YZ8TUHmbCFV1yfjA6whCzUq85g
-	qooHHDk10Ttz/9+j8tkJQCcF3zfdHG+fv2jt9UTwSyp2wNb1NvN9vSFBonreJFW/AshFKR27a7J
-	mipZfyuEfFjdy7xWsfIARLgBrmb5earNWpTxFbhOdjhBQNPbeukO5fQTG67mTvYCHNiJROUHgdB
-	FX45ftA=
-X-Received: by 2002:a17:906:c14c:b0:b88:dc6:3967 with SMTP id
- a640c23a62f3a-b942e026133mr560704766b.40.1773043515456; Mon, 09 Mar 2026
- 01:05:15 -0700 (PDT)
+	 To:Cc:Content-Type; b=cWxwGUJJdMfH7W/lovw5KZgImeKfw85xcHHJ/c7nvkQe/wklsZjVhURvDWqdwSolT8X0Grq1xMfsGuzyCp5q6jYqe2JpYSc3eWD5AuGWT4Jr5yS18zBlekS+e4IBhifWbNn2ILvp4ME/zuFQWDwmA22W3EDygbvkNJTehwvbTwo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WdSRqv1l; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3F69DC4AF0D
+	for <linux-mips@vger.kernel.org>; Mon,  9 Mar 2026 08:39:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1773045565;
+	bh=lmhRRii9BO7pCks+UXBWncpJDHHvOFHDr/1FU5tS2Dc=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=WdSRqv1l9cnLKSFLHhILKBputV3GcYJKALfpBY1JSeYsV8M2DTVAhXvGnFdMIUBoZ
+	 u1TTqUSFnSchtsJAGRsbe75vRgVGaAhmdhg9HvU74esJIPW2495NanSULupwyeW7PT
+	 YaCc04FUEFJ+TnyCI7vwqSgqNgUE6uYG7kXhpWsNzBlH62LL0sdi5KV24INW7HWTMS
+	 DaLkZNI+2flGr4fHuiuuvSJz9dW2rJ7bAYkCMV+MUG0PEE3Cta9uzSWVAyA4AxTN5y
+	 +F2ndD2lKnvgeVQlJCtt8r0Do8bYMPx5sz1Wz+M9150u6O8SAJpB7oeuzYGd3EgwS/
+	 7SEvsU49k0Ckw==
+Received: by mail-lj1-f177.google.com with SMTP id 38308e7fff4ca-38a4118c4f7so32324181fa.2
+        for <linux-mips@vger.kernel.org>; Mon, 09 Mar 2026 01:39:25 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCVPQZNbA5iz2kUAhJd20Y3MptnUgCjs8JUVFKqcJDUiC9xP+o13f8wgQyLdQqpbRU/aWgcOPM3Fztra@vger.kernel.org
+X-Gm-Message-State: AOJu0YxWqWbfF1WO9RuX1uUdp+ApVnpFpSH5kA7FwswZZQe2SsPwpJh1
+	pwpqKAcXpOwfEBqQgoeIjLAh7qkYMH7KvL76+q3P5qWzY28QafuBPG0J0ZmnmXxQTUBs+rKBTXJ
+	SOFdt+a9GvgKy9RlwpPYqawnNYGCXSTvo0Aokx/DvxA==
+X-Received: by 2002:a05:651c:892:b0:38a:b18:f41e with SMTP id
+ 38308e7fff4ca-38a40b4bca5mr35053151fa.6.1773045562416; Mon, 09 Mar 2026
+ 01:39:22 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <cover.1771989595.git.zhoubinbin@loongson.cn> <408551399f089d10e2ebc2c0add5ba58d659a1b9.1771989596.git.zhoubinbin@loongson.cn>
- <CAAhV-H6G6Zb7P8OpoM78FkfSW2HeLt+9xfbJyU21tdbUa8A=Ww@mail.gmail.com> <aa5yZ6xSW8yxm9gI@vaman>
-In-Reply-To: <aa5yZ6xSW8yxm9gI@vaman>
-From: Binbin Zhou <zhoubb.aaron@gmail.com>
-Date: Mon, 9 Mar 2026 16:05:03 +0800
-X-Gm-Features: AaiRm5294yKy8lbGyQ7Hmx4k6HbI1oWu6Wm6ACsqemZt6_dIw21pirDFEH1wTc4
-Message-ID: <CAMpQs4JX0jZuLk84QnW79cVrjA-Fs6oDx8Uq_cyTVLTaE3F8vg@mail.gmail.com>
-Subject: Re: [PATCH v3 6/6] dmaengine: loongson: New driver for the Loongson
- Multi-Channel DMA controller
-To: Vinod Koul <vkoul@kernel.org>
-Cc: Huacai Chen <chenhuacai@kernel.org>, Binbin Zhou <zhoubinbin@loongson.cn>, 
-	Huacai Chen <chenhuacai@loongson.cn>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, Frank Li <Frank.Li@kernel.org>, 
-	dmaengine@vger.kernel.org, Xuerui Wang <kernel@xen0n.name>, loongarch@lists.linux.dev, 
-	devicetree@vger.kernel.org, Keguang Zhang <keguang.zhang@gmail.com>, 
-	linux-mips@vger.kernel.org
+References: <20260306-qcom-sa8255p-emac-v7-0-d6a3013094b7@oss.qualcomm.com>
+ <20260306-qcom-sa8255p-emac-v7-1-d6a3013094b7@oss.qualcomm.com> <20260307-boisterous-tuscan-rat-1eb9bb@quoll>
+In-Reply-To: <20260307-boisterous-tuscan-rat-1eb9bb@quoll>
+From: Bartosz Golaszewski <brgl@kernel.org>
+Date: Mon, 9 Mar 2026 09:39:10 +0100
+X-Gmail-Original-Message-ID: <CAMRc=MeeHP_ZjhOHu5NNLCU6Cg59EAWQAS0JngEHDQkmcDH3HQ@mail.gmail.com>
+X-Gm-Features: AaiRm50wcU1Efh35HOluVCqu3-5afwUUXiIKPiOPr6mPL4PpMSQ1J-X9POGllS8
+Message-ID: <CAMRc=MeeHP_ZjhOHu5NNLCU6Cg59EAWQAS0JngEHDQkmcDH3HQ@mail.gmail.com>
+Subject: Re: [PATCH net-next v7 1/7] dt-bindings: net: qcom: document the
+ ethqos device for SCMI-based systems
+To: Krzysztof Kozlowski <krzk@kernel.org>
+Cc: Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>, 
+	Bjorn Andersson <andersson@kernel.org>, Konrad Dybcio <konradybcio@kernel.org>, 
+	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Richard Cochran <richardcochran@gmail.com>, Andrew Lunn <andrew+netdev@lunn.ch>, 
+	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	Maxime Coquelin <mcoquelin.stm32@gmail.com>, Alexandre Torgue <alexandre.torgue@foss.st.com>, 
+	Vinod Koul <vkoul@kernel.org>, Giuseppe Cavallaro <peppe.cavallaro@st.com>, 
+	Jose Abreu <joabreu@synopsys.com>, Chen-Yu Tsai <wens@kernel.org>, 
+	Jernej Skrabec <jernej.skrabec@gmail.com>, Samuel Holland <samuel@sholland.org>, 
+	Matthew Gerlach <matthew.gerlach@altera.com>, Neil Armstrong <neil.armstrong@linaro.org>, 
+	Kevin Hilman <khilman@baylibre.com>, Jerome Brunet <jbrunet@baylibre.com>, 
+	Martin Blumenstingl <martin.blumenstingl@googlemail.com>, 
+	Keguang Zhang <keguang.zhang@gmail.com>, Shawn Guo <shawnguo@kernel.org>, 
+	Sascha Hauer <s.hauer@pengutronix.de>, Pengutronix Kernel Team <kernel@pengutronix.de>, 
+	Fabio Estevam <festevam@gmail.com>, Jan Petrous <jan.petrous@oss.nxp.com>, s32@nxp.com, 
+	Romain Gantois <romain.gantois@bootlin.com>, 
+	Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>, Heiko Stuebner <heiko@sntech.de>, 
+	Chen Wang <unicorn_wang@outlook.com>, Inochi Amaoto <inochiama@gmail.com>, 
+	Emil Renner Berthing <kernel@esmil.dk>, Minda Chen <minda.chen@starfivetech.com>, 
+	Drew Fustini <fustini@kernel.org>, Guo Ren <guoren@kernel.org>, Fu Wei <wefu@redhat.com>, 
+	Nobuhiro Iwamatsu <nobuhiro.iwamatsu.x90@mail.toshiba>, 
+	Geert Uytterhoeven <geert+renesas@glider.be>, Magnus Damm <magnus.damm@gmail.com>, 
+	Maxime Ripard <mripard@kernel.org>, Shuang Liang <liangshuang@eswincomputing.com>, 
+	Zhi Li <lizhi2@eswincomputing.com>, Shangjuan Wei <weishangjuan@eswincomputing.com>, 
+	"G. Jaya Kumaran" <vineetha.g.jaya.kumaran@intel.com>, Clark Wang <xiaoning.wang@nxp.com>, 
+	Linux Team <linux-imx@nxp.com>, Frank Li <Frank.Li@nxp.com>, David Wu <david.wu@rock-chips.com>, 
+	Samin Guo <samin.guo@starfivetech.com>, 
+	Christophe Roullier <christophe.roullier@foss.st.com>, Swathi K S <swathi.ks@samsung.com>, 
+	Mohd Ayaan Anwar <mohd.anwar@oss.qualcomm.com>, linux-arm-msm@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	netdev@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com, 
+	linux-arm-kernel@lists.infradead.org, Drew Fustini <dfustini@tenstorrent.com>, 
+	linux-sunxi@lists.linux.dev, linux-amlogic@lists.infradead.org, 
+	linux-mips@vger.kernel.org, imx@lists.linux.dev, 
+	linux-renesas-soc@vger.kernel.org, linux-rockchip@lists.infradead.org, 
+	sophgo@lists.linux.dev, linux-riscv@lists.infradead.org, 
+	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>, 
+	Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Rspamd-Queue-Id: 2C7DF23559D
+X-Rspamd-Queue-Id: D4AE3235955
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-0.66 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
-	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
-	R_DKIM_ALLOW(-0.20)[gmail.com:s=20230601];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-13414-lists,linux-mips=lfdr.de];
+	FREEMAIL_CC(0.00)[oss.qualcomm.com,kernel.org,gmail.com,lunn.ch,davemloft.net,google.com,redhat.com,foss.st.com,st.com,synopsys.com,sholland.org,altera.com,linaro.org,baylibre.com,googlemail.com,pengutronix.de,oss.nxp.com,nxp.com,bootlin.com,bp.renesas.com,sntech.de,outlook.com,esmil.dk,starfivetech.com,mail.toshiba,glider.be,eswincomputing.com,intel.com,rock-chips.com,samsung.com,vger.kernel.org,st-md-mailman.stormreply.com,lists.infradead.org,tenstorrent.com,lists.linux.dev];
 	FROM_HAS_DN(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
+	DKIM_TRACE(0.00)[kernel.org:+];
 	MIME_TRACE(0.00)[0:+];
+	TAGGED_FROM(0.00)[bounces-13415-lists,linux-mips=lfdr.de];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	FREEMAIL_FROM(0.00)[gmail.com];
-	RCPT_COUNT_TWELVE(0.00)[14];
-	FREEMAIL_CC(0.00)[kernel.org,loongson.cn,vger.kernel.org,xen0n.name,lists.linux.dev,gmail.com];
+	RCVD_TLS_LAST(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
 	TO_DN_SOME(0.00)[];
-	NEURAL_HAM(-0.00)[-0.981];
+	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[zhoubbaaron@gmail.com,linux-mips@vger.kernel.org];
-	DKIM_TRACE(0.00)[gmail.com:+];
-	MID_RHS_MATCH_FROMTLD(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
-	TAGGED_RCPT(0.00)[linux-mips,dt];
+	FROM_NEQ_ENVFROM(0.00)[brgl@kernel.org,linux-mips@vger.kernel.org];
 	MISSING_XM_UA(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[loongson.cn:email,mail.gmail.com:mid,tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo]
+	RCPT_COUNT_GT_50(0.00)[76];
+	TAGGED_RCPT(0.00)[linux-mips,dt,netdev,renesas];
+	NEURAL_HAM(-0.00)[-0.991];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[bootlin.com:email,mail.gmail.com:mid,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,linaro.org:email]
 X-Rspamd-Action: no action
 
-On Mon, Mar 9, 2026 at 3:10=E2=80=AFPM Vinod Koul <vkoul@kernel.org> wrote:
+On Sat, Mar 7, 2026 at 11:25=E2=80=AFAM Krzysztof Kozlowski <krzk@kernel.or=
+g> wrote:
 >
-> On 26-02-26, 16:18, Huacai Chen wrote:
-> > Hi, Binbin,
+> On Fri, Mar 06, 2026 at 04:46:39PM +0100, Bartosz Golaszewski wrote:
+> > From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 > >
-> > On Wed, Feb 25, 2026 at 3:41=E2=80=AFPM Binbin Zhou <zhoubinbin@loongso=
-n.cn> wrote:
-> > >
-> > > This DMA controller appears in Loongson-2K0300 and Loongson-2K3000.
-> > >
-> > > It is a chain multi-channel controller that enables data transfers fr=
-om
-> > > memory to memory, device to memory, and memory to device, as well as
-> > > channel prioritization configurable through the channel configuration
-> > > registers.
-> > >
-> > > In addition, there are slight differences between Loongson-2K0300 and
-> > > Loongson-2K3000, such as channel register offsets and the number of
-> > > channels.
-> > >
-> > > Signed-off-by: Binbin Zhou <zhoubinbin@loongson.cn>
-> > > ---
-> > >  MAINTAINERS                                  |   1 +
-> > >  drivers/dma/loongson/Kconfig                 |  10 +
-> > >  drivers/dma/loongson/Makefile                |   1 +
-> > >  drivers/dma/loongson/loongson2-apb-cmc-dma.c | 729 +++++++++++++++++=
-++
-> > >  4 files changed, 741 insertions(+)
-> > >  create mode 100644 drivers/dma/loongson/loongson2-apb-cmc-dma.c
-> > >
-> > > diff --git a/MAINTAINERS b/MAINTAINERS
-> > > index aea29c28d865..af9fbb3b43e2 100644
-> > > --- a/MAINTAINERS
-> > > +++ b/MAINTAINERS
-> > > @@ -14954,6 +14954,7 @@ L:      dmaengine@vger.kernel.org
-> > >  S:     Maintained
-> > >  F:     Documentation/devicetree/bindings/dma/loongson,ls2k0300-dma.y=
-aml
-> > >  F:     Documentation/devicetree/bindings/dma/loongson,ls2x-apbdma.ya=
-ml
-> > > +F:     drivers/dma/loongson/loongson2-apb-cmc-dma.c
-> > >  F:     drivers/dma/loongson/loongson2-apb-dma.c
-> > >
-> > >  LOONGSON LS2X I2C DRIVER
-> > > diff --git a/drivers/dma/loongson/Kconfig b/drivers/dma/loongson/Kcon=
-fig
-> > > index 9dbdaef5a59f..4278fbbe8096 100644
-> > > --- a/drivers/dma/loongson/Kconfig
-> > > +++ b/drivers/dma/loongson/Kconfig
-> > > @@ -12,6 +12,16 @@ config LOONGSON1_APB_DMA
-> > >           This selects support for the APB DMA controller in Loongson=
-1 SoCs,
-> > >           which is required by Loongson1 NAND and audio support.
-> > >
-> > > +config LOONGSON2_APB_CMC_DMA
-> > > +       tristate "Loongson2 Chain Multi-Channel DMA support"
-> > > +       select DMA_ENGINE
-> > > +       select DMA_VIRTUAL_CHANNELS
-> > > +       help
-> > > +         Support for the Loongson Chain Multi-Channel DMA controller=
- driver.
-> > > +         It is discovered on the Loongson-2K chip (Loongson-2K0300/L=
-oongson-2K3000),
-> > > +         which has 4/8 channels internally, enabling bidirectional d=
-ata transfer
-> > > +         between devices and memory.
-> > Moving this to after LOONGSON2_APB_DMA is a little better.
+> > Describe the firmware-managed variant of the QCom DesignWare MAC. As th=
+e
+> > properties here differ a lot from the HLOS-managed variant, lets put it
+> > in a separate file. Since we need to update the maximum number of power
+> > domains, let's update existing bindings referencing the top-level
+> > snps,dwmac.yaml and limit their maxItems for power-domains to 1.
+> >
+> > Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+> > Reviewed-by: Romain Gantois <romain.gantois@bootlin.com> # For RZ/N1
 >
-> Yes and we expect these files to be sorted, so this needs to be done
-
-This is reorder on the latest patchset:
-
-https://lore.kernel.org/all/cover.1772853681.git.zhoubinbin@loongson.cn/
+> Can we drop half-baked reviews? Reviewing only that piece is not even
+> possible, because it makes no sense outside of main change context. IOW,
+> it's pointless review of nothing, if you do not actually review the main
+> change impacting RZ/N1.
 >
-> --
-> ~Vinod
 
---=20
-Thanks.
-Binbin
+This is the first time I'm hearing we can't review individual parts of
+changesets? I see your point about this particular patch and the fact
+it only makes sense as a whole but is this the official policy for
+parts of larger DTS patches?
+
+Bart
+
+> Also submitting patches do not really allow to apply reviewer's
+> statement of oversight to inly part of the patch.
+>
+> It's called Ack then. Use proper tags if one does not actually review
+> the patch.
+>
+
+I need to resend anyway so I'll drop it. I may also drop the two
+hundred addresses from Cc b4 added. :)
+
+Bart
 
