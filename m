@@ -1,229 +1,188 @@
-Return-Path: <linux-mips+bounces-13427-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-13428-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id CA7DEjbMrmkDJAIAu9opvQ
-	(envelope-from <linux-mips+bounces-13427-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Mon, 09 Mar 2026 14:33:42 +0100
+	id EM3dHNXbrmkCJgIAu9opvQ
+	(envelope-from <linux-mips+bounces-13428-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Mon, 09 Mar 2026 15:40:21 +0100
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id 46683239CDF
-	for <lists+linux-mips@lfdr.de>; Mon, 09 Mar 2026 14:33:41 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id BBA0B23AB08
+	for <lists+linux-mips@lfdr.de>; Mon, 09 Mar 2026 15:40:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id E6A87300C37D
-	for <lists+linux-mips@lfdr.de>; Mon,  9 Mar 2026 13:33:06 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id DF10C314CD95
+	for <lists+linux-mips@lfdr.de>; Mon,  9 Mar 2026 14:34:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D9C582556E;
-	Mon,  9 Mar 2026 13:33:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 598DA3D34BA;
+	Mon,  9 Mar 2026 14:34:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="V4wL+B0K"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="LOOFktWd"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4FBE255F2D
-	for <linux-mips@vger.kernel.org>; Mon,  9 Mar 2026 13:33:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 338073CD8C7;
+	Mon,  9 Mar 2026 14:34:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773063183; cv=none; b=CNQ6Alv+qokyECQ7+XER25CQURZjD9IHTLVkc0o8eKemMzoLSktm4Lhi4t2T1FvoRp/SYJevqb5CGvrLtGygeE6ZGvJi9HUrzZD3SJR4zSReQKq6z3rj9oxK3NUlBc6pfO/hfAJmXkcCrCN35bBC71HlUM3qR4Jiu5YecZww9z4=
+	t=1773066880; cv=none; b=B0irHdYYLYCDndLNI276LXF4Gaixv7Y1vyI3R2kYyQr7nFEaLoW4ot9CQmXbyUNGXTA0lHVP5a3+HhQixpKRXlmIzN93l0xim4/0emlueSzGGH4C5W6gfo9CT/mI9M4sR+oPqPXYm1FW2VY3QmWYR/gbgkoEt+5sw4KPGl36+mY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773063183; c=relaxed/simple;
-	bh=BTHtEpNf79/aZLsd9vWZFWEtV159n9Y/T5kPu0xKjDE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=LykoaBR7XWDF2OzgxXcE9pW+fayfgvTACHroiShLXZZ3aGw4uzFytOvh2iptDML8ndI1r/OciG9OGtrXYqRqpxHkMVCOL5f8QGmjbeVWbxjx1PuYaeiIY91w2iNg0SLj68KnVb926PIp1LSw9ArPGGi++UUb4+AnHQV+xHjYhYI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=V4wL+B0K; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 959D0C2BC9E
-	for <linux-mips@vger.kernel.org>; Mon,  9 Mar 2026 13:33:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1773063183;
-	bh=BTHtEpNf79/aZLsd9vWZFWEtV159n9Y/T5kPu0xKjDE=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=V4wL+B0KN0+mkKl6jlrce5TKebjg3Y43ayQb2agA8rlsxB2L5KrJbPRM4lffmOYVv
-	 WeoCbphnvAiSn14vJApR0DkykhCZi84KdCPucmK3ODu0eGjLqok6PdyDHKytnwBgBj
-	 CbNU5aXCnZQXzrMjw6j+NcNqh0foBwzW4aeI7pggoVoZ8ohWLocNPApwbUoMo85MFY
-	 oGTTo7w0CXdRGL0nRVVZAoudiPxXEXUTap9s9O4ghOFb505d8XzBb/FUXUrxweC0Z3
-	 PaYzMaRcgmkoxPVWNRrh+XRwyJqxfXrInguSTibxttrVEWJpgfwnDvqzFQAaapkrWb
-	 n3DnV8F/mtSjQ==
-Received: by mail-ed1-f54.google.com with SMTP id 4fb4d7f45d1cf-662b42ca0daso8593a12.3
-        for <linux-mips@vger.kernel.org>; Mon, 09 Mar 2026 06:33:03 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCWcpHGQM67kzPxG7yIJwdszqkKm0Hdv7PYQxxWXtATTAG860drxhf29EfCyE0k5Yv3TssOaWGtxNmsE@vger.kernel.org
-X-Gm-Message-State: AOJu0YxiV7QZTYljkd5xZlc8FAxMnm6xKJLCbx45CIo0TdzviIf5ZT+e
-	Fmnqq1LjjLn2oiTKsdBUohY8PVfFN3jUkwzWWVWPOwAMW7hyzV/dnPMa1MijCk32awYz8c5MXlH
-	5e74f5cuorN5XS1fiGp7Q1+bKrd3Hii0=
-X-Received: by 2002:a05:6402:42d1:b0:661:3804:b0c2 with SMTP id
- 4fb4d7f45d1cf-6619d51d6admr5919005a12.27.1773063181991; Mon, 09 Mar 2026
- 06:33:01 -0700 (PDT)
+	s=arc-20240116; t=1773066880; c=relaxed/simple;
+	bh=7Om42pK1736xcJbl+KuCzmLL4e/d9ZBjwuQTwXWl4hg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=omTpcVM2UYyv8UASyacy+SiBcBNEEPtkfmNJmCVvBGZM7m0K204gpR/E40Lj3EE2+ieFeXCouRhXx8pRm9CfjxC7cVzvyRX/wBsFMdLQNLkQQy5Lw4CXX5rVMkAjy+G/ETVTPT/D6GvkVZdD4Zv2RUc3DE0F8OD+ud7Rh7NyVuU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=LOOFktWd; arc=none smtp.client-ip=198.175.65.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1773066868; x=1804602868;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=7Om42pK1736xcJbl+KuCzmLL4e/d9ZBjwuQTwXWl4hg=;
+  b=LOOFktWdatsSPnA6eRbW7BCyJw5erJ2mT6tCYHayNkLFDWwvtlN5ARQe
+   EcbjMV4PTeQSVvETaXcl/ZmY1JB9mVCM6CV0nANfvx8cNyGyKkMSoaqTX
+   iV6hntz0Uox12LefidQcqFakW4imqg/3lwd6u1s1SgHHm0dHk4ub67pOB
+   diCOL4kBN4AK7enAT+zVEJb22Ug9O+JYlCtHvmH7wr2ftd6A5OzeNr0J2
+   bnHzRDbJlhBU1MZArbPl/DGqj4rEVU5Qm5ikDRcLi2CjYGFDK6maqb+5a
+   TgsuFhJ4yGrEQjpubztGXOEWVnFhyh1f6XZUXAIY0I4Zu1Tk/NyhxwonO
+   A==;
+X-CSE-ConnectionGUID: 7KV6ZKJ+SfWmq/0nF1Mcmw==
+X-CSE-MsgGUID: 6YFjJiYvRo6EVCgE2JjMdg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11723"; a="91474620"
+X-IronPort-AV: E=Sophos;i="6.23,109,1770624000"; 
+   d="scan'208";a="91474620"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2026 07:34:28 -0700
+X-CSE-ConnectionGUID: y56EkhnJSZGZ87q7lNuH8w==
+X-CSE-MsgGUID: lvH563DEQ7iMQcx0+cmJKg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,109,1770624000"; 
+   d="scan'208";a="219708076"
+Received: from aduenasd-mobl5.amr.corp.intel.com (HELO [10.125.109.195]) ([10.125.109.195])
+  by orviesa009-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2026 07:34:27 -0700
+Message-ID: <51c8272d-e7d2-422c-aec5-54ba8ec7c9fe@intel.com>
+Date: Mon, 9 Mar 2026 07:34:38 -0700
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <cover.1772853681.git.zhoubinbin@loongson.cn>
-In-Reply-To: <cover.1772853681.git.zhoubinbin@loongson.cn>
-From: Huacai Chen <chenhuacai@kernel.org>
-Date: Mon, 9 Mar 2026 21:32:52 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H65H5WjRarf8KHN3zb1jSyFpGPS1By2=0Kqd1MqnVx9ow@mail.gmail.com>
-X-Gm-Features: AaiRm53ShuE-RRVpgsb6NRxueHra0ZOJThCsn08_hzoyeP4saxxF_8G4DDjsnCc
-Message-ID: <CAAhV-H65H5WjRarf8KHN3zb1jSyFpGPS1By2=0Kqd1MqnVx9ow@mail.gmail.com>
-Subject: Re: [PATCH v4 0/6] dmaengine: Add Loongson Multi-Channel DMA
- controller support
-To: Binbin Zhou <zhoubinbin@loongson.cn>
-Cc: Binbin Zhou <zhoubb.aaron@gmail.com>, Huacai Chen <chenhuacai@loongson.cn>, 
-	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Vinod Koul <vkoul@kernel.org>, Frank Li <Frank.Li@kernel.org>, dmaengine@vger.kernel.org, 
-	Xuerui Wang <kernel@xen0n.name>, loongarch@lists.linux.dev, devicetree@vger.kernel.org, 
-	Keguang Zhang <keguang.zhang@gmail.com>, linux-mips@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Rspamd-Queue-Id: 46683239CDF
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] drivers: pcmcia: remove obsolete host controller drivers
+To: Ethan Nelson-Moore <enelsonmoore@gmail.com>,
+ linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
+ linux-pci@vger.kernel.org
+Cc: Dominik Brodowski <linux@dominikbrodowski.net>,
+ Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+ Madhavan Srinivasan <maddy@linux.ibm.com>,
+ Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>,
+ "Christophe Leroy (CS GROUP)" <chleroy@kernel.org>,
+ Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+ Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
+ x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+ Bjorn Helgaas <bhelgaas@google.com>, Jakub Kicinski <kuba@kernel.org>,
+ Theodore Ts'o <tytso@mit.edu>, Eric Biggers <ebiggers@google.com>,
+ Simon Horman <horms@kernel.org>, Lukas Bulwahn <lukas.bulwahn@redhat.com>
+References: <20260309074226.25937-1-enelsonmoore@gmail.com>
+From: Dave Hansen <dave.hansen@intel.com>
+Content-Language: en-US
+Autocrypt: addr=dave.hansen@intel.com; keydata=
+ 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
+In-Reply-To: <20260309074226.25937-1-enelsonmoore@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Rspamd-Queue-Id: BBA0B23AB08
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.66 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
-	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
+	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-13427-lists,linux-mips=lfdr.de];
-	FREEMAIL_CC(0.00)[gmail.com,loongson.cn,kernel.org,vger.kernel.org,xen0n.name,lists.linux.dev];
-	FROM_HAS_DN(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-13428-lists,linux-mips=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[14];
+	FREEMAIL_TO(0.00)[gmail.com,vger.kernel.org];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	FREEMAIL_CC(0.00)[dominikbrodowski.net,alpha.franken.de,linux.ibm.com,ellerman.id.au,gmail.com,kernel.org,redhat.com,alien8.de,linux.intel.com,zytor.com,google.com,mit.edu];
+	RCPT_COUNT_TWELVE(0.00)[22];
 	MIME_TRACE(0.00)[0:+];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	MISSING_XM_UA(0.00)[];
-	TO_DN_SOME(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[chenhuacai@kernel.org,linux-mips@vger.kernel.org];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	NEURAL_HAM(-0.00)[-0.990];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[linux-mips,dt];
-	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[mail.gmail.com:mid,sin.lore.kernel.org:rdns,sin.lore.kernel.org:helo,loongson.cn:email]
+	FROM_NEQ_ENVFROM(0.00)[dave.hansen@intel.com,linux-mips@vger.kernel.org];
+	DKIM_TRACE(0.00)[intel.com:+];
+	NEURAL_HAM(-0.00)[-0.978];
+	TAGGED_RCPT(0.00)[linux-mips];
+	MID_RHS_MATCH_FROM(0.00)[];
+	TO_DN_SOME(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[intel.com:dkim,intel.com:email,intel.com:mid,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo]
 X-Rspamd-Action: no action
 
-On Sat, Mar 7, 2026 at 11:25=E2=80=AFAM Binbin Zhou <zhoubinbin@loongson.cn=
-> wrote:
->
-> Hi all:
->
-> This patchset introduces the Loongson multi-channel DMA controller,
-> which is present in the Loongson-2K0300 and Loongson-2K3000 processors.
->
-> It is a multi-channel controller that enables data transfers from memory
-> to memory, device to memory, and memory to device, as well as channel
-> prioritization configurable through the channel configuration registers.
->
-> Additionally, since multiple distinct types of DMA controllers exist on
-> the Loongson platform, I have attempted to consolidate all Loongson DMA
-> drivers into a new directory named `Loongson` for easier management.
-For the whole series,
-Reviewed-by: Huacai Chen <chenhuacai@loongson.cn>
+On 3/9/26 00:41, Ethan Nelson-Moore wrote:
+...
+>  arch/x86/kernel/resource.c            |    2 +-
 
->
-> Thanks.
-> Binbin
->
-> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> V4:
-> - Rebase on dmaengine/next tree;
-> - Add Reviewed-by tags from Frank and Rob, thanks;
->
-> patch(1/6):
->  - Add `depends on` restrictions.
->
-> patch(6/6):
->  - Move loongson2_cmc_dma_config{..} close to its users.
->
-> Link to V3:
-> https://lore.kernel.org/dmaengine/cover.1771989595.git.zhoubinbin@loongso=
-n.cn/
->
-> V3:
-> - Rebase on dmaengine/next tree;
->
-> patch(1/6):
->  - Keep alphabet order;
->
-> patch(2/6):
->  - Add Reviewed-by tag from Frank, thanks;
->
-> patch(3/6)/(4/6):
->  - New patches, format loongson2-apb-dma driver code;
->
-> patch(5/6):
->  - Add description for `interrupts` property;
->
-> patch(6/6):
->  - Use ffs() helper make the code cleaner;
->  - Refact loongson2_cmc_dma_chan_irq();
->  - Simplify locking with guard() and scoped_guard();
->  - kzalloc()->kzalloc_flex().
->
-> Link to V2:
-> https://lore.kernel.org/all/cover.1770605931.git.zhoubinbin@loongson.cn/
->
-> V2:
-> patch(1/4):
->  - Update loongson1-apb-dma.c entry in MAINTAINERS.
->
-> patch(2/4):
->  - New patch, use dmaenginem_async_device_register() helper.
->
-> patch(3/4):
->  - `additionalProperties: false` replaced by
->    `unevaluatedProperties: false`.
->
-> patch(4/4):
->  - Rename filename as loongson2-apb-cmc-dma.c;
->  - Rename Kconfig item as LOONGSON2_APB_CMC_DMA;
->  - Rename the variable prefix as `loongson2_cmc_dma`;
->  - Use dmaenginem_async_device_register() helper;
->  - Drop 'dma_' prefix in struct loongson2_mdma_chan_reg;
->  - Use struct_size();
->
-> Link to V1:
-> https://lore.kernel.org/all/cover.1770119693.git.zhoubinbin@loongson.cn/
->
-> Binbin Zhou (6):
->   dmaengine: loongson: New directory for Loongson DMA controllers
->     drivers
->   dmaengine: loongson: loongson2-apb: Convert to
->     dmaenginem_async_device_register()
->   dmaengine: loongson: loongson2-apb: Convert to devm_clk_get_enabled()
->   dmaengine: loongson: loongson2-apb: Simplify locking with guard() and
->     scoped_guard()
->   dt-bindings: dmaengine: Add Loongson Multi-Channel DMA controller
->   dmaengine: loongson: New driver for the Loongson Multi-Channel DMA
->     controller
->
->  .../bindings/dma/loongson,ls2k0300-dma.yaml   |  81 ++
->  MAINTAINERS                                   |   7 +-
->  drivers/dma/Kconfig                           |  25 +-
->  drivers/dma/Makefile                          |   3 +-
->  drivers/dma/loongson/Kconfig                  |  41 +
->  drivers/dma/loongson/Makefile                 |   4 +
->  .../dma/{ =3D> loongson}/loongson1-apb-dma.c    |   4 +-
->  drivers/dma/loongson/loongson2-apb-cmc-dma.c  | 730 ++++++++++++++++++
->  .../dma/{ =3D> loongson}/loongson2-apb-dma.c    |  93 +--
->  9 files changed, 903 insertions(+), 85 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/dma/loongson,ls2k03=
-00-dma.yaml
->  create mode 100644 drivers/dma/loongson/Kconfig
->  create mode 100644 drivers/dma/loongson/Makefile
->  rename drivers/dma/{ =3D> loongson}/loongson1-apb-dma.c (99%)
->  create mode 100644 drivers/dma/loongson/loongson2-apb-cmc-dma.c
->  rename drivers/dma/{ =3D> loongson}/loongson2-apb-dma.c (91%)
->
->
-> base-commit: c8e9b1d9febc83ee94944695a07cfd40a1b29743
-> --
-> 2.52.0
->
+Acked-by: Dave Hansen <dave.hansen@linux.intel.com> # for x86
+
+Just curious, roughly when were *these* controllers that you are
+removing actually being sold in new systems? Because I think you're
+leaving the drivers for the newer controllers in place, at least for the
+moment.
+
+One nit:
+
+> i82365.h is used by drivers other than i82365 and is therefore retained.
+
+It might be nice to add a comment in that header about what its current
+role still *is*. It seems like some (newer?) PCMCIA controllers shared
+register ABI with the i82365.
+
+But that's obviously super minor.
 
