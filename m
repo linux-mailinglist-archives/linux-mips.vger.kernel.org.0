@@ -1,48 +1,50 @@
-Return-Path: <linux-mips+bounces-13418-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-13420-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 2JGiG73IrmlwIwIAu9opvQ
-	(envelope-from <linux-mips+bounces-13418-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Mon, 09 Mar 2026 14:18:53 +0100
+	id +LnqF8LIrmlwIwIAu9opvQ
+	(envelope-from <linux-mips+bounces-13420-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Mon, 09 Mar 2026 14:18:58 +0100
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id D87412398FF
-	for <lists+linux-mips@lfdr.de>; Mon, 09 Mar 2026 14:18:52 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2766423991D
+	for <lists+linux-mips@lfdr.de>; Mon, 09 Mar 2026 14:18:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 69C7130094C2
-	for <lists+linux-mips@lfdr.de>; Mon,  9 Mar 2026 13:18:51 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 4E4FC301BDC8
+	for <lists+linux-mips@lfdr.de>; Mon,  9 Mar 2026 13:18:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AA8543BED6F;
-	Mon,  9 Mar 2026 13:18:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 108AF3C2769;
+	Mon,  9 Mar 2026 13:18:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cjdns.fr header.i=@cjdns.fr header.b="GjMOdncY"
+	dkim=pass (2048-bit key) header.d=cjdns.fr header.i=@cjdns.fr header.b="arpzSAP+"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from mail.cjdns.fr (mail.cjdns.fr [5.135.140.105])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36E933BD63D;
-	Mon,  9 Mar 2026 13:18:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F6013C2774;
+	Mon,  9 Mar 2026 13:18:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=5.135.140.105
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773062330; cv=none; b=TQt31AEqYN3J9dvb7Kr8+BssHkH/oM2EWIwi+EPi+KFFyrkJtmNW4tnTVbQlBq4uTrNWs2EUlE7f9btrWLU0rAowizNEhZKObwFQtpvXSqsQ30JoruMTG5cWCf14BiQfWewZN1JXCOuBBAjL8qHkrs+7t90wqWA4QJSrrR3O24o=
+	t=1773062334; cv=none; b=upyCwTckBnBIzUVv900R7VurHwyCG98VzL1I+dqS63eOmXmnhtduy0Fo9gJGcWVJzLiflsulA7YSw8kpigWay1xsGuV2beX/C+/cVYMTmaWWVcvM/IAALYl+mGgOyvpHy1nmbsY2eAgdhC5kAonMP50S9qMKU3k+6Pq/55iU47A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773062330; c=relaxed/simple;
-	bh=I/fnei6+1zSYKsgxvA65UaXWt07Edw6ULpLRDKhr4Io=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=ZjsPyey50QBPc36eUB7jXDwwZF6XTvUuE+2lV8hnzle5tUYIwF+Afg50uUZ7niTMChRNetQM9uFVePIXiSfFdoUrvn6rHl2ZrtPnBbCr6OQ8g1RlUt24hepK/3GwJhzpOBoLwv4AmtDFTbAGW1ZmSeIqdO1vH2UgFQdxSUrQnDs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=cjdns.fr; spf=pass smtp.mailfrom=cjdns.fr; dkim=pass (2048-bit key) header.d=cjdns.fr header.i=@cjdns.fr header.b=GjMOdncY; arc=none smtp.client-ip=5.135.140.105
+	s=arc-20240116; t=1773062334; c=relaxed/simple;
+	bh=q/q/Hr9u/FQi3GAawSY26iu1G6qQMuvjFv4Se2zHqEU=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=ZP4NhKAH2rP9f9bqFuXjOTde6xUcU7/G3s63WhIKDiQAICWfjc3LKmPBoQ+WocQfulFFo+6z4HOEL9DKBP0qLa0Bzqx0jq6TE/ej7KZa2m7UetSOrvKERWl6IkUcklmtCnT2nLuveJ3vjgFNMECTG+hG0Yc672jiIrRDyWPPYBM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=cjdns.fr; spf=none smtp.mailfrom=cjdns.fr; dkim=pass (2048-bit key) header.d=cjdns.fr header.i=@cjdns.fr header.b=arpzSAP+; arc=none smtp.client-ip=5.135.140.105
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=cjdns.fr
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cjdns.fr
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 7695B284DD7;
-	Mon,  9 Mar 2026 14:18:32 +0100 (CET)
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=cjdns.fr
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 1E69E28680B;
+	Mon,  9 Mar 2026 14:18:40 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cjdns.fr; s=dkim;
-	t=1773062319; h=from:subject:date:message-id:to:cc:mime-version:
-	 content-transfer-encoding; bh=Y07gyMyA+v61AkgAjpiX1Hx/H6h+2ViD5prXyk9P3U4=;
-	b=GjMOdncYe6alUKv1iGSD8mSIJWw9X7w8G8Tw2F5S3/Wz052nxQrUNbclTyhViUsqFhy8uf
-	C6/MKgSsiwk2MpOzEieAkEdUbYEUan9KLAJ6Cj/A/75ZTBzlkw5zTzbhwMs8ovUNnySttd
-	v4Ne/HYsA2K1D9If9zwt3WXq5sYb64cYAfkGCj2Po4Pxir1dJVnEiQ0YWEYnSI6RgMB7+3
-	YJ9p5GYweAJtS0hxLYE+ynGtr2gH7+YVKrdT3D9pdOwL23NOFYR7xlpuAaPel1K521I8lw
-	GCEavo2ObQVrYDX3oPynx9/EjTSt4Ex/t3pyfwxOKJd44gMtMK6MlCYlu9KD0A==
+	t=1773062323; h=from:subject:date:message-id:to:cc:mime-version:
+	 content-transfer-encoding:in-reply-to:references;
+	bh=0kKSPlWgiC0oMPA6n4uvU5Sf5SxbvpnQg9oy7p1Ayeo=;
+	b=arpzSAP+g0pElGs95Ot3BhOqKoSnrYBZs+76Rlx4+vAfybkoxr7rxG7roWlwXOd+iMHPMi
+	OA23z5d7vNvC6UDiO5n5xRBg9Ie8JUwLOGDZdK05Arha4VqTqIggHITYS7j8BDqeRp9VO2
+	p9p3/kcKYXSn6I4N4h7qx0sK2J+F1MSFNo0lXMVBOKafEz4S6f0x0+fIpMY6a4UzBM+Ltj
+	HBNChVddBLZBcDBQYpArmnQ2wmpTN3gXoNjnRokfHxz5PtFNhXYtyPvexOw5Gj+oq6zmGk
+	eQlvPenO6C0d/Te75pTGn2k7cSlbw16StN+cFqxveWE3rCcXb/RAOfNa5UvZ2Q==
 From: Caleb James DeLisle <cjd@cjdns.fr>
 To: linux-mips@vger.kernel.org
 Cc: naseefkm@gmail.com,
@@ -73,9 +75,11 @@ Cc: naseefkm@gmail.com,
 	linux-mediatek@lists.infradead.org,
 	linux-phy@lists.infradead.org,
 	linux-arm-kernel@lists.infradead.org
-Subject: [PATCH v2 0/8] mips: econet: Add clk/reset and PCIe support
-Date: Mon,  9 Mar 2026 13:18:10 +0000
-Message-Id: <20260309131818.74467-1-cjd@cjdns.fr>
+Subject: [PATCH v2 1/8] dt-bindings: clock, reset: Add econet EN751221
+Date: Mon,  9 Mar 2026 13:18:11 +0000
+Message-Id: <20260309131818.74467-2-cjd@cjdns.fr>
+In-Reply-To: <20260309131818.74467-1-cjd@cjdns.fr>
+References: <20260309131818.74467-1-cjd@cjdns.fr>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -84,7 +88,7 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Last-TLS-Session-Version: TLSv1.3
-X-Rspamd-Queue-Id: D87412398FF
+X-Rspamd-Queue-Id: 2766423991D
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [0.84 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
@@ -93,7 +97,7 @@ X-Spamd-Result: default: False [0.84 / 15.00];
 	R_MISSING_CHARSET(0.50)[];
 	DMARC_POLICY_ALLOW(-0.50)[cjdns.fr,none];
 	R_DKIM_ALLOW(-0.20)[cjdns.fr:s=dkim];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
@@ -103,7 +107,7 @@ X-Spamd-Result: default: False [0.84 / 15.00];
 	MIME_TRACE(0.00)[0:+];
 	RECEIVED_HELO_LOCALHOST(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-13418-lists,linux-mips=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-13420-lists,linux-mips=lfdr.de];
 	MISSING_XM_UA(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
@@ -115,66 +119,162 @@ X-Spamd-Result: default: False [0.84 / 15.00];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-mips,dt];
 	RCPT_COUNT_TWELVE(0.00)[29];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[cjdns.fr:dkim,cjdns.fr:mid,tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo]
+	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:rdns,sto.lore.kernel.org:helo,cjdns.fr:dkim,cjdns.fr:email,cjdns.fr:mid]
 X-Rspamd-Action: no action
 
-Add clock/reset and PCIe support to EcoNet EN751221 and related SoCs.
-This builds on the Airoha EN7523 clock driver and the Mediatek PCIe driver.
+Add clock and reset bindings for EN751221 as well as a "chip-scu" which is
+an additional regmap that is used by the clock driver as well as others.
+This split of the SCU across two register areas is the same as the Airoha
+AN758x family.
 
-Patch 6 is upstreaming of Ahmed Naseef's work on EcoNet PCIe, which was
-developed to support the EN7528, but which works equally on the EN751221.
-
-There is also a workaround in patch 7 to gracefully handle PCI hardware
-which does not advertize a bridge window and instead always reads zero.
-
-Changes in v2:
-* clock/econet,en751221-scu.h drop EN751221_MAX_CLKS
-* clk-en7523.c add EN751221_MAX_CLKS
-* econet,en751221-chip-scu.yaml drop in favor of using mtd/syscon.yaml
-* airoha,en7523-scu.yaml drop redundant example
-* econet,en751221-pcie-phy.yaml Refer to PHYs as "gen1" and "gen2"
-* pcie-mediatek.c Exclude pcie_retrain_link() when building as a module
-* en751221.dtsi "econet,en751221-scu" is not a "syscon"
-* Rebase to linux-next
-* v1: https://lore.kernel.org/linux-mips/20260303190948.694783-1-cjd@cjdns.fr/
-
-Caleb James DeLisle (8):
-  dt-bindings: clock, reset: Add econet EN751221
-  clk: airoha: Add econet EN751221 clock/reset support to en7523-scu
-  dt-bindings: phy: Document PCIe PHY in EcoNet EN751221 and EN7528
-  phy: econet: Add PCIe PHY driver for EcoNet EN751221 and EN7528 SoCs.
-  dt-bindings: PCI: mediatek: Add support for EcoNet EN7528
-  PCI: mediatek: Add support for EcoNet EN7528 SoC
-  PCI: Skip bridge window reads when window is not supported
-  mips: dts: Add PCIe to EcoNet EN751221
-
- .../bindings/clock/airoha,en7523-scu.yaml     |   7 +-
- .../devicetree/bindings/mfd/syscon.yaml       |   2 +
- .../bindings/pci/mediatek-pcie.yaml           |   1 +
- .../phy/econet,en751221-pcie-phy.yaml         |  50 ++++
- MAINTAINERS                                   |   9 +
- arch/mips/boot/dts/econet/en751221.dtsi       | 114 +++++++++
- .../econet/en751221_smartfiber_xp8421-b.dts   |  21 ++
- arch/mips/econet/Kconfig                      |   2 +
- drivers/clk/Kconfig                           |   6 +-
- drivers/clk/clk-en7523.c                      | 238 +++++++++++++++++-
- drivers/pci/controller/Kconfig                |   2 +-
- drivers/pci/controller/pcie-mediatek.c        | 118 +++++++++
- drivers/pci/probe.c                           |   6 +
- drivers/phy/Kconfig                           |  12 +
- drivers/phy/Makefile                          |   1 +
- drivers/phy/phy-econet-pcie.c                 | 180 +++++++++++++
- .../dt-bindings/clock/econet,en751221-scu.h   |  13 +
- .../dt-bindings/reset/econet,en751221-scu.h   |  49 ++++
- 18 files changed, 821 insertions(+), 10 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/phy/econet,en751221-pcie-phy.yaml
- create mode 100644 drivers/phy/phy-econet-pcie.c
+Signed-off-by: Caleb James DeLisle <cjd@cjdns.fr>
+---
+ .../bindings/clock/airoha,en7523-scu.yaml     |  7 ++-
+ .../devicetree/bindings/mfd/syscon.yaml       |  2 +
+ MAINTAINERS                                   |  2 +
+ .../dt-bindings/clock/econet,en751221-scu.h   | 13 +++++
+ .../dt-bindings/reset/econet,en751221-scu.h   | 49 +++++++++++++++++++
+ 5 files changed, 72 insertions(+), 1 deletion(-)
  create mode 100644 include/dt-bindings/clock/econet,en751221-scu.h
  create mode 100644 include/dt-bindings/reset/econet,en751221-scu.h
 
-
-base-commit: 3fa5e5702a82d259897bd7e209469bc06368bf31
+diff --git a/Documentation/devicetree/bindings/clock/airoha,en7523-scu.yaml b/Documentation/devicetree/bindings/clock/airoha,en7523-scu.yaml
+index a8471367175b..91abe7716fce 100644
+--- a/Documentation/devicetree/bindings/clock/airoha,en7523-scu.yaml
++++ b/Documentation/devicetree/bindings/clock/airoha,en7523-scu.yaml
+@@ -32,6 +32,7 @@ properties:
+       - enum:
+           - airoha,en7523-scu
+           - airoha,en7581-scu
++          - econet,en751221-scu
+ 
+   reg:
+     items:
+@@ -67,7 +68,10 @@ allOf:
+   - if:
+       properties:
+         compatible:
+-          const: airoha,en7581-scu
++          items:
++            - enum:
++                - airoha,en7581-scu
++                - econet,en751221-scu
+     then:
+       properties:
+         reg:
+@@ -98,3 +102,4 @@ examples:
+               #reset-cells = <1>;
+       };
+     };
++
+diff --git a/Documentation/devicetree/bindings/mfd/syscon.yaml b/Documentation/devicetree/bindings/mfd/syscon.yaml
+index e57add2bacd3..e22867088063 100644
+--- a/Documentation/devicetree/bindings/mfd/syscon.yaml
++++ b/Documentation/devicetree/bindings/mfd/syscon.yaml
+@@ -61,6 +61,7 @@ select:
+           - cirrus,ep7209-syscon2
+           - cirrus,ep7209-syscon3
+           - cnxt,cx92755-uc
++          - econet,en751221-chip-scu
+           - freecom,fsg-cs2-system-controller
+           - fsl,imx93-aonmix-ns-syscfg
+           - fsl,imx93-wakeupmix-syscfg
+@@ -173,6 +174,7 @@ properties:
+               - cirrus,ep7209-syscon2
+               - cirrus,ep7209-syscon3
+               - cnxt,cx92755-uc
++              - econet,en751221-chip-scu
+               - freecom,fsg-cs2-system-controller
+               - fsl,imx93-aonmix-ns-syscfg
+               - fsl,imx93-wakeupmix-syscfg
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 14899f1de77e..3781d55db5bb 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -9119,6 +9119,8 @@ F:	arch/mips/boot/dts/econet/
+ F:	arch/mips/econet/
+ F:	drivers/clocksource/timer-econet-en751221.c
+ F:	drivers/irqchip/irq-econet-en751221.c
++F:	include/dt-bindings/clock/econet,en751221-scu.h
++F:	include/dt-bindings/reset/econet,en751221-scu.h
+ 
+ ECRYPT FILE SYSTEM
+ M:	Tyler Hicks <code@tyhicks.com>
+diff --git a/include/dt-bindings/clock/econet,en751221-scu.h b/include/dt-bindings/clock/econet,en751221-scu.h
+new file mode 100644
+index 000000000000..44a5b197cb06
+--- /dev/null
++++ b/include/dt-bindings/clock/econet,en751221-scu.h
+@@ -0,0 +1,13 @@
++/* SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause) */
++
++#ifndef _DT_BINDINGS_CLOCK_ECONET_EN751221_SCU_H_
++#define _DT_BINDINGS_CLOCK_ECONET_EN751221_SCU_H_
++
++#define EN751221_CLK_PCIE	0
++#define EN751221_CLK_SPI	1
++#define EN751221_CLK_BUS	2
++#define EN751221_CLK_CPU	3
++#define EN751221_CLK_HPT	4
++#define EN751221_CLK_GSW	5
++
++#endif /* _DT_BINDINGS_CLOCK_ECONET_EN751221_SCU_H_ */
+diff --git a/include/dt-bindings/reset/econet,en751221-scu.h b/include/dt-bindings/reset/econet,en751221-scu.h
+new file mode 100644
+index 000000000000..bad499d4d50a
+--- /dev/null
++++ b/include/dt-bindings/reset/econet,en751221-scu.h
+@@ -0,0 +1,49 @@
++/* SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause) */
++
++#ifndef __DT_BINDINGS_RESET_CONTROLLER_ECONET_EN751221_H_
++#define __DT_BINDINGS_RESET_CONTROLLER_ECONET_EN751221_H_
++
++#define EN751221_XPON_PHY_RST		 0
++#define EN751221_PCM1_ZSI_ISI_RST	 1
++#define EN751221_FE_QDMA1_RST		 2
++#define EN751221_FE_QDMA2_RST		 3
++#define EN751221_FE_UNZIP_RST		 4
++#define EN751221_PCM2_RST		 5
++#define EN751221_PTM_MAC_RST		 6
++#define EN751221_CRYPTO_RST		 7
++#define EN751221_SAR_RST		 8
++#define EN751221_TIMER_RST		 9
++#define EN751221_INTC_RST		10
++#define EN751221_BONDING_RST		11
++#define EN751221_PCM1_RST		12
++#define EN751221_UART_RST		13
++#define EN751221_GPIO_RST		14
++#define EN751221_GDMA_RST		15
++#define EN751221_I2C_MASTER_RST		16
++#define EN751221_PCM2_ZSI_ISI_RST	17
++#define EN751221_SFC_RST		18
++#define EN751221_UART2_RST		19
++#define EN751221_GDMP_RST		20
++#define EN751221_FE_RST			21
++#define EN751221_USB_HOST_P0_RST	22
++#define EN751221_GSW_RST		23
++#define EN751221_SFC2_PCM_RST		24
++#define EN751221_PCIE0_RST		25
++#define EN751221_PCIE1_RST		26
++#define EN751221_CPU_TIMER_RST		27
++#define EN751221_PCIE_HB_RST		28
++#define EN751221_SIMIF_RST		29
++#define EN751221_XPON_MAC_RST		30
++#define EN751221_GFAST_RST		31
++#define EN751221_CPU_TIMER2_RST		32
++#define EN751221_UART3_RST		33
++#define EN751221_UART4_RST		34
++#define EN751221_UART5_RST		35
++#define EN751221_I2C2_RST		36
++#define EN751221_XSI_MAC_RST		37
++#define EN751221_XSI_PHY_RST		38
++#define EN751221_DMT_RST		39
++#define EN751221_USB_PHY_P0_RST		40
++#define EN751221_USB_PHY_P1_RST		41
++
++#endif /* __DT_BINDINGS_RESET_CONTROLLER_ECONET_EN751221_H_ */
 -- 
 2.39.5
 
