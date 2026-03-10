@@ -1,219 +1,163 @@
-Return-Path: <linux-mips+bounces-13434-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-13435-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id sLFBEZ5vr2m6YQIAu9opvQ
-	(envelope-from <linux-mips+bounces-13434-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Tue, 10 Mar 2026 02:10:54 +0100
+	id aLItJlK2r2lzbwIAu9opvQ
+	(envelope-from <linux-mips+bounces-13435-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Tue, 10 Mar 2026 07:12:34 +0100
 X-Original-To: lists+linux-mips@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9D2292435AC
-	for <lists+linux-mips@lfdr.de>; Tue, 10 Mar 2026 02:10:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 04794245B8D
+	for <lists+linux-mips@lfdr.de>; Tue, 10 Mar 2026 07:12:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id F2B693055129
-	for <lists+linux-mips@lfdr.de>; Tue, 10 Mar 2026 01:10:51 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 50C6F30523D9
+	for <lists+linux-mips@lfdr.de>; Tue, 10 Mar 2026 06:12:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 436DD26A1AC;
-	Tue, 10 Mar 2026 01:10:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A052D314A86;
+	Tue, 10 Mar 2026 06:12:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="cqifN+fw";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="KZXjQUJc"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="A6aNEl07"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dy1-f181.google.com (mail-dy1-f181.google.com [74.125.82.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD952255E43
-	for <linux-mips@vger.kernel.org>; Tue, 10 Mar 2026 01:10:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75354314A79
+	for <linux-mips@vger.kernel.org>; Tue, 10 Mar 2026 06:12:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773105051; cv=none; b=A0AbVqSsnE39crFSIQoy1V6jhUEYjHnCd+KC/VtxghroiJteLPmlkGpzKo+Y2qZLp2xYp9X3id8bgEGLfcJH6wIPb4XJdPWba07vbhBh0YhlALfaH1RdI+KHLoD2Qg4o6Cf87eha1msh2WSuV0XaM5pyx7yi9IdRb4mEx8DaB6o=
+	t=1773123140; cv=none; b=GXhADBMH2S1j8iirHtmePccXP52hvCb0N+YnLVcf8yazLtCW/aOpJ2WzCrTwiBVDvmTTIa4m9iMGMpYHsu4Iqx74Ok/CDYLbNgAztO1hKmalmX93Ew7xuW3Wuz3gANzW0j9YsuOQD0O2QxFKnLBq7Knb4NAyF/PfHWgh4huZv6E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773105051; c=relaxed/simple;
-	bh=KTWcRe1uEdBcdV3dSWnFRmmQqhKcuVtF4VSklt2P5Ak=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=ekwt8hMzzTJn5uuKY+MyvqVDRg8nRr7DIdkNwj3Uqis/gD+jNvwq8uUxDaqeTcpcx9DeeLUo8LyQTdjCeAh49r+s+ZbBNUiDEhQPevRxQh7SZYoDkjl9YvHgl216EB+p8inks9jj26M1CKyXHJz+/7zUVT9JkpZLfUToQsJU1wQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=cqifN+fw; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=KZXjQUJc; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1773105048;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=KTWcRe1uEdBcdV3dSWnFRmmQqhKcuVtF4VSklt2P5Ak=;
-	b=cqifN+fwey2uuNWJKbAsGYioMmWLpfgqH57gQOr1PYOkFE6fvblDYnVtz2nA7OVLf1W5TS
-	5pnW1Z3YgQuM3ev3hHmotlAOQD0KB6EBjEz6R/FzU7qYJ9QbgfKpGOIpLLDEWZBdlN8365
-	Dn+ceKEbOO7qeSVvEZKcY0r5oYDHTSI=
-Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com
- [209.85.219.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-433-xZnukYBNPzK6PBPlcd6BTQ-1; Mon, 09 Mar 2026 21:10:47 -0400
-X-MC-Unique: xZnukYBNPzK6PBPlcd6BTQ-1
-X-Mimecast-MFC-AGG-ID: xZnukYBNPzK6PBPlcd6BTQ_1773105047
-Received: by mail-qv1-f69.google.com with SMTP id 6a1803df08f44-899f757514bso577687676d6.1
-        for <linux-mips@vger.kernel.org>; Mon, 09 Mar 2026 18:10:47 -0700 (PDT)
+	s=arc-20240116; t=1773123140; c=relaxed/simple;
+	bh=2zz5RnScCUMkzHONosF9yEW8ZXBLhntgWYXPYRZwkYw=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=Z6058VoAxAdFp2R64d0Ye9Aj2HKtf19L0PkWuzsOJpN9vOkvBb7q1OT4x5Tx7hqNWvM7R0flaxWsXf8hRLfLR8UDkJExZsnwhe0tGo92AbtUAo/0s6ULwDXmbMk34PVcmqWpQVtnj/2PW2XUKlJqtUEGlmqujS8o8Vn/ayVyc/0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=A6aNEl07; arc=none smtp.client-ip=74.125.82.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-dy1-f181.google.com with SMTP id 5a478bee46e88-2be19f05d7dso638408eec.1
+        for <linux-mips@vger.kernel.org>; Mon, 09 Mar 2026 23:12:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1773105047; x=1773709847; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=KTWcRe1uEdBcdV3dSWnFRmmQqhKcuVtF4VSklt2P5Ak=;
-        b=KZXjQUJcjgAHJDetunx4foLlQCvQaZjkAubtSBZ/Xb6KdQx4sq/PHRRIHywxiIxORW
-         kmi06fwVKuHqaA9W/mKKq5aDE298F0xRx1jBVAIOPtonDJqxxOCgiJNB13hldcEaVOrm
-         h56qVNjQ6gzSZlAZqnc7hysf2SqW/rIG9ndGme9t5ntz8eTwHOMTsKJvd1G+cRMZxpQK
-         xudYNP77IsqOvCdBjdxrCUTBLL9NJUgi+Ns7pPdt9d2j7rMjZHPdlFepp6WDlrDs3LK3
-         4E/ikrvQoHYUU7/kHmubyH7T4tCdzqSsudkcXCyM5dxFgrxQPcNqnM7bTe6y+tnArFn7
-         Ej/w==
+        d=gmail.com; s=20230601; t=1773123138; x=1773727938; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=GZ9KmidaRrJqyFwsMVgxQzC62T02yMtxzxJg/inqp4A=;
+        b=A6aNEl072c5J2qM3hQY4d7bEhuEaChrnqzHG6g524djTh7dSOXAXJ2IN6zN9XFXecB
+         rflAteUE/3fX6Ctxw+3yG6uQO8tgJqf7c0lZ6u8fYK1TPj3MPuE6PzhMpFCg3ECRZGvA
+         uyjHY0PBRq8yGxlfbeujYgPxYg8aV+/HYG2tblncbmDeJapnu7B9onBD2WVPVRMN84HK
+         WW53cSjk4ghabNDq3UiY00dO5MY4xheS2rQQKS/5BFjTB8xZ8rrIBE+4d17z1MEkpPCC
+         7dh0AGJksSsskFUZ0BFmu7I4hr/0SBiEK6R9AFFTmcWkY8TrJWKhF4HarB2WLx+xxzcu
+         tUdQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1773105047; x=1773709847;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=KTWcRe1uEdBcdV3dSWnFRmmQqhKcuVtF4VSklt2P5Ak=;
-        b=hsLulM9Zbub5PB4YW2txofZO1OAD+SVbwmD9ROA4qpf8QJNQr7cRdcVIkRVQR8/wtx
-         xn7VSDtZ6HZZw0nywL6K37pa6o/ro3bNQI1DOpAbJGIocRGp3TAXN8Y0NUSQDXP6/lnA
-         SPM2Cy6wlmLZmArDvc3dPYcrcR6AsihWBPy/2wCreLNKLzN6SNX1zbws9BjmpJso/fbp
-         BUgM59CYOtl16tVjUbTmo3gDKSO0DRO1dGo+AjBOtyEQH6k+xt8wrjT83NSoILagsvu9
-         mJDNGvI/fmjfhm+slhRxymcVO0cYxXNsdSr1U4gcbD4KMolILmGLb5YUQldiNyc9Zngj
-         a8ig==
-X-Forwarded-Encrypted: i=1; AJvYcCWm/BuNWpdzk74dm8jQWprPVyH0xn3Pg2yq3U/kWE+2WSxm7YO3geUvxoCTnAs2fI/uMj1KP81G/IK6@vger.kernel.org
-X-Gm-Message-State: AOJu0YzlTqgwN7HeZXaNi7qnCQ+4dE2gSQ8RdjLf2iPO0gg0j5HTLCLD
-	GPEbcQcuxZtnHA8qp5aNicWi4LUs8leZ8q/oosRlHQRlVr+vAC15AoqJxUTw14QdOLKA+hpeuV1
-	LW5CoDGS5ggKL+UYc3/V6YbDwVzZdw5sHE2pztfHKj4Qh8CTo4NyuDnkwSK6E+zU=
-X-Gm-Gg: ATEYQzxP873LBsXGmkEQM5yH9CDVDJNA26mi95FYpPhoifliW7PY45OCDIP3lCk2ZTr
-	FUlNuMXBGiCtv3uYh5UxV4qyllH/mEDyCjPtvZWFpDcjaF9BKxP/3eMQ6tMEjMoZGhIL2VITQ5B
-	BPPBWgakEznHevNVCPc3Scp9fPFcw31yrUkHq+ob95wEhdJgpmIO+l874FSNaMmI9BAT58As02B
-	5XXgfTO8CxHLFAEWfT6omy7AeXfEKHA4mWzCjVH3Xki3yWhXW9Cy4tNsuztBB/eGpS1t6QgoyqP
-	ZwxFcGyC7FQNN2M1tQPLXil1UcLeeejMvtbsPgI3oEJRa/hTBy1A1HIsKQVczgbMyJv06n9+QQb
-	CL9xc6luZt1bsrnX/+qb2KnVJXPE17HyZrTn5G8zzywnRsSyr+VUna2PcAIxpKXcUzkontY4zm+
-	ZILQp2/wLj1uYSQw==
-X-Received: by 2002:a05:6214:d8b:b0:89a:258:c1d1 with SMTP id 6a1803df08f44-89a30ad1c78mr197365116d6.42.1773105047104;
-        Mon, 09 Mar 2026 18:10:47 -0700 (PDT)
-X-Received: by 2002:a05:6214:d8b:b0:89a:258:c1d1 with SMTP id 6a1803df08f44-89a30ad1c78mr197364236d6.42.1773105046575;
-        Mon, 09 Mar 2026 18:10:46 -0700 (PDT)
-Received: from thinkpad-p1.localdomain (pool-174-112-193-187.cpe.net.cable.rogers.com. [174.112.193.187])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-89a57a18252sm10681656d6.10.2026.03.09.18.10.42
+        d=1e100.net; s=20230601; t=1773123138; x=1773727938;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=GZ9KmidaRrJqyFwsMVgxQzC62T02yMtxzxJg/inqp4A=;
+        b=XDJdy12N5J5dFCnRR/FBGlTVwZ/7626CNNLWS73kLx5A2yyZWvPKPuiv3XSOyOtzwN
+         ezXmK4p3zJBpS/ZtpBuXhf/cOemnqiZ1WeysLLvRWAxO4bTiXP/bf1O7ewuwCxXzu+MR
+         EHgXWJsNc+wHTQg8Eub7oPizpeZC3u0/VTa4IdkUUH/Go3Y3ccpxqyEIZ+5sR2/O4drp
+         7eZ2U6wTL4YAwDdfSJ9ZqWqsTXFvEIbkA0YMSSEQPA1pdDiq/zt0ytzaLXv1GX8wtLrd
+         3aVy7xsVFYyapCX70sT89efI6skVDZfOb27MI0V6rjsydbj0vV1uHHumKZzDikCzyMPs
+         o06A==
+X-Gm-Message-State: AOJu0YxirfYSeGwf5prCW8Sgs/r7sgOwIVH5day1ges35/FC1y2iOhnx
+	TYIleCxAWxg1/I5h54fwYk/9v64m3NzwOKu0Kr+tVnhSzA4GCrGYaM9iLdN2cQ==
+X-Gm-Gg: ATEYQzw6Pscu+9d1pVYHnhU4qAELk3Nrc2zMQzj/VJuPLncPIMeipwxw0XpqhDYv0Ri
+	x4O+tA/aFFYZrfwq++Ovw4AyU8TJnoNrvfRB3GvqWp3gNe89rj+jYSxSLqyy3yWdUCz55NY1Z5H
+	WJFNDjM8iSdQ47VS8cXKWkZVpOwy9agfU3VU5ZpGg+ZI2UvgnNIf3md5YX21G5Evo4NS7nTRxiP
+	m+b7l0ZrceSWla5QVwysdQb73iNdaD7kIGTcyruFu4pwbPUejOBcUNkREcJs+wck2XOzndEJpL4
+	drG894JIuPSinZSS2FY4XzQNkQcwiRFzvVWeHLiMdko9p0k/fkqVnFD6mq1m1zZu5XEQNl4YtBG
+	xTs4ToX7vfMnSfaqv3cfh4kC0Ueom4rreTeg8x2HRGROZzPC7tUVb9hMxFAczxTVQshHgIJ7LZJ
+	G0RfSU3Yb8lvtMxMKXXvJSTeBEQCSz+3q2dL9nnP0cmUGzZUvVaTUkhoNX80jBrvalgny/Re45e
+	55XbLOd2CUIlcp2gkUpXwbZew==
+X-Received: by 2002:a05:7301:6895:b0:2be:ca4:e144 with SMTP id 5a478bee46e88-2be4e04ce65mr5882948eec.31.1773123138307;
+        Mon, 09 Mar 2026 23:12:18 -0700 (PDT)
+Received: from dtor-ws.sjc.corp.google.com ([2a00:79e0:2ebe:8:2a0a:17c2:21e7:dcfb])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2be4f96aa32sm11787106eec.26.2026.03.09.23.12.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 Mar 2026 18:10:45 -0700 (PDT)
-Message-ID: <4728554b256f016d9a5f3e019ed831387b0f059b.camel@redhat.com>
-Subject: Re: [PATCH net-next v7 0/7] net: stmmac: qcom-ethqos: add support
- for SCMI power domains
-From: Radu Rendec <rrendec@redhat.com>
-To: Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>, Bjorn
- Andersson <andersson@kernel.org>, Konrad Dybcio <konradybcio@kernel.org>,
- Rob Herring <robh@kernel.org>,  Krzysztof Kozlowski	 <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Richard Cochran	
- <richardcochran@gmail.com>, Andrew Lunn <andrew+netdev@lunn.ch>, "David S.
- Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Jakub
- Kicinski <kuba@kernel.org>,  Paolo Abeni <pabeni@redhat.com>, Maxime
- Coquelin <mcoquelin.stm32@gmail.com>, Alexandre Torgue	
- <alexandre.torgue@foss.st.com>, Vinod Koul <vkoul@kernel.org>, Giuseppe
- Cavallaro <peppe.cavallaro@st.com>, Jose Abreu <joabreu@synopsys.com>,
- Chen-Yu Tsai <wens@kernel.org>,  Jernej Skrabec <jernej.skrabec@gmail.com>,
- Samuel Holland <samuel@sholland.org>, Matthew Gerlach	
- <matthew.gerlach@altera.com>, Neil Armstrong <neil.armstrong@linaro.org>, 
- Kevin Hilman <khilman@baylibre.com>, Jerome Brunet <jbrunet@baylibre.com>,
- Martin Blumenstingl	 <martin.blumenstingl@googlemail.com>, Keguang Zhang
- <keguang.zhang@gmail.com>,  Shawn Guo <shawnguo@kernel.org>, Sascha Hauer
- <s.hauer@pengutronix.de>, Pengutronix Kernel Team	 <kernel@pengutronix.de>,
- Fabio Estevam <festevam@gmail.com>, Jan Petrous	 <jan.petrous@oss.nxp.com>,
- s32@nxp.com, Romain Gantois	 <romain.gantois@bootlin.com>, Lad Prabhakar	
- <prabhakar.mahadev-lad.rj@bp.renesas.com>, Heiko Stuebner
- <heiko@sntech.de>,  Chen Wang <unicorn_wang@outlook.com>, Inochi Amaoto
- <inochiama@gmail.com>, Emil Renner Berthing	 <kernel@esmil.dk>, Minda Chen
- <minda.chen@starfivetech.com>, Drew Fustini	 <fustini@kernel.org>, Guo Ren
- <guoren@kernel.org>, Fu Wei <wefu@redhat.com>,  Nobuhiro Iwamatsu
- <nobuhiro.iwamatsu.x90@mail.toshiba>, Geert Uytterhoeven
- <geert+renesas@glider.be>, Magnus Damm	 <magnus.damm@gmail.com>, Maxime
- Ripard <mripard@kernel.org>, Shuang Liang	
- <liangshuang@eswincomputing.com>, Zhi Li <lizhi2@eswincomputing.com>, 
- Shangjuan Wei <weishangjuan@eswincomputing.com>, "G. Jaya Kumaran"
- <vineetha.g.jaya.kumaran@intel.com>,  Clark Wang <xiaoning.wang@nxp.com>,
- Linux Team <linux-imx@nxp.com>, Frank Li <Frank.Li@nxp.com>, David Wu	
- <david.wu@rock-chips.com>, Samin Guo <samin.guo@starfivetech.com>, 
- Christophe Roullier <christophe.roullier@foss.st.com>, Swathi K S
- <swathi.ks@samsung.com>, Bartosz Golaszewski	 <brgl@kernel.org>, Mohd Ayaan
- Anwar <mohd.anwar@oss.qualcomm.com>
-Cc: linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, netdev@vger.kernel.org, 
-	linux-stm32@st-md-mailman.stormreply.com,
- linux-arm-kernel@lists.infradead.org,  Drew Fustini
- <dfustini@tenstorrent.com>, linux-sunxi@lists.linux.dev,
- linux-amlogic@lists.infradead.org, 	linux-mips@vger.kernel.org,
- imx@lists.linux.dev, 	linux-renesas-soc@vger.kernel.org,
- linux-rockchip@lists.infradead.org, 	sophgo@lists.linux.dev,
- linux-riscv@lists.infradead.org, Bartosz Golaszewski	
- <bartosz.golaszewski@linaro.org>, Krzysztof Kozlowski	
- <krzysztof.kozlowski@oss.qualcomm.com>, Konrad Dybcio	
- <konrad.dybcio@oss.qualcomm.com>
-Date: Mon, 09 Mar 2026 21:10:41 -0400
-In-Reply-To: <20260306-qcom-sa8255p-emac-v7-0-d6a3013094b7@oss.qualcomm.com>
-References: <20260306-qcom-sa8255p-emac-v7-0-d6a3013094b7@oss.qualcomm.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.56.2 (3.56.2-2.fc42) 
+        Mon, 09 Mar 2026 23:12:17 -0700 (PDT)
+From: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Subject: [PATCH 0/4] MIPS: alchemy: attach software nodes to GPIO
+ controllers and use properties
+Date: Mon, 09 Mar 2026 23:11:57 -0700
+Message-Id: <20260309-alchemy-v1-0-f55e9dc60ba1@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Rspamd-Queue-Id: 9D2292435AC
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAC22r2kC/y3M2wpAQBSF4VfRvjY1iMGryIVYzC7HGUTy7iZcf
+ qvVf5GFYVjKvYsMdrY8jQ6B71Gtq7GD4MaZQhkmMpKZqPpaYziFSoM4RasAmZB7zwYtH2+pKD8
+ bLJsLrv943w+EkaH4bgAAAA==
+X-Change-ID: 20260309-alchemy-78158ef7ee06
+To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+X-Mailer: b4 0.15-dev-a6826
+X-Rspamd-Queue-Id: 04794245B8D
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.66 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[redhat.com,quarantine];
-	R_DKIM_ALLOW(-0.20)[redhat.com:s=mimecast20190719,redhat.com:s=google];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
 	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20230601];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	DKIM_TRACE(0.00)[redhat.com:+];
-	FROM_HAS_DN(0.00)[];
-	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-13434-lists,linux-mips=lfdr.de];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	FREEMAIL_TO(0.00)[oss.qualcomm.com,kernel.org,gmail.com,lunn.ch,davemloft.net,google.com,redhat.com,foss.st.com,st.com,synopsys.com,sholland.org,altera.com,linaro.org,baylibre.com,googlemail.com,pengutronix.de,oss.nxp.com,nxp.com,bootlin.com,bp.renesas.com,sntech.de,outlook.com,esmil.dk,starfivetech.com,mail.toshiba,glider.be,eswincomputing.com,intel.com,rock-chips.com,samsung.com];
+	TO_DN_SOME(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
 	MIME_TRACE(0.00)[0:+];
-	RCVD_COUNT_FIVE(0.00)[6];
+	TAGGED_FROM(0.00)[bounces-13435-lists,linux-mips=lfdr.de];
+	RCVD_TLS_LAST(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	DKIM_TRACE(0.00)[gmail.com:+];
+	RCPT_COUNT_THREE(0.00)[3];
+	FROM_HAS_DN(0.00)[];
+	FREEMAIL_FROM(0.00)[gmail.com];
+	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[rrendec@redhat.com,linux-mips@vger.kernel.org];
+	FROM_NEQ_ENVFROM(0.00)[dmitrytorokhov@gmail.com,linux-mips@vger.kernel.org];
 	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	RCPT_COUNT_GT_50(0.00)[77];
+	NEURAL_HAM(-0.00)[-0.999];
+	TAGGED_RCPT(0.00)[linux-mips];
 	MID_RHS_MATCH_FROM(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
-	TAGGED_RCPT(0.00)[linux-mips,dt,netdev,renesas];
-	TO_DN_SOME(0.00)[]
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo]
 X-Rspamd-Action: no action
 
-On Fri, 2026-03-06 at 16:46 +0100, Bartosz Golaszewski wrote:
-> Add support for the firmware-managed variant of the DesignWare MAC on
-> the sa8255p platform. This series contains new DT bindings and driver
-> changes required to support the MAC in the STMMAC driver.
->=20
-> It also reorganizes the ethqos code quite a bit to make the introduction
-> of power domains into the driver a bit easier on the eye.
->=20
-> The DTS changes will go in separately.
+This series of patches updates board previously converted to use static
+device properties/software nodes to attach and use nodes attached to the
+respective gpiochip devices rather than simply defining unattached
+software nodes with matching name. This is a requirement of newer
+gpiolib code. Note that there is currently a workaround preserving the
+lookup based on the software node name, but it will be removed soon.
 
-As Jakub pointed out, it conflicts with the latest net-next, but does
-apply cleanly on the latest mainline, so I tested there (on a SA8775P
-board running the SCMI firmware).
+The additional 2 patches convert the remaining 2 boards to use software
+nodes as well.
 
-The two NICs come up as expected. Basic iperf3 throughput and jitter
-tests look good. I would offer a Tested-by tag and a summary of the
-test results, but I think it's a moot point because you'll have to
-submit a new version anyway.
+Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+---
+Dmitry Torokhov (4):
+      MIPS: alchemy: mtx1: attach software nodes to GPIO chips
+      MIPS: alchemy: db1000: use nodes attached to GPIO chips in properties
+      MIPS: alchemy: gpr: switch to static device properties
+      MIPS: alchemy: db1300: switch to static device properties
 
-I will wait for you to rebase, then test again and come back with the
-results.
+ arch/mips/alchemy/board-gpr.c                   | 122 ++++++++------
+ arch/mips/alchemy/board-mtx1.c                  |  79 ++++-----
+ arch/mips/alchemy/common/gpiolib.c              |  45 ++++-
+ arch/mips/alchemy/devboards/db1000.c            |  36 ++--
+ arch/mips/alchemy/devboards/db1300.c            | 209 +++++++++++++++---------
+ arch/mips/include/asm/mach-au1x00/gpio-au1000.h |   4 +
+ arch/mips/include/asm/mach-au1x00/gpio-au1300.h |   3 +
+ 7 files changed, 301 insertions(+), 197 deletions(-)
+---
+base-commit: 343f51842f4ed7143872f3aa116a214a5619a4b9
+change-id: 20260309-alchemy-78158ef7ee06
 
---=20
-Best regards,
-Radu
+Thanks.
+
+-- 
+Dmitry
 
 
