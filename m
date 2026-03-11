@@ -1,651 +1,545 @@
-Return-Path: <linux-mips+bounces-13573-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-13574-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id eGN9Fe2gsWn4EAAAu9opvQ
-	(envelope-from <linux-mips+bounces-13573-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Wed, 11 Mar 2026 18:05:49 +0100
+	id 0NhWGbmisWn4EAAAu9opvQ
+	(envelope-from <linux-mips+bounces-13574-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Wed, 11 Mar 2026 18:13:29 +0100
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4D70F267B8B
-	for <lists+linux-mips@lfdr.de>; Wed, 11 Mar 2026 18:05:48 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 921F0267D76
+	for <lists+linux-mips@lfdr.de>; Wed, 11 Mar 2026 18:13:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id CD017301F5BD
-	for <lists+linux-mips@lfdr.de>; Wed, 11 Mar 2026 17:04:34 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 4EDD7300668A
+	for <lists+linux-mips@lfdr.de>; Wed, 11 Mar 2026 17:13:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DA8DB3E3C77;
-	Wed, 11 Mar 2026 17:04:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 705B73E316B;
+	Wed, 11 Mar 2026 17:13:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="hoLntPZO";
-	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="SJQM3/GB"
+	dkim=pass (2048-bit key) header.d=cjdns.fr header.i=@cjdns.fr header.b="ScMfa/rI"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from mail.cjdns.fr (mail.cjdns.fr [5.135.140.105])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A36EB3E3C6A
-	for <linux-mips@vger.kernel.org>; Wed, 11 Mar 2026 17:04:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C1F23E0C4C;
+	Wed, 11 Mar 2026 17:13:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=5.135.140.105
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773248662; cv=none; b=AAdTZdK7WB393GAn0fsshfSkep1YKh/Dwi0t5shxnyjXFAZBMUB0lwzeDmZMbda80x/JBUto/0WWW/OUxEBjxHm9zQFIjwWnRW4ybsR05Qjq5Ttuj2iePquSoTVzNn1KBS6sC07k+miAKzDx0gE9b3+pIhnD/uquKqLlNhHR3II=
+	t=1773249204; cv=none; b=GXoWRI5iNM5EHymzzrPSvFBVTKBjwxvIuNzjPlKfGLDV5maLTHPbmUvjelzKZGhNoTzjvaaNpofSA2jSWZBof9kkVclAw8MMB57w9nANtLbetS7KrN1dAck+Be6H3xnHxYsumya07A/PFwPkybxN3RDhrpwVPHN5CqmKd0lwhow=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773248662; c=relaxed/simple;
-	bh=Dugz3DUItY9s5TtOLN4+N2+97oyMNRJFB/OhZsdqxm8=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=iBuqTqX9bZq+sAhC3DB0O1N4Ug8NKPLrcHnTGuCSkZv+HX5TumkxofkDtgcR0qfIKby7GbItAlnndcOV+sKO8qGHRCz5kNkSTz1d3xPDO3H5YvGEw6QoFF6BLuLBe8PfOeuu5EV3sp9AV8jCBSzohDV9QmsYw148rOdLGcn6E00=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=hoLntPZO; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=SJQM3/GB; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 62BFv813915114
-	for <linux-mips@vger.kernel.org>; Wed, 11 Mar 2026 17:04:19 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	R40MiDjdV1CjralqS3R+Tb9SfFYBiqy6S1/fcSy9W5g=; b=hoLntPZOBS9bcwHr
-	k9foIci7aGgNxsulbNLJYt1reqphiNJsMeOn6X7YdJZyHtF+iogW/HqyGL0XwJxc
-	5Lr808XNNoxKAqkxcRxXYqHqok73xwTb2J/z1u65fwV2IZG1ibyLCT1dIXUskdoN
-	SqezkY/OdszD4JAjSDjkY7jWNXfGzSy245gViKNo1A9PMZyaGhLbzw8bB2pQnKv8
-	BdRrot4zTYf+Fwpls/GAiaPeaZEyJj1MFo0cB43cH+ZOp5XJZ0XQTeOA7pyWF4lH
-	IuGWvsenCL/o/hblS5O3tdG3TVhB0ab9bKAj94iQAZJduK33z7A0cr4sk/PdkYmT
-	g+dLhw==
-Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com [209.85.160.199])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4cubg208vh-1
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <linux-mips@vger.kernel.org>; Wed, 11 Mar 2026 17:04:19 +0000 (GMT)
-Received: by mail-qt1-f199.google.com with SMTP id d75a77b69052e-509011403a7so6303001cf.1
-        for <linux-mips@vger.kernel.org>; Wed, 11 Mar 2026 10:04:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=oss.qualcomm.com; s=google; t=1773248659; x=1773853459; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=R40MiDjdV1CjralqS3R+Tb9SfFYBiqy6S1/fcSy9W5g=;
-        b=SJQM3/GBsjiAgE0v0mTCb/vpCp3shoi4wjHGt3cY+jmP0zStBeHSzCMdzQFOXCYfKJ
-         GDdpY4TlbrvRQTEMErHYjosmRwzZY+Q8NZ4hUEDem2tJp+Xwy/hYIuiWKbfv3riLMtm7
-         pMSIVxlEtuiB+ZIKf7IFGVZ/WE2K1S5osld6Kk2KNNkCxepYP2XuFNf+P6kyKyYG2Uju
-         jZ8b81R56qxbvhBABDc+neYrzNQb4YVzkYVcbC9dVVPpyhioPtAQprWCr1ajQRb67sUT
-         pExEwe0dsDeT3iScPYrOTa/3JMomPg4YlCFfObhuL8C+DITRdO3gMH30lC/RGnJ4rW9E
-         foAw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1773248659; x=1773853459;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=R40MiDjdV1CjralqS3R+Tb9SfFYBiqy6S1/fcSy9W5g=;
-        b=jPkO63mEQ2Lr6TDZr+oR8TwHCAPO7C8SKIv1tU8ivcWTdRy3wIDxJqs3cCh/i7vLGR
-         O/1KlnWJZPV5hl03LFG/yIJJ3uC7ulRF6E3R6zLtYYEM95BDsMLNFE9Cg6qjaezcPu1v
-         bcSDXay8+JzRlS6stxwtqH+lrQwAp+37lEhFLx7fQ+bcMuFekJK7WtLqExg8sOD7on35
-         g0CjrGA3KkSfK6AaS9aFK6Hg3xp+P+qR7NQrbJaxZTY5aZ12oiL9TSoe/W+tg8kNaxtU
-         MZr1efXDxWKPlBMMsBaT8mIlL5iCqXwLjr5PZPZLkF0EWm+Totu6gOmdL2pUZAIcShTd
-         0D8Q==
-X-Forwarded-Encrypted: i=1; AJvYcCXFrDjjDsQZ4uYJh1z62XBXxtGvyZjZsG4QwnuikTBdkv5B3RefkrKO7DUgYsxKNvq2PxkFeMlOReyM@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxd96vthD5SnC9lHctwmOYVroXc/uTH2rnp9uz77E4h6PyX/bnD
-	kz22EXZOhd9QEVGET3Eicr9bv9f+MQIbFVl2oehBPwf8lkXhNu+IPCKRNKuku71IUWMyhXNpEpl
-	9Q5qnBXYOQO/Zz7woDlDmE29Bgz1gdzkyLkbdbgN2g6gAGQuThBzPnL0L1LqaR4lU
-X-Gm-Gg: ATEYQzz2p21SovaK70yf9to02vjq5rfQh647DepnfD6vOtk3mehambDF5uqj4sICnz4
-	JJaubdFLZbkp8ADFPbBmA/jZ6t85U9zFPnMJyXFdcMccD4ULbzgDzy5yEIFPbD44ryp5oVUK/67
-	bBtTZgy/FH4RG5SqJQNkeQroG9OEvKLtBnlfD3J2R+ZQ+SsHEnSxUz0oUsI0d9qRWt8SBQszdbk
-	nI3CUqB6oEKizMtKb4XtbVmfEMMkoUw6gbZJ6n49EiJ/IzRCwKdGOGLUTKAlbIFRdG8mf0L6wUN
-	g4rN1RcwmYOpeNhiGtEEgZW1C7QCr7r/98fHBOTeD17vWwusph45EGkVyS4AK2zAl1EuYg92rmn
-	0ZbDhljgzpWv6Z9FhSbwj74U9XPfpj57Wjvu/IfsLE9JcWrTOcBWP
-X-Received: by 2002:ac8:5a56:0:b0:509:59c:5799 with SMTP id d75a77b69052e-5093a0da546mr42673071cf.21.1773248658682;
-        Wed, 11 Mar 2026 10:04:18 -0700 (PDT)
-X-Received: by 2002:ac8:5a56:0:b0:509:59c:5799 with SMTP id d75a77b69052e-5093a0da546mr42671551cf.21.1773248657657;
-        Wed, 11 Mar 2026 10:04:17 -0700 (PDT)
-Received: from brgl-qcom.local ([2a01:cb1d:dc:7e00:3a92:6740:d71b:5056])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48541ad1e4esm167993075e9.8.2026.03.11.10.04.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 Mar 2026 10:04:16 -0700 (PDT)
-From: Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>
-Date: Wed, 11 Mar 2026 18:03:41 +0100
-Subject: [PATCH net-next v8 6/6] net: stmmac: qcom-ethqos: add support for
- sa8255p
+	s=arc-20240116; t=1773249204; c=relaxed/simple;
+	bh=Bo8UOVPi6PaKtVa1MDENLO8cOjfshIJ/OG9qJxKBL4E=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=hZZffRZAPXdK5wJghUveu3u4x7S1JPZ+PnhXj7ZJhf8FWfnbbpkZtNE2a2sfqfS8MHe+loWb1yMwanVQ8ufhFyLXB7NLNaZq6qZKapWJ93nYnTRn1gS43VquVXmohtyPO/Gvm1mVDsoNuYglkU1ENTcR3PPGNBZaB9Hz0hDXfgE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=cjdns.fr; spf=none smtp.mailfrom=cjdns.fr; dkim=pass (2048-bit key) header.d=cjdns.fr header.i=@cjdns.fr header.b=ScMfa/rI; arc=none smtp.client-ip=5.135.140.105
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=cjdns.fr
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=cjdns.fr
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id A584D2B975D;
+	Wed, 11 Mar 2026 18:13:00 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cjdns.fr; s=dkim;
+	t=1773249191; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 content-transfer-encoding:content-language:in-reply-to:references;
+	bh=SWK6hCFWTtJ6HB5p0G57+QkEA4hYw/yDHOa1YtvvqTE=;
+	b=ScMfa/rIt+JO2UGaejqsHDrxK9iGnuiAq4qO6/cHHWUrsvrFfnT3ETm4u359ls5vDUucD2
+	9V1qjHS0x9+EzvNn4fP7gMLIEMyqFnx9Kvs57sWwt1ExiJ7OYRneS4IWuW+S1/XXBGwTB2
+	sZSQWsGD6O8oh0O/NujEZdUnKGubYr5JiLgcWocenLugK+xWr+Z1rqtWtRUDEuLWYBu7CO
+	EsVDjo4s+fVhNa/7MNaMzzgyzNBQHMPcFpj5d0w79dzwpsamqyvlrA9+lW0BH0DM0eD099
+	FNoQtPkVo1GiLfNDRIVAiC1oIgF5XpcwqSF2JB9ha6PMJKnoJVhQTv/GLOhTKQ==
+Message-ID: <de6e8440-99a1-4be7-80aa-3645fdb0bdb9@cjdns.fr>
+Date: Wed, 11 Mar 2026 18:12:59 +0100
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260311-qcom-sa8255p-emac-v8-6-58227bcf1018@oss.qualcomm.com>
-References: <20260311-qcom-sa8255p-emac-v8-0-58227bcf1018@oss.qualcomm.com>
-In-Reply-To: <20260311-qcom-sa8255p-emac-v8-0-58227bcf1018@oss.qualcomm.com>
-To: Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konradybcio@kernel.org>, Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Andrew Lunn <andrew+netdev@lunn.ch>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Chen-Yu Tsai <wens@kernel.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>, Shawn Guo <shawnguo@kernel.org>,
-        Fabio Estevam <festevam@gmail.com>,
-        Jan Petrous <jan.petrous@oss.nxp.com>, s32@nxp.com,
-        Romain Gantois <romain.gantois@bootlin.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Christophe Roullier <christophe.roullier@foss.st.com>,
-        Bartosz Golaszewski <brgl@kernel.org>,
-        Radu Rendec <rrendec@redhat.com>
-Cc: linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org,
-        Drew Fustini <dfustini@tenstorrent.com>, linux-sunxi@lists.linux.dev,
-        linux-amlogic@lists.infradead.org, linux-mips@vger.kernel.org,
-        imx@lists.linux.dev, linux-renesas-soc@vger.kernel.org,
-        linux-rockchip@lists.infradead.org, sophgo@lists.linux.dev,
-        linux-riscv@lists.infradead.org, brgl@kernel.org,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
-        Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=13278;
- i=bartosz.golaszewski@oss.qualcomm.com; h=from:subject:message-id;
- bh=Dugz3DUItY9s5TtOLN4+N2+97oyMNRJFB/OhZsdqxm8=;
- b=owEBbQKS/ZANAwAKAQWdLsv/NoTDAcsmYgBpsaB4lrNgA5UG3WkIB6MbKHcC/zSx6XuPxqGKJ
- ImN5k2h1bKJAjMEAAEKAB0WIQSR5RMt5bVGHXuiZfwFnS7L/zaEwwUCabGgeAAKCRAFnS7L/zaE
- w+//D/0UFdHYmAej3gokDGVsGaQVOXFugeX8XyU5qg9R2+lUa0lzgfkxUNCEtHAJJS03P01zy5i
- Qct8jBl0/9Qg37FHXkS/EO5cMDkYJgZNB4qOuysLw8rksmdsijsR/lzaEWK77imhRGmIAUjH1W3
- r4YALzcpQZteQioFIE2NIsxj0mRqfJ7uuWDO8Wxhni6cZoS7stoaCxsw+rFFXAkDD34f+k1FRN7
- wqHfFASNKXX3UIIMdKm36e5eHytw1CEzGRCiwbJ9u9Q+AsIgsqcKEfMV+37cJHQRiyPmXz6mwSC
- nmO5VFIJb7mN/R0asyeeERmxB0cRg0tGQl5Ngi6cCLf7Q+WBHHXRmcq1FGnyQZzbPQav2zpA9RL
- ca/rJIK1+uGdn8mRZ3G0YY/Z6iOhlntkvHPaIJgIQXSr38GCjPoix6/ayXHdmtvXwMBSlX1KGQT
- hivPD+FpAs5lOVhqI7zus/T4PeXNTSFtXeLT+sNk0JDC+oAHlwvOSJXjIWF9Hj2H50adGlwMb6S
- bS899yo7uSl1FnZ5FYaoG2Ar2HYTWyz4e/OBAg/JH09PBTEQEfC9fvjA8w+Onb6rBdckwuF7AO2
- wYUqQM83Iv4WTrWmgUwb5X2n6rI4A2SEUpmb61tSq7u7RMqVXFYRiLl/Z2JTVbyn0KRxK5wQEwJ
- v2XcX0t8906ldow==
-X-Developer-Key: i=bartosz.golaszewski@oss.qualcomm.com; a=openpgp;
- fpr=169DEB6C0BC3C46013D2C79F11A72EA01471D772
-X-Authority-Analysis: v=2.4 cv=Htl72kTS c=1 sm=1 tr=0 ts=69b1a093 cx=c_pps
- a=WeENfcodrlLV9YRTxbY/uA==:117 a=xqWC_Br6kY4A:10 a=IkcTkHD0fZMA:10
- a=Yq5XynenixoA:10 a=s4-Qcg_JpJYA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=u7WPNUs3qKkmUXheDGA7:22 a=_glEPmIy2e8OvE2BGh3C:22 a=KKAkSRfTAAAA:8
- a=EUspDBNiAAAA:8 a=eSQ9y_BssGCL3sbXkzsA:9 a=QEXdDO2ut3YA:10
- a=kacYvNCVWA4VmyqE58fU:22 a=cvBusfyB2V15izCimMoJ:22
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMzExMDE0NCBTYWx0ZWRfX2CYjJLCNSD/D
- cA84bOeiBAE8wMKArh3Z1GKQ+umTz5kLSuBRaTAxOXKMc0PDHf/VexHOv01pdTU76IRar2UQpCq
- Gp/Fdy3SEnLi0hNZhpamtSRKfRiGes9n5lCAYtv3iWKpnp/anojVVL6BG+LZfVG+7Bm3YK2DIBX
- KxiKrjeb6Y3tuM11RB1QWZClX1QDZLutRL6R9z4W+ht5/u09wAUyQQsu3rFkorLMMYhrxcyMcV/
- 3ha5HWE3n42Zma2LKCyVrRtygRSEVgPCIvw2loyrlngccCMxwuFDGDrREyKibviO1s7iQd35qp3
- AdNhh6f8PFzluxyx/Sw9jxALINXCAQ6cCSO8VpTkt9vo6ZbCjIt16xlr81tqY0ZsQsywVKDCdZP
- rb78ZxMr5y9dbeE1CiNt8vDnlHdZQGz2Ydys4fqMZTnQgI98SnRNVTgXCNVFKZcxockNe33mcHq
- nG4Exknoue/kmw8OhUA==
-X-Proofpoint-ORIG-GUID: CdfaUOYixWyRHrs2FyU3vrnAR-vnNqMC
-X-Proofpoint-GUID: CdfaUOYixWyRHrs2FyU3vrnAR-vnNqMC
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
- definitions=2026-03-11_02,2026-03-09_02,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- priorityscore=1501 bulkscore=0 malwarescore=0 phishscore=0 impostorscore=0
- suspectscore=0 clxscore=1015 adultscore=0 spamscore=0 lowpriorityscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2602130000 definitions=main-2603110144
+User-Agent: Mozilla Thunderbird Beta
+Subject: Re: [PATCH v2 2/8] clk: airoha: Add econet EN751221 clock/reset
+ support to en7523-scu
+To: Brian Masney <bmasney@redhat.com>
+Cc: linux-mips@vger.kernel.org, naseefkm@gmail.com, mturquette@baylibre.com,
+ sboyd@kernel.org, robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
+ tsbogend@alpha.franken.de, ryder.lee@mediatek.com,
+ jianjun.wang@mediatek.com, lpieralisi@kernel.org, kwilczynski@kernel.org,
+ mani@kernel.org, bhelgaas@google.com, vkoul@kernel.org,
+ neil.armstrong@linaro.org, p.zabel@pengutronix.de, matthias.bgg@gmail.com,
+ angelogioacchino.delregno@collabora.com, nbd@nbd.name, ansuelsmth@gmail.com,
+ linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
+ linux-mediatek@lists.infradead.org, linux-phy@lists.infradead.org,
+ linux-arm-kernel@lists.infradead.org
+References: <20260309131818.74467-1-cjd@cjdns.fr>
+ <20260309131818.74467-3-cjd@cjdns.fr> <abF-qFC1Oa4dz-fh@redhat.com>
+Content-Language: en-US
+From: Caleb James DeLisle <cjd@cjdns.fr>
+In-Reply-To: <abF-qFC1Oa4dz-fh@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Last-TLS-Session-Version: TLSv1.3
 X-Spamd-Result: default: False [-0.66 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[qualcomm.com,reject];
-	R_DKIM_ALLOW(-0.20)[qualcomm.com:s=qcppdkim1,oss.qualcomm.com:s=google];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
+	DMARC_POLICY_ALLOW(-0.50)[cjdns.fr,none];
+	R_DKIM_ALLOW(-0.20)[cjdns.fr:s=dkim];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-13573-lists,linux-mips=lfdr.de];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[linaro.org:email,oss.qualcomm.com:dkim,oss.qualcomm.com:mid,sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,qualcomm.com:dkim,qualcomm.com:email];
-	FREEMAIL_TO(0.00)[kernel.org,lunn.ch,davemloft.net,google.com,redhat.com,gmail.com,foss.st.com,st.com,linaro.org,baylibre.com,oss.nxp.com,nxp.com,bootlin.com,glider.be];
-	FORGED_SENDER_MAILLIST(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[48];
-	MIME_TRACE(0.00)[0:+];
-	DKIM_TRACE(0.00)[qualcomm.com:+,oss.qualcomm.com:+];
-	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
-	TO_DN_SOME(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[bartosz.golaszewski@oss.qualcomm.com,linux-mips@vger.kernel.org];
+	TAGGED_FROM(0.00)[bounces-13574-lists,linux-mips=lfdr.de];
 	FROM_HAS_DN(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RECEIVED_HELO_LOCALHOST(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[29];
+	MIME_TRACE(0.00)[0:+];
+	FREEMAIL_CC(0.00)[vger.kernel.org,gmail.com,baylibre.com,kernel.org,alpha.franken.de,mediatek.com,google.com,linaro.org,pengutronix.de,collabora.com,nbd.name,lists.infradead.org];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	TO_DN_SOME(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
-	TAGGED_RCPT(0.00)[linux-mips,dt,netdev,renesas];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[cjd@cjdns.fr,linux-mips@vger.kernel.org];
+	DKIM_TRACE(0.00)[cjdns.fr:+];
 	MID_RHS_MATCH_FROM(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	RCVD_COUNT_SEVEN(0.00)[7]
-X-Rspamd-Queue-Id: 4D70F267B8B
+	TAGGED_RCPT(0.00)[linux-mips,dt];
+	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 921F0267D76
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-Extend the driver to support a new model - sa8255p. Unlike the
-previously supported variants, this one's power management is done in
-the firmware using SCMI. This is modeled in linux using power domains so
-add support for them.
+Hello Brian,
 
-Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>
----
- .../ethernet/stmicro/stmmac/dwmac-qcom-ethqos.c    | 301 ++++++++++++++++++---
- 1 file changed, 262 insertions(+), 39 deletions(-)
+Thank you for taking the time!
 
-diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac-qcom-ethqos.c b/drivers/net/ethernet/stmicro/stmmac/dwmac-qcom-ethqos.c
-index 7e3dc1df093a20eb766ebcb29738d9f4261145eb..c20f127f341c1b6793c408283353d60dde4dcb5e 100644
---- a/drivers/net/ethernet/stmicro/stmmac/dwmac-qcom-ethqos.c
-+++ b/drivers/net/ethernet/stmicro/stmmac/dwmac-qcom-ethqos.c
-@@ -7,6 +7,8 @@
- #include <linux/platform_device.h>
- #include <linux/phy.h>
- #include <linux/phy/phy.h>
-+#include <linux/pm_opp.h>
-+#include <linux/pm_domain.h>
- 
- #include "stmmac.h"
- #include "stmmac_platform.h"
-@@ -81,6 +83,13 @@
- 
- #define SGMII_10M_RX_CLK_DVDR			0x31
- 
-+enum ethqos_pd_selector {
-+	ETHQOS_PD_CORE = 0,
-+	ETHQOS_PD_MDIO,
-+	ETHQOS_PD_SERDES,
-+	ETHQOS_NUM_PDS,
-+};
-+
- struct ethqos_emac_por {
- 	unsigned int offset;
- 	unsigned int value;
-@@ -98,6 +107,9 @@ struct ethqos_emac_driver_data {
- 
- struct ethqos_emac_pm_data {
- 	const char *link_clk_name;
-+	bool use_domains;
-+	struct dev_pm_domain_attach_data pd;
-+	unsigned int clk_ptp_rate;
- };
- 
- struct ethqos_emac_match_data {
-@@ -110,13 +122,21 @@ struct ethqos_emac_pm_ctx {
- 	struct phy *serdes_phy;
- };
- 
-+struct ethqos_emac_pd_ctx {
-+	struct dev_pm_domain_list *pd_list;
-+	int serdes_level;
-+};
-+
- struct qcom_ethqos {
- 	struct platform_device *pdev;
- 	void __iomem *rgmii_base;
- 	void (*configure_func)(struct qcom_ethqos *ethqos,
- 			       phy_interface_t interface, int speed);
- 
--	struct ethqos_emac_pm_ctx pm;
-+	union {
-+		struct ethqos_emac_pm_ctx pm;
-+		struct ethqos_emac_pd_ctx pd;
-+	};
- 	phy_interface_t phy_mode;
- 
- 	const struct ethqos_emac_por *rgmii_por;
-@@ -338,6 +358,25 @@ static const struct ethqos_emac_match_data emac_sa8775p_data = {
- 	.pm_data = &emac_sa8775p_pm_data,
- };
- 
-+static const char * const emac_sa8255p_pd_names[] = {
-+	"core", "mdio", "serdes"
-+};
-+
-+static const struct ethqos_emac_pm_data emac_sa8255p_pm_data = {
-+	.pd = {
-+		.pd_flags = PD_FLAG_NO_DEV_LINK,
-+		.pd_names = emac_sa8255p_pd_names,
-+		.num_pd_names = ETHQOS_NUM_PDS,
-+	},
-+	.use_domains = true,
-+	.clk_ptp_rate = 230400000,
-+};
-+
-+static const struct ethqos_emac_match_data emac_sa8255p_data = {
-+	.drv_data = &emac_v4_0_0_data,
-+	.pm_data = &emac_sa8255p_pm_data,
-+};
-+
- static int ethqos_dll_configure(struct qcom_ethqos *ethqos)
- {
- 	struct device *dev = &ethqos->pdev->dev;
-@@ -406,6 +445,28 @@ static int ethqos_dll_configure(struct qcom_ethqos *ethqos)
- 	return 0;
- }
- 
-+static int qcom_ethqos_domain_on(struct qcom_ethqos *ethqos,
-+				 enum ethqos_pd_selector sel)
-+{
-+	struct device *dev = ethqos->pd.pd_list->pd_devs[sel];
-+	int ret;
-+
-+	ret = pm_runtime_resume_and_get(dev);
-+	if (ret < 0)
-+		dev_err(&ethqos->pdev->dev,
-+			"Failed to enable the power domain for %s\n",
-+			dev_name(dev));
-+	return ret;
-+}
-+
-+static void qcom_ethqos_domain_off(struct qcom_ethqos *ethqos,
-+				   enum ethqos_pd_selector sel)
-+{
-+	struct device *dev = ethqos->pd.pd_list->pd_devs[sel];
-+
-+	pm_runtime_put_sync(dev);
-+}
-+
- static int ethqos_rgmii_macro_init(struct qcom_ethqos *ethqos, int speed)
- {
- 	struct device *dev = &ethqos->pdev->dev;
-@@ -655,6 +716,20 @@ static void ethqos_configure_sgmii(struct qcom_ethqos *ethqos,
- 	ethqos_pcs_set_inband(priv, interface == PHY_INTERFACE_MODE_SGMII);
- }
- 
-+static void ethqos_configure_sgmii_pd(struct qcom_ethqos *ethqos,
-+				      phy_interface_t interface, int speed)
-+{
-+	switch (speed) {
-+	case SPEED_2500:
-+	case SPEED_1000:
-+	case SPEED_100:
-+	case SPEED_10:
-+		ethqos->pd.serdes_level = speed;
-+	}
-+
-+	ethqos_configure_sgmii(ethqos, interface, speed);
-+}
-+
- static void ethqos_configure(struct qcom_ethqos *ethqos,
- 			     phy_interface_t interface, int speed)
- {
-@@ -710,6 +785,45 @@ static int ethqos_mac_finish_serdes(struct net_device *ndev, void *priv,
- 	return ret;
- }
- 
-+static int ethqos_mac_finish_serdes_pd(struct net_device *ndev, void *priv,
-+				       unsigned int mode,
-+				       phy_interface_t interface)
-+{
-+	struct qcom_ethqos *ethqos = priv;
-+	struct device *dev = ethqos->pd.pd_list->pd_devs[ETHQOS_PD_SERDES];
-+	int ret = 0;
-+
-+	qcom_ethqos_set_sgmii_loopback(ethqos, false);
-+
-+	if (interface == PHY_INTERFACE_MODE_SGMII ||
-+	    interface == PHY_INTERFACE_MODE_2500BASEX)
-+		ret = dev_pm_opp_set_level(dev, ethqos->pd.serdes_level);
-+
-+	return ret;
-+}
-+
-+static int qcom_ethqos_pd_serdes_powerup(struct net_device *ndev, void *priv)
-+{
-+	struct qcom_ethqos *ethqos = priv;
-+	struct device *dev = ethqos->pd.pd_list->pd_devs[ETHQOS_PD_SERDES];
-+	int ret;
-+
-+	ret = qcom_ethqos_domain_on(ethqos, ETHQOS_PD_SERDES);
-+	if (ret < 0)
-+		return ret;
-+
-+	return dev_pm_opp_set_level(dev, ethqos->pd.serdes_level);
-+}
-+
-+static void qcom_ethqos_pd_serdes_powerdown(struct net_device *ndev, void *priv)
-+{
-+	struct qcom_ethqos *ethqos = priv;
-+	struct device *dev = ethqos->pd.pd_list->pd_devs[ETHQOS_PD_SERDES];
-+
-+	dev_pm_opp_set_level(dev, 0);
-+	qcom_ethqos_domain_off(ethqos, ETHQOS_PD_SERDES);
-+}
-+
- static int ethqos_clks_config(void *priv, bool enabled)
- {
- 	struct qcom_ethqos *ethqos = priv;
-@@ -741,6 +855,68 @@ static void ethqos_clks_disable(void *data)
- 	ethqos_clks_config(data, false);
- }
- 
-+static void ethqos_disable_serdes(void *data)
-+{
-+	struct qcom_ethqos *ethqos = data;
-+
-+	qcom_ethqos_domain_off(ethqos, ETHQOS_PD_SERDES);
-+}
-+
-+static int ethqos_pd_clks_config(void *priv, bool enabled)
-+{
-+	struct qcom_ethqos *ethqos = priv;
-+	int ret = 0;
-+
-+	if (enabled) {
-+		ret = qcom_ethqos_domain_on(ethqos, ETHQOS_PD_MDIO);
-+		if (ret < 0) {
-+			dev_err(&ethqos->pdev->dev,
-+				"Failed to enable the MDIO power domain\n");
-+			return ret;
-+		}
-+
-+		ethqos_set_func_clk_en(ethqos);
-+	} else {
-+		qcom_ethqos_domain_off(ethqos, ETHQOS_PD_MDIO);
-+	}
-+
-+	return ret;
-+}
-+
-+static int qcom_ethqos_pd_init(struct device *dev, void *priv)
-+{
-+	struct qcom_ethqos *ethqos = priv;
-+	int ret;
-+
-+	/*
-+	 * Enable functional clock to prevent DMA reset after timeout due
-+	 * to no PHY clock being enabled after the hardware block has been
-+	 * power cycled. The actual configuration will be adjusted once
-+	 * ethqos_fix_mac_speed() is called.
-+	 */
-+	ethqos_set_func_clk_en(ethqos);
-+
-+	ret = qcom_ethqos_domain_on(ethqos, ETHQOS_PD_CORE);
-+	if (ret)
-+		return ret;
-+
-+	ret = qcom_ethqos_domain_on(ethqos, ETHQOS_PD_MDIO);
-+	if (ret) {
-+		qcom_ethqos_domain_off(ethqos, ETHQOS_PD_CORE);
-+		return ret;
-+	}
-+
-+	return 0;
-+}
-+
-+static void qcom_ethqos_pd_exit(struct device *dev, void *data)
-+{
-+	struct qcom_ethqos *ethqos = data;
-+
-+	qcom_ethqos_domain_off(ethqos, ETHQOS_PD_MDIO);
-+	qcom_ethqos_domain_off(ethqos, ETHQOS_PD_CORE);
-+}
-+
- static void ethqos_ptp_clk_freq_config(struct stmmac_priv *priv)
- {
- 	struct plat_stmmacenet_data *plat_dat = priv->plat;
-@@ -781,31 +957,11 @@ static int qcom_ethqos_probe(struct platform_device *pdev)
- 				     "dt configuration failed\n");
- 	}
- 
--	plat_dat->clks_config = ethqos_clks_config;
--
- 	ethqos = devm_kzalloc(dev, sizeof(*ethqos), GFP_KERNEL);
- 	if (!ethqos)
- 		return -ENOMEM;
- 
- 	ethqos->phy_mode = plat_dat->phy_interface;
--	switch (ethqos->phy_mode) {
--	case PHY_INTERFACE_MODE_RGMII:
--	case PHY_INTERFACE_MODE_RGMII_ID:
--	case PHY_INTERFACE_MODE_RGMII_RXID:
--	case PHY_INTERFACE_MODE_RGMII_TXID:
--		ethqos->configure_func = ethqos_configure_rgmii;
--		break;
--	case PHY_INTERFACE_MODE_2500BASEX:
--	case PHY_INTERFACE_MODE_SGMII:
--		ethqos->configure_func = ethqos_configure_sgmii;
--		plat_dat->mac_finish = ethqos_mac_finish_serdes;
--		break;
--	default:
--		dev_err(dev, "Unsupported phy mode %s\n",
--			phy_modes(ethqos->phy_mode));
--		return -EINVAL;
--	}
--
- 	ethqos->pdev = pdev;
- 	ethqos->rgmii_base = devm_platform_ioremap_resource_byname(pdev, "rgmii");
- 	if (IS_ERR(ethqos->rgmii_base))
-@@ -823,35 +979,101 @@ static int qcom_ethqos_probe(struct platform_device *pdev)
- 	ethqos->has_emac_ge_3 = drv_data->has_emac_ge_3;
- 	ethqos->needs_sgmii_loopback = drv_data->needs_sgmii_loopback;
- 
--	ethqos->pm.link_clk = devm_clk_get(dev, clk_name);
--	if (IS_ERR(ethqos->pm.link_clk))
--		return dev_err_probe(dev, PTR_ERR(ethqos->pm.link_clk),
--				     "Failed to get link_clk\n");
-+	if (pm_data && pm_data->use_domains) {
-+		switch (ethqos->phy_mode) {
-+		case PHY_INTERFACE_MODE_RGMII:
-+		case PHY_INTERFACE_MODE_RGMII_ID:
-+		case PHY_INTERFACE_MODE_RGMII_RXID:
-+		case PHY_INTERFACE_MODE_RGMII_TXID:
-+			ethqos->configure_func = ethqos_configure_rgmii;
-+			break;
-+		case PHY_INTERFACE_MODE_2500BASEX:
-+		case PHY_INTERFACE_MODE_SGMII:
-+			ethqos->configure_func = ethqos_configure_sgmii_pd;
-+			plat_dat->mac_finish = ethqos_mac_finish_serdes_pd;
-+			break;
-+		default:
-+			dev_err(dev, "Unsupported phy mode %s\n",
-+				phy_modes(ethqos->phy_mode));
-+			return -EINVAL;
-+		}
- 
--	ret = ethqos_clks_config(ethqos, true);
--	if (ret)
--		return ret;
-+		ret = devm_pm_domain_attach_list(dev, &pm_data->pd,
-+						 &ethqos->pd.pd_list);
-+		if (ret < 0)
-+			return dev_err_probe(dev, ret, "Failed to attach power domains\n");
-+
-+		plat_dat->clks_config = ethqos_pd_clks_config;
-+		plat_dat->serdes_powerup = qcom_ethqos_pd_serdes_powerup;
-+		plat_dat->serdes_powerdown = qcom_ethqos_pd_serdes_powerdown;
-+		plat_dat->exit = qcom_ethqos_pd_exit;
-+		plat_dat->init = qcom_ethqos_pd_init;
-+		plat_dat->clk_ptp_rate = pm_data->clk_ptp_rate;
-+
-+		ret = qcom_ethqos_domain_on(ethqos, ETHQOS_PD_SERDES);
-+		if (ret)
-+			return dev_err_probe(dev, ret,
-+					     "Failed to enable the serdes power domain\n");
-+
-+		ret = devm_add_action_or_reset(dev, ethqos_disable_serdes, ethqos);
-+		if (ret)
-+			return ret;
-+	} else {
-+		switch (ethqos->phy_mode) {
-+		case PHY_INTERFACE_MODE_RGMII:
-+		case PHY_INTERFACE_MODE_RGMII_ID:
-+		case PHY_INTERFACE_MODE_RGMII_RXID:
-+		case PHY_INTERFACE_MODE_RGMII_TXID:
-+			ethqos->configure_func = ethqos_configure_rgmii;
-+			break;
-+		case PHY_INTERFACE_MODE_2500BASEX:
-+		case PHY_INTERFACE_MODE_SGMII:
-+			ethqos->configure_func = ethqos_configure_sgmii;
-+			plat_dat->mac_finish = ethqos_mac_finish_serdes;
-+			break;
-+		default:
-+			dev_err(dev, "Unsupported phy mode %s\n",
-+				phy_modes(ethqos->phy_mode));
-+			return -EINVAL;
-+		}
- 
--	ret = devm_add_action_or_reset(dev, ethqos_clks_disable, ethqos);
--	if (ret)
--		return ret;
-+		ethqos->pm.link_clk = devm_clk_get(dev, clk_name);
-+		if (IS_ERR(ethqos->pm.link_clk))
-+			return dev_err_probe(dev, PTR_ERR(ethqos->pm.link_clk),
-+					     "Failed to get link_clk\n");
-+
-+		ret = ethqos_clks_config(ethqos, true);
-+		if (ret)
-+			return ret;
-+
-+		ret = devm_add_action_or_reset(dev, ethqos_clks_disable, ethqos);
-+		if (ret)
-+			return ret;
-+
-+		ethqos->pm.serdes_phy = devm_phy_optional_get(dev, "serdes");
-+		if (IS_ERR(ethqos->pm.serdes_phy))
-+			return dev_err_probe(dev, PTR_ERR(ethqos->pm.serdes_phy),
-+					     "Failed to get serdes phy\n");
- 
--	ethqos->pm.serdes_phy = devm_phy_optional_get(dev, "serdes");
--	if (IS_ERR(ethqos->pm.serdes_phy))
--		return dev_err_probe(dev, PTR_ERR(ethqos->pm.serdes_phy),
--				     "Failed to get serdes phy\n");
-+		ethqos_set_clk_tx_rate(ethqos, NULL, plat_dat->phy_interface,
-+				       SPEED_1000);
- 
--	ethqos_set_clk_tx_rate(ethqos, NULL, plat_dat->phy_interface,
--			       SPEED_1000);
-+		plat_dat->clks_config = ethqos_clks_config;
-+		plat_dat->set_clk_tx_rate = ethqos_set_clk_tx_rate;
-+		plat_dat->ptp_clk_freq_config = ethqos_ptp_clk_freq_config;
-+
-+		if (ethqos->pm.serdes_phy) {
-+			plat_dat->serdes_powerup = qcom_ethqos_serdes_powerup;
-+			plat_dat->serdes_powerdown  = qcom_ethqos_serdes_powerdown;
-+		}
-+	}
- 
- 	qcom_ethqos_set_sgmii_loopback(ethqos, true);
- 	ethqos_set_func_clk_en(ethqos);
- 
- 	plat_dat->bsp_priv = ethqos;
--	plat_dat->set_clk_tx_rate = ethqos_set_clk_tx_rate;
- 	plat_dat->fix_mac_speed = ethqos_fix_mac_speed;
- 	plat_dat->dump_debug_regs = rgmii_dump;
--	plat_dat->ptp_clk_freq_config = ethqos_ptp_clk_freq_config;
- 	plat_dat->core_type = DWMAC_CORE_GMAC4;
- 	if (ethqos->has_emac_ge_3)
- 		plat_dat->dwmac4_addrs = &drv_data->dwmac4_addrs;
-@@ -877,6 +1099,7 @@ static int qcom_ethqos_probe(struct platform_device *pdev)
- 
- static const struct of_device_id qcom_ethqos_match[] = {
- 	{ .compatible = "qcom,qcs404-ethqos", .data = &emac_qcs404_data},
-+	{ .compatible = "qcom,sa8255p-ethqos", .data = &emac_sa8255p_data},
- 	{ .compatible = "qcom,sa8775p-ethqos", .data = &emac_sa8775p_data},
- 	{ .compatible = "qcom,sc8280xp-ethqos", .data = &emac_sc8280xp_data},
- 	{ .compatible = "qcom,sm8150-ethqos", .data = &emac_sm8150_data},
 
--- 
-2.47.3
+On 11/03/2026 15:39, Brian Masney wrote:
+> Hi Caleb,
+>
+> On Mon, Mar 09, 2026 at 01:18:12PM +0000, Caleb James DeLisle wrote:
+>> EcoNet EN751221 clock/reset driver is significantly similar to the
+>> EN7523 / EN7581, however the EN751221 does not have a neat batch of clock
+>> divider registers so there are fewer known clocks, and the frequency of
+>> each clock is derived differently. This clock driver will probably work
+>> correctly on EN751627, EN7528, and EN7580.
+>>
+>> Signed-off-by: Caleb James DeLisle <cjd@cjdns.fr>
+>> ---
+>>   drivers/clk/Kconfig      |   6 +-
+>>   drivers/clk/clk-en7523.c | 238 ++++++++++++++++++++++++++++++++++++++-
+>>   2 files changed, 236 insertions(+), 8 deletions(-)
+>>
+>> diff --git a/drivers/clk/Kconfig b/drivers/clk/Kconfig
+>> index 3d803b4cf5c1..47df6073a72b 100644
+>> --- a/drivers/clk/Kconfig
+>> +++ b/drivers/clk/Kconfig
+>> @@ -218,13 +218,13 @@ config COMMON_CLK_CS2000_CP
+>>   	  If you say yes here you get support for the CS2000 clock multiplier.
+>>   
+>>   config COMMON_CLK_EN7523
+>> -	bool "Clock driver for Airoha EN7523 SoC system clocks"
+>> +	bool "Clock driver for Airoha/EcoNet SoC system clocks"
+>>   	depends on OF
+>> -	depends on ARCH_AIROHA || COMPILE_TEST
+>> +	depends on ARCH_AIROHA || ECONET || COMPILE_TEST
+>>   	default ARCH_AIROHA
+>>   	help
+>>   	  This driver provides the fixed clocks and gates present on Airoha
+>> -	  ARM silicon.
+>> +	  and EcoNet silicon.
+>>   
+>>   config COMMON_CLK_EP93XX
+>>   	tristate "Clock driver for Cirrus Logic ep93xx SoC"
+>> diff --git a/drivers/clk/clk-en7523.c b/drivers/clk/clk-en7523.c
+>> index 08cc8e5acf43..f7bd7034cf7f 100644
+>> --- a/drivers/clk/clk-en7523.c
+>> +++ b/drivers/clk/clk-en7523.c
+>> @@ -1,5 +1,6 @@
+>>   // SPDX-License-Identifier: GPL-2.0-only
+>>   
+>> +#include <linux/bitfield.h>
+>>   #include <linux/delay.h>
+>>   #include <linux/clk-provider.h>
+>>   #include <linux/io.h>
+>> @@ -11,6 +12,8 @@
+>>   #include <dt-bindings/clock/en7523-clk.h>
+>>   #include <dt-bindings/reset/airoha,en7523-reset.h>
+>>   #include <dt-bindings/reset/airoha,en7581-reset.h>
+>> +#include <dt-bindings/clock/econet,en751221-scu.h>
+>> +#include <dt-bindings/reset/econet,en751221-scu.h>
+>>   
+>>   #define RST_NR_PER_BANK			32
+>>   
+>> @@ -33,15 +36,49 @@
+>>   #define   REG_RESET_CONTROL_PCIEHB	BIT(29)
+>>   #define   REG_RESET_CONTROL_PCIE1	BIT(27)
+>>   #define   REG_RESET_CONTROL_PCIE2	BIT(26)
+>> +#define REG_HIR				0x064
+>> +#define   REG_HIR_MASK			GENMASK(31, 16)
+>>   /* EN7581 */
+>>   #define REG_NP_SCU_PCIC			0x88
+>>   #define REG_NP_SCU_SSTR			0x9c
+>>   #define REG_PCIE_XSI0_SEL_MASK		GENMASK(14, 13)
+>>   #define REG_PCIE_XSI1_SEL_MASK		GENMASK(12, 11)
+>>   #define REG_CRYPTO_CLKSRC2		0x20c
+>> +/* EN751221 */
+>> +#define EN751221_REG_SPI_DIV		0x0cc
+>> +#define EN751221_REG_SPI_DIV_MASK	GENMASK(31, 8)
+>> +#define EN751221_SPI_BASE		500000000
+>> +#define EN751221_SPI_BASE_EN7526C	400000000
+>> +#define EN751221_REG_BUS		0x284
+>> +#define EN751221_REG_BUS_MASK		GENMASK(21, 12)
+>> +#define EN751221_REG_SSR3		0x094
+>> +#define EN751221_REG_SSR3_GSW_MASK	GENMASK(9, 8)
+>>   
+>>   #define REG_RST_CTRL2			0x830
+>>   #define REG_RST_CTRL1			0x834
+>> +#define EN751221_REG_RST_DMT		0x84
+>> +#define EN751221_REG_RST_USB		0xec
+>> +
+>> +#define EN751221_MAX_CLKS		6
+>> +
+>> +enum en_hir {
+>> +	HIR_UNKNOWN	= -1,
+>> +	HIR_TC3169	= 0,
+>> +	HIR_TC3182	= 1,
+>> +	HIR_RT65168	= 2,
+>> +	HIR_RT63165	= 3,
+>> +	HIR_RT63365	= 4,
+>> +	HIR_MT751020	= 5,
+>> +	HIR_MT7505	= 6,
+>> +	HIR_EN751221	= 7,
+>> +	HIR_EN7526C	= 8,
+>> +	HIR_EN751627	= 9,
+>> +	HIR_EN7580	= 10,
+>> +	HIR_EN7528	= 11,
+>> +	HIR_EN7523	= 12,
+>> +	HIR_EN7581	= 13,
+>> +	HIR_MAX		= 14,
+>> +};
+>>   
+>>   struct en_clk_desc {
+>>   	int id;
+>> @@ -93,6 +130,8 @@ static const u32 bus7581_base[] = { 600000000, 540000000 };
+>>   static const u32 npu7581_base[] = { 800000000, 750000000, 720000000, 600000000 };
+>>   static const u32 crypto_base[] = { 540000000, 480000000 };
+>>   static const u32 emmc7581_base[] = { 200000000, 150000000 };
+>> +/* EN751221 */
+>> +static const u32 gsw751221_base[] = { 500000000, 250000000, 400000000, 200000000 };
+>>   
+>>   static const struct en_clk_desc en7523_base_clks[] = {
+>>   	{
+>> @@ -300,6 +339,13 @@ static const u16 en7581_rst_ofs[] = {
+>>   	REG_RST_CTRL1,
+>>   };
+>>   
+>> +static const u16 en751221_rst_ofs[] = {
+>> +	REG_RST_CTRL2,
+>> +	REG_RST_CTRL1,
+>> +	EN751221_REG_RST_DMT,
+>> +	EN751221_REG_RST_USB,
+>> +};
+>> +
+>>   static const u16 en7523_rst_map[] = {
+>>   	/* RST_CTRL2 */
+>>   	[EN7523_XPON_PHY_RST]		= 0,
+>> @@ -405,8 +451,61 @@ static const u16 en7581_rst_map[] = {
+>>   	[EN7581_XPON_MAC_RST]		= RST_NR_PER_BANK + 31,
+>>   };
+>>   
+>> +static const u16 en751221_rst_map[] = {
+>> +	/* RST_CTRL2 */
+>> +	[EN751221_XPON_PHY_RST]		= 0,
+>> +	[EN751221_GFAST_RST]		= 1,
+>> +	[EN751221_CPU_TIMER2_RST]	= 2,
+>> +	[EN751221_UART3_RST]		= 3,
+>> +	[EN751221_UART4_RST]		= 4,
+>> +	[EN751221_UART5_RST]		= 5,
+>> +	[EN751221_I2C2_RST]		= 6,
+>> +	[EN751221_XSI_MAC_RST]		= 7,
+>> +	[EN751221_XSI_PHY_RST]		= 8,
+>> +
+>> +	/* RST_CTRL1 */
+>> +	[EN751221_PCM1_ZSI_ISI_RST]	= RST_NR_PER_BANK + 0,
+>> +	[EN751221_FE_QDMA1_RST]		= RST_NR_PER_BANK + 1,
+>> +	[EN751221_FE_QDMA2_RST]		= RST_NR_PER_BANK + 2,
+>> +	[EN751221_FE_UNZIP_RST]		= RST_NR_PER_BANK + 3,
+>> +	[EN751221_PCM2_RST]		= RST_NR_PER_BANK + 4,
+>> +	[EN751221_PTM_MAC_RST]		= RST_NR_PER_BANK + 5,
+>> +	[EN751221_CRYPTO_RST]		= RST_NR_PER_BANK + 6,
+>> +	[EN751221_SAR_RST]		= RST_NR_PER_BANK + 7,
+>> +	[EN751221_TIMER_RST]		= RST_NR_PER_BANK + 8,
+>> +	[EN751221_INTC_RST]		= RST_NR_PER_BANK + 9,
+>> +	[EN751221_BONDING_RST]		= RST_NR_PER_BANK + 10,
+>> +	[EN751221_PCM1_RST]		= RST_NR_PER_BANK + 11,
+>> +	[EN751221_UART_RST]		= RST_NR_PER_BANK + 12,
+>> +	[EN751221_GPIO_RST]		= RST_NR_PER_BANK + 13,
+>> +	[EN751221_GDMA_RST]		= RST_NR_PER_BANK + 14,
+>> +	[EN751221_I2C_MASTER_RST]	= RST_NR_PER_BANK + 16,
+>> +	[EN751221_PCM2_ZSI_ISI_RST]	= RST_NR_PER_BANK + 17,
+>> +	[EN751221_SFC_RST]		= RST_NR_PER_BANK + 18,
+>> +	[EN751221_UART2_RST]		= RST_NR_PER_BANK + 19,
+>> +	[EN751221_GDMP_RST]		= RST_NR_PER_BANK + 20,
+>> +	[EN751221_FE_RST]		= RST_NR_PER_BANK + 21,
+>> +	[EN751221_USB_HOST_P0_RST]	= RST_NR_PER_BANK + 22,
+>> +	[EN751221_GSW_RST]		= RST_NR_PER_BANK + 23,
+>> +	[EN751221_SFC2_PCM_RST]		= RST_NR_PER_BANK + 25,
+>> +	[EN751221_PCIE0_RST]		= RST_NR_PER_BANK + 26,
+>> +	[EN751221_PCIE1_RST]		= RST_NR_PER_BANK + 27,
+>> +	[EN751221_CPU_TIMER_RST]	= RST_NR_PER_BANK + 28,
+>> +	[EN751221_PCIE_HB_RST]		= RST_NR_PER_BANK + 29,
+>> +	[EN751221_SIMIF_RST]		= RST_NR_PER_BANK + 30,
+>> +	[EN751221_XPON_MAC_RST]		= RST_NR_PER_BANK + 31,
+>> +
+>> +	/* RST_DMT */
+>> +	[EN751221_DMT_RST]		= 2 * RST_NR_PER_BANK + 0,
+>> +
+>> +	/* RST_USB */
+>> +	[EN751221_USB_PHY_P0_RST]	= 3 * RST_NR_PER_BANK + 6,
+>> +	[EN751221_USB_PHY_P1_RST]	= 3 * RST_NR_PER_BANK + 7,
+>> +};
+>> +
+>>   static int en7581_reset_register(struct device *dev, void __iomem *base,
+>> -				 const u16 *rst_map, int nr_resets);
+>> +				 const u16 *rst_map, int nr_resets,
+>> +				 const u16 *rst_reg_ofs);
+>>   
+>>   static u32 en7523_get_base_rate(const struct en_clk_desc *desc, u32 val)
+>>   {
+>> @@ -604,7 +703,8 @@ static int en7523_clk_hw_init(struct platform_device *pdev,
+>>   	en7523_register_clocks(&pdev->dev, clk_data, base, np_base);
+>>   
+>>   	return en7581_reset_register(&pdev->dev, np_base, en7523_rst_map,
+>> -				     ARRAY_SIZE(en7523_rst_map));
+>> +				     ARRAY_SIZE(en7523_rst_map),
+>> +				     en7581_rst_ofs);
+> I assume the mix of en7523 and en7581 is ok here?
 
+
+Correct, en7581 came first, then when en7523 was added they reused the 
+function. I'm only changing the offsets to be passed in because en751221 
+has more reset registers so different offset table than the others.
+
+
+>>   }
+>>   
+>>   static void en7581_register_clocks(struct device *dev, struct clk_hw_onecell_data *clk_data,
+>> @@ -705,7 +805,8 @@ static const struct reset_control_ops en7581_reset_ops = {
+>>   };
+>>   
+>>   static int en7581_reset_register(struct device *dev, void __iomem *base,
+>> -				 const u16 *rst_map, int nr_resets)
+>> +				 const u16 *rst_map, int nr_resets,
+>> +				 const u16 *rst_reg_ofs)
+>>   {
+>>   	struct en_rst_data *rst_data;
+>>   
+>> @@ -713,7 +814,7 @@ static int en7581_reset_register(struct device *dev, void __iomem *base,
+>>   	if (!rst_data)
+>>   		return -ENOMEM;
+>>   
+>> -	rst_data->bank_ofs = en7581_rst_ofs;
+>> +	rst_data->bank_ofs = rst_reg_ofs;
+>>   	rst_data->idx_map = rst_map;
+>>   	rst_data->base = base;
+>>   
+>> @@ -752,7 +853,123 @@ static int en7581_clk_hw_init(struct platform_device *pdev,
+>>   	writel(val | 3, base + REG_NP_SCU_PCIC);
+>>   
+>>   	return en7581_reset_register(&pdev->dev, base, en7581_rst_map,
+>> -				     ARRAY_SIZE(en7581_rst_map));
+>> +				     ARRAY_SIZE(en7581_rst_map),
+>> +				     en7581_rst_ofs);
+>> +}
+>> +
+>> +static enum en_hir get_hw_id(void __iomem *np_base)
+>> +{
+>> +	u32 val = FIELD_GET(REG_HIR_MASK, readl(np_base + REG_HIR));
+>> +
+>> +	if (val < HIR_MAX)
+>> +		return (enum en_hir) val;
+> No space with the cast.
+OK
+>> +
+>> +	return HIR_UNKNOWN;
+>> +}
+>> +
+>> +static void en751221_try_register_clk(struct device *dev, int key,
+>> +				      struct clk_hw_onecell_data *clk_data,
+>> +				      const char *name, u32 rate)
+>> +{
+>> +	struct clk_hw *hw;
+>> +
+>> +	hw = clk_hw_register_fixed_rate(dev, name, NULL, 0, rate);
+>> +	if (IS_ERR(hw) || key >= EN751221_MAX_CLKS)
+>> +		pr_err("Failed to register clk %s: %pe\n", name, hw);
+> Is %pe correct in the case when key >= EN751221_MAX_CLKS?
+Hmm, it's gonna give a pointer address, indeed that's not so nice. I'll 
+re-work this so it makes more sense.
+>> +	else
+>> +		clk_data->hws[key] = hw;
+> Should the error code be returned here? I know the function has try in
+> it's name, however if this fails, then it still registers it.
+
+
+This function follows the general pattern of en7581_register_clocks(). 
+If a clock can't be registered, leave clk_data->hws[key] as NULL, log, 
+and continue. There's only two possible reasons for failing, if 
+clk_hw_register_fixed_rate() fails then it's not registered because it 
+failed. If key >= EN751221_MAX_CLKS, it does register but I'll fix this 
+so it's checking that before clk_hw_register_fixed_rate().
+
+
+>> +}
+>> +
+>> +static void en751221_register_clocks(struct device *dev,
+>> +				     struct clk_hw_onecell_data *clk_data,
+>> +				     struct regmap *map, void __iomem *np_base)
+>> +{
+>> +	enum en_hir hid = get_hw_id(np_base);
+>> +	struct clk_hw *hw;
+>> +	u32 rate;
+>> +	u32 div;
+>> +	int err;
+>> +
+>> +	/* PCI */
+>> +	hw = en7523_register_pcie_clk(dev, np_base);
+>> +	clk_data->hws[EN751221_CLK_PCIE] = hw;
+>> +
+>> +	/* SPI */
+>> +	rate = EN751221_SPI_BASE;
+>> +	if (hid == HIR_EN7526C)
+>> +		rate = EN751221_SPI_BASE_EN7526C;
+>> +
+>> +	err = regmap_read(map, EN751221_REG_SPI_DIV, &div);
+>> +	if (err) {
+>> +		pr_err("Failed reading fixed clk div %s: %d\n",
+>> +		       "spi", err);
+>> +	} else {
+>> +		div = FIELD_GET(EN751221_REG_SPI_DIV_MASK, div) * 2;
+>> +		if (!div)
+>> +			div = 40;
+> Should 40 be documented a little better with a #define?
+Ok yes, makes sense.
+>> +
+>> +		en751221_try_register_clk(dev, EN751221_CLK_SPI, clk_data,
+>> +					  "spi", rate / div);
+>> +	}
+>> +
+>> +	/* BUS */
+>> +	rate = FIELD_GET(EN751221_REG_BUS_MASK,
+>> +			 readl(np_base + EN751221_REG_BUS));
+>> +	rate *= 1000000;
+>> +	en751221_try_register_clk(dev, EN751221_CLK_BUS, clk_data, "bus",
+>> +				  rate);
+>> +
+>> +	/* CPU */
+>> +	en751221_try_register_clk(dev, EN751221_CLK_CPU, clk_data, "cpu",
+>> +				  rate * 4);
+>> +
+>> +	/* HPT */
+>> +	switch (hid) {
+>> +	case HIR_EN751221:
+>> +	case HIR_EN751627:
+>> +	case HIR_EN7526C:
+>> +	case HIR_EN7580:
+>> +	case HIR_EN7528:
+>> +		rate = 200000000;
+>> +		break;
+>> +	case HIR_MT7505:
+>> +		rate = 100000000;
+>> +		break;
+>> +	case HIR_MT751020:
+>> +		rate = 800000000 / 3;
+>> +		break;
+>> +	default:
+>> +		rate = 250000000;
+> Should a warning be logged here or in get_hw_id() above? hid can be set
+> to HIR_UNKNOWN here.
+
+Now that I'm looking at this again, I'm starting to think it might be 
+better to just remove it and use a fixed-clock in the DT. I wrote it 
+aiming for completeness, but this particular clock has so much code 
+supporting it, I'm feeling like it just doesn't make any sense.
+
+Let me know if you have a feeling on this because I'm swaying in the 
+direction of just re-sending with it removed.
+
+>
+>> +	}
+>> +	en751221_try_register_clk(dev, EN751221_CLK_HPT, clk_data, "hpt",
+>> +				  rate);
+>> +
+>> +	/* GSW */
+>> +	rate = FIELD_GET(EN751221_REG_SSR3_GSW_MASK,
+>> +			 readl(np_base + EN751221_REG_SSR3));
+>> +	en751221_try_register_clk(dev, EN751221_CLK_GSW, clk_data, "gsw",
+>> +				  gsw751221_base[rate]);
+>> +}
+>> +
+>> +static int en751221_clk_hw_init(struct platform_device *pdev,
+>> +				struct clk_hw_onecell_data *clk_data)
+>> +{
+>> +	struct regmap *map;
+>> +	void __iomem *base;
+>> +
+>> +	map = syscon_regmap_lookup_by_compatible("econet,en751221-chip-scu");
+>> +	if (IS_ERR(map))
+>> +		return PTR_ERR(map);
+>> +
+>> +	base = devm_platform_ioremap_resource(pdev, 0);
+>> +	if (IS_ERR(base))
+>> +		return PTR_ERR(base);
+>> +
+>> +	en751221_register_clocks(&pdev->dev, clk_data, map, base);
+> Again, any reason why the error handling is missing here?
+
+
+I followed the same logic that was used for the en7581 and en7523, but I 
+think the logic is reasonable. If a clock fails to register, you either 
+log and continue, or you blow up the whole probe(), which is just going 
+to make it more frustrating to debug since then no clocks will register 
+and anything downstream of them will be unhappy.
+
+Thanks,
+
+Caleb
+
+
+>
+> Brian
+>
+>
+>> +
+>> +	return en7581_reset_register(&pdev->dev, base, en751221_rst_map,
+>> +				     ARRAY_SIZE(en751221_rst_map),
+>> +				     en751221_rst_ofs);
+>>   }
+>>   
+>>   static int en7523_clk_probe(struct platform_device *pdev)
+>> @@ -799,9 +1016,20 @@ static const struct en_clk_soc_data en7581_data = {
+>>   	.hw_init = en7581_clk_hw_init,
+>>   };
+>>   
+>> +static const struct en_clk_soc_data en751221_data = {
+>> +	.num_clocks = EN751221_MAX_CLKS,
+>> +	.pcie_ops = {
+>> +		.is_enabled = en7523_pci_is_enabled,
+>> +		.prepare = en7523_pci_prepare,
+>> +		.unprepare = en7523_pci_unprepare,
+>> +	},
+>> +	.hw_init = en751221_clk_hw_init,
+>> +};
+>> +
+>>   static const struct of_device_id of_match_clk_en7523[] = {
+>>   	{ .compatible = "airoha,en7523-scu", .data = &en7523_data },
+>>   	{ .compatible = "airoha,en7581-scu", .data = &en7581_data },
+>> +	{ .compatible = "econet,en751221-scu", .data = &en751221_data },
+>>   	{ /* sentinel */ }
+>>   };
+>>   
+>> -- 
+>> 2.39.5
+>>
 
