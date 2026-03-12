@@ -1,163 +1,285 @@
-Return-Path: <linux-mips+bounces-13596-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-13597-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id aG4bHW4Os2koSAAAu9opvQ
-	(envelope-from <linux-mips+bounces-13596-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Thu, 12 Mar 2026 20:05:18 +0100
+	id EAl1F08Rs2k9SAAAu9opvQ
+	(envelope-from <linux-mips+bounces-13597-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Thu, 12 Mar 2026 20:17:35 +0100
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 38595277741
-	for <lists+linux-mips@lfdr.de>; Thu, 12 Mar 2026 20:05:18 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id BBA3A277924
+	for <lists+linux-mips@lfdr.de>; Thu, 12 Mar 2026 20:17:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 2B5BA305040C
-	for <lists+linux-mips@lfdr.de>; Thu, 12 Mar 2026 19:05:13 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id D9A2F301ECEA
+	for <lists+linux-mips@lfdr.de>; Thu, 12 Mar 2026 19:16:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 30BEB38C2D8;
-	Thu, 12 Mar 2026 19:05:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 685B631F9BB;
+	Thu, 12 Mar 2026 19:16:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="aJaDL5Pl";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="b7U648rh"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RJ/OeZwo"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CFCFA37DEA7
-	for <linux-mips@vger.kernel.org>; Thu, 12 Mar 2026 19:05:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41D91314A6F;
+	Thu, 12 Mar 2026 19:16:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773342308; cv=none; b=rLUVcU4P9zQsleUKiJGIZOZVk2SwctgJ0CGid8aTdC8ZORg8Da68KOgWto3yxl4jneTKe+1Lhr/BQRiJo40w98WZcNfkenekqFiHN1IpkV1H6a4V1/oWwVXQx/iJO2mtTxCKGe9ehnZYYPzvKvlkL/3AFwCkf3B6xi19FcaVK/0=
+	t=1773342994; cv=none; b=fg+P+qqOzrkYhpt6G9CkDhTV1Wniov5MOWOkMZINNjwcMh88v/7ikSGGXd7Wv9juFi/vBVGo6fv+M5mGrZT9S+fUiJZB4BtkDwMhjuireWpSW2oS9oykObi7NwwoZQfv/wWyH/FzgiOqqDVKJwjfswqp/OQ+5Cb6wUO41cpSFas=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773342308; c=relaxed/simple;
-	bh=gRz5kv+ZQGoeaBp3JZPi0keg8FC++izwtJHUj7bGlzw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=XG320kNNyzVErWiL2RNw6VyrN/mdDdqh5+uamf6kRl4XGdgFrEa01VR0kw3lj+XrvgkHBabGYq+LDfTCUrxI9DNEijz8h0rVCCTCqRtV+vkWLQ2W8c/2/Iv5bQuD3E04KK9E3qDJMeL9lM92oeImZfzYHqNsyyVrK7FuQA0Zk/Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=aJaDL5Pl; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=b7U648rh; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1773342304;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=AlGHEWxU5rIBCwzyS3n9Fsdg8fqOw24aBbYZdNgyOtE=;
-	b=aJaDL5PlNSRmaNo884kVkYtAgleVQIUYnSbyIWOfKbKy2GAXiFOGFskAPLchZG+WxHUJD4
-	xGWXn7tNiToi0RAzakzceLtvXUay7ZImXoGArz61TlbjoSvbsAUeDjJGJXmuhhhHOyt5sl
-	6T6eRt7qa7CooIJWXd+Z4aYRWXyDrAY=
-Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
- [209.85.222.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-316-dYuPS5YhPg62V0F9D5-hhQ-1; Thu, 12 Mar 2026 15:05:03 -0400
-X-MC-Unique: dYuPS5YhPg62V0F9D5-hhQ-1
-X-Mimecast-MFC-AGG-ID: dYuPS5YhPg62V0F9D5-hhQ_1773342303
-Received: by mail-qk1-f197.google.com with SMTP id af79cd13be357-8cdae902bccso478351085a.0
-        for <linux-mips@vger.kernel.org>; Thu, 12 Mar 2026 12:05:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1773342303; x=1773947103; darn=vger.kernel.org;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=AlGHEWxU5rIBCwzyS3n9Fsdg8fqOw24aBbYZdNgyOtE=;
-        b=b7U648rh3RlhlQp+2AlnKUt+gm5LxwFO3wWKD7jb1DtCe1hzRX8dlaX9sPfqi4VeDv
-         a0/PUdNOTZ4bhbnJwSQa21ObeTxnpuZrKycDYi10Awo2dMJH17mbiqEfNoo+kjZtv91T
-         Ff7iTJ4h/ECofZnKOv+BNebcSp8jQOlsqt9yOI6VZRqeHuH7hoLG8DGdOlB1bEup7F8n
-         lf/QsexdmRsnTHPW4MtnenBzZFyGmUIO6CFqNgDSqQzWnEv/npEj6xMBSIjJ/Mspvn0x
-         0Y7J9c7P8o5LRVg00vP6M7qRGCJ+J9WGqyWJZVBU4CnHsvErKc+1oT6wgas+lpWE7koz
-         cySA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1773342303; x=1773947103;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=AlGHEWxU5rIBCwzyS3n9Fsdg8fqOw24aBbYZdNgyOtE=;
-        b=r0x8lg65iqMXBjlHt/4MEQaFqYXNUbs2IF0MjUoQKKEekY/+JFtHCqTbz5xwFUO6s/
-         RNylALivgdpBmo4P+Bg0qmeM9KBEpmziT8uJgrG+cgu7o4sfsebWuT0dbhwlhqmYozjK
-         wTvtgODfiQCSpxePiyhkSl6i+XjhUNCCrG11Cj7FSJQ3iSUzX0YibicQMo8hBzC11Xk5
-         rer84Y8Omx5VBI+KwNziUaYuJ1eWEhcjV0RWb+Br8XKE9NkHcBQ5upCmZwBnJkhX/Rps
-         w0ws0vUqQ7MlXBSQT6zLzhD6hJzne19f0uT5TOJLV8xljnbgmdBCl0HfDzEX1UX3EWF/
-         wc2Q==
-X-Forwarded-Encrypted: i=1; AJvYcCX4EiCPRH/s1GW4xs3mdtvRKM/xjFzbdTu9lCUJQ6FJmqnatMtck45kuk6rC+klDNkEKJ36/rJIebDX@vger.kernel.org
-X-Gm-Message-State: AOJu0YwOKm11UxN1CV8SZzs5QAr23CDap2YXwn2ow4rjBvnYG4OM6ddx
-	uQ3S/l88QOPJu1PseHz4IjzNOTGfjWRRI6wKzE1uJPPWLBBOVFxMv1yWd0IkDI+vYEVUNEOu4F1
-	P8PnBmmOvk5eDCd1rlCw+3gJTZWkAC2tVGyXFIr+8T/ok1XkhvtU8scfmUwUHWmM=
-X-Gm-Gg: ATEYQzw+OCMrAmqPZhC9xeJAYkRj7DEIHb5+b+ElEO0ZzazFyXOOfouW2/F4B4eWb8M
-	36/Evaf8NtwpciniYEYcQKMSkxVgRPX3R++bTXkIgeNvEhLtr/5u/v/rtxsz92ggczJLzvNCn5D
-	RvJjNrBBgfeDXX4TgdJ7ySmvxT7hiv0pfvbN5fpjSkyBaodcGmST+VpWTQwy4x0+jQ3etINTDKA
-	VUhhOlfFcvpGiYTYaS43NCHFs9/Zl4BNiRZscACeyazG7nBL7G1mMQzeJ23mhPwGC4gqbP8xoUG
-	Dzgw+Rku+n7otw+RQCPzYXBSBSg2oaDWHsp0khsk3xvoD+hbuMDlBFndAtiIR8XFPdLsY98n9f9
-	zj/9GXEsDflQgHCHolsBcy7KclAVmA9+Zg+AKubbLjuYMR4Hu1lhkEzXQ
-X-Received: by 2002:a05:620a:468c:b0:8cd:8fc7:8308 with SMTP id af79cd13be357-8cdb5baaa87mr107675585a.75.1773342303005;
-        Thu, 12 Mar 2026 12:05:03 -0700 (PDT)
-X-Received: by 2002:a05:620a:468c:b0:8cd:8fc7:8308 with SMTP id af79cd13be357-8cdb5baaa87mr107669385a.75.1773342302313;
-        Thu, 12 Mar 2026 12:05:02 -0700 (PDT)
-Received: from redhat.com (c-73-183-52-120.hsd1.pa.comcast.net. [73.183.52.120])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-89a65bd54f9sm41198836d6.6.2026.03.12.12.05.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 Mar 2026 12:05:01 -0700 (PDT)
-Date: Thu, 12 Mar 2026 15:04:59 -0400
-From: Brian Masney <bmasney@redhat.com>
-To: Caleb James DeLisle <cjd@cjdns.fr>
-Cc: linux-clk@vger.kernel.org, linux-mips@vger.kernel.org,
-	naseefkm@gmail.com, mturquette@baylibre.com, sboyd@kernel.org,
-	robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
-	lee@kernel.org, p.zabel@pengutronix.de, nbd@nbd.name,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] clk: airoha: Add econet EN751221 clock/reset support
- to en7523-scu
-Message-ID: <abMOW9N-qWqqbmYD@redhat.com>
-References: <20260312162449.569359-1-cjd@cjdns.fr>
- <20260312162449.569359-3-cjd@cjdns.fr>
+	s=arc-20240116; t=1773342994; c=relaxed/simple;
+	bh=TaSLkR5gPDfxujDC1zIc+PKZQMwo2SHfFpgA8heiCwA=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=oH0nxdoAS3l/iisb8Lmb2PYKBoEOwrGjeeKWROtkNJscoDk+KUrBQLFX0zDux3xP4Dp9uBiUq3dOK94k600ThjhSVjmrq9EOS7RFgTHoyutVKSX0XrwyDjg/5VNrFwz1gPOv7rh9XvcdzjQMiD+dDuoC5ulqcjEE5UmXgu6UZ00=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RJ/OeZwo; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5FB2FC4CEF7;
+	Thu, 12 Mar 2026 19:16:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1773342993;
+	bh=TaSLkR5gPDfxujDC1zIc+PKZQMwo2SHfFpgA8heiCwA=;
+	h=From:To:Cc:Subject:Date:From;
+	b=RJ/OeZwo0EpMiWhb6/z0zIn+/lFIuIvP2BfzNEAj9LTqZfBCjv1o5hnt4plZA721a
+	 ih6WVKNO5Z+PgABzP3qU9mNk3ZQdayMRlhZrsa3HWiVByCdZSFrFYLe0/7lxG7OMSg
+	 FBYifP/bgQwr574bwudgfgyoHnB9f/hWGwgWe1FDPrtLRQXW3cutgrXsqn1yBfQyAO
+	 cLyQ9H8N5cQhIxAeyK3PB3UNucYEayj8QTANEhh8lPSNLnt33n+V+48VghS2R7jej6
+	 vxj7XgXAC6C2E/LkQ0c1rBr5o/kq+vJUK3tiAL3mfMap9fAXAJ1J2eEDtK0eEUhevE
+	 WNctijuQVz9Nw==
+From: "Lorenzo Stoakes (Oracle)" <ljs@kernel.org>
+To: Andrew Morton <akpm@linux-foundation.org>
+Cc: David Hildenbrand <david@kernel.org>,
+	"Liam R . Howlett" <Liam.Howlett@oracle.com>,
+	Vlastimil Babka <vbabka@kernel.org>,
+	Jann Horn <jannh@google.com>,
+	Pedro Falcato <pfalcato@suse.de>,
+	Mike Rapoport <rppt@kernel.org>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Kees Cook <kees@kernel.org>,
+	linux-mm@kvack.org,
+	linux-kernel@vger.kernel.org,
+	Vineet Gupta <vgupta@kernel.org>,
+	Russell King <linux@armlinux.org.uk>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>,
+	Brian Cain <bcain@kernel.org>,
+	Huacai Chen <chenhuacai@kernel.org>,
+	WANG Xuerui <kernel@xen0n.name>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Dinh Nguyen <dinguyen@kernel.org>,
+	Madhavan Srinivasan <maddy@linux.ibm.com>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Nicholas Piggin <npiggin@gmail.com>,
+	Christophe Leroy <chleroy@kernel.org>,
+	Paul Walmsley <pjw@kernel.org>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Alexandre Ghiti <alex@ghiti.fr>,
+	Heiko Carstens <hca@linux.ibm.com>,
+	Vasily Gorbik <gor@linux.ibm.com>,
+	Alexander Gordeev <agordeev@linux.ibm.com>,
+	Christian Borntraeger <borntraeger@linux.ibm.com>,
+	Sven Schnelle <svens@linux.ibm.com>,
+	Thomas Gleixner <tglx@kernel.org>,
+	Ingo Molnar <mingo@redhat.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	x86@kernel.org,
+	"H . Peter Anvin" <hpa@zytor.com>,
+	Richard Weinberger <richard@nod.at>,
+	Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+	Johannes Berg <johannes@sipsolutions.net>,
+	Alexander Viro <viro@zeniv.linux.org.uk>,
+	Christian Brauner <brauner@kernel.org>,
+	Jan Kara <jack@suse.cz>,
+	Xu Xin <xu.xin16@zte.com.cn>,
+	Chengming Zhou <chengming.zhou@linux.dev>,
+	Michal Hocko <mhocko@suse.com>,
+	Paul Moore <paul@paul-moore.com>,
+	Stephen Smalley <stephen.smalley.work@gmail.com>,
+	Ondrej Mosnacek <omosnace@redhat.com>,
+	linux-snps-arc@lists.infradead.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-hexagon@vger.kernel.org,
+	loongarch@lists.linux.dev,
+	linux-mips@vger.kernel.org,
+	linuxppc-dev@lists.ozlabs.org,
+	linux-riscv@lists.infradead.org,
+	linux-s390@vger.kernel.org,
+	linux-um@lists.infradead.org,
+	linux-fsdevel@vger.kernel.org,
+	selinux@vger.kernel.org
+Subject: [PATCH 00/20] mm/vma: convert vm_flags_t to vma_flags_t in vma code
+Date: Thu, 12 Mar 2026 19:15:58 +0000
+Message-ID: <cover.1773342102.git.ljs@kernel.org>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260312162449.569359-3-cjd@cjdns.fr>
-User-Agent: Mutt/2.2.14 (2025-02-20)
-X-Spamd-Result: default: False [-0.66 / 15.00];
+Content-Transfer-Encoding: 8bit
+X-Spamd-Result: default: False [0.84 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
+	MID_CONTAINS_FROM(1.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[redhat.com,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
-	R_DKIM_ALLOW(-0.20)[redhat.com:s=mimecast20190719,redhat.com:s=google];
+	R_MISSING_CHARSET(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FREEMAIL_CC(0.00)[vger.kernel.org,gmail.com,baylibre.com,kernel.org,pengutronix.de,nbd.name];
-	TAGGED_FROM(0.00)[bounces-13596-lists,linux-mips=lfdr.de];
-	FROM_HAS_DN(0.00)[];
+	FREEMAIL_CC(0.00)[kernel.org,oracle.com,google.com,suse.de,kvack.org,vger.kernel.org,armlinux.org.uk,arm.com,xen0n.name,alpha.franken.de,linux.ibm.com,ellerman.id.au,gmail.com,dabbelt.com,eecs.berkeley.edu,ghiti.fr,redhat.com,alien8.de,linux.intel.com,zytor.com,nod.at,cambridgegreys.com,sipsolutions.net,zeniv.linux.org.uk,suse.cz,zte.com.cn,linux.dev,suse.com,paul-moore.com,lists.infradead.org,lists.linux.dev,lists.ozlabs.org];
+	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[14];
-	MIME_TRACE(0.00)[0:+];
-	DKIM_TRACE(0.00)[redhat.com:+];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
-	TO_DN_SOME(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[6];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[bmasney@redhat.com,linux-mips@vger.kernel.org];
+	TAGGED_FROM(0.00)[bounces-13597-lists,linux-mips=lfdr.de];
+	RCVD_COUNT_THREE(0.00)[4];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[ljs@kernel.org,linux-mips@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	DKIM_TRACE(0.00)[kernel.org:+];
+	RCPT_COUNT_GT_50(0.00)[62];
+	TAGGED_RCPT(0.00)[linux-mips];
 	NEURAL_HAM(-0.00)[-1.000];
-	TAGGED_RCPT(0.00)[linux-mips,dt];
-	MID_RHS_MATCH_FROM(0.00)[];
+	TO_DN_SOME(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[cjdns.fr:email]
-X-Rspamd-Queue-Id: 38595277741
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: BBA3A277924
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On Thu, Mar 12, 2026 at 04:24:49PM +0000, Caleb James DeLisle wrote:
-> EcoNet EN751221 clock/reset driver is significantly similar to the
-> EN7523 / EN7581, however the EN751221 does not have a neat batch of clock
-> divider registers so there are fewer known clocks, and the frequency of
-> each clock is derived differently. This clock driver will probably work
-> correctly on EN751627, EN7528, and EN7580.
-> 
-> Signed-off-by: Caleb James DeLisle <cjd@cjdns.fr>
+This series converts a lot of the existing use of the legacy vm_flags_t
+data type to the new vma_flags_t type which replaces it.
 
-Reviewed-by: Brian Masney <bmasney@redhat.com>
+In order to do so it adds a number of additional helpers:
 
+* vma_flags_empty() - Determines whether a vma_flags_t value has no bits
+  set.
+
+* vma_flags_and() - Performs a bitwise AND between two vma_flags_t values.
+
+* vma_flags_diff_pair() - Determines which flags are not shared between a
+  pair of VMA flags (typically non-constant values)
+
+* append_vma_flags() - Similar to mk_vma_flags(), but allows a vma_flags_t
+  value to be specified (typically a constant value) which will be copied
+  and appended to to create a new vma_flags_t value, with additional flags
+  specified to append to it.
+
+* vma_flags_same() - Determines if a vma_flags_t value is exactly equal to
+  a set of VMA flags.
+
+* vma_flags_same_mask() - Determines if a vma_flags_t value is eactly equal
+  to another vma_flags_t value (typically constant).
+
+* vma_flags_same_pair() - Determines if a pair of vma_flags_t values are
+  exactly equal to one another (typically both non-constant).
+
+* vma_flags_to_legacy() - Converts a vma_flags_t value to a vm_flags_t
+  value, used to enable more iterative introduction of the use of
+  vma_flags_t.
+
+* legacy_to_vma_flags() - Converts a vm_flags_t value to a vma_flags-t
+  value, for the same purpose.
+
+* vma_test() - Tests whether a VMA's flags contain s specific singular VMA
+  flag.
+
+* vma_test_any() - Tests whether a VMA's flags contain any of a set of VMA
+  flags.
+
+* vma_test_any_mask() - Tests whether a VMA's flags contain any of the
+  flags specified in another, typically constant, vma_flags_t value.
+
+* vma_clear_flags() - Clears a specific set of VMA flags from a vma_flags_t
+  value.
+
+* vma_clear_flags_mask() - Clears those flag set in a vma_flags_t value
+  (typically constant) from a (typically not constant) vma_flags_t value.
+
+The series mostly focuses on the the VMA specific code, especially that
+contained in mm/vma.c and mm/vma.h.
+
+It updates both brk() and mmap() logic to utils vma_flags_t values as much
+as is practiaclly possible at this point, changing surrounding logic to be
+able to do so.
+
+It also updates the vma_modify_xxx() functions where they interact with VMA
+flags directly to use vm_flags_t values where possible.
+
+There is extensive testing added in the VMA userland tests to assert that
+all of these new VMA flag functions work correctly.
+
+Lorenzo Stoakes (Oracle) (20):
+  mm/vma: add vma_flags_empty(), vma_flags_and(), vma_flags_diff_pair()
+  tools/testing/vma: add unit tests flag empty, diff_pair, and[_mask]
+  mm/vma: add further vma_flags_t unions
+  tools/testing/vma: convert bulk of test code to vma_flags_t
+  mm/vma: use new VMA flags for sticky flags logic
+  tools/testing/vma: fix VMA flag tests
+  mm/vma: add append_vma_flags() helper
+  tools/testing/vma: add simple test for append_vma_flags()
+  mm: unexport vm_brk_flags() and eliminate vm_flags parameter
+  mm/vma: introduce vma_flags_same[_mask/_pair]()
+  mm/vma: introduce [vma_flags,legacy]_to_[legacy,vma_flags]() helpers
+  tools/testing/vma: test that legacy flag helpers work correctly
+  mm: convert do_brk_flags() to use vma_flags_t
+  mm/vma: introduce vma_test[_any[_mask]](), and make inlining
+    consistent
+  tools/testing/vma: update VMA flag tests to test vma_test[_any_mask]()
+  mm/vma: introduce vma_clear_flags[_mask]()
+  tools/testing/vma: update VMA tests to test vma_clear_flags[_mask]()
+  mm/vma: convert as much as we can in mm/vma.c to vma_flags_t
+  mm/vma: convert vma_modify_flags[_uffd]() to use vma_flags_t
+  mm/vma: convert __mmap_region() to use vma_flags_t
+
+ arch/arc/include/asm/page.h        |   2 +-
+ arch/arm/include/asm/page.h        |   2 +-
+ arch/arm64/include/asm/page.h      |   3 +-
+ arch/hexagon/include/asm/page.h    |   2 +-
+ arch/loongarch/include/asm/page.h  |   2 +-
+ arch/mips/include/asm/page.h       |   2 +-
+ arch/nios2/include/asm/page.h      |   2 +-
+ arch/powerpc/include/asm/page.h    |   4 +-
+ arch/powerpc/include/asm/page_32.h |   2 +-
+ arch/powerpc/include/asm/page_64.h |  12 +-
+ arch/riscv/include/asm/page.h      |   2 +-
+ arch/s390/include/asm/page.h       |   2 +-
+ arch/x86/include/asm/page_types.h  |   2 +-
+ arch/x86/um/asm/vm-flags.h         |   4 +-
+ fs/binfmt_elf.c                    |   3 +-
+ include/linux/ksm.h                |  10 +-
+ include/linux/mm.h                 | 282 ++++++++++++++++++++------
+ include/linux/mm_types.h           |  52 ++++-
+ include/linux/mman.h               |  49 -----
+ include/linux/userfaultfd_k.h      |   3 +
+ mm/internal.h                      |   3 +
+ mm/ksm.c                           |  43 ++--
+ mm/madvise.c                       |  10 +-
+ mm/mlock.c                         |  42 ++--
+ mm/mmap.c                          |  19 +-
+ mm/mprotect.c                      |  53 +++--
+ mm/mremap.c                        |   6 +-
+ mm/mseal.c                         |  10 +-
+ mm/userfaultfd.c                   |  21 +-
+ mm/vma.c                           | 216 ++++++++++++--------
+ mm/vma.h                           |  86 ++++++--
+ mm/vma_exec.c                      |   5 +-
+ security/selinux/hooks.c           |   4 +-
+ tools/include/linux/bitmap.h       |  13 ++
+ tools/lib/bitmap.c                 |  10 +
+ tools/testing/vma/include/custom.h |  19 --
+ tools/testing/vma/include/dup.h    | 262 +++++++++++++++++-------
+ tools/testing/vma/include/stubs.h  |  11 +-
+ tools/testing/vma/shared.c         |   8 +-
+ tools/testing/vma/shared.h         |  22 +-
+ tools/testing/vma/tests/merge.c    | 311 +++++++++++++++--------------
+ tools/testing/vma/tests/mmap.c     |  18 +-
+ tools/testing/vma/tests/vma.c      | 303 +++++++++++++++++++++++++---
+ 43 files changed, 1307 insertions(+), 630 deletions(-)
+
+--
+2.53.0
 
