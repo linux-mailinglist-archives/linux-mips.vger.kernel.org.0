@@ -1,157 +1,146 @@
-Return-Path: <linux-mips+bounces-13697-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-13698-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id CI6bI1QiuGmdZQEAu9opvQ
-	(envelope-from <linux-mips+bounces-13697-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Mon, 16 Mar 2026 16:31:32 +0100
+	id UAuzCu4ouGnhZgEAu9opvQ
+	(envelope-from <linux-mips+bounces-13698-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Mon, 16 Mar 2026 16:59:42 +0100
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 31E2C29C691
-	for <lists+linux-mips@lfdr.de>; Mon, 16 Mar 2026 16:31:32 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id B53F929CE27
+	for <lists+linux-mips@lfdr.de>; Mon, 16 Mar 2026 16:59:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 2DEBE3051050
-	for <lists+linux-mips@lfdr.de>; Mon, 16 Mar 2026 15:27:53 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id C4EEB30990A9
+	for <lists+linux-mips@lfdr.de>; Mon, 16 Mar 2026 15:52:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7CA673A9618;
-	Mon, 16 Mar 2026 15:26:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2456B3B6BE3;
+	Mon, 16 Mar 2026 15:52:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="g7wEu8wM"
+	dkim=pass (2048-bit key) header.d=cjdns.fr header.i=@cjdns.fr header.b="r8UOBjjD"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
+Received: from mail.cjdns.fr (mail.cjdns.fr [5.135.140.105])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E8DE3A2541;
-	Mon, 16 Mar 2026 15:26:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.85.4
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F414F3A7821;
+	Mon, 16 Mar 2026 15:52:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=5.135.140.105
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773674776; cv=none; b=lkGZKiCMIdZ5hVJ+u5zxQj1kNoPog4OId8c3tpDmyhtAMzLfWBkvS9jzGlAspPcfJ/e38sglYMaTIndGm+H8IvVFsENu244oZhlg+MjXRJaT9dkObrR8E09NGJCbWYoAU65B+xJuMR1Kryd+kXSo0D1IrVA7lYob5CZwQ6SBN6o=
+	t=1773676347; cv=none; b=WWF4ggurx0tWKMxDA8NFCSQBC5WLHgAcQLGuMm8Hg26rZ0eEZZKQ99bKwze02fZQlHF/jYObDleHksM8kbso48REQJn186oJxyadnSPSluUeiO5RLsHOTADKlpzmoXKzoq4Q8o/39dtWiu9rJE2p46SY25kpD5WHGprTNQGPGu8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773674776; c=relaxed/simple;
-	bh=HiF5B4Bc73eHsZAl9unZvix8uUjE2fsep39CeE6Z6ok=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=IGR4YRqSfGA7YabQjYvL78Qe5fwnKGFSvrwNbsZ2h9jbzT39tshnccU2Fo099JKrUZ/xp/PYnhgOAA2t58xg7C24kOuzBoIv2XKrcmj2wN8w07HiuIxt7tBfpW0EI6GcFv3ol4j9dCYOj3ulyWD85WtMhpLz8vNTv56PCenuATs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=g7wEu8wM; arc=none smtp.client-ip=185.246.85.4
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-03.galae.net (Postfix) with ESMTPS id ED4CD4E40B37;
-	Mon, 16 Mar 2026 15:26:13 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id C39045FC4A;
-	Mon, 16 Mar 2026 15:26:13 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 66969103721F8;
-	Mon, 16 Mar 2026 16:26:11 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1773674772; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding:in-reply-to:references;
-	bh=t13fTL38ybBnjcJkpfx+K3cUGVZwn08bqofOvp3rY/E=;
-	b=g7wEu8wMxX14MPtuGpZ3ujPtebXwaYKya4BVSMUMXY6d2jmNLwfi4RsmVX1UH28Smz24ax
-	7TqPs8xLfeEfQZMrZ1ORToYJgtJttR+2wfDycflPSIrX7m94pPIH4ADkroO5TC5PaxIAQR
-	iTvbfvRa+zOxQaKSHvc3GnfBr3qNDB+MrLuqLLdAxjEDmuWmC6rOwHuFQkN1QTsj/hT7nD
-	E3Ixl5ChZDd553sn+onzq581qTC0yunPSUfOn/kuia+eQ3RCavKnT0ibkNBJfon5A2xjmb
-	DbvmB816++87ULv9YHpBPNzn/cb4hhtMAHXPgIe3y9r+8YYlLNjtfF8Ld5mxkA==
-From: =?utf-8?q?Beno=C3=AEt_Monin?= <benoit.monin@bootlin.com>
-Date: Mon, 16 Mar 2026 16:25:50 +0100
-Subject: [PATCH v4 13/13] MAINTAINERS: Mobileye: Add EyeQ6Lplus files
+	s=arc-20240116; t=1773676347; c=relaxed/simple;
+	bh=uUXNMZYluYxDTZUEM+CIKLtifIX4NVIKuEd3JX+jz1Y=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=BfoqLkivCNDjHhvr90sWs0bprwKO/ZMZ+6kmejHwfL/82JfBXOw3RN/kw1uhMwjNy3UK730Y4A4DyKRJs6MpdxYnh+oATUHkRNAUj3ZnEFRLL+iBN1MWQVqIQJLQ9ikrmTwhTxsEIDepqzHQfEKVl5+tnuYy9V0YZmO9ZLYolHA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=cjdns.fr; spf=none smtp.mailfrom=cjdns.fr; dkim=pass (2048-bit key) header.d=cjdns.fr header.i=@cjdns.fr header.b=r8UOBjjD; arc=none smtp.client-ip=5.135.140.105
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=cjdns.fr
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=cjdns.fr
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 2BADB302EB3;
+	Mon, 16 Mar 2026 16:52:08 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cjdns.fr; s=dkim;
+	t=1773676334; h=from:subject:date:message-id:to:cc:mime-version:
+	 content-transfer-encoding; bh=Q11hnzTKrbJQfR59sChwy59iNTTXeocJ+Lmy3WVGuHU=;
+	b=r8UOBjjDoVmxU+sPlo88yabF/Mg1DAzDSQHVocQGzeE1FKHIyY3uan5sdVc13u7FKMjQDO
+	cisBH+YubhmFq9UHP8YNddsBPAtUicq25lCqPoqnwlQc0N83uWY87IkKFelWWyuXs6+4rV
+	0HXANlpP9U1H+qEQC3cDfaSGBIp/CYHzV/Hr/rBeWdgv1NKG3J7+upIO+F3QVhw1F1ABri
+	0PegtrcI62pXDFtWq0lumkKHeeW5rntXJdYW/HuC1hjDNDy/bWYVksyghcDz8li+ObOZBs
+	9gXfRDUnBq9aqa19HaxYD+kI86NaLdjLal/96GzFgiSJi6LUkaEZ6r1fNwVrZg==
+From: Caleb James DeLisle <cjd@cjdns.fr>
+To: linux-pci@vger.kernel.org
+Cc: linux-mips@vger.kernel.org,
+	naseefkm@gmail.com,
+	ryder.lee@mediatek.com,
+	bhelgaas@google.com,
+	lpieralisi@kernel.org,
+	kwilczynski@kernel.org,
+	mani@kernel.org,
+	robh@kernel.org,
+	krzk+dt@kernel.org,
+	conor+dt@kernel.org,
+	matthias.bgg@gmail.com,
+	angelogioacchino.delregno@collabora.com,
+	ansuelsmth@gmail.com,
+	linux-mediatek@lists.infradead.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Caleb James DeLisle <cjd@cjdns.fr>
+Subject: [PATCH v2 0/3] PCI: mediatek: Add support for EcoNet SoCs
+Date: Mon, 16 Mar 2026 15:51:54 +0000
+Message-Id: <20260316155157.679533-1-cjd@cjdns.fr>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20260316-eyeq6lplus-v4-13-bf44dfc7a261@bootlin.com>
-References: <20260316-eyeq6lplus-v4-0-bf44dfc7a261@bootlin.com>
-In-Reply-To: <20260316-eyeq6lplus-v4-0-bf44dfc7a261@bootlin.com>
-To: Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>, 
- Gregory CLEMENT <gregory.clement@bootlin.com>, 
- =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>, 
- Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, 
- Michael Turquette <mturquette@baylibre.com>, 
- Stephen Boyd <sboyd@kernel.org>, Philipp Zabel <p.zabel@pengutronix.de>, 
- Linus Walleij <linusw@kernel.org>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
- Tawfik Bayouk <tawfik.bayouk@mobileye.com>, linux-mips@vger.kernel.org, 
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org, 
- =?utf-8?q?Beno=C3=AEt_Monin?= <benoit.monin@bootlin.com>
-X-Mailer: b4 0.14.3
 X-Last-TLS-Session-Version: TLSv1.3
-X-Spamd-Result: default: False [-0.66 / 15.00];
+X-Spamd-Result: default: False [0.84 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[bootlin.com,reject];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
-	R_DKIM_ALLOW(-0.20)[bootlin.com:s=dkim];
+	MID_CONTAINS_FROM(1.00)[];
+	DMARC_POLICY_ALLOW(-0.50)[cjdns.fr,none];
+	R_MISSING_CHARSET(0.50)[];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_DKIM_ALLOW(-0.20)[cjdns.fr:s=dkim];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[18];
+	FREEMAIL_CC(0.00)[vger.kernel.org,gmail.com,mediatek.com,google.com,kernel.org,collabora.com,lists.infradead.org,cjdns.fr];
+	TAGGED_FROM(0.00)[bounces-13698-lists,linux-mips=lfdr.de];
 	MIME_TRACE(0.00)[0:+];
-	RECEIVED_HELO_LOCALHOST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-13697-lists,linux-mips=lfdr.de];
-	DKIM_TRACE(0.00)[bootlin.com:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
+	RECEIVED_HELO_LOCALHOST(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[19];
-	RCVD_COUNT_FIVE(0.00)[6];
+	TO_DN_SOME(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[benoit.monin@bootlin.com,linux-mips@vger.kernel.org];
-	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
+	FROM_NEQ_ENVFROM(0.00)[cjd@cjdns.fr,linux-mips@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	DKIM_TRACE(0.00)[cjdns.fr:+];
 	NEURAL_HAM(-0.00)[-1.000];
-	TAGGED_RCPT(0.00)[linux-mips,dt];
-	MID_RHS_MATCH_FROM(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TO_DN_SOME(0.00)[]
-X-Rspamd-Queue-Id: 31E2C29C691
+	TAGGED_RCPT(0.00)[linux-mips,dt];
+	MISSING_XM_UA(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[cjdns.fr:dkim,cjdns.fr:mid,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: B53F929CE27
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-Use wildcard to match all EyeQ defconfigs under arch/mips. This covers
-the newly added defconfig, and the EyeQ5 and EyeQ6H ones. Add an entry
-for the dt-bindings header of the EyeQ6Lplus clocks.
+Add EcoNet EN7528 (and EN751221) PCIe support.
 
-While at it, add myself to the maintainers of Mobileye MIPS SoCs.
+Changes from v1:
+* mediatek-pcie.yaml slot0 needs device-type = "pci", fix dt_binding_check
+Link: https://lore.kernel.org/linux-mips/177334026016.3889069.9474337544951486443.robh@kernel.org
 
-Signed-off-by: Benoît Monin <benoit.monin@bootlin.com>
----
- MAINTAINERS | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+This was split from a larger PCIe patchset which crossed multiple
+subsystems. I'm not labeling this a v3 because it's a new patchset, but
+I'm keeping the historical record anyway.
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 55af015174a5..63048d5ede7d 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -17802,6 +17802,7 @@ F:	drivers/media/dvb-frontends/mn88473*
- 
- MOBILEYE MIPS SOCS
- M:	Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>
-+M:	Benoît Monin <benoit.monin@bootlin.com>
- M:	Gregory CLEMENT <gregory.clement@bootlin.com>
- M:	Théo Lebrun <theo.lebrun@bootlin.com>
- L:	linux-mips@vger.kernel.org
-@@ -17809,12 +17810,13 @@ S:	Maintained
- F:	Documentation/devicetree/bindings/mips/mobileye.yaml
- F:	Documentation/devicetree/bindings/soc/mobileye/
- F:	arch/mips/boot/dts/mobileye/
--F:	arch/mips/configs/eyeq5_defconfig
-+F:	arch/mips/configs/eyeq*_defconfig
- F:	arch/mips/mobileye/board-epm5.its.S
- F:	drivers/clk/clk-eyeq.c
- F:	drivers/pinctrl/pinctrl-eyeq5.c
- F:	drivers/reset/reset-eyeq.c
- F:	include/dt-bindings/clock/mobileye,eyeq5-clk.h
-+F:	include/dt-bindings/clock/mobileye,eyeq6lplus-clk.h
- 
- MODULE SUPPORT
- M:	Luis Chamberlain <mcgrof@kernel.org>
+Changes from econet-pcie v2:
+* mediatek-pcie.yaml add missing constraints to PCI node properties
+* econet-pcie v2: https://lore.kernel.org/linux-mips/20260309131818.74467-1-cjd@cjdns.fr
 
+Changes from econet-pcie v1:
+* pcie-mediatek.c Exclude pcie_retrain_link() when building as a module
+* econet-pcie v1: https://lore.kernel.org/linux-mips/20260303190948.694783-1-cjd@cjdns.fr/
+
+
+Caleb James DeLisle (3):
+  dt-bindings: PCI: mediatek: Add support for EcoNet EN7528
+  PCI: mediatek: Add support for EcoNet EN7528 SoC
+  PCI: Skip bridge window reads when window is not supported
+
+ .../bindings/pci/mediatek-pcie.yaml           |  82 ++++++++++++
+ drivers/pci/controller/Kconfig                |   2 +-
+ drivers/pci/controller/pcie-mediatek.c        | 118 ++++++++++++++++++
+ drivers/pci/probe.c                           |   6 +
+ 4 files changed, 207 insertions(+), 1 deletion(-)
+
+
+base-commit: 3fa5e5702a82d259897bd7e209469bc06368bf31
 -- 
-2.53.0
+2.39.5
 
 
