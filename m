@@ -1,59 +1,60 @@
-Return-Path: <linux-mips+bounces-13694-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-13695-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id UBgXNQoiuGmdZQEAu9opvQ
-	(envelope-from <linux-mips+bounces-13694-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Mon, 16 Mar 2026 16:30:18 +0100
+	id EPyQK5kjuGk8ZgEAu9opvQ
+	(envelope-from <linux-mips+bounces-13695-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Mon, 16 Mar 2026 16:36:57 +0100
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id B2EAA29C5EB
-	for <lists+linux-mips@lfdr.de>; Mon, 16 Mar 2026 16:30:18 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1015129C871
+	for <lists+linux-mips@lfdr.de>; Mon, 16 Mar 2026 16:36:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 6D69930351EC
-	for <lists+linux-mips@lfdr.de>; Mon, 16 Mar 2026 15:27:25 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id BAAE3312C51C
+	for <lists+linux-mips@lfdr.de>; Mon, 16 Mar 2026 15:27:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C0C9E3A7F46;
-	Mon, 16 Mar 2026 15:26:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0F9A03A7F61;
+	Mon, 16 Mar 2026 15:26:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="F3haMy3m"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="lbph7C6D"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
+Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F0513A63F1;
-	Mon, 16 Mar 2026 15:26:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.84.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F51C3A7823;
+	Mon, 16 Mar 2026 15:26:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.85.4
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773674771; cv=none; b=ay9QmGcUijxQ6JWJBOsUUzlrPBNyhzvn/zkN2w4vriBlp8IKwAhLXjsCrzviLU3LFfaUmlpCBrKb3HJhe/5YI+n84Z0HysfFFbFF/rJC1L+BZBEyFuk+7jKwmawk+ecOchnuOeBlkK/VG0l5pJc9Z3jtrhHyPdFEbk7h2nV8n3s=
+	t=1773674773; cv=none; b=mmXTEecoZ7vpwmjSCRzHsrvxfhqOvu0wdvy3/yD+Kk1yWKYEzZQOiupoQlXW6stx8F/rR1VzG5Xq8bRur8sDTjym0/hxG2XrI26bDLDOk+r1x8XfI3cN4Pi7aVt8wUv4RWozQeecR5iBy4XnV2B3ffxAUZ4SdtZ5RG1bvFjQ14A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773674771; c=relaxed/simple;
-	bh=xVUnPUPdxovx34Wd6eMgfbvMHvEP7/paunAnVQVxbrY=;
+	s=arc-20240116; t=1773674773; c=relaxed/simple;
+	bh=qu1qfic7KBLY7EWIiL3AaAuZ07Rjx+XJtSK4llNtxTc=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=KXJJuFYL8Wh4TiDFT4LOMb3ZFKwHkljoAXWXLaySvr+i7lN34P9yfaWYsOUaH6vWF/JaYoH6ksr7wxwyW8slr7nWzYOHZKir1y88+wbqHtrrHrIAbENLJKhKjb5xN93YI24j0TkyeNL4oju0W+14nmg+YS4Y2u4Lhe+spI7UTAA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=F3haMy3m; arc=none smtp.client-ip=185.246.84.56
+	 In-Reply-To:To:Cc; b=LCIxzqAiwMWh7klYBhaTUEcrB5Pv2CIhA3QME4u/5tM5MYTG1u+LDHNVTs6PFkMfLdVw8CpKJV0eov0WpZo5QImaeKbT7a/yjr5Oox/UR1MtRejUIB11kBrulL0hqqKExzvdUIIqB8H4hhtCpcUejL11PgTQspFlQnp5mCy00q4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=lbph7C6D; arc=none smtp.client-ip=185.246.85.4
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-02.galae.net (Postfix) with ESMTPS id 011DA1A2DAD;
-	Mon, 16 Mar 2026 15:26:09 +0000 (UTC)
+	by smtpout-03.galae.net (Postfix) with ESMTPS id 7A5234E40B37;
+	Mon, 16 Mar 2026 15:26:10 +0000 (UTC)
 Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id C95025FC4A;
-	Mon, 16 Mar 2026 15:26:08 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 9CED5103721F4;
-	Mon, 16 Mar 2026 16:26:05 +0100 (CET)
+	by smtpout-01.galae.net (Postfix) with ESMTPS id 505A35FC4A;
+	Mon, 16 Mar 2026 15:26:10 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id B35A6103721F7;
+	Mon, 16 Mar 2026 16:26:07 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1773674767; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	t=1773674769; h=from:subject:date:message-id:to:cc:mime-version:content-type:
 	 content-transfer-encoding:in-reply-to:references;
-	bh=dfiuaLc8bx94tgxUemYFMGzOoB2nYnzT6eWglqGNczQ=;
-	b=F3haMy3mO7ISotohV+KnVd/oue7uNXDL8C/FVzwobS6p3hc87OjEsr3rU7CRHbRJWg/4Qm
-	v65mbxWxK7mkEEekEX+YdIVZ1JrWCf9J2ucOEyyO/bJ8j3tr3eJF9WRzPmBU3U5hZkxbVq
-	EF+WKfmyQTs3usYRUGtVaIR9WU0v3No0qQ38ClCmF+y4LlL4oPs4rVoGz+xUEOpwvKKgZ+
-	o8cnNHZ0tAOWt5X4fB+xGMsgelxnBQKv5bVuiu9BprgtKtE+V0ctz2WJD8jqkfosDnaguQ
-	7qj07Hzaoem3E1dvVPtRb8zvraxrE0tdkgq9L3iFACFzVBkR5wVDmr04c8ND+A==
+	bh=RynMD57QmlInHCRSqrRnZ8BdOyZAlob/tJmmv4olNGM=;
+	b=lbph7C6DybpVHHQcsArG93jXN21QS2ayHM1QzSs2yRKgDRkYKZLEQ8EXGYayUZbb/TbsJn
+	h7C4XkE/VQ7EQMkynAidDV0Am6TKrGLJY8eUULDvvh6D2mBdyZqDWEkeZZ13RPbL3cHsfU
+	4KNnXFe+AzJoH0QNo4ett/L6XLJgmU5jio1Q12hxJBONK86qo/239msPUpsskvE1BNtkHT
+	fArlgR5T4pTbJvifAuiwcJLU8X9uCKu4zK+CfD9+Gz/mI7InW5WCGyJ+w4sZh+EC5sMAfh
+	kmHwRIdYHe1in0c0qyi1MMOPwKKaJH1rtxb/y0UQ9QihXXfY3Sg0IdruvIlK1A==
 From: =?utf-8?q?Beno=C3=AEt_Monin?= <benoit.monin@bootlin.com>
-Date: Mon, 16 Mar 2026 16:25:47 +0100
-Subject: [PATCH v4 10/13] MIPS: Add Mobileye EyeQ6Lplus SoC dtsi
+Date: Mon, 16 Mar 2026 16:25:48 +0100
+Subject: [PATCH v4 11/13] MIPS: Add Mobileye EyeQ6Lplus evaluation board
+ dts
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -62,7 +63,7 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20260316-eyeq6lplus-v4-10-bf44dfc7a261@bootlin.com>
+Message-Id: <20260316-eyeq6lplus-v4-11-bf44dfc7a261@bootlin.com>
 References: <20260316-eyeq6lplus-v4-0-bf44dfc7a261@bootlin.com>
 In-Reply-To: <20260316-eyeq6lplus-v4-0-bf44dfc7a261@bootlin.com>
 To: Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>, 
@@ -85,317 +86,163 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[bootlin.com,reject];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
 	R_DKIM_ALLOW(-0.20)[bootlin.com:s=dkim];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	RECEIVED_HELO_LOCALHOST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-13694-lists,linux-mips=lfdr.de];
-	DKIM_TRACE(0.00)[bootlin.com:+];
-	RCVD_TLS_LAST(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-13695-lists,linux-mips=lfdr.de];
 	FROM_HAS_DN(0.00)[];
+	RECEIVED_HELO_LOCALHOST(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
 	RCPT_COUNT_TWELVE(0.00)[19];
+	MIME_TRACE(0.00)[0:+];
+	DKIM_TRACE(0.00)[bootlin.com:+];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	TO_DN_SOME(0.00)[];
 	RCVD_COUNT_FIVE(0.00)[6];
 	PRECEDENCE_BULK(0.00)[];
 	FROM_NEQ_ENVFROM(0.00)[benoit.monin@bootlin.com,linux-mips@vger.kernel.org];
-	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
 	TAGGED_RCPT(0.00)[linux-mips,dt];
 	MID_RHS_MATCH_FROM(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TO_DN_SOME(0.00)[]
-X-Rspamd-Queue-Id: B2EAA29C5EB
+	DBL_BLOCKED_OPENRESOLVER(0.00)[0.0.0.0:email,bootlin.com:dkim,bootlin.com:email,bootlin.com:mid,48.13.162.192:email,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,47.251.83.64:email,47.236.17.0:email]
+X-Rspamd-Queue-Id: 1015129C871
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-Add the device tree include files for the EyeQ6Lplus system on chip
-from Mobileye.
+Add the device tree of the evaluation board of the EyeQ6Lplus SoC.
 
-Those files provide the initial support of the SoC:
-* The I6500 CPU and GIC interrupt controller.
-* The OLB ("Other Logic Block") providing clocks, resets and pin controls.
-* One UART.
-* One GPIO controller.
-* Two SPI controllers, one in host mode and one in target mode.
-* One octoSPI flash controller.
-* Two I2C controllers.
+The board comes with 2GB of RAM and an SPI NAND connected to the octoSPI
+controller The UART of the SoC is used as the serial console.
 
 Signed-off-by: Benoît Monin <benoit.monin@bootlin.com>
 ---
- arch/mips/boot/dts/mobileye/eyeq6lplus-pins.dtsi |  84 +++++++++++
- arch/mips/boot/dts/mobileye/eyeq6lplus.dtsi      | 170 +++++++++++++++++++++++
- 2 files changed, 254 insertions(+)
+ arch/mips/boot/dts/mobileye/Makefile            |   1 +
+ arch/mips/boot/dts/mobileye/eyeq6lplus-epm6.dts | 103 ++++++++++++++++++++++++
+ 2 files changed, 104 insertions(+)
 
-diff --git a/arch/mips/boot/dts/mobileye/eyeq6lplus-pins.dtsi b/arch/mips/boot/dts/mobileye/eyeq6lplus-pins.dtsi
+diff --git a/arch/mips/boot/dts/mobileye/Makefile b/arch/mips/boot/dts/mobileye/Makefile
+index 7cc89968aaac..9305dd01f4c8 100644
+--- a/arch/mips/boot/dts/mobileye/Makefile
++++ b/arch/mips/boot/dts/mobileye/Makefile
+@@ -3,3 +3,4 @@
+ 
+ dtb-$(CONFIG_MACH_EYEQ5)		+= eyeq5-epm5.dtb
+ dtb-$(CONFIG_MACH_EYEQ6H)		+= eyeq6h-epm6.dtb
++dtb-$(CONFIG_MACH_EYEQ6LPLUS)		+= eyeq6lplus-epm6.dtb
+diff --git a/arch/mips/boot/dts/mobileye/eyeq6lplus-epm6.dts b/arch/mips/boot/dts/mobileye/eyeq6lplus-epm6.dts
 new file mode 100644
-index 000000000000..5cb0660f46c6
+index 000000000000..404d0ff09f5a
 --- /dev/null
-+++ b/arch/mips/boot/dts/mobileye/eyeq6lplus-pins.dtsi
-@@ -0,0 +1,84 @@
++++ b/arch/mips/boot/dts/mobileye/eyeq6lplus-epm6.dts
+@@ -0,0 +1,103 @@
 +// SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+
-+&olb {
-+	timer0_pins: timer0-pins {
-+		function = "timer0";
-+		pins = "PA0", "PA1";
-+	};
-+	timer1_pins: timer1-pins {
-+		function = "timer1";
-+		pins = "PA2", "PA3";
-+	};
-+	uart_ssi_pins: uart-ssi-pins {
-+		function = "uart_ssi";
-+		pins = "PA4", "PA5";
-+	};
-+	spi0_pins: spi0-pins {
-+		function = "spi0";
-+		pins = "PA6", "PA7", "PA8", "PA9";
-+	};
-+	uart0_pins: uart0-pins {
-+		function = "uart0";
-+		pins = "PA11", "PA12";
-+	};
-+	timer2_pins: timer2-pins {
-+		function = "timer2";
-+		pins = "PA13", "PA14";
-+	};
-+	timer3_pins: timer3-pins {
-+		function = "timer3";
-+		pins = "PA15", "PA16";
-+	};
-+	timer_ext0_pins: timer-ext0-pins {
-+		function = "timer_ext0";
-+		pins = "PA17", "PA18", "PA19", "PA20";
-+	};
-+	timer_ext0_input_a_pins: timer-ext0-input-a-pins {
-+		function = "timer_ext0";
-+		pins = "PA17";
-+	};
-+	pps0_pins: pps0-pins {
-+		function = "timer_ext0";
-+		pins = "PA17";
-+	};
-+	timer_ext0_input_b_pins: timer-ext0-input-b-pins {
-+		function = "timer_ext0";
-+		pins = "PA18";
-+	};
-+	timer_ext0_output_pins: timer-ext0-output-pins {
-+		function = "timer_ext0";
-+		pins = "PA19", "PA20";
-+	};
-+	spi1_pins: spi1-pins {
-+		function = "spi1";
-+		pins = "PA21", "PA22", "PA23", "PA24";
-+	};
-+	spi1_reduced_pins: spi1-reduced-pins {
-+		function = "spi1";
-+		pins = "PA21", "PA22", "PA23";
-+	};
-+	timer_ext1_pins: timer-ext1-pins {
-+		function = "timer_ext1";
-+		pins = "PA26", "PA27", "PA28", "PA29";
-+	};
-+	timer_ext1_input_a_pins: timer-ext1-input-a-pins {
-+		function = "timer_ext1";
-+		pins = "PA26";
-+	};
-+	timer_ext1_input_b_pins: timer-ext1-input-b-pins {
-+		function = "timer_ext1";
-+		pins = "PA27";
-+	};
-+	timer_ext1_output_pins: timer-ext1-output-pins {
-+		function = "timer_ext1";
-+		pins = "PA28", "PA29";
-+	};
-+	ext_ref_clk_pins: ext-ref-clk-pins {
-+		function = "ext_ref_clk";
-+		pins = "PA30";
-+	};
-+	mipi_ref_clk_pins: mipi-ref-clk-pins {
-+		function = "mipi_ref_clk";
-+		pins = "PA31";
-+	};
-+};
-diff --git a/arch/mips/boot/dts/mobileye/eyeq6lplus.dtsi b/arch/mips/boot/dts/mobileye/eyeq6lplus.dtsi
-new file mode 100644
-index 000000000000..4c72da917a95
---- /dev/null
-+++ b/arch/mips/boot/dts/mobileye/eyeq6lplus.dtsi
-@@ -0,0 +1,170 @@
-+// SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
 +/*
 + * Copyright 2025 Mobileye Vision Technologies Ltd.
 + */
 +
-+#include <dt-bindings/interrupt-controller/mips-gic.h>
++/dts-v1/;
 +
-+#include <dt-bindings/clock/mobileye,eyeq6lplus-clk.h>
++#include "eyeq6lplus.dtsi"
 +
 +/ {
-+	#address-cells = <2>;
-+	#size-cells = <2>;
-+	cpus {
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+		cpu@0 {
-+			device_type = "cpu";
-+			compatible = "img,i6500";
-+			reg = <0>;
-+			clocks = <&olb EQ6LPC_CPU_OCC>;
-+		};
++	compatible = "mobileye,eyeq6lplus-epm6", "mobileye,eyeq6lplus";
++	model = "Mobileye EyeQ6Lplus Evaluation board";
++
++	aliases {
++		serial0 = &uart0;
 +	};
 +
-+	cpu_intc: interrupt-controller {
-+		compatible = "mti,cpu-interrupt-controller";
-+		interrupt-controller;
-+		#address-cells = <0>;
-+		#interrupt-cells = <1>;
++	chosen {
++		stdout-path = "serial0:921600n8";
 +	};
 +
-+	coherency-manager {
-+		compatible = "mobileye,eyeq6-cm";
++	memory@0 {
++		device_type = "memory";
++		reg = <0x1 0x00000000 0x0 0x80000000>;
 +	};
 +
-+	xtal: clock-30000000 {
-+		compatible = "fixed-clock";
-+		#clock-cells = <0>;
-+		clock-frequency = <30000000>;
-+	};
-+
-+	soc: soc {
-+		compatible = "simple-bus";
++	reserved-memory {
 +		#address-cells = <2>;
 +		#size-cells = <2>;
 +		ranges;
 +
-+		olb: system-controller@e8400000 {
-+			compatible = "mobileye,eyeq6lplus-olb", "syscon";
-+			reg = <0 0xe8400000 0x0 0x80000>;
-+			#reset-cells = <2>;
-+			#clock-cells = <1>;
-+			clocks = <&xtal>;
-+			clock-names = "ref";
++		/* These reserved memory regions are also defined in bootmanager
++		 * for configuring inbound translation for BARS, don't change
++		 * these without syncing with bootmanager
++		 */
++		mhm_reserved_0: the-mhm-reserved-0 {
++			reg = <0x1 0x00000000 0x0 0x0000800>;
 +		};
-+
-+		ospi: spi@e8800000 {
-+			compatible = "mobileye,eyeq5-ospi", "cdns,qspi-nor";
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			reg = <0 0xe8800000 0x0 0x100000>,
-+			      <0 0xb0000000 0x0 0x30000000>;
-+			interrupt-parent = <&gic>;
-+			interrupts = <GIC_SHARED 10 IRQ_TYPE_LEVEL_HIGH>;
-+			cdns,fifo-depth = <128>;
-+			cdns,fifo-width = <4>;
-+			cdns,trigger-address = <0x00000000>;
-+			clocks  = <&olb EQ6LPC_PER_OSPI>;
-+			status = "disabled";
++		bm_logs_reserved: bm-logs-reserved {
++			reg = <0x1 0x0000800 0x0 0x000f800>;
 +		};
-+
-+		spi0: spi@eac0d000 {
-+			compatible = "snps,dw-apb-ssi";
-+			reg = <0 0xeac0d000 0x0 0x1000>;
-+			clocks = <&olb EQ6LPC_PER_SPI>;
-+			interrupt-parent = <&gic>;
-+			interrupts = <GIC_SHARED 11 IRQ_TYPE_LEVEL_HIGH>;
-+			resets = <&olb 0 0>;
-+			reset-names = "spi";
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			status = "disabled";
++		shmem0_reserved: shmem@804000000 {
++			reg = <0x1 0x04000000 0x0 0x1000000>;
 +		};
-+
-+		spi1: spi@eac0e000 {
-+			compatible = "snps,dw-apb-ssi";
-+			reg = <0 0xeac0e000 0x0 0x1000>;
-+			spi-slave;
-+			clocks = <&olb EQ6LPC_PER_SPI>;
-+			interrupt-parent = <&gic>;
-+			interrupts = <GIC_SHARED 12 IRQ_TYPE_LEVEL_HIGH>;
-+			resets = <&olb 0 1>;
-+			reset-names = "spi";
-+			#address-cells = <0>;
-+			#size-cells = <0>;
-+			status = "disabled";
++		shmem1_reserved: shmem@805000000 {
++			reg = <0x1 0x05000000 0x0 0x1000000>;
 +		};
-+
-+		uart0: serial@eac10000 {
-+			compatible = "snps,dw-apb-uart";
-+			reg-shift = <2>;
-+			reg-io-width = <4>;
-+			clocks = <&olb EQ6LPC_PER_UART>;
-+			clock-frequency = <15625000>;
-+			reg = <0 0xeac10000 0x0 0x1000>;
-+			interrupt-parent = <&gic>;
-+			interrupts = <GIC_SHARED 8 IRQ_TYPE_LEVEL_HIGH>;
-+			resets = <&olb 0 2>;
-+			status = "disabled";
++		mini_coredump0_reserved: mini-coredump0@806200000 {
++			reg = <0x1 0x06200000 0x0 0x100000>;
 +		};
-+
-+		i2c0: i2c@eac11000 {
-+			compatible = "mobileye,eyeq6lplus-i2c", "snps,designware-i2c";
-+			reg = <0 0xeac11000 0x0 0x1000>;
-+			interrupt-parent = <&gic>;
-+			interrupts = <GIC_SHARED 6 IRQ_TYPE_LEVEL_HIGH>;
-+			clock-frequency = <400000>;
-+			clocks = <&olb EQ6LPC_PER_I2C_SER>;
-+			resets = <&olb 0 3>;
-+			i2c-sda-hold-time-ns = <50>;
-+			status = "disabled";
++		mailbox_reserved: mailbox-reserved {
++			reg = <0x1 0x06300000 0x0 0x000300>;
 +		};
-+
-+		i2c1: i2c@eac12000 {
-+			compatible = "mobileye,eyeq6lplus-i2c", "snps,designware-i2c";
-+			reg = <0 0xeac12000 0x0 0x1000>;
-+			interrupt-parent = <&gic>;
-+			interrupts = <GIC_SHARED 7 IRQ_TYPE_LEVEL_HIGH>;
-+			clock-frequency = <400000>;
-+			clocks = <&olb EQ6LPC_PER_I2C_SER>;
-+			resets = <&olb 0 4>;
-+			i2c-sda-hold-time-ns = <50>;
-+			status = "disabled";
++		sys_logs_reserved: sys-logs-reserved {
++			reg = <0x1 0x10000000 0x0 0x800000>;
 +		};
-+
-+		gpio: gpio@eac14000 {
-+			compatible = "snps,dw-apb-gpio";
-+			reg = <0x0 0xeac14000 0x0 0x1000>;
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			resets = <&olb 0 13>;
-+			porta: gpio-port@0 {
-+				compatible = "snps,dw-apb-gpio-port";
-+				gpio-controller;
-+				#gpio-cells = <2>;
-+				snps,nr-gpios = <32>;
-+				gpio-ranges = <&olb 0 0 32>;
-+				reg = <0>;
-+				interrupt-controller;
-+				#interrupt-cells = <2>;
-+				interrupt-parent = <&gic>;
-+				interrupts = <GIC_SHARED 13 IRQ_TYPE_LEVEL_HIGH>;
-+			};
-+		};
-+
-+		gic: interrupt-controller@f0920000 {
-+			compatible = "mti,gic";
-+			reg = <0x0 0xf0920000 0x0 0x20000>;
-+			interrupt-controller;
-+			#interrupt-cells = <3>;
-+			interrupt-parent = <&cpu_intc>;
-+			timer {
-+				compatible = "mti,gic-timer";
-+				interrupts = <GIC_LOCAL 1 IRQ_TYPE_NONE>;
-+				clocks = <&olb EQ6LPC_CPU_OCC>;
-+			};
++		csl_policy_logs_reserved: csl-policy-logs-reserved {
++			reg = <0x1 0x10800000 0x0 0x10000>;
 +		};
 +	};
 +};
 +
-+#include "eyeq6lplus-pins.dtsi"
++&ospi {
++	status = "okay";
++	flash@0 {
++		compatible = "spi-nand";
++		reg = <0>;
++		spi-max-frequency = <40000000>;
++		cdns,read-delay = <0>;
++		cdns,tshsl-ns = <400>;
++		cdns,tsd2d-ns = <120>;
++		cdns,tchsh-ns = <40>;
++		cdns,tslch-ns = <20>;
++		spi-tx-bus-width = <1>;
++		spi-rx-bus-width = <8>;
++	};
++};
++
++&spi0 {
++	pinctrl-0 = <&spi0_pins>;
++	pinctrl-names = "default";
++	status = "okay";
++};
++
++&spi1 {
++	pinctrl-0 = <&spi1_pins>;
++	pinctrl-names = "default";
++	status = "okay";
++};
++
++&uart0 {
++	pinctrl-0 = <&uart0_pins>;
++	pinctrl-names = "default";
++	status = "okay";
++};
++
++&i2c0 {
++	status = "okay";
++};
++
++&i2c1 {
++	status = "okay";
++};
 
 -- 
 2.53.0
