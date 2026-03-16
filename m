@@ -1,49 +1,49 @@
-Return-Path: <linux-mips+bounces-13674-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-13675-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id qMrZDbYCuGlpYAEAu9opvQ
-	(envelope-from <linux-mips+bounces-13674-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Mon, 16 Mar 2026 14:16:38 +0100
+	id qH5jB+sCuGlpYAEAu9opvQ
+	(envelope-from <linux-mips+bounces-13675-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Mon, 16 Mar 2026 14:17:31 +0100
 X-Original-To: lists+linux-mips@lfdr.de
 Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id ACD2B29A21C
-	for <lists+linux-mips@lfdr.de>; Mon, 16 Mar 2026 14:16:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 948D029A286
+	for <lists+linux-mips@lfdr.de>; Mon, 16 Mar 2026 14:17:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id C0AD330300EB
-	for <lists+linux-mips@lfdr.de>; Mon, 16 Mar 2026 13:10:02 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id DBEF230804DC
+	for <lists+linux-mips@lfdr.de>; Mon, 16 Mar 2026 13:10:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5DD4E397E80;
-	Mon, 16 Mar 2026 13:09:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6A15139B483;
+	Mon, 16 Mar 2026 13:09:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="o1cv3LY2"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TJG/Go8A"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 377413976A9;
-	Mon, 16 Mar 2026 13:09:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43C753988FA;
+	Mon, 16 Mar 2026 13:09:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773666577; cv=none; b=p44INnXXP2OXyMYa9j59++ybM+Kea4tPBKuxsFXOwVWf8khR1rzbpWapWKtOiJiK9dZR8/8BswxJjlfER+YrFPz/j0vueyE8bhx3EjVk8mUm1bFcJXmspHM3YXtzkMOEjpJuKSQCWzwBTxvEk7YYfya0+WKdh2/pu05WBK/Oc2I=
+	t=1773666580; cv=none; b=kStqpaktReisameeh2E9f5O9bSWOEOb9IoCK/LcmVo114UrtNNbJT7hsDXIYsDlyCh8kgELja3ywFXFNrbQuQ94V4u8A9nTg7DRD89aCPBJvlsfUx22b+zHKYNUQaXPXUcVRdtAWtJE8ER+aFIZoZ1R3uVpB8tQdP19guPBu2cw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773666577; c=relaxed/simple;
-	bh=0yi2AdYhzlQaYc4Yt2SZxuxCx2MWGBbtnvun8B/4hkw=;
+	s=arc-20240116; t=1773666580; c=relaxed/simple;
+	bh=dLJAyLW52YxQ0AN/NeuZQy3GzYiIO3sQ/ClSljBmA2Y=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=e0i5j1S/KLo4f0I5XB3I/1bGXMOIwDL+b4UN5y3PjyN/9yrspmHcCroFZxLlwXqZeM6nrRdkLyhk+qcQCm7cQWQftYFfQ1ZHj6Z5Fo6JDK6SH1QmjMBCeyHuXxNhaanQZ0QWICsQ+P2+2r4IEh1DaNKLsB0o0lFems4C9XeMJL8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=o1cv3LY2; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73D16C2BCB0;
-	Mon, 16 Mar 2026 13:09:36 +0000 (UTC)
+	 MIME-Version; b=dyL1z2OavEi77Z0RX2m9qVtQDA/EvxhsPgBohVHS5odEGL73gWukcCbvMILGPI8roVDSH2GQF+ehBHHrHXGUR6OWWP8tE0ByJghVFiDRoKNctu+WQ9DhjBX7KHiom1RBtrdvIWrAmEAf4Q4w+ZcK2PljasNZ0Wr9am8v7U03Q+k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TJG/Go8A; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4350FC19424;
+	Mon, 16 Mar 2026 13:09:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1773666577;
-	bh=0yi2AdYhzlQaYc4Yt2SZxuxCx2MWGBbtnvun8B/4hkw=;
+	s=k20201202; t=1773666579;
+	bh=dLJAyLW52YxQ0AN/NeuZQy3GzYiIO3sQ/ClSljBmA2Y=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=o1cv3LY2qoJ49LoF1okR/CSrMcE9SA+tjX05vCTw44rp4nOvrnv3h1A1hV52tEuEy
-	 fhGj2PT/sTz+Ru0YdTFpcSfn9kotI2ZKr76Hg1hlrQsqvDbK8soX45tc7vEW6Yn23O
-	 qhtgO7dRsTmdmMI7XMJvp567zPNdAL3vO0artZuNVLNjRnnQ3I+orUEL+4RDS228K1
-	 zfiKp12igFcrUPkOhQHKfokLoQybcJcBrUsprNAop1+a6GXRlGVZBhzvY0R5RASBMl
-	 SlFKhuAGP0lT18NKxEoN1UyrhhC6TMAumQBddToBRKc76X4Z5ejrVx1XwuQX3ri3K5
-	 QbBizd0XbR6Eg==
+	b=TJG/Go8A1cY8XS5/cAwBFroFXuBNyK85BM7BXdepftLaaH0hgiTtnWt94hTv5NzQk
+	 mi9JB6jBKDTXIVd1hpifEwkrt4trzZ01AHPVwLAJZGZsYdYo/sYYijNdcV3kU2ycvb
+	 xS3rsbNrAw2IJTDx0eyKMX4KxE17kIEKHD1bLFjVP8xJBSvxRirbu4wU6Ek2CSMghZ
+	 IBkA/mfuSfU/btp4YszcI4RKptelvWUc4mAENue7y7fw0OdVRAlzoR+tvmrvu6llBa
+	 hjs0IVHsjxs08YA4JEMwdB9gsTNAPwrbsSRB3yRw4iEgqXIW8+N4/BZ0XXiWAtToyu
+	 vrXuiockp9v1A==
 From: "Lorenzo Stoakes (Oracle)" <ljs@kernel.org>
 To: Andrew Morton <akpm@linux-foundation.org>
 Cc: David Hildenbrand <david@kernel.org>,
@@ -107,9 +107,9 @@ Cc: David Hildenbrand <david@kernel.org>,
 	linux-um@lists.infradead.org,
 	linux-fsdevel@vger.kernel.org,
 	selinux@vger.kernel.org
-Subject: [PATCH v2 15/23] mm: introduce vma_flags_count() and vma[_flags]_test_single_mask()
-Date: Mon, 16 Mar 2026 13:08:04 +0000
-Message-ID: <96e7481026067766bfd7f2d4e395dd89ce845ab2.1773665966.git.ljs@kernel.org>
+Subject: [PATCH v2 16/23] tools/testing/vma: test vma_flags_count,vma[_flags]_test_single_mask
+Date: Mon, 16 Mar 2026 13:08:05 +0000
+Message-ID: <140b9b77da1ef463f969cbeb2b5fb25627301cd6.1773665966.git.ljs@kernel.org>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <cover.1773665966.git.ljs@kernel.org>
 References: <cover.1773665966.git.ljs@kernel.org>
@@ -136,7 +136,7 @@ X-Spamd-Result: default: False [0.84 / 15.00];
 	MIME_TRACE(0.00)[0:+];
 	RCVD_COUNT_THREE(0.00)[4];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-13674-lists,linux-mips=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-13675-lists,linux-mips=lfdr.de];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	TO_DN_SOME(0.00)[];
 	RCPT_COUNT_GT_50(0.00)[62];
@@ -148,194 +148,142 @@ X-Spamd-Result: default: False [0.84 / 15.00];
 	TAGGED_RCPT(0.00)[linux-mips];
 	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
 	FROM_HAS_DN(0.00)[]
-X-Rspamd-Queue-Id: ACD2B29A21C
+X-Rspamd-Queue-Id: 948D029A286
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-vma_flags_count() determines how many bits are set in VMA flags, using
-bitmap_weight().
+Update the VMA tests to assert that vma_flags_count() behaves as expected,
+as well as vma_flags_test_single_mask() and vma_test_single_mask().
 
-vma_flags_test_single_mask() determines if a vma_flags_t set of flags
-contains a single flag specified as another vma_flags_t value, or if the
-sought flag mask is empty, it is defined to return false.
+For the test functions we can simply update the existing vma_test(), et
+al. test to also test the single_mask variants.
 
-This is useful when we want to declare a VMA flag as optionally a single
-flag in a mask or empty depending on kernel configuration.
+We also add some explicit testing of an empty VMA flag to this test to
+ensure this is handled properly.
 
-This allows us to have VM_NONE-like semantics when checking whether the
-flag is set.
+In order to test vma_flags_count() we simply take an existing set of flags
+and gradually remove flags ensuring the count remains as expected
+throughout.
 
-In a subsequent patch, we introduce the use of VMA_DROPPABLE of type
-vma_flags_t using precisely these semantics.
-
-It would be actively confusing to use vma_flags_test_any_single_mask() for
-this (and vma_flags_test_all_mask() is not correct to use here, as it
-trivially returns true when tested against an empty vma flags mask).
-
-We introduce vma_flags_count() to be able to assert that the compared flag
-mask is singular or empty, checked when CONFIG_DEBUG_VM is enabled.
-
-Also update the VMA tests as part of this change.
+We also update the vma[_flags]_test_all() tests to make clear the semantics
+that we expect vma[_flags]_test_all(..., EMPTY_VMA_FLAGS) to return true,
+as trivially, all flags of none are always set in VMA flags.
 
 Signed-off-by: Lorenzo Stoakes (Oracle) <ljs@kernel.org>
 ---
- include/linux/mm.h                 | 46 ++++++++++++++++++++++++++++++
- tools/testing/vma/include/custom.h |  6 ----
- tools/testing/vma/include/dup.h    | 21 ++++++++++++++
- tools/testing/vma/vma_internal.h   |  6 ++++
- 4 files changed, 73 insertions(+), 6 deletions(-)
+ tools/testing/vma/tests/vma.c | 63 ++++++++++++++++++++++++++++++-----
+ 1 file changed, 54 insertions(+), 9 deletions(-)
 
-diff --git a/include/linux/mm.h b/include/linux/mm.h
-index 47bf9f166924..324b6e8a66fa 100644
---- a/include/linux/mm.h
-+++ b/include/linux/mm.h
-@@ -1083,6 +1083,14 @@ static __always_inline vma_flags_t __mk_vma_flags(vma_flags_t flags,
- #define append_vma_flags(flags, ...) __mk_vma_flags(flags,			\
- 		COUNT_ARGS(__VA_ARGS__), (const vma_flag_t []){__VA_ARGS__})
+diff --git a/tools/testing/vma/tests/vma.c b/tools/testing/vma/tests/vma.c
+index 1395d55a1e02..c73c3a565f1d 100644
+--- a/tools/testing/vma/tests/vma.c
++++ b/tools/testing/vma/tests/vma.c
+@@ -174,10 +174,10 @@ static bool test_vma_flags_word(void)
+ /* Ensure that vma_flags_test() and friends works correctly. */
+ static bool test_vma_flags_test(void)
+ {
+-	const vma_flags_t flags = mk_vma_flags(VMA_READ_BIT, VMA_WRITE_BIT,
+-					       VMA_EXEC_BIT
++	vma_flags_t flags = mk_vma_flags(VMA_READ_BIT, VMA_WRITE_BIT,
++					 VMA_EXEC_BIT
+ #if NUM_VMA_FLAG_BITS > 64
+-					       , 64, 65
++					 , 64, 65
+ #endif
+ 		);
+ 	struct vm_area_desc desc = {
+@@ -187,14 +187,18 @@ static bool test_vma_flags_test(void)
+ 		.flags = flags,
+ 	};
  
-+/* Calculates the number of set bits in the specified VMA flags. */
-+static __always_inline int vma_flags_count(const vma_flags_t *flags)
-+{
-+	const unsigned long *bitmap = flags->__vma_flags;
-+
-+	return bitmap_weight(bitmap, NUM_VMA_FLAG_BITS);
-+}
-+
- /*
-  * Test whether a specific VMA flag is set, e.g.:
-  *
-@@ -1158,6 +1166,26 @@ static __always_inline bool vma_flags_test_all_mask(const vma_flags_t *flags,
- #define vma_flags_test_all(flags, ...) \
- 	vma_flags_test_all_mask(flags, mk_vma_flags(__VA_ARGS__))
+-#define do_test(_flag)					\
+-	ASSERT_TRUE(vma_flags_test(&flags, _flag));	\
+-	ASSERT_TRUE(vma_test(&vma, _flag));		\
++#define do_test(_flag)							    \
++	ASSERT_TRUE(vma_flags_test(&flags, _flag));			    \
++	ASSERT_TRUE(vma_flags_test_single_mask(&flags, mk_vma_flags(_flag))); \
++	ASSERT_TRUE(vma_test(&vma, _flag));				    \
++	ASSERT_TRUE(vma_test_single_mask(&vma, mk_vma_flags(_flag)));	    \
+ 	ASSERT_TRUE(vma_desc_test(&desc, _flag))
  
-+/*
-+ * Helper to test that a flag mask of type vma_flags_t has a SINGLE flag set
-+ * (returning false if flagmask has no flags set).
-+ *
-+ * This is defined to make the semantics clearer when testing an optionally
-+ * defined VMA flags mask, e.g.:
-+ *
-+ * if (vma_flags_test_single_mask(&flags, VMA_DROPPABLE)) { ... }
-+ *
-+ * When VMA_DROPPABLE is defined if available, or set to EMPTY_VMA_FLAGS
-+ * otherwise.
-+ */
-+static __always_inline bool vma_flags_test_single_mask(const vma_flags_t *flags,
-+		vma_flags_t flagmask)
-+{
-+	VM_WARN_ON_ONCE(vma_flags_count(&flagmask) > 1);
-+
-+	return vma_flags_test_any_mask(flags, flagmask);
-+}
-+
- /* Set each of the to_set flags in flags, non-atomically. */
- static __always_inline void vma_flags_set_mask(vma_flags_t *flags,
- 		vma_flags_t to_set)
-@@ -1286,6 +1314,24 @@ static __always_inline bool vma_test_all_mask(const struct vm_area_struct *vma,
- #define vma_test_all(vma, ...) \
- 	vma_test_all_mask(vma, mk_vma_flags(__VA_ARGS__))
+-#define do_test_false(_flag)				\
+-	ASSERT_FALSE(vma_flags_test(&flags, _flag));	\
+-	ASSERT_FALSE(vma_test(&vma, _flag));		\
++#define do_test_false(_flag)						     \
++	ASSERT_FALSE(vma_flags_test(&flags, _flag));			     \
++	ASSERT_FALSE(vma_flags_test_single_mask(&flags, mk_vma_flags(_flag))); \
++	ASSERT_FALSE(vma_test(&vma, _flag));				     \
++	ASSERT_FALSE(vma_test_single_mask(&vma, mk_vma_flags(_flag)));	     \
+ 	ASSERT_FALSE(vma_desc_test(&desc, _flag))
  
-+/*
-+ * Helper to test that a flag mask of type vma_flags_t has a SINGLE flag set
-+ * (returning false if flagmask has no flags set).
-+ *
-+ * This is useful when a flag needs to be either defined or not depending upon
-+ * kernel configuration, e.g.:
-+ *
-+ * if (vma_test_single_mask(vma, VMA_DROPPABLE)) { ... }
-+ *
-+ * When VMA_DROPPABLE is defined if available, or set to EMPTY_VMA_FLAGS
-+ * otherwise.
-+ */
-+static __always_inline bool
-+vma_test_single_mask(const struct vm_area_struct *vma, vma_flags_t flagmask)
-+{
-+	return vma_flags_test_single_mask(&vma->flags, flagmask);
-+}
+ 	do_test(VMA_READ_BIT);
+@@ -212,6 +216,15 @@ static bool test_vma_flags_test(void)
+ #undef do_test
+ #undef do_test_false
+ 
++	/* We define the _single_mask() variants to return false if empty. */
++	ASSERT_FALSE(vma_flags_test_single_mask(&flags, EMPTY_VMA_FLAGS));
++	ASSERT_FALSE(vma_test_single_mask(&vma, EMPTY_VMA_FLAGS));
++	/* Even when both flags and tested flag mask are empty! */
++	flags = EMPTY_VMA_FLAGS;
++	vma.flags = EMPTY_VMA_FLAGS;
++	ASSERT_FALSE(vma_flags_test_single_mask(&flags, EMPTY_VMA_FLAGS));
++	ASSERT_FALSE(vma_test_single_mask(&vma, EMPTY_VMA_FLAGS));
 +
- /*
-  * Helper to set all VMA flags in a VMA.
-  *
-diff --git a/tools/testing/vma/include/custom.h b/tools/testing/vma/include/custom.h
-index 2c498e713fbd..b7d9eb0a44e4 100644
---- a/tools/testing/vma/include/custom.h
-+++ b/tools/testing/vma/include/custom.h
-@@ -15,12 +15,6 @@ extern unsigned long dac_mmap_min_addr;
- #define dac_mmap_min_addr	0UL
+ 	return true;
+ }
+ 
+@@ -309,6 +322,10 @@ static bool test_vma_flags_test_any(void)
+ 	do_test(VMA_READ_BIT, VMA_WRITE_BIT, VMA_EXEC_BIT, 64, 65);
  #endif
  
--#define VM_WARN_ON(_expr) (WARN_ON(_expr))
--#define VM_WARN_ON_ONCE(_expr) (WARN_ON_ONCE(_expr))
--#define VM_WARN_ON_VMG(_expr, _vmg) (WARN_ON(_expr))
--#define VM_BUG_ON(_expr) (BUG_ON(_expr))
--#define VM_BUG_ON_VMA(_expr, _vma) (BUG_ON(_expr))
--
- #define TASK_SIZE ((1ul << 47)-PAGE_SIZE)
- 
- /*
-diff --git a/tools/testing/vma/include/dup.h b/tools/testing/vma/include/dup.h
-index ccf539b42e72..d4149d9837fb 100644
---- a/tools/testing/vma/include/dup.h
-+++ b/tools/testing/vma/include/dup.h
-@@ -903,6 +903,13 @@ static __always_inline vma_flags_t __mk_vma_flags(vma_flags_t flags,
- #define append_vma_flags(flags, ...) __mk_vma_flags(flags,			\
- 		COUNT_ARGS(__VA_ARGS__), (const vma_flag_t []){__VA_ARGS__})
- 
-+static __always_inline int vma_flags_count(const vma_flags_t *flags)
-+{
-+	const unsigned long *bitmap = flags->__vma_flags;
++	/* Testing all flags against none trivially succeeds. */
++	ASSERT_TRUE(vma_flags_test_all_mask(&flags, EMPTY_VMA_FLAGS));
++	ASSERT_TRUE(vma_test_all_mask(&vma, EMPTY_VMA_FLAGS));
 +
-+	return bitmap_weight(bitmap, NUM_VMA_FLAG_BITS);
+ #undef do_test
+ #undef do_test_all_true
+ #undef do_test_all_false
+@@ -592,6 +609,33 @@ static bool test_append_vma_flags(void)
+ 	return true;
+ }
+ 
++/* Assert that vma_flags_count() behaves as expected. */
++static bool test_vma_flags_count(void)
++{
++	vma_flags_t flags = mk_vma_flags(VMA_READ_BIT, VMA_WRITE_BIT,
++					 VMA_EXEC_BIT
++#if NUM_VMA_FLAG_BITS > 64
++					 , 64, 65
++#endif
++		);
++
++#if NUM_VMA_FLAG_BITS > 64
++	ASSERT_EQ(vma_flags_count(&flags), 5);
++	vma_flags_clear(&flags, 64);
++	ASSERT_EQ(vma_flags_count(&flags), 4);
++	vma_flags_clear(&flags, 65);
++#endif
++	ASSERT_EQ(vma_flags_count(&flags), 3);
++	vma_flags_clear(&flags, VMA_EXEC_BIT);
++	ASSERT_EQ(vma_flags_count(&flags), 2);
++	vma_flags_clear(&flags, VMA_WRITE_BIT);
++	ASSERT_EQ(vma_flags_count(&flags), 1);
++	vma_flags_clear(&flags, VMA_READ_BIT);
++	ASSERT_EQ(vma_flags_count(&flags), 0);
++
++	return true;
 +}
 +
- static __always_inline bool vma_flags_test(const vma_flags_t *flags,
- 		vma_flag_t bit)
+ static void run_vma_tests(int *num_tests, int *num_fail)
  {
-@@ -950,6 +957,14 @@ static __always_inline bool vma_flags_test_all_mask(const vma_flags_t *flags,
- #define vma_flags_test_all(flags, ...) \
- 	vma_flags_test_all_mask(flags, mk_vma_flags(__VA_ARGS__))
- 
-+static __always_inline bool vma_flags_test_single_mask(const vma_flags_t *flags,
-+						vma_flags_t flagmask)
-+{
-+	VM_WARN_ON_ONCE(vma_flags_count(&flagmask) > 1);
-+
-+	return vma_flags_test_any_mask(flags, flagmask);
-+}
-+
- static __always_inline void vma_flags_set_mask(vma_flags_t *flags, vma_flags_t to_set)
- {
- 	unsigned long *bitmap = flags->__vma_flags;
-@@ -1029,6 +1044,12 @@ static __always_inline bool vma_test_all_mask(const struct vm_area_struct *vma,
- #define vma_test_all(vma, ...) \
- 	vma_test_all_mask(vma, mk_vma_flags(__VA_ARGS__))
- 
-+static __always_inline bool
-+vma_test_single_mask(const struct vm_area_struct *vma, vma_flags_t flagmask)
-+{
-+	return vma_flags_test_single_mask(&vma->flags, flagmask);
-+}
-+
- static __always_inline void vma_set_flags_mask(struct vm_area_struct *vma,
- 		vma_flags_t flags)
- {
-diff --git a/tools/testing/vma/vma_internal.h b/tools/testing/vma/vma_internal.h
-index 0e1121e2ef23..e12ab2c80f95 100644
---- a/tools/testing/vma/vma_internal.h
-+++ b/tools/testing/vma/vma_internal.h
-@@ -51,6 +51,12 @@ typedef unsigned long	pgprotval_t;
- typedef struct pgprot { pgprotval_t pgprot; } pgprot_t;
- typedef __bitwise unsigned int vm_fault_t;
- 
-+#define VM_WARN_ON(_expr) (WARN_ON(_expr))
-+#define VM_WARN_ON_ONCE(_expr) (WARN_ON_ONCE(_expr))
-+#define VM_WARN_ON_VMG(_expr, _vmg) (WARN_ON(_expr))
-+#define VM_BUG_ON(_expr) (BUG_ON(_expr))
-+#define VM_BUG_ON_VMA(_expr, _vma) (BUG_ON(_expr))
-+
- #include "include/stubs.h"
- #include "include/dup.h"
- #include "include/custom.h"
+ 	TEST(copy_vma);
+@@ -607,4 +651,5 @@ static void run_vma_tests(int *num_tests, int *num_fail)
+ 	TEST(vma_flags_diff);
+ 	TEST(vma_flags_and);
+ 	TEST(append_vma_flags);
++	TEST(vma_flags_count);
+ }
 -- 
 2.53.0
 
