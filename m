@@ -1,53 +1,53 @@
-Return-Path: <linux-mips+bounces-13716-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-13717-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id IGv8LGocuWm+qwEAu9opvQ
-	(envelope-from <linux-mips+bounces-13716-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Tue, 17 Mar 2026 10:18:34 +0100
+	id cEiJDrocuWm+qwEAu9opvQ
+	(envelope-from <linux-mips+bounces-13717-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Tue, 17 Mar 2026 10:19:54 +0100
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id B226D2A66EE
-	for <lists+linux-mips@lfdr.de>; Tue, 17 Mar 2026 10:18:33 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7B3A82A67E0
+	for <lists+linux-mips@lfdr.de>; Tue, 17 Mar 2026 10:19:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 558EE301FE5B
-	for <lists+linux-mips@lfdr.de>; Tue, 17 Mar 2026 09:17:24 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 745AA302F4CB
+	for <lists+linux-mips@lfdr.de>; Tue, 17 Mar 2026 09:18:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BCE62337BBC;
-	Tue, 17 Mar 2026 09:16:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3E1A839184D;
+	Tue, 17 Mar 2026 09:17:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XX7M7zEC"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QYiqhmAp"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 141E135E92B;
-	Tue, 17 Mar 2026 09:16:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78F9035BDBF;
+	Tue, 17 Mar 2026 09:17:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773739019; cv=none; b=nU0v1ny2KnzsP9FzRbGv838Bsdiim79mhT/ajVny3RXuOvgFUJ9qwUwb2LniEs7MxosTRc4TYstz4YIKyZYw9eCdUWBJrUgP2ObFdfCReeNDPWeK+7RlEH/U3ykszrXexlRhE/aIpARvVL1P5XrDL2J1t20On3o3jWUswtOioLA=
+	t=1773739039; cv=none; b=XF547nD25vG738WtpEucpMO+gxtQFZWKJqVoSFWgT6Izv1UWvEDBTP67AVSI1BTw4q6pA4SHjwepciDZO0/87p4U5Vy2DGPcBoWC5ED4TPOojHx5foKg3GQQ6GwqfUwvD+xURnx8Tn1bkuwblzyMzixlPhgJOy79HqM7dpCUoAA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773739019; c=relaxed/simple;
-	bh=BznAsGmiCeBt3HfillpWJCB2/zJ7nKDTHjSQK2m08KQ=;
+	s=arc-20240116; t=1773739039; c=relaxed/simple;
+	bh=Mk/oX5hILYiP7pQGn6SnTdlX4gw/NbWPzyO/VnCZiBw=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=qGINnLqQI1uyRYxHQI1Kc3HWHMM0aTTIEyvSy/jnCqo8Iny5e4ZnpUaFgMUZJsyqNs4Yzi38QzgBbjPj5hqKONROEBLTVtP2tgxcW/GfhR3/JZQzkbeSeYsQcy8virONITsngi9vJTGBRIzc4izmrtt9agkIwdMY09GsqVqHWTc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XX7M7zEC; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA256C4CEF7;
-	Tue, 17 Mar 2026 09:16:38 +0000 (UTC)
+	 In-Reply-To:To:Cc; b=sA+2fUM0dYHiX6nBnZHoGWBp398b2iPC3235jjQIereRLB8n66OzUgFMTJiTUCqYMv3wzXdNPA1J+nd4YD23IoEPnO+mpxDHCFJpoSnRB+lKxy3Zj6ZXz/3K5nKuzO1zR7Paqr2U1k0qGJtQIAFT9QNUkxb2B1OuPFYLoMgeDOw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QYiqhmAp; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E7D7C2BC9E;
+	Tue, 17 Mar 2026 09:16:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1773739018;
-	bh=BznAsGmiCeBt3HfillpWJCB2/zJ7nKDTHjSQK2m08KQ=;
+	s=k20201202; t=1773739039;
+	bh=Mk/oX5hILYiP7pQGn6SnTdlX4gw/NbWPzyO/VnCZiBw=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=XX7M7zECNwKjK5OS+FeyBaOmMGOyngmufddo0EkGyv+uwFy4SUPrN43+m5BxPCC/J
-	 AtY6vBCtM75tLbOaimM0mq5BNahVBzf3ZdUFVG/0qr0bUJ1EFjlFpWketC9SLf+UiW
-	 /1ThQVxStc01xyZs7XwnrXMBIzigJROfdez3IXj8LyEWgwyUEsurLhdKoP8UmbCdov
-	 uTOsSNgSHRBEcmj9OQ5ee5TFgXCxHCQNmg47OTy7MYreKutl7ijjjsx4VHdmo29uE7
-	 zFtco1D5MfjELO7PpN6LQdLakf1erUIRe8Ko5bCj42aoPhDR9DX7jOAmsYoRVfYxfv
-	 UP/sVsuffC8zw==
+	b=QYiqhmApnfyMWRd7nudSPadPclrdwy7KxdA/OH/prej1bKJmrgKSW2/u8En/1GZFl
+	 GADrJmqNxGcuowwqrzMLce6Pvim9wcvbSG94OR/DtA2tcYUoPIqXvXMagiGgAmvm9r
+	 UYShmiHGLg4MVujYG2dC9kLKNbvh+ZX3xMQ0k62lXxkatQWHcm5Bb8E4qeGHUqt40J
+	 J+qafXs1BUKRJvtXC/efFzZztQ0OHgYDVz/WsPcSAYX+/QtTmIcN8s6fbGbth/BBqa
+	 kuOj6yI3LSDNBAos0ImceSwNrKiS6eQ6Mgv6KnrL08LXvTM6WcdhnhxBLoR0RMPoBp
+	 r83OCR3II7PBw==
 From: "Vincent Mailhol (Arm)" <mailhol@kernel.org>
-Date: Tue, 17 Mar 2026 10:13:41 +0100
-Subject: [PATCH 5/9] arm: configs: remove obsolete assignments to
- SND_SOC_ROCKCHIP
+Date: Tue, 17 Mar 2026 10:13:42 +0100
+Subject: [PATCH 6/9] arm64: defconfig: remove implicit assignment to
+ CRYPTO_SHA3
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -56,7 +56,7 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260317-arm_defconf_cleanup-v1-5-8eecb7fdd24d@kernel.org>
+Message-Id: <20260317-arm_defconf_cleanup-v1-6-8eecb7fdd24d@kernel.org>
 References: <20260317-arm_defconf_cleanup-v1-0-8eecb7fdd24d@kernel.org>
 In-Reply-To: <20260317-arm_defconf_cleanup-v1-0-8eecb7fdd24d@kernel.org>
 To: Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>, 
@@ -126,12 +126,12 @@ Cc: Alexandre Gonzalo <alexandre.gonzalo@arm.com>,
  linux-renesas-soc@vger.kernel.org, linux-parisc@vger.kernel.org, 
  openbmc@lists.ozlabs.org, "Vincent Mailhol (Arm)" <mailhol@kernel.org>
 X-Mailer: b4 0.13.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1527; i=mailhol@kernel.org;
- h=from:subject:message-id; bh=BznAsGmiCeBt3HfillpWJCB2/zJ7nKDTHjSQK2m08KQ=;
- b=owGbwMvMwCV2McXO4Xp97WbG02pJDJk7pfv2X1zzc02wu+AB9wRVzxmZoUwhQq/7dX4HLinKl
- dp6fntbRykLgxgXg6yYIsuyck5uhY5C77BDfy1h5rAygQxh4OIUgIn0BzIyXPxQ/PNgWqLjqoTX
- F6Mqypbdvrsmo+jK18rAynstrp//H2L47x5/7Mrb/I26Ias/a50Reum3t/hzyZ6rWx2DUma0R+W
- lsgAA
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1248; i=mailhol@kernel.org;
+ h=from:subject:message-id; bh=Mk/oX5hILYiP7pQGn6SnTdlX4gw/NbWPzyO/VnCZiBw=;
+ b=owGbwMvMwCV2McXO4Xp97WbG02pJDJk7pfvCDmS/Fdlwpjpxl/HUlTsWl1YJKocsKREOWyxfz
+ /nk6WPvjlIWBjEuBlkxRZZl5ZzcCh2F3mGH/lrCzGFlAhnCwMUpABN50sDIMDGI6bOjM1dktH8q
+ uzZX4bngw3XnnPlWbXi+fEvY5dmGNgz/s7cXHqhREZXlj9wTNi+p9WXLxKYl/7+u2bUwIk51rtF
+ ZbgA=
 X-Developer-Key: i=mailhol@kernel.org; a=openpgp;
  fpr=ED8F700574E67F20E574E8E2AB5FEB886DBB99C2
 X-Spamd-Result: default: False [-0.66 / 15.00];
@@ -139,11 +139,11 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
 	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-13716-lists,linux-mips=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-13717-lists,linux-mips=lfdr.de];
 	FROM_HAS_DN(0.00)[];
 	RCVD_COUNT_THREE(0.00)[4];
 	FREEMAIL_TO(0.00)[kernel.org,linaro.org,gmail.com,armlinux.org.uk,iki.fi,kemnade.info,baylibre.com,atomide.com,xen0n.name,alpha.franken.de,linux.ibm.com,ellerman.id.au,dabbelt.com,eecs.berkeley.edu,ghiti.fr,users.sourceforge.jp,libc.org,physik.fu-berlin.de,redhat.com,alien8.de,linux.intel.com,zytor.com,linutronix.de,goodmis.org,netfilter.org,samsung.com,nxp.com,pengutronix.de,mleia.com,timesys.com,arm.com,glider.be,mobileye.com,bootlin.com,HansenPartnership.com,gmx.de,gmx.net,zankel.net,suse.de,arndb.de,sntech.de,renesas.com,quicinc.com,roeck-us.net,oss.qualcomm.com,linuxfoundation.org,oracle.com];
@@ -151,7 +151,7 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	DKIM_TRACE(0.00)[kernel.org:+];
-	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
+	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
 	TO_DN_SOME(0.00)[];
 	RCPT_COUNT_GT_50(0.00)[98];
 	PRECEDENCE_BULK(0.00)[];
@@ -161,53 +161,43 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	TAGGED_RCPT(0.00)[linux-mips,renesas];
 	MID_RHS_MATCH_FROM(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: B226D2A66EE
+	DBL_BLOCKED_OPENRESOLVER(0.00)[merge_config.sh:url,sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 7B3A82A67E0
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-CONFIG_SND_SOC_ROCKCHIP was removed in commit cae3cc435db5 ("ASoC:
-rockchip: Standardize ASoC menu"). However it is still referenced in
-some defconfigs.
+When given the arm64 defconfig, merge_config.sh yields below warning:
 
-Remove any references to CONFIG_SND_SOC_ROCKCHIP.
+  $ ARCH=arm64 ./scripts/kconfig/merge_config.sh arch/arm64/configs/defconfig
+  <...>
+  WARNING: CONFIG_CRYPTO_SHA3 differs:
+  Requested value: CONFIG_CRYPTO_SHA3=m
+  Actual value:    CONFIG_CRYPTO_SHA3=y
 
-FYI, the suppressions were done using:
+This is because one of CRYPTO_SHA3 child dependency, CRYPTO_JITTERENTROPY,
+is set to "y" thus preventing CRYPTO_SHA3 to be built as a module.
 
-  git ls-files -z 'arch/*/configs/*defconfig' |\
-    xargs -0 sed -i -E '/^CONFIG_SND_SOC_ROCKCHIP/d'
+CRYPTO_SHA3 is automatically selected anyway, so just remove it from
+the defconfig and let the kconfig scripts set it to the correct value.
 
-Fixes: cae3cc435db5 ("ASoC: rockchip: Standardize ASoC menu")
+Fixes: 1e29a750572a ("lib/crypto: arm64/sha3: Migrate optimized code into library")
 Signed-off-by: Vincent Mailhol (Arm) <mailhol@kernel.org>
 ---
- arch/arm/configs/multi_v7_defconfig | 1 -
- arch/arm64/configs/defconfig        | 1 -
- 2 files changed, 2 deletions(-)
+ arch/arm64/configs/defconfig | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/arch/arm/configs/multi_v7_defconfig b/arch/arm/configs/multi_v7_defconfig
-index a9bb85873c0a..e7028dc2f9d5 100644
---- a/arch/arm/configs/multi_v7_defconfig
-+++ b/arch/arm/configs/multi_v7_defconfig
-@@ -814,7 +814,6 @@ CONFIG_SND_MMP_SOC_SSPA=m
- CONFIG_SND_PXA910_SOC=m
- CONFIG_SND_SOC_QCOM=m
- CONFIG_SND_SOC_APQ8016_SBC=m
--CONFIG_SND_SOC_ROCKCHIP=m
- CONFIG_SND_SOC_SH4_FSI=m
- CONFIG_SND_SOC_RCAR=m
- CONFIG_SND_SOC_ROCKCHIP_SPDIF=m
 diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
-index baff2cd34721..7f6334d1d040 100644
+index 7f6334d1d040..0b307e2ab384 100644
 --- a/arch/arm64/configs/defconfig
 +++ b/arch/arm64/configs/defconfig
-@@ -1085,7 +1085,6 @@ CONFIG_SND_SOC_SC8280XP=m
- CONFIG_SND_SOC_SC7180=m
- CONFIG_SND_SOC_SC7280=m
- CONFIG_SND_SOC_X1E80100=m
--CONFIG_SND_SOC_ROCKCHIP=m
- CONFIG_SND_SOC_ROCKCHIP_I2S_TDM=m
- CONFIG_SND_SOC_ROCKCHIP_SAI=m
- CONFIG_SND_SOC_ROCKCHIP_SPDIF=m
+@@ -1901,7 +1901,6 @@ CONFIG_CRYPTO_CHACHA20=m
+ CONFIG_CRYPTO_BENCHMARK=m
+ CONFIG_CRYPTO_ECHAINIV=y
+ CONFIG_CRYPTO_MICHAEL_MIC=m
+-CONFIG_CRYPTO_SHA3=m
+ CONFIG_CRYPTO_USER_API_RNG=m
+ CONFIG_CRYPTO_GHASH_ARM64_CE=y
+ CONFIG_CRYPTO_SM3_ARM64_CE=m
 
 -- 
 2.43.0
