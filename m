@@ -1,53 +1,53 @@
-Return-Path: <linux-mips+bounces-13719-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-13720-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id kGaFEIUduWm8rAEAu9opvQ
-	(envelope-from <linux-mips+bounces-13719-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Tue, 17 Mar 2026 10:23:17 +0100
+	id cEONCqcduWmbrQEAu9opvQ
+	(envelope-from <linux-mips+bounces-13720-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Tue, 17 Mar 2026 10:23:51 +0100
 X-Original-To: lists+linux-mips@lfdr.de
 Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 02CBB2A690F
-	for <lists+linux-mips@lfdr.de>; Tue, 17 Mar 2026 10:23:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id DC6DB2A6972
+	for <lists+linux-mips@lfdr.de>; Tue, 17 Mar 2026 10:23:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 8DCDB307A579
-	for <lists+linux-mips@lfdr.de>; Tue, 17 Mar 2026 09:19:20 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 9957D30A8947
+	for <lists+linux-mips@lfdr.de>; Tue, 17 Mar 2026 09:19:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A9C7D39F18A;
-	Tue, 17 Mar 2026 09:17:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A0C3C391E50;
+	Tue, 17 Mar 2026 09:18:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XpwVmfZw"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ReNXgdl8"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6F2C37C90F;
-	Tue, 17 Mar 2026 09:17:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DAB2835B125;
+	Tue, 17 Mar 2026 09:18:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773739079; cv=none; b=JcBk2Iso4efv43CWM4DgDMZ4NXQotGHms9qavuuViErVj1voHxj7yCcyK9CjqgAdHAXkumlMxwnJ7JYHlApgzZWTEVKUWbPvn8o8cR7pUS/zSxlb3XP8zB+xTfAid1MCiRgnV0YYsEQS0C3zoRxmk9UviBih8Ke0SyD7XwLYU1g=
+	t=1773739100; cv=none; b=hf6uH0aur5hMxK1vxi2ocynIcHzJA8QcDMHUC36/3Si+EaZMRUKCAFBoSkI3RJDgdkNjdrkYdjLSvXN8YrURDz7D7/zhEZR0qPc67wJ6pCfBiIw+bebzuDpSYy1o77CttS9ap7aU7RvgCD9+P2wHtjPTZR28+IZ44QFRfV2OSJw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773739079; c=relaxed/simple;
-	bh=rijEHchLteNXFaviNnGMZpirNppt7OUDLa0dnxKFYl8=;
+	s=arc-20240116; t=1773739100; c=relaxed/simple;
+	bh=aDNsd04I+L/FbjpEUbNbTUbkn5QKAI4xvdupFjUj+7s=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=YPemeAZ5KPyT6GFSB8I2e7RmaTV9ggurGg53sf2gllBF9ZmP1SdyveMAxgdAp6Xx1cZvNZDOB8xEEP9lhxK9wgNPPqB/cRKLpKRMKgNcpx9Z6TTviaJi8ImWrYthUsCYDV53vG+Zvv9sKzTDIaP3JXmH0dnF1UuUGRMLhCJ/vN0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XpwVmfZw; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DF11CC4CEF7;
-	Tue, 17 Mar 2026 09:17:38 +0000 (UTC)
+	 In-Reply-To:To:Cc; b=F4F/g+5zPi8+nhsJCTju7NrRSdUoKMQR2yo/rr2MhME9Bp9fjzjx7FADbH32MeqhDpPXlWNl1h55S86FAhdcKpvlQh/gwJWXoYXWVNq25x/JsqoXHHK0NRmBcE3UtPtReh4JRiM8laPLHmYXse51zSkPEYzPOeIFYlQ2f5DdylU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ReNXgdl8; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2B28DC19425;
+	Tue, 17 Mar 2026 09:17:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1773739078;
-	bh=rijEHchLteNXFaviNnGMZpirNppt7OUDLa0dnxKFYl8=;
+	s=k20201202; t=1773739099;
+	bh=aDNsd04I+L/FbjpEUbNbTUbkn5QKAI4xvdupFjUj+7s=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=XpwVmfZw0JgXdiE+9Wy7h/YBbFNV2OF2PkFXJirhrMjyHVETav4IuXybm/nhrKbEk
-	 Pcg5g9eXGagveMnhb0pPNJ8ekcfyChtxtDD5u2bKbV2IwVUcQjWuIPLtZXV88xWRRa
-	 fnDRnXz0+h1/HEJktAYm6Drw56s0I6YC8BoaYLXdGr+PUP2mZV9/o9ApAbuj2nAF9K
-	 ErkJ/xyOxGtDap4AMHhLUg25qX9nEzNONDGvrUbRvLzJglPEHUZ2AsG9H5jLTpfJDF
-	 KVAR7LFPE5HIoLf8DdWDaFSuDNPAVr5+fhJpCw8JZw0bqDYX7yEO/ZXVvE6cGlE5AW
-	 xj983+NGdjTjg==
+	b=ReNXgdl8wrMR0j9myTw0vxEUXdUH3VmbBFakEpeGWMQyqMywjtPl5Xtqb7CK3MSmU
+	 qEqNhLfqwOJ19vhybs59iW13+uwkx3KQPD1k0k49R2AF01pvm7oM/8bhpwu6TqSVHj
+	 U3AZOviPY7TMOtnC9489kfNRt6LCPMAYNZMv9zltaD4QIxRnuzLjQFi9j3bHLWFv0J
+	 79xnWFh2qUeQUt8ASeRZuMi2RryimNsz37FHt/1I8V/TuTHEJAKzClw6hbiX+LbLFP
+	 6qKpGFIeXpFt2tjpIv6KSmSCUuge4UXMpHfNph3juVSSLwwmFhtiqS83E7BmpwGge3
+	 YHW1tZ2nsZxbg==
 From: "Vincent Mailhol (Arm)" <mailhol@kernel.org>
-Date: Tue, 17 Mar 2026 10:13:44 +0100
-Subject: [PATCH 8/9] arm64: defconfig: remove obsolete assignment to
- SENSORS_SA67MCU
+Date: Tue, 17 Mar 2026 10:13:45 +0100
+Subject: [PATCH 9/9] arm64: defconfig: remove obsolete assignment to
+ SLIM_QCOM_CTRL
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -56,7 +56,7 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260317-arm_defconf_cleanup-v1-8-8eecb7fdd24d@kernel.org>
+Message-Id: <20260317-arm_defconf_cleanup-v1-9-8eecb7fdd24d@kernel.org>
 References: <20260317-arm_defconf_cleanup-v1-0-8eecb7fdd24d@kernel.org>
 In-Reply-To: <20260317-arm_defconf_cleanup-v1-0-8eecb7fdd24d@kernel.org>
 To: Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>, 
@@ -126,12 +126,12 @@ Cc: Alexandre Gonzalo <alexandre.gonzalo@arm.com>,
  linux-renesas-soc@vger.kernel.org, linux-parisc@vger.kernel.org, 
  openbmc@lists.ozlabs.org, "Vincent Mailhol (Arm)" <mailhol@kernel.org>
 X-Mailer: b4 0.13.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=824; i=mailhol@kernel.org;
- h=from:subject:message-id; bh=rijEHchLteNXFaviNnGMZpirNppt7OUDLa0dnxKFYl8=;
- b=owGbwMvMwCV2McXO4Xp97WbG02pJDJk7pfu4z51qK2SKqPyQF71s5huv6GT+Csa9LQnOJ5L/9
- gfNT5/fUcrCIMbFICumyLKsnJNboaPQO+zQX0uYOaxMIEMYuDgFYCISDxn+KfF26bU9O/vIh/dw
- l+z03NxrCSeWyx/higu0+Sy2KKSwk+F/xaT++zem3G88G3/mbKnKgUheFcFqpQOPWvq2f7hTUC/
- DAQA=
+X-Developer-Signature: v=1; a=openpgp-sha256; l=784; i=mailhol@kernel.org;
+ h=from:subject:message-id; bh=aDNsd04I+L/FbjpEUbNbTUbkn5QKAI4xvdupFjUj+7s=;
+ b=owGbwMvMwCV2McXO4Xp97WbG02pJDJk7pft4ZO8tTex4wfvw9YIiq6jtBybw7z0uX/S3IE/wW
+ /Gtf8Y5HaUsDGJcDLJiiizLyjm5FToKvcMO/bWEmcPKBDKEgYtTACbS4MLwP4DxBcvGZZMnmd8M
+ 9V0kJLhc+/yjhz7H/3y47t6w4o3BuxmMDHdCHOdwaR1uVt49bc6ST6s71+S/Mphb8ebstGlNC1b
+ b2fEAAA==
 X-Developer-Key: i=mailhol@kernel.org; a=openpgp;
  fpr=ED8F700574E67F20E574E8E2AB5FEB886DBB99C2
 X-Spamd-Result: default: False [-0.66 / 15.00];
@@ -143,7 +143,7 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-13719-lists,linux-mips=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-13720-lists,linux-mips=lfdr.de];
 	FROM_HAS_DN(0.00)[];
 	RCVD_COUNT_THREE(0.00)[4];
 	FREEMAIL_TO(0.00)[kernel.org,linaro.org,gmail.com,armlinux.org.uk,iki.fi,kemnade.info,baylibre.com,atomide.com,xen0n.name,alpha.franken.de,linux.ibm.com,ellerman.id.au,dabbelt.com,eecs.berkeley.edu,ghiti.fr,users.sourceforge.jp,libc.org,physik.fu-berlin.de,redhat.com,alien8.de,linux.intel.com,zytor.com,linutronix.de,goodmis.org,netfilter.org,samsung.com,nxp.com,pengutronix.de,mleia.com,timesys.com,arm.com,glider.be,mobileye.com,bootlin.com,HansenPartnership.com,gmx.de,gmx.net,zankel.net,suse.de,arndb.de,sntech.de,renesas.com,quicinc.com,roeck-us.net,oss.qualcomm.com,linuxfoundation.org,oracle.com];
@@ -162,32 +162,32 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	MID_RHS_MATCH_FROM(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 02CBB2A690F
+X-Rspamd-Queue-Id: DC6DB2A6972
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-The Kontron SMARC-sAM67 board management controller is not in the
-kernel tree anymore. Clean-up the leftover reference to
-CONFIG_SENSORS_SA67MCU which was left in the defconfig.
+The Qcom Slimbus controller driver is not in the kernel tree
+anymore. Clean-up the leftover reference to CONFIG_SLIM_QCOM_CTRL
+which was left in the defconfig.
 
-Fixes: e710b2283725 ("Revert "hwmon: add SMARC-sAM67 support"")
+Fixes: 7cbba32a2d62 ("slimbus: qcom: remove unused qcom controller driver")
 Signed-off-by: Vincent Mailhol (Arm) <mailhol@kernel.org>
 ---
  arch/arm64/configs/defconfig | 1 -
  1 file changed, 1 deletion(-)
 
 diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
-index 1fda77bca432..c5e23beeaebf 100644
+index c5e23beeaebf..88951844c203 100644
 --- a/arch/arm64/configs/defconfig
 +++ b/arch/arm64/configs/defconfig
-@@ -743,7 +743,6 @@ CONFIG_SENSORS_LM75=m
- CONFIG_SENSORS_LM90=m
- CONFIG_SENSORS_PWM_FAN=m
- CONFIG_SENSORS_RASPBERRYPI_HWMON=m
--CONFIG_SENSORS_SA67MCU=m
- CONFIG_SENSORS_SL28CPLD=m
- CONFIG_SENSORS_INA2XX=m
- CONFIG_SENSORS_INA3221=m
+@@ -1822,7 +1822,6 @@ CONFIG_OPTEE=y
+ CONFIG_MUX_GPIO=m
+ CONFIG_MUX_MMIO=y
+ CONFIG_SLIMBUS=m
+-CONFIG_SLIM_QCOM_CTRL=m
+ CONFIG_SLIM_QCOM_NGD_CTRL=m
+ CONFIG_INTERCONNECT=y
+ CONFIG_INTERCONNECT_IMX=y
 
 -- 
 2.43.0
