@@ -1,51 +1,51 @@
-Return-Path: <linux-mips+bounces-13726-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-13727-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id yF24MEk8uWkowQEAu9opvQ
-	(envelope-from <linux-mips+bounces-13726-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Tue, 17 Mar 2026 12:34:33 +0100
+	id oKRHMqY9uWkowQEAu9opvQ
+	(envelope-from <linux-mips+bounces-13727-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Tue, 17 Mar 2026 12:40:22 +0100
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 666B52A8E8B
-	for <lists+linux-mips@lfdr.de>; Tue, 17 Mar 2026 12:34:33 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6D3CD2A9111
+	for <lists+linux-mips@lfdr.de>; Tue, 17 Mar 2026 12:40:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 3BB7930A1718
-	for <lists+linux-mips@lfdr.de>; Tue, 17 Mar 2026 11:31:33 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id EBCCA30856DB
+	for <lists+linux-mips@lfdr.de>; Tue, 17 Mar 2026 11:34:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E76A43ACEF3;
-	Tue, 17 Mar 2026 11:31:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C769F3AE6FF;
+	Tue, 17 Mar 2026 11:33:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eb5SnXCu"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="E3pZf3cV"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B596834F486;
-	Tue, 17 Mar 2026 11:31:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BC9B34DCD1;
+	Tue, 17 Mar 2026 11:33:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773747091; cv=none; b=J8w7PX2zrBNood4lm9EMfwK2UxbU1cdonYdY5NQbqoLS38qeYIMPuLzloCLObCzhZJoA1S4w952FRm9kjvnoE2V+uqyjPY+AXU1oHm2aT2buydOlcW51n1fVb+uMn1yVV1z4lRk4cEQsNTukidExCn1G6p2xj32nHssC8+JQtBI=
+	t=1773747204; cv=none; b=WB8xewbllkT1fHmpq/qDS2hZLLrB8y3Q37QEhAPap5uDHAVdZ3SKmm2zPhGBVVGTr4566XPTjZL7H6bnApNxwn+2c5IAAC6ghaXqEKphM33iSHnlMCdwa/98wjPkyvToLUNU3d265b6hGXclCFixRE+OTFnuoW9K7m6nQu8Qedo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773747091; c=relaxed/simple;
-	bh=RJu7zzI8G2XAcsirv31BLb2C0/yXDjhzALY+IvHEbkY=;
+	s=arc-20240116; t=1773747204; c=relaxed/simple;
+	bh=NW40BtuGiZtf3N8mInSflUm5h77s6MkQtn0eynAQDUo=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Zjd9xfQllKFQjXn+0m+HIncXLXXcOLeEzXwwaPot1JvLziNoAbDbLLSb1X7NlNpxU9NYeqcxmFXtviMRRwXAyUj+65SG6ZwU24nW5t0QyEPDh+VVzPPoMwn93xEA8yfu/DPmo6ntbGDk7G0UJh6kAf/BJ9bxfeYk8TG9LoTzbPs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eb5SnXCu; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5DDAAC2BC9E;
-	Tue, 17 Mar 2026 11:31:13 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=lbsk9NZX0msxSB4X9bq2t5NAudTDmupk9QIH8grsUrSLvG4QpgoODPLhEqBm9PLoeUgGpXvARxvxR1cg9Bq+ArsqSnkuND39A/g7ruOxBJqNj0OsFmN9pQBXsT9voeFYbm8Nt2CedLAhyMYc+CiW3SjiVM783dL8TFvutj67i5Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=E3pZf3cV; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 79250C2BC9E;
+	Tue, 17 Mar 2026 11:33:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1773747091;
-	bh=RJu7zzI8G2XAcsirv31BLb2C0/yXDjhzALY+IvHEbkY=;
+	s=k20201202; t=1773747204;
+	bh=NW40BtuGiZtf3N8mInSflUm5h77s6MkQtn0eynAQDUo=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=eb5SnXCuUQnP8d0L07gffJ3SV/5BEcg6P3S3fL1M2UY3Q2528A/haRhahOSV8is6P
-	 TONPUH2RBrqaJGxGNMn1mkNSs7HIKCo2fojP7HEiBf+TsFdSsFEo2YSvOvGgRaY6n+
-	 9uWgcmgj9aX8+mpe7mXytJPOfTaVuD97zsAMgBJMZjw3Of86duPWAVSkByYe+cUyVW
-	 wydncZ34pX5zLfSkyBDihOTH4f7BRFON5ZHkj5zS8LeDX/OGViw3bQ9YDV7eaiOpOJ
-	 F1H9fgJEHA6tRttMXB4Q+IfbNR3R5pOVPKSWlQPNTbhUbn5xwYhplaEtSDTLo9wQP4
-	 bWUEGwhbgi0dQ==
-Message-ID: <ff697bee-2173-4311-9089-0875114d54d8@kernel.org>
-Date: Tue, 17 Mar 2026 12:31:11 +0100
+	b=E3pZf3cVzjfxyY2GnCUlOQMsOhBsGNp5QxvyX36gMH4En/qyR5aXboVLl5TmXp78t
+	 9oQrmqBCKbJsetxtndjn43ewRxjG/TpC30b0Dv104tbtSqPbPEQbRK2vsbjC7aTynB
+	 KOveJ7Q5ILZIYIz7PWSVV0PyHCd+k1ZUr5XegxBIOxC3jnkPIuiw3Z+NOC/ZvDr6/p
+	 vaFZ+wOBCXOZplswCZl3N6AF1szDW3vTRCa3qjSpA7ixI+9Gb9eqsSjfKUl4DPxuDJ
+	 XfFKrkJDdr79kEvtBbRKUCs82zIzqHUcLsU1o+VyG9Rb7u1q1fhoBE+Gj2BwpnoZgx
+	 37rZf4AoC5V1w==
+Message-ID: <fa1e4d72-50e2-49d4-a458-1e3d300cce4f@kernel.org>
+Date: Tue, 17 Mar 2026 12:33:04 +0100
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -53,8 +53,8 @@ List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 7/9] arm64: defconfig: remove incorrect assignment to
- IPQ_APSS_5018
+Subject: Re: [PATCH 8/9] arm64: defconfig: remove obsolete assignment to
+ SENSORS_SA67MCU
 To: "Vincent Mailhol (Arm)" <mailhol@kernel.org>,
  Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>,
  Mikko Rapeli <mikko.rapeli@linaro.org>,
@@ -122,7 +122,7 @@ Cc: Alexandre Gonzalo <alexandre.gonzalo@arm.com>,
  linux-renesas-soc@vger.kernel.org, linux-parisc@vger.kernel.org,
  openbmc@lists.ozlabs.org
 References: <20260317-arm_defconf_cleanup-v1-0-8eecb7fdd24d@kernel.org>
- <20260317-arm_defconf_cleanup-v1-7-8eecb7fdd24d@kernel.org>
+ <20260317-arm_defconf_cleanup-v1-8-8eecb7fdd24d@kernel.org>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -168,7 +168,7 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  jWt87ecuHlpL3uuQ0ZZNWqHgZoQLXoqC2ZV5KrtKWb/jyiFX/sxSrodALf0zf+tfHv0FZWT2
  zHjUqd0t4njD/UOsuIMOQn4Ig0SdivYPfZukb5cdasKJukG1NOpbW7yRNivaCnfZz6dTawXw
  XRIV/KDsHQiyVxKvN73bThKhONkcX2LWuD928tAR6XMM2G5ovxLe09vuOzzfTWQDsm++9UKF a/A=
-In-Reply-To: <20260317-arm_defconf_cleanup-v1-7-8eecb7fdd24d@kernel.org>
+In-Reply-To: <20260317-arm_defconf_cleanup-v1-8-8eecb7fdd24d@kernel.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spamd-Result: default: False [-0.66 / 15.00];
@@ -176,11 +176,11 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
 	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-13726-lists,linux-mips=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-13727-lists,linux-mips=lfdr.de];
 	FROM_HAS_DN(0.00)[];
 	RCVD_COUNT_THREE(0.00)[4];
 	FREEMAIL_TO(0.00)[kernel.org,linaro.org,gmail.com,armlinux.org.uk,iki.fi,kemnade.info,baylibre.com,atomide.com,xen0n.name,alpha.franken.de,linux.ibm.com,ellerman.id.au,dabbelt.com,eecs.berkeley.edu,ghiti.fr,users.sourceforge.jp,libc.org,physik.fu-berlin.de,redhat.com,alien8.de,linux.intel.com,zytor.com,linutronix.de,goodmis.org,netfilter.org,samsung.com,nxp.com,pengutronix.de,mleia.com,timesys.com,arm.com,glider.be,mobileye.com,bootlin.com,HansenPartnership.com,gmx.de,gmx.net,zankel.net,suse.de,arndb.de,sntech.de,renesas.com,quicinc.com,roeck-us.net,oss.qualcomm.com,linuxfoundation.org,oracle.com];
@@ -188,7 +188,7 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	DKIM_TRACE(0.00)[kernel.org:+];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
 	TO_DN_SOME(0.00)[];
 	RCPT_COUNT_GT_50(0.00)[97];
 	PRECEDENCE_BULK(0.00)[];
@@ -198,31 +198,26 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	TAGGED_RCPT(0.00)[linux-mips,renesas];
 	MID_RHS_MATCH_FROM(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 666B52A8E8B
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 6D3CD2A9111
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
 On 17/03/2026 10:13, Vincent Mailhol (Arm) wrote:
-> CONFIG_IPQ_APSS_5018 does not exist and never existed. Remove it.
+> The Kontron SMARC-sAM67 board management controller is not in the
+> kernel tree anymore. Clean-up the leftover reference to
+> CONFIG_SENSORS_SA67MCU which was left in the defconfig.
 > 
-> Fixes: 7f0c87348fb5 ("arm64: defconfig: Enable IPQ5018 SoC base configs")
+> Fixes: e710b2283725 ("Revert "hwmon: add SMARC-sAM67 support"")
 > Signed-off-by: Vincent Mailhol (Arm) <mailhol@kernel.org>
 > ---
+>  arch/arm64/configs/defconfig | 1 -
+>  1 file changed, 1 deletion(-)
 
-Just like try one year ago:
-https://lore.kernel.org/all/20240104133241.2030193-1-ross.burton@arm.com/
+https://lore.kernel.org/all/20260302122540.1377444-3-mwalle@kernel.org/
 
-No one will apply it if you do not send the patch to right people.
-multi_vx and arm64 defconfig fall outside of get_maintainers thus policy
-from maintainer soc profile applies.
-
-This one should be send to platform maintainers, so to qcom.
-
-Other ones: please send all arm and arm64 defconfig changes in one
-patchset to soc folks. Here, at least provide credits with Reported-by
-to Ross.
-
+It is said to see that multiple people did the same work twice and did
+work which was not sent to right addresses. :(
 
 Best regards,
 Krzysztof
