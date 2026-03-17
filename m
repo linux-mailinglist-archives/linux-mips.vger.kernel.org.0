@@ -1,60 +1,60 @@
-Return-Path: <linux-mips+bounces-13730-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-13732-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 2IHnCWdYuWnYAgIAu9opvQ
-	(envelope-from <linux-mips+bounces-13730-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Tue, 17 Mar 2026 14:34:31 +0100
+	id QDP1I0JZuWnYAgIAu9opvQ
+	(envelope-from <linux-mips+bounces-13732-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Tue, 17 Mar 2026 14:38:10 +0100
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 01DAE2AAF16
-	for <lists+linux-mips@lfdr.de>; Tue, 17 Mar 2026 14:34:30 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1EFFB2AB005
+	for <lists+linux-mips@lfdr.de>; Tue, 17 Mar 2026 14:38:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 9BE853032D17
-	for <lists+linux-mips@lfdr.de>; Tue, 17 Mar 2026 13:34:04 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 4DF5530996BA
+	for <lists+linux-mips@lfdr.de>; Tue, 17 Mar 2026 13:34:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A14572BDC23;
-	Tue, 17 Mar 2026 13:33:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4BE98303C97;
+	Tue, 17 Mar 2026 13:33:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="1BnL00zW"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="aY0bFTvx"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
+Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A88728D83E;
-	Tue, 17 Mar 2026 13:33:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.171.202.116
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5104227FD4A;
+	Tue, 17 Mar 2026 13:33:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.85.4
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773754419; cv=none; b=HfFHL/VLYrTUKCA6PLwCFwD4Ye9jzUM7ZE5wSZ/GTOm5DPBtn+bOY4hysqIFF501RhCQ/Du58mikhRcj8YTfAbiGodKlybD2W96E2Kt0j8hOzqUiCN/MaVdXUrDVrQ4re7IFm01siuaTdd6xaAu4ZsAJYFMfPRiKaHcHIuyNP9M=
+	t=1773754422; cv=none; b=nw4OHwC32heVsqwSou0Hsqh5bkdLSnyD8J5W2KdDKyhQHtzz8ZYjb5ldGhRUUUBcOtgfs5Ok5BiNEO78CwgkNlgcGRv81HKGRZ2lnbEnh54jSoYhFyv36N48DNwvwKE+9j+ehE/JYlRfkS9vQL9BcbNl/rsca//7RRa8iCxAWVY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773754419; c=relaxed/simple;
-	bh=2ea1iWY3G2WJoVz9abrqzxtZaJ7JSndBztOUmPTmdaw=;
+	s=arc-20240116; t=1773754422; c=relaxed/simple;
+	bh=w2P98RtZ71C/LGhITu+Rj69QooLz3cBmY6xljHzBuc8=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=Kfhpp/7+AfRo9RTZtkoy6271peoSfLqlY52788I+8wnjTzQRPzauZw6nYysboJojXPAp3Cmg+54VaMXLHIPygPi64ywh3k8sxTpJGHDNgwPXWaW3yXGKGI/1WPf69QayFFiVsXYo4qI3kKDmISGgqSRwZMr0IXrLKlF1vFW1bAo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=1BnL00zW; arc=none smtp.client-ip=185.171.202.116
+	 In-Reply-To:To:Cc; b=U7jQjwVys75e/QsaqaFHsB+G9XQRGGK4EcqYvhPlpbelQJveHq3B8B/TQvRdHN4NUIVR9eAStPOWjqsw0+mfmIp0RYB32q/TGgidB0WgVw9mK3lYI7VBsW6e2DT2TIz8CUwEWB4SaZqT0jNyern+171A2mVnep7LkuGdgIsJ5sQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=aY0bFTvx; arc=none smtp.client-ip=185.246.85.4
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-04.galae.net (Postfix) with ESMTPS id 5FC07C5505A;
-	Tue, 17 Mar 2026 13:34:00 +0000 (UTC)
+	by smtpout-03.galae.net (Postfix) with ESMTPS id 087604E426C2;
+	Tue, 17 Mar 2026 13:33:39 +0000 (UTC)
 Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id 547305FC9A;
-	Tue, 17 Mar 2026 13:33:36 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 7464A104505E9;
-	Tue, 17 Mar 2026 14:33:33 +0100 (CET)
+	by smtpout-01.galae.net (Postfix) with ESMTPS id D03BB5FC9A;
+	Tue, 17 Mar 2026 13:33:38 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 93175104505EA;
+	Tue, 17 Mar 2026 14:33:35 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1773754415; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	t=1773754417; h=from:subject:date:message-id:to:cc:mime-version:content-type:
 	 content-transfer-encoding:in-reply-to:references;
-	bh=ntIkyf4BHjj62Dc7A+L7YEXGw0IsZTA15rJunwpStEs=;
-	b=1BnL00zWwyVJ2Ahl+rY1ma+pyiHmUkWeuMpRJTebQCfIJnv/qyPxILXpRF/LmFkw0sKghF
-	o4rj2GtpUB1JN2U0zj07i5iDluv2pfGykBbp+UERlaPQcwt+aIKs6/XdHh0JmZdj4hvdyI
-	tFlztnwP1YrA56E/i2549Y0/Dh9nbFnobrxLZ5GQzuzhOBtB7YgrUzDKHQSuTXrtm3sZ5B
-	AMGnpYfdJW62j7qKhKmwQxtAahjTrmzf30k5IxATz2XjiMkOIBUpKjrxLR/P0zsz20xyhQ
-	1GOWnG8dNY9/bxSn6rb4ZoiXI9LGsUjyzls71ZO7yWa2M1f0G9sZZ3+o565wLQ==
+	bh=yOq1d1/feoU9ZacZzbZLoYJ5+TqXp/ks2PPbQyH8Mhg=;
+	b=aY0bFTvxHUTjsHbOy7p2URiNRXtO+WW7rfpDcPhxIeZf+28G/tgle7gs0BNdqfxAODAt4s
+	ZI2r2+4YbScryLGZaq8fkTTGsV0w+E67NeuP8zrKbtrfaCk9SHAzjDXs9JBjpl+nVo3hsJ
+	R1JRgjmcCZDFbN+/E5w/KbC8Oi3Z8kAavCRDdqYi65Fj8q0jh8MtWsjfRaKhDQ8C1QVouq
+	p7eus60TCljnVashuqFi3t9VPFqWsI82FOpfJtMUoZahkD76Hl3slm2gYvGoo0noJPO8Ra
+	ivi5hKWTuQnTnvJdhr9MM27VsrTuvQwZm3+ZXSlj6Aea81aEd56Mhrrd2D4F9g==
 From: =?utf-8?q?Beno=C3=AEt_Monin?= <benoit.monin@bootlin.com>
-Date: Tue, 17 Mar 2026 14:33:05 +0100
-Subject: [PATCH v5 03/10] clk: fixed-factor: Rework initialization with
- parent clocks
+Date: Tue, 17 Mar 2026 14:33:06 +0100
+Subject: [PATCH v5 04/10] clk: fixed-factor: Export
+ __clk_hw_register_fixed_factor()
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -63,7 +63,7 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20260317-clk-eyeq7-v5-3-6f6daa2c2367@bootlin.com>
+Message-Id: <20260317-clk-eyeq7-v5-4-6f6daa2c2367@bootlin.com>
 References: <20260317-clk-eyeq7-v5-0-6f6daa2c2367@bootlin.com>
 In-Reply-To: <20260317-clk-eyeq7-v5-0-6f6daa2c2367@bootlin.com>
 To: Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>, 
@@ -88,11 +88,11 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[bootlin.com,reject];
 	R_DKIM_ALLOW(-0.20)[bootlin.com:s=dkim];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-13730-lists,linux-mips=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-13732-lists,linux-mips=lfdr.de];
 	FROM_HAS_DN(0.00)[];
 	RECEIVED_HELO_LOCALHOST(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
@@ -100,7 +100,7 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	RCPT_COUNT_TWELVE(0.00)[22];
 	MIME_TRACE(0.00)[0:+];
 	DKIM_TRACE(0.00)[bootlin.com:+];
-	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
 	TO_DN_SOME(0.00)[];
 	RCVD_COUNT_FIVE(0.00)[6];
 	PRECEDENCE_BULK(0.00)[];
@@ -110,108 +110,199 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	TAGGED_RCPT(0.00)[linux-mips,dt];
 	MID_RHS_MATCH_FROM(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,bootlin.com:dkim,bootlin.com:email,bootlin.com:mid]
-X-Rspamd-Queue-Id: 01DAE2AAF16
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,bootlin.com:dkim,bootlin.com:email,bootlin.com:mid]
+X-Rspamd-Queue-Id: 1EFFB2AB005
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-Use the same sequence as clk-divider, clk-gate and other to set the
-parent_names, parent_hws and parent_data in the init struct when
-registering a fixed-factor clock. The number of parent clocks is now
-only set to one if a parent clock is provided.
+Make the base registration function for fixed-factor clocks public and
+re-implement the various registration functions that are a direct call
+to __clk_hw_register_fixed_factor() as macros.
 
-Previously the number of parent clocks was always one, forcing callers
-of __clk_hw_register_fixed_factor() to provide a dummy parent_data
-struct with an invalid clock index in case they were not provided with
-a non-NULL parent_name or parent_hw. Drop this dummy parent_data as is
-not necessary anymore.
+This is similar to how the registration functions of divider, mux and
+other clocks are implemented.
 
-This change only has a small impact on mis-configured fixed-factor. Now a
-call to clk_hw_register_fixed_factor() with a NULL parent will register
-a fixed-factor with zero parent while previously it was registered with
-one invalid parent. In both cases the rate of the fixed-factor is 0Hz
-but it is no longer shown as orphaned.
-
-This has no impact on properly configured fixed-factors clocks.
+Add a new macro clk_hw_register_fixed_factor_pdata() to register
+a fixed-factor clock with its parent clock passed as a struct
+clk_parent_data.
 
 Reviewed-by: Brian Masney <bmasney@redhat.com>
 Signed-off-by: Benoît Monin <benoit.monin@bootlin.com>
 ---
- drivers/clk/clk-fixed-factor.c | 28 ++++++++++------------------
- 1 file changed, 10 insertions(+), 18 deletions(-)
+ drivers/clk/clk-fixed-factor.c | 52 ++-------------------------------------
+ include/linux/clk-provider.h   | 56 +++++++++++++++++++++++++++++++++---------
+ 2 files changed, 46 insertions(+), 62 deletions(-)
 
 diff --git a/drivers/clk/clk-fixed-factor.c b/drivers/clk/clk-fixed-factor.c
-index 850e8b95f352..359e91441c74 100644
+index 359e91441c74..6116f878fc8f 100644
 --- a/drivers/clk/clk-fixed-factor.c
 +++ b/drivers/clk/clk-fixed-factor.c
-@@ -124,13 +124,13 @@ __clk_hw_register_fixed_factor(struct device *dev, struct device_node *np,
- 	init.name = name;
- 	init.ops = &clk_fixed_factor_ops;
- 	init.flags = flags;
--	if (parent_name)
--		init.parent_names = &parent_name;
--	else if (parent_hw)
--		init.parent_hws = &parent_hw;
-+	init.parent_names = parent_name ? &parent_name : NULL;
-+	init.parent_hws = parent_hw ? &parent_hw : NULL;
-+	init.parent_data = pdata;
-+	if (parent_name || parent_hw || pdata)
-+		init.num_parents = 1;
- 	else
--		init.parent_data = pdata;
--	init.num_parents = 1;
-+		init.num_parents = 0;
+@@ -90,7 +90,7 @@ static void devm_clk_hw_register_fixed_factor_release(struct device *dev, void *
+ 	clk_hw_unregister(&fix->hw);
+ }
  
- 	hw = &fix->hw;
- 	if (dev)
-@@ -190,10 +190,8 @@ struct clk_hw *devm_clk_hw_register_fixed_factor_parent_hw(struct device *dev,
- 		const char *name, const struct clk_hw *parent_hw,
+-static struct clk_hw *
++struct clk_hw *
+ __clk_hw_register_fixed_factor(struct device *dev, struct device_node *np,
+ 		const char *name, const char *parent_name,
+ 		const struct clk_hw *parent_hw, const struct clk_parent_data *pdata,
+@@ -148,6 +148,7 @@ __clk_hw_register_fixed_factor(struct device *dev, struct device_node *np,
+ 
+ 	return hw;
+ }
++EXPORT_SYMBOL_GPL(__clk_hw_register_fixed_factor);
+ 
+ /**
+  * devm_clk_hw_register_fixed_factor_index - Register a fixed factor clock with
+@@ -173,46 +174,6 @@ struct clk_hw *devm_clk_hw_register_fixed_factor_index(struct device *dev,
+ }
+ EXPORT_SYMBOL_GPL(devm_clk_hw_register_fixed_factor_index);
+ 
+-/**
+- * devm_clk_hw_register_fixed_factor_parent_hw - Register a fixed factor clock with
+- * pointer to parent clock
+- * @dev: device that is registering this clock
+- * @name: name of this clock
+- * @parent_hw: pointer to parent clk
+- * @flags: fixed factor flags
+- * @mult: multiplier
+- * @div: divider
+- *
+- * Return: Pointer to fixed factor clk_hw structure that was registered or
+- * an error pointer.
+- */
+-struct clk_hw *devm_clk_hw_register_fixed_factor_parent_hw(struct device *dev,
+-		const char *name, const struct clk_hw *parent_hw,
+-		unsigned long flags, unsigned int mult, unsigned int div)
+-{
+-	return __clk_hw_register_fixed_factor(dev, NULL, name, NULL, parent_hw,
+-					      NULL, flags, mult, div, 0, 0, true);
+-}
+-EXPORT_SYMBOL_GPL(devm_clk_hw_register_fixed_factor_parent_hw);
+-
+-struct clk_hw *clk_hw_register_fixed_factor_parent_hw(struct device *dev,
+-		const char *name, const struct clk_hw *parent_hw,
+-		unsigned long flags, unsigned int mult, unsigned int div)
+-{
+-	return __clk_hw_register_fixed_factor(dev, NULL, name, NULL, parent_hw,
+-					      NULL, flags, mult, div, 0, 0, false);
+-}
+-EXPORT_SYMBOL_GPL(clk_hw_register_fixed_factor_parent_hw);
+-
+-struct clk_hw *clk_hw_register_fixed_factor(struct device *dev,
+-		const char *name, const char *parent_name, unsigned long flags,
+-		unsigned int mult, unsigned int div)
+-{
+-	return __clk_hw_register_fixed_factor(dev, NULL, name, parent_name, NULL,
+-					      NULL, flags, mult, div, 0, 0, false);
+-}
+-EXPORT_SYMBOL_GPL(clk_hw_register_fixed_factor);
+-
+ struct clk_hw *clk_hw_register_fixed_factor_fwname(struct device *dev,
+ 		struct device_node *np, const char *name, const char *fw_name,
  		unsigned long flags, unsigned int mult, unsigned int div)
- {
--	const struct clk_parent_data pdata = { .index = -1 };
--
- 	return __clk_hw_register_fixed_factor(dev, NULL, name, NULL, parent_hw,
--					      &pdata, flags, mult, div, 0, 0, true);
-+					      NULL, flags, mult, div, 0, 0, true);
+@@ -286,15 +247,6 @@ void clk_hw_unregister_fixed_factor(struct clk_hw *hw)
  }
- EXPORT_SYMBOL_GPL(devm_clk_hw_register_fixed_factor_parent_hw);
+ EXPORT_SYMBOL_GPL(clk_hw_unregister_fixed_factor);
  
-@@ -201,10 +199,8 @@ struct clk_hw *clk_hw_register_fixed_factor_parent_hw(struct device *dev,
- 		const char *name, const struct clk_hw *parent_hw,
+-struct clk_hw *devm_clk_hw_register_fixed_factor(struct device *dev,
+-		const char *name, const char *parent_name, unsigned long flags,
+-		unsigned int mult, unsigned int div)
+-{
+-	return __clk_hw_register_fixed_factor(dev, NULL, name, parent_name, NULL,
+-			NULL, flags, mult, div, 0, 0, true);
+-}
+-EXPORT_SYMBOL_GPL(devm_clk_hw_register_fixed_factor);
+-
+ struct clk_hw *devm_clk_hw_register_fixed_factor_fwname(struct device *dev,
+ 		struct device_node *np, const char *name, const char *fw_name,
  		unsigned long flags, unsigned int mult, unsigned int div)
- {
--	const struct clk_parent_data pdata = { .index = -1 };
--
- 	return __clk_hw_register_fixed_factor(dev, NULL, name, NULL, parent_hw,
--					      &pdata, flags, mult, div, 0, 0, false);
-+					      NULL, flags, mult, div, 0, 0, false);
- }
- EXPORT_SYMBOL_GPL(clk_hw_register_fixed_factor_parent_hw);
+diff --git a/include/linux/clk-provider.h b/include/linux/clk-provider.h
+index 630705a47129..7a3de1009270 100644
+--- a/include/linux/clk-provider.h
++++ b/include/linux/clk-provider.h
+@@ -1146,13 +1146,16 @@ struct clk_fixed_factor {
+ #define to_clk_fixed_factor(_hw) container_of(_hw, struct clk_fixed_factor, hw)
  
-@@ -212,10 +208,8 @@ struct clk_hw *clk_hw_register_fixed_factor(struct device *dev,
- 		const char *name, const char *parent_name, unsigned long flags,
- 		unsigned int mult, unsigned int div)
- {
--	const struct clk_parent_data pdata = { .index = -1 };
--
- 	return __clk_hw_register_fixed_factor(dev, NULL, name, parent_name, NULL,
--					      &pdata, flags, mult, div, 0, 0, false);
-+					      NULL, flags, mult, div, 0, 0, false);
- }
- EXPORT_SYMBOL_GPL(clk_hw_register_fixed_factor);
+ extern const struct clk_ops clk_fixed_factor_ops;
++struct clk_hw *
++__clk_hw_register_fixed_factor(struct device *dev, struct device_node *np,
++		const char *name, const char *parent_name,
++		const struct clk_hw *parent_hw, const struct clk_parent_data *pdata,
++		unsigned long flags, unsigned int mult, unsigned int div,
++		unsigned long acc, unsigned int fixflags, bool devm);
+ struct clk *clk_register_fixed_factor(struct device *dev, const char *name,
+ 		const char *parent_name, unsigned long flags,
+ 		unsigned int mult, unsigned int div);
+ void clk_unregister_fixed_factor(struct clk *clk);
+-struct clk_hw *clk_hw_register_fixed_factor(struct device *dev,
+-		const char *name, const char *parent_name, unsigned long flags,
+-		unsigned int mult, unsigned int div);
+ struct clk_hw *clk_hw_register_fixed_factor_fwname(struct device *dev,
+ 		struct device_node *np, const char *name, const char *fw_name,
+ 		unsigned long flags, unsigned int mult, unsigned int div);
+@@ -1164,9 +1167,6 @@ struct clk_hw *clk_hw_register_fixed_factor_index(struct device *dev,
+ 		const char *name, unsigned int index, unsigned long flags,
+ 		unsigned int mult, unsigned int div);
+ void clk_hw_unregister_fixed_factor(struct clk_hw *hw);
+-struct clk_hw *devm_clk_hw_register_fixed_factor(struct device *dev,
+-		const char *name, const char *parent_name, unsigned long flags,
+-		unsigned int mult, unsigned int div);
+ struct clk_hw *devm_clk_hw_register_fixed_factor_fwname(struct device *dev,
+ 		struct device_node *np, const char *name, const char *fw_name,
+ 		unsigned long flags, unsigned int mult, unsigned int div);
+@@ -1178,13 +1178,45 @@ struct clk_hw *devm_clk_hw_register_fixed_factor_index(struct device *dev,
+ 		const char *name, unsigned int index, unsigned long flags,
+ 		unsigned int mult, unsigned int div);
  
-@@ -296,10 +290,8 @@ struct clk_hw *devm_clk_hw_register_fixed_factor(struct device *dev,
- 		const char *name, const char *parent_name, unsigned long flags,
- 		unsigned int mult, unsigned int div)
- {
--	const struct clk_parent_data pdata = { .index = -1 };
--
- 	return __clk_hw_register_fixed_factor(dev, NULL, name, parent_name, NULL,
--			&pdata, flags, mult, div, 0, 0, true);
-+			NULL, flags, mult, div, 0, 0, true);
- }
- EXPORT_SYMBOL_GPL(devm_clk_hw_register_fixed_factor);
+-struct clk_hw *devm_clk_hw_register_fixed_factor_parent_hw(struct device *dev,
+-		const char *name, const struct clk_hw *parent_hw,
+-		unsigned long flags, unsigned int mult, unsigned int div);
++#define clk_hw_register_fixed_factor(dev, name, parent_name,                  \
++				     flags, mult, div)                        \
++	__clk_hw_register_fixed_factor((dev), NULL, (name), (parent_name),    \
++				       NULL,  NULL, (flags), (mult), (div),   \
++				       0, 0, false)
++#define clk_hw_register_fixed_factor_pdata(dev, np, name, pdata,              \
++					   flags, mult, div, acc, fixflags)   \
++	__clk_hw_register_fixed_factor((dev), (np), (name), NULL, NULL,       \
++				       (pdata), (flags), (mult), (div),       \
++				       (acc), (fixflags), false)
++#define devm_clk_hw_register_fixed_factor(dev, name, parent_name, flags,      \
++					  mult, div)                          \
++	__clk_hw_register_fixed_factor((dev), NULL, (name), (parent_name),    \
++				       NULL, NULL, (flags), (mult), (div), 0, \
++				       0, true)
++/**
++ * devm_clk_hw_register_fixed_factor_parent_hw - Register a fixed factor clock with
++ * pointer to parent clock
++ * @dev: device that is registering this clock
++ * @name: name of this clock
++ * @parent_hw: pointer to parent clk
++ * @flags: fixed factor flags
++ * @mult: multiplier
++ * @div: divider
++ *
++ * Return: Pointer to fixed factor clk_hw structure that was registered or
++ * an error pointer.
++ */
++#define devm_clk_hw_register_fixed_factor_parent_hw(dev, name, parent_hw,     \
++						    flags, mult, div)         \
++	__clk_hw_register_fixed_factor((dev), NULL, (name), NULL,             \
++				       (parent_hw), NULL, (flags), (mult),    \
++				       (div), 0, 0, true)
  
+-struct clk_hw *clk_hw_register_fixed_factor_parent_hw(struct device *dev,
+-		const char *name, const struct clk_hw *parent_hw,
+-		unsigned long flags, unsigned int mult, unsigned int div);
++#define clk_hw_register_fixed_factor_parent_hw(dev, name, parent_hw, flags,   \
++					       mult, div)                     \
++	__clk_hw_register_fixed_factor((dev), NULL, (name), NULL,             \
++				       (parent_hw), NULL, (flags), (mult),    \
++				       (div), 0, 0, false)
+ /**
+  * struct clk_fractional_divider - adjustable fractional divider clock
+  *
 
 -- 
 2.53.0
