@@ -1,60 +1,59 @@
-Return-Path: <linux-mips+bounces-13734-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-13735-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id aNs8EXJZuWnYAgIAu9opvQ
-	(envelope-from <linux-mips+bounces-13734-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Tue, 17 Mar 2026 14:38:58 +0100
+	id oDn4FIFZuWnYAgIAu9opvQ
+	(envelope-from <linux-mips+bounces-13735-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Tue, 17 Mar 2026 14:39:13 +0100
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4643B2AB047
-	for <lists+linux-mips@lfdr.de>; Tue, 17 Mar 2026 14:38:57 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 120F32AB06C
+	for <lists+linux-mips@lfdr.de>; Tue, 17 Mar 2026 14:39:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 8EDEB30630A1
-	for <lists+linux-mips@lfdr.de>; Tue, 17 Mar 2026 13:34:21 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 3F7603072F1F
+	for <lists+linux-mips@lfdr.de>; Tue, 17 Mar 2026 13:34:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D82EA3290BD;
-	Tue, 17 Mar 2026 13:33:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5BD64361DA7;
+	Tue, 17 Mar 2026 13:33:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="2dC0/RvC"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="KUJRvA7f"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB6772F12C6;
-	Tue, 17 Mar 2026 13:33:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2BF1235B64C;
+	Tue, 17 Mar 2026 13:33:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.84.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773754424; cv=none; b=KwHQ0Zi1b6wDyEtgdwdsB2QrBheB6uGCo5GgNnI7IualHuKfvjGHcJ/YTAPGaMvuQwik7Rc0hIYQM1u5+OzdX/N+Yx+yvunBkfzaFY0KdSH+nGo5n0LEjQrXXkpr+aHEYsQvjFr4qf0rPg1/Vl0m9zoJaFaPc5hQYv1+7gLXZ7U=
+	t=1773754430; cv=none; b=j+QEQ0nrAPCs9DP5xpWGv5QDnv0e34r93v4Sg8H7KXKwb85h8PGbdkxmbD88NIwpwfigxVUUdvERGIwwW4dNt615N7tSZhlWW5VItVC3pkf07WCgVqmE4ALuySS2CpRGYAAx4JaMfsSJsfpdHB4YmRlJGw3HsUVaHHoR2vuZVZo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773754424; c=relaxed/simple;
-	bh=1d5jwm/HXf+1jopHHwdBEsJurqsfrBJka01HmjVnAuE=;
+	s=arc-20240116; t=1773754430; c=relaxed/simple;
+	bh=o4qp6WUuV4LHrbII8qU/PE+pMKeT1feoWvuDb/iatfs=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=EyOGlM37Va3hay/N+Jhu1T4aQcni0RCDKG3AwiQDj9xzFeSqA7LeRsxNo2Fe/aWLgAoEpj2eywWIqilQsWInCoDMozahdxeo5YIyH/4HO+4QXsnLiHZW+smD0wUngtFgwj2ad7dkfOgJZfqZ0OhvNbiqv4YL8l0WUQD1EfnlmXY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=2dC0/RvC; arc=none smtp.client-ip=185.246.84.56
+	 In-Reply-To:To:Cc; b=QJNXkLL1sMcFXLR8KhFc3OEDmJkC3F4KxxX4PoCDKbD5b/LgIGeWs8ZjDPoN379e8GcYwRWEH/udJczzVJySsfXqWOxNssTyz/C2EjEc5WBEJYcRXKsQsIlYxAs8JzrhCgrrPzCd1ggOOT1dbCeb3MrGdpQchokAGzUVhiiJ0YA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=KUJRvA7f; arc=none smtp.client-ip=185.246.84.56
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-02.galae.net (Postfix) with ESMTPS id 9D60D1A2DF3;
-	Tue, 17 Mar 2026 13:33:40 +0000 (UTC)
+	by smtpout-02.galae.net (Postfix) with ESMTPS id 8A1D41A2DAD;
+	Tue, 17 Mar 2026 13:33:43 +0000 (UTC)
 Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id 6DA795FC9A;
-	Tue, 17 Mar 2026 13:33:40 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id C4F2B104505EB;
-	Tue, 17 Mar 2026 14:33:37 +0100 (CET)
+	by smtpout-01.galae.net (Postfix) with ESMTPS id 5EE5E5FC9A;
+	Tue, 17 Mar 2026 13:33:43 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id A2C94104505EE;
+	Tue, 17 Mar 2026 14:33:39 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1773754419; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	t=1773754422; h=from:subject:date:message-id:to:cc:mime-version:content-type:
 	 content-transfer-encoding:in-reply-to:references;
-	bh=aUYUflWYXCNMFkVZDsoHMMnLEv02bLTB8mbRpGNIxfo=;
-	b=2dC0/RvCd6o6IcNU6LnR1S/sCsRyNTjyJSOTurvhH5HvwqW+GGfC8c9mYzxC/6yrYpP2KD
-	LG3h5K3DGwzLAQsNKjoUO36m6+9jgMS9KY6wu72PpaQ+DeFfNPyhoHuVRJJHjx86xWA7G/
-	93nUU8xZRBFbyXNgUKqAHK3ue4LQyt/XvCXSN1oh2I8am4fcAuA3FWo/goRqpPFFjcKd3n
-	d9GM2UbeRd5f2uoqfAQMCu+JmRd9PBxPu+o1gDBUlcX6E1Mdqk/5zTwDtFWJg1ss8EIKkZ
-	B8U43WMStqY+fgt/vxuojs17gLGefjJo951Me1iA+aT/cinL9Fymw7A7vi4SjA==
+	bh=g5RyB84br9O66OgklXBq77NxLESBFcuM+UEIlDGX0DY=;
+	b=KUJRvA7fhttv0vM6D/aLlt2ZPWaKeqhqZlRmzb9Y7C7RLBwmY/6w2XMGYZyYs83F78KiCJ
+	UB4jdlJEYdn18SstjVgLZzeVFxv43js9NkMqQLFTK1xZlOnB0AxRtexHad2hkcwtNeugt+
+	kGH4iX43zUX3AS4FeZvub4kCdq+LBwl3hxdVyeq7HZN57im5vz27oiWyOtYlHQ5t9yxwvb
+	sg6uK9QzhxIeUm9iTaYpg9sZaIGBDa6PUeWWT3B2tH3uDDeiMmik0HKWgr3fv+KBxTsREC
+	2XmKYkZeBRxfkMkkiCdcqOMJ2TR8GKOYVMRYmiYv0u/Ah6lq4GP2Ir8pafM/PA==
 From: =?utf-8?q?Beno=C3=AEt_Monin?= <benoit.monin@bootlin.com>
-Date: Tue, 17 Mar 2026 14:33:07 +0100
-Subject: [PATCH v5 05/10] clk: eyeq: Prefix the PLL registers with the PLL
- type
+Date: Tue, 17 Mar 2026 14:33:08 +0100
+Subject: [PATCH v5 06/10] clk: eyeq: Introduce a generic clock type
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -63,7 +62,7 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20260317-clk-eyeq7-v5-5-6f6daa2c2367@bootlin.com>
+Message-Id: <20260317-clk-eyeq7-v5-6-6f6daa2c2367@bootlin.com>
 References: <20260317-clk-eyeq7-v5-0-6f6daa2c2367@bootlin.com>
 In-Reply-To: <20260317-clk-eyeq7-v5-0-6f6daa2c2367@bootlin.com>
 To: Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>, 
@@ -87,11 +86,11 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[bootlin.com,reject];
 	R_DKIM_ALLOW(-0.20)[bootlin.com:s=dkim];
-	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-13734-lists,linux-mips=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-13735-lists,linux-mips=lfdr.de];
 	FROM_HAS_DN(0.00)[];
 	RECEIVED_HELO_LOCALHOST(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
@@ -99,7 +98,7 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	RCPT_COUNT_TWELVE(0.00)[21];
 	MIME_TRACE(0.00)[0:+];
 	DKIM_TRACE(0.00)[bootlin.com:+];
-	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
 	TO_DN_SOME(0.00)[];
 	RCVD_COUNT_FIVE(0.00)[6];
 	PRECEDENCE_BULK(0.00)[];
@@ -109,170 +108,352 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	TAGGED_RCPT(0.00)[linux-mips,dt];
 	MID_RHS_MATCH_FROM(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[bootlin.com:dkim,bootlin.com:email,bootlin.com:mid,sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 4643B2AB047
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,bootlin.com:dkim,bootlin.com:email,bootlin.com:mid]
+X-Rspamd-Queue-Id: 120F32AB06C
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-Rename the PLL registers to make room for other PLL types that are
-present in the eyeQ7H.
+Currently, the clocks contained in the OLB are represented as three
+separate structures: PLL, dividers and fixed factors. These clock objects
+are stored in three separate arrays in the match data and registered in
+a fixed order: first the PLL, then the dividers, and finally the fixed
+factors. While this is sufficient for the clocks found in the OLB of
+the EyeQ5 and EyeQ6, it does not allow declaring the more complex clock
+interdependencies for those found in the OLB of the EyeQ7H.
 
-Move the access to the PLL register inside the function parsing it
-as both call sites were doing the same thing.
+We add a new type of clock represented by the struct eqc_clock that covers
+all types of clocks found in OLB. It contains the clock index and its
+name, alongside the parent clock index and name. The index refers to
+the position in the array of clk_hw in the struct clk_hw_onecell_data
+that is filled when registering the clocks. The parent name is optional
+and can refer to the parent clock either via the device tree or via
+its globally unique name. Two special index values are used to select
+which type of lookup is done. The function eqc_fill_parent_data() fill
+a clk_parent_data structure based on the parent index and name values.
+
+The struct eqc_clock also contains two function pointers: .probe()
+and .unregister(). The probe() function parses the eqc_clock structure,
+registers a new clock as a clk_hw and adds it to the clk_hw_onecell_data
+structure. It can be called during probe and early init.  The unregister()
+function unregisters the clk_hw. This patch adds the probe functions
+for the PLLs, the dividers and the fixed factors found in the EyeQ OLB.
+
+Finally, a union is also part of the eqc_clock structure to store the
+data specific to each type of clock.
+
+To help in declaring struct eqc_clock, three macros are added. They set
+the correct function pointers for .probe() and .unregister() based on
+the type of clock being declared.
+
+An array of eqc_clock is added to the match data and early match
+data. They are parsed during probe and early initialization respectively.
+
+There is no user yet of the eqc_clock structure.
 
 Signed-off-by: Benoît Monin <benoit.monin@bootlin.com>
 ---
- drivers/clk/clk-eyeq.c | 76 +++++++++++++++++++++++---------------------------
- 1 file changed, 35 insertions(+), 41 deletions(-)
+ drivers/clk/clk-eyeq.c | 212 ++++++++++++++++++++++++++++++++++++++++++++++++-
+ 1 file changed, 209 insertions(+), 3 deletions(-)
 
 diff --git a/drivers/clk/clk-eyeq.c b/drivers/clk/clk-eyeq.c
-index d9303c2c7aa5..e4e690a12a23 100644
+index e4e690a12a23..623b1d3f041d 100644
 --- a/drivers/clk/clk-eyeq.c
 +++ b/drivers/clk/clk-eyeq.c
-@@ -48,28 +48,28 @@
- #include <dt-bindings/clock/mobileye,eyeq6lplus-clk.h>
+@@ -71,6 +71,13 @@
+ #define FRACG_PCSR1_DOWN_SPREAD			BIT(11)
+ #define FRACG_PCSR1_FRAC_IN			GENMASK(31, 12)
  
- /* In frac mode, it enables fractional noise canceling DAC. Else, no function. */
--#define PCSR0_DAC_EN			BIT(0)
-+#define FRACG_PCSR0_DAC_EN			BIT(0)
- /* Fractional or integer mode */
--#define PCSR0_DSM_EN			BIT(1)
--#define PCSR0_PLL_EN			BIT(2)
-+#define FRACG_PCSR0_DSM_EN			BIT(1)
-+#define FRACG_PCSR0_PLL_EN			BIT(2)
- /* All clocks output held at 0 */
--#define PCSR0_FOUTPOSTDIV_EN		BIT(3)
--#define PCSR0_POST_DIV1			GENMASK(6, 4)
--#define PCSR0_POST_DIV2			GENMASK(9, 7)
--#define PCSR0_REF_DIV			GENMASK(15, 10)
--#define PCSR0_INTIN			GENMASK(27, 16)
--#define PCSR0_BYPASS			BIT(28)
-+#define FRACG_PCSR0_FOUTPOSTDIV_EN		BIT(3)
-+#define FRACG_PCSR0_POST_DIV1			GENMASK(6, 4)
-+#define FRACG_PCSR0_POST_DIV2			GENMASK(9, 7)
-+#define FRACG_PCSR0_REF_DIV			GENMASK(15, 10)
-+#define FRACG_PCSR0_INTIN			GENMASK(27, 16)
-+#define FRACG_PCSR0_BYPASS			BIT(28)
- /* Bits 30..29 are reserved */
--#define PCSR0_PLL_LOCKED		BIT(31)
-+#define FRACG_PCSR0_PLL_LOCKED			BIT(31)
- 
--#define PCSR1_RESET			BIT(0)
--#define PCSR1_SSGC_DIV			GENMASK(4, 1)
-+#define FRACG_PCSR1_RESET			BIT(0)
-+#define FRACG_PCSR1_SSGC_DIV			GENMASK(4, 1)
- /* Spread amplitude (% = 0.1 * SPREAD[4:0]) */
--#define PCSR1_SPREAD			GENMASK(9, 5)
--#define PCSR1_DIS_SSCG			BIT(10)
-+#define FRACG_PCSR1_SPREAD			GENMASK(9, 5)
-+#define FRACG_PCSR1_DIS_SSCG			BIT(10)
- /* Down-spread or center-spread */
--#define PCSR1_DOWN_SPREAD		BIT(11)
--#define PCSR1_FRAC_IN			GENMASK(31, 12)
-+#define FRACG_PCSR1_DOWN_SPREAD			BIT(11)
-+#define FRACG_PCSR1_FRAC_IN			GENMASK(31, 12)
- 
++/*
++ * Special index values to lookup a parent clock by its name
++ * from the device tree or by its globally unique name.
++ */
++#define PARENT_BY_FWNAME			(-1)
++#define PARENT_BY_NAME				(-2)
++
  struct eqc_pll {
  	unsigned int	index;
-@@ -162,34 +162,40 @@ static void eqc_pll_downshift_factors(unsigned long *mult, unsigned long *div)
- 	*div >>= shift;
+ 	const char	*name;
+@@ -98,6 +105,32 @@ struct eqc_fixed_factor {
+ 	unsigned int	parent;
+ };
+ 
++struct eqc_clock {
++	int		index;
++	int		parent_idx;
++	const char	*name;
++	const char	*parent_name;
++	int		(*probe)(struct device *dev, struct device_node *np,
++				 const struct eqc_clock *clk, void __iomem *base,
++				 struct clk_hw_onecell_data *cells);
++	void		(*unregister)(struct clk_hw *hw);
++	union {
++		struct {
++			unsigned int			reg;
++			u8				shift;
++			u8				width;
++			const struct clk_div_table	*table;
++		} div;
++		struct {
++			unsigned int			mult;
++			unsigned int			div;
++		} ff;
++		struct {
++			unsigned int			reg;
++		} pll;
++	};
++};
++
+ struct eqc_match_data {
+ 	unsigned int		pll_count;
+ 	const struct eqc_pll	*plls;
+@@ -108,6 +141,9 @@ struct eqc_match_data {
+ 	unsigned int			fixed_factor_count;
+ 	const struct eqc_fixed_factor	*fixed_factors;
+ 
++	unsigned int		clk_count;
++	const struct eqc_clock	*clks;
++
+ 	const char		*reset_auxdev_name;
+ 	const char		*pinctrl_auxdev_name;
+ 	const char		*eth_phy_auxdev_name;
+@@ -122,6 +158,9 @@ struct eqc_early_match_data {
+ 	unsigned int			early_fixed_factor_count;
+ 	const struct eqc_fixed_factor	*early_fixed_factors;
+ 
++	unsigned int		early_clk_count;
++	const struct eqc_clock	*early_clks;
++
+ 	/*
+ 	 * We want our of_xlate callback to EPROBE_DEFER instead of dev_err()
+ 	 * and EINVAL. For that, we must know the total clock count.
+@@ -336,6 +375,101 @@ static void eqc_auxdev_create_optional(struct device *dev, void __iomem *base,
+ 	}
  }
  
--static int eqc_pll_parse_registers(u32 r0, u32 r1, unsigned long *mult,
--				   unsigned long *div, unsigned long *acc)
-+static int eqc_pll_parse_fracg(void __iomem *base, unsigned long *mult,
-+			       unsigned long *div, unsigned long *acc)
- {
- 	unsigned long spread;
-+	u32 r0, r1;
-+	u64 val;
- 
--	if (r0 & PCSR0_BYPASS) {
-+	val = readq(base);
-+	r0 = val;
-+	r1 = val >> 32;
++static int eqc_fill_parent_data(const struct eqc_clock *clk,
++				struct clk_hw_onecell_data *cells,
++				struct clk_parent_data *parent_data)
++{
++	int pidx = clk->parent_idx;
 +
-+	if (r0 & FRACG_PCSR0_BYPASS) {
- 		*mult = 1;
- 		*div = 1;
- 		*acc = 0;
- 		return 0;
- 	}
++	memset(parent_data, 0, sizeof(struct clk_parent_data));
++
++	if (pidx == PARENT_BY_FWNAME) {
++		/* lookup the parent clock by its fw_name */
++		parent_data->index = -1;
++		parent_data->fw_name = clk->parent_name;
++	} else if (pidx == PARENT_BY_NAME) {
++		/* lookup the parent clock by its global name */
++		parent_data->index = -1;
++		parent_data->name = clk->parent_name;
++	} else if (pidx >= 0 && pidx < cells->num && !IS_ERR(cells->hws[pidx])) {
++		/* get the parent hw directly */
++		parent_data->hw = cells->hws[pidx];
++	} else {
++		return -EINVAL;
++	}
++
++	return 0;
++}
++
++static int eqc_probe_divider(struct device *dev, struct device_node *np,
++			     const struct eqc_clock *clk, void __iomem *base,
++			     struct clk_hw_onecell_data *cells)
++{
++	struct clk_parent_data parent_data;
++	struct clk_hw *hw;
++	int ret;
++
++	ret = eqc_fill_parent_data(clk, cells, &parent_data);
++	if (ret)
++		return ret;
++
++	hw = clk_hw_register_divider_table_parent_data(dev, clk->name,
++			&parent_data, 0, base + clk->div.reg, clk->div.shift, clk->div.width,
++			clk->div.table ? 0 : CLK_DIVIDER_EVEN_INTEGERS, clk->div.table, NULL);
++	if (IS_ERR(hw))
++		return IS_ERR(hw);
++
++	cells->hws[clk->index] = hw;
++	return 0;
++}
++
++static int eqc_probe_fixed_factor(struct device *dev, struct device_node *np,
++				  const struct eqc_clock *clk, void __iomem *base,
++				  struct clk_hw_onecell_data *cells)
++{
++	struct clk_parent_data parent_data;
++	struct clk_hw *hw;
++	int ret;
++
++	ret = eqc_fill_parent_data(clk, cells, &parent_data);
++	if (ret)
++		return ret;
++
++	hw = clk_hw_register_fixed_factor_pdata(dev, np, clk->name, &parent_data, 0,
++						clk->ff.mult, clk->ff.div, 0, 0);
++	if (IS_ERR(hw))
++		return IS_ERR(hw);
++
++	cells->hws[clk->index] = hw;
++	return 0;
++}
++
++static int eqc_probe_pll_fracg(struct device *dev, struct device_node *np,
++			       const struct eqc_clock *clk, void __iomem *base,
++			       struct clk_hw_onecell_data *cells)
++{
++	struct clk_parent_data parent_data;
++	unsigned long mult, div, acc;
++	struct clk_hw *hw;
++	int ret;
++
++	ret = eqc_pll_parse_fracg(base + clk->pll.reg, &mult, &div, &acc);
++	if (ret)
++		return ret;
++
++	ret = eqc_fill_parent_data(clk, cells, &parent_data);
++	if (ret)
++		return ret;
++
++	hw = clk_hw_register_fixed_factor_pdata(dev, np, clk->name, &parent_data, 0, mult,
++						div, acc, CLK_FIXED_FACTOR_FIXED_ACCURACY);
++	if (IS_ERR(hw))
++		return IS_ERR(hw);
++
++	cells->hws[clk->index] = hw;
++	return 0;
++}
++
+ static int eqc_probe(struct platform_device *pdev)
+ {
+ 	struct device *dev = &pdev->dev;
+@@ -345,6 +479,7 @@ static int eqc_probe(struct platform_device *pdev)
+ 	unsigned int i, clk_count;
+ 	struct resource *res;
+ 	void __iomem *base;
++	int ret;
  
--	if (!(r0 & PCSR0_PLL_LOCKED))
-+	if (!(r0 & FRACG_PCSR0_PLL_LOCKED))
- 		return -EINVAL;
+ 	data = device_get_match_data(dev);
+ 	if (!data)
+@@ -363,11 +498,12 @@ static int eqc_probe(struct platform_device *pdev)
+ 	eqc_auxdev_create_optional(dev, base, data->pinctrl_auxdev_name);
+ 	eqc_auxdev_create_optional(dev, base, data->eth_phy_auxdev_name);
  
--	*mult = FIELD_GET(PCSR0_INTIN, r0);
--	*div = FIELD_GET(PCSR0_REF_DIV, r0);
-+	*mult = FIELD_GET(FRACG_PCSR0_INTIN, r0);
-+	*div = FIELD_GET(FRACG_PCSR0_REF_DIV, r0);
+-	if (data->pll_count + data->div_count + data->fixed_factor_count == 0)
++	if (data->pll_count + data->div_count + data->fixed_factor_count + data->clk_count == 0)
+ 		return 0; /* Zero clocks, we are done. */
  
- 	/* Fractional mode, in 2^20 (0x100000) parts. */
--	if (r0 & PCSR0_DSM_EN) {
-+	if (r0 & FRACG_PCSR0_DSM_EN) {
- 		*div *= (1ULL << 20);
--		*mult = *mult * (1ULL << 20) + FIELD_GET(PCSR1_FRAC_IN, r1);
-+		*mult = *mult * (1ULL << 20) + FIELD_GET(FRACG_PCSR1_FRAC_IN, r1);
- 	}
+ 	clk_count = data->pll_count + data->div_count +
+-		    data->fixed_factor_count + data->early_clk_count;
++		    data->fixed_factor_count + data->clk_count +
++		    data->early_clk_count;
+ 	cells = kzalloc_flex(*cells, hws, clk_count);
+ 	if (!cells)
+ 		return -ENOMEM;
+@@ -384,9 +520,58 @@ static int eqc_probe(struct platform_device *pdev)
  
- 	if (!*mult || !*div)
- 		return -EINVAL;
+ 	eqc_probe_init_fixed_factors(dev, data, cells);
  
--	if (r1 & (PCSR1_RESET | PCSR1_DIS_SSCG)) {
-+	if (r1 & (FRACG_PCSR1_RESET | FRACG_PCSR1_DIS_SSCG)) {
- 		*acc = 0;
- 		return 0;
- 	}
-@@ -204,10 +210,10 @@ static int eqc_pll_parse_registers(u32 r0, u32 r1, unsigned long *mult,
- 	 *
- 	 * Care is taken to avoid overflowing or losing precision.
- 	 */
--	spread = FIELD_GET(PCSR1_SPREAD, r1);
-+	spread = FIELD_GET(FRACG_PCSR1_SPREAD, r1);
- 	*acc = DIV_ROUND_CLOSEST(spread * 1000000000, 1024 * 2);
++	for (i = 0; i < data->clk_count; i++) {
++		const struct eqc_clock *clk = &data->clks[i];
++
++		if (clk->probe)
++			ret = clk->probe(dev, NULL, clk, base, cells);
++		else
++			ret = -EINVAL;
++		if (ret)
++			dev_warn(dev, "failed probing clock %s: %d\n", clk->name, ret);
++	}
++
+ 	return of_clk_add_hw_provider(np, of_clk_hw_onecell_get, cells);
+ }
  
--	if (r1 & PCSR1_DOWN_SPREAD) {
-+	if (r1 & FRACG_PCSR1_DOWN_SPREAD) {
- 		/*
- 		 * Downspreading: the central frequency is half a
- 		 * spread lower.
-@@ -232,18 +238,12 @@ static void eqc_probe_init_plls(struct device *dev, const struct eqc_match_data
- 	const struct eqc_pll *pll;
- 	struct clk_hw *hw;
- 	unsigned int i;
--	u32 r0, r1;
--	u64 val;
++#define DIV(_index, _parent_idx, _name, _parent_name,			\
++		_reg, _shift, _width, _table)				\
++	{								\
++		.index = _index,					\
++		.parent_idx = _parent_idx,				\
++		.name = _name,						\
++		.parent_name = _parent_name,				\
++		.probe = eqc_probe_divider,				\
++		.unregister = clk_hw_unregister_divider,		\
++		.div.reg = _reg,					\
++		.div.shift = _shift,					\
++		.div.width = _width,					\
++		.div.table = _table,					\
++	}
++
++#define FF(_index, _parent_idx, _name, _parent_name, _mult, _div)	\
++	{								\
++		.index = _index,					\
++		.parent_idx = _parent_idx,				\
++		.name = _name,						\
++		.parent_name = _parent_name,				\
++		.probe = eqc_probe_fixed_factor,			\
++		.unregister = clk_hw_unregister_fixed_factor,		\
++		.ff.mult = _mult,					\
++		.ff.div = _div,						\
++	}
++
++#define PLL_FRACG(_index, _parent_idx, _name, _parent_name, _reg)	\
++	{								\
++		.index = _index,					\
++		.parent_idx = _parent_idx,				\
++		.name = _name,						\
++		.parent_name = _parent_name,				\
++		.probe = eqc_probe_pll_fracg,				\
++		.unregister = clk_hw_unregister_fixed_factor,		\
++		.pll.reg = _reg,					\
++	}
++
+ /* Required early for GIC timer (pll-cpu) and UARTs (pll-per). */
+ static const struct eqc_pll eqc_eyeq5_early_plls[] = {
+ 	{ .index = EQ5C_PLL_CPU, .name = "pll-cpu",  .reg64 = 0x02C },
+@@ -769,7 +954,7 @@ static void __init eqc_early_init(struct device_node *np,
  	int ret;
  
- 	for (i = 0; i < data->pll_count; i++) {
- 		pll = &data->plls[i];
+ 	clk_count = early_data->early_pll_count + early_data->early_fixed_factor_count +
+-		    early_data->late_clk_count;
++		    early_data->early_clk_count + early_data->late_clk_count;
+ 	cells = kzalloc_flex(*cells, hws, clk_count);
+ 	if (!cells) {
+ 		ret = -ENOMEM;
+@@ -831,6 +1016,19 @@ static void __init eqc_early_init(struct device_node *np,
+ 		}
+ 	}
  
--		val = readq(base + pll->reg64);
--		r0 = val;
--		r1 = val >> 32;
--
--		ret = eqc_pll_parse_registers(r0, r1, &mult, &div, &acc);
-+		ret = eqc_pll_parse_fracg(base + pll->reg64, &mult, &div, &acc);
- 		if (ret) {
- 			dev_warn(dev, "failed parsing state of %s\n", pll->name);
- 			cells->hws[pll->index] = ERR_PTR(ret);
-@@ -799,14 +799,8 @@ static void __init eqc_early_init(struct device_node *np,
- 		const struct eqc_pll *pll = &early_data->early_plls[i];
- 		unsigned long mult, div, acc;
- 		struct clk_hw *hw;
--		u32 r0, r1;
--		u64 val;
++	for (i = 0; i < early_data->early_clk_count; i++) {
++		const struct eqc_clock *clk = &early_data->early_clks[i];
++
++		if (clk->probe)
++			ret = clk->probe(NULL, np, clk, base, cells);
++		else
++			ret = -EINVAL;
++		if (ret) {
++			pr_err("failed registering %s\n", clk->name);
++			goto err;
++		}
++	}
++
+ 	ret = of_clk_add_hw_provider(np, of_clk_hw_onecell_get, cells);
+ 	if (ret) {
+ 		pr_err("failed registering clk provider: %d\n", ret);
+@@ -860,6 +1058,14 @@ static void __init eqc_early_init(struct device_node *np,
+ 				clk_hw_unregister_fixed_factor(hw);
+ 		}
  
--		val = readq(base + pll->reg64);
--		r0 = val;
--		r1 = val >> 32;
--
--		ret = eqc_pll_parse_registers(r0, r1, &mult, &div, &acc);
-+		ret = eqc_pll_parse_fracg(base + pll->reg64, &mult, &div, &acc);
- 		if (ret) {
- 			pr_err("failed parsing state of %s\n", pll->name);
- 			goto err;
++		for (i = 0; i < early_data->early_clk_count; i++) {
++			const struct eqc_clock *clk = &early_data->early_clks[i];
++			struct clk_hw *hw = cells->hws[clk->index];
++
++			if (!IS_ERR_OR_NULL(hw) && clk->unregister)
++				clk->unregister(hw);
++		}
++
+ 		kfree(cells);
+ 	}
+ }
 
 -- 
 2.53.0
