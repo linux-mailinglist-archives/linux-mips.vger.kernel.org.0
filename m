@@ -1,53 +1,53 @@
-Return-Path: <linux-mips+bounces-13714-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-13715-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id WEk4Jv8buWkyrAEAu9opvQ
-	(envelope-from <linux-mips+bounces-13714-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Tue, 17 Mar 2026 10:16:47 +0100
+	id oLpDOVIcuWkyrAEAu9opvQ
+	(envelope-from <linux-mips+bounces-13715-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Tue, 17 Mar 2026 10:18:10 +0100
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 41E932A65ED
-	for <lists+linux-mips@lfdr.de>; Tue, 17 Mar 2026 10:16:47 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4451E2A66DC
+	for <lists+linux-mips@lfdr.de>; Tue, 17 Mar 2026 10:18:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id A12E0301BABF
-	for <lists+linux-mips@lfdr.de>; Tue, 17 Mar 2026 09:16:46 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id CBC8D3029883
+	for <lists+linux-mips@lfdr.de>; Tue, 17 Mar 2026 09:17:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F1BF235E923;
-	Tue, 17 Mar 2026 09:16:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D75B235E921;
+	Tue, 17 Mar 2026 09:16:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bdHEjNjQ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="S8Qqa056"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59D0F359A85;
-	Tue, 17 Mar 2026 09:16:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15EE235837B;
+	Tue, 17 Mar 2026 09:16:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773738979; cv=none; b=ga0CPkS1QE3F/60/oMeDOaNs49ycodIf8fjSazWLHCEFXL8O9wF4MQe2ONWB2Bcd1bpGoNxSYH2Sf8mvyYlznAdaCVn/uh9yTw7age6VFviSNCqgILueF9gMSInHKVAps9bS/l1XlIFjKJrQavYa+CF1dRs8RjqeQlnyzdD0O5I=
+	t=1773738999; cv=none; b=XJK1XyPW0n+GywaIcUa1vHkfiMDXCPkdChl8egQaPoDpEoF1F9xQP77qpJsyj0S8xiVQPAk04b901QJDVWO2CdiHwOE2242DW5OlI4O32ocL6liHSvmxk6eAFUQbh1YyX0iMOdiljZDJ1FKU1zH6GwQTVJ6oKmfzghW2+ElE9ZM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773738979; c=relaxed/simple;
-	bh=132YhYEKBEnfSExSKRYFjLv/8lCXtq+DQeVZmk0rgf0=;
+	s=arc-20240116; t=1773738999; c=relaxed/simple;
+	bh=BAMWxZ2OsIU1U9Jszn8uWbpr4W6JPsqvaL0hEo+gcx8=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=qyMvElXS33oFpAIsxfMjy//Bjb5fbfP2GvPYn/DyZGkraO+UNMtTH0Ql6JQyGETcGQcT9tMkBkSn7yHruXl6vGTTG2yd8kLem/KE35suL34c5Pa68SnVwquqpHTQo3UUqY9bZ0jbAR6Wz75kpZl9ZJMd0TqoNp39riGE3sPd2tw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bdHEjNjQ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C5977C2BCAF;
-	Tue, 17 Mar 2026 09:15:58 +0000 (UTC)
+	 In-Reply-To:To:Cc; b=KISgJ5hZ0DZkCl/TU/ShaKpYx2P/AUm4OwX8e1obgJN4TRIEaH7wZjmIt2Jw3bJn5FeMoGFIzEtMGgabH3Nqh9e83H/lxE2sHdaEcKEjXYdGPa1HOAbKVwhJud9QgRkvVbJeLqG+lf6idSxhOZGPIxl3s1Bo2O4DHk0hdF4JybU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=S8Qqa056; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 37072C19425;
+	Tue, 17 Mar 2026 09:16:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1773738978;
-	bh=132YhYEKBEnfSExSKRYFjLv/8lCXtq+DQeVZmk0rgf0=;
+	s=k20201202; t=1773738998;
+	bh=BAMWxZ2OsIU1U9Jszn8uWbpr4W6JPsqvaL0hEo+gcx8=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=bdHEjNjQeoBsDuPKEeW8jrwZVHrR6ofDOsKi+emlM6gAWb5HFF9Pz1Ctd6HZpIXq3
-	 qowX63yqi9SiItQ6q3hMRdR+QTeuEsPrQvIza+/bIViQiWEloP27mIt4PuZOlQmrIP
-	 OOvHM97eONHJsB7AMHbuDDIseQEYz5axjl2+QKHp1z4qiqS9i5l/4sloULij4oRRCE
-	 PSXMdfm/C+nLNOSKreyQM14CUcUbqkFNE2rF5jzATLJhuwV1YdwWL1RHe/19pBkm1O
-	 X0VxqxZZ702/LSz4459KEGKuYBjnihvf2sQsmWvbmyR2RNnkmoCPrCqgW5cScUOPmc
-	 XOxvlycTA+lvw==
+	b=S8Qqa056BHTdg+bMoGtWiQ6ASRhHQKlLJgznwKUr7FsRPJ3GR3s74vwL7h4rjansQ
+	 sujpBm4V9Vqy9AjV0C191Fco4Ek9okUfTfP2GXBeBMCUTT5oPSt9iLEc3stnojO/5O
+	 ro+JsqEpUyJVtnHB1lDk8+Y3k/2Jhm3w3vnPzE914eHTzqzJX10c56QLzMAGFxSiwu
+	 kJDt/tqdx0EDsUbjOKi7SMfi11rpfQnXADOHbASIm2ViSFPM0G2E6vYEUouviBv655
+	 IO70RbmggYj/3/gm2TO88i/FQMpDmFK58UHDPzOQgXejZMD2sSdH6i+99oYMV8uOpW
+	 eNarAu+VcfOKQ==
 From: "Vincent Mailhol (Arm)" <mailhol@kernel.org>
-Date: Tue, 17 Mar 2026 10:13:39 +0100
-Subject: [PATCH 3/9] configs: remove obsolete assignments to
- CONFIG_NFS_V4_1
+Date: Tue, 17 Mar 2026 10:13:40 +0100
+Subject: [PATCH 4/9] configs: remove implicit assignments to
+ FB_MODE_HELPERS
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -56,7 +56,7 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260317-arm_defconf_cleanup-v1-3-8eecb7fdd24d@kernel.org>
+Message-Id: <20260317-arm_defconf_cleanup-v1-4-8eecb7fdd24d@kernel.org>
 References: <20260317-arm_defconf_cleanup-v1-0-8eecb7fdd24d@kernel.org>
 In-Reply-To: <20260317-arm_defconf_cleanup-v1-0-8eecb7fdd24d@kernel.org>
 To: Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>, 
@@ -126,286 +126,230 @@ Cc: Alexandre Gonzalo <alexandre.gonzalo@arm.com>,
  linux-renesas-soc@vger.kernel.org, linux-parisc@vger.kernel.org, 
  openbmc@lists.ozlabs.org, "Vincent Mailhol (Arm)" <mailhol@kernel.org>
 X-Mailer: b4 0.13.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=8510; i=mailhol@kernel.org;
- h=from:subject:message-id; bh=132YhYEKBEnfSExSKRYFjLv/8lCXtq+DQeVZmk0rgf0=;
- b=owGbwMvMwCV2McXO4Xp97WbG02pJDJk7pfuSGn9P/ywx9a+UTJ660p8XEw3K5P6ZaLO8c/+04
- 2lIY1JeRykLgxgXg6yYIsuyck5uhY5C77BDfy1h5rAygQxh4OIUgIk42jMyzF3XYfZRaHlEg453
- y/E+aU133xST4NXaQdcF11zOr+PbxfA/YrX/W8Ou4o8nm82u3Rbbmvj7zsIpsVvtVXpEoisqCo+
- yAgA=
+X-Developer-Signature: v=1; a=openpgp-sha256; l=6693; i=mailhol@kernel.org;
+ h=from:subject:message-id; bh=BAMWxZ2OsIU1U9Jszn8uWbpr4W6JPsqvaL0hEo+gcx8=;
+ b=owGbwMvMwCV2McXO4Xp97WbG02pJDJk7pft8z0x6lWu7PSfzouHxQPu4e+cCE1cFaV19Man+x
+ 3qJ7NrkjlIWBjEuBlkxRZZl5ZzcCh2F3mGH/lrCzGFlAhnCwMUpABP5XsTwv0jR+//Z7OOHMq94
+ bV/D07Hort2Vw1Iyh4/0S1uJuEcf02Fk2P7B0c1Gf1Jz+23X9QdepnItUJ14Yu9Fn81Pfr5WYV9
+ iyQQA
 X-Developer-Key: i=mailhol@kernel.org; a=openpgp;
  fpr=ED8F700574E67F20E574E8E2AB5FEB886DBB99C2
 X-Spamd-Result: default: False [-0.66 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
 	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FREEMAIL_TO(0.00)[kernel.org,linaro.org,gmail.com,armlinux.org.uk,iki.fi,kemnade.info,baylibre.com,atomide.com,xen0n.name,alpha.franken.de,linux.ibm.com,ellerman.id.au,dabbelt.com,eecs.berkeley.edu,ghiti.fr,users.sourceforge.jp,libc.org,physik.fu-berlin.de,redhat.com,alien8.de,linux.intel.com,zytor.com,linutronix.de,goodmis.org,netfilter.org,samsung.com,nxp.com,pengutronix.de,mleia.com,timesys.com,arm.com,glider.be,mobileye.com,bootlin.com,HansenPartnership.com,gmx.de,gmx.net,zankel.net,suse.de,arndb.de,sntech.de,renesas.com,quicinc.com,roeck-us.net,oss.qualcomm.com,linuxfoundation.org,oracle.com];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-13714-lists,linux-mips=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-13715-lists,linux-mips=lfdr.de];
 	FROM_HAS_DN(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
+	FREEMAIL_TO(0.00)[kernel.org,linaro.org,gmail.com,armlinux.org.uk,iki.fi,kemnade.info,baylibre.com,atomide.com,xen0n.name,alpha.franken.de,linux.ibm.com,ellerman.id.au,dabbelt.com,eecs.berkeley.edu,ghiti.fr,users.sourceforge.jp,libc.org,physik.fu-berlin.de,redhat.com,alien8.de,linux.intel.com,zytor.com,linutronix.de,goodmis.org,netfilter.org,samsung.com,nxp.com,pengutronix.de,mleia.com,timesys.com,arm.com,glider.be,mobileye.com,bootlin.com,HansenPartnership.com,gmx.de,gmx.net,zankel.net,suse.de,arndb.de,sntech.de,renesas.com,quicinc.com,roeck-us.net,oss.qualcomm.com,linuxfoundation.org,oracle.com];
+	RCVD_TLS_LAST(0.00)[];
 	MIME_TRACE(0.00)[0:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	DKIM_TRACE(0.00)[kernel.org:+];
+	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
+	TO_DN_SOME(0.00)[];
 	RCPT_COUNT_GT_50(0.00)[98];
 	PRECEDENCE_BULK(0.00)[];
 	FROM_NEQ_ENVFROM(0.00)[mailhol@kernel.org,linux-mips@vger.kernel.org];
-	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
 	TAGGED_RCPT(0.00)[linux-mips,renesas];
 	MID_RHS_MATCH_FROM(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TO_DN_SOME(0.00)[]
-X-Rspamd-Queue-Id: 41E932A65ED
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 4451E2A66DC
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-CONFIG_NFS_V4_1 was revomed in commit 7537db24806f ("NFS: Merge
-CONFIG_NFS_V4_1 with CONFIG_NFS_V4"). However, some defconfigs are
-still referring the old configuration.
+Now that CONFIG_FB_MODE_HELPERS is an hidden configuration, there is
+no need to manually select it anymore.
 
-Clean-up all the leftover references to CONFIG_NFS_V4_1.
+Remove any references to FB_MODE_HELPERS in the defconfigs.
 
-FYI, the suppressions were done using:
+FYI, the suppression was done using:
 
-  git grep -z -l '^CONFIG_NFS_V4=' -- 'arch/*/configs/*defconfig' |\
-    xargs -0 sed -i -E '/^CONFIG_NFS_V4_1=/d'
+  git ls-files -z 'arch/*/configs/*defconfig' |\
+    xargs -0 sed -i -E '/^CONFIG_FB_MODE_HELPERS/d'
 
-CONFIG_NFS_V4_1_IMPLEMENTATION_ID_DOMAIN and CONFIG_NFS_V4_1_MIGRATION
-were not in scope of the renaming and still use V4_1 in their name, so
-keep those two untouched.
-
-Fixes: 7537db24806f ("NFS: Merge CONFIG_NFS_V4_1 with CONFIG_NFS_V4")
+Fixes: c031bffabaf7 ("fbdev: Turn FB_MODE_HELPERS into an internal config option")
 Signed-off-by: Vincent Mailhol (Arm) <mailhol@kernel.org>
 ---
- arch/arm/configs/exynos_defconfig           | 1 -
- arch/arm/configs/imx_v6_v7_defconfig        | 1 -
- arch/arm/configs/lpc32xx_defconfig          | 1 -
- arch/arm/configs/mps2_defconfig             | 1 -
- arch/arm/configs/multi_v7_defconfig         | 1 -
- arch/arm/configs/shmobile_defconfig         | 1 -
- arch/arm64/configs/defconfig                | 1 -
- arch/loongarch/configs/loongson32_defconfig | 1 -
- arch/loongarch/configs/loongson64_defconfig | 1 -
- arch/mips/configs/bmips_stb_defconfig       | 1 -
- arch/mips/configs/cavium_octeon_defconfig   | 1 -
- arch/mips/configs/db1xxx_defconfig          | 1 -
- arch/mips/configs/eyeq5_defconfig           | 1 -
- arch/mips/configs/eyeq6_defconfig           | 1 -
- arch/mips/configs/generic_defconfig         | 1 -
- arch/parisc/configs/generic-64bit_defconfig | 1 -
- arch/riscv/configs/defconfig                | 1 -
- 17 files changed, 17 deletions(-)
+ arch/arm/configs/am200epdkit_defconfig | 1 -
+ arch/arm/configs/collie_defconfig      | 1 -
+ arch/arm/configs/ep93xx_defconfig      | 1 -
+ arch/arm/configs/imx_v6_v7_defconfig   | 1 -
+ arch/arm/configs/lpc18xx_defconfig     | 1 -
+ arch/arm/configs/lpc32xx_defconfig     | 1 -
+ arch/arm/configs/mxs_defconfig         | 1 -
+ arch/arm/configs/omap1_defconfig       | 1 -
+ arch/arm/configs/omap2plus_defconfig   | 1 -
+ arch/arm/configs/wpcm450_defconfig     | 1 -
+ arch/arm64/configs/defconfig           | 1 -
+ arch/mips/configs/lemote2f_defconfig   | 1 -
+ arch/xtensa/configs/virt_defconfig     | 1 -
+ 13 files changed, 13 deletions(-)
 
-diff --git a/arch/arm/configs/exynos_defconfig b/arch/arm/configs/exynos_defconfig
-index 84070e9698e8..96ea941ff700 100644
---- a/arch/arm/configs/exynos_defconfig
-+++ b/arch/arm/configs/exynos_defconfig
-@@ -341,7 +341,6 @@ CONFIG_SQUASHFS=y
- CONFIG_ROMFS_FS=y
- CONFIG_NFS_FS=y
- CONFIG_NFS_V4=y
--CONFIG_NFS_V4_1=y
- CONFIG_NFS_V4_2=y
- CONFIG_ROOT_NFS=y
- CONFIG_NLS_CODEPAGE_437=y
+diff --git a/arch/arm/configs/am200epdkit_defconfig b/arch/arm/configs/am200epdkit_defconfig
+index 2367b1685c1c..1051a61e2f80 100644
+--- a/arch/arm/configs/am200epdkit_defconfig
++++ b/arch/arm/configs/am200epdkit_defconfig
+@@ -57,7 +57,6 @@ CONFIG_SERIAL_PXA_CONSOLE=y
+ CONFIG_WATCHDOG=y
+ CONFIG_SA1100_WATCHDOG=m
+ CONFIG_FB=y
+-CONFIG_FB_MODE_HELPERS=y
+ CONFIG_FB_TILEBLITTING=y
+ CONFIG_FB_PXA=y
+ CONFIG_FB_PXA_PARAMETERS=y
+diff --git a/arch/arm/configs/collie_defconfig b/arch/arm/configs/collie_defconfig
+index 578c6a4af620..56c4b8d537f8 100644
+--- a/arch/arm/configs/collie_defconfig
++++ b/arch/arm/configs/collie_defconfig
+@@ -61,7 +61,6 @@ CONFIG_MCP_UCB1200_TS=y
+ CONFIG_FB=y
+ CONFIG_FB_SA1100=y
+ # CONFIG_VGA_CONSOLE is not set
+-CONFIG_FB_MODE_HELPERS=y
+ CONFIG_FRAMEBUFFER_CONSOLE=y
+ CONFIG_FRAMEBUFFER_CONSOLE_ROTATION=y
+ CONFIG_NEW_LEDS=y
+diff --git a/arch/arm/configs/ep93xx_defconfig b/arch/arm/configs/ep93xx_defconfig
+index 9f3c7324d1cf..4fc0b14a6a4f 100644
+--- a/arch/arm/configs/ep93xx_defconfig
++++ b/arch/arm/configs/ep93xx_defconfig
+@@ -79,7 +79,6 @@ CONFIG_WATCHDOG=y
+ CONFIG_EP93XX_WATCHDOG=y
+ CONFIG_FB=y
+ CONFIG_FB_EP93XX=y
+-CONFIG_FB_MODE_HELPERS=y
+ CONFIG_LOGO=y
+ CONFIG_USB=y
+ CONFIG_USB_DYNAMIC_MINORS=y
 diff --git a/arch/arm/configs/imx_v6_v7_defconfig b/arch/arm/configs/imx_v6_v7_defconfig
-index ed588add8d31..fadca597a944 100644
+index fadca597a944..3e227c5b7487 100644
 --- a/arch/arm/configs/imx_v6_v7_defconfig
 +++ b/arch/arm/configs/imx_v6_v7_defconfig
-@@ -456,7 +456,6 @@ CONFIG_UBIFS_FS=y
- CONFIG_NFS_FS=y
- CONFIG_NFS_V3_ACL=y
- CONFIG_NFS_V4=y
--CONFIG_NFS_V4_1=y
- CONFIG_NFS_V4_2=y
- CONFIG_ROOT_NFS=y
- CONFIG_NLS_DEFAULT="cp437"
+@@ -295,7 +295,6 @@ CONFIG_DRM_IMX_HDMI=y
+ CONFIG_DRM_ETNAVIV=y
+ CONFIG_DRM_MXSFB=y
+ CONFIG_FB=y
+-CONFIG_FB_MODE_HELPERS=y
+ CONFIG_LCD_CLASS_DEVICE=y
+ CONFIG_LCD_L4F00242T03=y
+ CONFIG_LCD_PLATFORM=y
+diff --git a/arch/arm/configs/lpc18xx_defconfig b/arch/arm/configs/lpc18xx_defconfig
+index f142a6637ede..98a0b0c3736d 100644
+--- a/arch/arm/configs/lpc18xx_defconfig
++++ b/arch/arm/configs/lpc18xx_defconfig
+@@ -109,7 +109,6 @@ CONFIG_REGULATOR=y
+ CONFIG_REGULATOR_FIXED_VOLTAGE=y
+ CONFIG_DRM=y
+ CONFIG_DRM_PL111=y
+-CONFIG_FB_MODE_HELPERS=y
+ CONFIG_USB=y
+ CONFIG_USB_EHCI_HCD=y
+ CONFIG_USB_EHCI_ROOT_HUB_TT=y
 diff --git a/arch/arm/configs/lpc32xx_defconfig b/arch/arm/configs/lpc32xx_defconfig
-index b9e2e603cd95..c0d4bc141a12 100644
+index c0d4bc141a12..4c81b5fefd2c 100644
 --- a/arch/arm/configs/lpc32xx_defconfig
 +++ b/arch/arm/configs/lpc32xx_defconfig
-@@ -169,7 +169,6 @@ CONFIG_UBIFS_FS=y
- CONFIG_CRAMFS=y
- CONFIG_NFS_FS=y
- CONFIG_NFS_V4=y
--CONFIG_NFS_V4_1=y
- CONFIG_NFS_V4_2=y
- CONFIG_ROOT_NFS=y
- CONFIG_NLS_CODEPAGE_437=y
-diff --git a/arch/arm/configs/mps2_defconfig b/arch/arm/configs/mps2_defconfig
-index e995e50537ef..b043566e155d 100644
---- a/arch/arm/configs/mps2_defconfig
-+++ b/arch/arm/configs/mps2_defconfig
-@@ -89,7 +89,6 @@ CONFIG_ARM_TIMER_SP804=y
- # CONFIG_MISC_FILESYSTEMS is not set
- CONFIG_NFS_FS=y
- CONFIG_NFS_V4=y
--CONFIG_NFS_V4_1=y
- CONFIG_NFS_V4_2=y
- CONFIG_ROOT_NFS=y
- CONFIG_NLS=y
-diff --git a/arch/arm/configs/multi_v7_defconfig b/arch/arm/configs/multi_v7_defconfig
-index f75d75cf91c8..a9bb85873c0a 100644
---- a/arch/arm/configs/multi_v7_defconfig
-+++ b/arch/arm/configs/multi_v7_defconfig
-@@ -1289,7 +1289,6 @@ CONFIG_PSTORE_RAM=y
- CONFIG_NFS_FS=y
- CONFIG_NFS_V3_ACL=y
- CONFIG_NFS_V4=y
--CONFIG_NFS_V4_1=y
- CONFIG_NFS_V4_2=y
- CONFIG_ROOT_NFS=y
- CONFIG_NLS_CODEPAGE_437=y
-diff --git a/arch/arm/configs/shmobile_defconfig b/arch/arm/configs/shmobile_defconfig
-index ef487eab17cc..4e7af21e29ed 100644
---- a/arch/arm/configs/shmobile_defconfig
-+++ b/arch/arm/configs/shmobile_defconfig
-@@ -217,7 +217,6 @@ CONFIG_TMPFS=y
- CONFIG_NFS_FS=y
- CONFIG_NFS_V3_ACL=y
- CONFIG_NFS_V4=y
--CONFIG_NFS_V4_1=y
- CONFIG_ROOT_NFS=y
- CONFIG_NLS_CODEPAGE_437=y
- CONFIG_NLS_ISO8859_1=y
+@@ -105,7 +105,6 @@ CONFIG_DRM=y
+ CONFIG_DRM_PANEL_SIMPLE=y
+ CONFIG_DRM_PANEL_EDP=y
+ CONFIG_DRM_PL111=y
+-CONFIG_FB_MODE_HELPERS=y
+ CONFIG_BACKLIGHT_CLASS_DEVICE=y
+ CONFIG_FRAMEBUFFER_CONSOLE=y
+ CONFIG_LOGO=y
+diff --git a/arch/arm/configs/mxs_defconfig b/arch/arm/configs/mxs_defconfig
+index 603fb003b223..1717e364e21c 100644
+--- a/arch/arm/configs/mxs_defconfig
++++ b/arch/arm/configs/mxs_defconfig
+@@ -90,7 +90,6 @@ CONFIG_DRM=y
+ CONFIG_DRM_PANEL_SEIKO_43WVF1G=y
+ CONFIG_DRM_MXSFB=y
+ CONFIG_FB=y
+-CONFIG_FB_MODE_HELPERS=y
+ CONFIG_LCD_CLASS_DEVICE=y
+ CONFIG_BACKLIGHT_CLASS_DEVICE=y
+ CONFIG_BACKLIGHT_PWM=y
+diff --git a/arch/arm/configs/omap1_defconfig b/arch/arm/configs/omap1_defconfig
+index df88763fc7c3..fc2150b347b6 100644
+--- a/arch/arm/configs/omap1_defconfig
++++ b/arch/arm/configs/omap1_defconfig
+@@ -137,7 +137,6 @@ CONFIG_FB_OMAP_LCDC_HWA742=y
+ CONFIG_FB_OMAP_MANUAL_UPDATE=y
+ CONFIG_FB_OMAP_LCD_MIPID=y
+ CONFIG_FIRMWARE_EDID=y
+-CONFIG_FB_MODE_HELPERS=y
+ CONFIG_LCD_CLASS_DEVICE=y
+ CONFIG_FRAMEBUFFER_CONSOLE=y
+ CONFIG_FRAMEBUFFER_CONSOLE_ROTATION=y
+diff --git a/arch/arm/configs/omap2plus_defconfig b/arch/arm/configs/omap2plus_defconfig
+index 0464f6552169..810c0cace407 100644
+--- a/arch/arm/configs/omap2plus_defconfig
++++ b/arch/arm/configs/omap2plus_defconfig
+@@ -506,7 +506,6 @@ CONFIG_DRM_TI_TFP410=m
+ CONFIG_DRM_TI_TPD12S015=m
+ CONFIG_FB=y
+ CONFIG_FIRMWARE_EDID=y
+-CONFIG_FB_MODE_HELPERS=y
+ CONFIG_FB_TILEBLITTING=y
+ CONFIG_LCD_CLASS_DEVICE=y
+ CONFIG_LCD_PLATFORM=y
+diff --git a/arch/arm/configs/wpcm450_defconfig b/arch/arm/configs/wpcm450_defconfig
+index cd4b3e70ff68..d28aea17480d 100644
+--- a/arch/arm/configs/wpcm450_defconfig
++++ b/arch/arm/configs/wpcm450_defconfig
+@@ -133,7 +133,6 @@ CONFIG_MFD_SYSCON=y
+ CONFIG_REGULATOR=y
+ CONFIG_REGULATOR_FIXED_VOLTAGE=y
+ CONFIG_FB=y
+-CONFIG_FB_MODE_HELPERS=y
+ # CONFIG_HID is not set
+ CONFIG_USB_CHIPIDEA=y
+ CONFIG_USB_CHIPIDEA_UDC=y
 diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
-index cfedcb61cc55..1f6ce04c0b4b 100644
+index 1f6ce04c0b4b..baff2cd34721 100644
 --- a/arch/arm64/configs/defconfig
 +++ b/arch/arm64/configs/defconfig
-@@ -1892,7 +1892,6 @@ CONFIG_SQUASHFS=y
- CONFIG_PSTORE_RAM=m
- CONFIG_NFS_FS=y
- CONFIG_NFS_V4=y
--CONFIG_NFS_V4_1=y
- CONFIG_NFS_V4_2=y
- CONFIG_ROOT_NFS=y
- CONFIG_9P_FS=y
-diff --git a/arch/loongarch/configs/loongson32_defconfig b/arch/loongarch/configs/loongson32_defconfig
-index 276b1577e0be..3fe4035f6631 100644
---- a/arch/loongarch/configs/loongson32_defconfig
-+++ b/arch/loongarch/configs/loongson32_defconfig
-@@ -1036,7 +1036,6 @@ CONFIG_EROFS_FS_PCPU_KTHREAD=y
- CONFIG_NFS_FS=y
- CONFIG_NFS_V3_ACL=y
- CONFIG_NFS_V4=y
--CONFIG_NFS_V4_1=y
- CONFIG_NFS_V4_2=y
- CONFIG_ROOT_NFS=y
- CONFIG_NFSD=y
-diff --git a/arch/loongarch/configs/loongson64_defconfig b/arch/loongarch/configs/loongson64_defconfig
-index a14db1a95e7e..8abecf8357ef 100644
---- a/arch/loongarch/configs/loongson64_defconfig
-+++ b/arch/loongarch/configs/loongson64_defconfig
-@@ -1069,7 +1069,6 @@ CONFIG_EROFS_FS_PCPU_KTHREAD=y
- CONFIG_NFS_FS=y
- CONFIG_NFS_V3_ACL=y
- CONFIG_NFS_V4=y
--CONFIG_NFS_V4_1=y
- CONFIG_NFS_V4_2=y
- CONFIG_ROOT_NFS=y
- CONFIG_NFSD=y
-diff --git a/arch/mips/configs/bmips_stb_defconfig b/arch/mips/configs/bmips_stb_defconfig
-index 4be4e8b0d6a1..6ca4750ac259 100644
---- a/arch/mips/configs/bmips_stb_defconfig
-+++ b/arch/mips/configs/bmips_stb_defconfig
-@@ -164,7 +164,6 @@ CONFIG_SQUASHFS_XZ=y
- CONFIG_NFS_FS=y
- CONFIG_NFS_V3_ACL=y
- CONFIG_NFS_V4=y
--CONFIG_NFS_V4_1=y
- CONFIG_NFS_V4_2=y
- CONFIG_ROOT_NFS=y
- CONFIG_NLS_CODEPAGE_437=y
-diff --git a/arch/mips/configs/cavium_octeon_defconfig b/arch/mips/configs/cavium_octeon_defconfig
-index 68c363366bce..7a7ffbb0f13a 100644
---- a/arch/mips/configs/cavium_octeon_defconfig
-+++ b/arch/mips/configs/cavium_octeon_defconfig
-@@ -145,7 +145,6 @@ CONFIG_TMPFS=y
- CONFIG_HUGETLBFS=y
- CONFIG_NFS_FS=y
- CONFIG_NFS_V4=y
--CONFIG_NFS_V4_1=y
- CONFIG_ROOT_NFS=y
- CONFIG_NLS_CODEPAGE_437=y
- CONFIG_NLS_ASCII=y
-diff --git a/arch/mips/configs/db1xxx_defconfig b/arch/mips/configs/db1xxx_defconfig
-index 281dd7d0f805..fefd0e3023ef 100644
---- a/arch/mips/configs/db1xxx_defconfig
-+++ b/arch/mips/configs/db1xxx_defconfig
-@@ -195,7 +195,6 @@ CONFIG_SQUASHFS_XZ=y
- CONFIG_NFS_FS=y
- CONFIG_NFS_V3_ACL=y
- CONFIG_NFS_V4=y
--CONFIG_NFS_V4_1=y
- CONFIG_NFS_V4_2=y
- CONFIG_NFS_V4_1_IMPLEMENTATION_ID_DOMAIN="local"
- CONFIG_NFS_V4_1_MIGRATION=y
-diff --git a/arch/mips/configs/eyeq5_defconfig b/arch/mips/configs/eyeq5_defconfig
-index 6688f56aba1c..dd7d6dfe04c8 100644
---- a/arch/mips/configs/eyeq5_defconfig
-+++ b/arch/mips/configs/eyeq5_defconfig
-@@ -102,7 +102,6 @@ CONFIG_UBIFS_FS=y
- CONFIG_NFS_FS=y
- CONFIG_NFS_V3_ACL=y
- CONFIG_NFS_V4=y
--CONFIG_NFS_V4_1=y
- CONFIG_NFS_V4_2=y
- CONFIG_ROOT_NFS=y
- CONFIG_FRAME_WARN=1024
-diff --git a/arch/mips/configs/eyeq6_defconfig b/arch/mips/configs/eyeq6_defconfig
-index 0a00a201937b..5a447535f40f 100644
---- a/arch/mips/configs/eyeq6_defconfig
-+++ b/arch/mips/configs/eyeq6_defconfig
-@@ -101,7 +101,6 @@ CONFIG_UBIFS_FS=y
- CONFIG_NFS_FS=y
- CONFIG_NFS_V3_ACL=y
- CONFIG_NFS_V4=y
--CONFIG_NFS_V4_1=y
- CONFIG_NFS_V4_2=y
- CONFIG_ROOT_NFS=y
- CONFIG_FRAME_WARN=1024
-diff --git a/arch/mips/configs/generic_defconfig b/arch/mips/configs/generic_defconfig
-index fa916407bdd4..bbd765e64320 100644
---- a/arch/mips/configs/generic_defconfig
-+++ b/arch/mips/configs/generic_defconfig
-@@ -71,7 +71,6 @@ CONFIG_TMPFS_POSIX_ACL=y
- CONFIG_NFS_FS=y
- CONFIG_NFS_V3_ACL=y
- CONFIG_NFS_V4=y
--CONFIG_NFS_V4_1=y
- CONFIG_NFS_V4_2=y
- CONFIG_ROOT_NFS=y
- # CONFIG_XZ_DEC_X86 is not set
-diff --git a/arch/parisc/configs/generic-64bit_defconfig b/arch/parisc/configs/generic-64bit_defconfig
-index ce91f9d1fdbf..60ba7b824a22 100644
---- a/arch/parisc/configs/generic-64bit_defconfig
-+++ b/arch/parisc/configs/generic-64bit_defconfig
-@@ -269,7 +269,6 @@ CONFIG_TMPFS_XATTR=y
- CONFIG_CONFIGFS_FS=y
- CONFIG_NFS_FS=m
- CONFIG_NFS_V4=m
--CONFIG_NFS_V4_1=y
- CONFIG_NFSD=m
- CONFIG_NFSD_V4=y
- CONFIG_NLS_DEFAULT="utf8"
-diff --git a/arch/riscv/configs/defconfig b/arch/riscv/configs/defconfig
-index a9b7d476ac7a..506b6466c2f4 100644
---- a/arch/riscv/configs/defconfig
-+++ b/arch/riscv/configs/defconfig
-@@ -282,7 +282,6 @@ CONFIG_TMPFS_POSIX_ACL=y
- CONFIG_HUGETLBFS=y
- CONFIG_NFS_FS=y
- CONFIG_NFS_V4=y
--CONFIG_NFS_V4_1=y
- CONFIG_NFS_V4_2=y
- CONFIG_ROOT_NFS=y
- CONFIG_9P_FS=y
+@@ -1037,7 +1037,6 @@ CONFIG_DRM_ZYNQMP_DPSUB_AUDIO=y
+ CONFIG_DRM_POWERVR=m
+ CONFIG_FB=y
+ CONFIG_FB_EFI=y
+-CONFIG_FB_MODE_HELPERS=y
+ CONFIG_BACKLIGHT_PWM=m
+ CONFIG_BACKLIGHT_APPLE_DWI=m
+ CONFIG_BACKLIGHT_QCOM_WLED=m
+diff --git a/arch/mips/configs/lemote2f_defconfig b/arch/mips/configs/lemote2f_defconfig
+index 8d3f20ed19b5..9ea6ffa83c7f 100644
+--- a/arch/mips/configs/lemote2f_defconfig
++++ b/arch/mips/configs/lemote2f_defconfig
+@@ -137,7 +137,6 @@ CONFIG_FB_SIS_315=y
+ CONFIG_FB_SIMPLE=y
+ CONFIG_FB_SM712=y
+ CONFIG_FIRMWARE_EDID=y
+-CONFIG_FB_MODE_HELPERS=y
+ CONFIG_FB_TILEBLITTING=y
+ CONFIG_BACKLIGHT_CLASS_DEVICE=y
+ CONFIG_FRAMEBUFFER_CONSOLE=y
+diff --git a/arch/xtensa/configs/virt_defconfig b/arch/xtensa/configs/virt_defconfig
+index 982dd67ed174..b86135b0ea84 100644
+--- a/arch/xtensa/configs/virt_defconfig
++++ b/arch/xtensa/configs/virt_defconfig
+@@ -68,7 +68,6 @@ CONFIG_HW_RANDOM_VIRTIO=y
+ CONFIG_DRM=y
+ CONFIG_DRM_VGEM=y
+ CONFIG_DRM_VIRTIO_GPU=y
+-CONFIG_FB_MODE_HELPERS=y
+ # CONFIG_VGA_CONSOLE is not set
+ CONFIG_FRAMEBUFFER_CONSOLE=y
+ CONFIG_LOGO=y
 
 -- 
 2.43.0
