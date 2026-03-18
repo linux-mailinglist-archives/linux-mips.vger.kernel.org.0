@@ -1,247 +1,191 @@
-Return-Path: <linux-mips+bounces-13748-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-13749-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 2P/8AuKkumlraAIAu9opvQ
-	(envelope-from <linux-mips+bounces-13748-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Wed, 18 Mar 2026 14:13:06 +0100
+	id IPYwHSCzumlWawIAu9opvQ
+	(envelope-from <linux-mips+bounces-13749-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Wed, 18 Mar 2026 15:13:52 +0100
 X-Original-To: lists+linux-mips@lfdr.de
 Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 00B192BBFF1
-	for <lists+linux-mips@lfdr.de>; Wed, 18 Mar 2026 14:13:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 7CE4F2BCD0D
+	for <lists+linux-mips@lfdr.de>; Wed, 18 Mar 2026 15:13:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 1A1F23008D22
-	for <lists+linux-mips@lfdr.de>; Wed, 18 Mar 2026 13:13:02 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id A2DA130E0DCF
+	for <lists+linux-mips@lfdr.de>; Wed, 18 Mar 2026 13:58:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2E6F43D75A6;
-	Wed, 18 Mar 2026 13:13:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 89FE13DA5CA;
+	Wed, 18 Mar 2026 13:57:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NN91kXR1"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tG0m2dOB"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-pj1-f49.google.com (mail-pj1-f49.google.com [209.85.216.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6AAA3921C7
-	for <linux-mips@vger.kernel.org>; Wed, 18 Mar 2026 13:12:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 660883DA5BF
+	for <linux-mips@vger.kernel.org>; Wed, 18 Mar 2026 13:57:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773839580; cv=none; b=hPYze0GSG+qjfrLZw9Mh9izCsTRjtQQHKN5QBwgHKAgv0HacJS7Zp8AxtBoxHDnfAArmzZmC/vzC7U191/IZ7BQNbtGmbOAg0TLWyeJl2G8nh/isMfglXaDExC6ikYXEZR3Kyy4xFpIZ+nHUwv/GWwyqbrNGiP824/bfk6PRUgg=
+	t=1773842252; cv=none; b=G3OWjAnT6TT8aCe12XHz7fGYchHctDZMzAsGhQhNbihal+3/aVKgG5juU3zTHAm7xtdrClHD30tKJFmClgGa11QCUHog5uGfQlZG8SQFv30SK4oroBF1fokKnw+yM4y3pdoNaeuOyIqBrpzFMsBN9Bw/m83et9Nscs4DdxQE+n8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773839580; c=relaxed/simple;
-	bh=OdQCTcowNhAMMHZuTr+edOMBX9ASYFb/KgzSCNzEfFM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=VpdwEIcVlgEGcqMdMvF/k9Rtp9VI/DVz4eleNaY6RIlUHeMv1IiW+vTuYjZjgMYPHrvVxMn3Jw8qEzmeUpbGOJNXVWIqmzYgVTQtvp7z1QoSqDGDiiiqWBk0kQUhDcFTH+ewrH8QYMF4FNkQ4LBpeVhDkD3cDp+HnN0VIPB8OO8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NN91kXR1; arc=none smtp.client-ip=209.85.216.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f49.google.com with SMTP id 98e67ed59e1d1-35a1230c60eso3582045a91.3
-        for <linux-mips@vger.kernel.org>; Wed, 18 Mar 2026 06:12:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1773839578; x=1774444378; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=a38AgtgrSL45qQSDWrOkOi7hxNfM+B9cZh1RZkzmCEM=;
-        b=NN91kXR1KBFUWH2LCTrwNH9CAKvd2+gcA74C1KxOg2JmLznRUAUaDS/T5+mpLKhtHU
-         5Wn33SyIlmjSVzR6BdMzvg6RCZd9mO+wWGxs5IU5yrk3UWc8BnUyoY2gtQUQKaNjanLA
-         egn8stiMUBTB6dv1teQo5Kfdjxc45Fd+iJjkUFm/0RHRMFkzlSrh6Ch5XwA+EqNJtEdm
-         gfYYZeqInlcAxOZksN3WkPCHqnMhiwe0/qumJbmvyiyHEMDbaODL7r+JNslBG9GIDSAE
-         OUI2x1F52vDHysXhi7aRe1+lbwNw4aGQZ2z8hISzQ17Gnzij8p1i95HWhL2gwLEMR8Yx
-         q2+Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1773839578; x=1774444378;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=a38AgtgrSL45qQSDWrOkOi7hxNfM+B9cZh1RZkzmCEM=;
-        b=W2kFzb2nmsIkwAiC0iJQRF7CB80CIejTY3rD7sovJsdwqssLn+0HPfvorLfS5vZBOR
-         lidsYvMApkE9lG6yo2KMI+2kwSb86zo3QRNuWMlndjrxNDZSxrvJzmopjFNd0OAvNk61
-         hE4H+1uxcqqS1W/0GS6GKWX2aAFI8ViCK950KTqSnTktfukUzgzuDnlSyAYL4Ed0/31K
-         5Euh/PjleM3J55HyacThKeAtirOK8+Cz1PQY7XuHTURYeX9ajbwMg8YZYN0otLmm0083
-         Sc8bzV88NDUBdubUKurnbObVfsRf5azyV//h3gwohWloKWGPmAIo3G2Ltma4GgDsJvfS
-         1NXQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVuZ1M++2MdK1WPcnT3KbdLKKqFfsC2lCr6u9kh0UDO2mXtqc6aeQZvoq/HOrW6CIXah0icBqdWN8h6@vger.kernel.org
-X-Gm-Message-State: AOJu0YycNk1xqwdUKe02NNvrM7OOcsgaZ1mFQ4OzeBBy7e3r4MQ1mnT3
-	V9PC7UI1zTGG9JKMXAbkqVY812mCDYrgZgNSexcBW4mJ9SPLForlNmzP
-X-Gm-Gg: ATEYQzzRFy+ryVn9VD1wbZ5PfuR8+m/6Gq1gyNVdpDHHyZ2fywJsAh4tGxTUI6GlceA
-	bkEAOjQNnsL8VboetWb4QVl9SU2KW6HoYcllBGZdNZA9WOBtpg/yX4Oo0+eAuy3PCBDJtNw7B9I
-	YLt/3DKA5GCAGYWEUVZgOX2Gz7OcKufGRfQzPN3sfvloC9qRMcVVGLdvXhcnZYdQ07klVr15sWf
-	a7BAXdX2LdXj59bYgY+yaSwAAZY36vr0rlU7p2E5B9Urt26ZZRhQCwiMVubaUnEQe2p+gsXc7rK
-	Te1fZgO3dBvhBKUt9G3dcs/hHQM/g3C6R+lbtcRS47b0RB7QwbQVlw3tXJrBDxzwBHI6nLbVgmA
-	2LTE7+jMnrEdQwg2scAmazSHiF4S+D+4j8xUglDcesgZuPuN0eMSgAArIStfX8rGv9J6gnHPO6a
-	le/15BsL9Uan3FaMtH3XWAB2D4wj8Lk84IsbQwX2E=
-X-Received: by 2002:a17:90b:1d52:b0:35b:982a:28c7 with SMTP id 98e67ed59e1d1-35bb9e3cf19mr3027930a91.5.1773839578116;
-        Wed, 18 Mar 2026 06:12:58 -0700 (PDT)
-Received: from DESKTOP-TIT0J8O.localdomain ([49.47.198.15])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-35bada5c760sm6280105a91.5.2026.03.18.06.12.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 Mar 2026 06:12:57 -0700 (PDT)
-Date: Wed, 18 Mar 2026 17:12:49 +0400
-From: Ahmed Naseef <naseefkm@gmail.com>
-To: Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>
-Cc: Bjorn Helgaas <helgaas@kernel.org>, Caleb James DeLisle <cjd@cjdns.fr>,
-	linux-pci@vger.kernel.org, linux-mips@vger.kernel.org,
-	ryder.lee@mediatek.com, bhelgaas@google.com, lpieralisi@kernel.org,
-	kwilczynski@kernel.org, mani@kernel.org, robh@kernel.org,
-	krzk+dt@kernel.org, conor+dt@kernel.org, matthias.bgg@gmail.com,
-	angelogioacchino.delregno@collabora.com, ansuelsmth@gmail.com,
-	linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
-	LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 3/3] PCI: Skip bridge window reads when window is not
- supported
-Message-ID: <abqk0VUyLF+iqVXw@DESKTOP-TIT0J8O.localdomain>
-References: <20260316155157.679533-4-cjd@cjdns.fr>
- <20260317212908.GA109023@bhelgaas>
- <abpFjQJ5RNcbzbmz@DESKTOP-TIT0J8O.localdomain>
- <fc927b7f-a820-d3c2-581c-ab6db562bcfb@linux.intel.com>
- <2d47f78f-22cf-78c8-8312-3ffb095d2693@linux.intel.com>
+	s=arc-20240116; t=1773842252; c=relaxed/simple;
+	bh=gnx7uWxAC+gLJ3Mdq7xy1t6BYYdm0AV9Cqp1s3NHoDM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=nvPSSbnymaIfhp/nW4k5GQCdND7iZspd3WnlcsiZSsO7sS1h2C5Hb4kDyhmr//asgwZeOeoJ35Y8ZVmERdAmEsev6Pe6mTNPMKCDWJU+of7GS76DiG2CLTOenOUwRgHdkxmSAmHmAXCMHQ+67RrAMlibWOO5DOO6+nAdl0xhUNE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tG0m2dOB; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2F846C2BCB2
+	for <linux-mips@vger.kernel.org>; Wed, 18 Mar 2026 13:57:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1773842252;
+	bh=gnx7uWxAC+gLJ3Mdq7xy1t6BYYdm0AV9Cqp1s3NHoDM=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=tG0m2dOB3VF+KR4QsAaWd375AEAaHi6goPXz2Rb0W8MyzyhFIxZxh58hjbc5jMyXW
+	 nHuf6T5X+HnlEOGoVuSeTmSRWkkTp27jM4oCIYekluJE1SI7Cv6HL9TgPdzGi4ngXT
+	 4cu0OV5zU0n/tb17vWImKB40GheDd4ujEFRxbLTd1+Kfq3cKxyOH8pPAC5HwAyDk2t
+	 ma0Oz6/AASaFYBJLVKB0qubSU/WVVM6a/L9X20mEqbir9lsr/kXNxv0R3nWCpVROBZ
+	 yc14qUDHVkASgLhn83xOX5adYu/xkAmSE62gBJ8iGjR/mOcZWqtruibHfnuDGP4bYf
+	 OWvXkCrubRKLQ==
+Received: by mail-ed1-f48.google.com with SMTP id 4fb4d7f45d1cf-666f646f5cfso1541252a12.1
+        for <linux-mips@vger.kernel.org>; Wed, 18 Mar 2026 06:57:32 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCXv3gHvkG/p3QonoZw2CK1Cm5F4ijyC0b3YQg6rvFRbhXgqablHOcyHty8HO+po+HyQDu1rVqx826hW@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx194IzZMXAktTBlV8EESUnN7HTxijz3hoabuI8kKgLA+f93sXE
+	D4UM7qmRcH9yuaxBOT5n9m0Wj1Uw+dr5nhRCyLxeiEbWeVt3dVznaf/2TUW6TjxAKGgrosZA0F7
+	ByTxtW5eNUSDwkB6/9AEqMOK/awqOaiQ=
+X-Received: by 2002:a17:907:7244:b0:b93:f24a:127 with SMTP id
+ a640c23a62f3a-b97d6de76a1mr489038566b.24.1773842250621; Wed, 18 Mar 2026
+ 06:57:30 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <2d47f78f-22cf-78c8-8312-3ffb095d2693@linux.intel.com>
+References: <20260314162828.1055188-1-zhengxingda@iscas.ac.cn>
+In-Reply-To: <20260314162828.1055188-1-zhengxingda@iscas.ac.cn>
+From: Huacai Chen <chenhuacai@kernel.org>
+Date: Wed, 18 Mar 2026 21:57:14 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H4OYVB21jH3PSzOi4GPU+t4LY664Yp=CeDhjFRKf9V07Q@mail.gmail.com>
+X-Gm-Features: AaiRm51L7NG5tsCrybND45L_NZrxxhNvUkDMnSa4KOQ_a2hgp11NA1VrtQjPUV4
+Message-ID: <CAAhV-H4OYVB21jH3PSzOi4GPU+t4LY664Yp=CeDhjFRKf9V07Q@mail.gmail.com>
+Subject: Re: [PATCH v3 0/8] Add support for LS7A LPC IRQ for MIPS Loongson systems
+To: Icenowy Zheng <zhengxingda@iscas.ac.cn>
+Cc: Thomas Gleixner <tglx@kernel.org>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	WANG Xuerui <kernel@xen0n.name>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
+	Jiaxun Yang <jiaxun.yang@flygoat.com>, Icenowy Zheng <uwu@icenowy.me>, Yao Zi <me@ziyao.cc>, 
+	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org, 
+	loongarch@lists.linux.dev, linux-mips@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spamd-Result: default: False [-0.66 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
-	R_DKIM_ALLOW(-0.20)[gmail.com:s=20230601];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
 	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-13748-lists,linux-mips=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	FREEMAIL_CC(0.00)[kernel.org,cjdns.fr,vger.kernel.org,mediatek.com,google.com,gmail.com,collabora.com,lists.infradead.org];
-	FREEMAIL_FROM(0.00)[gmail.com];
-	RCPT_COUNT_TWELVE(0.00)[19];
+	TAGGED_FROM(0.00)[bounces-13749-lists,linux-mips=lfdr.de];
 	FROM_HAS_DN(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[14];
+	MIME_TRACE(0.00)[0:+];
+	DKIM_TRACE(0.00)[kernel.org:+];
+	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
 	MISSING_XM_UA(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[naseefkm@gmail.com,linux-mips@vger.kernel.org];
-	DKIM_TRACE(0.00)[gmail.com:+];
+	FROM_NEQ_ENVFROM(0.00)[chenhuacai@kernel.org,linux-mips@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-mips,dt];
 	TO_DN_SOME(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,DESKTOP-TIT0J8O.localdomain:mid]
-X-Rspamd-Queue-Id: 00B192BBFF1
+	DBL_BLOCKED_OPENRESOLVER(0.00)[mail.gmail.com:mid,iscas.ac.cn:email,sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 7CE4F2BCD0D
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On Wed, Mar 18, 2026 at 02:18:22PM +0200, Ilpo Järvinen wrote:
-> On Wed, 18 Mar 2026, Ilpo Järvinen wrote:
-> 
-> > On Wed, 18 Mar 2026, Ahmed Naseef wrote:
-> > 
-> > > On Tue, Mar 17, 2026 at 04:29:08PM -0500, Bjorn Helgaas wrote:
-> > > > On Mon, Mar 16, 2026 at 03:51:57PM +0000, Caleb James DeLisle wrote:
-> > > > > pci_read_bridge_io() and pci_read_bridge_mmio_pref() read bridge window
-> > > > > registers unconditionally. If the registers are hardwired to zero
-> > > > > (not implemented), both base and limit will be 0. Since (0 <= 0) is
-> > > > > true, a bogus window [mem 0x00000000-0x000fffff] or [io 0x0000-0x0fff]
-> > > > > gets created.
-> > > > > 
-> > > > > pci_read_bridge_windows() already detects unsupported windows by
-> > > > > testing register writability and sets io_window/pref_window flags
-> > > > > accordingly. Check these flags at the start of pci_read_bridge_io()
-> > > > > and pci_read_bridge_mmio_pref() to skip reading registers when the
-> > > > > window is not supported.
-> > > > 
-> > > > The fundamental problem here is that assigned space to a bridge window
-> > > > that isn't implemented.  I wish we understood the connection between
-> > > > this "read window" path and the assignment path.
-> > > > 
-> > > > Maybe this patch fixes it because we enter pci_read_bridge_mmio_pref()
-> > > > with res->flags being NULL, and we set IORESOURCE_MEM |
-> > > > IORESOURCE_PREFETCH again, which makes it look like we can assign
-> > > > space for it?
-> > > 
-> > > Yes, that's exactly right.
-> > > 
-> > > > 
-> > > > If that's the case, I think it would improve the commit log to mention
-> > > > the actual mechanism by which we avoid assigning space.
-> > > > 
-> > > 
-> > > How about this:
-> > > 
-> > >   pci_read_bridge_io() and pci_read_bridge_mmio_pref() read
-> > >   bridge window registers unconditionally. If the registers
-> > >   are hardwired to zero (not implemented), both base and limit
-> > >   will be 0. Since (0 <= 0) is true, these functions set
-> > >   IORESOURCE_IO or IORESOURCE_MEM | IORESOURCE_PREFETCH on
-> > >   the bridge resource. This causes the allocator to assign
-> > >   space for the window even though the hardware can't
-> > >   implement it.
-> > > 
-> > >   pci_read_bridge_windows() already detects unsupported windows
-> > >   by testing register writability and sets io_window/pref_window
-> > >   flags accordingly. Check these flags at the start of
-> > >   pci_read_bridge_io() and pci_read_bridge_mmio_pref() to skip
-> > >   reading registers when the window is not supported, so the
-> > >   resource flags remain clear and the allocator does not assign
-> > >   space for non-existent windows.
-> > 
-> > At least to me the proposed text reads much better than the original.
-> > The original text required reading between the lines to connect the dots, 
-> > whereas this new one clearly explains what causes what.
-> 
-> Hi again,
-> 
-> Reading the code I think the entire 0 <= 0 part is a red herring 
-> when it comes to the current code, the flags are always set by the 
-> functions!
-> 
-> The code would only add IORESOURCE_UNSET | IORESOURCE_DISABLED if the 
-> base <= limit check fails but that's still wrong because it says to the 
-> resource allocation code that it can enable that bridge window if it needs 
-> to.
-> 
-> Prior to the commit 8278c6914306 ("PCI: Preserve bridge window resource 
-> type flags") the base <= limit check did play some role (maybe the 
-> original commit message was based on some older tree than the most current 
-> one).
+Hi, Icenowy,
 
-Thank you for catching that. We were testing on LTS kernel
-6.12 (downstream OpenWrt) where the commit 8278c6914306
-("PCI: Preserve bridge window resource type flags") is not
-present . In that tree the flags are still only set inside
-the base <= limit check, which is why the commit message
-focused on that path.
-  
-For current mainline, how about this for the commit message:
+On Sun, Mar 15, 2026 at 12:28=E2=80=AFAM Icenowy Zheng <zhengxingda@iscas.a=
+c.cn> wrote:
+>
+> This patchset tries to add support for Loongson 7A1000 PCH's LPC
+> interrupt controller to MIPS-based Loongson systems.
+>
+> LPC, from software's perspective of view, is just ISA, so the interrupts
+> should be handled as legacy ones occupying the lowest 0-15 IRQ numbers.
+> Despite the current PCH LPC driver for ACPI-based LoongArch Loongson
+> machines handled it, the setup is fragile and depends on its specific
+> setup sequence (allocating the LPC IRQs first, and then allocate the
+> parent IRQ at PCH PIC). The refactor of extracting parent IRQ allocation
+> breaks this fragile sequence, so the first two commits is created to
+> address this issue (by reserving ISA interrupts from the dynamic
+> allocation space).
+>
+> Then the remaining commits are just adding OF(DT) based initialization
+> of PCH LPC interrupt controller, like what happened on PCH PIC.
+>
+> Tested on a Haier Boyue G51 system with legacy i8042 keyboard/mouse as
+> integrated ones.
+>
+> Changes in v3:
+> - Override arch_dynirq_lower_bound() in MIPS Loongson64 / LoongArch
+>   instead of modifying the global version of function.
+> - Added Rob's R-b to the binding patch.
+>
+> Changes in v2:
+> - Rebased on top of `irq-drivers-2026-02-09` tag.
+> - Compatible changed to `loongson,ls7a-lpc` .
+> - Merged the patch for conditionally build of ACPI code to the patch
+>   introducing OF code.
+> - Sorted function variable definitions.
+> - Reworded some commit messages as Thomas Glexiner suggests.
+> - Added __init to the LPC irqchip OF initialization code to prevent
+>   section mismatch.
+>
+> Icenowy Zheng (8):
+>   MIPS: loongson64: Override arch_dynirq_lower_bound to reserve LPC IRQs
+>   LoongArch: Override arch_dynirq_lower_bound to reserve LPC IRQs
+Use upper case for the first word, which means....
 
-  pci_read_bridge_io() and pci_read_bridge_mmio_pref()
-  unconditionally set resource type flags (IORESOURCE_IO
-  or IORESOURCE_MEM | IORESOURCE_PREFETCH) when reading
-  bridge window registers. For windows that are not
-  implemented in hardware, this causes the allocator to
-  assign space for a window that doesn't exist.
+>   dt-bindings: interrupt-controller: add LS7A PCH LPC
+s/add/Add/g
 
-  pci_read_bridge_windows() already detects unsupported
-  windows by testing register writability and sets
-  io_window/pref_window flags accordingly. Check these
-  flags at the start of pci_read_bridge_io() and
-  pci_read_bridge_mmio_pref() to skip them entirely when
-  the window is not supported, so the resource flags
-  remain clear and the allocator does not assign space
-  for non-existent windows.
+>   irqchip/loongson-pch-lpc: extract non-ACPI-related code from ACPI init
+s/extract/Extract/g
 
+>   irqchip/loongson-pch-lpc: add OF init code
+s/add/Add/g
 
-Ahmed Naseef
+>   irqchip/loongson-pch-lpc: enable building on MIPS Loongson64
+s/enable/Enable/g
 
-> 
-> -- 
->  i.
+>   MIPS: Loongson64: dts: sort nodes
+s/sort/Sort/g
 
+>   MIPS: Loongson64: dts: add node for LS7A PCH LPC
+s/add/Add/g
+
+In addition, I think the last two patches should be in another series
+because they won't go to the irqchip tree.
+
+Huacai
+
+>
+>  .../loongson,pch-lpc.yaml                     | 52 +++++++++++
+>  arch/loongarch/kernel/irq.c                   |  6 ++
+>  arch/mips/boot/dts/loongson/ls7a-pch.dtsi     | 17 +++-
+>  arch/mips/loongson64/init.c                   |  6 ++
+>  drivers/irqchip/Kconfig                       |  1 -
+>  drivers/irqchip/irq-loongson-pch-lpc.c        | 87 ++++++++++++++-----
+>  6 files changed, 144 insertions(+), 25 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/interrupt-controlle=
+r/loongson,pch-lpc.yaml
+>
+> --
+> 2.52.0
+>
 
