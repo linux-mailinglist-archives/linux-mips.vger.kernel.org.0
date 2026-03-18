@@ -1,162 +1,170 @@
-Return-Path: <linux-mips+bounces-13743-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-13744-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id IHHdMajHuWl/NgIAu9opvQ
-	(envelope-from <linux-mips+bounces-13743-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Tue, 17 Mar 2026 22:29:12 +0100
+	id iDScLk1DumljTgIAu9opvQ
+	(envelope-from <linux-mips+bounces-13744-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Wed, 18 Mar 2026 07:16:45 +0100
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7002B2B2B08
-	for <lists+linux-mips@lfdr.de>; Tue, 17 Mar 2026 22:29:12 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7D05E2B640A
+	for <lists+linux-mips@lfdr.de>; Wed, 18 Mar 2026 07:16:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id D090C303872B
-	for <lists+linux-mips@lfdr.de>; Tue, 17 Mar 2026 21:29:11 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 6AA9F303DF78
+	for <lists+linux-mips@lfdr.de>; Wed, 18 Mar 2026 06:16:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 379F1391851;
-	Tue, 17 Mar 2026 21:29:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4227A2DEA68;
+	Wed, 18 Mar 2026 06:16:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mNngK0/F"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="czA+VIq9"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com [209.85.208.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 136643914F6;
-	Tue, 17 Mar 2026 21:29:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773782950; cv=none; b=HzpJ6UP/YIvPDmUj1dbbOjKZrKqSPEn7CqpwssmoUOn1OjiAf28sK4D7rDyVZOL3fyEPwRTwgWJKeVz2NoMnlnNoI3zpMTG8P6ySB7kwIhPBbATmw1To74laC9tLNoIoMCt+HQcJjLWUT3/0yJPMAk2WHPfrgWypjHB7F7wA8Mk=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773782950; c=relaxed/simple;
-	bh=EEPcdwfYA2i1wDNKfSw099Z5veH/DJsStfCV0MN+hNM=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To; b=WsAoUbAQYy6KQn6zbIamEHg1F3c/knSqlxJilZB8sBsjoT4Zh/UuQd/43viMItNtgeKEP5p0Dg91SI+yWIjWMYkEUtqTHRCQYfwIX3XElYfArcj+eCbG1MTs5SCmPCkbfuFJsDtqQ39gzy/15aFbx0Q6tfiAL/aQRJxFscrtkpg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mNngK0/F; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81C6EC4CEF7;
-	Tue, 17 Mar 2026 21:29:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1773782949;
-	bh=EEPcdwfYA2i1wDNKfSw099Z5veH/DJsStfCV0MN+hNM=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:From;
-	b=mNngK0/Fs/0IBKQ6aMEbV8XD37uWZwqxk9Xp1x3CSxJsS/UYuc7J+7WpeXQjIv9ec
-	 X8EcEeWKHBjvgKMyu88CqnlBxL2FAWqBgqJ4ozol6/VeGTI5aw1QFR1zLgeXFDVjMj
-	 Vh6uui+Fy6IJVUmetrS8GwD0rBJEg8lPlnZn8e78rGdrnEcwsHeuy895dwjCKj/iZe
-	 dJo+fNqA/n+fe+zuUf5P+uyUVtuF5G2F5N53qMXibkbEQPNAYVaY1EcNuLb40V7IK+
-	 bTXVtpbv+vjN6Jcthvxlff79woq7ce2WQMs/ChrloY0QQo6VedrOb7moFEJyJlBC9E
-	 IM6wbxpicP85A==
-Date: Tue, 17 Mar 2026 16:29:08 -0500
-From: Bjorn Helgaas <helgaas@kernel.org>
-To: Caleb James DeLisle <cjd@cjdns.fr>
-Cc: linux-pci@vger.kernel.org, linux-mips@vger.kernel.org,
-	naseefkm@gmail.com, ryder.lee@mediatek.com, bhelgaas@google.com,
-	lpieralisi@kernel.org, kwilczynski@kernel.org, mani@kernel.org,
-	robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
-	matthias.bgg@gmail.com, angelogioacchino.delregno@collabora.com,
-	ansuelsmth@gmail.com, linux-mediatek@lists.infradead.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 3/3] PCI: Skip bridge window reads when window is not
- supported
-Message-ID: <20260317212908.GA109023@bhelgaas>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A73273033C0
+	for <linux-mips@vger.kernel.org>; Wed, 18 Mar 2026 06:16:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.44
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1773814601; cv=pass; b=VxROWYihtrOJk+2vOuwjEPd8wKYmgpxDo0iW+iyu/dXIs+QSNPQoe2tWGArXkYxozIQZBAwt8sCEuE4LqBGRf8utNJxqYgFcwyezyMwXfQfmz1ADdSsFA/VZ/TUiNzfK37tXngr5+II85Sfba9vztjyfEgrqSaVzOnXQeBO2mQI=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1773814601; c=relaxed/simple;
+	bh=LyvuvQqufknbMfPTy2o7n/T+OqohBBDpzWX+jX0Ni6Q=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=iYQlt6B3tQVCTEjGziBmH/WelTxG+Mj0Qv8LvyHY4DlYahr1r3ewkKY90ZNpKBbInuzNBn5AQlXXvM5SygxS95BqgW7UGVcItheTphgprs44P8ViblKujQyPUVwNz+LVkIwHdA6zavj0YP9DXseDz4Zc4ImDK2pYoBa3bP6+Mk4=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=czA+VIq9; arc=pass smtp.client-ip=209.85.208.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ed1-f44.google.com with SMTP id 4fb4d7f45d1cf-667df358d78so283500a12.2
+        for <linux-mips@vger.kernel.org>; Tue, 17 Mar 2026 23:16:39 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1773814598; cv=none;
+        d=google.com; s=arc-20240605;
+        b=e5UQjFiZY1zJt5J992DHi9s36I2uShFlsanJWeI6Jc5o3SHSvSah6HELgX60Z+MytP
+         2b3PFsTxK4R5FQvQhdOFXMpXHAFMCkcoSQltAfIOt1x3L+noDccDEDhWqrXDxUvnu+CP
+         F1kOs3rDO5QSL1r7dxmHwQijwfPqduTpftuVKPtjZsRzCs7jg2qZzZ2dgEGlPgFAE/t4
+         I5edCwOFGhn0V2G39DHz9dmJLF7TBg/SpYz235P4ust7rZMG/AWaYBHPeoEA32Swkabb
+         hMJy4k3tTYjBNd0KEvflPbfwU8CPKVQ7k8k459B5mRygJHXUJwDC8yMVNgW1unN1XHJb
+         iJgg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=hNXx5fLw5itcSqfItrsW3d6my1DlKfO6NqzxE5+AiMo=;
+        fh=mrNcVS5RmTGlMFvH1k9hSEbVg6rHHKbKniq5KzRLq94=;
+        b=VRfomeoHtc5T99VsFK28oDLIgUBOgLuuuv7MS5s/IjFPZSYnlU5WDxIJWB2cbSjZia
+         FTe652LERGeOzsUr/MATGtf/91w3hAjR+xbIs3iprw5BNFNMDmbZa7D18hzjysN4zfcn
+         qSBzCx4e6g9z2jJ+Q6sX7AjnUdgIDJsw8xBrqdf8JcI7imZ5HRv/YmAt7JAXjyNnaolH
+         9YFbdVLWjfDsKEaiC0YIAhht4WEXBlDnQEgLDLh9lRuzsMbagrsW89SLAwzll5+Pocph
+         TD2p9ijuRJuCJhPwkXw1pLHlHgcLGrKp9RXjIP1RZwfcBMF2VZXQQ2jvR6aTnEQckgYN
+         9neA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1773814598; x=1774419398; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=hNXx5fLw5itcSqfItrsW3d6my1DlKfO6NqzxE5+AiMo=;
+        b=czA+VIq9QGWQxIWviOuOrte+AkszdW/h15AxwnnBl8PgQdCUSJeFt/rkA58JF8bw1z
+         MYdnPYGFr5y46Y9Ze6hH0uQbYgBxWhk4ISCFrpb1oCRqUKW8TesUGp2nfyk/tjdH6ZzI
+         DwOCFfQmjthVedmcIE7z/9904oV0s5pfRk6WMlT+ADyKZllzFK45VHyMvAMFKoo37U/j
+         J1nqKAueMk09QeZKqRnb2BbN9+d1iclFRFK4eWers79RzlXUT6c5NL6yIGsvvdDwBLkL
+         mIaXTaJyIolZxl+55rCZtIapNWvPnqXYQeH5Kjuv+rgtZgAO2r5C3jf4lHbFErXbdAiD
+         Zyfg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1773814598; x=1774419398;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=hNXx5fLw5itcSqfItrsW3d6my1DlKfO6NqzxE5+AiMo=;
+        b=Y7FLHHyvJDpIxK9U+YrsGqTp21EMHgBdpmKCfZ8nlXglij7u4U3WdhgAs21aUAMsPL
+         U4GSEi4tnqCzdjH7wCUxCvOhqNPZIpajg+jWl0ZWcCdxkIamJDkNi9RK3wBIKK+Nztc4
+         jxFUIgvYuyjmWuXu2p9PsM0HP/K/iDttb47ZwZMlwXA8oaz0K12OBzNPCUh8sxYIUfeH
+         nNNqNUS8m2IGqd+zm7mlY73rVqQia+k97JIJVzPUCm1SSa/kbp+FKBx2mSFBGrAnmD/Q
+         HoDTrWhof+5hWSvuf6QB9Rz7LGrqhHCKVLdSLZlwK0mbwGs30l2PcVz+gWUm7i+Atf3N
+         bB8Q==
+X-Forwarded-Encrypted: i=1; AJvYcCU7Kt9PNjGNaY9b8Z8Y28VDxM+bhEWmWIXxBwEBR7YydD8SYpMI9FC3QZC4ouHMpGH1J9RR0TE8J9KP@vger.kernel.org
+X-Gm-Message-State: AOJu0YxdVYMxal2UUR/0HmG2A9Lz0JLwe1JWLxrvsdCQxbqEglsFTzPR
+	FF+m8oFCH08aA8bbJwpmMGFU71FEFVfNULOXiKot4TIv5PNSvxC00+o4h1Ejzw0dUeqzeH+xp3r
+	UjKP9H7RATEE1PrXIGsJkHNjc+y3jIC4=
+X-Gm-Gg: ATEYQzxs7pFPo2C27p+cjmuZOKyoIUpSt7FnDVpznCrb3KQwL1cQfJxzXHthHy/E/Il
+	7VOzDS9zO1Gn+BwX7bq22ifiB0Ks6Ataz+ybD6I7nLy02vemp1NeZvd9lsfvOPqpZ1DIJ2y35R8
+	MspTK8QvKq4g9t3dqQgWM/w3vkVISoh30//ZKWELX6M3BiNDs7o9yTt9N6Igr87SVZ0fwRko0IZ
+	ClBdAFhOHulq3Kbyp3LEolujlvlf2G6d3we90wmoxg9UAKFvm5EgkBoGNA+Q0fwCsubQS+C63Aq
+	lODQNIDCJkevdYqDFJax2XUBiPRAuuDRTmRK7IfPPLnn4ESvN7A=
+X-Received: by 2002:a17:907:7b93:b0:b97:cc05:61b9 with SMTP id
+ a640c23a62f3a-b97f4801ab5mr133040366b.15.1773814597747; Tue, 17 Mar 2026
+ 23:16:37 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260316155157.679533-4-cjd@cjdns.fr>
-X-Spamd-Result: default: False [-0.16 / 15.00];
+References: <20260302-at-vector-size-arch-v1-0-a11f03ba2ca8@linutronix.de> <20260302-at-vector-size-arch-v1-14-a11f03ba2ca8@linutronix.de>
+In-Reply-To: <20260302-at-vector-size-arch-v1-14-a11f03ba2ca8@linutronix.de>
+From: Magnus Lindholm <linmag7@gmail.com>
+Date: Wed, 18 Mar 2026 07:16:26 +0100
+X-Gm-Features: AaiRm51Xx89jeaivgNYAhMk2LxpIu3kD6j5N4SuQDZ84WCnP1EAzJIW2dMNKGiE
+Message-ID: <CA+=Fv5RLtUPp9BhXfFEUk3roE3Gah0iUamDEZ-MXCNM_xKm3PA@mail.gmail.com>
+Subject: Re: [PATCH 14/15] alpha: remove AT_VECTOR_SIZE_ARCH from UAPI
+To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
+Cc: Kees Cook <kees@kernel.org>, Arnd Bergmann <arnd@arndb.de>, linux-mm@kvack.org, 
+	linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-riscv@lists.infradead.org, 
+	loongarch@lists.linux.dev, linux-s390@vger.kernel.org, 
+	linuxppc-dev@lists.ozlabs.org, linux-mips@vger.kernel.org, 
+	sparclinux@vger.kernel.org, linux-sh@vger.kernel.org, 
+	linux-alpha@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spamd-Result: default: False [-0.66 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_RHS_NOT_FQDN(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
-	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20230601];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-13743-lists,linux-mips=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	FROM_HAS_DN(0.00)[];
+	TAGGED_FROM(0.00)[bounces-13744-lists,linux-mips=lfdr.de];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	RCPT_COUNT_TWELVE(0.00)[18];
 	MIME_TRACE(0.00)[0:+];
-	FREEMAIL_CC(0.00)[vger.kernel.org,gmail.com,mediatek.com,google.com,kernel.org,collabora.com,lists.infradead.org];
+	RCVD_COUNT_THREE(0.00)[4];
+	FREEMAIL_FROM(0.00)[gmail.com];
+	RCPT_COUNT_TWELVE(0.00)[15];
+	FROM_HAS_DN(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	TO_DN_SOME(0.00)[];
-	NEURAL_HAM(-0.00)[-0.999];
+	NEURAL_HAM(-0.00)[-1.000];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[helgaas@kernel.org,linux-mips@vger.kernel.org];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	TAGGED_RCPT(0.00)[linux-mips,dt];
-	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[linmag7@gmail.com,linux-mips@vger.kernel.org];
+	DKIM_TRACE(0.00)[gmail.com:+];
+	MID_RHS_MATCH_FROMTLD(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	TAGGED_RCPT(0.00)[linux-mips];
 	MISSING_XM_UA(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 7002B2B2B08
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,mail.gmail.com:mid]
+X-Rspamd-Queue-Id: 7D05E2B640A
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On Mon, Mar 16, 2026 at 03:51:57PM +0000, Caleb James DeLisle wrote:
-> pci_read_bridge_io() and pci_read_bridge_mmio_pref() read bridge window
-> registers unconditionally. If the registers are hardwired to zero
-> (not implemented), both base and limit will be 0. Since (0 <= 0) is
-> true, a bogus window [mem 0x00000000-0x000fffff] or [io 0x0000-0x0fff]
-> gets created.
-> 
-> pci_read_bridge_windows() already detects unsupported windows by
-> testing register writability and sets io_window/pref_window flags
-> accordingly. Check these flags at the start of pci_read_bridge_io()
-> and pci_read_bridge_mmio_pref() to skip reading registers when the
-> window is not supported.
-
-The fundamental problem here is that assigned space to a bridge window
-that isn't implemented.  I wish we understood the connection between
-this "read window" path and the assignment path.
-
-Maybe this patch fixes it because we enter pci_read_bridge_mmio_pref()
-with res->flags being NULL, and we set IORESOURCE_MEM |
-IORESOURCE_PREFETCH again, which makes it look like we can assign
-space for it?
-
-If that's the case, I think it would improve the commit log to mention
-the actual mechanism by which we avoid assigning space.
-
-> Suggested-by: Bjorn Helgaas <helgaas@kernel.org>
-> Link: https://lore.kernel.org/all/20260113210259.GA715789@bhelgaas/
-> Signed-off-by: Ahmed Naseef <naseefkm@gmail.com>
-> Signed-off-by: Caleb James DeLisle <cjd@cjdns.fr>
+On Mon, Mar 2, 2026 at 1:32=E2=80=AFPM Thomas Wei=C3=9Fschuh
+<thomas.weissschuh@linutronix.de> wrote:
+>
+> There is nothing userspace can do with this value. In the kernel is
+> always combined with AT_VECTOR_SIZE_BASE, which is not exposed to
+> userspace and also changes from time to time.
+>
+> Move the symbol to a kernel-internal header.
+>
+> Signed-off-by: Thomas Wei=C3=9Fschuh <thomas.weissschuh@linutronix.de>
 > ---
->  drivers/pci/probe.c | 6 ++++++
->  1 file changed, 6 insertions(+)
-> 
-> diff --git a/drivers/pci/probe.c b/drivers/pci/probe.c
-> index bccc7a4bdd79..4eacb741b4ec 100644
-> --- a/drivers/pci/probe.c
-> +++ b/drivers/pci/probe.c
-> @@ -395,6 +395,9 @@ static void pci_read_bridge_io(struct pci_dev *dev, struct resource *res,
->  	unsigned long io_mask, io_granularity, base, limit;
->  	struct pci_bus_region region;
->  
-> +	if (!dev->io_window)
-> +		return;
-> +
->  	io_mask = PCI_IO_RANGE_MASK;
->  	io_granularity = 0x1000;
->  	if (dev->io_window_1k) {
-> @@ -465,6 +468,9 @@ static void pci_read_bridge_mmio_pref(struct pci_dev *dev, struct resource *res,
->  	pci_bus_addr_t base, limit;
->  	struct pci_bus_region region;
->  
-> +	if (!dev->pref_window)
-> +		return;
-> +
->  	pci_read_config_word(dev, PCI_PREF_MEMORY_BASE, &mem_base_lo);
->  	pci_read_config_word(dev, PCI_PREF_MEMORY_LIMIT, &mem_limit_lo);
->  	base64 = (mem_base_lo & PCI_PREF_RANGE_MASK) << 16;
-> -- 
-> 2.39.5
-> 
+>  arch/alpha/include/asm/auxvec.h      | 7 +++++++
+>  arch/alpha/include/uapi/asm/auxvec.h | 8 +++-----
+>  2 files changed, 10 insertions(+), 5 deletions(-)
+>
+
+Build-tested on alpha, no issues here.
+
+Acked-by: Magnus Lindholm <linmag7@gmail.com>
 
