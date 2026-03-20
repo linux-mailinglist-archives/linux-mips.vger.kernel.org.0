@@ -1,213 +1,361 @@
-Return-Path: <linux-mips+bounces-13816-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-13817-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id YA1QH2yTvWnY+wIAu9opvQ
-	(envelope-from <linux-mips+bounces-13816-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Fri, 20 Mar 2026 19:35:24 +0100
+	id uF2XKnmivWkM/wIAu9opvQ
+	(envelope-from <linux-mips+bounces-13817-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Fri, 20 Mar 2026 20:39:37 +0100
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 285B92DF801
-	for <lists+linux-mips@lfdr.de>; Fri, 20 Mar 2026 19:35:24 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1A49A2E0236
+	for <lists+linux-mips@lfdr.de>; Fri, 20 Mar 2026 20:39:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id E5124300A74E
-	for <lists+linux-mips@lfdr.de>; Fri, 20 Mar 2026 18:28:30 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 4885C3008301
+	for <lists+linux-mips@lfdr.de>; Fri, 20 Mar 2026 19:38:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 76C793E6DDA;
-	Fri, 20 Mar 2026 18:28:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D20FC34EEEF;
+	Fri, 20 Mar 2026 19:38:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gkHt0MCc"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IKRO8hqR"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50331175A9F;
-	Fri, 20 Mar 2026 18:28:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB4AA34D3B1;
+	Fri, 20 Mar 2026 19:38:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774031310; cv=none; b=UsqLmXWBJTPLbhmhByV5yC2CpPzoQrkzfTyCyTt34gUOrQBYjzpNIG1Bc3HbvHWMACFtRXZ6LN3N+1ymozbesz30fxv6+bO4PtBjm4VuK3ywGCMt0ugnK+yDaXOGWvQlhre0VAmKV7/TBxivCS9XoddY7J9UtuL7ZbZHQeJFvPo=
+	t=1774035526; cv=none; b=qDkcSJjEFvPKI9MEN7HKZrzP6XV1cUWAgyqWYbrvwGzwUK9rNwi6o3m0lQwl+FGDSA5FpqdhHVJJdiZbNbZJATIhKW9VOqx6sIviQIT+pauiCzFr2omVW1UmoawSU3ZCe3fUfHn6wK/qG/qOpeQsFK/P5hm/1NzBASDamIZcQ7g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774031310; c=relaxed/simple;
-	bh=Fv5VAaAi7lFFXaq+Zs2NQXEVg9yFBZfIimKqUJwizNI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=CMrDtu5x1aeGLM9X8YigyT9v+B/UnIL4cuG1L2l8+ID8L5u/NjsO43F4hj/xQ8olIG5zl9w4BGahv8gLMNXxMr68LIfmGVDxbspkAhe2Hn7HjFiutsX91mP/u1yeA2qSByHS6RRt9GN4kK+6KP3qlCUFrNAif808jBhbj/MC06c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gkHt0MCc; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5E703C4AF63;
-	Fri, 20 Mar 2026 18:28:29 +0000 (UTC)
+	s=arc-20240116; t=1774035526; c=relaxed/simple;
+	bh=B5vWr9J4Eb+/vYtuFSntRP4/6BZCLXVQxRrN5ULo4B4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=tlAC+DXRFG7zsXebXNAemSrIg0CBj3QvbPQdWhwoAzsnuk1veiG1IFX5GQrjcBeYLWQbPwbzUdKfqII6Q3ufW09laKvhH/LuqnwYc902QdTm1dEignZ5X7eFiHgwsyKI39MGbgUsVyn6wGhqrg50vuZAcmK57hGcz3LMPDPileo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IKRO8hqR; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E10B5C4CEF7;
+	Fri, 20 Mar 2026 19:38:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1774031309;
-	bh=Fv5VAaAi7lFFXaq+Zs2NQXEVg9yFBZfIimKqUJwizNI=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=gkHt0MCcBHLIQio/xzhZ3JYDqMoeggebPJgOlyMKl++IgyflAsadSjnR6ajO59T7W
-	 Bads34sP/a5yAm4Az5ZrzO6EFDu3djUgXqmf5qozSpDl0E+emDW/7MW3NjnJK8Slny
-	 OotgoXlSvtjugWgJaY9L6WhmqLGWE1/djXCDpUtueFL1T/RlRKAFXQq8l15zcyQNzg
-	 xjTOR7A8pPrNcxZlYg/qfRZqRoGr1vsLPFhe4Hd1TaAtSvhAOyzOMqZjEfVQNGp8Tp
-	 eyJrsI19HFTP1bsaOPJ+0b/i2opswgGS1tIHSoUImZmzyNRI2vbOkompeaDJUfnist
-	 DFKvOz84NKcEw==
-Date: Fri, 20 Mar 2026 18:28:28 +0000
+	s=k20201202; t=1774035526;
+	bh=B5vWr9J4Eb+/vYtuFSntRP4/6BZCLXVQxRrN5ULo4B4=;
+	h=From:To:Cc:Subject:Date:From;
+	b=IKRO8hqRGgDmarX8cUyOaR2T+zTsf7Cybp33CEGm3VVjXoMge30Vth6pty2I0Gay6
+	 h76wgYpecItl5t5LO8kQq/p1iswuoV/dg1q8ljRu+b2kb5HwxzDDiz2JqRRxk0uy2v
+	 N2BEjQgcRvnW17+gIZz3euO48IiZO4Cm2umjVfzJLKQiRNxXmf47GCbJZKhjMd18kB
+	 l4Ry8wj3OWjkngov6CwHR0wAckwXbLMO98fGfB+jkWTz+YyHhIKq67LTVRwldPdO5Y
+	 /Xw/1yzFpF3lsJicAjPv+JOZt8JFT3BKiEXglHu5++uyKc/fr9S/nBYRa1QsLb4QRg
+	 1eGNEXv2EHsfg==
 From: "Lorenzo Stoakes (Oracle)" <ljs@kernel.org>
-To: "Vlastimil Babka (SUSE)" <vbabka@kernel.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>, 
-	David Hildenbrand <david@kernel.org>, "Liam R . Howlett" <Liam.Howlett@oracle.com>, 
-	Jann Horn <jannh@google.com>, Pedro Falcato <pfalcato@suse.de>, 
-	Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>, 
-	Kees Cook <kees@kernel.org>, linux-mm@kvack.org, linux-kernel@vger.kernel.org, 
-	Vineet Gupta <vgupta@kernel.org>, Russell King <linux@armlinux.org.uk>, 
-	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, Brian Cain <bcain@kernel.org>, 
-	Huacai Chen <chenhuacai@kernel.org>, WANG Xuerui <kernel@xen0n.name>, 
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, Dinh Nguyen <dinguyen@kernel.org>, 
-	Madhavan Srinivasan <maddy@linux.ibm.com>, Michael Ellerman <mpe@ellerman.id.au>, 
-	Nicholas Piggin <npiggin@gmail.com>, Christophe Leroy <chleroy@kernel.org>, 
-	Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>, 
-	Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>, 
-	Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>, 
-	Alexander Gordeev <agordeev@linux.ibm.com>, Christian Borntraeger <borntraeger@linux.ibm.com>, 
-	Sven Schnelle <svens@linux.ibm.com>, Thomas Gleixner <tglx@kernel.org>, 
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>, 
-	Richard Weinberger <richard@nod.at>, Anton Ivanov <anton.ivanov@cambridgegreys.com>, 
-	Johannes Berg <johannes@sipsolutions.net>, Alexander Viro <viro@zeniv.linux.org.uk>, 
-	Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, Xu Xin <xu.xin16@zte.com.cn>, 
-	Chengming Zhou <chengming.zhou@linux.dev>, Michal Hocko <mhocko@suse.com>, Paul Moore <paul@paul-moore.com>, 
-	Stephen Smalley <stephen.smalley.work@gmail.com>, Ondrej Mosnacek <omosnace@redhat.com>, 
-	linux-snps-arc@lists.infradead.org, linux-arm-kernel@lists.infradead.org, 
-	linux-hexagon@vger.kernel.org, loongarch@lists.linux.dev, linux-mips@vger.kernel.org, 
-	linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org, 
-	linux-um@lists.infradead.org, linux-fsdevel@vger.kernel.org, selinux@vger.kernel.org
-Subject: Re: [PATCH v3 21/23] mm/vma: convert as much as we can in mm/vma.c
- to vma_flags_t
-Message-ID: <5c61e8fc-f77d-4f9a-80b9-534978aa1840@lucifer.local>
-References: <cover.1773846935.git.ljs@kernel.org>
- <44a952b98d68fc231ab231de6de04b077866bab8.1773846935.git.ljs@kernel.org>
- <a7535063-abaa-4f67-a090-4a47098f10e7@kernel.org>
+To: Andrew Morton <akpm@linux-foundation.org>
+Cc: David Hildenbrand <david@kernel.org>,
+	"Liam R . Howlett" <Liam.Howlett@oracle.com>,
+	Vlastimil Babka <vbabka@kernel.org>,
+	Jann Horn <jannh@google.com>,
+	Pedro Falcato <pfalcato@suse.de>,
+	Mike Rapoport <rppt@kernel.org>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Kees Cook <kees@kernel.org>,
+	linux-mm@kvack.org,
+	linux-kernel@vger.kernel.org,
+	Vineet Gupta <vgupta@kernel.org>,
+	Russell King <linux@armlinux.org.uk>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>,
+	Brian Cain <bcain@kernel.org>,
+	Huacai Chen <chenhuacai@kernel.org>,
+	WANG Xuerui <kernel@xen0n.name>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Dinh Nguyen <dinguyen@kernel.org>,
+	Madhavan Srinivasan <maddy@linux.ibm.com>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Nicholas Piggin <npiggin@gmail.com>,
+	Christophe Leroy <chleroy@kernel.org>,
+	Paul Walmsley <pjw@kernel.org>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Alexandre Ghiti <alex@ghiti.fr>,
+	Heiko Carstens <hca@linux.ibm.com>,
+	Vasily Gorbik <gor@linux.ibm.com>,
+	Alexander Gordeev <agordeev@linux.ibm.com>,
+	Christian Borntraeger <borntraeger@linux.ibm.com>,
+	Sven Schnelle <svens@linux.ibm.com>,
+	Thomas Gleixner <tglx@kernel.org>,
+	Ingo Molnar <mingo@redhat.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	x86@kernel.org,
+	"H . Peter Anvin" <hpa@zytor.com>,
+	Richard Weinberger <richard@nod.at>,
+	Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+	Johannes Berg <johannes@sipsolutions.net>,
+	Alexander Viro <viro@zeniv.linux.org.uk>,
+	Christian Brauner <brauner@kernel.org>,
+	Jan Kara <jack@suse.cz>,
+	Xu Xin <xu.xin16@zte.com.cn>,
+	Chengming Zhou <chengming.zhou@linux.dev>,
+	Michal Hocko <mhocko@suse.com>,
+	Paul Moore <paul@paul-moore.com>,
+	Stephen Smalley <stephen.smalley.work@gmail.com>,
+	Ondrej Mosnacek <omosnace@redhat.com>,
+	linux-snps-arc@lists.infradead.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-hexagon@vger.kernel.org,
+	loongarch@lists.linux.dev,
+	linux-mips@vger.kernel.org,
+	linuxppc-dev@lists.ozlabs.org,
+	linux-riscv@lists.infradead.org,
+	linux-s390@vger.kernel.org,
+	linux-um@lists.infradead.org,
+	linux-fsdevel@vger.kernel.org,
+	selinux@vger.kernel.org
+Subject: [PATCH v4 00/25] mm/vma: convert vm_flags_t to vma_flags_t in vma code
+Date: Fri, 20 Mar 2026 19:38:17 +0000
+Message-ID: <cover.1774034900.git.ljs@kernel.org>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <a7535063-abaa-4f67-a090-4a47098f10e7@kernel.org>
-X-Spamd-Result: default: False [-0.66 / 15.00];
+Content-Transfer-Encoding: 8bit
+X-Spamd-Result: default: False [0.84 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	MID_CONTAINS_FROM(1.00)[];
+	R_MISSING_CHARSET(0.50)[];
 	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
 	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FREEMAIL_CC(0.00)[linux-foundation.org,kernel.org,oracle.com,google.com,suse.de,kvack.org,vger.kernel.org,armlinux.org.uk,arm.com,xen0n.name,alpha.franken.de,linux.ibm.com,ellerman.id.au,gmail.com,dabbelt.com,eecs.berkeley.edu,ghiti.fr,redhat.com,alien8.de,linux.intel.com,zytor.com,nod.at,cambridgegreys.com,sipsolutions.net,zeniv.linux.org.uk,suse.cz,zte.com.cn,linux.dev,suse.com,paul-moore.com,lists.infradead.org,lists.linux.dev,lists.ozlabs.org];
-	TAGGED_FROM(0.00)[bounces-13816-lists,linux-mips=lfdr.de];
-	FROM_HAS_DN(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
+	FREEMAIL_CC(0.00)[kernel.org,oracle.com,google.com,suse.de,kvack.org,vger.kernel.org,armlinux.org.uk,arm.com,xen0n.name,alpha.franken.de,linux.ibm.com,ellerman.id.au,gmail.com,dabbelt.com,eecs.berkeley.edu,ghiti.fr,redhat.com,alien8.de,linux.intel.com,zytor.com,nod.at,cambridgegreys.com,sipsolutions.net,zeniv.linux.org.uk,suse.cz,zte.com.cn,linux.dev,suse.com,paul-moore.com,lists.infradead.org,lists.linux.dev,lists.ozlabs.org];
 	RCVD_TLS_LAST(0.00)[];
 	MIME_TRACE(0.00)[0:+];
+	RCVD_COUNT_THREE(0.00)[4];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	MISSING_XM_UA(0.00)[];
+	TAGGED_FROM(0.00)[bounces-13817-lists,linux-mips=lfdr.de];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	TO_DN_SOME(0.00)[];
 	RCPT_COUNT_GT_50(0.00)[62];
 	PRECEDENCE_BULK(0.00)[];
 	FROM_NEQ_ENVFROM(0.00)[ljs@kernel.org,linux-mips@vger.kernel.org];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	NEURAL_HAM(-0.00)[-0.536];
+	DKIM_TRACE(0.00)[kernel.org:+];
+	NEURAL_HAM(-0.00)[-1.000];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-mips];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 285B92DF801
+	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
+	FROM_HAS_DN(0.00)[]
+X-Rspamd-Queue-Id: 1A49A2E0236
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On Fri, Mar 20, 2026 at 11:15:52AM +0100, Vlastimil Babka (SUSE) wrote:
-> On 3/18/26 16:50, Lorenzo Stoakes (Oracle) wrote:
-> > Now we have established a good foundation for vm_flags_t to vma_flags_t
-> > changes, update mm/vma.c to utilise vma_flags_t wherever possible.
-> >
-> > We are able to convert VM_STARTGAP_FLAGS entirely as this is only used in
-> > mm/vma.c, and to account for the fact we can't use VM_NONE to make life
-> > easier, place the definition of this within existing #ifdef's to be
-> > cleaner.
-> >
-> > Generally the remaining changes are mechanical.
-> >
-> > Also update the VMA tests to reflect the changes.
-> >
-> > Signed-off-by: Lorenzo Stoakes (Oracle) <ljs@kernel.org>
->
-> Acked-by: Vlastimil Babka (SUSE) <vbabka@kernel.org>
+This series converts a lot of the existing use of the legacy vm_flags_t
+data type to the new vma_flags_t type which replaces it.
 
-Thanks!
+In order to do so it adds a number of additional helpers:
 
->
-> Nits:
->
-> > @@ -2338,8 +2339,11 @@ void mm_drop_all_locks(struct mm_struct *mm)
-> >   * We account for memory if it's a private writeable mapping,
-> >   * not hugepages and VM_NORESERVE wasn't set.
-> >   */
-> > -static bool accountable_mapping(struct file *file, vm_flags_t vm_flags)
-> > +static bool accountable_mapping(struct mmap_state *map)
-> >  {
-> > +	const struct file *file = map->file;
-> > +	vma_flags_t mask;
-> > +
-> >  	/*
-> >  	 * hugetlb has its own accounting separate from the core VM
-> >  	 * VM_HUGETLB may not be set yet so we cannot check for that flag.
-> > @@ -2347,7 +2351,9 @@ static bool accountable_mapping(struct file *file, vm_flags_t vm_flags)
-> >  	if (file && is_file_hugepages(file))
-> >  		return false;
-> >
-> > -	return (vm_flags & (VM_NORESERVE | VM_SHARED | VM_WRITE)) == VM_WRITE;
-> > +	mask = vma_flags_and(&map->vma_flags, VMA_NORESERVE_BIT, VMA_SHARED_BIT,
-> > +			     VMA_WRITE_BIT);
-> > +	return vma_flags_same(&mask, VMA_WRITE_BIT);
->
-> Another case of possible refactor, if you agree with those pointed out in
-> earlier patch.
+* vma_flags_empty() - Determines whether a vma_flags_t value has no bits
+  set.
 
-Ack
+* vma_flags_and() - Performs a bitwise AND between two vma_flags_t values.
 
->
-> >  }
-> >
-> >  /*
->
-> > @@ -2993,7 +2998,8 @@ unsigned long unmapped_area(struct vm_unmapped_area_info *info)
-> >  	gap = vma_iter_addr(&vmi) + info->start_gap;
-> >  	gap += (info->align_offset - gap) & info->align_mask;
-> >  	tmp = vma_next(&vmi);
-> > -	if (tmp && (tmp->vm_flags & VM_STARTGAP_FLAGS)) { /* Avoid prev check if possible */
-> > +	/* Avoid prev check if possible */
-> > +	if (tmp && (vma_test_any_mask(tmp, VMA_STARTGAP_FLAGS))) {
->
-> The parentheses around function call not necessary?
+* vma_flags_diff_pair() - Determines which flags are not shared between a
+  pair of VMA flags (typically non-constant values)
 
-True, can fix up.
+* append_vma_flags() - Similar to mk_vma_flags(), but allows a vma_flags_t
+  value to be specified (typically a constant value) which will be copied
+  and appended to to create a new vma_flags_t value, with additional flags
+  specified to append to it.
 
->
-> >  		if (vm_start_gap(tmp) < gap + length - 1) {
-> >  			low_limit = tmp->vm_end;
-> >  			vma_iter_reset(&vmi);
-> > @@ -3045,7 +3051,8 @@ unsigned long unmapped_area_topdown(struct vm_unmapped_area_info *info)
-> >  	gap -= (gap - info->align_offset) & info->align_mask;
-> >  	gap_end = vma_iter_end(&vmi);
-> >  	tmp = vma_next(&vmi);
-> > -	if (tmp && (tmp->vm_flags & VM_STARTGAP_FLAGS)) { /* Avoid prev check if possible */
-> > +	 /* Avoid prev check if possible */
-> > +	if (tmp && (vma_test_any_mask(tmp, VMA_STARTGAP_FLAGS))) {
->
-> Same.
+* vma_flags_same() - Determines if a vma_flags_t value is exactly equal to
+  a set of VMA flags.
 
-True, will fix up.
+* vma_flags_same_mask() - Determines if a vma_flags_t value is eactly equal
+  to another vma_flags_t value (typically constant).
 
->
-> >  		if (vm_start_gap(tmp) < gap_end) {
-> >  			high_limit = vm_start_gap(tmp);
-> >  			vma_iter_reset(&vmi);
+* vma_flags_same_pair() - Determines if a pair of vma_flags_t values are
+  exactly equal to one another (typically both non-constant).
 
-Cheers, Lorenzo
+* vma_flags_to_legacy() - Converts a vma_flags_t value to a vm_flags_t
+  value, used to enable more iterative introduction of the use of
+  vma_flags_t.
+
+* legacy_to_vma_flags() - Converts a vm_flags_t value to a vma_flags-t
+  value, for the same purpose.
+
+* vma_flags_test_single_mask() - Tests whether a vma_flags_t value contain
+  the single flag specified in an input vma_flags_t flag mask, or if that
+  flag mask is empty, is defined to return false. Useful for
+  config-predicated VMA flag mask defines.
+
+* vma_test() - Tests whether a VMA's flags contain a specific singular VMA
+  flag.
+
+* vma_test_any() - Tests whether a VMA's flags contain any of a set of VMA
+  flags.
+
+* vma_test_any_mask() - Tests whether a VMA's flags contain any of the
+  flags specified in another, typically constant, vma_flags_t value.
+
+* vma_test_single_mask() - Tests whether a VMA's flags contain the single
+  flag specified in an input vma_flags_t flag mask, or if that flag mask is
+  empty, is defined to return false. Useful for config-predicated VMA flag
+  mask defines.
+
+* vma_clear_flags() - Clears a specific set of VMA flags from a vma_flags_t
+  value.
+
+* vma_clear_flags_mask() - Clears those flag set in a vma_flags_t value
+  (typically constant) from a (typically not constant) vma_flags_t value.
+
+The series mostly focuses on the the VMA specific code, especially that
+contained in mm/vma.c and mm/vma.h.
+
+It updates both brk() and mmap() logic to utils vma_flags_t values as much
+as is practiaclly possible at this point, changing surrounding logic to be
+able to do so.
+
+It also updates the vma_modify_xxx() functions where they interact with VMA
+flags directly to use vm_flags_t values where possible.
+
+There is extensive testing added in the VMA userland tests to assert that
+all of these new VMA flag functions work correctly.
+
+
+v4:
+* Propagated tags, thanks Vlasta!
+* Removed superfluous parens around vma_test_any_mask() as per Vlasta.
+* Converted masked functions into more understandable equivalent form as
+  per Vlasta in 24/25.
+* Redefined VM_SPECIAL using vma_flags_to_legacy() as per Vlasta.
+* Fixed whitespace as per Vlasta.
+* Added vma_flags_reset_once() as per Vlasta.
+* Expanded 22/23 commit message to describe why I'm replacing things as
+  per Vlasta.
+* Added bitmap_copy() to test headers in order to implement
+  vma_flags_reset_once().
+
+v3:
+* Folded in tags, thanks Paul, Vlastimil!
+* Respun to apply the correct suggestions/reports from
+  https://sashiko.dev/#/patchset/cover.1773665966.git.ljs%40kernel.org
+  (note there is also quite a lot of noise, that is ignored).
+* Const-ified vma_flags_t * param for vma_flags_empty() as per Sashiko.
+* Obtained sticky flag masks after VMA write lock acquired on merge and
+  update vma_expand() similarly. This is meaningful, as the maybe guard
+  flag is set atomically which might race outside of a VMA write lock, as
+  per Sashiko.
+* Dropped comment about 'VM_NONE convenience' from 5/23 commit message as
+  the VMA_xxx form flags can now provide that.
+* Updated legacy_to_vma_flags() to ensure upper bits are cleared for
+  NUM_VMA_FLAG_BITS > 64 as per Sashiko.
+* Updated legacy_to_vma_flags() to use vma_flags_overwrite_word() for
+  consistency.
+* Refreshed vma_flags_overwrite_word(), vma_flag_overwrite_word_once(),
+  vma_flags_set_word() and vma_flags_clear_word() in the VMA test dup.h
+  header to keep them consistent with the kernel.
+* Updated VMA_DATA_DEFAULT_FLAGS declaration on arm64 to be predicated on
+  CONFIG_ARM64_MTE as to whether VMA_MTE_ALLOWED_BIT is set, as per
+  Sashiko.
+* Fixed bug where the VMA did not have VMA_SOFTDIRTY_BIT set if
+  pgtable_supports_soft_dirty(), but rather the stack variable vma_flags,
+  as per Sashiko.
+* Corrected vmag -> vma typo in VMA test code as per Sashiko.
+* Fixed typo in 20/23 commit message 'correctly' -> 'correct' as per
+  Sashiko.
+* Fixed VMA flag clear tests to consistently do vma_clear_flags_mask(&vma,
+  mask) rather than vma_flags_clear_mask(&vma.flags, mask) as per Sashiko.
+* Added missing vma_start_write() in mseal_apply() as per Sahiko.
+https://lore.kernel.org/all/cover.1773846935.git.ljs@kernel.org/
+
+v2:
+* Rebased on mm-unstable.
+* Added vma_flags_count() and vma[_flags]_test_single_mask() for testing
+  whether flags have a single flag set depending on an input flag mask,
+  returning false if the flag mask is empty.
+* Added tests for vma_flags_count() and vma[_flags]_test_single_mask().
+* Updated the KSM VMA_DROPPABLE test to use vma_flags_test_single_mask().
+* Updated the newly-introduced-since-rebase vma_supports_mlock() to use
+  vma_flags_t.
+https://lore.kernel.org/linux-mm/cover.1773665966.git.ljs@kernel.org/
+
+v1:
+https://lore.kernel.org/linux-mm/cover.1773342102.git.ljs@kernel.org/
+
+Lorenzo Stoakes (Oracle) (25):
+  mm/vma: add vma_flags_empty(), vma_flags_and(), vma_flags_diff_pair()
+  tools/testing/vma: add unit tests flag empty, diff_pair, and[_mask]
+  mm/vma: add further vma_flags_t unions
+  tools/testing/vma: convert bulk of test code to vma_flags_t
+  mm/vma: use new VMA flags for sticky flags logic
+  tools/testing/vma: fix VMA flag tests
+  mm/vma: add append_vma_flags() helper
+  tools/testing/vma: add simple test for append_vma_flags()
+  mm: unexport vm_brk_flags() and eliminate vm_flags parameter
+  mm/vma: introduce vma_flags_same[_mask/_pair]()
+  mm/vma: introduce [vma_flags,legacy]_to_[legacy,vma_flags]() helpers
+  tools/testing/vma: test that legacy flag helpers work correctly
+  mm/vma: introduce vma_test[_any[_mask]](), and make inlining
+    consistent
+  tools/testing/vma: update VMA flag tests to test vma_test[_any_mask]()
+  mm: introduce vma_flags_count() and vma[_flags]_test_single_mask()
+  tools/testing/vma: test vma_flags_count,vma[_flags]_test_single_mask
+  mm: convert do_brk_flags() to use vma_flags_t
+  mm: update vma_supports_mlock() to use new VMA flags
+  mm/vma: introduce vma_clear_flags[_mask]()
+  tools/testing/vma: update VMA tests to test vma_clear_flags[_mask]()
+  mm/vma: convert as much as we can in mm/vma.c to vma_flags_t
+  tools: bitmap: add missing bitmap_copy() implementation
+  mm/vma: convert vma_modify_flags[_uffd]() to use vma_flags_t
+  mm/vma: convert __mmap_region() to use vma_flags_t
+  mm: simplify VMA flag tests of excluded flags
+
+ arch/arc/include/asm/page.h        |   2 +-
+ arch/arm/include/asm/page.h        |   2 +-
+ arch/arm64/include/asm/page.h      |   7 +-
+ arch/hexagon/include/asm/page.h    |   2 +-
+ arch/loongarch/include/asm/page.h  |   2 +-
+ arch/mips/include/asm/page.h       |   2 +-
+ arch/nios2/include/asm/page.h      |   2 +-
+ arch/powerpc/include/asm/page.h    |   4 +-
+ arch/powerpc/include/asm/page_32.h |   2 +-
+ arch/powerpc/include/asm/page_64.h |  12 +-
+ arch/riscv/include/asm/page.h      |   2 +-
+ arch/s390/include/asm/page.h       |   2 +-
+ arch/x86/include/asm/page_types.h  |   2 +-
+ arch/x86/um/asm/vm-flags.h         |   4 +-
+ fs/binfmt_elf.c                    |   3 +-
+ include/linux/ksm.h                |  10 +-
+ include/linux/mm.h                 | 352 +++++++++++++++++++++-------
+ include/linux/mm_types.h           |  52 ++++-
+ include/linux/mman.h               |  49 ----
+ include/linux/userfaultfd_k.h      |   3 +
+ mm/internal.h                      |   7 +-
+ mm/ksm.c                           |  43 ++--
+ mm/madvise.c                       |  10 +-
+ mm/mlock.c                         |  38 +--
+ mm/mmap.c                          |  19 +-
+ mm/mprotect.c                      |  49 ++--
+ mm/mremap.c                        |   6 +-
+ mm/mseal.c                         |  11 +-
+ mm/userfaultfd.c                   |  21 +-
+ mm/vma.c                           | 210 ++++++++++-------
+ mm/vma.h                           |  84 ++++++-
+ mm/vma_exec.c                      |   5 +-
+ security/selinux/hooks.c           |   4 +-
+ tools/include/linux/bitmap.h       |  24 ++
+ tools/lib/bitmap.c                 |  10 +
+ tools/testing/vma/include/custom.h |  25 --
+ tools/testing/vma/include/dup.h    | 309 ++++++++++++++++++-------
+ tools/testing/vma/include/stubs.h  |  11 +-
+ tools/testing/vma/shared.c         |   8 +-
+ tools/testing/vma/shared.h         |  22 +-
+ tools/testing/vma/tests/merge.c    | 311 +++++++++++++------------
+ tools/testing/vma/tests/mmap.c     |  18 +-
+ tools/testing/vma/tests/vma.c      | 359 +++++++++++++++++++++++++----
+ tools/testing/vma/vma_internal.h   |   6 +
+ 44 files changed, 1463 insertions(+), 663 deletions(-)
+
+--
+2.53.0
 
