@@ -1,49 +1,49 @@
-Return-Path: <linux-mips+bounces-13829-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-13830-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id GIBnAIGjvWkM/wIAu9opvQ
-	(envelope-from <linux-mips+bounces-13829-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Fri, 20 Mar 2026 20:44:01 +0100
+	id uE8FIJijvWkM/wIAu9opvQ
+	(envelope-from <linux-mips+bounces-13830-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Fri, 20 Mar 2026 20:44:24 +0100
 X-Original-To: lists+linux-mips@lfdr.de
 Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id B15B52E0457
-	for <lists+linux-mips@lfdr.de>; Fri, 20 Mar 2026 20:44:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 286E92E0483
+	for <lists+linux-mips@lfdr.de>; Fri, 20 Mar 2026 20:44:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id E2504305AA00
-	for <lists+linux-mips@lfdr.de>; Fri, 20 Mar 2026 19:41:08 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id BCEC530452D0
+	for <lists+linux-mips@lfdr.de>; Fri, 20 Mar 2026 19:41:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7C1A53F87E2;
-	Fri, 20 Mar 2026 19:39:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 496333F8E17;
+	Fri, 20 Mar 2026 19:39:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="n9G5Rfle"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Y8NRizsP"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54DE63F787B;
-	Fri, 20 Mar 2026 19:39:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20A613F8DF4;
+	Fri, 20 Mar 2026 19:39:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774035554; cv=none; b=RvdLHak/ZVX6ziMJ5Wv6jVx7SgSyQN8BBOf3uY7cOWMuS/PskVLngSu+t5GVLD3N6IjYeOpNSr73ATMfgdAKQS17QcdsHOfE0e5Dw0irvIjcyYWUJ6d8EGMnnw3CmMVn3XlTuZnotPA2DtcQjg9r7Dgn2UN3pVUGzAQ9Jknb9o8=
+	t=1774035556; cv=none; b=Hlh5Y+skF3ZK3aGRU+YLB+Uk6BMSVrv8uRHB/pZYbTr5R31g9id1YDHsLXgvCwtqHF/+1lCTakpPNSGOPMvfFhae4PUiYhQwa1BG7rl13BVugxbtyKSsbn1IPKuCP/53CxclfrnbDQTZdIXWgvBTA8tLAD0E14LRkq/C7VKqnsU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774035554; c=relaxed/simple;
-	bh=LrLBS64c+lmBUJM2XbvLHLJnGjK9/zMfbb5TL2UTCws=;
+	s=arc-20240116; t=1774035556; c=relaxed/simple;
+	bh=75AA3POmnrofOVgvNS3ujKeXMtoo1Jxrkj2CrXjWe/U=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=b+dtNaoe9PI54VhWbmlcYYOYGDgGlBG3i+mbe8lQzaPKLrMYffp/pKP8QpSfwT7PSUpqIlEGHlhaCxkthlAip2nDMafRekYnAArOnD0VFOKuY3wnYtHkABTXbu6pxz5pzWv3NmEORqE1qMaIzptEurST25/5lKDg/gKmScG9j54=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=n9G5Rfle; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 75CADC2BC9E;
-	Fri, 20 Mar 2026 19:39:13 +0000 (UTC)
+	 MIME-Version; b=YLIfZVYBuMK0g6SztNAbCeDW1jppAqHGFWtGx8xkhgCXv3PdDfTMmHURGH0P8FBoi9FQebNqHz1tdGkKi6fxPNYudj107LZA0gkvI51yjHgWIhR4QQvhORiQoTRx8XAUzooZs26YIu8u1UNLzxaCVJDTsSfvBDLSo44DAc6lK+8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Y8NRizsP; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8BE46C2BCAF;
+	Fri, 20 Mar 2026 19:39:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1774035553;
-	bh=LrLBS64c+lmBUJM2XbvLHLJnGjK9/zMfbb5TL2UTCws=;
+	s=k20201202; t=1774035556;
+	bh=75AA3POmnrofOVgvNS3ujKeXMtoo1Jxrkj2CrXjWe/U=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=n9G5RfleSKlgF5IOVA2zXMw7RB/0EsB8jsXdwJANrb3vkQfRndWlRknI8JoQlRPuv
-	 zgCX6aDwrYZVTz75jLr+KIPFYcBrUDvMT9XX7hAb4vlckyEtjaKsjouuzE4QE6Dcl1
-	 o2HwpJagChgQY9sNvxa2V3D81uvsfl9/SrEthaNA3o+Sr88oot/AuaCYgDeBFOySyl
-	 q6XeWSPRQJ3LJkLYxCqrpBHPF/1/0pG+jUNSe8+4vHsB1eeoQfAb1rWhYw6UW/7T+1
-	 OvSzcnuLb+EqzJMxiNiIU7Wkgy6v68h8V5rWxiRLmLjJMLfpRprBXEC9xhv69y4Xd8
-	 BPa+YjeIoj8Pg==
+	b=Y8NRizsPEt9w1+zxcwQQBo/8SouKkTjJUjmM+1HXJ+fc9GLhVOIfL2m5bYYUMo4hN
+	 jMBf4nwCQUQK0uuFOxGb29ymlICAVjgmyxYU7U4Htfrcpearf0vUD7xWLp3XrmD6j5
+	 RFxHxOFT1fofzUVCtX15NjQvSJs9D4CEGt0zB+ELRt/f42Z77Iqz/RgLwu6XKDtJh8
+	 IqA7DfXCv1me5BNDMlGqBapl+SMFPHB8AC2HkcMbBOdb507pqrNWDmk3tVNUNoSOvz
+	 4ydixNFUpwekgmvpgoP+OqgicQnaqM0KjZbaCrgM8FYolJy0Syv2NiVzW5Zru+4Ssg
+	 4v1PFsyBmqI8w==
 From: "Lorenzo Stoakes (Oracle)" <ljs@kernel.org>
 To: Andrew Morton <akpm@linux-foundation.org>
 Cc: David Hildenbrand <david@kernel.org>,
@@ -107,9 +107,9 @@ Cc: David Hildenbrand <david@kernel.org>,
 	linux-um@lists.infradead.org,
 	linux-fsdevel@vger.kernel.org,
 	selinux@vger.kernel.org
-Subject: [PATCH v4 12/25] tools/testing/vma: test that legacy flag helpers work correctly
-Date: Fri, 20 Mar 2026 19:38:29 +0000
-Message-ID: <3374e50053adb65818fde948ae3488e1e29ae8b1.1774034900.git.ljs@kernel.org>
+Subject: [PATCH v4 13/25] mm/vma: introduce vma_test[_any[_mask]](), and make inlining consistent
+Date: Fri, 20 Mar 2026 19:38:30 +0000
+Message-ID: <be1d71f08307d747a82232cbd8664a88c0f41419.1774034900.git.ljs@kernel.org>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <cover.1774034900.git.ljs@kernel.org>
 References: <cover.1774034900.git.ljs@kernel.org>
@@ -135,7 +135,7 @@ X-Spamd-Result: default: False [0.84 / 15.00];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-13829-lists,linux-mips=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-13830-lists,linux-mips=lfdr.de];
 	RCVD_COUNT_THREE(0.00)[4];
 	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
@@ -149,42 +149,339 @@ X-Spamd-Result: default: False [0.84 / 15.00];
 	TO_DN_SOME(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: B15B52E0457
+X-Rspamd-Queue-Id: 286E92E0483
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-Update the existing compare_legacy_flags() predicate function to assert
-that legacy_to_vma_flags() and vma_flags_to_legacy() behave as expected.
+Introduce helper functions and macros to make it convenient to test flags
+and flag masks for VMAs, specifically:
 
+* vma_test() - determine if a single VMA flag is set in a VMA.
+* vma_test_any_mask() - determine if any flags in a vma_flags_t value are
+			set in a VMA.
+* vma_test_any() - Helper macro to test if any of specific flags are set.
+
+Also, there are a mix of 'inline's and '__always_inline's in VMA helper
+function declarations, update to consistently use __always_inline.
+
+Finally, update the VMA tests to reflect the changes.
+
+Acked-by: Vlastimil Babka (SUSE) <vbabka@kernel.org>
 Signed-off-by: Lorenzo Stoakes (Oracle) <ljs@kernel.org>
 ---
- tools/testing/vma/tests/vma.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+ include/linux/mm.h              | 49 +++++++++++++++++++++-----
+ include/linux/mm_types.h        | 12 ++++---
+ tools/testing/vma/include/dup.h | 61 +++++++++++++++++++++------------
+ 3 files changed, 88 insertions(+), 34 deletions(-)
 
-diff --git a/tools/testing/vma/tests/vma.c b/tools/testing/vma/tests/vma.c
-index 98e465fb1bf2..1fae25170ff7 100644
---- a/tools/testing/vma/tests/vma.c
-+++ b/tools/testing/vma/tests/vma.c
-@@ -5,6 +5,7 @@ static bool compare_legacy_flags(vm_flags_t legacy_flags, vma_flags_t flags)
- 	const unsigned long legacy_val = legacy_flags;
- 	/* The lower word should contain the precise same value. */
- 	const unsigned long flags_lower = flags.__vma_flags[0];
-+	vma_flags_t converted_flags;
- #if NUM_VMA_FLAG_BITS > BITS_PER_LONG
- 	int i;
- 
-@@ -17,6 +18,11 @@ static bool compare_legacy_flags(vm_flags_t legacy_flags, vma_flags_t flags)
- 
- 	static_assert(sizeof(legacy_flags) == sizeof(unsigned long));
- 
-+	/* Assert that legacy flag helpers work correctly. */
-+	converted_flags = legacy_to_vma_flags(legacy_flags);
-+	ASSERT_FLAGS_SAME_MASK(&converted_flags, flags);
-+	ASSERT_EQ(vma_flags_to_legacy(flags), legacy_flags);
-+
- 	return legacy_val == flags_lower;
+diff --git a/include/linux/mm.h b/include/linux/mm.h
+index b170cee95e25..47bf9f166924 100644
+--- a/include/linux/mm.h
++++ b/include/linux/mm.h
+@@ -999,7 +999,8 @@ static inline void vm_flags_mod(struct vm_area_struct *vma,
+ 	__vm_flags_mod(vma, set, clear);
  }
  
+-static inline bool __vma_atomic_valid_flag(struct vm_area_struct *vma, vma_flag_t bit)
++static __always_inline bool __vma_atomic_valid_flag(struct vm_area_struct *vma,
++		vma_flag_t bit)
+ {
+ 	const vm_flags_t mask = BIT((__force int)bit);
+ 
+@@ -1014,7 +1015,8 @@ static inline bool __vma_atomic_valid_flag(struct vm_area_struct *vma, vma_flag_
+  * Set VMA flag atomically. Requires only VMA/mmap read lock. Only specific
+  * valid flags are allowed to do this.
+  */
+-static inline void vma_set_atomic_flag(struct vm_area_struct *vma, vma_flag_t bit)
++static __always_inline void vma_set_atomic_flag(struct vm_area_struct *vma,
++		vma_flag_t bit)
+ {
+ 	unsigned long *bitmap = vma->flags.__vma_flags;
+ 
+@@ -1030,7 +1032,8 @@ static inline void vma_set_atomic_flag(struct vm_area_struct *vma, vma_flag_t bi
+  * This is necessarily racey, so callers must ensure that serialisation is
+  * achieved through some other means, or that races are permissible.
+  */
+-static inline bool vma_test_atomic_flag(struct vm_area_struct *vma, vma_flag_t bit)
++static __always_inline bool vma_test_atomic_flag(struct vm_area_struct *vma,
++		vma_flag_t bit)
+ {
+ 	if (__vma_atomic_valid_flag(vma, bit))
+ 		return test_bit((__force int)bit, &vma->vm_flags);
+@@ -1235,13 +1238,41 @@ static __always_inline bool vma_flags_same_mask(const vma_flags_t *flags,
+ #define vma_flags_same(flags, ...) \
+ 	vma_flags_same_mask(flags, mk_vma_flags(__VA_ARGS__))
+ 
++/*
++ * Test whether a specific flag in the VMA is set, e.g.:
++ *
++ * if (vma_test(vma, VMA_READ_BIT)) { ... }
++ */
++static __always_inline bool vma_test(const struct vm_area_struct *vma,
++		vma_flag_t bit)
++{
++	return vma_flags_test(&vma->flags, bit);
++}
++
++/* Helper to test any VMA flags in a VMA . */
++static __always_inline bool vma_test_any_mask(const struct vm_area_struct *vma,
++		vma_flags_t flags)
++{
++	return vma_flags_test_any_mask(&vma->flags, flags);
++}
++
++/*
++ * Helper macro for testing whether any VMA flags are set in a VMA,
++ * e.g.:
++ *
++ * if (vma_test_any(vma, VMA_IO_BIT, VMA_PFNMAP_BIT,
++ *		VMA_DONTEXPAND_BIT, VMA_DONTDUMP_BIT)) { ... }
++ */
++#define vma_test_any(vma, ...) \
++	vma_test_any_mask(vma, mk_vma_flags(__VA_ARGS__))
++
+ /*
+  * Helper to test that ALL specified flags are set in a VMA.
+  *
+  * Note: appropriate locks must be held, this function does not acquire them for
+  * you.
+  */
+-static inline bool vma_test_all_mask(const struct vm_area_struct *vma,
++static __always_inline bool vma_test_all_mask(const struct vm_area_struct *vma,
+ 		vma_flags_t flags)
+ {
+ 	return vma_flags_test_all_mask(&vma->flags, flags);
+@@ -1261,7 +1292,7 @@ static inline bool vma_test_all_mask(const struct vm_area_struct *vma,
+  * Note: appropriate locks must be held, this function does not acquire them for
+  * you.
+  */
+-static inline void vma_set_flags_mask(struct vm_area_struct *vma,
++static __always_inline void vma_set_flags_mask(struct vm_area_struct *vma,
+ 		vma_flags_t flags)
+ {
+ 	vma_flags_set_mask(&vma->flags, flags);
+@@ -1291,7 +1322,7 @@ static __always_inline bool vma_desc_test(const struct vm_area_desc *desc,
+ }
+ 
+ /* Helper to test any VMA flags in a VMA descriptor. */
+-static inline bool vma_desc_test_any_mask(const struct vm_area_desc *desc,
++static __always_inline bool vma_desc_test_any_mask(const struct vm_area_desc *desc,
+ 		vma_flags_t flags)
+ {
+ 	return vma_flags_test_any_mask(&desc->vma_flags, flags);
+@@ -1308,7 +1339,7 @@ static inline bool vma_desc_test_any_mask(const struct vm_area_desc *desc,
+ 	vma_desc_test_any_mask(desc, mk_vma_flags(__VA_ARGS__))
+ 
+ /* Helper to test all VMA flags in a VMA descriptor. */
+-static inline bool vma_desc_test_all_mask(const struct vm_area_desc *desc,
++static __always_inline bool vma_desc_test_all_mask(const struct vm_area_desc *desc,
+ 		vma_flags_t flags)
+ {
+ 	return vma_flags_test_all_mask(&desc->vma_flags, flags);
+@@ -1324,7 +1355,7 @@ static inline bool vma_desc_test_all_mask(const struct vm_area_desc *desc,
+ 	vma_desc_test_all_mask(desc, mk_vma_flags(__VA_ARGS__))
+ 
+ /* Helper to set all VMA flags in a VMA descriptor. */
+-static inline void vma_desc_set_flags_mask(struct vm_area_desc *desc,
++static __always_inline void vma_desc_set_flags_mask(struct vm_area_desc *desc,
+ 		vma_flags_t flags)
+ {
+ 	vma_flags_set_mask(&desc->vma_flags, flags);
+@@ -1341,7 +1372,7 @@ static inline void vma_desc_set_flags_mask(struct vm_area_desc *desc,
+ 	vma_desc_set_flags_mask(desc, mk_vma_flags(__VA_ARGS__))
+ 
+ /* Helper to clear all VMA flags in a VMA descriptor. */
+-static inline void vma_desc_clear_flags_mask(struct vm_area_desc *desc,
++static __always_inline void vma_desc_clear_flags_mask(struct vm_area_desc *desc,
+ 		vma_flags_t flags)
+ {
+ 	vma_flags_clear_mask(&desc->vma_flags, flags);
+diff --git a/include/linux/mm_types.h b/include/linux/mm_types.h
+index c5ad55b8a45b..16d31045e26e 100644
+--- a/include/linux/mm_types.h
++++ b/include/linux/mm_types.h
+@@ -1087,7 +1087,8 @@ static __always_inline vm_flags_t vma_flags_to_legacy(vma_flags_t flags)
+  * IMPORTANT: This does not overwrite bytes past the first system word. The
+  * caller must account for this.
+  */
+-static inline void vma_flags_overwrite_word(vma_flags_t *flags, unsigned long value)
++static __always_inline void vma_flags_overwrite_word(vma_flags_t *flags,
++		unsigned long value)
+ {
+ 	unsigned long *bitmap = flags->__vma_flags;
+ 
+@@ -1114,7 +1115,8 @@ static __always_inline vma_flags_t legacy_to_vma_flags(vm_flags_t flags)
+  * IMPORTANT: This does not overwrite bytes past the first system word. The
+  * caller must account for this.
+  */
+-static inline void vma_flags_overwrite_word_once(vma_flags_t *flags, unsigned long value)
++static __always_inline void vma_flags_overwrite_word_once(vma_flags_t *flags,
++		unsigned long value)
+ {
+ 	unsigned long *bitmap = flags->__vma_flags;
+ 
+@@ -1122,7 +1124,8 @@ static inline void vma_flags_overwrite_word_once(vma_flags_t *flags, unsigned lo
+ }
+ 
+ /* Update the first system word of VMA flags setting bits, non-atomically. */
+-static inline void vma_flags_set_word(vma_flags_t *flags, unsigned long value)
++static __always_inline void vma_flags_set_word(vma_flags_t *flags,
++		unsigned long value)
+ {
+ 	unsigned long *bitmap = flags->__vma_flags;
+ 
+@@ -1130,7 +1133,8 @@ static inline void vma_flags_set_word(vma_flags_t *flags, unsigned long value)
+ }
+ 
+ /* Update the first system word of VMA flags clearing bits, non-atomically. */
+-static inline void vma_flags_clear_word(vma_flags_t *flags, unsigned long value)
++static __always_inline void vma_flags_clear_word(vma_flags_t *flags,
++		unsigned long value)
+ {
+ 	unsigned long *bitmap = flags->__vma_flags;
+ 
+diff --git a/tools/testing/vma/include/dup.h b/tools/testing/vma/include/dup.h
+index f49af21319ba..f9fe07a8a443 100644
+--- a/tools/testing/vma/include/dup.h
++++ b/tools/testing/vma/include/dup.h
+@@ -764,7 +764,8 @@ static inline bool mm_flags_test(int flag, const struct mm_struct *mm)
+  * IMPORTANT: This does not overwrite bytes past the first system word. The
+  * caller must account for this.
+  */
+-static inline void vma_flags_overwrite_word(vma_flags_t *flags, unsigned long value)
++static __always_inline void vma_flags_overwrite_word(vma_flags_t *flags,
++		unsigned long value)
+ {
+ 	unsigned long *bitmap = flags->__vma_flags;
+ 
+@@ -777,7 +778,8 @@ static inline void vma_flags_overwrite_word(vma_flags_t *flags, unsigned long va
+  * IMPORTANT: This does not overwrite bytes past the first system word. The
+  * caller must account for this.
+  */
+-static inline void vma_flags_overwrite_word_once(vma_flags_t *flags, unsigned long value)
++static __always_inline void vma_flags_overwrite_word_once(vma_flags_t *flags,
++		unsigned long value)
+ {
+ 	unsigned long *bitmap = flags->__vma_flags;
+ 
+@@ -785,7 +787,8 @@ static inline void vma_flags_overwrite_word_once(vma_flags_t *flags, unsigned lo
+ }
+ 
+ /* Update the first system word of VMA flags setting bits, non-atomically. */
+-static inline void vma_flags_set_word(vma_flags_t *flags, unsigned long value)
++static __always_inline void vma_flags_set_word(vma_flags_t *flags,
++		unsigned long value)
+ {
+ 	unsigned long *bitmap = flags->__vma_flags;
+ 
+@@ -793,7 +796,8 @@ static inline void vma_flags_set_word(vma_flags_t *flags, unsigned long value)
+ }
+ 
+ /* Update the first system word of VMA flags clearing bits, non-atomically. */
+-static inline void vma_flags_clear_word(vma_flags_t *flags, unsigned long value)
++static __always_inline void vma_flags_clear_word(vma_flags_t *flags,
++		unsigned long value)
+ {
+ 	unsigned long *bitmap = flags->__vma_flags;
+ 
+@@ -1003,23 +1007,32 @@ static __always_inline bool vma_flags_same_mask(const vma_flags_t *flags,
+ #define vma_flags_same(flags, ...) \
+ 	vma_flags_same_mask(flags, mk_vma_flags(__VA_ARGS__))
+ 
+-static inline bool vma_test_all_mask(const struct vm_area_struct *vma,
+-				     vma_flags_t flags)
++static __always_inline bool vma_test(const struct vm_area_struct *vma,
++		vma_flag_t bit)
+ {
+-	return vma_flags_test_all_mask(&vma->flags, flags);
++	return vma_flags_test(&vma->flags, bit);
+ }
+ 
+-#define vma_test_all(vma, ...) \
+-	vma_test_all_mask(vma, mk_vma_flags(__VA_ARGS__))
++static __always_inline bool vma_test_any_mask(const struct vm_area_struct *vma,
++		vma_flags_t flags)
++{
++	return vma_flags_test_any_mask(&vma->flags, flags);
++}
+ 
+-static inline bool is_shared_maywrite_vm_flags(vm_flags_t vm_flags)
++#define vma_test_any(vma, ...) \
++	vma_test_any_mask(vma, mk_vma_flags(__VA_ARGS__))
++
++static __always_inline bool vma_test_all_mask(const struct vm_area_struct *vma,
++		vma_flags_t flags)
+ {
+-	return (vm_flags & (VM_SHARED | VM_MAYWRITE)) ==
+-		(VM_SHARED | VM_MAYWRITE);
++	return vma_flags_test_all_mask(&vma->flags, flags);
+ }
+ 
+-static inline void vma_set_flags_mask(struct vm_area_struct *vma,
+-				      vma_flags_t flags)
++#define vma_test_all(vma, ...) \
++	vma_test_all_mask(vma, mk_vma_flags(__VA_ARGS__))
++
++static __always_inline void vma_set_flags_mask(struct vm_area_struct *vma,
++		vma_flags_t flags)
+ {
+ 	vma_flags_set_mask(&vma->flags, flags);
+ }
+@@ -1033,8 +1046,8 @@ static __always_inline bool vma_desc_test(const struct vm_area_desc *desc,
+ 	return vma_flags_test(&desc->vma_flags, bit);
+ }
+ 
+-static inline bool vma_desc_test_any_mask(const struct vm_area_desc *desc,
+-					    vma_flags_t flags)
++static __always_inline bool vma_desc_test_any_mask(const struct vm_area_desc *desc,
++		vma_flags_t flags)
+ {
+ 	return vma_flags_test_any_mask(&desc->vma_flags, flags);
+ }
+@@ -1042,7 +1055,7 @@ static inline bool vma_desc_test_any_mask(const struct vm_area_desc *desc,
+ #define vma_desc_test_any(desc, ...) \
+ 	vma_desc_test_any_mask(desc, mk_vma_flags(__VA_ARGS__))
+ 
+-static inline bool vma_desc_test_all_mask(const struct vm_area_desc *desc,
++static __always_inline bool vma_desc_test_all_mask(const struct vm_area_desc *desc,
+ 		vma_flags_t flags)
+ {
+ 	return vma_flags_test_all_mask(&desc->vma_flags, flags);
+@@ -1051,8 +1064,8 @@ static inline bool vma_desc_test_all_mask(const struct vm_area_desc *desc,
+ #define vma_desc_test_all(desc, ...) \
+ 	vma_desc_test_all_mask(desc, mk_vma_flags(__VA_ARGS__))
+ 
+-static inline void vma_desc_set_flags_mask(struct vm_area_desc *desc,
+-					   vma_flags_t flags)
++static __always_inline void vma_desc_set_flags_mask(struct vm_area_desc *desc,
++		vma_flags_t flags)
+ {
+ 	vma_flags_set_mask(&desc->vma_flags, flags);
+ }
+@@ -1060,8 +1073,8 @@ static inline void vma_desc_set_flags_mask(struct vm_area_desc *desc,
+ #define vma_desc_set_flags(desc, ...) \
+ 	vma_desc_set_flags_mask(desc, mk_vma_flags(__VA_ARGS__))
+ 
+-static inline void vma_desc_clear_flags_mask(struct vm_area_desc *desc,
+-					     vma_flags_t flags)
++static __always_inline void vma_desc_clear_flags_mask(struct vm_area_desc *desc,
++		vma_flags_t flags)
+ {
+ 	vma_flags_clear_mask(&desc->vma_flags, flags);
+ }
+@@ -1069,6 +1082,12 @@ static inline void vma_desc_clear_flags_mask(struct vm_area_desc *desc,
+ #define vma_desc_clear_flags(desc, ...) \
+ 	vma_desc_clear_flags_mask(desc, mk_vma_flags(__VA_ARGS__))
+ 
++static inline bool is_shared_maywrite_vm_flags(vm_flags_t vm_flags)
++{
++	return (vm_flags & (VM_SHARED | VM_MAYWRITE)) ==
++		(VM_SHARED | VM_MAYWRITE);
++}
++
+ static inline bool is_shared_maywrite(const vma_flags_t *flags)
+ {
+ 	return vma_flags_test_all(flags, VMA_SHARED_BIT, VMA_MAYWRITE_BIT);
 -- 
 2.53.0
 
