@@ -1,187 +1,183 @@
-Return-Path: <linux-mips+bounces-13859-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-13860-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id IOJWMyCFvmn4RwMAu9opvQ
-	(envelope-from <linux-mips+bounces-13859-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Sat, 21 Mar 2026 12:46:40 +0100
+	id mNJKJ9mKvmkOSQMAu9opvQ
+	(envelope-from <linux-mips+bounces-13860-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Sat, 21 Mar 2026 13:11:05 +0100
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id 626012E50BD
-	for <lists+linux-mips@lfdr.de>; Sat, 21 Mar 2026 12:46:40 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 02A862E53AE
+	for <lists+linux-mips@lfdr.de>; Sat, 21 Mar 2026 13:11:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id AC2AD300399C
-	for <lists+linux-mips@lfdr.de>; Sat, 21 Mar 2026 11:46:39 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id B6A21300A395
+	for <lists+linux-mips@lfdr.de>; Sat, 21 Mar 2026 12:10:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3C77F38B133;
-	Sat, 21 Mar 2026 11:46:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0C09D28851C;
+	Sat, 21 Mar 2026 12:10:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b="vHAyyWtX";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="kAUUtRgg"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YElIJbbT"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from fout-b4-smtp.messagingengine.com (fout-b4-smtp.messagingengine.com [202.12.124.147])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02F171DE2AD;
-	Sat, 21 Mar 2026 11:46:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.147
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB5632C028F
+	for <linux-mips@vger.kernel.org>; Sat, 21 Mar 2026 12:10:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774093598; cv=none; b=DCHdE97bEDzrI0vHWLb39Kypt1bqC+AvWhjph+g/qP7kmMFABwjB83F5594jT2zG3+JU4UFtoALFqpfux7PX1sx61kqJjLz6ghT+U7Sq6mR7ue9A8ZQ6hS6HcKZfY/eiWgp0P28xWxgPD2pWAHoN71fiiUbf3Yze2kpS6JG4egE=
+	t=1774095053; cv=none; b=n/cBs1n25LUf4T2pjSdjZoXCHiIrPcGUvd6XB+1rk/PgzYCiQ2nsWDYwBDxyAP3nz5I+rqOl48dxbw82pFtckZ5TNy5CI4v7ZwugjKmJ+I3fDx8iU9LuHp37MuEesSR6J4sD5Nk9iSXc/CJl/qrpBlc+D7Yl7xJ+7vMQBaUyyrg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774093598; c=relaxed/simple;
-	bh=bztXV4euuPrhRT2ssHTIluQzRVGTAJjq9VmInF4hpTU=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=aI/hTbkyhFD2S3RTTVrLCMjEwSoakOAZDKnWzTCc1rk1GX5oY8+SLxXJabfm+JcDruG1CNXgMpYwTfpPvcZQCWNEzPmzy4sBF0qQ1Fginhscoj4lOM1Yeeg3l1BouRnue7mF/0WlkMjTKLIg6EBaUw8kz+ulrdTsEXrpytfnCtg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com; spf=pass smtp.mailfrom=flygoat.com; dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b=vHAyyWtX; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=kAUUtRgg; arc=none smtp.client-ip=202.12.124.147
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flygoat.com
-Received: from phl-compute-03.internal (phl-compute-03.internal [10.202.2.43])
-	by mailfout.stl.internal (Postfix) with ESMTP id 149491D00156;
-	Sat, 21 Mar 2026 07:46:35 -0400 (EDT)
-Received: from phl-imap-08 ([10.202.2.84])
-  by phl-compute-03.internal (MEProxy); Sat, 21 Mar 2026 07:46:35 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
-	cc:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm2; t=1774093594;
-	 x=1774179994; bh=e7e4Se+PfjWD7DOyw/X91rALDV7hJ0KrQaseFUWVQgs=; b=
-	vHAyyWtX0UqGQnj16ggZX6bt0eX74BoOuMb+XpEGZor64mTEVVQXAgrk9ioiNyuq
-	HHg4EmHO/QTDegb7RsIbFGn47b9aDIj6HET4abye4OA9lVA8m7V8bENL7SQUeaHm
-	liGv6fAWXEcANkpXVs4tVuOvmMN0183pkjvYEWULVgv3FtogKSLfhtNfkKsJV4Wp
-	iTYHZpqH5/d9LnfuYM9zhAsoAbJC8AIQ9BC9Ocv/KQhSGsW45XpxyzEj0vqmObf4
-	AMlm+pnnkjBb6DK3OpUjmMpAlgR1Iv8ExrGUn9IJnCWMEAvg+Tnma0yD46nHZdx4
-	6i7FyYD/6oVsYuT5BWXbeg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1774093594; x=
-	1774179994; bh=e7e4Se+PfjWD7DOyw/X91rALDV7hJ0KrQaseFUWVQgs=; b=k
-	AUUtRggc6LCBuOnkjvPDth6FE8Vq6XNISyE12G5J3nQ/heY3O7kt9B17vKItMsiv
-	wTGLEE2pDm3ugGip4o/sisK9FjjdEL/cCvB7ctzNAB1x51nLx0JZVRwtxrHSd+O0
-	n/lkaT21pUpt0JdhRjuqqjB5f2gKFe0sGaO1/AF00FMCNNwN0tH4hvwiqA3PVOzQ
-	UR20x8yCsbOlz/XUyEwVzKqftYNt4m1iWFZ5prekrxSwdyzzVvjHqu5oUo1aELoN
-	Edvll+9ivkHBZUiD4Lne36gLEKHSOrDe4fNe0/rDT10rhR6V1d2VlS+ukPIBVYEz
-	o/fc23O4rmYzO8CXJTSvA==
-X-ME-Sender: <xms:GoW-aTQiv7u021WEIWEcKyhn_eE2Lx-4f_NHhVekiwzr6WnHTHp6xg>
-    <xme:GoW-afkbmySIDvyjwr7x6-cWtJMlyFyXKiVLd_d7r6TF0e6_56liFPdkFxtGY0VmP
-    J1ymLBsuwRxNwFhynMMMqA4bRu3BSJJU6THWv7ROU8_XbcTN8uVa_Ce>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefgedrtddtgdefuddvjeeiucetufdoteggodetrf
-    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
-    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
-    gurhepofggfffhvfevkfgjfhfutgfgsehtjeertdertddtnecuhfhrohhmpedflfhirgig
-    uhhnucgjrghnghdfuceojhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomheqne
-    cuggftrfgrthhtvghrnhephfethfdutdeigeelueeitddtheehudevffejtedtkedvueei
-    tddujeefieejieefnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilh
-    hfrhhomhepjhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomhdpnhgspghrtghp
-    thhtohepudegpdhmohguvgepshhmthhpohhuthdprhgtphhtthhopehtshgsohhgvghnug
-    esrghlphhhrgdrfhhrrghnkhgvnhdruggvpdhrtghpthhtohepuhifuhesihgtvghnohif
-    hidrmhgvpdhrtghpthhtohepiihhvghnghigihhnghgurgesihhstggrshdrrggtrdgtnh
-    dprhgtphhtthhopegthhgvnhhhuhgrtggriheskhgvrhhnvghlrdhorhhgpdhrtghpthht
-    oheptghonhhorhdoughtsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehkrhiikhdoug
-    htsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehrohgshheskhgvrhhnvghlrdhorhhg
-    pdhrtghpthhtohepthhglhigsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehlohhonh
-    hgrghrtghhsehlihhsthhsrdhlihhnuhigrdguvghv
-X-ME-Proxy: <xmx:GoW-afXrO5aCGGk3sE5evmF7ZyTXf5ataKg4QHBpzH4DRvdhK7BauQ>
-    <xmx:GoW-aYAICP2YFXjoOTjkovh-ovaU9vOXePb1M_4H36tRB7scwcEefQ>
-    <xmx:GoW-abIO8ip4cklICkyBjlcWDA4xoqYfgayOP80VaxYq8z5s1RxTjQ>
-    <xmx:GoW-aWv97QDauatGmf82XB1LR0fd_84NTe_RZTnlngxk1IcBmjYhRw>
-    <xmx:GoW-aX--qOnht7nj8RuzBvBD1cCRVjbCBJiGiim6hH2I72GK8JJ_s4AP>
-Feedback-ID: ifd894703:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id BDE772CE0072; Sat, 21 Mar 2026 07:46:34 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
+	s=arc-20240116; t=1774095053; c=relaxed/simple;
+	bh=Me8RHncuorU5Bnt1FGpeDdkHmkRj0Akc3sb0Vai9Ye8=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=WqmizRBg3zWyG7H1pbVoH+6dO6jd6oCbovOnAEHsLpC81q/PnEL+U0va2e+AxmykJKYrvGtfQ42K3U/SHK8M8YQq9lF1beG8+PlvMw2Da3EnHohm3RCbMBCetUNlo4sdieQRvq61VAtZZyu7KpW8TXzKItnex7Pn5aBbOLg8OIM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YElIJbbT; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 976F9C2BCB2
+	for <linux-mips@vger.kernel.org>; Sat, 21 Mar 2026 12:10:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1774095053;
+	bh=Me8RHncuorU5Bnt1FGpeDdkHmkRj0Akc3sb0Vai9Ye8=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=YElIJbbTM4SUHYA3k3q3h3OFGJq44TdRrR7BfwD3RsTmbuhE3ljw4Cdcsok/zv1N4
+	 M/+lijNybtEVbPTIwQBqJeZfeJkhJZJAQEKu9Pq7laYy1bKxUXkTmzbOKUb1BdHm9g
+	 vyhoWrJv62U1IZqqH0Row2GFdXVwIB9nGr2zaKqaBPiZtUt+2Ig74F6sTvIzM88OaL
+	 slM8d81Xi9R8zZ/cnUFz0kmi7MoXuIMjmM+EdBMwTgnqj1B9e9q735uqhGqC6UJ1RJ
+	 cCeV740581Gsf2i6897bCl+TWf19IhinkLsjGELaxvEcLj673KgfZj09bJAlIrf2l6
+	 0XD9bAdsfGL7Q==
+Received: by mail-ed1-f45.google.com with SMTP id 4fb4d7f45d1cf-667f8794e97so4914624a12.2
+        for <linux-mips@vger.kernel.org>; Sat, 21 Mar 2026 05:10:53 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCUTmqqqT1zDcusXryUYBozay7wf6DJFNDvtSBWHErNERwNbcCpCRDk0k5lIrZO7wunkcIKyp/o2htbU@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw8AdttUV1jP/lNzjVm/9L9sEgj7Y1WynN7u4cDf47b0n559vcK
+	pI+RwGP1CMz8Uc/COIh0wvPNwjQiJKK8nmrK5uwFaQM4gN0oLgMF94Ru1NQPVI5SHNWbnxM5k1R
+	lrb70cYG8uqkgnRo1jqIqDxziO4HAKfE=
+X-Received: by 2002:a17:906:13c2:b0:b97:61d7:793f with SMTP id
+ a640c23a62f3a-b982f282a9fmr347730566b.24.1774095052107; Sat, 21 Mar 2026
+ 05:10:52 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-ThreadId: A59YFox_m8Ms
-Date: Sat, 21 Mar 2026 11:46:13 +0000
-From: "Jiaxun Yang" <jiaxun.yang@flygoat.com>
-To: "Icenowy Zheng" <zhengxingda@iscas.ac.cn>,
- "Thomas Gleixner" <tglx@kernel.org>, "Rob Herring" <robh@kernel.org>,
- "Krzysztof Kozlowski" <krzk+dt@kernel.org>,
- "Conor Dooley" <conor+dt@kernel.org>, "Huacai Chen" <chenhuacai@kernel.org>,
- "Xuerui Wang" <kernel@xen0n.name>,
- "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>
-Cc: "Icenowy Zheng" <uwu@icenowy.me>, "Yao Zi" <me@ziyao.cc>,
- linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
- loongarch@lists.linux.dev,
- "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>
-Message-Id: <e2d1afb3-d137-4795-9bc3-e08711a767e5@app.fastmail.com>
-In-Reply-To: <20260321092032.3502701-7-zhengxingda@iscas.ac.cn>
 References: <20260321092032.3502701-1-zhengxingda@iscas.ac.cn>
- <20260321092032.3502701-7-zhengxingda@iscas.ac.cn>
-Subject: Re: [PATCH v4 6/6] irqchip/loongson-pch-lpc: Enable building on MIPS
- Loongson64
-Content-Type: text/plain
-Content-Transfer-Encoding: 7bit
-X-Spamd-Result: default: False [-0.65 / 15.00];
+In-Reply-To: <20260321092032.3502701-1-zhengxingda@iscas.ac.cn>
+From: Huacai Chen <chenhuacai@kernel.org>
+Date: Sat, 21 Mar 2026 20:10:39 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H6pcwfFPK_FRaXMa-h=aqEmJoLv7wUtG43WrbfHDZGYuw@mail.gmail.com>
+X-Gm-Features: AaiRm508So21GaidqT3MorXZv8b1sxmEw5OwaNquBRDd5F5Ghrpf6T2HDO4BAPo
+Message-ID: <CAAhV-H6pcwfFPK_FRaXMa-h=aqEmJoLv7wUtG43WrbfHDZGYuw@mail.gmail.com>
+Subject: Re: [PATCH v4 0/6] Add support for LS7A LPC IRQ for MIPS Loongson systems
+To: Icenowy Zheng <zhengxingda@iscas.ac.cn>
+Cc: Thomas Gleixner <tglx@kernel.org>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	WANG Xuerui <kernel@xen0n.name>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
+	Jiaxun Yang <jiaxun.yang@flygoat.com>, Icenowy Zheng <uwu@icenowy.me>, Yao Zi <me@ziyao.cc>, 
+	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org, 
+	loongarch@lists.linux.dev, linux-mips@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spamd-Result: default: False [-0.66 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[flygoat.com,none];
-	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
-	R_DKIM_ALLOW(-0.20)[flygoat.com:s=fm2,messagingengine.com:s=fm1];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
-	XM_UA_NO_VERSION(0.01)[];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-13859-lists,linux-mips=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-13860-lists,linux-mips=lfdr.de];
+	FROM_HAS_DN(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
 	RCPT_COUNT_TWELVE(0.00)[14];
 	MIME_TRACE(0.00)[0:+];
-	TO_DN_EQ_ADDR_SOME(0.00)[];
-	RCVD_TLS_LAST(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	DKIM_TRACE(0.00)[kernel.org:+];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	MISSING_XM_UA(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[jiaxun.yang@flygoat.com,linux-mips@vger.kernel.org];
-	FROM_HAS_DN(0.00)[];
-	DKIM_TRACE(0.00)[flygoat.com:+,messagingengine.com:+];
-	RCVD_COUNT_FIVE(0.00)[6];
+	FROM_NEQ_ENVFROM(0.00)[chenhuacai@kernel.org,linux-mips@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	NEURAL_HAM(-0.00)[-1.000];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-mips,dt];
-	NEURAL_HAM(-0.00)[-0.993];
 	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[flygoat.com:dkim,flygoat.com:email,iscas.ac.cn:email]
-X-Rspamd-Queue-Id: 626012E50BD
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,mail.gmail.com:mid,loongson.cn:email,iscas.ac.cn:email]
+X-Rspamd-Queue-Id: 02A862E53AE
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
+For the whole series:
+
+Reviewed-by: Huacai Chen <chenhuacai@loongson.cn>
 
 
-On Sat, 21 Mar 2026, at 9:20 AM, Icenowy Zheng wrote:
-> As the driver can now support OF-based platforms, it's now possible to
-> use it on MIPS Loongson64 machines.
+On Sat, Mar 21, 2026 at 5:20=E2=80=AFPM Icenowy Zheng <zhengxingda@iscas.ac=
+.cn> wrote:
 >
-> Drop the requirement of LOONGARCH for this driver, to allow build on
-> both MIPS-based and LoongArch-based Loongson systems.
+> From: Icenowy Zheng <uwu@icenowy.me>
 >
-> Signed-off-by: Icenowy Zheng <zhengxingda@iscas.ac.cn>
-
-Reviewed-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
-
-> ---
->  drivers/irqchip/Kconfig | 1 -
->  1 file changed, 1 deletion(-)
+> This patchset tries to add support for Loongson 7A1000 PCH's LPC
+> interrupt controller to MIPS-based Loongson systems.
 >
-> diff --git a/drivers/irqchip/Kconfig b/drivers/irqchip/Kconfig
-> index f07b00d7fef90..f2eee2bd61dd0 100644
-> --- a/drivers/irqchip/Kconfig
-> +++ b/drivers/irqchip/Kconfig
-> @@ -761,7 +761,6 @@ config LOONGSON_PCH_MSI
-> 
->  config LOONGSON_PCH_LPC
->  	bool "Loongson PCH LPC Controller"
-> -	depends on LOONGARCH
->  	depends on MACH_LOONGSON64 || LOONGARCH
->  	default MACH_LOONGSON64
->  	select IRQ_DOMAIN_HIERARCHY
-> -- 
+> LPC, from software's perspective of view, is just ISA, so the interrupts
+> should be handled as legacy ones occupying the lowest 0-15 IRQ numbers.
+> Despite the current PCH LPC driver for ACPI-based LoongArch Loongson
+> machines handled it, the setup is fragile and depends on its specific
+> setup sequence (allocating the LPC IRQs first, and then allocate the
+> parent IRQ at PCH PIC). The refactor of extracting parent IRQ allocation
+> breaks this fragile sequence, so the first two commits is created to
+> address this issue (by reserving ISA interrupts from the dynamic
+> allocation space).
+>
+> Then the remaining commits are just adding OF(DT) based initialization
+> of PCH LPC interrupt controller, like what happened on PCH PIC.
+>
+> Tested on a Haier Boyue G51 system with legacy i8042 keyboard/mouse as
+> integrated ones, with some additional patches adding the PCH LPC device
+> node to the ls7a-pch.dtsi file.
+>
+> Changes in v4:
+> - Removed "IRQ" acronym from detailed commit messages (but still kept
+>   in summary phrases for the length constraint).
+> - Re-format some patch to utilize 100 columns instead of 80.
+> - Temporarily removed the DT patches for fitting the whole patchset into
+>   the irqchip tree.
+>
+> Changes in v3:
+> - Override arch_dynirq_lower_bound() in MIPS Loongson64 / LoongArch
+>   instead of modifying the global version of function.
+> - Added Rob's R-b to the binding patch.
+>
+> Changes in v2:
+> - Rebased on top of `irq-drivers-2026-02-09` tag.
+> - Compatible changed to `loongson,ls7a-lpc` .
+> - Merged the patch for conditionally build of ACPI code to the patch
+>   introducing OF code.
+> - Sorted function variable definitions.
+> - Reworded some commit messages as Thomas Glexiner suggests.
+> - Added __init to the LPC irqchip OF initialization code to prevent
+>   section mismatch.
+>
+> Icenowy Zheng (6):
+>   MIPS: loongson64: Override arch_dynirq_lower_bound to reserve LPC IRQs
+>   LoongArch: Override arch_dynirq_lower_bound to reserve LPC IRQs
+>   dt-bindings: interrupt-controller: add LS7A PCH LPC
+>   irqchip/loongson-pch-lpc: Extract non-ACPI-related code from ACPI init
+>   irqchip/loongson-pch-lpc: Add OF init code
+>   irqchip/loongson-pch-lpc: Enable building on MIPS Loongson64
+>
+>  .../loongson,pch-lpc.yaml                     | 52 +++++++++++
+>  arch/loongarch/kernel/irq.c                   |  6 ++
+>  arch/mips/loongson64/init.c                   |  6 ++
+>  drivers/irqchip/Kconfig                       |  1 -
+>  drivers/irqchip/irq-loongson-pch-lpc.c        | 92 +++++++++++++++----
+>  5 files changed, 136 insertions(+), 21 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/interrupt-controlle=
+r/loongson,pch-lpc.yaml
+>
+> --
 > 2.52.0
-
--- 
-- Jiaxun
+>
+>
 
