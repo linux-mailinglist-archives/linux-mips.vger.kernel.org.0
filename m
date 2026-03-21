@@ -1,133 +1,117 @@
-Return-Path: <linux-mips+bounces-13861-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-13862-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id GLB0O+2svmmlWQMAu9opvQ
-	(envelope-from <linux-mips+bounces-13861-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Sat, 21 Mar 2026 15:36:29 +0100
+	id ZchnM+/RvmlmeAMAu9opvQ
+	(envelope-from <linux-mips+bounces-13862-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Sat, 21 Mar 2026 18:14:23 +0100
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8EDB92E5D5F
-	for <lists+linux-mips@lfdr.de>; Sat, 21 Mar 2026 15:36:29 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4D1802E6782
+	for <lists+linux-mips@lfdr.de>; Sat, 21 Mar 2026 18:14:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 041753011BC9
-	for <lists+linux-mips@lfdr.de>; Sat, 21 Mar 2026 14:36:15 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 42CE830094CA
+	for <lists+linux-mips@lfdr.de>; Sat, 21 Mar 2026 17:14:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7573629D26E;
-	Sat, 21 Mar 2026 14:36:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 363E0329C78;
+	Sat, 21 Mar 2026 17:14:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=crapouillou.net header.i=@crapouillou.net header.b="tItR4EGf"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ekI7OpOs"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from aposti.net (aposti.net [185.119.170.32])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B028737646E;
-	Sat, 21 Mar 2026 14:36:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.119.170.32
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 128842512DE;
+	Sat, 21 Mar 2026 17:14:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774103774; cv=none; b=j1Y2E3/yrCTqUlumZ0WbKDlUkM2bfIkOCecoopzIHnUkg/T/UV/Hijnb0IfpiVRuqd8SXrC07pfC2x8hDpsfa8CI36z0OCHfDEh7J5zHe4H6KVC9+xKt3OUffHsJfoyb1mdiUUHEq7TZFezarMrmZfQdhayidH9XNVOKnd4X5Oc=
+	t=1774113260; cv=none; b=PsgG3R9FcUGixS87r5GpiJeK1LkXtKiuHCIx3Inid9vw11FeNzrP/KYINEMgz1bQHp/P09N9WWicRTv3do4rwTEy6qSQhCsIC+6FJohnwxldEhhbCrkTrRnbVGBwHm5HElXXr9yFkI0H15P1L/PVN4aomrvnnQnvTzhnH1/NbY8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774103774; c=relaxed/simple;
-	bh=zn/YO/TCXYmtoC+IugKxfXMgLUpYdFLfP52Rtce5fis=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=T+tSspg2sVaSOWgf9JriRhxAcD0ov4R4sQMi2uqc09eP2Dy+WzwwgTQI3wdzXrP4yN10u4d6Yhp3glrCEs4JvnBLpa6PwJf99UlAhTLYFF5Wt6WVLePIorsVCfs2t54NlZW5J7Ik+sglSFVYwzEquXFGRlL72pXieEXaJkkyp3c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=crapouillou.net; spf=pass smtp.mailfrom=crapouillou.net; dkim=pass (1024-bit key) header.d=crapouillou.net header.i=@crapouillou.net header.b=tItR4EGf; arc=none smtp.client-ip=185.119.170.32
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=crapouillou.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=crapouillou.net
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=crapouillou.net;
-	s=mail; t=1774103764;
-	bh=zn/YO/TCXYmtoC+IugKxfXMgLUpYdFLfP52Rtce5fis=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-	b=tItR4EGfLEa1h0KEu4qta07yvf6EoA1oLMHHC/hHhBs0Flu++Bg0kh8FQdq/TuUeU
-	 L6VYg25/W455cp4F60jr3LEHcLjz1JzpIgg9sk2Rs99TE9/gAlZ5jK3SVea7hWdAkY
-	 r/REthetPvMxUyWn+d51Yha0TSqiILnsAiPClR2E=
-Message-ID: <46bc3e91ae5a3e246bcd89b715d9ea5b797052f3.camel@crapouillou.net>
-Subject: Re: [PATCH v1 1/1] pwm: jz4740: Drop unused include
-From: Paul Cercueil <paul@crapouillou.net>
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>, 
-	linux-mips@vger.kernel.org, linux-pwm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Cc: Uwe =?ISO-8859-1?Q?Kleine-K=F6nig?= <ukleinek@kernel.org>
-Date: Sat, 21 Mar 2026 15:35:59 +0100
-In-Reply-To: <20260320220644.3237290-1-andriy.shevchenko@linux.intel.com>
-References: <20260320220644.3237290-1-andriy.shevchenko@linux.intel.com>
-Autocrypt: addr=paul@crapouillou.net; prefer-encrypt=mutual;
- keydata=mQENBF0KhcEBCADkfmrzdTOp/gFOMQX0QwKE2WgeCJiHPWkpEuPH81/HB2dpjPZNW03ZM
- LQfECbbaEkdbN4YnPfXgcc1uBe5mwOAPV1MBlaZcEt4M67iYQwSNrP7maPS3IaQJ18ES8JJ5Uf5Uz
- FZaUawgH+oipYGW+v31cX6L3k+dGsPRM0Pyo0sQt52fsopNPZ9iag0iY7dGNuKenaEqkYNjwEgTtN
- z8dt6s3hMpHIKZFL3OhAGi88wF/21isv0zkF4J0wlf9gYUTEEY3Eulx80PTVqGIcHZzfavlWIdzhe
- +rxHTDGVwseR2Y1WjgFGQ2F+vXetAB8NEeygXee+i9nY5qt9c07m8mzjABEBAAG0JFBhdWwgQ2VyY
- 3VlaWwgPHBhdWxAY3JhcG91aWxsb3UubmV0PokBTgQTAQoAOBYhBNdHYd8OeCBwpMuVxnPua9InSr
- 1BBQJdCoXBAhsDBQsJCAcCBhUKCQgLAgQWAgMBAh4BAheAAAoJEHPua9InSr1BgvIH/0kLyrI3V0f
- 33a6D3BJwc1grbygPVYGuC5l5eMnAI+rDmLR19E2yvibRpgUc87NmPEQPpbbtAZt8On/2WZoE5OIP
- dlId/AHNpdgAtGXo0ZX4LGeVPjxjdkbrKVHxbcdcnY+zzaFglpbVSvp76pxqgVg8PgxkAAeeJV+ET
- 4t0823Gz2HzCL/6JZhvKAEtHVulOWoBh368SYdolp1TSfORWmHzvQiCCCA+j0cMkYVGzIQzEQhX7U
- rf9N/nhU5/SGLFEi9DcBfXoGzhyQyLXflhJtKm3XGB1K/pPulbKaPcKAl6rIDWPuFpHkSbmZ9r4KF
- lBwgAhlGy6nqP7O3u7q23hRU=
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+	s=arc-20240116; t=1774113260; c=relaxed/simple;
+	bh=UJMWvvJqdR1PYRby9qfnQtq6VQYLY8kw5EyYq0j5wBE=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=RiFiMwN/nTVwDaxLNPgH3+XjoQGUglPr8K6NJ2zyCVn1ynF0G/0vE5HOli7/Py3B2IF5IvCmLLhEf5m4rZGCKZYAS7hz3dC/PGmiDKE1lCdepHtjzcszqyMbcmoZNS+vjjGkLlBzB+KhLAjRZ6Mykuqe0sHfsfLv9DCPM9cNj+M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ekI7OpOs; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D9F5BC19421;
+	Sat, 21 Mar 2026 17:14:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1774113259;
+	bh=UJMWvvJqdR1PYRby9qfnQtq6VQYLY8kw5EyYq0j5wBE=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+	b=ekI7OpOsREtU9+uWbUP7OVozxIe1KjD3/kC/QpUEA0aWE0ZK66hNdeiaI9dZa7YA9
+	 eKJCFrl3vwi8zCmlS6+vi15Z2gD0DkhqQw5BQ4ToPMRP6ejBWCxo0TyebvZ6f4/+cK
+	 fLYanaoaXt56DTql+q95erFgv6FAJpFNFjhjc7iBh784emhLDAs8O2xXGLyK6Sqlrs
+	 LTCCg4u/ctUmynTQmshMr9B9Ibswum/PPsvxofgwEsOoh2MSepMbJc9K78KTevOFDK
+	 IYhkHIkigt3FLxx40LDot/Ke5txY5taTSCh8af4IgNMd2bxnmUNQyRzN5w3METS8XO
+	 2BZlrCXVi289Q==
+From: Thomas Gleixner <tglx@kernel.org>
+To: Icenowy Zheng <uwu@icenowy.me>, Huacai Chen <chenhuacai@kernel.org>
+Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>, WANG Xuerui <kernel@xen0n.name>,
+ Thomas
+ Bogendoerfer <tsbogend@alpha.franken.de>, Jiaxun Yang
+ <jiaxun.yang@flygoat.com>, Yao Zi <me@ziyao.cc>,
+ linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+ loongarch@lists.linux.dev, linux-mips@vger.kernel.org
+Subject: Re: [PATCH v3 0/8] Add support for LS7A LPC IRQ for MIPS Loongson
+ systems
+In-Reply-To: <87f24e166c931d0040e7b838785e7b360cbc7c6a.camel@icenowy.me>
+References: <20260314162828.1055188-1-zhengxingda@iscas.ac.cn>
+ <CAAhV-H4OYVB21jH3PSzOi4GPU+t4LY664Yp=CeDhjFRKf9V07Q@mail.gmail.com>
+ <87f24e166c931d0040e7b838785e7b360cbc7c6a.camel@icenowy.me>
+Date: Sat, 21 Mar 2026 18:14:15 +0100
+Message-ID: <87ikaphzq0.ffs@tglx>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Spamd-Result: default: False [-2.16 / 15.00];
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spamd-Result: default: False [3.84 / 15.00];
+	MID_END_EQ_FROM_USER_PART(4.00)[];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[crapouillou.net,none];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
-	R_DKIM_ALLOW(-0.20)[crapouillou.net:s=mail];
+	MID_RHS_NOT_FQDN(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-13861-lists,linux-mips=lfdr.de];
-	FROM_HAS_DN(0.00)[];
-	RCVD_COUNT_THREE(0.00)[3];
+	TAGGED_FROM(0.00)[bounces-13862-lists,linux-mips=lfdr.de];
+	RCVD_COUNT_THREE(0.00)[4];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	TO_DN_SOME(0.00)[];
-	DKIM_TRACE(0.00)[crapouillou.net:+];
+	RCPT_COUNT_TWELVE(0.00)[13];
+	FROM_HAS_DN(0.00)[];
 	MISSING_XM_UA(0.00)[];
-	RCPT_COUNT_FIVE(0.00)[5];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[paul@crapouillou.net,linux-mips@vger.kernel.org];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
-	TAGGED_RCPT(0.00)[linux-mips];
-	MID_RHS_MATCH_FROM(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[crapouillou.net:dkim,crapouillou.net:email,crapouillou.net:mid,intel.com:email,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 8EDB92E5D5F
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[tglx@kernel.org,linux-mips@vger.kernel.org];
+	DKIM_TRACE(0.00)[kernel.org:+];
+	TAGGED_RCPT(0.00)[linux-mips,dt];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TO_DN_SOME(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 4D1802E6782
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-Le vendredi 20 mars 2026 =C3=A0 23:06 +0100, Andy Shevchenko a =C3=A9crit=
-=C2=A0:
-> This driver includes the legacy header <linux/gpio.h> but does
-> not use any symbols from it. Drop the inclusion.
->=20
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+On Sat, Mar 21 2026 at 16:59, Icenowy Zheng wrote:
+> =E5=9C=A8 2026-03-18=E4=B8=89=E7=9A=84 21:57 +0800=EF=BC=8CHuacai Chen=E5=
+=86=99=E9=81=93=EF=BC=9A
+> I'm going to change this for your preference, but please note that
+> there's no requirement of using upper case for `summary phrase` in the
+> Documentation/process/submitting-patches.rst document.
 
-Acked-by: Paul Cercueil <paul@crapouillou.net>
+Interrupt chip code is maintained in the tip tree and that tree has a
+supplementary document, which explicitely requests this:
 
-Cheers,
--Paul
-
-> ---
-> =C2=A0drivers/pwm/pwm-jz4740.c | 1 -
-> =C2=A01 file changed, 1 deletion(-)
->=20
-> diff --git a/drivers/pwm/pwm-jz4740.c b/drivers/pwm/pwm-jz4740.c
-> index 6bdb01619380..e0b5966fc7fe 100644
-> --- a/drivers/pwm/pwm-jz4740.c
-> +++ b/drivers/pwm/pwm-jz4740.c
-> @@ -10,7 +10,6 @@
-> =C2=A0
-> =C2=A0#include <linux/clk.h>
-> =C2=A0#include <linux/err.h>
-> -#include <linux/gpio.h>
-> =C2=A0#include <linux/kernel.h>
-> =C2=A0#include <linux/mfd/ingenic-tcu.h>
-> =C2=A0#include <linux/mfd/syscon.h>
+  https://www.kernel.org/doc/html/latest/process/maintainer-tip.html#patch-=
+subject
 
