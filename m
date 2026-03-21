@@ -1,117 +1,139 @@
-Return-Path: <linux-mips+bounces-13862-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-13863-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id ZchnM+/RvmlmeAMAu9opvQ
-	(envelope-from <linux-mips+bounces-13862-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Sat, 21 Mar 2026 18:14:23 +0100
+	id eIE8H4cfv2m7vQMAu9opvQ
+	(envelope-from <linux-mips+bounces-13863-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Sat, 21 Mar 2026 23:45:27 +0100
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4D1802E6782
-	for <lists+linux-mips@lfdr.de>; Sat, 21 Mar 2026 18:14:23 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id DAC612E7888
+	for <lists+linux-mips@lfdr.de>; Sat, 21 Mar 2026 23:45:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 42CE830094CA
-	for <lists+linux-mips@lfdr.de>; Sat, 21 Mar 2026 17:14:22 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 85B4C300C908
+	for <lists+linux-mips@lfdr.de>; Sat, 21 Mar 2026 22:45:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 363E0329C78;
-	Sat, 21 Mar 2026 17:14:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 325E22B9B7;
+	Sat, 21 Mar 2026 22:45:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ekI7OpOs"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FD1i/Lfy"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 128842512DE;
-	Sat, 21 Mar 2026 17:14:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D9BB40DFCB;
+	Sat, 21 Mar 2026 22:45:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774113260; cv=none; b=PsgG3R9FcUGixS87r5GpiJeK1LkXtKiuHCIx3Inid9vw11FeNzrP/KYINEMgz1bQHp/P09N9WWicRTv3do4rwTEy6qSQhCsIC+6FJohnwxldEhhbCrkTrRnbVGBwHm5HElXXr9yFkI0H15P1L/PVN4aomrvnnQnvTzhnH1/NbY8=
+	t=1774133124; cv=none; b=azJbnnkESrS2a2c3mFgtx88YXIMJsItS/1p8RPlYA9oWFAP29NpoByZ1x1m9CQckKyS0ySsXnhs67juia61zaWxc34MjjHd0msPhf9T/bLWcPOYmCgItOUntRROYfzzZybF1605G6AbhC5QbeTycfugRpHzjxDJwN5D7LpQeyFY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774113260; c=relaxed/simple;
-	bh=UJMWvvJqdR1PYRby9qfnQtq6VQYLY8kw5EyYq0j5wBE=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=RiFiMwN/nTVwDaxLNPgH3+XjoQGUglPr8K6NJ2zyCVn1ynF0G/0vE5HOli7/Py3B2IF5IvCmLLhEf5m4rZGCKZYAS7hz3dC/PGmiDKE1lCdepHtjzcszqyMbcmoZNS+vjjGkLlBzB+KhLAjRZ6Mykuqe0sHfsfLv9DCPM9cNj+M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ekI7OpOs; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D9F5BC19421;
-	Sat, 21 Mar 2026 17:14:18 +0000 (UTC)
+	s=arc-20240116; t=1774133124; c=relaxed/simple;
+	bh=IW12eEI3ZKbVq37cMKA3pc+CzTg1bSKIJO3BKrL4t7E=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=nS1/BVMrpqGkNWOm0OUcBOiXmpq3trl3nS22U0DHJSJM/JRH/msM/PiSXgPVfzRC5eYFNRckvM9qspclSGvvT5rnKVGYksSGzO83hyAxpr1a+KCuDDwlZgwxvM+HtGQH+F++dN5/tA6W0en/kI2WWtN2Z4fcMJgoQ4P7Ktc/DZo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FD1i/Lfy; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 26122C19421;
+	Sat, 21 Mar 2026 22:45:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1774113259;
-	bh=UJMWvvJqdR1PYRby9qfnQtq6VQYLY8kw5EyYq0j5wBE=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-	b=ekI7OpOsREtU9+uWbUP7OVozxIe1KjD3/kC/QpUEA0aWE0ZK66hNdeiaI9dZa7YA9
-	 eKJCFrl3vwi8zCmlS6+vi15Z2gD0DkhqQw5BQ4ToPMRP6ejBWCxo0TyebvZ6f4/+cK
-	 fLYanaoaXt56DTql+q95erFgv6FAJpFNFjhjc7iBh784emhLDAs8O2xXGLyK6Sqlrs
-	 LTCCg4u/ctUmynTQmshMr9B9Ibswum/PPsvxofgwEsOoh2MSepMbJc9K78KTevOFDK
-	 IYhkHIkigt3FLxx40LDot/Ke5txY5taTSCh8af4IgNMd2bxnmUNQyRzN5w3METS8XO
-	 2BZlrCXVi289Q==
-From: Thomas Gleixner <tglx@kernel.org>
-To: Icenowy Zheng <uwu@icenowy.me>, Huacai Chen <chenhuacai@kernel.org>
-Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, WANG Xuerui <kernel@xen0n.name>,
- Thomas
- Bogendoerfer <tsbogend@alpha.franken.de>, Jiaxun Yang
- <jiaxun.yang@flygoat.com>, Yao Zi <me@ziyao.cc>,
- linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
- loongarch@lists.linux.dev, linux-mips@vger.kernel.org
-Subject: Re: [PATCH v3 0/8] Add support for LS7A LPC IRQ for MIPS Loongson
- systems
-In-Reply-To: <87f24e166c931d0040e7b838785e7b360cbc7c6a.camel@icenowy.me>
-References: <20260314162828.1055188-1-zhengxingda@iscas.ac.cn>
- <CAAhV-H4OYVB21jH3PSzOi4GPU+t4LY664Yp=CeDhjFRKf9V07Q@mail.gmail.com>
- <87f24e166c931d0040e7b838785e7b360cbc7c6a.camel@icenowy.me>
-Date: Sat, 21 Mar 2026 18:14:15 +0100
-Message-ID: <87ikaphzq0.ffs@tglx>
+	s=k20201202; t=1774133123;
+	bh=IW12eEI3ZKbVq37cMKA3pc+CzTg1bSKIJO3BKrL4t7E=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=FD1i/LfywIet50OXtisHK/RxZsXn5Vu/ApZy5YeJmiatak4UTyF1aSNpqA7xA9yK9
+	 Wu1V/WPRpvz2j447ug5dfJOLZLyBikP7xz2wDM7ZsZTnRBYPeTx0IPJSg4le2Sh0ut
+	 uf76lReW2skwt6i7XplmRDOjn91vuh776cKprTsZdLx6F121T6YuDb0ogQ6Z95H0Bj
+	 qeD1pwJEJL9D53i0nFd9b0HX3tRN61LliRXLtA2dO8RWSz/GI2iyM7TG5JHQvmM9yj
+	 yDyPm//Q6fUh6e7V8IjDIgIQEGSPWGZe76gBYLS2uD+fxmOetpohjt2jB6yYBtw3Lm
+	 0+ziJd524rlGg==
+Date: Sat, 21 Mar 2026 23:45:20 +0100
+From: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <ukleinek@kernel.org>
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc: linux-mips@vger.kernel.org, linux-pwm@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, Paul Cercueil <paul@crapouillou.net>
+Subject: Re: [PATCH v1 1/1] pwm: jz4740: Drop unused include
+Message-ID: <ab8fLL87ZZUHLXF4@monoceros>
+References: <20260320220644.3237290-1-andriy.shevchenko@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spamd-Result: default: False [3.84 / 15.00];
-	MID_END_EQ_FROM_USER_PART(4.00)[];
-	SUSPICIOUS_RECIPS(1.50)[];
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="d5bkty6jini6mazq"
+Content-Disposition: inline
+In-Reply-To: <20260320220644.3237290-1-andriy.shevchenko@linux.intel.com>
+X-Spamd-Result: default: False [-3.76 / 15.00];
+	SIGNED_PGP(-2.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	MID_RHS_NOT_FQDN(0.50)[];
 	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
 	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+	MIME_GOOD(-0.20)[multipart/signed,text/plain];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
-	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-13862-lists,linux-mips=lfdr.de];
-	RCVD_COUNT_THREE(0.00)[4];
-	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[13];
+	TAGGED_FROM(0.00)[bounces-13863-lists,linux-mips=lfdr.de];
+	RCVD_COUNT_THREE(0.00)[4];
+	TO_DN_SOME(0.00)[];
+	MIME_TRACE(0.00)[0:+,1:+,2:~];
 	FROM_HAS_DN(0.00)[];
 	MISSING_XM_UA(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[tglx@kernel.org,linux-mips@vger.kernel.org];
+	FROM_NEQ_ENVFROM(0.00)[ukleinek@kernel.org,linux-mips@vger.kernel.org];
 	DKIM_TRACE(0.00)[kernel.org:+];
-	TAGGED_RCPT(0.00)[linux-mips,dt];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	TAGGED_RCPT(0.00)[linux-mips];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 4D1802E6782
+	RCPT_COUNT_FIVE(0.00)[5];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[intel.com:email,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: DAC612E7888
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On Sat, Mar 21 2026 at 16:59, Icenowy Zheng wrote:
-> =E5=9C=A8 2026-03-18=E4=B8=89=E7=9A=84 21:57 +0800=EF=BC=8CHuacai Chen=E5=
-=86=99=E9=81=93=EF=BC=9A
-> I'm going to change this for your preference, but please note that
-> there's no requirement of using upper case for `summary phrase` in the
-> Documentation/process/submitting-patches.rst document.
 
-Interrupt chip code is maintained in the tip tree and that tree has a
-supplementary document, which explicitely requests this:
+--d5bkty6jini6mazq
+Content-Type: text/plain; protected-headers=v1; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH v1 1/1] pwm: jz4740: Drop unused include
+MIME-Version: 1.0
 
-  https://www.kernel.org/doc/html/latest/process/maintainer-tip.html#patch-=
-subject
+Hello Andy,
+
+On Fri, Mar 20, 2026 at 11:06:44PM +0100, Andy Shevchenko wrote:
+> This driver includes the legacy header <linux/gpio.h> but does
+> not use any symbols from it. Drop the inclusion.
+>=20
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+
+Applied with Paul's ack to
+
+https://git.kernel.org/pub/scm/linux/kernel/git/ukleinek/linux.git pwm/for-=
+next
+
+=2E
+
+Thanks
+Uwe
+
+--d5bkty6jini6mazq
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmm/H34ACgkQj4D7WH0S
+/k6rGQgApyW+1MrG9Kc1sa6lpDJfebt3VuAAe9eXTm0VcUgr5jyfmnXpxMp7scCZ
+Jxk2MPUr9Qqt0YRIkuP8IhjJBqhzFvL+bdxb4W8szVrsUSA+Y+XqzZ5yCzuKIIZ8
+0hrtjt5h4wBpK5kkmbaSvGQgQDqQqSxBnh2tSqwy2cjxwv5sWWW/o896uIz6gPeD
+rmOOdm61bi2Zk0iLL0RlEzA1HzCrJC4MPjlEBCjB5+A71VnKKJvzVpmHnHFFBpbh
+XhG5GIM+TxtYlUnXAdlP3ZICKiB64c6x9lVCRqMope4a2mZfoARWgOAt9Tg5zsf0
+PnZbhPdDdlMxGqzxTBQjxVSXbrOUSg==
+=azbb
+-----END PGP SIGNATURE-----
+
+--d5bkty6jini6mazq--
 
