@@ -1,178 +1,133 @@
-Return-Path: <linux-mips+bounces-13870-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-13871-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id ECOlMbDlwGl5OQQAu9opvQ
-	(envelope-from <linux-mips+bounces-13870-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Mon, 23 Mar 2026 08:03:12 +0100
+	id SJE0LtwCwWlUPgQAu9opvQ
+	(envelope-from <linux-mips+bounces-13871-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Mon, 23 Mar 2026 10:07:40 +0100
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 318AA2ED407
-	for <lists+linux-mips@lfdr.de>; Mon, 23 Mar 2026 08:03:12 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 36A832EEAFF
+	for <lists+linux-mips@lfdr.de>; Mon, 23 Mar 2026 10:07:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 277B53016510
-	for <lists+linux-mips@lfdr.de>; Mon, 23 Mar 2026 07:02:32 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id E49593034CA3
+	for <lists+linux-mips@lfdr.de>; Mon, 23 Mar 2026 09:03:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BE6CD29D26E;
-	Mon, 23 Mar 2026 07:02:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1173638642A;
+	Mon, 23 Mar 2026 09:03:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="TRdqtC3V"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="V8z6WKCi"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FCCA223DCE;
-	Mon, 23 Mar 2026 07:02:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0D393859E1
+	for <linux-mips@vger.kernel.org>; Mon, 23 Mar 2026 09:03:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774249351; cv=none; b=QXbNC42fIUnvk54oiDKcGlueC8iHm8i9ZKQiiqKQ0C+HGHCtkDbWfYVMPZbyw4nzjbL95113bskw17gGG6LkvgSdzsG0o9UScDUX6vWsV2gt10re6ItvADDSdwGqVIiNQrykcu6kZZLtPkGt7b1rwpmzwXzFYvv4iVzRekZewQQ=
+	t=1774256635; cv=none; b=angHMUb8S0ZDwMn7vc1sHQ/hXBIOY3Ue0Kk8TvDASKdgS9OB89i8CiYEFA+QkwRLnCw6dDSZlDamNTwyfD5/7RVVzfAqVhQwqd76atHgeRYahA+FqAkGbv/8LSWU3b/67Jt7iCoQWAfzEgzyeZO8nnDNtsSxQB+yjnjKYzjkwgg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774249351; c=relaxed/simple;
-	bh=EatjSQw4+B5pP/iKZyBLC7kKTvA5t+96nriL2cudrzc=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=RWbI7/rWol5zyC++nWZfGTDPdXrVJHRGhRrWGLh5M3/rQE0gUdrSMRHurSPjK/DHBTJS/DNgwejhZtzDlvrLl+7LgSXXKw87YPCKPycu3FVSJlPHaXRFu5bztYhKFjU9FHLBmVP72ZGgnIADOfD4+zhyOuDKb5Cy6UHysXddv3Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=lst.de; spf=none smtp.mailfrom=bombadil.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=TRdqtC3V; arc=none smtp.client-ip=198.137.202.133
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=lst.de
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bombadil.srs.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-	MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Sender
-	:Reply-To:Content-Type:Content-ID:Content-Description;
-	bh=Wlkrm0myB9P5DBDaclzihXCLak0GcKolkRDqx8ZruQ0=; b=TRdqtC3V4JFkKzclMhRAwPhHvy
-	haVphzi2M7zk2uFS2hNi2cvsdo3KRHQNhivSBcXRnQY04c/UZFTQUTWRBCRGlYddGLskEQJv3Y+62
-	SDFsbVLO+EL5tXadw1l46vFGdvKD9ppMVDE/hUbqjPRgrSFgAcAWkNETxhTUOlzZz9cuyrHZU9svb
-	+kW/i3TienruQ8EuClSUwk/Y+uSNWjzooEsCpDUbTCywABz1EyUkpWPW3kxAyRx3/MCoQfpRUNwzs
-	vhXUJmOuK5THFvsbqDy0IQ/jjLSkS0FvtgFwEY30dC0kyDFHrH8AkLvYUqfmJUz0Zd3bfW+Njpl7X
-	r2vG4dnA==;
-Received: from 2a02-8389-2341-5b80-d601-7564-c2e0-491c.cable.dynamic.v6.surfer.at ([2a02:8389:2341:5b80:d601:7564:c2e0:491c] helo=localhost)
-	by bombadil.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
-	id 1w4ZIz-0000000G9lB-1wml;
-	Mon, 23 Mar 2026 07:02:30 +0000
-From: Christoph Hellwig <hch@lst.de>
-To: Alexander Viro <viro@zeniv.linux.org.uk>,
-	Christian Brauner <brauner@kernel.org>
-Cc: Jan Kara <jack@suse.cz>,
-	x86@kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-mips@vger.kernel.org,
-	linux-parisc@vger.kernel.org,
-	linuxppc-dev@lists.ozlabs.org,
-	sparclinux@vger.kernel.org,
-	linux-fsdevel@vger.kernel.org,
-	linux-api@vger.kernel.org
-Subject: [PATCH 3/3] fs: remove do_sys_truncate
-Date: Mon, 23 Mar 2026 08:01:46 +0100
-Message-ID: <20260323070205.2939118-4-hch@lst.de>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20260323070205.2939118-1-hch@lst.de>
-References: <20260323070205.2939118-1-hch@lst.de>
+	s=arc-20240116; t=1774256635; c=relaxed/simple;
+	bh=Y6Ln7apokh/wc0AOi/toxBUgq+c7baqtMbdqFe1JR+s=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=VQ+8XwV9C72IsfK/GjC1DEyxuPrnGVZNeHHsEqEVMPxSteiXYPprMM2HoO22hnvwVbFDCfRaYM4q4QEu7yl+WDJ7tM8wioYO2V5TSWnVN7fl7jAjYTHmicOceWJsb4PU5tcLN4WyxSU1Yt/lIKdW9ncT1BZyXgeP9jKHjuty6iM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=V8z6WKCi; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A9F35C2BCC4
+	for <linux-mips@vger.kernel.org>; Mon, 23 Mar 2026 09:03:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1774256634;
+	bh=Y6Ln7apokh/wc0AOi/toxBUgq+c7baqtMbdqFe1JR+s=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=V8z6WKCi5Zsoe+uxCF5locHBMfndoMqJUIb3dbz8gIFPVW0vzOoTHca+9gaYnHiQQ
+	 hrRXi/zQwDPRMkSc5/sSxhCktqWAiUpuM9GC9WC3870hjvxhKVV+C2AOQVxTl8h3Gz
+	 VM5AZvnrQ/j5baJa2Xcgi/n5bbyvai8OKkDwKd2RPtfyV2bHzTs+7xP3G7sC2kvRua
+	 pzXTiQsuj9qx8E5+dKS33jZczro/rs4AqaT0nzMjnLlbhHSSUoqq2pL3AcCCg8fQIl
+	 d4T58fNpVcEr9WJJh1fVY70yaIRYgShJ15l/92CG/+ggpJPhAlGDW5N8v8NbtcTu2v
+	 BWPfF+5+Mhprw==
+Received: by mail-yw1-f182.google.com with SMTP id 00721157ae682-79a40fb9890so23062007b3.1
+        for <linux-mips@vger.kernel.org>; Mon, 23 Mar 2026 02:03:54 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCX09n4oKEJUAErrxSRlegnn65WVKRKEcQtFG7g/uv+BAD9XQzZd1hlsq8ZgdwH5e2MjQ+VwMFuFChss@vger.kernel.org
+X-Gm-Message-State: AOJu0YysuIE+dh+RNXzaff2BL6ipRfyn1qb7/EI9aA2JYvPX60k0Vpzm
+	3KvuFgCO056gICpbraa7HC1VH6VqxnIaAsGtti0D2dC3KidMHAh1Qz5nzB/oxOcFD45eXN5lF/U
+	2/YiWP3hJux2D7rwgNnPCa7XngVq7T/w=
+X-Received: by 2002:a05:690c:c513:b0:79a:b77f:3fe0 with SMTP id
+ 00721157ae682-79ab77f4a4emr19423007b3.5.1774256634011; Mon, 23 Mar 2026
+ 02:03:54 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
-X-Spamd-Result: default: False [-0.06 / 15.00];
+References: <20260316-eyeq6lplus-v4-0-bf44dfc7a261@bootlin.com> <20260316-eyeq6lplus-v4-2-bf44dfc7a261@bootlin.com>
+In-Reply-To: <20260316-eyeq6lplus-v4-2-bf44dfc7a261@bootlin.com>
+From: Linus Walleij <linusw@kernel.org>
+Date: Mon, 23 Mar 2026 10:03:43 +0100
+X-Gmail-Original-Message-ID: <CAD++jLn+z13_oZO0XLm9Q_sqwDq09-qYKN5PQiZCOZ96+9LkHw@mail.gmail.com>
+X-Gm-Features: AQROBzAs6grpZb_qsDNBkL3kogXuOOZDTkjOH99AKL5DVmwWAn4NYFh7gNmvQi4
+Message-ID: <CAD++jLn+z13_oZO0XLm9Q_sqwDq09-qYKN5PQiZCOZ96+9LkHw@mail.gmail.com>
+Subject: Re: [PATCH v4 02/13] dt-bindings: soc: mobileye: Add EyeQ6Lplus OLB
+To: =?UTF-8?Q?Beno=C3=AEt_Monin?= <benoit.monin@bootlin.com>
+Cc: Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>, 
+	Gregory CLEMENT <gregory.clement@bootlin.com>, =?UTF-8?B?VGjDqW8gTGVicnVu?= <theo.lebrun@bootlin.com>, 
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, 
+	Philipp Zabel <p.zabel@pengutronix.de>, Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
+	Tawfik Bayouk <tawfik.bayouk@mobileye.com>, linux-mips@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spamd-Result: default: False [-0.66 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_CONTAINS_FROM(1.00)[];
-	R_MISSING_CHARSET(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
-	R_DKIM_ALLOW(-0.20)[infradead.org:s=bombadil.20210309];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
 	MAILLIST(-0.15)[generic];
-	DMARC_POLICY_SOFTFAIL(0.10)[lst.de : SPF not aligned (relaxed), DKIM not aligned (relaxed),none];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_TLS_LAST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	PRECEDENCE_BULK(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-13870-lists,linux-mips=lfdr.de];
-	MIME_TRACE(0.00)[0:+];
+	TAGGED_FROM(0.00)[bounces-13871-lists,linux-mips=lfdr.de];
 	FROM_HAS_DN(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[18];
+	MIME_TRACE(0.00)[0:+];
+	DKIM_TRACE(0.00)[kernel.org:+];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	MISSING_XM_UA(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[5];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[linusw@kernel.org,linux-mips@vger.kernel.org];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[hch@lst.de,linux-mips@vger.kernel.org];
-	RCPT_COUNT_SEVEN(0.00)[11];
 	NEURAL_HAM(-0.00)[-1.000];
-	DKIM_TRACE(0.00)[infradead.org:+];
-	TAGGED_RCPT(0.00)[linux-mips];
-	TO_DN_SOME(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[lst.de:email,lst.de:mid,infradead.org:dkim]
-X-Rspamd-Queue-Id: 318AA2ED407
+	TAGGED_RCPT(0.00)[linux-mips,dt];
+	TO_DN_SOME(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,mail.gmail.com:mid]
+X-Rspamd-Queue-Id: 36A832EEAFF
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-do_sys_truncate ist only used to implement ksys_truncate and the native
-truncate syscalls.  Merge do_sys_truncate into ksys_truncate and return
-int from it as it only returns 0 or negative errnos.
+On Mon, Mar 16, 2026 at 4:25=E2=80=AFPM Beno=C3=AEt Monin <benoit.monin@boo=
+tlin.com> wrote:
 
-Signed-off-by: Christoph Hellwig <hch@lst.de>
----
- fs/open.c                | 8 ++++----
- include/linux/syscalls.h | 8 +-------
- 2 files changed, 5 insertions(+), 11 deletions(-)
+> The "Other Logic Block" found in the EyeQ6Lplus from Mobileye provides
+> various functions for the controllers present in the SoC.
+>
+> The OLB produces 22 clocks derived from its input, which is connected
+> to the main oscillator of the SoC.
+>
+> It provides reset signals via two reset domains.
+>
+> It also controls 32 pins to be either a GPIO or an alternate function.
+>
+> Reviewed-by: Rob Herring (Arm) <robh@kernel.org>
+> Signed-off-by: Beno=C3=AEt Monin <benoit.monin@bootlin.com>
 
-diff --git a/fs/open.c b/fs/open.c
-index 181c1597e73c..681d405bc61e 100644
---- a/fs/open.c
-+++ b/fs/open.c
-@@ -126,7 +126,7 @@ int vfs_truncate(const struct path *path, loff_t length)
- }
- EXPORT_SYMBOL_GPL(vfs_truncate);
- 
--int do_sys_truncate(const char __user *pathname, loff_t length)
-+int ksys_truncate(const char __user *pathname, loff_t length)
- {
- 	unsigned int lookup_flags = LOOKUP_FOLLOW;
- 	struct path path;
-@@ -151,13 +151,13 @@ int do_sys_truncate(const char __user *pathname, loff_t length)
- 
- SYSCALL_DEFINE2(truncate, const char __user *, path, long, length)
- {
--	return do_sys_truncate(path, length);
-+	return ksys_truncate(path, length);
- }
- 
- #ifdef CONFIG_COMPAT
- COMPAT_SYSCALL_DEFINE2(truncate, const char __user *, path, compat_off_t, length)
- {
--	return do_sys_truncate(path, length);
-+	return ksys_truncate(path, length);
- }
- #endif
- 
-@@ -222,7 +222,7 @@ COMPAT_SYSCALL_DEFINE2(ftruncate, unsigned int, fd, compat_off_t, length)
- #if BITS_PER_LONG == 32
- SYSCALL_DEFINE2(truncate64, const char __user *, path, loff_t, length)
- {
--	return do_sys_truncate(path, length);
-+	return ksys_truncate(path, length);
- }
- 
- SYSCALL_DEFINE2(ftruncate64, unsigned int, fd, loff_t, length)
-diff --git a/include/linux/syscalls.h b/include/linux/syscalls.h
-index 8787b3511c86..f5639d5ac331 100644
---- a/include/linux/syscalls.h
-+++ b/include/linux/syscalls.h
-@@ -1285,13 +1285,7 @@ static inline long ksys_lchown(const char __user *filename, uid_t user,
- 
- #define FTRUNCATE_LFS	(1u << 0)	/* allow truncating > 32-bit */
- int ksys_ftruncate(unsigned int fd, loff_t length, unsigned int flags);
--
--int do_sys_truncate(const char __user *pathname, loff_t length);
--
--static inline long ksys_truncate(const char __user *pathname, loff_t length)
--{
--	return do_sys_truncate(pathname, length);
--}
-+int ksys_truncate(const char __user *pathname, loff_t length);
- 
- static inline unsigned int ksys_personality(unsigned int personality)
- {
--- 
-2.47.3
+Reviewed-by: Linus Walleij <linusw@kernel.org>
 
+Yours,
+Linus Walleij
 
