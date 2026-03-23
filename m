@@ -1,129 +1,355 @@
-Return-Path: <linux-mips+bounces-13873-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-13874-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id IDHKL2wCwWlUPgQAu9opvQ
-	(envelope-from <linux-mips+bounces-13873-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Mon, 23 Mar 2026 10:05:48 +0100
+	id OGyaFhsWwWn5QQQAu9opvQ
+	(envelope-from <linux-mips+bounces-13874-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Mon, 23 Mar 2026 11:29:47 +0100
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5EF112EEA71
-	for <lists+linux-mips@lfdr.de>; Mon, 23 Mar 2026 10:05:48 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id ADAAE2F00F5
+	for <lists+linux-mips@lfdr.de>; Mon, 23 Mar 2026 11:29:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 1746A30067BA
-	for <lists+linux-mips@lfdr.de>; Mon, 23 Mar 2026 09:05:26 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id BF7E63034B12
+	for <lists+linux-mips@lfdr.de>; Mon, 23 Mar 2026 10:27:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9F01E3859E4;
-	Mon, 23 Mar 2026 09:05:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1F61138BF97;
+	Mon, 23 Mar 2026 10:27:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TAWP0Jd5"
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="trinx4GO";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="6/90Tqg4";
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="trinx4GO";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="6/90Tqg4"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C8DD385527
-	for <linux-mips@vger.kernel.org>; Mon, 23 Mar 2026 09:05:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4EF7C38B7A6
+	for <linux-mips@vger.kernel.org>; Mon, 23 Mar 2026 10:27:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774256724; cv=none; b=jVnrGL8a5XVrIxGCH4ancMVv7pWJewZBws8nnvmJzjGqlqe6CqoImFV1PhL21gM7qOLq53QSw9Qup31HtBntmwvWl6tLf2JQrOqlFydmnb+iIccYmRINxnT0KldMq5AnlvYzvfwXOlGJ7sCwJLG4YYHTnSThgsWaK2CudNQLTx8=
+	t=1774261630; cv=none; b=ivyOXbPIDAz3VUXEg3i71UFuQTxhgK3nPmKi7sUJmCcbKGkd8vm0Lr7RZ40/JmAMObzHLHNzlXYnsZTdRrlhYfpzU4cLZtxc4lWIZhopsybCE1r10w0ANgqJirMpXqIXbA/+mgyjYaU8LXaMN8sq5nxHUe4vioFouwMI691gbgU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774256724; c=relaxed/simple;
-	bh=2T6c3S72ahQY8xybcAngPOvZa9iNFlrMEfZwRXlS7Ys=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=FWyOmiaTY8oRpj68XmIpww/TekcDhUrCZhTwmPWoHfl5adje5OYsBh1AD5jc5vgB+snn5ksVMNCwBQjoh51uDFr7F8iOJ7YNk8RPJ5LXdGs7TDSMdrnMBIcZjPy4g+sX1mFBh7xJUtyZu/nWwJJWSl4U8zgiX2NYnc/NqFZeVa4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TAWP0Jd5; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 61E56C2BCC4
-	for <linux-mips@vger.kernel.org>; Mon, 23 Mar 2026 09:05:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1774256724;
-	bh=2T6c3S72ahQY8xybcAngPOvZa9iNFlrMEfZwRXlS7Ys=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=TAWP0Jd50+wA4bct6nWl0Eo/e9MYBgqRB/moFc29zFNGTSNiftQQtD+bQgdXDpkQg
-	 Bihy5MvZR4R1pvm3iDZIW7tH7CffFizgyMfTHR2za4yZmw2R2I/hwODK622Sy+t/A4
-	 6hJ0NcGEFgKbDHI8s1xE9ejKvjIZD7meu9BvpQuP49AQZSl9AtBG/b5Rqp2WNfh6N8
-	 W28tB8Hd92jEYsAjTmw38EbXcTzalNcMTm4/uin07leljwQXBZ9JpR/NMuUwRw9Uj2
-	 0uc937HF8DGvWvNdalJhPaGzUn5CvaWLV9lWFlJud4wZ+0z6PD/N1J3BVg73SFA8xY
-	 B+BO4s56wTqEA==
-Received: by mail-yw1-f172.google.com with SMTP id 00721157ae682-79a46ebe2beso33307187b3.2
-        for <linux-mips@vger.kernel.org>; Mon, 23 Mar 2026 02:05:24 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCVHA8/i1pvH4WXGbaAY8/l3/XucBK9diNL2O0PBQemyKWmUUeJO5aYHGItaIRs2uwVgiI7VhBPAiP9u@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz/X6yYWhRZCTSVjxYYyPfPAELZFC2nCsdMA/n0FLFoIMHA8qoY
-	cYMblvySoQA/EEH+HnZjalN1o+HusEW+a//E7NPNH1+a32Wd8vSkqbolADop0oryNWMwGmcEP30
-	I027RPtWWA/kt0/+bc9H4qOvWdqXEGQY=
-X-Received: by 2002:a05:690c:2612:b0:798:1637:fee0 with SMTP id
- 00721157ae682-79a90c05e2dmr136862067b3.52.1774256723603; Mon, 23 Mar 2026
- 02:05:23 -0700 (PDT)
+	s=arc-20240116; t=1774261630; c=relaxed/simple;
+	bh=Q0tw1nzrsOyLhL8hiu4lHjfUfpx+NeNBnHS3+jry5/A=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ZhcickeYtUTbTBR/FKOhqtr10vV6NbT0iQ5utjI4JwRuT8jm5YMB+HbOKVhhi0myxKI2t651aJB2JJMqx9gq1t/6sCEzK6xROq8Yh72WFL0yidzPjc1NLjGO3QFbLzlFohqYlFvmElo455gykQU+kN3j55TLwgQswyCj5Xt7MiY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=trinx4GO; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=6/90Tqg4; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=trinx4GO; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=6/90Tqg4; arc=none smtp.client-ip=195.135.223.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
+Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id 9257D4D2BA;
+	Mon, 23 Mar 2026 10:27:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1774261626; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Qds2uJ32pRLlQJWAzNsHGeIq2mrVMscPUZYgB/FLRhk=;
+	b=trinx4GO6i5sN4372NxLM4qCkPoaMj3kHn/Hhmz4fVIp58zBTue1ljOfnzf6S2A+7CCD68
+	1T+FZ6lbU0b7dsTPRkvLONny46JsvVyg/lVzj5kkijn710li1mJzPVn+DcZoeKfj6nEzKC
+	+6VVDk++EusnvpSCFBb1BRJ+kp24xf8=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1774261626;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Qds2uJ32pRLlQJWAzNsHGeIq2mrVMscPUZYgB/FLRhk=;
+	b=6/90Tqg4lLELhwZvxNqHMe1fk8jlJRaVsgM+Rn7IbjqqBHkGNsAps03gV0Pf2NYZDHl+6Q
+	gMPbBd9+VSEtksCA==
+Authentication-Results: smtp-out1.suse.de;
+	none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1774261626; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Qds2uJ32pRLlQJWAzNsHGeIq2mrVMscPUZYgB/FLRhk=;
+	b=trinx4GO6i5sN4372NxLM4qCkPoaMj3kHn/Hhmz4fVIp58zBTue1ljOfnzf6S2A+7CCD68
+	1T+FZ6lbU0b7dsTPRkvLONny46JsvVyg/lVzj5kkijn710li1mJzPVn+DcZoeKfj6nEzKC
+	+6VVDk++EusnvpSCFBb1BRJ+kp24xf8=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1774261626;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Qds2uJ32pRLlQJWAzNsHGeIq2mrVMscPUZYgB/FLRhk=;
+	b=6/90Tqg4lLELhwZvxNqHMe1fk8jlJRaVsgM+Rn7IbjqqBHkGNsAps03gV0Pf2NYZDHl+6Q
+	gMPbBd9+VSEtksCA==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 8508F43819;
+	Mon, 23 Mar 2026 10:27:06 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id pt12IHoVwWlGHwAAD6G6ig
+	(envelope-from <jack@suse.cz>); Mon, 23 Mar 2026 10:27:06 +0000
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+	id 4A3E5A0B2E; Mon, 23 Mar 2026 11:27:06 +0100 (CET)
+Date: Mon, 23 Mar 2026 11:27:06 +0100
+From: Jan Kara <jack@suse.cz>
+To: Christoph Hellwig <hch@lst.de>
+Cc: Alexander Viro <viro@zeniv.linux.org.uk>, 
+	Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, x86@kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org, 
+	linuxppc-dev@lists.ozlabs.org, sparclinux@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
+	linux-api@vger.kernel.org
+Subject: Re: [PATCH 1/3] fs: fix archiecture-specific compat_ftruncate64
+Message-ID: <47ovbvveajcppkfgjc3sqbfzuozmvyivz32fbvwoq444lny6eg@45awkyuwcmrx>
+References: <20260323070205.2939118-1-hch@lst.de>
+ <20260323070205.2939118-2-hch@lst.de>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260316-eyeq6lplus-v4-0-bf44dfc7a261@bootlin.com> <20260316-eyeq6lplus-v4-6-bf44dfc7a261@bootlin.com>
-In-Reply-To: <20260316-eyeq6lplus-v4-6-bf44dfc7a261@bootlin.com>
-From: Linus Walleij <linusw@kernel.org>
-Date: Mon, 23 Mar 2026 10:05:12 +0100
-X-Gmail-Original-Message-ID: <CAD++jLmT+4xb3sfa3f1z0vD4qikeB+v0kC6yo6=hSU+==fZOkg@mail.gmail.com>
-X-Gm-Features: AQROBzCPE1B6frTZvvI1ONusEll1hYYlE5t57wp0l2RUDUVexg_OieOxm5rH708
-Message-ID: <CAD++jLmT+4xb3sfa3f1z0vD4qikeB+v0kC6yo6=hSU+==fZOkg@mail.gmail.com>
-Subject: Re: [PATCH v4 06/13] pinctrl: eyeq5: Add Mobileye EyeQ6Lplus OLB
-To: =?UTF-8?Q?Beno=C3=AEt_Monin?= <benoit.monin@bootlin.com>
-Cc: Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>, 
-	Gregory CLEMENT <gregory.clement@bootlin.com>, =?UTF-8?B?VGjDqW8gTGVicnVu?= <theo.lebrun@bootlin.com>, 
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, 
-	Philipp Zabel <p.zabel@pengutronix.de>, Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
-	Tawfik Bayouk <tawfik.bayouk@mobileye.com>, linux-mips@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spamd-Result: default: False [-0.66 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260323070205.2939118-2-hch@lst.de>
+X-Spam-Flag: NO
+X-Spam-Score: -7.80
+X-Spam-Level: 
+X-Spamd-Result: default: False [-1.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
-	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
+	MID_RHS_NOT_FQDN(0.50)[];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_DKIM_ALLOW(-0.20)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-13873-lists,linux-mips=lfdr.de];
-	FROM_HAS_DN(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[18];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,suse.cz:dkim,suse.cz:email,lst.de:email,suse.com:email];
+	DMARC_NA(0.00)[suse.cz];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-13874-lists,linux-mips=lfdr.de];
+	RCPT_COUNT_TWELVE(0.00)[12];
 	MIME_TRACE(0.00)[0:+];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
+	DKIM_TRACE(0.00)[suse.cz:+];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
 	MISSING_XM_UA(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[linusw@kernel.org,linux-mips@vger.kernel.org];
+	FROM_NEQ_ENVFROM(0.00)[jack@suse.cz,linux-mips@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[linux-mips,dt];
+	TAGGED_RCPT(0.00)[linux-mips];
 	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,mail.gmail.com:mid,bootlin.com:email]
-X-Rspamd-Queue-Id: 5EF112EEA71
+	RCVD_COUNT_SEVEN(0.00)[7]
+X-Rspamd-Queue-Id: ADAAE2F00F5
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On Mon, Mar 16, 2026 at 4:26=E2=80=AFPM Beno=C3=AEt Monin <benoit.monin@boo=
-tlin.com> wrote:
+On Mon 23-03-26 08:01:44, Christoph Hellwig wrote:
+> The "small" argument to do_sys_ftruncate indicates if > 32-bit size
+> should be reject, but all the arch-specific compat ftruncate64
+> implementations get this wrong.  Merge do_sys_ftruncate and
+> ksys_ftruncate, replace the integer as boolean small flag with a
+> descriptive one about LFS semantics, and use it correctly in the
+> architecture-specific ftruncate64 implementations.
+> 
+> Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
+> Fixes: 3dd681d944f6 ("arm64: 32-bit (compat) applications support")
+> Signed-off-by: Christoph Hellwig <hch@lst.de>
 
-> Add the match data for the pinctrl found in the EyeQ6Lplus OLB. The pin
-> control is identical in function to the one present in the EyeQ5 but
-> has a single bank of 32 pins.
->
-> Signed-off-by: Beno=C3=AEt Monin <benoit.monin@bootlin.com>
+Looks good. Feel free to add:
 
-Reviewed-by: Linus Walleij <linusw@kernel.org>
+Reviewed-by: Jan Kara <jack@suse.cz>
 
-I don't know your merge strategy for this patch series, if you want part
-of it applied to the pinctrl tree then tell me which patches and how.
+								Honza
 
-Yours,
-Linus Walleij
+> ---
+>  arch/arm64/kernel/sys32.c       |  2 +-
+>  arch/mips/kernel/linux32.c      |  2 +-
+>  arch/parisc/kernel/sys_parisc.c |  4 ++--
+>  arch/powerpc/kernel/sys_ppc32.c |  2 +-
+>  arch/sparc/kernel/sys_sparc32.c |  2 +-
+>  arch/x86/kernel/sys_ia32.c      |  3 ++-
+>  fs/internal.h                   |  1 -
+>  fs/open.c                       | 12 ++++++------
+>  include/linux/syscalls.h        |  8 ++------
+>  9 files changed, 16 insertions(+), 20 deletions(-)
+> 
+> diff --git a/arch/arm64/kernel/sys32.c b/arch/arm64/kernel/sys32.c
+> index 96bcfb907443..12a948f3a504 100644
+> --- a/arch/arm64/kernel/sys32.c
+> +++ b/arch/arm64/kernel/sys32.c
+> @@ -89,7 +89,7 @@ COMPAT_SYSCALL_DEFINE4(aarch32_truncate64, const char __user *, pathname,
+>  COMPAT_SYSCALL_DEFINE4(aarch32_ftruncate64, unsigned int, fd, u32, __pad,
+>  		       arg_u32p(length))
+>  {
+> -	return ksys_ftruncate(fd, arg_u64(length));
+> +	return ksys_ftruncate(fd, arg_u64(length), FTRUNCATE_LFS);
+>  }
+>  
+>  COMPAT_SYSCALL_DEFINE5(aarch32_readahead, int, fd, u32, __pad,
+> diff --git a/arch/mips/kernel/linux32.c b/arch/mips/kernel/linux32.c
+> index a0c0a7a654e9..fe9a787db569 100644
+> --- a/arch/mips/kernel/linux32.c
+> +++ b/arch/mips/kernel/linux32.c
+> @@ -60,7 +60,7 @@ SYSCALL_DEFINE4(32_truncate64, const char __user *, path,
+>  SYSCALL_DEFINE4(32_ftruncate64, unsigned long, fd, unsigned long, __dummy,
+>  	unsigned long, a2, unsigned long, a3)
+>  {
+> -	return ksys_ftruncate(fd, merge_64(a2, a3));
+> +	return ksys_ftruncate(fd, merge_64(a2, a3), FTRUNCATE_LFS);
+>  }
+>  
+>  SYSCALL_DEFINE5(32_llseek, unsigned int, fd, unsigned int, offset_high,
+> diff --git a/arch/parisc/kernel/sys_parisc.c b/arch/parisc/kernel/sys_parisc.c
+> index b2cdbb8a12b1..fcb0d8069139 100644
+> --- a/arch/parisc/kernel/sys_parisc.c
+> +++ b/arch/parisc/kernel/sys_parisc.c
+> @@ -216,7 +216,7 @@ asmlinkage long parisc_truncate64(const char __user * path,
+>  asmlinkage long parisc_ftruncate64(unsigned int fd,
+>  					unsigned int high, unsigned int low)
+>  {
+> -	return ksys_ftruncate(fd, (long)high << 32 | low);
+> +	return ksys_ftruncate(fd, (long)high << 32 | low, FTRUNCATE_LFS);
+>  }
+>  
+>  /* stubs for the benefit of the syscall_table since truncate64 and truncate 
+> @@ -227,7 +227,7 @@ asmlinkage long sys_truncate64(const char __user * path, unsigned long length)
+>  }
+>  asmlinkage long sys_ftruncate64(unsigned int fd, unsigned long length)
+>  {
+> -	return ksys_ftruncate(fd, length);
+> +	return ksys_ftruncate(fd, length, FTRUNCATE_LFS);
+>  }
+>  asmlinkage long sys_fcntl64(unsigned int fd, unsigned int cmd, unsigned long arg)
+>  {
+> diff --git a/arch/powerpc/kernel/sys_ppc32.c b/arch/powerpc/kernel/sys_ppc32.c
+> index d451a8229223..03fa487f2614 100644
+> --- a/arch/powerpc/kernel/sys_ppc32.c
+> +++ b/arch/powerpc/kernel/sys_ppc32.c
+> @@ -101,7 +101,7 @@ PPC32_SYSCALL_DEFINE4(ppc_ftruncate64,
+>  		       unsigned int, fd, u32, reg4,
+>  		       unsigned long, len1, unsigned long, len2)
+>  {
+> -	return ksys_ftruncate(fd, merge_64(len1, len2));
+> +	return ksys_ftruncate(fd, merge_64(len1, len2), FTRUNCATE_LFS);
+>  }
+>  
+>  PPC32_SYSCALL_DEFINE6(ppc32_fadvise64,
+> diff --git a/arch/sparc/kernel/sys_sparc32.c b/arch/sparc/kernel/sys_sparc32.c
+> index f84a02ab6bf9..04432b82b9e3 100644
+> --- a/arch/sparc/kernel/sys_sparc32.c
+> +++ b/arch/sparc/kernel/sys_sparc32.c
+> @@ -58,7 +58,7 @@ COMPAT_SYSCALL_DEFINE3(truncate64, const char __user *, path, u32, high, u32, lo
+>  
+>  COMPAT_SYSCALL_DEFINE3(ftruncate64, unsigned int, fd, u32, high, u32, low)
+>  {
+> -	return ksys_ftruncate(fd, ((u64)high << 32) | low);
+> +	return ksys_ftruncate(fd, ((u64)high << 32) | low, FTRUNCATE_LFS);
+>  }
+>  
+>  static int cp_compat_stat64(struct kstat *stat,
+> diff --git a/arch/x86/kernel/sys_ia32.c b/arch/x86/kernel/sys_ia32.c
+> index 6cf65397d225..610a1c2f4519 100644
+> --- a/arch/x86/kernel/sys_ia32.c
+> +++ b/arch/x86/kernel/sys_ia32.c
+> @@ -61,7 +61,8 @@ SYSCALL_DEFINE3(ia32_truncate64, const char __user *, filename,
+>  SYSCALL_DEFINE3(ia32_ftruncate64, unsigned int, fd,
+>  		unsigned long, offset_low, unsigned long, offset_high)
+>  {
+> -	return ksys_ftruncate(fd, ((loff_t) offset_high << 32) | offset_low);
+> +	return ksys_ftruncate(fd, ((loff_t) offset_high << 32) | offset_low,
+> +			FTRUNCATE_LFS);
+>  }
+>  
+>  /* warning: next two assume little endian */
+> diff --git a/fs/internal.h b/fs/internal.h
+> index cbc384a1aa09..2663823e273a 100644
+> --- a/fs/internal.h
+> +++ b/fs/internal.h
+> @@ -199,7 +199,6 @@ extern int build_open_flags(const struct open_how *how, struct open_flags *op);
+>  struct file *file_close_fd_locked(struct files_struct *files, unsigned fd);
+>  
+>  int do_ftruncate(struct file *file, loff_t length, int small);
+> -int do_sys_ftruncate(unsigned int fd, loff_t length, int small);
+>  int chmod_common(const struct path *path, umode_t mode);
+>  int do_fchownat(int dfd, const char __user *filename, uid_t user, gid_t group,
+>  		int flag);
+> diff --git a/fs/open.c b/fs/open.c
+> index 91f1139591ab..412d0d6fbaa7 100644
+> --- a/fs/open.c
+> +++ b/fs/open.c
+> @@ -197,7 +197,7 @@ int do_ftruncate(struct file *file, loff_t length, int small)
+>  				   ATTR_MTIME | ATTR_CTIME, file);
+>  }
+>  
+> -int do_sys_ftruncate(unsigned int fd, loff_t length, int small)
+> +int ksys_ftruncate(unsigned int fd, loff_t length, unsigned int flags)
+>  {
+>  	if (length < 0)
+>  		return -EINVAL;
+> @@ -205,18 +205,18 @@ int do_sys_ftruncate(unsigned int fd, loff_t length, int small)
+>  	if (fd_empty(f))
+>  		return -EBADF;
+>  
+> -	return do_ftruncate(fd_file(f), length, small);
+> +	return do_ftruncate(fd_file(f), length, !(flags & FTRUNCATE_LFS));
+>  }
+>  
+>  SYSCALL_DEFINE2(ftruncate, unsigned int, fd, off_t, length)
+>  {
+> -	return do_sys_ftruncate(fd, length, 1);
+> +	return ksys_ftruncate(fd, length, 0);
+>  }
+>  
+>  #ifdef CONFIG_COMPAT
+>  COMPAT_SYSCALL_DEFINE2(ftruncate, unsigned int, fd, compat_off_t, length)
+>  {
+> -	return do_sys_ftruncate(fd, length, 1);
+> +	return ksys_ftruncate(fd, length, 0);
+>  }
+>  #endif
+>  
+> @@ -229,7 +229,7 @@ SYSCALL_DEFINE2(truncate64, const char __user *, path, loff_t, length)
+>  
+>  SYSCALL_DEFINE2(ftruncate64, unsigned int, fd, loff_t, length)
+>  {
+> -	return do_sys_ftruncate(fd, length, 0);
+> +	return ksys_ftruncate(fd, length, FTRUNCATE_LFS);
+>  }
+>  #endif /* BITS_PER_LONG == 32 */
+>  
+> @@ -245,7 +245,7 @@ COMPAT_SYSCALL_DEFINE3(truncate64, const char __user *, pathname,
+>  COMPAT_SYSCALL_DEFINE3(ftruncate64, unsigned int, fd,
+>  		       compat_arg_u64_dual(length))
+>  {
+> -	return ksys_ftruncate(fd, compat_arg_u64_glue(length));
+> +	return ksys_ftruncate(fd, compat_arg_u64_glue(length), FTRUNCATE_LFS);
+>  }
+>  #endif
+>  
+> diff --git a/include/linux/syscalls.h b/include/linux/syscalls.h
+> index 02bd6ddb6278..8787b3511c86 100644
+> --- a/include/linux/syscalls.h
+> +++ b/include/linux/syscalls.h
+> @@ -1283,12 +1283,8 @@ static inline long ksys_lchown(const char __user *filename, uid_t user,
+>  			     AT_SYMLINK_NOFOLLOW);
+>  }
+>  
+> -int do_sys_ftruncate(unsigned int fd, loff_t length, int small);
+> -
+> -static inline long ksys_ftruncate(unsigned int fd, loff_t length)
+> -{
+> -	return do_sys_ftruncate(fd, length, 1);
+> -}
+> +#define FTRUNCATE_LFS	(1u << 0)	/* allow truncating > 32-bit */
+> +int ksys_ftruncate(unsigned int fd, loff_t length, unsigned int flags);
+>  
+>  int do_sys_truncate(const char __user *pathname, loff_t length);
+>  
+> -- 
+> 2.47.3
+> 
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
 
