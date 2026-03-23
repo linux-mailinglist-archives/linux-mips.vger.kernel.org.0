@@ -1,51 +1,51 @@
-Return-Path: <linux-mips+bounces-13886-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-13887-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id wOhDLIZpwWmoSwQAu9opvQ
-	(envelope-from <linux-mips+bounces-13886-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Mon, 23 Mar 2026 17:25:42 +0100
+	id uDsrNnN3wWkQTQQAu9opvQ
+	(envelope-from <linux-mips+bounces-13887-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Mon, 23 Mar 2026 18:25:07 +0100
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id A044E2F80E8
-	for <lists+linux-mips@lfdr.de>; Mon, 23 Mar 2026 17:25:41 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 87C862F9DD5
+	for <lists+linux-mips@lfdr.de>; Mon, 23 Mar 2026 18:25:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 096F930C3CD2
-	for <lists+linux-mips@lfdr.de>; Mon, 23 Mar 2026 15:50:59 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id D0611307637A
+	for <lists+linux-mips@lfdr.de>; Mon, 23 Mar 2026 15:51:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A766C261B9E;
-	Mon, 23 Mar 2026 15:49:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0D1D22798EA;
+	Mon, 23 Mar 2026 15:51:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XdKC0tlg"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="o1THjGW8"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75821253932;
-	Mon, 23 Mar 2026 15:49:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D73F226159E;
+	Mon, 23 Mar 2026 15:51:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774280998; cv=none; b=ocQe78PDBlIlzUQy2xrG8/fuQ6ovbqO/1DluBltT25U0+giDKgmsaw25xXOAXneRHIVVmzn/bCYnnYe/brxyhDwpv1CypMvbbyKWjud12yglUaI8jRlaVMY39VKW4DXdIM6urirWZiZiILvgzZUYBDuspHb55OSELN3cANE9P6Y=
+	t=1774281115; cv=none; b=c0kZmJghE9fLDBxGytJmtgEa0/ib/u0xVnWWVQM/DfKQ6gbzlltedODadFpdiu3MrEb4004D+ljeozhA8QeXU9vxQevYavSDSAkKDicX0B3MNzMKOegfLSb/zhwu8uQh3FZPj8ONOp5ME3ArW/pUaL+4wvN8O5kLzz+4uIpCc78=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774280998; c=relaxed/simple;
-	bh=PE+T0jq3B8ZtYRDz678LEyuTz6jmDPCQy5RpPTYrDcc=;
+	s=arc-20240116; t=1774281115; c=relaxed/simple;
+	bh=vZdm4GONA/O1jK4+M6185Q0giqh3AS1i2sFB5Pfd/2Y=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ilerMIv5lykSCqmaVgORz011dvitCJborCFezyVm+m+b9DM+5z3wHHhssjyWGgr+uXWqSmJXPtYqlAKxI8YrCHULlgKIO2LZy0j9Sg4b+Te1t3B0AVqu26T/t1w18b+BI/09/zMYFP0bjrodtA999iMJBZRNXPeYh7m19bYj7qE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XdKC0tlg; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 79346C4CEF7;
-	Mon, 23 Mar 2026 15:49:46 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=WC/Su5DSfbmKx/hjjLx/LWUbWOrLtkC+iAtlSS3Ov8uRSbFx+FSuKN5K9Y7423IO//a3uq1zVVBsKflkqLnS2RxcBs+9CJeJYk9SLvxeYLMbT8sPvlYBC/w0ZotbH2yLYJvHqZxWSXc+2/FG2D737L1EOieH3Ivfyp0uqVdkFYE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=o1THjGW8; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DCA5BC4CEF7;
+	Mon, 23 Mar 2026 15:51:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1774280998;
-	bh=PE+T0jq3B8ZtYRDz678LEyuTz6jmDPCQy5RpPTYrDcc=;
+	s=k20201202; t=1774281115;
+	bh=vZdm4GONA/O1jK4+M6185Q0giqh3AS1i2sFB5Pfd/2Y=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=XdKC0tlgf1MZ9+nFlKePnzFurNne6QPx1E6YWyTEqc5Cy4/MJ7viljpcXJeeYfD84
-	 LwWQhNPsI2I9K0v1c33u+VAYFjbd8O5XNRv7oB6hk9aWRLevlIqBhXTN/OJlKMwQKf
-	 P5Vz/q+wIiOUnPmbE+gPP+1XyMVrMVU51S9pyTagqqIblZpcRImI+DCS0rQGs9Ppmv
-	 uI4cbcMRaN1v0kgvKPt9I+2sGELYGp/hsRsweEovyazf3HWaMCdkqf89a80XhZaKnl
-	 owytQQeI/86OfShIGnWbjgDPLE70BmD03V3uE7cRvQ8417IfFC5O/o3RDSK2/SzDZz
-	 cVIvEtMGRKwxg==
-Message-ID: <3945a9c5-565f-4126-8d46-1db584b09e79@kernel.org>
-Date: Mon, 23 Mar 2026 16:49:44 +0100
+	b=o1THjGW87BBZn2ZRvUB/ZbG6Bpk46OGuXu9+rNxgEX1JPplRd0PmhhIVaepJQX2x+
+	 tNfnZZ2oJ/LEW/V1kb+Kd4rSlee9+4uD+RKeGWfnc/xNRMj7aASQw2bbJQ+4aFpnT4
+	 D5oU71wAa1icX022onJ8SXq1egN+wMrKLzs0GkJXDMxvnSocAjVWuUsitbcyyxaQfV
+	 JJXP9c4lBWKh9RLPX/Xy30cKFsVybbnBnhAp26jeybHA0vntxV0OkXb/w0rzQv6/lE
+	 VQ33MGCeDpT2FONGoMZBv7aFNGtJEznzEExGGKYXFQSBLYixZR0A4kZUSTFL4AAduW
+	 zfBJEYhpa4mqQ==
+Message-ID: <47f796ed-ac66-4a75-98c9-64afc8929f35@kernel.org>
+Date: Mon, 23 Mar 2026 16:51:41 +0100
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -53,8 +53,7 @@ List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 24/25] mm/vma: convert __mmap_region() to use
- vma_flags_t
+Subject: Re: [PATCH v4 25/25] mm: simplify VMA flag tests of excluded flags
 To: "Lorenzo Stoakes (Oracle)" <ljs@kernel.org>,
  Andrew Morton <akpm@linux-foundation.org>
 Cc: David Hildenbrand <david@kernel.org>,
@@ -93,63 +92,64 @@ Cc: David Hildenbrand <david@kernel.org>,
  linux-s390@vger.kernel.org, linux-um@lists.infradead.org,
  linux-fsdevel@vger.kernel.org, selinux@vger.kernel.org
 References: <cover.1774034900.git.ljs@kernel.org>
- <1fc33a404c962f02da778da100387cc19bd62153.1774034900.git.ljs@kernel.org>
+ <d395c5dd837a9864f5efcec42175910afbe3ce73.1774034900.git.ljs@kernel.org>
 From: "Vlastimil Babka (SUSE)" <vbabka@kernel.org>
 Content-Language: en-US
-In-Reply-To: <1fc33a404c962f02da778da100387cc19bd62153.1774034900.git.ljs@kernel.org>
+In-Reply-To: <d395c5dd837a9864f5efcec42175910afbe3ce73.1774034900.git.ljs@kernel.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spamd-Result: default: False [-0.66 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	FREEMAIL_CC(0.00)[kernel.org,oracle.com,google.com,suse.de,kvack.org,vger.kernel.org,armlinux.org.uk,arm.com,xen0n.name,alpha.franken.de,linux.ibm.com,ellerman.id.au,gmail.com,dabbelt.com,eecs.berkeley.edu,ghiti.fr,redhat.com,alien8.de,linux.intel.com,zytor.com,nod.at,cambridgegreys.com,sipsolutions.net,zeniv.linux.org.uk,suse.cz,zte.com.cn,linux.dev,suse.com,paul-moore.com,lists.infradead.org,lists.linux.dev,lists.ozlabs.org];
-	TAGGED_FROM(0.00)[bounces-13886-lists,linux-mips=lfdr.de];
-	FROM_HAS_DN(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
 	RCVD_TLS_LAST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	FORGED_SENDER_MAILLIST(0.00)[];
 	DKIM_TRACE(0.00)[kernel.org:+];
-	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
-	TO_DN_SOME(0.00)[];
+	TAGGED_FROM(0.00)[bounces-13887-lists,linux-mips=lfdr.de];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	MIME_TRACE(0.00)[0:+];
 	RCPT_COUNT_GT_50(0.00)[62];
 	PRECEDENCE_BULK(0.00)[];
 	FROM_NEQ_ENVFROM(0.00)[vbabka@kernel.org,linux-mips@vger.kernel.org];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
 	NEURAL_HAM(-0.00)[-1.000];
 	TAGGED_RCPT(0.00)[linux-mips];
 	MID_RHS_MATCH_FROM(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: A044E2F80E8
+	TO_DN_SOME(0.00)[]
+X-Rspamd-Queue-Id: 87C862F9DD5
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
 On 3/20/26 8:38 PM, Lorenzo Stoakes (Oracle) wrote:
-> Update the mmap() implementation logic implemented in __mmap_region() and
-> functions invoked by it.  The mmap_region() function converts its input
-> vm_flags_t parameter to a vma_flags_t value which it then passes to
-> __mmap_region() which uses the vma_flags_t value consistently from then
-> on.
+> We have implemented flag mask comparisons of the form:
 > 
-> As part of the change, we convert map_deny_write_exec() to using
-> vma_flags_t (it was incorrectly using unsigned long before), and place it
-> in vma.h, as it is only used internal to mm.
+> if ((vm_flags & (VM_FOO|VM_BAR|VM_BAZ) == VM_FOO) { ... }
 > 
-> With this change, we eliminate the legacy is_shared_maywrite_vm_flags()
-> helper function which is now no longer required.
+> Like-for-like in the code using a bitwise-and mask via vma_flags_and() and
+> using vma_flags_same() to ensure the final result equals only the required
+> flag value.
 > 
-> We are also able to update the MMAP_STATE() and VMG_MMAP_STATE() macros to
-> use the vma_flags_t value.
+> This is fine but confusing, make things clearer by instead explicitly
+> excluding undesired flags and including the desired one via tests of the
+> form:
 > 
-> Finally, we update the VMA tests to reflect the change.
+> 	if (vma_flags_test(&flags, VMA_FOO_BIT) &&
+> 	    !vma_flags_test_any(&flags, VMA_BAR_BIT, VMA_BAZ_BIT)) { ... }
 > 
+> Which makes it easier to understand what is going on.
+> 
+> No functional change intended.
+> 
+> Suggested-by: Vlastimil Babka (SUSE) <vbabka@kernel.org>
 > Signed-off-by: Lorenzo Stoakes (Oracle) <ljs@kernel.org>
 
 Acked-by: Vlastimil Babka (SUSE) <vbabka@kernel.org>
