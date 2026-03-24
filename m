@@ -1,66 +1,66 @@
-Return-Path: <linux-mips+bounces-13914-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-13915-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id kK1ZBPHFwmmIlgQAu9opvQ
-	(envelope-from <linux-mips+bounces-13914-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Tue, 24 Mar 2026 18:12:17 +0100
+	id KK3bK63EwmlflgQAu9opvQ
+	(envelope-from <linux-mips+bounces-13915-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Tue, 24 Mar 2026 18:06:53 +0100
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3A73B319CA0
-	for <lists+linux-mips@lfdr.de>; Tue, 24 Mar 2026 18:12:16 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1C9C4319AFC
+	for <lists+linux-mips@lfdr.de>; Tue, 24 Mar 2026 18:06:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 7BD2E3062689
-	for <lists+linux-mips@lfdr.de>; Tue, 24 Mar 2026 17:00:11 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 3DAA0315BB8E
+	for <lists+linux-mips@lfdr.de>; Tue, 24 Mar 2026 17:00:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E6DAD3F7E6A;
-	Tue, 24 Mar 2026 17:00:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6592C407574;
+	Tue, 24 Mar 2026 17:00:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="gpEHST9P"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jBzXgPUR"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD62F38911B;
-	Tue, 24 Mar 2026 17:00:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 792F3391E7E;
+	Tue, 24 Mar 2026 17:00:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774371609; cv=none; b=o39a7TtOj6yNGmFrGp0BDv7MmujKcOOFjaAo3LRafuPVE6TPLEaXRWyn4A7jg+vNVz+WHVGjcOmPWp4BNwziMYqkHCjTJ3w5sgrHWZMaP/A7yJWDRSA9YS9lA2tvLDfzRjfynVRbkck/nhQf9x8PUfqNU7rwt4AJfANGAu8BNtY=
+	t=1774371622; cv=none; b=DYzFqj+MiubjNr7ReBhFREq0VWFMcYtxn5FvjFmUeY1SAZvxP0j2J0Wd/TyFDE/vvuFN2d2UAsDeguQ88h6Lk01XKxH/5x5GpYE6cBpKwggLZ6bjG1A/MStuXRT46mgBoqo3lJHTaMJ5HGIIqZlydFfjiYCAY326Wf5jwyHwTdg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774371609; c=relaxed/simple;
-	bh=9hvV8PDAdyGkHU10me7VyjfjKt6p0yD22QH58KrfakU=;
+	s=arc-20240116; t=1774371622; c=relaxed/simple;
+	bh=d6KLxSDgRcKiLzDY+NMiMRY2jmIC2rw/9NmZTIuAx/o=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=SWdnOF9MjhNyx/v4Vn+o8GGnuxvhCG64XirlpMWGX6sOQ0UE44yyQR5Ue2D+Yg83/jF3HydXITG2dCpN44C54GtxDfKKYuTUXGCEVhsyDNWwz05zRRu8UbRlNm/bE6saylOFJXvBbUKlN27qvCd4UCO5TGoE75mxmLb3jHGqmCE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=gpEHST9P; arc=none smtp.client-ip=198.175.65.19
+	 MIME-Version:Content-Type; b=n3MSQxt+FutHshNqorQJz00/UHDu/9KJCTeObK3XpLts6o7QrXXERdY+Fy0nEMtPdJpecMDz/sefyzEt1AmZIL9NVOzsfOpea0jAYbzvZMBtQD4RFqQd10ZSoVE9L4E9mo7ceOvp/DG0VcY28y+uSiqjv+QNbd796Z6Zr265lXo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jBzXgPUR; arc=none smtp.client-ip=198.175.65.19
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1774371607; x=1805907607;
+  t=1774371620; x=1805907620;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=9hvV8PDAdyGkHU10me7VyjfjKt6p0yD22QH58KrfakU=;
-  b=gpEHST9P1UugeaS32z4rzTOOKQ9kQj4bIIQ7osxvVXJxWCmJ9ddnBqSp
-   H9E8F2CV5VUEmNyesdo3O4RNI4sgeGnoI+7QP2aaJjoyPVY+We+FXuLmt
-   7+gLB87ce3pnwfGQ51eaBGeg1yn8j4MJS/7ruQ0Im3YaHVEA8n4ujALmD
-   1NS3qMdWW/H6yx9O7+Q8GIrBbhCBzqIDCRm+HDJ0J35jFdHh9Vo+IK2LI
-   FPn0XXe/WImSbsCSIu3UtlqPMKxs2C8BEVxjEILdnAVr0DpcM3Wb5//9r
-   sjpapG5eGao8ltTti4DPhqKFhvgV2oJzIUgwVgLFqOX182Ycx01Z31hqF
-   g==;
-X-CSE-ConnectionGUID: LSgROxn/Tsi1yLyFZVyL3w==
-X-CSE-MsgGUID: YKVnB93wRB6HsX9nY4ouZw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11739"; a="75281401"
+  bh=d6KLxSDgRcKiLzDY+NMiMRY2jmIC2rw/9NmZTIuAx/o=;
+  b=jBzXgPUR0QtWYycsjVLpDEUrOCItsFVArtlgUN6FA6YG2yoXW0dqxawJ
+   jLuXUTLNI9fj21Z7kshsLHqAAmiTCq4GP+q3J5vvh809C4L8hUBa4d+Wc
+   0am6j7Rr8D0i/PgLOPWsnxPiQBJnyWBLBI5TXG25rs85bg6DlTW9iqE/q
+   zhd/bHo0ZvpcWDvsFmKP5F67EkJriuJY8P/EcoQo4+7ewTFB1TawVLtNy
+   MIlm6robS/dgLFkLWltLQh0+lk7FiXSGjMqv7PykvT4kByKnijsu66CG3
+   6s7KQJTN6X0Lur2H/w4M+OAtoImSHzxnNDbrBzQttbrgoKj+Tpupjz9yl
+   Q==;
+X-CSE-ConnectionGUID: F1CyYZZqSC+xZFXs0ca8bg==
+X-CSE-MsgGUID: 9nh59SSPRESai79d3MTEMA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11739"; a="75281439"
 X-IronPort-AV: E=Sophos;i="6.23,138,1770624000"; 
-   d="scan'208";a="75281401"
+   d="scan'208";a="75281439"
 Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Mar 2026 10:00:06 -0700
-X-CSE-ConnectionGUID: ZabKv/GtRfqHh4rMbY+IrQ==
-X-CSE-MsgGUID: KjVhSRgDSkWdd+eayrpYDg==
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Mar 2026 10:00:18 -0700
+X-CSE-ConnectionGUID: ib4xzWKRSNm/cm3wyP1vbg==
+X-CSE-MsgGUID: WCv5QcPyT7OGGuY23A4d9Q==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.23,138,1770624000"; 
-   d="scan'208";a="219540084"
+   d="scan'208";a="219540242"
 Received: from ijarvine-mobl1.ger.corp.intel.com (HELO localhost) ([10.245.244.217])
-  by fmviesa006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Mar 2026 09:59:57 -0700
+  by fmviesa006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Mar 2026 10:00:10 -0700
 From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
 To: linux-pci@vger.kernel.org,
 	Bjorn Helgaas <bhelgaas@google.com>,
@@ -92,9 +92,9 @@ To: linux-pci@vger.kernel.org,
 	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
 	linux-kernel@vger.kernel.org
 Cc: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Subject: [PATCH 06/10] MIPS: PCI: Remove unnecessary second application of align
-Date: Tue, 24 Mar 2026 18:56:29 +0200
-Message-Id: <20260324165633.4583-7-ilpo.jarvinen@linux.intel.com>
+Subject: [PATCH 07/10] parisc/PCI: Cleanup align handling
+Date: Tue, 24 Mar 2026 18:56:30 +0200
+Message-Id: <20260324165633.4583-8-ilpo.jarvinen@linux.intel.com>
 X-Mailer: git-send-email 2.39.5
 In-Reply-To: <20260324165633.4583-1-ilpo.jarvinen@linux.intel.com>
 References: <20260324165633.4583-1-ilpo.jarvinen@linux.intel.com>
@@ -111,12 +111,12 @@ X-Spamd-Result: default: False [-1.16 / 15.00];
 	MID_CONTAINS_FROM(1.00)[];
 	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
 	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-13914-lists,linux-mips=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-13915-lists,linux-mips=lfdr.de];
 	FREEMAIL_TO(0.00)[vger.kernel.org,google.com,roeck-us.net,lists.infradead.org,lists.linux-m68k.org,lists.ozlabs.org,armlinux.org.uk,linux-m68k.org,alpha.franken.de,HansenPartnership.com,gmx.de,ellerman.id.au,kernel.org,redhat.com,alien8.de,linux.intel.com,zytor.com,zankel.net,gmail.com,linux.ibm.com,users.sourceforge.jp,libc.org,physik.fu-berlin.de];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
@@ -130,42 +130,58 @@ X-Spamd-Result: default: False [-1.16 / 15.00];
 	RCVD_COUNT_FIVE(0.00)[5];
 	TAGGED_RCPT(0.00)[linux-mips];
 	NEURAL_HAM(-0.00)[-1.000];
-	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[linux.intel.com:mid,intel.com:dkim,intel.com:email,sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 3A73B319CA0
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,intel.com:dkim,intel.com:email,linux.intel.com:mid]
+X-Rspamd-Queue-Id: 1C9C4319AFC
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-Aligning res->start by align inside pcibios_align_resource() is
-unnecessary because caller of pcibios_align_resource() is
-__find_resource_space() that aligns res->start with align before
-calling pcibios_align_resource().
+Caller of pcibios_align_resource() (__find_resource_space()) already
+aligns the start address by 'alignment' so aligning is only necessary
+if align > alignment.
 
-Aligning by align in case of IORESOURCE_IO && start & 0x300 cannot ever
-result in changing start either because 0x300 bits would have not
-survived the earlier alignment if align was large enough to have an
-impact.
-
-Thus, remove the duplicated aligning from pcibios_align_resource().
+Change also to use ALIGN() instead of open-coding.
 
 Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
 ---
- arch/mips/pci/pci-generic.c | 2 --
- 1 file changed, 2 deletions(-)
+ arch/parisc/kernel/pci.c | 10 ++++------
+ 1 file changed, 4 insertions(+), 6 deletions(-)
 
-diff --git a/arch/mips/pci/pci-generic.c b/arch/mips/pci/pci-generic.c
-index f4957c26efc7..aaa1d6de8bef 100644
---- a/arch/mips/pci/pci-generic.c
-+++ b/arch/mips/pci/pci-generic.c
-@@ -32,8 +32,6 @@ resource_size_t pcibios_align_resource(void *data, const struct resource *res,
- 	if (res->flags & IORESOURCE_IO && start & 0x300)
- 		start = (start + 0x3ff) & ~0x3ff;
+diff --git a/arch/parisc/kernel/pci.c b/arch/parisc/kernel/pci.c
+index f99b20795d5a..f50be1a63c4c 100644
+--- a/arch/parisc/kernel/pci.c
++++ b/arch/parisc/kernel/pci.c
+@@ -8,6 +8,7 @@
+  * Copyright (C) 1999-2001 Hewlett-Packard Company
+  * Copyright (C) 1999-2001 Grant Grundler
+  */
++#include <linux/align.h>
+ #include <linux/eisa.h>
+ #include <linux/init.h>
+ #include <linux/module.h>
+@@ -200,7 +201,7 @@ resource_size_t pcibios_align_resource(void *data, const struct resource *res,
+ 				       resource_size_t size,
+ 				       resource_size_t alignment)
+ {
+-	resource_size_t mask, align, start = res->start;
++	resource_size_t align, start = res->start;
  
--	start = (start + align - 1) & ~(align - 1);
+ 	DBG_RES("pcibios_align_resource(%s, (%p) [%lx,%lx]/%x, 0x%lx, 0x%lx)\n",
+ 		pci_name(((struct pci_dev *) data)),
+@@ -209,11 +210,8 @@ resource_size_t pcibios_align_resource(void *data, const struct resource *res,
+ 
+ 	/* If it's not IO, then it's gotta be MEM */
+ 	align = (res->flags & IORESOURCE_IO) ? PCIBIOS_MIN_IO : PCIBIOS_MIN_MEM;
 -
- 	host_bridge = pci_find_host_bridge(dev->bus);
+-	/* Align to largest of MIN or input size */
+-	mask = max(alignment, align) - 1;
+-	start += mask;
+-	start &= ~mask;
++	if (align > alignment)
++		start = ALIGN(start, align);
  
- 	if (host_bridge->align_resource)
+ 	return start;
+ }
 -- 
 2.39.5
 
