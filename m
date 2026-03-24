@@ -1,66 +1,66 @@
-Return-Path: <linux-mips+bounces-13911-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-13912-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id iJXQNKzDwmlflgQAu9opvQ
-	(envelope-from <linux-mips+bounces-13911-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Tue, 24 Mar 2026 18:02:36 +0100
+	id +As7OcnFwmmIlgQAu9opvQ
+	(envelope-from <linux-mips+bounces-13912-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Tue, 24 Mar 2026 18:11:37 +0100
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id 703AA319989
-	for <lists+linux-mips@lfdr.de>; Tue, 24 Mar 2026 18:02:36 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id E8EBA319C6C
+	for <lists+linux-mips@lfdr.de>; Tue, 24 Mar 2026 18:11:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id E82A9303840D
-	for <lists+linux-mips@lfdr.de>; Tue, 24 Mar 2026 16:59:23 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 3E261303145A
+	for <lists+linux-mips@lfdr.de>; Tue, 24 Mar 2026 16:59:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 31A0A3FCB3B;
-	Tue, 24 Mar 2026 16:59:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0C54038C2D7;
+	Tue, 24 Mar 2026 16:59:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="JL9j3tQe"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ULyMssny"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 806BD3CF66F;
-	Tue, 24 Mar 2026 16:59:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BCF0736C581;
+	Tue, 24 Mar 2026 16:59:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774371559; cv=none; b=R7z0RlaN4f156EJHjfeMjs8WyFjVHYYl0izmldeH0xz+h0kN2Z1a0fbQ+ib3viBaKpf4sifGu23ovU2q36y9B2lGVGZ7HfevN+NA7qGoDEOUhmis6VhGtarJZFSSvyEWAyqphy8OtG75Jmbh5NbHTft7xSdLpaNMhKVVd7yO7GM=
+	t=1774371579; cv=none; b=QJd4mjOMz/qe4Eal//vGTNexXX9h808t1Tc3DJ2W2DLxK4Jc9bxFEQbuFaX3wnFCWOPqNuOxkwL6I44O55WmmHaQSHBC2/zmGOi3vzPeYVtVCP+nXKLBs5ggq39zy7dSHkff+ud4CAF4SVcEb/tHMjqWuZyTFB91TsA3qZmZHy4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774371559; c=relaxed/simple;
-	bh=4wZaEWcRmOK6fFyQu8mcl48M7LLtMpZtBEYXsd1Cc4E=;
+	s=arc-20240116; t=1774371579; c=relaxed/simple;
+	bh=cQi+TnP6KS0Xel2L1NUm1zOxuJkTQw+HXZFhNST/QpA=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=kt/+STf+a1WULvdnJwY03JoezaC82Jp5YIwieGmBpZihTYhoOHFCMKmB8EyU7dmBBV+gO91gmYWQQAWVmTmSTl+EoW/gfm+wAgtCIb3L/bx22JkEdPsfg/iff6+nYgGKYga5LC6RMWY1E9d1SG+qCQQT+/QZuCJhOSE+ZGx9KZQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=JL9j3tQe; arc=none smtp.client-ip=198.175.65.13
+	 MIME-Version:Content-Type; b=f8lxFMe3jbVREaKgWfxjut9dyQWbdxyS7MseLjPxbhZvlLnck9RAUwqbyIYwk0MsKfxj19/Tq4EINambXiEUtdiXm+1ehBOnxYkjTEmaevsb7Lrw2T54zlqUqFmDx4C9xRG/eeCBTKMOE2ndCx16b92JvvoQqJDsXG4KQb9Uk/U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ULyMssny; arc=none smtp.client-ip=198.175.65.14
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1774371558; x=1805907558;
+  t=1774371579; x=1805907579;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=4wZaEWcRmOK6fFyQu8mcl48M7LLtMpZtBEYXsd1Cc4E=;
-  b=JL9j3tQeXBYC83en/T8KiQE9JJyUH+tYKOhXXjWWAS+oIoMIcgoLgo0W
-   PQ8J1LtlYKISV4O7YW4/ZBAJLct0KS1Z5n33+LDGxT8qTDxPJ/zK75RFD
-   4Q3UCd0TwlbWJ4z5Q/sUv6+VUWa3Xv8xuxHm1hnJRTlnLpcZxk0cEfAtq
-   lkw7v9Xlcb1JWazFzTGp0KurDx2USnkngF1b1Y6DgXdvqg53lVlYPkMCS
-   XbtxgNWWfjWW8bznrWL16ZxYU3qxLOwG9lKtqEj7ilgD/My2dEzFsCQ4y
-   qBALtZT9j0oKqDX4EM8Vxa9VIBnen6b1lzG9qJMUFdv5DeZsNK4U7H5Nh
+  bh=cQi+TnP6KS0Xel2L1NUm1zOxuJkTQw+HXZFhNST/QpA=;
+  b=ULyMssnyIxA+WgYz4/xyz832bS6VnKyxuvu5Ok0+dNNVjR2RfyGrtrtU
+   ed6PE3wEPeca+UVwF7mQuddaHj2rgoKRPOAoiytSqNDW5u/ES+fA4A3fk
+   ZQl9hxSFfCmptk0j2A8Emh4mVsfgURFzUBmHxahq4pi5lztUmRUxWddDD
+   6iPhr4XVrpgAF82B7FSgR+0+OktAelLlig+1XpL6sWeZaUNwgUCh/YBME
+   FYp4or+BoTRVWJClIjsI0b5mAtZ3S8vbtFkwdgppaVwS3nGAb6Adf8rfN
+   yEfICABoO85WKD0JDO88L5dWvF2nESWlSMQlLr5dv3WfJ4jiAKYrOJ5li
    w==;
-X-CSE-ConnectionGUID: Vdv1ZBH0TvqJY+mk/TDCgQ==
-X-CSE-MsgGUID: GwDKocO1TBCQrsFLqMxLdw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11739"; a="86471757"
+X-CSE-ConnectionGUID: SFhs8CXTQguTB5+gxm3jhw==
+X-CSE-MsgGUID: bx5lfOLMQyKYRmnFnL2VBQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11739"; a="79252739"
 X-IronPort-AV: E=Sophos;i="6.23,138,1770624000"; 
-   d="scan'208";a="86471757"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Mar 2026 09:59:17 -0700
-X-CSE-ConnectionGUID: b26LCQzsTZi2fIETMNneag==
-X-CSE-MsgGUID: WA0Ub946SXOBfg0OV/eeeg==
+   d="scan'208";a="79252739"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Mar 2026 09:59:34 -0700
+X-CSE-ConnectionGUID: bklkz5swSMGrpU/gEbGm9Q==
+X-CSE-MsgGUID: DjRzhFV5Q9qVW8oMHuNG1A==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.23,138,1770624000"; 
-   d="scan'208";a="224666273"
+   d="scan'208";a="228447839"
 Received: from ijarvine-mobl1.ger.corp.intel.com (HELO localhost) ([10.245.244.217])
-  by orviesa007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Mar 2026 09:59:07 -0700
+  by ORVIESA003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Mar 2026 09:59:22 -0700
 From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
 To: linux-pci@vger.kernel.org,
 	Bjorn Helgaas <bhelgaas@google.com>,
@@ -92,9 +92,9 @@ To: linux-pci@vger.kernel.org,
 	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
 	linux-kernel@vger.kernel.org
 Cc: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Subject: [PATCH 03/10] resource: Rename 'tmp' variable to 'full_avail'
-Date: Tue, 24 Mar 2026 18:56:26 +0200
-Message-Id: <20260324165633.4583-4-ilpo.jarvinen@linux.intel.com>
+Subject: [PATCH 04/10] ARM/PCI: Remove unnecessary second application of align
+Date: Tue, 24 Mar 2026 18:56:27 +0200
+Message-Id: <20260324165633.4583-5-ilpo.jarvinen@linux.intel.com>
 X-Mailer: git-send-email 2.39.5
 In-Reply-To: <20260324165633.4583-1-ilpo.jarvinen@linux.intel.com>
 References: <20260324165633.4583-1-ilpo.jarvinen@linux.intel.com>
@@ -111,12 +111,12 @@ X-Spamd-Result: default: False [-1.16 / 15.00];
 	MID_CONTAINS_FROM(1.00)[];
 	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
 	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
-	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
+	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-13911-lists,linux-mips=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-13912-lists,linux-mips=lfdr.de];
 	FREEMAIL_TO(0.00)[vger.kernel.org,google.com,roeck-us.net,lists.infradead.org,lists.linux-m68k.org,lists.ozlabs.org,armlinux.org.uk,linux-m68k.org,alpha.franken.de,HansenPartnership.com,gmx.de,ellerman.id.au,kernel.org,redhat.com,alien8.de,linux.intel.com,zytor.com,zankel.net,gmail.com,linux.ibm.com,users.sourceforge.jp,libc.org,physik.fu-berlin.de];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
@@ -130,86 +130,42 @@ X-Spamd-Result: default: False [-1.16 / 15.00];
 	RCVD_COUNT_FIVE(0.00)[5];
 	TAGGED_RCPT(0.00)[linux-mips];
 	NEURAL_HAM(-0.00)[-1.000];
-	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[linux.intel.com:mid,intel.com:dkim,intel.com:email,sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 703AA319989
+	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[linux.intel.com:mid,sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,intel.com:dkim,intel.com:email]
+X-Rspamd-Queue-Id: E8EBA319C6C
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-__find_resource_space() has variable called 'tmp'. Rename it to
-'full_avail' to better indicate its purpose.
+Aligning res->start by align inside pcibios_align_resource() is
+unnecessary because caller of pcibios_align_resource() is
+__find_resource_space() that aligns res->start with align before
+calling pcibios_align_resource().
+
+Aligning by align in case of IORESOURCE_IO && start & 0x300 cannot ever
+result in changing start either because 0x300 bits would have not
+survived the earlier alignment if align was large enough to have an
+impact.
+
+Thus, remove the duplicated aligning from pcibios_align_resource().
 
 Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
 ---
- kernel/resource.c | 28 ++++++++++++++--------------
- 1 file changed, 14 insertions(+), 14 deletions(-)
+ arch/arm/kernel/bios32.c | 2 --
+ 1 file changed, 2 deletions(-)
 
-diff --git a/kernel/resource.c b/kernel/resource.c
-index 1b8d3101bdc6..8c5fcb30fc33 100644
---- a/kernel/resource.c
-+++ b/kernel/resource.c
-@@ -727,39 +727,39 @@ static int __find_resource_space(struct resource *root, struct resource *old,
- 				 struct resource_constraint *constraint)
- {
- 	struct resource *this = root->child;
--	struct resource tmp = *new, avail, alloc;
-+	struct resource full_avail = *new, avail, alloc;
- 	resource_alignf alignf = constraint->alignf;
+diff --git a/arch/arm/kernel/bios32.c b/arch/arm/kernel/bios32.c
+index 5b9b4fcd0e54..cedb83a85dd9 100644
+--- a/arch/arm/kernel/bios32.c
++++ b/arch/arm/kernel/bios32.c
+@@ -571,8 +571,6 @@ resource_size_t pcibios_align_resource(void *data, const struct resource *res,
+ 	if (res->flags & IORESOURCE_IO && start & 0x300)
+ 		start = (start + 0x3ff) & ~0x3ff;
  
--	tmp.start = root->start;
-+	full_avail.start = root->start;
- 	/*
- 	 * Skip past an allocated resource that starts at 0, since the assignment
--	 * of this->start - 1 to tmp->end below would cause an underflow.
-+	 * of this->start - 1 to full_avail->end below would cause an underflow.
- 	 */
- 	if (this && this->start == root->start) {
--		tmp.start = (this == old) ? old->start : this->end + 1;
-+		full_avail.start = (this == old) ? old->start : this->end + 1;
- 		this = this->sibling;
- 	}
- 	for(;;) {
- 		if (this)
--			tmp.end = (this == old) ?  this->end : this->start - 1;
-+			full_avail.end = (this == old) ?  this->end : this->start - 1;
- 		else
--			tmp.end = root->end;
-+			full_avail.end = root->end;
+-	start = (start + align - 1) & ~(align - 1);
+-
+ 	host_bridge = pci_find_host_bridge(dev->bus);
  
--		if (tmp.end < tmp.start)
-+		if (full_avail.end < full_avail.start)
- 			goto next;
- 
--		resource_clip(&tmp, constraint->min, constraint->max);
--		arch_remove_reservations(&tmp);
-+		resource_clip(&full_avail, constraint->min, constraint->max);
-+		arch_remove_reservations(&full_avail);
- 
- 		/* Check for overflow after ALIGN() */
--		avail.start = ALIGN(tmp.start, constraint->align);
--		avail.end = tmp.end;
-+		avail.start = ALIGN(full_avail.start, constraint->align);
-+		avail.end = full_avail.end;
- 		avail.flags = new->flags;
--		if (avail.start >= tmp.start) {
-+		if (avail.start >= full_avail.start) {
- 			alloc.flags = avail.flags;
- 			if (alignf) {
- 				alloc.start = alignf(constraint->alignf_data,
--						     &avail, &tmp,
-+						     &avail, &full_avail,
- 						     size, constraint->align);
- 			} else {
- 				alloc.start = avail.start;
-@@ -777,7 +777,7 @@ next:		if (!this || this->end == root->end)
- 			break;
- 
- 		if (this != old)
--			tmp.start = this->end + 1;
-+			full_avail.start = this->end + 1;
- 		this = this->sibling;
- 	}
- 	return -EBUSY;
+ 	if (host_bridge->align_resource)
 -- 
 2.39.5
 
