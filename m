@@ -1,311 +1,193 @@
-Return-Path: <linux-mips+bounces-13928-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-13929-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id CCxAJ2ntwmkdnQQAu9opvQ
-	(envelope-from <linux-mips+bounces-13928-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Tue, 24 Mar 2026 21:00:41 +0100
+	id OHLtCF27w2kKtwQAu9opvQ
+	(envelope-from <linux-mips+bounces-13929-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Wed, 25 Mar 2026 11:39:25 +0100
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 11CED31C008
-	for <lists+linux-mips@lfdr.de>; Tue, 24 Mar 2026 21:00:40 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id BB1AC323222
+	for <lists+linux-mips@lfdr.de>; Wed, 25 Mar 2026 11:39:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 16DD831198F9
-	for <lists+linux-mips@lfdr.de>; Tue, 24 Mar 2026 19:54:59 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 7F0DF3094EED
+	for <lists+linux-mips@lfdr.de>; Wed, 25 Mar 2026 10:33:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8DB8D3451AF;
-	Tue, 24 Mar 2026 19:54:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D6C8F3B8BD7;
+	Wed, 25 Mar 2026 10:33:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cjdns.fr header.i=@cjdns.fr header.b="kfBdJtAy"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IQ7wamBu"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail.cjdns.fr (mail.cjdns.fr [5.135.140.105])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 951F338759C;
-	Tue, 24 Mar 2026 19:54:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=5.135.140.105
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A76BC3B893B;
+	Wed, 25 Mar 2026 10:33:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774382074; cv=none; b=Jw3I7GY3rbYF61WChz/OE5R0LHFc6VIalahM50OJSiunT54k0OjxmYeTtEHdE0tvNf0bTxN+oXGozEEtve+J3yI3YPt5VPpNoWRc526nno+czjqPBhylSqHmbdacHEdT99VbLRK15u5SWb3fPDn1GCy65PshoudMNQpl3vv99zM=
+	t=1774434826; cv=none; b=sC4+V3eUgRALXWRsT/Mg7W3pJr9LRE4jQU9enfr0dhSRP9QaOoPvoXhCRA3iMvNQdpiDi4R4ONFmAAJT5Ax+EDoNOD0OhtNwehUcnEQLxeulFcLbqKl9hZNebk6X7x+/O4uqV6tyBsM2CS4IS5aYqz6bWepuyL1gEXzJFLSAYpg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774382074; c=relaxed/simple;
-	bh=ApIuGxUsBH0FGWE/JOEVFx31vfBoX/FOKHBKCdS3TH8=;
+	s=arc-20240116; t=1774434826; c=relaxed/simple;
+	bh=aJiJufwALZTrMErym90lg9xadYFrtwTh9zLM612wdfU=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=eVb5TAR4jKMI3nchQ6Ircd/sfkLWzIgonTJBZEKK2Fx/tmu1hbh87xrP32r+fztylBahlWw6xsmJy0MNos0aA5Z6wRLPbpG8MAazsnM15JG4WuQhqNFFI5KpvxM0HMQlyLw9a34qgIlusM8ulE+F+CKfWjirZCl7pVqczftLp3I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=cjdns.fr; spf=none smtp.mailfrom=cjdns.fr; dkim=pass (2048-bit key) header.d=cjdns.fr header.i=@cjdns.fr header.b=kfBdJtAy; arc=none smtp.client-ip=5.135.140.105
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=cjdns.fr
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=cjdns.fr
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id B40973AA8E6;
-	Tue, 24 Mar 2026 20:54:25 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cjdns.fr; s=dkim;
-	t=1774382069; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding:content-language:in-reply-to:references;
-	bh=4iWKEbRSat36IV94lLy0So9Efd8lQ9YMr7+bYVKEn3s=;
-	b=kfBdJtAyZlEcBfjeYglEZSwbElrc+UyvohpZ6uFd5LanoHHK3huog9XW3nd40ux2SAc2Qi
-	/LxqbkLe0q74+0Rtg6UzmTBOlPHA75pfvWpUgxLomOV07eI+p4eF/0KYovc6G14ZhozK1w
-	B/cF/waaVbM6x52hkwVTnE5P+s1oiIjnEkJBw1z6+UAcmzSwprj204OsEbOQIg45R6NLI+
-	7VVlUNOk62tz+UWOU53VW7r0W90981hEyTMBtz2d5dWuLEBzsiDOoHQMZ25w3RUlAw/ybF
-	0lnc6FGCtDcbbuqdndmVNpuV/PrxUBN7oJSgl44cehMSsjumEv+AWlnuBzcP5A==
-Message-ID: <291d896e-838a-437e-8525-5896f3c957b6@cjdns.fr>
-Date: Tue, 24 Mar 2026 20:54:24 +0100
+	 In-Reply-To:Content-Type; b=izvZ5uGt/141mDroqVgEWmmo3ckrTrrhH9zQMgYWQwNPkp5xP+r1Yu6Tbv/AKVQ/UKLalP0N2K3bY3vNQY04Uo/S/x0J7isRmTdtEpkfm3nQ2MgVW0aHH+bK04y1AZBSG5YdPfbL+KcUpProsDO0jcTL/qoq/lWVfAu5h9/zRMY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IQ7wamBu; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 45D04C4CEF7;
+	Wed, 25 Mar 2026 10:33:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1774434826;
+	bh=aJiJufwALZTrMErym90lg9xadYFrtwTh9zLM612wdfU=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=IQ7wamBuBswIV06YMQ512/86FaeSJDO1hVJmHF15aa7lwqSBhYRoh2/xQs7mCuMVn
+	 jIZx2QfPrLjG8x4HGTqwuohoFEss2YApWTN6VCPS6cZhs/Cz8meOXIe/nuz3nW3OfQ
+	 sW0aKsRm2pkCRj3Tz0xlGVf6Gag2qK2q2BHc6gd5m/lWaXyDpvlRC/a6o2Y0gsRKbw
+	 RfK3wED0pdnN0Lx0xk8dNqAWio6aPnfaaxOQ/5BjXGXYBkYeT67KblOmgVEwNZOcNA
+	 F7WJV99ADDvaoAhrnEG8aPpXAxBYDzixJeHIYfU0n1hRsq0hJGFAKTXaXIvu5adZgH
+	 fldf6DCQY3dFg==
+Message-ID: <965fe446-8f91-48bf-9453-878fef4eb1d0@kernel.org>
+Date: Wed, 25 Mar 2026 11:33:20 +0100
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird Beta
-Subject: Re: [PATCH v3 2/2] PCI: mediatek: Add support for EcoNet EN7528 SoC
-To: Bjorn Helgaas <helgaas@kernel.org>
-Cc: linux-pci@vger.kernel.org, linux-mips@vger.kernel.org,
- naseefkm@gmail.com, ryder.lee@mediatek.com, bhelgaas@google.com,
- lpieralisi@kernel.org, kwilczynski@kernel.org, mani@kernel.org,
- robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
- matthias.bgg@gmail.com, angelogioacchino.delregno@collabora.com,
- ansuelsmth@gmail.com, linux-mediatek@lists.infradead.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20260323213621.GA1080209@bhelgaas>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/9] scripts: kconfig: merge_config.sh: use POSIX '=' in
+ test
+To: Mikko Rapeli <mikko.rapeli@linaro.org>
+Cc: Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>,
+ Richard Henderson <richard.henderson@linaro.org>,
+ Matt Turner <mattst88@gmail.com>, Magnus Lindholm <linmag7@gmail.com>,
+ Russell King <linux@armlinux.org.uk>, Aaro Koskinen <aaro.koskinen@iki.fi>,
+ Andreas Kemnade <andreas@kemnade.info>, Kevin Hilman <khilman@baylibre.com>,
+ Roger Quadros <rogerq@kernel.org>, Tony Lindgren <tony@atomide.com>,
+ Huacai Chen <chenhuacai@kernel.org>, WANG Xuerui <kernel@xen0n.name>,
+ Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+ Madhavan Srinivasan <maddy@linux.ibm.com>,
+ Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>,
+ "Christophe Leroy (CS GROUP)" <chleroy@kernel.org>,
+ Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>,
+ Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>,
+ Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>,
+ Alexander Gordeev <agordeev@linux.ibm.com>,
+ Christian Borntraeger <borntraeger@linux.ibm.com>,
+ Sven Schnelle <svens@linux.ibm.com>,
+ Yoshinori Sato <ysato@users.sourceforge.jp>, Rich Felker <dalias@libc.org>,
+ John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+ Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+ Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
+ x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+ Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+ Clark Williams <clrkwllms@kernel.org>, Steven Rostedt <rostedt@goodmis.org>,
+ Pablo Neira Ayuso <pablo@netfilter.org>,
+ Krzysztof Kozlowski <krzk@kernel.org>, Alim Akhtar
+ <alim.akhtar@samsung.com>, Frank Li <Frank.Li@nxp.com>,
+ Sascha Hauer <s.hauer@pengutronix.de>,
+ Pengutronix Kernel Team <kernel@pengutronix.de>,
+ Fabio Estevam <festevam@gmail.com>, Vladimir Zapolskiy <vz@mleia.com>,
+ Piotr Wojtaszczyk <piotr.wojtaszczyk@timesys.com>,
+ Liviu Dudau <liviu.dudau@arm.com>, Sudeep Holla <sudeep.holla@kernel.org>,
+ Lorenzo Pieralisi <lpieralisi@kernel.org>,
+ Geert Uytterhoeven <geert+renesas@glider.be>,
+ Magnus Damm <magnus.damm@gmail.com>,
+ Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>,
+ Gregory CLEMENT <gregory.clement@bootlin.com>,
+ =?UTF-8?Q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>,
+ "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+ Helge Deller <deller@gmx.de>, Janusz Krzysztofik <jmkrzyszt@gmail.com>,
+ =?UTF-8?Q?Jonathan_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+ Chris Zankel <chris@zankel.net>, Max Filippov <jcmvbkbc@gmail.com>,
+ Thomas Zimmermann <tzimmermann@suse.de>, Arnd Bergmann <arnd@arndb.de>,
+ Heiko Stuebner <heiko@sntech.de>,
+ Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>,
+ Mark Brown <broonie@kernel.org>, Eric Biggers <ebiggers@kernel.org>,
+ Ard Biesheuvel <ardb@kernel.org>,
+ Sricharan Ramabadhran <quic_srichara@quicinc.com>,
+ Bjorn Andersson <andersson@kernel.org>, Michael Walle <mwalle@kernel.org>,
+ Guenter Roeck <linux@roeck-us.net>,
+ Srinivas Kandagatla <srinivas.kandagatla@oss.qualcomm.com>,
+ "Rob Herring (Arm)" <robh@kernel.org>,
+ Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Anna Schumaker <anna.schumaker@oracle.com>,
+ Alexandre Gonzalo <alexandre.gonzalo@arm.com>, linux-kbuild@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-alpha@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-omap@vger.kernel.org,
+ loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
+ linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+ linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+ linux-rt-devel@lists.linux.dev, linux-samsung-soc@vger.kernel.org,
+ imx@lists.linux.dev, linux-renesas-soc@vger.kernel.org,
+ linux-parisc@vger.kernel.org, openbmc@lists.ozlabs.org
+References: <20260317-arm_defconf_cleanup-v1-0-8eecb7fdd24d@kernel.org>
+ <20260317-arm_defconf_cleanup-v1-1-8eecb7fdd24d@kernel.org>
+ <abkfJsyQSbW-VjxD@nuoska>
+From: "Vincent Mailhol (Arm)" <mailhol@kernel.org>
 Content-Language: en-US
-From: Caleb James DeLisle <cjd@cjdns.fr>
-In-Reply-To: <20260323213621.GA1080209@bhelgaas>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+In-Reply-To: <abkfJsyQSbW-VjxD@nuoska>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Last-TLS-Session-Version: TLSv1.3
 X-Spamd-Result: default: False [-0.66 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[cjdns.fr,none];
-	R_DKIM_ALLOW(-0.20)[cjdns.fr:s=dkim];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-13928-lists,linux-mips=lfdr.de];
+	FREEMAIL_CC(0.00)[kernel.org,linaro.org,gmail.com,armlinux.org.uk,iki.fi,kemnade.info,baylibre.com,atomide.com,xen0n.name,alpha.franken.de,linux.ibm.com,ellerman.id.au,dabbelt.com,eecs.berkeley.edu,ghiti.fr,users.sourceforge.jp,libc.org,physik.fu-berlin.de,redhat.com,alien8.de,linux.intel.com,zytor.com,linutronix.de,goodmis.org,netfilter.org,samsung.com,nxp.com,pengutronix.de,mleia.com,timesys.com,arm.com,glider.be,mobileye.com,bootlin.com,hansenpartnership.com,gmx.de,gmx.net,zankel.net,suse.de,arndb.de,sntech.de,renesas.com,quicinc.com,roeck-us.net,oss.qualcomm.com,linuxfoundation.org,oracle.com,vger.kernel.org,lists.infradead.org,lists.linux.dev,lists.ozlabs.org];
+	TAGGED_FROM(0.00)[bounces-13929-lists,linux-mips=lfdr.de];
 	FROM_HAS_DN(0.00)[];
 	RCVD_COUNT_THREE(0.00)[4];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	RECEIVED_HELO_LOCALHOST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[18];
+	RCVD_TLS_LAST(0.00)[];
 	MIME_TRACE(0.00)[0:+];
-	FREEMAIL_CC(0.00)[vger.kernel.org,gmail.com,mediatek.com,google.com,kernel.org,collabora.com,lists.infradead.org];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	DKIM_TRACE(0.00)[kernel.org:+];
+	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
 	TO_DN_SOME(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
+	RCPT_COUNT_GT_50(0.00)[97];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[cjd@cjdns.fr,linux-mips@vger.kernel.org];
-	DKIM_TRACE(0.00)[cjdns.fr:+];
+	FROM_NEQ_ENVFROM(0.00)[mailhol@kernel.org,linux-mips@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	NEURAL_HAM(-0.00)[-1.000];
+	TAGGED_RCPT(0.00)[linux-mips,renesas];
 	MID_RHS_MATCH_FROM(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[linux-mips,dt];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 11CED31C008
+	DBL_BLOCKED_OPENRESOLVER(0.00)[merge_config.sh:url,sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: BB1AC323222
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-
-On 23/03/2026 22:36, Bjorn Helgaas wrote:
-> On Fri, Mar 20, 2026 at 09:42:12AM +0000, Caleb James DeLisle wrote:
->> Add support for the PCIe present on the EcoNet EN7528 (and EN751221) SoCs.
+On 3/17/26 10:30, Mikko Rapeli wrote:
+> Hi,
+> 
+> On Tue, Mar 17, 2026 at 10:13:37AM +0100, Vincent Mailhol (Arm) wrote:
+>> merge_config.sh yields this warning:
 >>
->> These SoCs have a mix of Gen1 and Gen2 capable ports, but the Gen2 ports
->> require re-training after startup.
->> ...
->> +static int mtk_pcie_startup_port_en7528(struct mtk_pcie_port *port)
->> +{
->> +	struct mtk_pcie *pcie = port->pcie;
->> +	struct pci_host_bridge *host = pci_host_bridge_from_priv(pcie);
->> +	struct resource *mem = NULL;
->> +	struct resource_entry *entry;
->> +	u32 val, link_mask;
->> +	int err;
->> +
->> +	entry = resource_list_first_type(&host->windows, IORESOURCE_MEM);
->> +	if (entry)
->> +		mem = entry->res;
->> +	if (!mem)
->> +		return -EINVAL;
->> +
->> +	if (!pcie->cfg) {
->> +		dev_err(pcie->dev, "EN7528: pciecfg syscon not available\n");
->> +		return -EINVAL;
->> +	}
->> +
->> +	/* Assert all reset signals */
->> +	writel(0, port->base + PCIE_RST_CTRL);
->> +
->> +	/*
->> +	 * Enable PCIe link down reset, if link status changed from link up to
->> +	 * link down, this will reset MAC control registers and configuration
->> +	 * space.
->> +	 */
->> +	writel(PCIE_LINKDOWN_RST_EN, port->base + PCIE_RST_CTRL);
->> +
->> +	/*
->> +	 * Described in PCIe CEM specification sections 2.2 (PERST# Signal) and
->> +	 * 2.2.1 (Initial Power-Up (G3 to S0)). The deassertion of PERST#
-> Include spec rev; the section numbers are typically specific to a spec
-> revision.  E.g., CEM r1.0, sec 2.2, 2.2.1.
->
->> +	 * should be delayed 100ms (TPVPERL) for the power and clock to become
->> +	 * stable.
->> +	 */
->> +	msleep(100);
-> Isn't there a #define for this in drivers/pci/pci.h?
-
-Indeed, and it has the proper reference to the spec revision. This hard 
-coded 100 and the spec comment trickled down from vendor code. Will 
-replace with the symbol.
-
->> +	/* De-assert PHY, PE, PIPE, MAC and configuration reset */
->> +	val = readl(port->base + PCIE_RST_CTRL);
->> +	val |= PCIE_PHY_RSTB | PCIE_PERSTB | PCIE_PIPE_SRSTB |
->> +	       PCIE_MAC_SRSTB | PCIE_CRSTB;
->> +	writel(val, port->base + PCIE_RST_CTRL);
->> +
->> +	writel(PCIE_CLASS_CODE | PCIE_REVISION_ID,
->> +	       port->base + PCIE_CONF_REV_CLASS);
->> +	writel(EN7528_HOST_MODE, port->base);
->> +
->> +	link_mask = (port->slot == 0) ? EN7528_RC0_LINKUP : EN7528_RC1_LINKUP;
->> +
->> +	/* 100ms timeout value should be enough for Gen1/2 training */
->> +	err = regmap_read_poll_timeout(pcie->cfg, EN7528_LINKUP_REG, val,
->> +				       !!(val & link_mask), 20,
->> +				       100 * USEC_PER_MSEC);
-> Ditto.  Also take a look and see if this is relevant:
-> https://lore.kernel.org/all/20260320224821.2571373-1-thierry.reding@kernel.org
-Okay, the hardcoded 100ms follows what is done in pcie-mediatek.c but 
-from pcie-mediatek-gen3.c it appears the appropriate symbol is 
-PCI_PM_D3COLD_WAIT so I'll substitute this.
->
->> +	if (err) {
->> +		dev_err(pcie->dev, "EN7528: port%d link timeout\n", port->slot);
->> +		return -ETIMEDOUT;
->> +	}
->> +
->> +	/* Set INTx mask */
-> Looks like this *clears* an INTx mask.  But the comment is probably
-> superfluous anyway.
-Indeed. "clear" -> "unmask" -> "activate" -> "set", I'll use the word 
-"activate" since that's what we're doing.
->> +	val = readl(port->base + PCIE_INT_MASK);
->> +	val &= ~INTX_MASK;
->> +	writel(val, port->base + PCIE_INT_MASK);
->> +
->> +	if (IS_ENABLED(CONFIG_PCI_MSI))
->> +		mtk_pcie_enable_msi(port);
->> +
->> +	/* Set AHB to PCIe translation windows */
->> +	val = lower_32_bits(mem->start) |
->> +	      AHB2PCIE_SIZE(fls(resource_size(mem)));
->> +	writel(val, port->base + PCIE_AHB_TRANS_BASE0_L);
->> +
->> +	val = upper_32_bits(mem->start);
->> +	writel(val, port->base + PCIE_AHB_TRANS_BASE0_H);
->> +
->> +	writel(WIN_ENABLE, port->base + PCIE_AXI_WINDOW0);
->> +
->> +	return 0;
->> +}
->> +
->>   static void __iomem *mtk_pcie_map_bus(struct pci_bus *bus,
->>   				      unsigned int devfn, int where)
->>   {
->> @@ -1149,6 +1236,30 @@ static int mtk_pcie_probe(struct platform_device *pdev)
->>   	if (err)
->>   		goto put_resources;
->>   
->> +	/* Retrain Gen1 links to reach Gen2 where supported */
->> +	if (pcie->soc->startup == mtk_pcie_startup_port_en7528) {
-> This looks like an ugly hack when placed here in mtk_pcie_probe(),
-> especially since it's after pci_host_probe() has already enumerated
-> the hierarchy.  Why can't this be inside
-> mtk_pcie_startup_port_en7528() itself?
-
-This is indeed frustrating. This little ritual has trickled down through 
-2 or 3 generations of rewritten vendor code. What we know is that the 
-Gen2 links come up as Gen1 on startup, but if you retrain them they 
-upgrade to Gen2. Technically this could be done in 
-mtk_pcie_startup_port_en7528(), but it won't be using 
-pcie_retrain_link() because we don't yet have the pci_dev struct. Doing 
-it manually is kind of ugly because we have to get the config offset of 
-the bridge device which we're retraining - vendor code for this is a bit 
-of a mess.
-
-I think probably the least bad solution here is to stick with this, 
-perhaps with a more descriptive / apologetic comment. WDYT?
-
->> +		struct pci_bus *bus = host->bus;
->> +		struct pci_dev *rc = NULL;
->> +
->> +		while ((rc = pci_get_class(PCI_CLASS_BRIDGE_PCI << 8, rc))) {
->> +			int ret = -EOPNOTSUPP;
-> I don't get this.  pci_get_class() looks through the entire hierarchy,
-> but this driver should only care about the links directly attached to
-> Root Ports.
-Good point, I'll switch this out for something more specific.
->> +			if (rc->bus != bus)
->> +				continue;
->> +
->> +			#if IS_BUILTIN(CONFIG_PCIE_MEDIATEK)
->> +			ret = pcie_retrain_link(rc, true);
->> +			#endif
-> Why is this specific to being builtin?  No other PCI controller
-> drivers do this.  Needs a comment about why this is special.
-> Typically such an #ifdef would be at the left margin.
-
-Okay yes, good point. The reason for this is because pcie_retrain_link() 
-is not exported and trying to re-implement the logic is the mess I 
-alluded to earlier. Since this driver supports multiple devices and 
-allows being compiled as a module, I opted to soft-fail in this case and 
-it will log that it didn't retrain with reason -EOPNOTSUPP. In that case 
-it would continue to run as a Gen1, and since this is an embedded 
-application, I think we can rely on the integrator to make it a builtin 
-if they're targeting the EN7528. But I can re-send with nicer 
-documentation around this.
-
->
->> +			if (!ret)
-> Prefer the positive test ("if (ret)").
-
-Okay.
-
-
-Thank you very much for the review.
-
-Caleb
-
-
->
->> +				dev_info(dev, "port%d link retrained\n",
->> +					 PCI_SLOT(rc->devfn));
->> +			else
->> +				dev_info(dev, "port%d failed to retrain %pe\n",
->> +					 PCI_SLOT(rc->devfn), ERR_PTR(ret));
->> +		}
->> +	}
->> +
->>   	return 0;
->>   
->>   put_resources:
->> @@ -1264,8 +1375,15 @@ static const struct mtk_pcie_soc mtk_pcie_soc_mt7629 = {
->>   	.quirks = MTK_PCIE_FIX_CLASS_ID | MTK_PCIE_FIX_DEVICE_ID,
->>   };
->>   
->> +static const struct mtk_pcie_soc mtk_pcie_soc_en7528 = {
->> +	.ops = &mtk_pcie_ops_v2,
->> +	.startup = mtk_pcie_startup_port_en7528,
->> +	.setup_irq = mtk_pcie_setup_irq,
->> +};
->> +
->>   static const struct of_device_id mtk_pcie_ids[] = {
->>   	{ .compatible = "airoha,an7583-pcie", .data = &mtk_pcie_soc_an7583 },
->> +	{ .compatible = "econet,en7528-pcie", .data = &mtk_pcie_soc_en7528 },
->>   	{ .compatible = "mediatek,mt2701-pcie", .data = &mtk_pcie_soc_v1 },
->>   	{ .compatible = "mediatek,mt7623-pcie", .data = &mtk_pcie_soc_v1 },
->>   	{ .compatible = "mediatek,mt2712-pcie", .data = &mtk_pcie_soc_mt2712 },
->> -- 
->> 2.39.5
+>>   ./scripts/kconfig/merge_config.sh: 384: [: false: unexpected operator
 >>
+>> This happens because the script runs under /bin/sh but compares
+>> strings using the '==' operator, which is a bash extension. The POSIX
+>> test command only specifies '=' for string equality.
+>>
+>> Replace '==' with the POSIX-compatible '=' so the script works when
+>> run with /bin/sh as intended.
+>>
+>> Fixes: dfc97e1c5da5 ("scripts: kconfig: merge_config.sh: use awk in checks too")
+>> Signed-off-by: Vincent Mailhol (Arm) <mailhol@kernel.org>
+> 
+> This fix is already merged in kbuild trees:
+> 
+> https://lore.kernel.org/linux-kbuild/20260309121505.40454-1-o451686892@gmail.com/
+> https://git.kernel.org/pub/scm/linux/kernel/git/kbuild/linux.git/log/?h=kbuild-fixes-for-next
+
+Noted! I actually started to write this before the other solution was
+posted, but, anyway, this will be removed in v2.
+
+
+Yours sincerely,
+Vincent Mailhol
+
 
