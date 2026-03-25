@@ -1,80 +1,78 @@
-Return-Path: <linux-mips+bounces-13937-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-13938-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id ABMPOOfbw2lwuQQAu9opvQ
-	(envelope-from <linux-mips+bounces-13937-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Wed, 25 Mar 2026 13:58:15 +0100
+	id yDHYHh3lw2lvugQAu9opvQ
+	(envelope-from <linux-mips+bounces-13938-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Wed, 25 Mar 2026 14:37:33 +0100
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7DB273254E3
-	for <lists+linux-mips@lfdr.de>; Wed, 25 Mar 2026 13:58:15 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id B4972325EA0
+	for <lists+linux-mips@lfdr.de>; Wed, 25 Mar 2026 14:37:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 477E930A9B30
-	for <lists+linux-mips@lfdr.de>; Wed, 25 Mar 2026 12:48:51 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id D30A131CC3B7
+	for <lists+linux-mips@lfdr.de>; Wed, 25 Mar 2026 12:51:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0C0AF3D6483;
-	Wed, 25 Mar 2026 12:48:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 278363D6696;
+	Wed, 25 Mar 2026 12:51:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="cg24GlqA"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="NB90DRRC"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
+Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F9E53D6479;
-	Wed, 25 Mar 2026 12:48:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.85.4
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17E113D16EA;
+	Wed, 25 Mar 2026 12:50:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.171.202.116
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774442925; cv=none; b=RImIKKp44c5PJODzVhShag3N3OAzCxQw5sTnvNsQXm3Subn+8hKe+rFAZU38lsmV8ebTUFl73MCucjB6Fs4tzPNQiPKZGAcJFKAb7gO+mt7cQQr1UZnieL/56cUxz5H6eeaCzi5bna8c5+VnJhoHFUrLfe/isuCXxas2xJDRERY=
+	t=1774443063; cv=none; b=EADJy2lAajlFQBaeeZVHiRc8S+T1ptM4XVrbC3DdOuvQYemejH6egGBNad2ifuDbYu7lr6/vrl97RqPrZIQg7pb+PBDBT3kX6tPKBjceunmGo7JRz+yowRIg5/tD6uKYZbSGHiKu7ybBQh4vZHaC4O5Onyd5IoOIAhL+dl6WU8k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774442925; c=relaxed/simple;
-	bh=P0Ni30xRg8QLMwvZ3OqGaYPQrCWuMnf4eu5qeZBTnTg=;
+	s=arc-20240116; t=1774443063; c=relaxed/simple;
+	bh=nis1EnGXaiGBbbe98OlND9BRNrjSeGkjUvM8qCuEYHY=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=QzJH7LaZoWQKQxXRUCuqcjbBXvnTe4xlaXT73dDLbIITjC+xgOaxFa9Ha0mH8wGzM/Nqo5cCN5E7zKQMoFrm5V30/7fHO9oZpK1AOPv+DOC+0adcgDAa30soekGCk5UeuwUTVa8AFatxEBtj7s4g3NqrzBrKyBBuz9p8bSTDZb8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=cg24GlqA; arc=none smtp.client-ip=185.246.85.4
+	 MIME-Version:Content-Type; b=tKZRuWdaVbE3I2oD7747FC2jbul5X7DHdDFZQvjaJ0CPi2ckrMBd7OU54WosfPnKTN3sYH0pDTjtLAwALl/n4Iki598pmhY9OV8xbpNWWXwvuTNncU2udq7fFL5RF2tYDiu3UETShISuMqeHoW3K93XH+gDkgB+bAFg64oGQ+Ic=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=NB90DRRC; arc=none smtp.client-ip=185.171.202.116
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-03.galae.net (Postfix) with ESMTPS id 3A50D4E4270B;
-	Wed, 25 Mar 2026 12:48:36 +0000 (UTC)
+	by smtpout-04.galae.net (Postfix) with ESMTPS id EDD86C5809F;
+	Wed, 25 Mar 2026 12:51:25 +0000 (UTC)
 Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id 0C5CE601E2;
-	Wed, 25 Mar 2026 12:48:36 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 38C7110451386;
-	Wed, 25 Mar 2026 13:48:29 +0100 (CET)
+	by smtpout-01.galae.net (Postfix) with ESMTPS id 20907601E2;
+	Wed, 25 Mar 2026 12:50:58 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 6CA161045140B;
+	Wed, 25 Mar 2026 13:50:54 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1774442914; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	t=1774443057; h=from:subject:date:message-id:to:cc:mime-version:content-type:
 	 content-transfer-encoding:in-reply-to:references;
-	bh=vrUb56OKoILRudzSP2HC6iXbV4b/pdrYXylo4VOm6Ak=;
-	b=cg24GlqAq71cIWMFccmLB7wrDVQ2wuWCHWIU+/af6+vNtyEkQQCG6DGEkUwuzkQnElrMZC
-	cpS++ZFELbzorBzb0J085cw25rOBXyejUBnbeRjlJnMXAMRSCfZgAg7LbPn2nMVjanskG3
-	a+BLte2WxI8w+RszzA933t1RjOXb7zlFAmbKdreK+zrXvUvZu4Hg6JgYyHL9FWtS57rKEj
-	Yd4yP0zv+XH1dzA2wb0myTUcswAQg7Tz7xOU1WeRBMIKndT3aQ+v1mD8McvWePoYIDTzZ+
-	PG1eDykT94b8yVmxt6VrlyzsffJf7dCvs7okzo9UvcAusXqn0rWEpc+doOILYg==
+	bh=6UOrP8NS5n8uHLOxDqtPTPLp/+9HsWqNfo5o09hCrZw=;
+	b=NB90DRRCC8NNSr3AhF4AKuaEqfIN25HFhKvj0nX6/r81xjjvuXWcSg2EwnRgUg+Kbl9FZc
+	KTlOzikvFl2LZjCaVHAPuL1Q2WXHa8Hs/COKKlr7SVuBwbvROtwXCSAfRkNOmrDXRg0Lod
+	F4ZRHWFXKH9U7QIQ3Z0v0pSBWFYkW0gVi9PlzastXPQxWYUCoYSm9nPF3K9QND4qeaExTj
+	byp3jpI7goDteGRV+gmSl3rhpalQipX8fV93e2UOVPm5YhlfS0nZWHXANSddvJUCHN0qGJ
+	wTX2GGR9Oi1mVRN4WQQaOX3W6+CzASBaLUDo4lH7rlJsUtoFeVlLwMGrT7WIXA==
 From: =?UTF-8?B?QmVub8OudA==?= Monin <benoit.monin@bootlin.com>
-To: Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>,
- Conor Dooley <conor+dt@kernel.org>,
+To: Linus Walleij <linusw@kernel.org>,
+ Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>,
  Gregory CLEMENT <gregory.clement@bootlin.com>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Michael Turquette <mturquette@baylibre.com>,
- Palmer Dabbelt <palmer@dabbelt.com>, Paul Walmsley <pjw@kernel.org>,
- Philipp Zabel <p.zabel@pengutronix.de>, Rob Herring <robh@kernel.org>,
  =?UTF-8?B?VGjDqW8=?= Lebrun <theo.lebrun@bootlin.com>,
- Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>,
- Stephen Boyd <sboyd@kernel.org>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Tawfik Bayouk <tawfik.bayouk@mobileye.com>, linux-riscv@lists.infradead.org,
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>,
+ Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>,
+ Philipp Zabel <p.zabel@pengutronix.de>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Tawfik Bayouk <tawfik.bayouk@mobileye.com>, linux-mips@vger.kernel.org,
  devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-clk@vger.kernel.org, linux-mips@vger.kernel.org,
- Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>,
- Sari Khoury <sari.khoury@mobileye.com>, Brian Masney <bmasney@redhat.com>
-Subject: Re: [PATCH v5 00/10] Add clock and reset support for Mobileye EyeQ7H
-Date: Wed, 25 Mar 2026 13:48:28 +0100
-Message-ID: <2786053.vuYhMxLoTh@benoit.monin>
-In-Reply-To: <177431268711.5403.12519723172593766522@lazor>
+ linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org
+Subject: Re: [PATCH v4 06/13] pinctrl: eyeq5: Add Mobileye EyeQ6Lplus OLB
+Date: Wed, 25 Mar 2026 13:50:53 +0100
+Message-ID: <27303918.1r3eYUQgxm@benoit.monin>
+In-Reply-To: <acKZ09NOFF59yZtJ@alpha.franken.de>
 References:
- <20260317-clk-eyeq7-v5-0-6f6daa2c2367@bootlin.com>
- <177431268711.5403.12519723172593766522@lazor>
+ <20260316-eyeq6lplus-v4-0-bf44dfc7a261@bootlin.com>
+ <CAD++jLmT+4xb3sfa3f1z0vD4qikeB+v0kC6yo6=hSU+==fZOkg@mail.gmail.com>
+ <acKZ09NOFF59yZtJ@alpha.franken.de>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -88,18 +86,18 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[bootlin.com,reject];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	R_DKIM_ALLOW(-0.20)[bootlin.com:s=dkim];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	FROM_HAS_DN(0.00)[];
-	TAGGED_FROM(0.00)[bounces-13937-lists,linux-mips=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-13938-lists,linux-mips=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
 	RECEIVED_HELO_LOCALHOST(0.00)[];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[23];
+	RCPT_COUNT_TWELVE(0.00)[18];
 	DKIM_TRACE(0.00)[bootlin.com:+];
 	MISSING_XM_UA(0.00)[];
 	TO_DN_SOME(0.00)[];
@@ -110,80 +108,54 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	NEURAL_HAM(-0.00)[-1.000];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-mips,dt];
-	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,bootlin.com:dkim,bootlin.com:url]
-X-Rspamd-Queue-Id: 7DB273254E3
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[bootlin.com:dkim,bootlin.com:email,bootlin.com:url,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,benoit.monin:mid]
+X-Rspamd-Queue-Id: B4972325EA0
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On Tuesday, 24 March 2026 at 01:38:07 CET, Stephen Boyd wrote:
-> Quoting Beno=C3=AEt Monin (2026-03-17 06:33:02)
-> > This patchset brings the support of the Other Logic Blocks (OLB)
-> > found in the first Mobileye SoC based on the RISC-V architecture, the
-> > EyeQ7H. Despite the change from MIPS to RISC-V, the Other Logic Blocks
-> > provide similar clock and reset functions to the controllers of the
-> > chip. This series introduces the device tree bindings of the SoC and
-> > the necessary changes to the clock and reset eyeq drivers.
-> >
-> [...]
+On Tuesday, 24 March 2026 at 15:04:03 CET, Thomas Bogendoerfer wrote:
+> On Mon, Mar 23, 2026 at 10:05:12AM +0100, Linus Walleij wrote:
+> > On Mon, Mar 16, 2026 at 4:26=E2=80=AFPM Beno=C3=AEt Monin <benoit.monin=
+@bootlin.com> wrote:
 > >=20
-> > This series depends on the EyeQ6Lplus support patchset posted
-> > previously[1], which in turn depends on Th=C3=A9o's series[2]. In parti=
-cular,
-> > the changes made to the clk-eyeq driver in this patchset depend on the
-> > changes done in these two series.
+> > > Add the match data for the pinctrl found in the EyeQ6Lplus OLB. The p=
+in
+> > > control is identical in function to the one present in the EyeQ5 but
+> > > has a single bank of 32 pins.
+> > >
+> > > Signed-off-by: Beno=C3=AEt Monin <benoit.monin@bootlin.com>
+> >=20
+> > Reviewed-by: Linus Walleij <linusw@kernel.org>
+> >=20
+> > I don't know your merge strategy for this patch series, if you want part
+> > of it applied to the pinctrl tree then tell me which patches and how.
 >=20
-> Is it a build time dependency or a run time dependency? Are you
-> expecting me to apply all three series to the clk tree?
+> as there are also MIPS parts involved and Stephen Acked the clk Patches
+> it might be best to merge via MIPS tree
 >=20
-It is a build dependency for the changes to the clk-eyeq driver. I am
-trying to figure out the best merge strategy. I propose to split the
-patches between the mips tree and the clock tree. The changes to the
-clk-eyeq driver and the auxiliary pinctrl-eyeq5 and reset-eyeq drivers
-could go through the clk tree. In detail, the following patches can
-be applied in order to avoid merge conflicts and the series is fully
-bisectable:
+> Thomas.
+>=20
+>=20
+I proposed to Stephen to take the patches related to the OLB (clk,
+pinctrl and reset) in the clk tree[1]. The following patches could go
+through the mips tree:
 
-All the patches from Th=C3=A9o's series[1]:
-        [PATCH v7 1/3] clk: eyeq: use the auxiliary device creation helper
-        [PATCH v7 2/3] clk: eyeq: add EyeQ5 children auxiliary device for g=
-eneric PHYs
-        [PATCH v7 3/3] reset: eyeq: drop device_set_of_node_from_dev() done=
- by parent
+      [PATCH v4 01/13] dt-bindings: mips: Add Mobileye EyeQ6Lplus SoC
+      [PATCH v4 02/13] dt-bindings: soc: mobileye: Add EyeQ6Lplus OLB
+      [PATCH v4 03/13] MIPS: Add Mobileye EyeQ6Lplus support
+      [PATCH v4 10/13] MIPS: Add Mobileye EyeQ6Lplus SoC dtsi
+      [PATCH v4 11/13] MIPS: Add Mobileye EyeQ6Lplus evaluation board dts
+      [PATCH v4 12/13] MIPS: config: add eyeq6lplus_defconfig
+      [PATCH v4 13/13] MAINTAINERS: Mobileye: Add EyeQ6Lplus files
 
-The following patches from the eyeq6lplus series[2]:
-        [PATCH v4 02/13] dt-bindings: soc: mobileye: Add EyeQ6Lplus OLB
-        [PATCH v4 04/13] reset: eyeq: Add Mobileye EyeQ6Lplus OLB
-        [PATCH v4 05/13] pinctrl: eyeq5: Use match data
-        [PATCH v4 06/13] pinctrl: eyeq5: Add Mobileye EyeQ6Lplus OLB
-        [PATCH v4 07/13] clk: eyeq: Skip post-divisor when computing PLL fr=
-equency
-        [PATCH v4 08/13] clk: eyeq: Adjust PLL accuracy computation
-        [PATCH v4 09/13] clk: eyeq: Add Mobileye EyeQ6Lplus OLB
-
-And the patches from this series:
-        [PATCH v5 01/10] dt-bindings: soc: mobileye: Add EyeQ7H OLB
-        [PATCH v5 02/10] reset: eyeq: Add EyeQ7H compatibles
-        [PATCH v5 03/10] clk: fixed-factor: Rework initialization with pare=
-nt clocks
-        [PATCH v5 04/10] clk: fixed-factor: Export __clk_hw_register_fixed_=
-factor()
-        [PATCH v5 05/10] clk: eyeq: Prefix the PLL registers with the PLL t=
-ype
-        [PATCH v5 06/10] clk: eyeq: Introduce a generic clock type
-        [PATCH v5 07/10] clk: eyeq: Convert clocks declaration to eqc_clock
-        [PATCH v5 08/10] clk: eyeq: Drop PLL, dividers, and fixed factors s=
-tructs
-        [PATCH v5 09/10] clk: eyeq: Add EyeQ7H compatibles
-
-The last patch to the MAINTAINERS file can be left aside for now, I can
-include it in the series introducing the EyeQ7H SoC (not yet posted).
+=46or the two sets of patches to build properly, the OLB dt-bindings patch
+(patch 02/13) is present in both as the clk-eyeq driver and the SoC
+device tree use the header introduced in it. I don't know if having a
+patch in two trees is a valid merge strategy. Any opinion on that?
 
 
-[1]: https://lore.kernel.org/lkml/20260225-macb-phy-v7-0-665bd8619d51@bootl=
-in.com/=20
-[2]: https://lore.kernel.org/all/20260316-eyeq6lplus-v4-0-bf44dfc7a261@boot=
-lin.com/
+[1]: https://lore.kernel.org/lkml/2786053.vuYhMxLoTh@benoit.monin/
 
 
 Best regards,
