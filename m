@@ -1,224 +1,197 @@
-Return-Path: <linux-mips+bounces-13936-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-13937-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id eFBwMBXgw2kgugQAu9opvQ
-	(envelope-from <linux-mips+bounces-13936-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Wed, 25 Mar 2026 14:16:05 +0100
+	id ABMPOOfbw2lwuQQAu9opvQ
+	(envelope-from <linux-mips+bounces-13937-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Wed, 25 Mar 2026 13:58:15 +0100
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0C20A3258C0
-	for <lists+linux-mips@lfdr.de>; Wed, 25 Mar 2026 14:16:05 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7DB273254E3
+	for <lists+linux-mips@lfdr.de>; Wed, 25 Mar 2026 13:58:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 57CD130D0AEE
-	for <lists+linux-mips@lfdr.de>; Wed, 25 Mar 2026 12:44:31 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 477E930A9B30
+	for <lists+linux-mips@lfdr.de>; Wed, 25 Mar 2026 12:48:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 07DD93D565B;
-	Wed, 25 Mar 2026 12:44:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0C0AF3D6483;
+	Wed, 25 Mar 2026 12:48:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RWUiB70l"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="cg24GlqA"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF5D73D47A7;
-	Wed, 25 Mar 2026 12:44:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F9E53D6479;
+	Wed, 25 Mar 2026 12:48:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.85.4
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774442664; cv=none; b=mG/il6SUwn7XjVbyDmsg/ELDD7Dn/h67IVUFYLpEnW5BDSQwKsAPfCeBnw6k4mN5xSKMahrAQNtbdcmHUbO0qZojeA3WUghCCDkwEmJdWWRyxmwa46UG6AMhOfT14VZgWGSn9g3sOBVvBFqaOcZw++uk+S2FiZ2HXHel5I3sckk=
+	t=1774442925; cv=none; b=RImIKKp44c5PJODzVhShag3N3OAzCxQw5sTnvNsQXm3Subn+8hKe+rFAZU38lsmV8ebTUFl73MCucjB6Fs4tzPNQiPKZGAcJFKAb7gO+mt7cQQr1UZnieL/56cUxz5H6eeaCzi5bna8c5+VnJhoHFUrLfe/isuCXxas2xJDRERY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774442664; c=relaxed/simple;
-	bh=38j766JVLWUVIfHDcaPtLgkhnG/XuRx89Jd0+IxYN6A=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=U58RYBrkT95Ntljb+SlLYTblx8QICR6nfgF5BAhguGlzzCwiGFJRvkP95J7+BeU1fV/7J7PwLbXYtUeNK7wPmaulVFcLdUwirKfNGv20s3ZxbqiYezLZvlV7nwiVAQL4HEOLEl4mgqwcRRqqjx13JHhVly4/yctP5LBFGO5CWQE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RWUiB70l; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DED05C2BCB0;
-	Wed, 25 Mar 2026 12:44:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1774442664;
-	bh=38j766JVLWUVIfHDcaPtLgkhnG/XuRx89Jd0+IxYN6A=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=RWUiB70lJFQ/lpRX5ksJCMQaC56Th+eO7hm7aEUDuy8Ob3y3O7RE3g6phJID+Lfs6
-	 jJoNnBN0IEh0AGkpcqImx42ObH5KMT847+f9FuhtO2tu7w6ZBVEnYvtsx8zYc0tSnz
-	 rCpd3E2bWxETBccTKvwfETKakB/9HkkiB3MOerBfdXxIdKLMxPsINHg0m0uAZzuToA
-	 pL904zdxnfHpI7n0laL8d4SLqpVJNkflxG6B5rx+JMm/Dr2U5xLknl4TT1rvYIe+tX
-	 NYS6ubeQS63LL1C8hS6xb+4klYgl6SgyxzxX2QiYY2Mln941/2SsK8/iuNHMI7qpT2
-	 7mY4W/DCGAH+w==
-Message-ID: <98a7e267-4162-42a1-9f4e-557897700e1b@kernel.org>
-Date: Wed, 25 Mar 2026 13:44:03 +0100
+	s=arc-20240116; t=1774442925; c=relaxed/simple;
+	bh=P0Ni30xRg8QLMwvZ3OqGaYPQrCWuMnf4eu5qeZBTnTg=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=QzJH7LaZoWQKQxXRUCuqcjbBXvnTe4xlaXT73dDLbIITjC+xgOaxFa9Ha0mH8wGzM/Nqo5cCN5E7zKQMoFrm5V30/7fHO9oZpK1AOPv+DOC+0adcgDAa30soekGCk5UeuwUTVa8AFatxEBtj7s4g3NqrzBrKyBBuz9p8bSTDZb8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=cg24GlqA; arc=none smtp.client-ip=185.246.85.4
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+	by smtpout-03.galae.net (Postfix) with ESMTPS id 3A50D4E4270B;
+	Wed, 25 Mar 2026 12:48:36 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+	by smtpout-01.galae.net (Postfix) with ESMTPS id 0C5CE601E2;
+	Wed, 25 Mar 2026 12:48:36 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 38C7110451386;
+	Wed, 25 Mar 2026 13:48:29 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
+	t=1774442914; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 content-transfer-encoding:in-reply-to:references;
+	bh=vrUb56OKoILRudzSP2HC6iXbV4b/pdrYXylo4VOm6Ak=;
+	b=cg24GlqAq71cIWMFccmLB7wrDVQ2wuWCHWIU+/af6+vNtyEkQQCG6DGEkUwuzkQnElrMZC
+	cpS++ZFELbzorBzb0J085cw25rOBXyejUBnbeRjlJnMXAMRSCfZgAg7LbPn2nMVjanskG3
+	a+BLte2WxI8w+RszzA933t1RjOXb7zlFAmbKdreK+zrXvUvZu4Hg6JgYyHL9FWtS57rKEj
+	Yd4yP0zv+XH1dzA2wb0myTUcswAQg7Tz7xOU1WeRBMIKndT3aQ+v1mD8McvWePoYIDTzZ+
+	PG1eDykT94b8yVmxt6VrlyzsffJf7dCvs7okzo9UvcAusXqn0rWEpc+doOILYg==
+From: =?UTF-8?B?QmVub8OudA==?= Monin <benoit.monin@bootlin.com>
+To: Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>,
+ Conor Dooley <conor+dt@kernel.org>,
+ Gregory CLEMENT <gregory.clement@bootlin.com>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Michael Turquette <mturquette@baylibre.com>,
+ Palmer Dabbelt <palmer@dabbelt.com>, Paul Walmsley <pjw@kernel.org>,
+ Philipp Zabel <p.zabel@pengutronix.de>, Rob Herring <robh@kernel.org>,
+ =?UTF-8?B?VGjDqW8=?= Lebrun <theo.lebrun@bootlin.com>,
+ Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>,
+ Stephen Boyd <sboyd@kernel.org>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Tawfik Bayouk <tawfik.bayouk@mobileye.com>, linux-riscv@lists.infradead.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-clk@vger.kernel.org, linux-mips@vger.kernel.org,
+ Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>,
+ Sari Khoury <sari.khoury@mobileye.com>, Brian Masney <bmasney@redhat.com>
+Subject: Re: [PATCH v5 00/10] Add clock and reset support for Mobileye EyeQ7H
+Date: Wed, 25 Mar 2026 13:48:28 +0100
+Message-ID: <2786053.vuYhMxLoTh@benoit.monin>
+In-Reply-To: <177431268711.5403.12519723172593766522@lazor>
+References:
+ <20260317-clk-eyeq7-v5-0-6f6daa2c2367@bootlin.com>
+ <177431268711.5403.12519723172593766522@lazor>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 9/9] arm64: defconfig: remove obsolete assignment to
- SLIM_QCOM_CTRL
-To: "Vincent Mailhol (Arm)" <mailhol@kernel.org>
-Cc: Alexandre Gonzalo <alexandre.gonzalo@arm.com>,
- linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-alpha@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-omap@vger.kernel.org, loongarch@lists.linux.dev,
- linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
- linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
- linux-sh@vger.kernel.org, linux-rt-devel@lists.linux.dev,
- linux-samsung-soc@vger.kernel.org, imx@lists.linux.dev,
- linux-renesas-soc@vger.kernel.org, linux-parisc@vger.kernel.org,
- openbmc@lists.ozlabs.org, Nathan Chancellor <nathan@kernel.org>,
- Nicolas Schier <nsc@kernel.org>, Mikko Rapeli <mikko.rapeli@linaro.org>,
- Richard Henderson <richard.henderson@linaro.org>,
- Matt Turner <mattst88@gmail.com>, Magnus Lindholm <linmag7@gmail.com>,
- Russell King <linux@armlinux.org.uk>, Aaro Koskinen <aaro.koskinen@iki.fi>,
- Andreas Kemnade <andreas@kemnade.info>, Kevin Hilman <khilman@baylibre.com>,
- Roger Quadros <rogerq@kernel.org>, Tony Lindgren <tony@atomide.com>,
- Huacai Chen <chenhuacai@kernel.org>, WANG Xuerui <kernel@xen0n.name>,
- Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
- Madhavan Srinivasan <maddy@linux.ibm.com>,
- Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>,
- "Christophe Leroy (CS GROUP)" <chleroy@kernel.org>,
- Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>,
- Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>,
- Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>,
- Alexander Gordeev <agordeev@linux.ibm.com>,
- Christian Borntraeger <borntraeger@linux.ibm.com>,
- Sven Schnelle <svens@linux.ibm.com>,
- Yoshinori Sato <ysato@users.sourceforge.jp>, Rich Felker <dalias@libc.org>,
- John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
- Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
- Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
- x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
- Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
- Clark Williams <clrkwllms@kernel.org>, Steven Rostedt <rostedt@goodmis.org>,
- Pablo Neira Ayuso <pablo@netfilter.org>,
- Alim Akhtar <alim.akhtar@samsung.com>, Frank Li <Frank.Li@nxp.com>,
- Sascha Hauer <s.hauer@pengutronix.de>,
- Pengutronix Kernel Team <kernel@pengutronix.de>,
- Fabio Estevam <festevam@gmail.com>, Vladimir Zapolskiy <vz@mleia.com>,
- Piotr Wojtaszczyk <piotr.wojtaszczyk@timesys.com>,
- Liviu Dudau <liviu.dudau@arm.com>, Sudeep Holla <sudeep.holla@kernel.org>,
- Lorenzo Pieralisi <lpieralisi@kernel.org>,
- Geert Uytterhoeven <geert+renesas@glider.be>,
- Magnus Damm <magnus.damm@gmail.com>,
- Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>,
- Gregory CLEMENT <gregory.clement@bootlin.com>,
- =?UTF-8?Q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>,
- "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
- Helge Deller <deller@gmx.de>, Janusz Krzysztofik <jmkrzyszt@gmail.com>,
- =?UTF-8?Q?Jonathan_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
- Chris Zankel <chris@zankel.net>, Max Filippov <jcmvbkbc@gmail.com>,
- Thomas Zimmermann <tzimmermann@suse.de>, Arnd Bergmann <arnd@arndb.de>,
- Heiko Stuebner <heiko@sntech.de>,
- Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>,
- Mark Brown <broonie@kernel.org>, Eric Biggers <ebiggers@kernel.org>,
- Ard Biesheuvel <ardb@kernel.org>,
- Sricharan Ramabadhran <quic_srichara@quicinc.com>,
- Bjorn Andersson <andersson@kernel.org>, Michael Walle <mwalle@kernel.org>,
- Guenter Roeck <linux@roeck-us.net>,
- Srinivas Kandagatla <srinivas.kandagatla@oss.qualcomm.com>,
- "Rob Herring (Arm)" <robh@kernel.org>,
- Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Anna Schumaker <anna.schumaker@oracle.com>
-References: <20260317-arm_defconf_cleanup-v1-0-8eecb7fdd24d@kernel.org>
- <20260317-arm_defconf_cleanup-v1-9-8eecb7fdd24d@kernel.org>
- <9545b66c-f223-48a3-96fe-c906d2307654@kernel.org>
- <d7ba53bd-e484-4ea1-b90b-e44321eef4c3@kernel.org>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 a/A=
-In-Reply-To: <d7ba53bd-e484-4ea1-b90b-e44321eef4c3@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+X-Last-TLS-Session-Version: TLSv1.3
 X-Spamd-Result: default: False [-0.66 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	DMARC_POLICY_ALLOW(-0.50)[bootlin.com,reject];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
+	R_DKIM_ALLOW(-0.20)[bootlin.com:s=dkim];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FREEMAIL_CC(0.00)[arm.com,vger.kernel.org,lists.infradead.org,lists.linux.dev,lists.ozlabs.org,kernel.org,linaro.org,gmail.com,armlinux.org.uk,iki.fi,kemnade.info,baylibre.com,atomide.com,xen0n.name,alpha.franken.de,linux.ibm.com,ellerman.id.au,dabbelt.com,eecs.berkeley.edu,ghiti.fr,users.sourceforge.jp,libc.org,physik.fu-berlin.de,redhat.com,alien8.de,linux.intel.com,zytor.com,linutronix.de,goodmis.org,netfilter.org,samsung.com,nxp.com,pengutronix.de,mleia.com,timesys.com,glider.be,mobileye.com,bootlin.com,HansenPartnership.com,gmx.de,gmx.net,zankel.net,suse.de,arndb.de,sntech.de,renesas.com,quicinc.com,roeck-us.net,oss.qualcomm.com,linuxfoundation.org,oracle.com];
-	TAGGED_FROM(0.00)[bounces-13936-lists,linux-mips=lfdr.de];
 	FROM_HAS_DN(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
+	TAGGED_FROM(0.00)[bounces-13937-lists,linux-mips=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
+	RECEIVED_HELO_LOCALHOST(0.00)[];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
+	RCPT_COUNT_TWELVE(0.00)[23];
+	DKIM_TRACE(0.00)[bootlin.com:+];
+	MISSING_XM_UA(0.00)[];
 	TO_DN_SOME(0.00)[];
-	RCPT_COUNT_GT_50(0.00)[97];
+	RCVD_COUNT_FIVE(0.00)[6];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[krzk@kernel.org,linux-mips@vger.kernel.org];
+	FROM_NEQ_ENVFROM(0.00)[benoit.monin@bootlin.com,linux-mips@vger.kernel.org];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
-	TAGGED_RCPT(0.00)[linux-mips,renesas];
-	MID_RHS_MATCH_FROM(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 0C20A3258C0
+	TAGGED_RCPT(0.00)[linux-mips,dt];
+	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,bootlin.com:dkim,bootlin.com:url]
+X-Rspamd-Queue-Id: 7DB273254E3
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On 25/03/2026 12:31, Vincent Mailhol (Arm) wrote:
->>
->> Exactly that case also encouraged me to document this, since we do not
->> know how to fix get_maintainers. See commit
->> 6efe5322f060099c8bc51aaee83b857394e42dd5
-> I read the thread in which you posted that patch. Thanks for updating
-> the documentation, but as people anticipated, as long as the tool
-> doesn't do the right thing, there will be people like me who will mess
-> up the recipient list.
-> 
-> Anyway, sorry for that.
+On Tuesday, 24 March 2026 at 01:38:07 CET, Stephen Boyd wrote:
+> Quoting Beno=C3=AEt Monin (2026-03-17 06:33:02)
+> > This patchset brings the support of the Other Logic Blocks (OLB)
+> > found in the first Mobileye SoC based on the RISC-V architecture, the
+> > EyeQ7H. Despite the change from MIPS to RISC-V, the Other Logic Blocks
+> > provide similar clock and reset functions to the controllers of the
+> > chip. This series introduces the device tree bindings of the SoC and
+> > the necessary changes to the clock and reset eyeq drivers.
+> >
+> [...]
+> >=20
+> > This series depends on the EyeQ6Lplus support patchset posted
+> > previously[1], which in turn depends on Th=C3=A9o's series[2]. In parti=
+cular,
+> > the changes made to the clk-eyeq driver in this patchset depend on the
+> > changes done in these two series.
+>=20
+> Is it a build time dependency or a run time dependency? Are you
+> expecting me to apply all three series to the clk tree?
+>=20
+It is a build dependency for the changes to the clk-eyeq driver. I am
+trying to figure out the best merge strategy. I propose to split the
+patches between the mips tree and the clock tree. The changes to the
+clk-eyeq driver and the auxiliary pinctrl-eyeq5 and reset-eyeq drivers
+could go through the clk tree. In detail, the following patches can
+be applied in order to avoid merge conflicts and the series is fully
+bisectable:
 
-No worries. I wished the tool was improved because I believe in the
-toolset, not remembering thousand rules of different subsystems...
+All the patches from Th=C3=A9o's series[1]:
+        [PATCH v7 1/3] clk: eyeq: use the auxiliary device creation helper
+        [PATCH v7 2/3] clk: eyeq: add EyeQ5 children auxiliary device for g=
+eneric PHYs
+        [PATCH v7 3/3] reset: eyeq: drop device_set_of_node_from_dev() done=
+ by parent
+
+The following patches from the eyeq6lplus series[2]:
+        [PATCH v4 02/13] dt-bindings: soc: mobileye: Add EyeQ6Lplus OLB
+        [PATCH v4 04/13] reset: eyeq: Add Mobileye EyeQ6Lplus OLB
+        [PATCH v4 05/13] pinctrl: eyeq5: Use match data
+        [PATCH v4 06/13] pinctrl: eyeq5: Add Mobileye EyeQ6Lplus OLB
+        [PATCH v4 07/13] clk: eyeq: Skip post-divisor when computing PLL fr=
+equency
+        [PATCH v4 08/13] clk: eyeq: Adjust PLL accuracy computation
+        [PATCH v4 09/13] clk: eyeq: Add Mobileye EyeQ6Lplus OLB
+
+And the patches from this series:
+        [PATCH v5 01/10] dt-bindings: soc: mobileye: Add EyeQ7H OLB
+        [PATCH v5 02/10] reset: eyeq: Add EyeQ7H compatibles
+        [PATCH v5 03/10] clk: fixed-factor: Rework initialization with pare=
+nt clocks
+        [PATCH v5 04/10] clk: fixed-factor: Export __clk_hw_register_fixed_=
+factor()
+        [PATCH v5 05/10] clk: eyeq: Prefix the PLL registers with the PLL t=
+ype
+        [PATCH v5 06/10] clk: eyeq: Introduce a generic clock type
+        [PATCH v5 07/10] clk: eyeq: Convert clocks declaration to eqc_clock
+        [PATCH v5 08/10] clk: eyeq: Drop PLL, dividers, and fixed factors s=
+tructs
+        [PATCH v5 09/10] clk: eyeq: Add EyeQ7H compatibles
+
+The last patch to the MAINTAINERS file can be left aside for now, I can
+include it in the series introducing the EyeQ7H SoC (not yet posted).
+
+
+[1]: https://lore.kernel.org/lkml/20260225-macb-phy-v7-0-665bd8619d51@bootl=
+in.com/=20
+[2]: https://lore.kernel.org/all/20260316-eyeq6lplus-v4-0-bf44dfc7a261@boot=
+lin.com/
+
 
 Best regards,
-Krzysztof
+=2D-=20
+Beno=C3=AEt Monin, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
+
+
+
 
