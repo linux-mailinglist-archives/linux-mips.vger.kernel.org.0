@@ -1,195 +1,206 @@
-Return-Path: <linux-mips+bounces-13933-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-13934-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id EJwSGerJw2lKuAQAu9opvQ
-	(envelope-from <linux-mips+bounces-13933-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Wed, 25 Mar 2026 12:41:30 +0100
+	id qB3CJ4DYw2lwuQQAu9opvQ
+	(envelope-from <linux-mips+bounces-13934-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Wed, 25 Mar 2026 13:43:44 +0100
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id F29D63240ED
-	for <lists+linux-mips@lfdr.de>; Wed, 25 Mar 2026 12:41:29 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 01D49325149
+	for <lists+linux-mips@lfdr.de>; Wed, 25 Mar 2026 13:43:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id CC30731274BD
-	for <lists+linux-mips@lfdr.de>; Wed, 25 Mar 2026 11:32:24 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id A0B8331B6ABF
+	for <lists+linux-mips@lfdr.de>; Wed, 25 Mar 2026 12:04:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 787C23CE4BF;
-	Wed, 25 Mar 2026 11:32:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 98BD53D0901;
+	Wed, 25 Mar 2026 12:04:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="p9xj+yQr"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="J7tmz/ea"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BE253CCFD1;
-	Wed, 25 Mar 2026 11:32:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C41FA3D1CC5;
+	Wed, 25 Mar 2026 12:04:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774438335; cv=none; b=Tk4iWPaY3VOyLg7IJYq/0Lz81+jTwh18EwSHwsEoJ+1UkCd/Uw64d/31xiiToW7oJEOUF08Ju8aSzLFN7AgEuq7tp27ODhIr+9b6a1oki897s1zMX1nMPRQ4ncWBJug4/Db3a9qQUkaJr8kHt9Gprl6f1ViFqmyiOfglfJyOfpw=
+	t=1774440258; cv=none; b=P2v1fyuvHYZEgeEF45LZM8trlPVOlnCrNUogC1rZR+1eJxH0WfTmpD6QIsG9kB9ra2utXZFv9aueys4pav7LpjR4Tm/JTToldnAWj4JnF6XAzA9AMbEFlu7waJ5Dxt/oeBpZE7i6g4d7Mjiex+ymRGJ1KsASSrNB3i/9c74GDl0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774438335; c=relaxed/simple;
-	bh=UHl6aIxvtuzZoFfPKn0m6HqE+Ix+jQLwOiO6mcxm7gc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=r/MHjWRkdtB3HlJsVGzTjCsQ2nTkPwdbSRzxdz+/6YRgx4EsoL9qM2Gjm1sloHJbFjAN2dwVxjHrmFln+SOv4o37S8fILinUaiO0t6qSZb4/Y1+fGPRk440hgLd+MEs23SeXxLkcIg+OUsWsJWTLnzHy7cBnd7i8fDbVzWqen5o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=p9xj+yQr; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 35258C2BC9E;
-	Wed, 25 Mar 2026 11:31:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1774438335;
-	bh=UHl6aIxvtuzZoFfPKn0m6HqE+Ix+jQLwOiO6mcxm7gc=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=p9xj+yQrGXkpoAF0fY9H5IaPcoHqI+j6qFDwyvc4yO1C747biO/reuY8t3d94mmup
-	 yQMdUZgPvj2v9edGgjvwa44Pe6FwmdZ43t/G8cYYldfmo7YsAt7eQsYUOQchWN8tEp
-	 lxT4aSMwTa3Lg9zV/TmzInC2IVkU8yAXXMuWflmPLvFoKuR5BI2SX5CUo5rJVYT1a9
-	 QJSXMoguTPIulqY0xz7WbsLHtpKTLSiyneymYrRj8U6WWUrJxGfwFv6fjWC6LeaTQu
-	 meTzpjdQXm6htU8OLApZ7jlovVUK4NVBzdOcUYZm4Uly3jpcZL4fYc0zooZuxOTQqt
-	 7cnUszMPYt6sQ==
-Message-ID: <d7ba53bd-e484-4ea1-b90b-e44321eef4c3@kernel.org>
-Date: Wed, 25 Mar 2026 12:31:51 +0100
+	s=arc-20240116; t=1774440258; c=relaxed/simple;
+	bh=pthnvpb4bRgKrgjRM/7gqeUF0giUw3hMBAx3mtd0Tfk=;
+	h=From:Date:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=FG/JBs0B+p2xp2vzHKLH5azwwM13MkXQQNND2K7ovQQiD4P8F2jYoHTByHSg9y20vt07ha5eTrHldBCv738CnXdVnzz1NOD+NJ12y7W5FbKHdW46Uhw0TjQaNbbNuizIXaymwXOQXw6u0Ju3/Hohxg0+KwBRFJ3mRhE9jHYBaYk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=J7tmz/ea; arc=none smtp.client-ip=192.198.163.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1774440257; x=1805976257;
+  h=from:date:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=pthnvpb4bRgKrgjRM/7gqeUF0giUw3hMBAx3mtd0Tfk=;
+  b=J7tmz/eaTd05OL5Uk7c6f1Kz8pD8vJdRkgQWOqDIGV0pFDBcdRBCkn5L
+   CHF0T6xDxbbPlkkMcFQ5srdSF3zl6wg/kncaLmsQAOzReECtzOOSn9tHA
+   inEXGYEhqWoW7sxM7rBars5x1z7pJHS9y2ujTi3YG6RW47526m7HdSFNK
+   uc0J5+6qPA05S8bFz5l0rUjFhsYQD3Q+EHHd1TdX9Z5/Rrb4XBiLBqEu/
+   u5yJRH0WjjoSCRThOZjnWjA2bPXqdVGwbajeUIsS5WETRkPM/TElJxRS3
+   1xKJJYjeyEjD9TvZy6SnkpcjaF94s7DRIOuUW23s462znQhMdhy7V+6hw
+   g==;
+X-CSE-ConnectionGUID: +a+RKR8dQuelGRD2RspvTQ==
+X-CSE-MsgGUID: x8N4ddhjS82VENnpV3ctWw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11739"; a="79381329"
+X-IronPort-AV: E=Sophos;i="6.23,140,1770624000"; 
+   d="scan'208";a="79381329"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Mar 2026 05:04:15 -0700
+X-CSE-ConnectionGUID: GDVCGG5yQPG4XMQBFBjvAw==
+X-CSE-MsgGUID: 2mzDZ70tTHGJhYkLqZAkRA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,140,1770624000"; 
+   d="scan'208";a="255160046"
+Received: from ijarvine-mobl1.ger.corp.intel.com (HELO localhost) ([10.245.245.125])
+  by orviesa002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Mar 2026 05:04:07 -0700
+From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Date: Wed, 25 Mar 2026 14:04:03 +0200 (EET)
+To: linux-pci@vger.kernel.org
+cc: Bjorn Helgaas <bhelgaas@google.com>, Guenter Roeck <linux@roeck-us.net>, 
+    linux-alpha@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+    linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org, 
+    linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, 
+    linux-s390@vger.kernel.org, linux-sh@vger.kernel.org, 
+    Russell King <linux@armlinux.org.uk>, 
+    Geert Uytterhoeven <geert@linux-m68k.org>, 
+    Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
+    "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>, 
+    Helge Deller <deller@gmx.de>, Michael Ellerman <mpe@ellerman.id.au>, 
+    Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, 
+    Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, 
+    "H. Peter Anvin" <hpa@zytor.com>, Chris Zankel <chris@zankel.net>, 
+    Max Filippov <jcmvbkbc@gmail.com>, 
+    Madhavan Srinivasan <maddy@linux.ibm.com>, 
+    Yoshinori Sato <ysato@users.sourceforge.jp>, Rich Felker <dalias@libc.org>, 
+    John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>, 
+    Nicholas Piggin <npiggin@gmail.com>, 
+    "Christophe Leroy (CS GROUP)" <chleroy@kernel.org>, x86@kernel.org, 
+    LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 09/10] PCI: Align head space better
+In-Reply-To: <20260324165633.4583-10-ilpo.jarvinen@linux.intel.com>
+Message-ID: <3a51ad39-558f-860d-4920-9f757b7d5131@linux.intel.com>
+References: <20260324165633.4583-1-ilpo.jarvinen@linux.intel.com> <20260324165633.4583-10-ilpo.jarvinen@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 9/9] arm64: defconfig: remove obsolete assignment to
- SLIM_QCOM_CTRL
-To: Krzysztof Kozlowski <krzk@kernel.org>
-Cc: Alexandre Gonzalo <alexandre.gonzalo@arm.com>,
- linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-alpha@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-omap@vger.kernel.org, loongarch@lists.linux.dev,
- linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
- linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
- linux-sh@vger.kernel.org, linux-rt-devel@lists.linux.dev,
- linux-samsung-soc@vger.kernel.org, imx@lists.linux.dev,
- linux-renesas-soc@vger.kernel.org, linux-parisc@vger.kernel.org,
- openbmc@lists.ozlabs.org, Nathan Chancellor <nathan@kernel.org>,
- Nicolas Schier <nsc@kernel.org>, Mikko Rapeli <mikko.rapeli@linaro.org>,
- Richard Henderson <richard.henderson@linaro.org>,
- Matt Turner <mattst88@gmail.com>, Magnus Lindholm <linmag7@gmail.com>,
- Russell King <linux@armlinux.org.uk>, Aaro Koskinen <aaro.koskinen@iki.fi>,
- Andreas Kemnade <andreas@kemnade.info>, Kevin Hilman <khilman@baylibre.com>,
- Roger Quadros <rogerq@kernel.org>, Tony Lindgren <tony@atomide.com>,
- Huacai Chen <chenhuacai@kernel.org>, WANG Xuerui <kernel@xen0n.name>,
- Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
- Madhavan Srinivasan <maddy@linux.ibm.com>,
- Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>,
- "Christophe Leroy (CS GROUP)" <chleroy@kernel.org>,
- Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>,
- Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>,
- Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>,
- Alexander Gordeev <agordeev@linux.ibm.com>,
- Christian Borntraeger <borntraeger@linux.ibm.com>,
- Sven Schnelle <svens@linux.ibm.com>,
- Yoshinori Sato <ysato@users.sourceforge.jp>, Rich Felker <dalias@libc.org>,
- John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
- Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
- Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
- x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
- Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
- Clark Williams <clrkwllms@kernel.org>, Steven Rostedt <rostedt@goodmis.org>,
- Pablo Neira Ayuso <pablo@netfilter.org>,
- Alim Akhtar <alim.akhtar@samsung.com>, Frank Li <Frank.Li@nxp.com>,
- Sascha Hauer <s.hauer@pengutronix.de>,
- Pengutronix Kernel Team <kernel@pengutronix.de>,
- Fabio Estevam <festevam@gmail.com>, Vladimir Zapolskiy <vz@mleia.com>,
- Piotr Wojtaszczyk <piotr.wojtaszczyk@timesys.com>,
- Liviu Dudau <liviu.dudau@arm.com>, Sudeep Holla <sudeep.holla@kernel.org>,
- Lorenzo Pieralisi <lpieralisi@kernel.org>,
- Geert Uytterhoeven <geert+renesas@glider.be>,
- Magnus Damm <magnus.damm@gmail.com>,
- Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>,
- Gregory CLEMENT <gregory.clement@bootlin.com>,
- =?UTF-8?Q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>,
- "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
- Helge Deller <deller@gmx.de>, Janusz Krzysztofik <jmkrzyszt@gmail.com>,
- =?UTF-8?Q?Jonathan_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
- Chris Zankel <chris@zankel.net>, Max Filippov <jcmvbkbc@gmail.com>,
- Thomas Zimmermann <tzimmermann@suse.de>, Arnd Bergmann <arnd@arndb.de>,
- Heiko Stuebner <heiko@sntech.de>,
- Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>,
- Mark Brown <broonie@kernel.org>, Eric Biggers <ebiggers@kernel.org>,
- Ard Biesheuvel <ardb@kernel.org>,
- Sricharan Ramabadhran <quic_srichara@quicinc.com>,
- Bjorn Andersson <andersson@kernel.org>, Michael Walle <mwalle@kernel.org>,
- Guenter Roeck <linux@roeck-us.net>,
- Srinivas Kandagatla <srinivas.kandagatla@oss.qualcomm.com>,
- "Rob Herring (Arm)" <robh@kernel.org>,
- Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Anna Schumaker <anna.schumaker@oracle.com>
-References: <20260317-arm_defconf_cleanup-v1-0-8eecb7fdd24d@kernel.org>
- <20260317-arm_defconf_cleanup-v1-9-8eecb7fdd24d@kernel.org>
- <9545b66c-f223-48a3-96fe-c906d2307654@kernel.org>
-From: "Vincent Mailhol (Arm)" <mailhol@kernel.org>
-Content-Language: en-US
-In-Reply-To: <9545b66c-f223-48a3-96fe-c906d2307654@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spamd-Result: default: False [-0.66 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+Content-Type: multipart/mixed; boundary="8323328-1062646629-1774440243=:976"
+X-Spamd-Result: default: False [-1.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	CTYPE_MIXED_BOGUS(1.00)[];
+	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
 	MAILLIST(-0.15)[generic];
-	MIME_GOOD(-0.10)[text/plain];
+	MIME_GOOD(-0.10)[multipart/mixed,text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FREEMAIL_CC(0.00)[arm.com,vger.kernel.org,lists.infradead.org,lists.linux.dev,lists.ozlabs.org,kernel.org,linaro.org,gmail.com,armlinux.org.uk,iki.fi,kemnade.info,baylibre.com,atomide.com,xen0n.name,alpha.franken.de,linux.ibm.com,ellerman.id.au,dabbelt.com,eecs.berkeley.edu,ghiti.fr,users.sourceforge.jp,libc.org,physik.fu-berlin.de,redhat.com,alien8.de,linux.intel.com,zytor.com,linutronix.de,goodmis.org,netfilter.org,samsung.com,nxp.com,pengutronix.de,mleia.com,timesys.com,glider.be,mobileye.com,bootlin.com,HansenPartnership.com,gmx.de,gmx.net,zankel.net,suse.de,arndb.de,sntech.de,renesas.com,quicinc.com,roeck-us.net,oss.qualcomm.com,linuxfoundation.org,oracle.com];
-	TAGGED_FROM(0.00)[bounces-13933-lists,linux-mips=lfdr.de];
+	FREEMAIL_CC(0.00)[google.com,roeck-us.net,vger.kernel.org,lists.infradead.org,lists.linux-m68k.org,lists.ozlabs.org,armlinux.org.uk,linux-m68k.org,alpha.franken.de,HansenPartnership.com,gmx.de,ellerman.id.au,kernel.org,redhat.com,alien8.de,linux.intel.com,zytor.com,zankel.net,gmail.com,linux.ibm.com,users.sourceforge.jp,libc.org,physik.fu-berlin.de];
+	TAGGED_FROM(0.00)[bounces-13934-lists,linux-mips=lfdr.de];
 	FROM_HAS_DN(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	RCVD_TLS_LAST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	RCVD_TLS_LAST(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[32];
+	MIME_TRACE(0.00)[0:+,1:+];
+	DKIM_TRACE(0.00)[intel.com:+];
+	MISSING_XM_UA(0.00)[];
 	TO_DN_SOME(0.00)[];
-	RCPT_COUNT_GT_50(0.00)[97];
+	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[mailhol@kernel.org,linux-mips@vger.kernel.org];
+	FROM_NEQ_ENVFROM(0.00)[ilpo.jarvinen@linux.intel.com,linux-mips@vger.kernel.org];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
-	TAGGED_RCPT(0.00)[linux-mips,renesas];
+	TAGGED_RCPT(0.00)[linux-mips];
 	MID_RHS_MATCH_FROM(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: F29D63240ED
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[linux.intel.com:mid,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,intel.com:dkim,intel.com:email]
+X-Rspamd-Queue-Id: 01D49325149
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On 3/17/26 12:35, Krzysztof Kozlowski wrote:
-> On 17/03/2026 10:13, Vincent Mailhol (Arm) wrote:
->> The Qcom Slimbus controller driver is not in the kernel tree
->> anymore. Clean-up the leftover reference to CONFIG_SLIM_QCOM_CTRL
->> which was left in the defconfig.
->>
->> Fixes: 7cbba32a2d62 ("slimbus: qcom: remove unused qcom controller driver")
->> Signed-off-by: Vincent Mailhol (Arm) <mailhol@kernel.org>
->> ---
->>  arch/arm64/configs/defconfig | 1 -
->>  1 file changed, 1 deletion(-)
-> 
-> https://lore.kernel.org/all/20251223140645.3545658-1-mikko.rapeli@linaro.org/
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
-I will add that this was initially reported by Mikko.
+--8323328-1062646629-1774440243=:976
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: QUOTED-PRINTABLE
 
-> I even asked there to send it to qcom maintainers :/
-> 
-> Exactly that case also encouraged me to document this, since we do not
-> know how to fix get_maintainers. See commit
-> 6efe5322f060099c8bc51aaee83b857394e42dd5
-I read the thread in which you posted that patch. Thanks for updating
-the documentation, but as people anticipated, as long as the tool
-doesn't do the right thing, there will be people like me who will mess
-up the recipient list.
+On Tue, 24 Mar 2026, Ilpo J=C3=A4rvinen wrote:
 
-Anyway, sorry for that.
+> When a bridge window contains big and small resource(s), the small
+> resource(s) may not amount to the half of the size of the big resource
+> which would allow calculate_head_align() to shrink the head alignment.
+> This results in always placing the small resource(s) after the big
+> resource.
+>=20
+> In general, it would be good to be able to place the small resource(s)
+> before the big resource to achieve better utilization of the address
+> space. In the cases where the large resource can only fit at the end
+> of the window, it is even required.
+>=20
+> However, carrying the information over from pbus_size_mem() and
+> calculate_head_align() to __pci_assign_resource() and
+> pcibios_align_resource() is not easy with the current data structures.
+>=20
+> A somewhat hacky way to move the non-aligning tail part to the head is
+> possible within pcibios_align_resource(). The free space between the
+> start of the free space span and the aligned start address can be
+> compared with the non-aligning remainder of the size. If the free space
+> is larger than the remainder, placing the remainder before the start
+> address is possible. This relocation should generally work, because PCI
+> resources consist only power-of-2 atoms.
+>=20
+> Various arch requirements may still need to override the relocation, so
+> the relocation is only applied selectively in such cases.
+>=20
+> Closes: https://bugzilla.kernel.org/show_bug.cgi?id=3D221205
+> Signed-off-by: Ilpo J=C3=A4rvinen <ilpo.jarvinen@linux.intel.com>
+> ---
+>  arch/arm/kernel/bios32.c         |  3 +++
+>  arch/m68k/kernel/pcibios.c       |  4 ++++
+>  arch/mips/pci/pci-generic.c      |  3 +++
+>  arch/mips/pci/pci-legacy.c       |  2 ++
+>  arch/parisc/kernel/pci.c         |  3 +++
+>  arch/powerpc/kernel/pci-common.c |  2 ++
+>  arch/sh/drivers/pci/pci.c        |  2 ++
+>  arch/x86/pci/i386.c              |  2 ++
+>  arch/xtensa/kernel/pci.c         |  2 ++
+>  drivers/pci/setup-res.c          | 39 +++++++++++++++++++++++++++++++-
+>  include/linux/pci.h              |  5 ++++
+>  kernel/resource.c                |  2 +-
+>  12 files changed, 67 insertions(+), 2 deletions(-)
 
+> diff --git a/arch/sh/drivers/pci/pci.c b/arch/sh/drivers/pci/pci.c
+> index 7a0522316ee3..994c3bd36ef2 100644
+> --- a/arch/sh/drivers/pci/pci.c
+> +++ b/arch/sh/drivers/pci/pci.c
+> @@ -185,6 +185,8 @@ resource_size_t pcibios_align_resource(void *data, co=
+nst struct resource *res,
+>  =09=09 */
+>  =09=09if (start & 0x300)
+>  =09=09=09start =3D (start + 0x3ff) & ~0x3ff;
+> +=09} else (res->flags & IORESOURCE_MEM) {
 
-Yours sincerely,
-Vincent Mailhol
+I'll be adding the missing if into this in v2 (found by sashiko). It seems=
+=20
+lkp didn't test this so it was not caught earlier.
 
+> +=09=09start =3D pci_align_resource(dev, res, empty_res, size, align);
+>  =09}
+> =20
+>  =09return start;
+
+--=20
+ i.
+
+--8323328-1062646629-1774440243=:976--
 
