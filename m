@@ -1,37 +1,37 @@
-Return-Path: <linux-mips+bounces-13943-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-13944-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 0M/oNWtKxGn5xwQAu9opvQ
-	(envelope-from <linux-mips+bounces-13943-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Wed, 25 Mar 2026 21:49:47 +0100
+	id yMOvBbNLxGn5xwQAu9opvQ
+	(envelope-from <linux-mips+bounces-13944-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Wed, 25 Mar 2026 21:55:15 +0100
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2F52A32BFD8
-	for <lists+linux-mips@lfdr.de>; Wed, 25 Mar 2026 21:49:47 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6B9D632C07A
+	for <lists+linux-mips@lfdr.de>; Wed, 25 Mar 2026 21:55:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id CCBDA3023DFE
-	for <lists+linux-mips@lfdr.de>; Wed, 25 Mar 2026 20:46:39 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 7BBC3304CCE0
+	for <lists+linux-mips@lfdr.de>; Wed, 25 Mar 2026 20:52:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9285830FF1D;
-	Wed, 25 Mar 2026 20:46:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E9436364E90;
+	Wed, 25 Mar 2026 20:52:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b="Ve02YZRn"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b="bJgocfdz"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [78.32.30.218])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1BF5F2C3257;
-	Wed, 25 Mar 2026 20:46:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BA363451AF;
+	Wed, 25 Mar 2026 20:52:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=78.32.30.218
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774471599; cv=none; b=SuDamM8BsFFuuSs+WX0Mgzs/AURtYNpwCsUQwJpIAsRzkIT4arG07jwqO1EsQM8zEzi6y2eNK62y6XJ5/xY6uiN7cs46WDI8iy5wjfZ4XuGrgHHdOVrkfs+gTxPqGswA+6mG5iMtWysbbQzwH5BtwK3knpPc66MsR53z4ns3H+c=
+	t=1774471952; cv=none; b=NIc7ZgdxxIwj4KPEWEUTSLoWLYcE9y7uNuOunrDDuImc4CWxLci/vuWZFlmSO8nVoQA1i2EPayCUnRce2qgHfH/oni5wDHb13OufQ/oz6/9Vw9goFRVTuYvRGuELnl7LasaMlsyZWLpksgKHuzQy33E9drc+9MeAVXPQQdQTsu8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774471599; c=relaxed/simple;
-	bh=5o1xohuKr0S+BiEvA0vQ9u8l2HBmv1np5Y69DlJp66g=;
+	s=arc-20240116; t=1774471952; c=relaxed/simple;
+	bh=7tfnYTF1fs0ROH1wH33nuz71pGj4lwF/JonOh4LcOu4=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=vBoHKTib1lNjLAnTGYBXa9e3eGTxu9VTDXzwK3hOhK7M1aB0clJOuCkOQZvX1/a6q1e7R/Nl+xtqcKUN+gG/CNI15rD3GOaakshuh7PlXfHaVAXn6QPDnlYdWX9ekFS+Q4pXg1zxCS6n+FiXC/XcO4tPXB7k6kGzzLCa+cUs1GY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk; spf=none smtp.mailfrom=armlinux.org.uk; dkim=pass (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b=Ve02YZRn; arc=none smtp.client-ip=78.32.30.218
+	 Content-Type:Content-Disposition:In-Reply-To; b=JoF0ZjtCNVw6WKPPyzfT9ZxJVLBJfcJiROtgFBIDZG0u7xfLg8K0fcUAzxHxTLq+L/WSLBl8eZXVk4AMFU6CUjafpue+4dVlpDfwWPCId/80yvHySQ/e7FcB8Jrh8XViX/VO5GCFiAStuLckTavIpkAWZIUYq+vvnbA3K+QAt1I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk; spf=none smtp.mailfrom=armlinux.org.uk; dkim=pass (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b=bJgocfdz; arc=none smtp.client-ip=78.32.30.218
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=armlinux.org.uk
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
@@ -40,23 +40,23 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
 	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
 	List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=9QKg/ec1UB4Iqjz+3XvMVVCaBUJlpvPmNLrcDpzXquo=; b=Ve02YZRnNB03ruvQ/IjMJ/1ue1
-	Bi8GDv/IOoGR1ANMgT981Oj4zKj2iU195jiS8WXu+7B+X6xJnKauwJSR4031QIWEgH+2vTwfVQr6y
-	6Uce6PdLDE3m76fpnRsKUBhpTJScPz4WkdEti7wSHIpkJlDYs4ox/dK/urm14+6tM4h1b8TQhing0
-	q3JBKDYwRFu+WNMRY0DtkGZxWIuqCxaxHYQ6kgObXg6QaE2h1AxVEp6VucVunJ22eCyC+c/8oM7Sd
-	UH972dpzdlSDv5EZv13lys3OTKfnntfc2ax0H2xncCFzdbdlgsnc4buqoC6Go4sQrHDOJ9VVuLLZ2
-	JvH2jTZA==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:46352)
+	bh=5TaF136hS7gyiN2INSsjbTVG4M1m+RcQW4RSzUAK8mc=; b=bJgocfdzLBKes2wMXa50BQ/Sgw
+	2VNxUldZJFRFO1DH1e3sWYkf+HpUKst8qeo6mEmxzisIlT9F643+8G7mP8W0cEG97CX9EddaPFnAx
+	0auvwtk71mLu472gb4M/pgwwwT7auS75QFoEuI3Ulc0t8Td1yqPpRlQhMRL9Q0sVOXjuT1KRASHvT
+	KyQkPoRHlhfR1LscoVZHueKBsDdovNbEjbfAFOMWWjTHfKoz7+lVqv6Pq5sNuqrikvfHErcf50ZxE
+	dLM4luhf9tuxdUXNx8G4p2TIcbxgKN3UURxz0Ib/Wm84DDDPrXllvWnYoO6lVBmszS+dAvfAa4kcZ
+	Cij15muw==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:36514)
 	by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.98.2)
 	(envelope-from <linux@armlinux.org.uk>)
-	id 1w5V7G-000000003sV-3Db4;
-	Wed, 25 Mar 2026 20:46:14 +0000
+	id 1w5VD1-000000003uJ-1ODG;
+	Wed, 25 Mar 2026 20:52:11 +0000
 Received: from linux by shell.armlinux.org.uk with local (Exim 4.98.2)
 	(envelope-from <linux@shell.armlinux.org.uk>)
-	id 1w5V7D-000000006M4-0GW4;
-	Wed, 25 Mar 2026 20:46:11 +0000
-Date: Wed, 25 Mar 2026 20:46:10 +0000
+	id 1w5VCy-000000006MD-0rz1;
+	Wed, 25 Mar 2026 20:52:08 +0000
+Date: Wed, 25 Mar 2026 20:52:08 +0000
 From: "Russell King (Oracle)" <linux@armlinux.org.uk>
 To: Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>
 Cc: Bjorn Andersson <andersson@kernel.org>,
@@ -97,11 +97,11 @@ Cc: Bjorn Andersson <andersson@kernel.org>,
 	linux-rockchip@lists.infradead.org, sophgo@lists.linux.dev,
 	linux-riscv@lists.infradead.org,
 	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Subject: Re: [PATCH net-next v9 2/6] net: stmmac: qcom-ethqos: use generic
- device properties
-Message-ID: <acRJkrKbF_lI03O4@shell.armlinux.org.uk>
+Subject: Re: [PATCH net-next v9 5/6] net: stmmac: qcom-ethqos: split power
+ management context into a separate struct
+Message-ID: <acRK-F6TACsZqEhx@shell.armlinux.org.uk>
 References: <20260316-qcom-sa8255p-emac-v9-0-c58934e76ff2@oss.qualcomm.com>
- <20260316-qcom-sa8255p-emac-v9-2-c58934e76ff2@oss.qualcomm.com>
+ <20260316-qcom-sa8255p-emac-v9-5-c58934e76ff2@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -110,18 +110,18 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260316-qcom-sa8255p-emac-v9-2-c58934e76ff2@oss.qualcomm.com>
+In-Reply-To: <20260316-qcom-sa8255p-emac-v9-5-c58934e76ff2@oss.qualcomm.com>
 Sender: Russell King (Oracle) <linux@armlinux.org.uk>
 X-Spamd-Result: default: False [1.14 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	R_DKIM_REJECT(1.00)[armlinux.org.uk:s=pandora-2019];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	DMARC_POLICY_SOFTFAIL(0.10)[armlinux.org.uk : SPF not aligned (relaxed),none];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-13943-lists,linux-mips=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-13944-lists,linux-mips=lfdr.de];
 	FROM_HAS_DN(0.00)[];
 	FREEMAIL_CC(0.00)[kernel.org,lunn.ch,davemloft.net,google.com,redhat.com,gmail.com,foss.st.com,st.com,linaro.org,baylibre.com,oss.nxp.com,nxp.com,oss.qualcomm.com,bootlin.com,glider.be,vger.kernel.org,st-md-mailman.stormreply.com,lists.infradead.org,tenstorrent.com,lists.linux.dev];
 	RCPT_COUNT_TWELVE(0.00)[48];
@@ -129,39 +129,36 @@ X-Spamd-Result: default: False [1.14 / 15.00];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	DKIM_TRACE(0.00)[armlinux.org.uk:-];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
 	MISSING_XM_UA(0.00)[];
 	RCVD_COUNT_FIVE(0.00)[5];
 	FROM_NEQ_ENVFROM(0.00)[linux@armlinux.org.uk,linux-mips@vger.kernel.org];
 	PRECEDENCE_BULK(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	NEURAL_HAM(-0.00)[-0.922];
+	NEURAL_HAM(-0.00)[-0.964];
 	TAGGED_RCPT(0.00)[linux-mips,dt,netdev,renesas];
 	MID_RHS_MATCH_FROMTLD(0.00)[];
 	TO_DN_SOME(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[shell.armlinux.org.uk:mid,armlinux.org.uk:url,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,linaro.org:email]
-X-Rspamd-Queue-Id: 2F52A32BFD8
+	DBL_BLOCKED_OPENRESOLVER(0.00)[shell.armlinux.org.uk:mid,linaro.org:email,armlinux.org.uk:url,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 6B9D632C07A
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On Mon, Mar 16, 2026 at 01:05:07PM +0100, Bartosz Golaszewski wrote:
+On Mon, Mar 16, 2026 at 01:05:10PM +0100, Bartosz Golaszewski wrote:
 > From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 > 
-> In order to drop the dependency on CONFIG_OF, convert all device property
-> getters from OF-specific to generic device properties and stop pulling
-> in any linux/of.h symbols.
+> With match data split into general and power-management sections, let's
+> now do the same with runtime device data.
 
-Why is this desirable? Please see the recent discussion at
-
-https://lore.kernel.org/r/20260322-remove-device-find-by-of-node-v1-0-b72eb22a1215@gmail.com
-
-specifically replies from Andrew and myself.
-
-Merely wanting to drop a dependency is not a good enough reason for
-these kinds of conversions, because they in effect make the DT
-properties also apply to ACPI which may not be appropriate (note
-for example that MDIO busses are not represented in ACPI.)
+As I've already said, this conflicts with work that I have in progress,
+which will remove the serdes support from this driver _if_ we can get
+forward progress on the PCS bits from Mohd - that has become dependent
+on sorting out the MDIO bus clock which seems to have been totally
+broken in this driver for quite some time so that we can have confidence
+that any testing that is done is actually being done on a setup which is
+running within correct specification (and not running the MDIO bus at
+some insane speed that may lead to data corruption.)
 
 -- 
 RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
