@@ -1,51 +1,51 @@
-Return-Path: <linux-mips+bounces-13929-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-13930-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id OHLtCF27w2kKtwQAu9opvQ
-	(envelope-from <linux-mips+bounces-13929-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Wed, 25 Mar 2026 11:39:25 +0100
+	id kPkFAkPJw2lKuAQAu9opvQ
+	(envelope-from <linux-mips+bounces-13930-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Wed, 25 Mar 2026 12:38:43 +0100
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id BB1AC323222
-	for <lists+linux-mips@lfdr.de>; Wed, 25 Mar 2026 11:39:24 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id A2BCE32402C
+	for <lists+linux-mips@lfdr.de>; Wed, 25 Mar 2026 12:38:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 7F0DF3094EED
-	for <lists+linux-mips@lfdr.de>; Wed, 25 Mar 2026 10:33:48 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id EED1130221FC
+	for <lists+linux-mips@lfdr.de>; Wed, 25 Mar 2026 11:27:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D6C8F3B8BD7;
-	Wed, 25 Mar 2026 10:33:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5C8143CD8B8;
+	Wed, 25 Mar 2026 11:27:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IQ7wamBu"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Gek2NIF+"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A76BC3B893B;
-	Wed, 25 Mar 2026 10:33:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3174F3AEF29;
+	Wed, 25 Mar 2026 11:27:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774434826; cv=none; b=sC4+V3eUgRALXWRsT/Mg7W3pJr9LRE4jQU9enfr0dhSRP9QaOoPvoXhCRA3iMvNQdpiDi4R4ONFmAAJT5Ax+EDoNOD0OhtNwehUcnEQLxeulFcLbqKl9hZNebk6X7x+/O4uqV6tyBsM2CS4IS5aYqz6bWepuyL1gEXzJFLSAYpg=
+	t=1774438055; cv=none; b=C23U600qty4xUWJ/4lPG9N9gqp77x0XddSy9UBs3aO7AaDtogtNUDw0WkUWjvnbYCF2FNmCYBFDqak4+BMZsEL2ruen2RLK4BMR9wXki2iEuy0FPpvDmKVVgSn7wk88BSgJfi8PObf6ZgCpv7QbC8UQ6FXArHanHzWNYqA6xYdo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774434826; c=relaxed/simple;
-	bh=aJiJufwALZTrMErym90lg9xadYFrtwTh9zLM612wdfU=;
+	s=arc-20240116; t=1774438055; c=relaxed/simple;
+	bh=aD1JvDIfq0GE0tWPZnEpoteUQl9LKVoUeLp+4KiP+wI=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=izvZ5uGt/141mDroqVgEWmmo3ckrTrrhH9zQMgYWQwNPkp5xP+r1Yu6Tbv/AKVQ/UKLalP0N2K3bY3vNQY04Uo/S/x0J7isRmTdtEpkfm3nQ2MgVW0aHH+bK04y1AZBSG5YdPfbL+KcUpProsDO0jcTL/qoq/lWVfAu5h9/zRMY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IQ7wamBu; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 45D04C4CEF7;
-	Wed, 25 Mar 2026 10:33:27 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=tPbOX9Xm4rouURHDfzNbuXe8jUZbm0od46RrF8MMGw/151hP+mVAL2d8T98yf3SibIxxky4muJJnMoTUnD4vD2ixo+ChdIGHh/XHjFq9sCAbbJpulTGS7+s2CPiIrU5h2u4Un8hpo6MT355a10WUXCu8Fh9PYPXdvyEtf0mNekY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Gek2NIF+; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7CE08C4CEF7;
+	Wed, 25 Mar 2026 11:27:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1774434826;
-	bh=aJiJufwALZTrMErym90lg9xadYFrtwTh9zLM612wdfU=;
+	s=k20201202; t=1774438055;
+	bh=aD1JvDIfq0GE0tWPZnEpoteUQl9LKVoUeLp+4KiP+wI=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=IQ7wamBuBswIV06YMQ512/86FaeSJDO1hVJmHF15aa7lwqSBhYRoh2/xQs7mCuMVn
-	 jIZx2QfPrLjG8x4HGTqwuohoFEss2YApWTN6VCPS6cZhs/Cz8meOXIe/nuz3nW3OfQ
-	 sW0aKsRm2pkCRj3Tz0xlGVf6Gag2qK2q2BHc6gd5m/lWaXyDpvlRC/a6o2Y0gsRKbw
-	 RfK3wED0pdnN0Lx0xk8dNqAWio6aPnfaaxOQ/5BjXGXYBkYeT67KblOmgVEwNZOcNA
-	 F7WJV99ADDvaoAhrnEG8aPpXAxBYDzixJeHIYfU0n1hRsq0hJGFAKTXaXIvu5adZgH
-	 fldf6DCQY3dFg==
-Message-ID: <965fe446-8f91-48bf-9453-878fef4eb1d0@kernel.org>
-Date: Wed, 25 Mar 2026 11:33:20 +0100
+	b=Gek2NIF+50ZmqIFXo3Abwewv4G7+nnsW9VSMv0MJSvCqE0QYQCxE0tBmFgJRBRECp
+	 Gcc7YZXcn6ZVjnnOFNPWxF9MXqXyhFMV2/rtAU9seEjQdh1t6qZiZ0is2C0JPXPhBn
+	 2cYzSNQ+wv0QUFUGa/aTz2gJSJZJA4ed1dMrx9K6NARl0UOWe3qrF1pRaeGcjSPDkw
+	 D4ktPFXCkzERe/9x5RNai4KmjZT+sqqQPICvXI7s+TI3/NID3cRU0cs8f4vrDqo6yN
+	 THmNV9Nu9oWReHHUKBYPcvAflG6BahJmiGo3mGEaRVmOB4tsJAqcsgQbvaJ4aWQ8Xg
+	 08DYkx/Hy2gVA==
+Message-ID: <3ec53a2e-a8e1-43d3-abdb-c00433e7675c@kernel.org>
+Date: Wed, 25 Mar 2026 12:27:13 +0100
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -53,10 +53,20 @@ List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/9] scripts: kconfig: merge_config.sh: use POSIX '=' in
- test
-To: Mikko Rapeli <mikko.rapeli@linaro.org>
-Cc: Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>,
+Subject: Re: [PATCH 5/9] arm: configs: remove obsolete assignments to
+ SND_SOC_ROCKCHIP
+To: Krzysztof Kozlowski <krzk@kernel.org>
+Cc: Alexandre Gonzalo <alexandre.gonzalo@arm.com>,
+ linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-alpha@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-omap@vger.kernel.org, loongarch@lists.linux.dev,
+ linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+ linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+ linux-sh@vger.kernel.org, linux-rt-devel@lists.linux.dev,
+ linux-samsung-soc@vger.kernel.org, imx@lists.linux.dev,
+ linux-renesas-soc@vger.kernel.org, linux-parisc@vger.kernel.org,
+ openbmc@lists.ozlabs.org, Nathan Chancellor <nathan@kernel.org>,
+ Nicolas Schier <nsc@kernel.org>, Mikko Rapeli <mikko.rapeli@linaro.org>,
  Richard Henderson <richard.henderson@linaro.org>,
  Matt Turner <mattst88@gmail.com>, Magnus Lindholm <linmag7@gmail.com>,
  Russell King <linux@armlinux.org.uk>, Aaro Koskinen <aaro.koskinen@iki.fi>,
@@ -81,8 +91,7 @@ Cc: Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>,
  Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
  Clark Williams <clrkwllms@kernel.org>, Steven Rostedt <rostedt@goodmis.org>,
  Pablo Neira Ayuso <pablo@netfilter.org>,
- Krzysztof Kozlowski <krzk@kernel.org>, Alim Akhtar
- <alim.akhtar@samsung.com>, Frank Li <Frank.Li@nxp.com>,
+ Alim Akhtar <alim.akhtar@samsung.com>, Frank Li <Frank.Li@nxp.com>,
  Sascha Hauer <s.hauer@pengutronix.de>,
  Pengutronix Kernel Team <kernel@pengutronix.de>,
  Fabio Estevam <festevam@gmail.com>, Vladimir Zapolskiy <vz@mleia.com>,
@@ -94,7 +103,7 @@ Cc: Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>,
  Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>,
  Gregory CLEMENT <gregory.clement@bootlin.com>,
  =?UTF-8?Q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>,
- "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+ "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
  Helge Deller <deller@gmx.de>, Janusz Krzysztofik <jmkrzyszt@gmail.com>,
  =?UTF-8?Q?Jonathan_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
  Chris Zankel <chris@zankel.net>, Max Filippov <jcmvbkbc@gmail.com>,
@@ -110,44 +119,35 @@ Cc: Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>,
  "Rob Herring (Arm)" <robh@kernel.org>,
  Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
  Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Anna Schumaker <anna.schumaker@oracle.com>,
- Alexandre Gonzalo <alexandre.gonzalo@arm.com>, linux-kbuild@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-alpha@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-omap@vger.kernel.org,
- loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
- linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
- linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
- linux-rt-devel@lists.linux.dev, linux-samsung-soc@vger.kernel.org,
- imx@lists.linux.dev, linux-renesas-soc@vger.kernel.org,
- linux-parisc@vger.kernel.org, openbmc@lists.ozlabs.org
+ Anna Schumaker <anna.schumaker@oracle.com>, soc@lists.linux.dev
 References: <20260317-arm_defconf_cleanup-v1-0-8eecb7fdd24d@kernel.org>
- <20260317-arm_defconf_cleanup-v1-1-8eecb7fdd24d@kernel.org>
- <abkfJsyQSbW-VjxD@nuoska>
+ <20260317-arm_defconf_cleanup-v1-5-8eecb7fdd24d@kernel.org>
+ <febd0f7e-59f3-4ba4-8706-53c7353e3fe5@kernel.org>
 From: "Vincent Mailhol (Arm)" <mailhol@kernel.org>
 Content-Language: en-US
-In-Reply-To: <abkfJsyQSbW-VjxD@nuoska>
+In-Reply-To: <febd0f7e-59f3-4ba4-8706-53c7353e3fe5@kernel.org>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Spamd-Result: default: False [-0.66 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FREEMAIL_CC(0.00)[kernel.org,linaro.org,gmail.com,armlinux.org.uk,iki.fi,kemnade.info,baylibre.com,atomide.com,xen0n.name,alpha.franken.de,linux.ibm.com,ellerman.id.au,dabbelt.com,eecs.berkeley.edu,ghiti.fr,users.sourceforge.jp,libc.org,physik.fu-berlin.de,redhat.com,alien8.de,linux.intel.com,zytor.com,linutronix.de,goodmis.org,netfilter.org,samsung.com,nxp.com,pengutronix.de,mleia.com,timesys.com,arm.com,glider.be,mobileye.com,bootlin.com,hansenpartnership.com,gmx.de,gmx.net,zankel.net,suse.de,arndb.de,sntech.de,renesas.com,quicinc.com,roeck-us.net,oss.qualcomm.com,linuxfoundation.org,oracle.com,vger.kernel.org,lists.infradead.org,lists.linux.dev,lists.ozlabs.org];
-	TAGGED_FROM(0.00)[bounces-13929-lists,linux-mips=lfdr.de];
+	FREEMAIL_CC(0.00)[arm.com,vger.kernel.org,lists.infradead.org,lists.linux.dev,lists.ozlabs.org,kernel.org,linaro.org,gmail.com,armlinux.org.uk,iki.fi,kemnade.info,baylibre.com,atomide.com,xen0n.name,alpha.franken.de,linux.ibm.com,ellerman.id.au,dabbelt.com,eecs.berkeley.edu,ghiti.fr,users.sourceforge.jp,libc.org,physik.fu-berlin.de,redhat.com,alien8.de,linux.intel.com,zytor.com,linutronix.de,goodmis.org,netfilter.org,samsung.com,nxp.com,pengutronix.de,mleia.com,timesys.com,glider.be,mobileye.com,bootlin.com,HansenPartnership.com,gmx.de,gmx.net,zankel.net,suse.de,arndb.de,sntech.de,renesas.com,quicinc.com,roeck-us.net,oss.qualcomm.com,linuxfoundation.org,oracle.com];
+	TAGGED_FROM(0.00)[bounces-13930-lists,linux-mips=lfdr.de];
 	FROM_HAS_DN(0.00)[];
 	RCVD_COUNT_THREE(0.00)[4];
 	RCVD_TLS_LAST(0.00)[];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	DKIM_TRACE(0.00)[kernel.org:+];
-	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
 	TO_DN_SOME(0.00)[];
-	RCPT_COUNT_GT_50(0.00)[97];
+	RCPT_COUNT_GT_50(0.00)[98];
 	PRECEDENCE_BULK(0.00)[];
 	FROM_NEQ_ENVFROM(0.00)[mailhol@kernel.org,linux-mips@vger.kernel.org];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
@@ -155,36 +155,52 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	TAGGED_RCPT(0.00)[linux-mips,renesas];
 	MID_RHS_MATCH_FROM(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[merge_config.sh:url,sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: BB1AC323222
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,linux.dev:email]
+X-Rspamd-Queue-Id: A2BCE32402C
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On 3/17/26 10:30, Mikko Rapeli wrote:
-> Hi,
-> 
-> On Tue, Mar 17, 2026 at 10:13:37AM +0100, Vincent Mailhol (Arm) wrote:
->> merge_config.sh yields this warning:
->>
->>   ./scripts/kconfig/merge_config.sh: 384: [: false: unexpected operator
->>
->> This happens because the script runs under /bin/sh but compares
->> strings using the '==' operator, which is a bash extension. The POSIX
->> test command only specifies '=' for string equality.
->>
->> Replace '==' with the POSIX-compatible '=' so the script works when
->> run with /bin/sh as intended.
->>
->> Fixes: dfc97e1c5da5 ("scripts: kconfig: merge_config.sh: use awk in checks too")
->> Signed-off-by: Vincent Mailhol (Arm) <mailhol@kernel.org>
-> 
-> This fix is already merged in kbuild trees:
-> 
-> https://lore.kernel.org/linux-kbuild/20260309121505.40454-1-o451686892@gmail.com/
-> https://git.kernel.org/pub/scm/linux/kernel/git/kbuild/linux.git/log/?h=kbuild-fixes-for-next
++CC: soc@lists.linux.dev
 
-Noted! I actually started to write this before the other solution was
-posted, but, anyway, this will be removed in v2.
+On 3/17/26 12:28, Krzysztof Kozlowski wrote:
+> On 17/03/2026 10:13, Vincent Mailhol (Arm) wrote:
+>> CONFIG_SND_SOC_ROCKCHIP was removed in commit cae3cc435db5 ("ASoC:
+>> rockchip: Standardize ASoC menu"). However it is still referenced in
+>> some defconfigs.
+>>
+>> Remove any references to CONFIG_SND_SOC_ROCKCHIP.
+>>
+>> FYI, the suppressions were done using:
+>>
+>>   git ls-files -z 'arch/*/configs/*defconfig' |\
+>>     xargs -0 sed -i -E '/^CONFIG_SND_SOC_ROCKCHIP/d'
+>>
+>> Fixes: cae3cc435db5 ("ASoC: rockchip: Standardize ASoC menu")
+>> Signed-off-by: Vincent Mailhol (Arm) <mailhol@kernel.org>
+>> ---
+>>  arch/arm/configs/multi_v7_defconfig | 1 -
+>>  arch/arm64/configs/defconfig        | 1 -
+> 
+> This was already posted:
+> https://lore.kernel.org/all/20260313-rockchip-snd-cleanup-v1-1-77d9a953fd1b@schnwalter.eu/
+> but just like that patch you did not send it to soc@ (if I am not
+> mistaken... CC list is enormous).
+
+OK, I will add soc@lists.linux.dev to the recipient list in v2.
+
+> I think you are mixing here independent works, like kconfig and per-arch
+> defconfig changes. Please split these per arch defconfig maintainers -
+> patches and patchset, so you won't be Cc-ing 50 addresses.
+
+The config issues which I am addressing are transversal problems so I
+was expecting to just get the Acked-by from the other architecture and
+have all this go through the same tree.
+
+As I explained in my cover letter, this is not doing any functional changes.
+
+But if this is not acceptable, I will just reduce the scope to arm/arm64
+then. Doing a per arch split as you suggested would be too much overhead
+(more than what I am ready to invest on this clean-up).
 
 
 Yours sincerely,
