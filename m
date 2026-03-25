@@ -1,51 +1,51 @@
-Return-Path: <linux-mips+bounces-13935-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-13936-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id eF6SIxHaw2m1uQQAu9opvQ
-	(envelope-from <linux-mips+bounces-13935-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Wed, 25 Mar 2026 13:50:25 +0100
+	id eFBwMBXgw2kgugQAu9opvQ
+	(envelope-from <linux-mips+bounces-13936-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Wed, 25 Mar 2026 14:16:05 +0100
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3632E3252D4
-	for <lists+linux-mips@lfdr.de>; Wed, 25 Mar 2026 13:50:25 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0C20A3258C0
+	for <lists+linux-mips@lfdr.de>; Wed, 25 Mar 2026 14:16:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 55ABB3042989
-	for <lists+linux-mips@lfdr.de>; Wed, 25 Mar 2026 12:42:38 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 57CD130D0AEE
+	for <lists+linux-mips@lfdr.de>; Wed, 25 Mar 2026 12:44:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D58C73D5236;
-	Wed, 25 Mar 2026 12:42:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 07DD93D565B;
+	Wed, 25 Mar 2026 12:44:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kqEhZy0K"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RWUiB70l"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABD833CF697;
-	Wed, 25 Mar 2026 12:42:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF5D73D47A7;
+	Wed, 25 Mar 2026 12:44:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774442554; cv=none; b=f/NzQtcOBHoN6TBxdAwUOzpW+EF9t6zlxGtB4ZTm8PzrPeVXVRrabQbRxVN4elVg73nyMc+kwbxVV0b14f/y99bhucGu6YtZobPskZ8eDTJbbrTE4onJJ+h0MaIsaSO480skHijchzhM4LL1Fd+0RB+BRs1x73opTL8cjoYFGe4=
+	t=1774442664; cv=none; b=mG/il6SUwn7XjVbyDmsg/ELDD7Dn/h67IVUFYLpEnW5BDSQwKsAPfCeBnw6k4mN5xSKMahrAQNtbdcmHUbO0qZojeA3WUghCCDkwEmJdWWRyxmwa46UG6AMhOfT14VZgWGSn9g3sOBVvBFqaOcZw++uk+S2FiZ2HXHel5I3sckk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774442554; c=relaxed/simple;
-	bh=w7OzwCqt8SyLebOkd0ga04DG/iV8dPT4IUIMUesHAhk=;
+	s=arc-20240116; t=1774442664; c=relaxed/simple;
+	bh=38j766JVLWUVIfHDcaPtLgkhnG/XuRx89Jd0+IxYN6A=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=TRhNqX1jWDikFFhJRxhVwxwZJ07API5RVDPKVAdHuzrzZsQOMU1tZWlrsr+DL2Iok+VfLh8aPWxWcuF62qJFJxK6G7hqdWYMwQc4Vk+k5NQb2YSTISg3K3VqN3TqHsODBg+F/lX6j16l/g9d9Q+euJmgpuPuJTIiqZpIfeRVPcI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kqEhZy0K; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E418FC4CEF7;
-	Wed, 25 Mar 2026 12:42:08 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=U58RYBrkT95Ntljb+SlLYTblx8QICR6nfgF5BAhguGlzzCwiGFJRvkP95J7+BeU1fV/7J7PwLbXYtUeNK7wPmaulVFcLdUwirKfNGv20s3ZxbqiYezLZvlV7nwiVAQL4HEOLEl4mgqwcRRqqjx13JHhVly4/yctP5LBFGO5CWQE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RWUiB70l; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DED05C2BCB0;
+	Wed, 25 Mar 2026 12:44:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1774442554;
-	bh=w7OzwCqt8SyLebOkd0ga04DG/iV8dPT4IUIMUesHAhk=;
+	s=k20201202; t=1774442664;
+	bh=38j766JVLWUVIfHDcaPtLgkhnG/XuRx89Jd0+IxYN6A=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=kqEhZy0KWeBErR981dacfREdOZWMmz6qOIxI4/aT7/aolwxv4kqXgQoqF3yfj/NNW
-	 qgGHWlfdf7fya7BTe6mmtyKuBxTwb8JRvk8QJK4RagZwcDRCTeDpS43812XcQjA2fE
-	 xkWy5aAn2w1MBXjPWyj+48XlvnssAxxrCjCI8ZK1sME1Sq+CNkRXJf+NW4CwA+iLF0
-	 4/e+TmLS5G9HIh/K2I27R5Ahbm5eBBLcd4KNdpwhs3CPjw669K1nE6SpkZrWp7/j1C
-	 bIjJAauviZ79LmzBEAAEmH1UTErdMS3unexGlTUMbIgrVB90vexkMKwZ7Jc/uAM6lJ
-	 pSCoDpRuXkrQQ==
-Message-ID: <85818080-c267-4c80-851e-daf050de97a0@kernel.org>
-Date: Wed, 25 Mar 2026 13:42:06 +0100
+	b=RWUiB70lJFQ/lpRX5ksJCMQaC56Th+eO7hm7aEUDuy8Ob3y3O7RE3g6phJID+Lfs6
+	 jJoNnBN0IEh0AGkpcqImx42ObH5KMT847+f9FuhtO2tu7w6ZBVEnYvtsx8zYc0tSnz
+	 rCpd3E2bWxETBccTKvwfETKakB/9HkkiB3MOerBfdXxIdKLMxPsINHg0m0uAZzuToA
+	 pL904zdxnfHpI7n0laL8d4SLqpVJNkflxG6B5rx+JMm/Dr2U5xLknl4TT1rvYIe+tX
+	 NYS6ubeQS63LL1C8hS6xb+4klYgl6SgyxzxX2QiYY2Mln941/2SsK8/iuNHMI7qpT2
+	 7mY4W/DCGAH+w==
+Message-ID: <98a7e267-4162-42a1-9f4e-557897700e1b@kernel.org>
+Date: Wed, 25 Mar 2026 13:44:03 +0100
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -53,8 +53,8 @@ List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 5/9] arm: configs: remove obsolete assignments to
- SND_SOC_ROCKCHIP
+Subject: Re: [PATCH 9/9] arm64: defconfig: remove obsolete assignment to
+ SLIM_QCOM_CTRL
 To: "Vincent Mailhol (Arm)" <mailhol@kernel.org>
 Cc: Alexandre Gonzalo <alexandre.gonzalo@arm.com>,
  linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
@@ -121,9 +121,9 @@ Cc: Alexandre Gonzalo <alexandre.gonzalo@arm.com>,
  Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
  Anna Schumaker <anna.schumaker@oracle.com>
 References: <20260317-arm_defconf_cleanup-v1-0-8eecb7fdd24d@kernel.org>
- <20260317-arm_defconf_cleanup-v1-5-8eecb7fdd24d@kernel.org>
- <febd0f7e-59f3-4ba4-8706-53c7353e3fe5@kernel.org>
- <3ec53a2e-a8e1-43d3-abdb-c00433e7675c@kernel.org>
+ <20260317-arm_defconf_cleanup-v1-9-8eecb7fdd24d@kernel.org>
+ <9545b66c-f223-48a3-96fe-c906d2307654@kernel.org>
+ <d7ba53bd-e484-4ea1-b90b-e44321eef4c3@kernel.org>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -169,27 +169,27 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  jWt87ecuHlpL3uuQ0ZZNWqHgZoQLXoqC2ZV5KrtKWb/jyiFX/sxSrodALf0zf+tfHv0FZWT2
  zHjUqd0t4njD/UOsuIMOQn4Ig0SdivYPfZukb5cdasKJukG1NOpbW7yRNivaCnfZz6dTawXw
  XRIV/KDsHQiyVxKvN73bThKhONkcX2LWuD928tAR6XMM2G5ovxLe09vuOzzfTWQDsm++9UKF a/A=
-In-Reply-To: <3ec53a2e-a8e1-43d3-abdb-c00433e7675c@kernel.org>
+In-Reply-To: <d7ba53bd-e484-4ea1-b90b-e44321eef4c3@kernel.org>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 X-Spamd-Result: default: False [-0.66 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
 	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	FREEMAIL_CC(0.00)[arm.com,vger.kernel.org,lists.infradead.org,lists.linux.dev,lists.ozlabs.org,kernel.org,linaro.org,gmail.com,armlinux.org.uk,iki.fi,kemnade.info,baylibre.com,atomide.com,xen0n.name,alpha.franken.de,linux.ibm.com,ellerman.id.au,dabbelt.com,eecs.berkeley.edu,ghiti.fr,users.sourceforge.jp,libc.org,physik.fu-berlin.de,redhat.com,alien8.de,linux.intel.com,zytor.com,linutronix.de,goodmis.org,netfilter.org,samsung.com,nxp.com,pengutronix.de,mleia.com,timesys.com,glider.be,mobileye.com,bootlin.com,HansenPartnership.com,gmx.de,gmx.net,zankel.net,suse.de,arndb.de,sntech.de,renesas.com,quicinc.com,roeck-us.net,oss.qualcomm.com,linuxfoundation.org,oracle.com];
-	TAGGED_FROM(0.00)[bounces-13935-lists,linux-mips=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-13936-lists,linux-mips=lfdr.de];
 	FROM_HAS_DN(0.00)[];
 	RCVD_COUNT_THREE(0.00)[4];
 	RCVD_TLS_LAST(0.00)[];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	DKIM_TRACE(0.00)[kernel.org:+];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
 	TO_DN_SOME(0.00)[];
 	RCPT_COUNT_GT_50(0.00)[97];
 	PRECEDENCE_BULK(0.00)[];
@@ -199,76 +199,25 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	TAGGED_RCPT(0.00)[linux-mips,renesas];
 	MID_RHS_MATCH_FROM(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 3632E3252D4
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 0C20A3258C0
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On 25/03/2026 12:27, Vincent Mailhol (Arm) wrote:
-> +CC: soc@lists.linux.dev
-
-Please don't. This is not a patch review mailing list.
-
-> 
-> On 3/17/26 12:28, Krzysztof Kozlowski wrote:
->> On 17/03/2026 10:13, Vincent Mailhol (Arm) wrote:
->>> CONFIG_SND_SOC_ROCKCHIP was removed in commit cae3cc435db5 ("ASoC:
->>> rockchip: Standardize ASoC menu"). However it is still referenced in
->>> some defconfigs.
->>>
->>> Remove any references to CONFIG_SND_SOC_ROCKCHIP.
->>>
->>> FYI, the suppressions were done using:
->>>
->>>   git ls-files -z 'arch/*/configs/*defconfig' |\
->>>     xargs -0 sed -i -E '/^CONFIG_SND_SOC_ROCKCHIP/d'
->>>
->>> Fixes: cae3cc435db5 ("ASoC: rockchip: Standardize ASoC menu")
->>> Signed-off-by: Vincent Mailhol (Arm) <mailhol@kernel.org>
->>> ---
->>>  arch/arm/configs/multi_v7_defconfig | 1 -
->>>  arch/arm64/configs/defconfig        | 1 -
+On 25/03/2026 12:31, Vincent Mailhol (Arm) wrote:
 >>
->> This was already posted:
->> https://lore.kernel.org/all/20260313-rockchip-snd-cleanup-v1-1-77d9a953fd1b@schnwalter.eu/
->> but just like that patch you did not send it to soc@ (if I am not
->> mistaken... CC list is enormous).
+>> Exactly that case also encouraged me to document this, since we do not
+>> know how to fix get_maintainers. See commit
+>> 6efe5322f060099c8bc51aaee83b857394e42dd5
+> I read the thread in which you posted that patch. Thanks for updating
+> the documentation, but as people anticipated, as long as the tool
+> doesn't do the right thing, there will be people like me who will mess
+> up the recipient list.
 > 
-> OK, I will add soc@lists.linux.dev to the recipient list in v2.
+> Anyway, sorry for that.
 
-Could be, but isn't this specific to given SoC? defconfigs go via SoC
-platform trees (maintainer soc profile).
-
-> 
->> I think you are mixing here independent works, like kconfig and per-arch
->> defconfig changes. Please split these per arch defconfig maintainers -
->> patches and patchset, so you won't be Cc-ing 50 addresses.
-> 
-> The config issues which I am addressing are transversal problems so I
-> was expecting to just get the Acked-by from the other architecture and
-
-Well, sure, IMO this only stalls the patchset but fine with me.
-
-> have all this go through the same tree.
-
-But which tree?
-
-
-> 
-> As I explained in my cover letter, this is not doing any functional changes.
-> 
-> But if this is not acceptable, I will just reduce the scope to arm/arm64
-> then. Doing a per arch split as you suggested would be too much overhead
-> (more than what I am ready to invest on this clean-up).
-
-The first thing your cover letter should explain is the
-merging/dependencies or other expectations you have. That's the most
-important thing when maintainers give your patchset 15 seconds in their
-mailbox. Or when you want to optimize maintainers process, making also
-your patchset easier to get in.
-
-There is a lot of text in the cover letter but nothing explaining what
-you wrote here.
+No worries. I wished the tool was improved because I believe in the
+toolset, not remembering thousand rules of different subsystems...
 
 Best regards,
 Krzysztof
