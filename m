@@ -1,204 +1,122 @@
-Return-Path: <linux-mips+bounces-13960-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-13961-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id oDqVIf+nxWlUAQUAu9opvQ
-	(envelope-from <linux-mips+bounces-13960-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Thu, 26 Mar 2026 22:41:19 +0100
+	id iKxMOEG6xWkeBAUAu9opvQ
+	(envelope-from <linux-mips+bounces-13961-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Thu, 26 Mar 2026 23:59:13 +0100
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0F31833C0AC
-	for <lists+linux-mips@lfdr.de>; Thu, 26 Mar 2026 22:41:18 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id CE67A33CD8A
+	for <lists+linux-mips@lfdr.de>; Thu, 26 Mar 2026 23:59:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id C8257304051D
-	for <lists+linux-mips@lfdr.de>; Thu, 26 Mar 2026 21:40:52 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 08EF7303AD0F
+	for <lists+linux-mips@lfdr.de>; Thu, 26 Mar 2026 22:46:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 43CC73FEB22;
-	Thu, 26 Mar 2026 21:40:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b="Q3UaVvdH";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="vldQ95RZ"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0DAF5341AD6;
+	Thu, 26 Mar 2026 22:46:55 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
-Received: from fhigh-b8-smtp.messagingengine.com (fhigh-b8-smtp.messagingengine.com [202.12.124.159])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16D5D3FEB1D;
-	Thu, 26 Mar 2026 21:40:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.159
+Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 60C89315D40;
+	Thu, 26 Mar 2026 22:46:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.175.24.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774561239; cv=none; b=JkdUHjv5QLVDE4Kf4FUK47CBScGHSeisQrAmG5W480O4kaP8mNEbESiuvivtUSAyM/xgOqmLWIzorYSTuzp9/VA/D6rpFeAZtEaP3KwyUMMHlAtXWLm/em921bU6H8f8L2PmQ78ttgCcVONuAJsJiljIsBIDsdl3QJbPcQ1NYXo=
+	t=1774565214; cv=none; b=uX0LOWkkTQeouclHOnrS1BvJzHPdHyiiqmt4z1vP965tnWZ6qaVNIe3mVHXVcr/rjd7K61uIARsQD5TETNH8pQwMyRvs3eGxKPIkIuhtHNBs0Lss+HpyBsV+Dcj18OpKDqVj7d3S0VTNLY25UOFoXwC2+eJnOWFS17nZ/lajJCw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774561239; c=relaxed/simple;
-	bh=Yk5ElyoUqD59NqrI+Foi14c0QkBGwkvf9Lpl4xfDuUs=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=n8H86WgPC9wW74m0hw60MJM1usG/lffdofsSEFHSJ+VYnpPkeI+uZOXOdxIl79u49oJrBQ/F2CBnoa4JdGnSTZXg2262CByYKnuQbPYMhYVDP6bqsvouo3I8FEs3x9Jhw/gUWhsHmpCZhUel8FNz8h104eL5RSslJZ7mwpFeRu0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com; spf=pass smtp.mailfrom=flygoat.com; dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b=Q3UaVvdH; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=vldQ95RZ; arc=none smtp.client-ip=202.12.124.159
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flygoat.com
-Received: from phl-compute-03.internal (phl-compute-03.internal [10.202.2.43])
-	by mailfhigh.stl.internal (Postfix) with ESMTP id 77A477A026B;
-	Thu, 26 Mar 2026 17:40:32 -0400 (EDT)
-Received: from phl-imap-08 ([10.202.2.84])
-  by phl-compute-03.internal (MEProxy); Thu, 26 Mar 2026 17:40:32 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
-	cc:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm2; t=1774561232;
-	 x=1774647632; bh=53kzqvS35Tfpdk+d6POicHdXAb503grGqmPn4kNmz+8=; b=
-	Q3UaVvdHTUK/SfHgTAp+Sc9vyJYZXDqk3D7bsHIa0bH4pBJzszB39Ztg8JAGjheT
-	lZi8iyI6XS1wkN4Sl6Y67K2sfuK/3U6l8VL2Qzn3+bIhELKs73CTIaBKIu7evB4a
-	SEXrXMyAGn7U9YMPKCHTvrtJewA0x7T8TiRQ+qXzWrxPg1OtisaYJEimD7MsHbA8
-	RBrvKrkdzkgfYHKNnekBJrB0IvwABIoHbGCkK4L7cU+bCpqEbIZtvkgZ7JwLQeRi
-	DWDHnBEh9TT/p05J8gbIMZ0mysUjTCXb7VUVF4cQm3jWnCNirKX5Pj3PVnHLiyB2
-	vkPPM851+MZSgR9C2kc8Zw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1774561232; x=
-	1774647632; bh=53kzqvS35Tfpdk+d6POicHdXAb503grGqmPn4kNmz+8=; b=v
-	ldQ95RZ4lBty++sb/ZWl2ojEEzXeI5Vzno2Fp1dkf8h8WNjm/a7rX+RNFxMUoZRY
-	/syfUCtfa+oRXVDwRh+c3HRm9lMQYDK4J+V2oH4PZrgnKjTPMC7LeTMhn40TwSI/
-	MW8GC3Y738o9xQw71WDy1vl06U3TRVsiq/t3S49ICqw5LTv5MExb5Odx11doi0GB
-	JrODFz+HTnlj7b51vyl6Pi1H51NFCtO0C/S6j9Ni6hOiMpqGvc52RLXp9lRD6rUF
-	msNQj3k66me3b7/ih6m82jDX9eEx/QVzcgAP6r4k78QCr/hqU/KI6PnzAY8S6Zfm
-	z6BOjmhwpoJ1vwMxUYU/Q==
-X-ME-Sender: <xms:zqfFaXvb6PMhn0-OiY5cd0lalVAmd064Fp25RLQYlElTFlBNgTt_Jg>
-    <xme:zqfFaTTJSOoN_iu6alYqfc8eqoOusWfwCefTWQRN8mZhIEg9r-97Mc5kRGDRt9twS
-    CSPVGuuLQCFSzyfPjpq1Ni6MTMAC3V-AbrliDdS-n5nYKIG_WRXyy8>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefgedrtddtgdefvdekgeelucetufdoteggodetrf
-    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
-    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
-    gurhepofggfffhvfevkfgjfhfutgfgsehtjeertdertddtnecuhfhrohhmpedflfhirgig
-    uhhnucgjrghnghdfuceojhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomheqne
-    cuggftrfgrthhtvghrnhephfethfdutdeigeelueeitddtheehudevffejtedtkedvueei
-    tddujeefieejieefnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilh
-    hfrhhomhepjhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomhdpnhgspghrtghp
-    thhtohepudegpdhmohguvgepshhmthhpohhuthdprhgtphhtthhopehtshgsohhgvghnug
-    esrghlphhhrgdrfhhrrghnkhgvnhdruggvpdhrtghpthhtohepuhifuhesihgtvghnohif
-    hidrmhgvpdhrtghpthhtohepiihhvghnghigihhnghgurgesihhstggrshdrrggtrdgtnh
-    dprhgtphhtthhopegthhgvnhhhuhgrtggriheskhgvrhhnvghlrdhorhhgpdhrtghpthht
-    oheptghonhhorhdoughtsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehkrhiikhdoug
-    htsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehrohgshheskhgvrhhnvghlrdhorhhg
-    pdhrtghpthhtohepthhglhigsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehlohhonh
-    hgrghrtghhsehlihhsthhsrdhlihhnuhigrdguvghv
-X-ME-Proxy: <xmx:zqfFaTNkgBJRd4mDe8-QGTvCcbuls3msixJEA1P3aHQdduZBGVPYcA>
-    <xmx:zqfFaenrlzTkFQci_KmFnGYOfaii1ZRCAneiXWTK9GskKjAiw5QwZQ>
-    <xmx:zqfFadaXAMK5jAPsCyMdzuRC2l5TR6GGT6npzpltIpwNalaih1uUKA>
-    <xmx:zqfFacT0ncrPkbsMLKcyjComvjY60tNFpJgIpCRc-KwEXZSP5C9bJg>
-    <xmx:0KfFadVOFyBuTlfIqnZw3TUxdjjo5ccBMs3kbSmqPEGLetrF5r6LxhTe>
-Feedback-ID: ifd894703:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id 53D312CE0072; Thu, 26 Mar 2026 17:40:30 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
+	s=arc-20240116; t=1774565214; c=relaxed/simple;
+	bh=jPeS7Hz/OZoONDvOoUxwObQ2rk7SW5d2Xjyob7BXJSE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=oMOQV6aSJjJUotaVZZuzlFRN9v0PXhyPRim+cMkM3reh77n4TC2TbmpxwIAIn/VfP9hjNdNTQU50Y5s7tSSnTlKPFL6HWyMto1YTlNCNu9UoVturwyZrgsKjNANRnoO/6dff283LEfRGDcanITaiSvHveK90tRoi5ROygdd5pTY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de; spf=pass smtp.mailfrom=alpha.franken.de; arc=none smtp.client-ip=193.175.24.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alpha.franken.de
+Received: from uucp by elvis.franken.de with local-rmail (Exim 3.36 #1)
+	id 1w5tTI-0004YP-00; Thu, 26 Mar 2026 23:46:36 +0100
+Received: by alpha.franken.de (Postfix, from userid 1000)
+	id 5D484C0256; Thu, 26 Mar 2026 23:46:28 +0100 (CET)
+Date: Thu, 26 Mar 2026 23:46:28 +0100
+From: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To: Jiaxun Yang <jiaxun.yang@flygoat.com>
+Cc: Icenowy Zheng <zhengxingda@iscas.ac.cn>, Icenowy Zheng <uwu@icenowy.me>,
+	Yao Zi <me@ziyao.cc>, linux-kernel@vger.kernel.org,
+	devicetree@vger.kernel.org, loongarch@lists.linux.dev,
+	"linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+	Xuerui Wang <kernel@xen0n.name>, Thomas Gleixner <tglx@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>, Rob Herring <robh@kernel.org>,
+	Huacai Chen <chenhuacai@kernel.org>
+Subject: Re: [PATCH v4 1/6] MIPS: loongson64: Override
+ arch_dynirq_lower_bound to reserve LPC IRQs
+Message-ID: <acW3RMKjA194cyHm@alpha.franken.de>
+References: <20260321092032.3502701-1-zhengxingda@iscas.ac.cn>
+ <20260321092032.3502701-2-zhengxingda@iscas.ac.cn>
+ <a8cb7352-2d1e-46e9-b526-de4d4dd7b460@app.fastmail.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-ThreadId: ABKrElPPawS7
-Date: Thu, 26 Mar 2026 21:40:09 +0000
-From: "Jiaxun Yang" <jiaxun.yang@flygoat.com>
-To: "Icenowy Zheng" <zhengxingda@iscas.ac.cn>,
- "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>
-Cc: "Icenowy Zheng" <uwu@icenowy.me>, "Yao Zi" <me@ziyao.cc>,
- linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
- loongarch@lists.linux.dev,
- "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
- "Xuerui Wang" <kernel@xen0n.name>, "Thomas Gleixner" <tglx@kernel.org>,
- "Krzysztof Kozlowski" <krzk+dt@kernel.org>,
- "Conor Dooley" <conor+dt@kernel.org>, "Rob Herring" <robh@kernel.org>,
- "Huacai Chen" <chenhuacai@kernel.org>
-Message-Id: <a8cb7352-2d1e-46e9-b526-de4d4dd7b460@app.fastmail.com>
-In-Reply-To: <20260321092032.3502701-2-zhengxingda@iscas.ac.cn>
-References: <20260321092032.3502701-1-zhengxingda@iscas.ac.cn>
- <20260321092032.3502701-2-zhengxingda@iscas.ac.cn>
-Subject: Re: [PATCH v4 1/6] MIPS: loongson64: Override arch_dynirq_lower_bound to
- reserve LPC IRQs
-Content-Type: text/plain
-Content-Transfer-Encoding: 7bit
-X-Spamd-Result: default: False [-0.65 / 15.00];
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <a8cb7352-2d1e-46e9-b526-de4d4dd7b460@app.fastmail.com>
+X-Spamd-Result: default: False [0.04 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[flygoat.com,none];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
-	R_DKIM_ALLOW(-0.20)[flygoat.com:s=fm2,messagingengine.com:s=fm1];
+	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
-	XM_UA_NO_VERSION(0.01)[];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-13960-lists,linux-mips=lfdr.de];
-	RCPT_COUNT_TWELVE(0.00)[14];
-	MIME_TRACE(0.00)[0:+];
-	TO_DN_EQ_ADDR_SOME(0.00)[];
-	RCVD_TLS_LAST(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
+	MISSING_XM_UA(0.00)[];
+	DMARC_NA(0.00)[franken.de];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[jiaxun.yang@flygoat.com,linux-mips@vger.kernel.org];
-	FROM_HAS_DN(0.00)[];
-	DKIM_TRACE(0.00)[flygoat.com:+,messagingengine.com:+];
-	RCVD_COUNT_FIVE(0.00)[6];
+	RCPT_COUNT_TWELVE(0.00)[14];
+	TAGGED_FROM(0.00)[bounces-13961-lists,linux-mips=lfdr.de];
+	RCVD_TLS_LAST(0.00)[];
+	TO_DN_EQ_ADDR_SOME(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
+	FORGED_SENDER_MAILLIST(0.00)[];
 	TAGGED_RCPT(0.00)[linux-mips,dt];
-	NEURAL_HAM(-0.00)[-0.999];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[tsbogend@alpha.franken.de,linux-mips@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
 	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,app.fastmail.com:mid,messagingengine.com:dkim,flygoat.com:dkim,flygoat.com:email,iscas.ac.cn:email]
-X-Rspamd-Queue-Id: 0F31833C0AC
+	RCVD_COUNT_FIVE(0.00)[5];
+	R_DKIM_NA(0.00)[];
+	NEURAL_HAM(-0.00)[-0.999];
+	MID_RHS_MATCH_FROM(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[alpha.franken.de:mid,sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,flygoat.com:email,iscas.ac.cn:email]
+X-Rspamd-Queue-Id: CE67A33CD8A
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
+On Thu, Mar 26, 2026 at 09:40:09PM +0000, Jiaxun Yang wrote:
+> 
+> 
+> On Sat, 21 Mar 2026, at 9:20 AM, Icenowy Zheng wrote:
+> > On some Loongson 3A devices, a LPC bus is present and some legacy
+> > devices (e.g. 8259) on it expect hardcoded low interrupt numbers. However
+> > currently the expected low range interrupt numbers are not exempted from
+> > the dynamic allocation, which leads to confliction when registering LPC
+> > interrupts in the fixed range.
+> >
+> > Override arch_dynirq_lower_bound() to reserve these low range interrupt
+> > numbers and prevent them from being dynamically allocated.
+> >
+> > Signed-off-by: Icenowy Zheng <zhengxingda@iscas.ac.cn>
+> 
+> Acked-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+> 
+> @Thomas Bogendoerfer, do you mind picking this over MIPS tree?
 
+https://lore.kernel.org/all/177453852024.1647592.16054697624437632741.tip-bot2@tip-bot2/
 
-On Sat, 21 Mar 2026, at 9:20 AM, Icenowy Zheng wrote:
-> On some Loongson 3A devices, a LPC bus is present and some legacy
-> devices (e.g. 8259) on it expect hardcoded low interrupt numbers. However
-> currently the expected low range interrupt numbers are not exempted from
-> the dynamic allocation, which leads to confliction when registering LPC
-> interrupts in the fixed range.
->
-> Override arch_dynirq_lower_bound() to reserve these low range interrupt
-> numbers and prevent them from being dynamically allocated.
->
-> Signed-off-by: Icenowy Zheng <zhengxingda@iscas.ac.cn>
+IMHO this in tip tree already
 
-Acked-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
-
-@Thomas Bogendoerfer, do you mind picking this over MIPS tree?
-
-Thanks
-Jiaxun
-
-> ---
->  arch/mips/loongson64/init.c | 6 ++++++
->  1 file changed, 6 insertions(+)
->
-> diff --git a/arch/mips/loongson64/init.c b/arch/mips/loongson64/init.c
-> index 5f73f8663ab2d..c7cc5a3d7817f 100644
-> --- a/arch/mips/loongson64/init.c
-> +++ b/arch/mips/loongson64/init.c
-> @@ -7,6 +7,7 @@
->  #include <linux/irqchip.h>
->  #include <linux/logic_pio.h>
->  #include <linux/memblock.h>
-> +#include <linux/minmax.h>
->  #include <linux/of.h>
->  #include <linux/of_address.h>
->  #include <asm/bootinfo.h>
-> @@ -227,3 +228,8 @@ void __init arch_init_irq(void)
->  	reserve_pio_range();
->  	irqchip_init();
->  }
-> +
-> +unsigned int arch_dynirq_lower_bound(unsigned int from)
-> +{
-> +	return MAX(from, NR_IRQS_LEGACY);
-> +}
-> -- 
-> 2.52.0
+Thomas.
 
 -- 
-- Jiaxun
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]
 
