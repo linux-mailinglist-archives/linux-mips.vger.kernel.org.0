@@ -1,187 +1,212 @@
-Return-Path: <linux-mips+bounces-13958-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-13959-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id QOslCUGIxWlc+wQAu9opvQ
-	(envelope-from <linux-mips+bounces-13958-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Thu, 26 Mar 2026 20:25:53 +0100
+	id oKXhAKqbxWnP/wQAu9opvQ
+	(envelope-from <linux-mips+bounces-13959-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Thu, 26 Mar 2026 21:48:42 +0100
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4910B33AE6B
-	for <lists+linux-mips@lfdr.de>; Thu, 26 Mar 2026 20:25:52 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9C2ED33B8CD
+	for <lists+linux-mips@lfdr.de>; Thu, 26 Mar 2026 21:48:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 5A739301515E
-	for <lists+linux-mips@lfdr.de>; Thu, 26 Mar 2026 19:25:27 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id A50D33048448
+	for <lists+linux-mips@lfdr.de>; Thu, 26 Mar 2026 20:48:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8830E3A5E70;
-	Thu, 26 Mar 2026 19:25:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 955383A6EFC;
+	Thu, 26 Mar 2026 20:48:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NfJ/oEz0"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Z0qW4FBp"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6196134FF40;
-	Thu, 26 Mar 2026 19:25:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7239D3A6B8B;
+	Thu, 26 Mar 2026 20:48:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774553122; cv=none; b=Bd/Sv5ym515xbZiIMF8BR2K6Q7fLP47OMDqquCAVC+RYYh4aKivv+TpodZf0wbslE2Lw5lyw7A55A0yLCgj5ACfg8OSJqu0HoLcPtZTB/w4DDW9yPskhGZ6UlT+7Vu6kIHFw/thYNhqEfEb8ItytN69R/ANY9d/KUI6+S+ViCX0=
+	t=1774558115; cv=none; b=rhJMX6KuC2fjdAwG59cmU5B9Nsi6eBdKHup+YHlNEPY3n+v15Ap3EOMPT6QYKGJ6yOCEIKywmyHS6B463snNpx8rUwrfYFJDy+B6nuYLE0X45kuSMkhR81qbj53B4b9b55itqHidV3EHNt6rZhSxvXNZdHpldc4DfjD2f7kDLXw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774553122; c=relaxed/simple;
-	bh=A++szeKtnjRSEovDyZxLISgC62LFBBAIhs/d9OMRhfE=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To; b=AUPrHkOfFLbUFbqTxoCtdjkJP+GQBAgusjfSwSWFu5fpV2rIQacPopX7ps8T6PfyA2Epn+TKlMjMxD/p4e3s7/ylB87IwoTbkDDFcw0vkhZZhTfEclftPL7L3y8RG3WW/g4vHnnljqfdKf3jFiwFqPgFjak1G6H6y8yIJUNvD+0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NfJ/oEz0; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0AA1EC116C6;
-	Thu, 26 Mar 2026 19:25:22 +0000 (UTC)
+	s=arc-20240116; t=1774558115; c=relaxed/simple;
+	bh=6LoLx7+aqrBPNFDurIy0LwoP04hwrB/2gDEyo0yPcT8=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=SMrjuT7CvLAUA0EmCvQuiL3iHyqU1Jf4iyFmYXB3Yj4te2lDg7QMOTBHvaz2PhfyYESvQoHGvOpc630eMm6mmDM9Ss6Qz4IIaV/ZXZfF4I0DFU3qffG/hl1yPBvLqY4W7yDxrHN2ctQjUjDFhPTQj+/bJnAzS2DBeKPW6NSMi6o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Z0qW4FBp; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 12FBBC19423;
+	Thu, 26 Mar 2026 20:48:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1774553122;
-	bh=A++szeKtnjRSEovDyZxLISgC62LFBBAIhs/d9OMRhfE=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:From;
-	b=NfJ/oEz0LRYInVcrSbNN88ZD+MdyZe+E5wpkqpNyM7Ggrd+87xrTGdb2eRZTy87DI
-	 3AEY3FowNt2dLBx5bUv4EG4eu546MewpNXZGCLDHkBfe8g3LZwJ102n7t7khlBaszz
-	 Lx4TnfZYWvuNCDHMwl+tUFBLw2zV1Ngq0Csg3zwt51tFeRwFrtv1uYON4+pXGzeX8B
-	 iMHKIRiCjG9dp3POhWU/XzfbitypWNW1N1GDKkwoAv/NyKcEekZl9lBiRmYoXapScF
-	 rKV+yPTbfY8C2bHC3ckb0AISfTndYlJ7pwkpyfMvmqNf9+9J1OGvYPuntH/jG+z1Hp
-	 YXvuT6LOCwG0g==
-Date: Thu, 26 Mar 2026 14:25:20 -0500
-From: Bjorn Helgaas <helgaas@kernel.org>
-To: Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>
-Cc: linux-pci@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>,
-	Guenter Roeck <linux@roeck-us.net>, linux-alpha@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-	linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-	linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-	Russell King <linux@armlinux.org.uk>,
-	Geert Uytterhoeven <geert@linux-m68k.org>,
+	s=k20201202; t=1774558115;
+	bh=6LoLx7+aqrBPNFDurIy0LwoP04hwrB/2gDEyo0yPcT8=;
+	h=From:To:Cc:Subject:Date:From;
+	b=Z0qW4FBpjsVkidAfp2bDKU/xuaIf3zwUx2PkDNEgGZEr+53Oc25pPypuT2ZQbd5wm
+	 VhVWJda7VYPppnCg3XTeKqpfWiV6Is2rMIHl3b4EciO9TGFWtW3NjX/mFnnZORQsJo
+	 n4PEqTY7gbDUCBjW04MP4p/HtbYVf64uU8iYH9M8e5MVukZh3hwLIcrghV3I+C8eLO
+	 gdd9cCQA6G1l8VuBlPP3dfVFdc3Ekzrm6sSlefYaf4gGXhkeWYxI6xDG5MeYUs2EfC
+	 W1vxKmUn82gryFgkUmeof9KYWopPjNy3h3rPV6VQLe/tk4FQI1IHLdsjXuecPAAPfc
+	 OoT6YDvRcURhQ==
+From: Eric Biggers <ebiggers@kernel.org>
+To: linux-crypto@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org,
+	Ard Biesheuvel <ardb@kernel.org>,
+	"Jason A . Donenfeld" <Jason@zx2c4.com>,
+	Herbert Xu <herbert@gondor.apana.org.au>,
+	linux-mips@vger.kernel.org,
 	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-	Helge Deller <deller@gmx.de>, Michael Ellerman <mpe@ellerman.id.au>,
-	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-	Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	"H. Peter Anvin" <hpa@zytor.com>, Chris Zankel <chris@zankel.net>,
-	Max Filippov <jcmvbkbc@gmail.com>,
-	Madhavan Srinivasan <maddy@linux.ibm.com>,
-	Yoshinori Sato <ysato@users.sourceforge.jp>,
-	Rich Felker <dalias@libc.org>,
-	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-	linux-kernel@vger.kernel.org, Xifer <xiferdev@gmail.com>
-Subject: Re: [PATCH 00/10] PCI: Improve head free space usage
-Message-ID: <20260326192520.GA1337681@bhelgaas>
+	Eric Biggers <ebiggers@kernel.org>
+Subject: [PATCH] lib/crypto: mips: Drop optimized MD5 code
+Date: Thu, 26 Mar 2026 13:48:24 -0700
+Message-ID: <20260326204824.62010-1-ebiggers@kernel.org>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20260324165633.4583-1-ilpo.jarvinen@linux.intel.com>
-X-Spamd-Result: default: False [-1.66 / 15.00];
+X-Spamd-Result: default: False [-0.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_RHS_NOT_FQDN(0.50)[];
+	MID_CONTAINS_FROM(1.00)[];
 	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
+	R_MISSING_CHARSET(0.50)[];
+	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
 	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-13958-lists,linux-mips=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-13959-lists,linux-mips=lfdr.de];
 	RCVD_COUNT_THREE(0.00)[4];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	FREEMAIL_CC(0.00)[vger.kernel.org,google.com,roeck-us.net,lists.infradead.org,lists.linux-m68k.org,lists.ozlabs.org,armlinux.org.uk,linux-m68k.org,alpha.franken.de,hansenpartnership.com,gmx.de,ellerman.id.au,kernel.org,redhat.com,alien8.de,linux.intel.com,zytor.com,zankel.net,gmail.com,linux.ibm.com,users.sourceforge.jp,libc.org,physik.fu-berlin.de];
-	RCPT_COUNT_TWELVE(0.00)[31];
-	MIME_TRACE(0.00)[0:+];
 	FROM_HAS_DN(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	FROM_NEQ_ENVFROM(0.00)[ebiggers@kernel.org,linux-mips@vger.kernel.org];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	TO_DN_SOME(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[helgaas@kernel.org,linux-mips@vger.kernel.org];
+	RCPT_COUNT_SEVEN(0.00)[8];
+	NEURAL_HAM(-0.00)[-1.000];
 	DKIM_TRACE(0.00)[kernel.org:+];
 	TAGGED_RCPT(0.00)[linux-mips];
-	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
+	TO_DN_SOME(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	MISSING_XM_UA(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 4910B33AE6B
+	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[iki.fi:email,sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 9C2ED33B8CD
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-[+cc Xifer; thanks very much for reporting and testing!]
+MD5 is obsolete.  Continuing to maintain architecture-optimized
+implementations of MD5 is unnecessary and risky.  It diverts resources
+from the modern algorithms that are actually important.
 
-On Tue, Mar 24, 2026 at 06:56:23PM +0200, Ilpo Järvinen wrote:
-> Hi all,
-> 
-> This series attempts to take advantage of free head space (the free
-> space before the aligned start address) in order to generally produce a
-> tighter packing of the resources/bridge windows.
-> 
-> The recent changes to the resource fitting algorithm caused resource
-> allocation failures in some cases where a bridge window that is sized
-> to be gapless could no longer be assigned. The previous algorithm left
-> a huge gaps which allowed it to place the remainder (non-aligning part
-> of the size) before the start address of used for the gapless fit,
-> whereas the new gapless approach always had to place the remainder
-> after the aligning part of the resources. There is not always space
-> for the remainder triggering those failures (e.g., when the aligning
-> part must be placed at the top of the window).
-> 
-> This series attempts to allow placing the remainder once again before
-> the aligning part, but now without leaving huge gaps to retain the
-> benefits of the gapless bridge windows. The approach is somewhat hacky
-> but should work thanks to PCI resources fundamentally consisting only
-> power-of-two atoms.
-> 
-> There maybe cases where architecture would not want to do such
-> relocation. This series adds the relocation to arch
-> pcibios_align_resource() functions to allow all of them taking
-> advantage of the better resource packing but if somebody objects doing
-> this relocation for a particular arch, I can remove it, please just let
-> me know (this relocation doesn't seem critical unless there are
-> regressions).
-> 
-> Ilpo Järvinen (10):
->   resource: Add __resource_contains_unbound() for internal contains
->     checks
->   resource: Pass full extent of empty space to resource_alignf CB
->   resource: Rename 'tmp' variable to 'full_avail'
->   ARM/PCI: Remove unnecessary second application of align
->   am68k/PCI: Remove unnecessary second application of align
->   MIPS: PCI: Remove unnecessary second application of align
->   parisc/PCI: Cleanup align handling
->   PCI: Rename window_alignment() to pci_min_window_alignment()
->   PCI: Align head space better
->   PCI: Fix alignment calculation for resource size larger than align
-> 
->  arch/alpha/kernel/pci.c          |  1 +
->  arch/arm/kernel/bios32.c         |  9 ++++---
->  arch/m68k/kernel/pcibios.c       |  8 +++++--
->  arch/mips/pci/pci-generic.c      |  8 ++++---
->  arch/mips/pci/pci-legacy.c       |  3 +++
->  arch/parisc/kernel/pci.c         | 17 ++++++++------
->  arch/powerpc/kernel/pci-common.c |  6 ++++-
->  arch/s390/pci/pci.c              |  1 +
->  arch/sh/drivers/pci/pci.c        |  6 ++++-
->  arch/x86/pci/i386.c              |  5 +++-
->  arch/xtensa/kernel/pci.c         |  3 +++
->  drivers/pci/pci.h                |  3 +++
->  drivers/pci/setup-bus.c          | 15 ++++++++----
->  drivers/pci/setup-res.c          | 40 +++++++++++++++++++++++++++++++-
->  drivers/pcmcia/rsrc_nonstatic.c  |  3 ++-
->  include/linux/ioport.h           | 22 +++++++++++++++---
->  include/linux/pci.h              | 12 +++++++---
->  kernel/resource.c                | 33 +++++++++++++-------------
->  18 files changed, 149 insertions(+), 46 deletions(-)
+While there was demand for continuing to maintain the PowerPC optimized
+MD5 code to accommodate userspace programs that are misusing AF_ALG
+(https://lore.kernel.org/linux-crypto/c4191597-341d-4fd7-bc3d-13daf7666c41@csgroup.eu/),
+no such demand has been seen for the MIPS Cavium Octeon optimized MD5
+code.  Note that this code runs on only one particular line of SoCs.
 
-I added Xifer's tested-by, fixed the "am68k" and missing "if"
-typos, and applied these to pci/resource for v7.1.
+Thus, let's drop it and focus effort on the more modern SHA algorithms,
+which already have optimized code for the same SoCs.
 
-Ilpo, if you post a v2 with more changes, I'll update to it.  I
-applied the series now to get a head start on 0-day building and into
-next.
+Signed-off-by: Eric Biggers <ebiggers@kernel.org>
+---
+
+This patch is targeting libcrypto-next
+
+ lib/crypto/Kconfig    |  1 -
+ lib/crypto/mips/md5.h | 65 -------------------------------------------
+ 2 files changed, 66 deletions(-)
+ delete mode 100644 lib/crypto/mips/md5.h
+
+diff --git a/lib/crypto/Kconfig b/lib/crypto/Kconfig
+index 4b6f593dc72f..9f31f03062f0 100644
+--- a/lib/crypto/Kconfig
++++ b/lib/crypto/Kconfig
+@@ -132,11 +132,10 @@ config CRYPTO_LIB_MD5
+ 	  uses any of the functions from <crypto/md5.h>.
+ 
+ config CRYPTO_LIB_MD5_ARCH
+ 	bool
+ 	depends on CRYPTO_LIB_MD5 && !UML
+-	default y if MIPS && CPU_CAVIUM_OCTEON
+ 	default y if PPC
+ 	default y if SPARC64
+ 
+ config CRYPTO_LIB_MLDSA
+ 	tristate
+diff --git a/lib/crypto/mips/md5.h b/lib/crypto/mips/md5.h
+deleted file mode 100644
+index e08e28aeffa4..000000000000
+--- a/lib/crypto/mips/md5.h
++++ /dev/null
+@@ -1,65 +0,0 @@
+-/*
+- * Cryptographic API.
+- *
+- * MD5 Message Digest Algorithm (RFC1321).
+- *
+- * Adapted for OCTEON by Aaro Koskinen <aaro.koskinen@iki.fi>.
+- *
+- * Based on crypto/md5.c, which is:
+- *
+- * Derived from cryptoapi implementation, originally based on the
+- * public domain implementation written by Colin Plumb in 1993.
+- *
+- * Copyright (c) Cryptoapi developers.
+- * Copyright (c) 2002 James Morris <jmorris@intercode.com.au>
+- *
+- * This program is free software; you can redistribute it and/or modify it
+- * under the terms of the GNU General Public License as published by the Free
+- * Software Foundation; either version 2 of the License, or (at your option)
+- * any later version.
+- */
+-
+-#include <asm/octeon/crypto.h>
+-#include <asm/octeon/octeon.h>
+-
+-/*
+- * We pass everything as 64-bit. OCTEON can handle misaligned data.
+- */
+-
+-static void md5_blocks(struct md5_block_state *state,
+-		       const u8 *data, size_t nblocks)
+-{
+-	struct octeon_cop2_state cop2_state;
+-	u64 *state64 = (u64 *)state;
+-	unsigned long flags;
+-
+-	if (!octeon_has_crypto())
+-		return md5_blocks_generic(state, data, nblocks);
+-
+-	cpu_to_le32_array(state->h, ARRAY_SIZE(state->h));
+-
+-	flags = octeon_crypto_enable(&cop2_state);
+-	write_octeon_64bit_hash_dword(state64[0], 0);
+-	write_octeon_64bit_hash_dword(state64[1], 1);
+-
+-	do {
+-		const u64 *block = (const u64 *)data;
+-
+-		write_octeon_64bit_block_dword(block[0], 0);
+-		write_octeon_64bit_block_dword(block[1], 1);
+-		write_octeon_64bit_block_dword(block[2], 2);
+-		write_octeon_64bit_block_dword(block[3], 3);
+-		write_octeon_64bit_block_dword(block[4], 4);
+-		write_octeon_64bit_block_dword(block[5], 5);
+-		write_octeon_64bit_block_dword(block[6], 6);
+-		octeon_md5_start(block[7]);
+-
+-		data += MD5_BLOCK_SIZE;
+-	} while (--nblocks);
+-
+-	state64[0] = read_octeon_64bit_hash_dword(0);
+-	state64[1] = read_octeon_64bit_hash_dword(1);
+-	octeon_crypto_disable(&cop2_state, flags);
+-
+-	le32_to_cpu_array(state->h, ARRAY_SIZE(state->h));
+-}
+
+base-commit: 7ac21b4032e5b9b8a6a312b6f1d54f4ba24d1c16
+-- 
+2.53.0
+
 
