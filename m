@@ -1,212 +1,204 @@
-Return-Path: <linux-mips+bounces-13959-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-13960-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id oKXhAKqbxWnP/wQAu9opvQ
-	(envelope-from <linux-mips+bounces-13959-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Thu, 26 Mar 2026 21:48:42 +0100
+	id oDqVIf+nxWlUAQUAu9opvQ
+	(envelope-from <linux-mips+bounces-13960-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Thu, 26 Mar 2026 22:41:19 +0100
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9C2ED33B8CD
-	for <lists+linux-mips@lfdr.de>; Thu, 26 Mar 2026 21:48:41 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0F31833C0AC
+	for <lists+linux-mips@lfdr.de>; Thu, 26 Mar 2026 22:41:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id A50D33048448
-	for <lists+linux-mips@lfdr.de>; Thu, 26 Mar 2026 20:48:36 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id C8257304051D
+	for <lists+linux-mips@lfdr.de>; Thu, 26 Mar 2026 21:40:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 955383A6EFC;
-	Thu, 26 Mar 2026 20:48:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 43CC73FEB22;
+	Thu, 26 Mar 2026 21:40:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Z0qW4FBp"
+	dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b="Q3UaVvdH";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="vldQ95RZ"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from fhigh-b8-smtp.messagingengine.com (fhigh-b8-smtp.messagingengine.com [202.12.124.159])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7239D3A6B8B;
-	Thu, 26 Mar 2026 20:48:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16D5D3FEB1D;
+	Thu, 26 Mar 2026 21:40:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.159
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774558115; cv=none; b=rhJMX6KuC2fjdAwG59cmU5B9Nsi6eBdKHup+YHlNEPY3n+v15Ap3EOMPT6QYKGJ6yOCEIKywmyHS6B463snNpx8rUwrfYFJDy+B6nuYLE0X45kuSMkhR81qbj53B4b9b55itqHidV3EHNt6rZhSxvXNZdHpldc4DfjD2f7kDLXw=
+	t=1774561239; cv=none; b=JkdUHjv5QLVDE4Kf4FUK47CBScGHSeisQrAmG5W480O4kaP8mNEbESiuvivtUSAyM/xgOqmLWIzorYSTuzp9/VA/D6rpFeAZtEaP3KwyUMMHlAtXWLm/em921bU6H8f8L2PmQ78ttgCcVONuAJsJiljIsBIDsdl3QJbPcQ1NYXo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774558115; c=relaxed/simple;
-	bh=6LoLx7+aqrBPNFDurIy0LwoP04hwrB/2gDEyo0yPcT8=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=SMrjuT7CvLAUA0EmCvQuiL3iHyqU1Jf4iyFmYXB3Yj4te2lDg7QMOTBHvaz2PhfyYESvQoHGvOpc630eMm6mmDM9Ss6Qz4IIaV/ZXZfF4I0DFU3qffG/hl1yPBvLqY4W7yDxrHN2ctQjUjDFhPTQj+/bJnAzS2DBeKPW6NSMi6o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Z0qW4FBp; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 12FBBC19423;
-	Thu, 26 Mar 2026 20:48:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1774558115;
-	bh=6LoLx7+aqrBPNFDurIy0LwoP04hwrB/2gDEyo0yPcT8=;
-	h=From:To:Cc:Subject:Date:From;
-	b=Z0qW4FBpjsVkidAfp2bDKU/xuaIf3zwUx2PkDNEgGZEr+53Oc25pPypuT2ZQbd5wm
-	 VhVWJda7VYPppnCg3XTeKqpfWiV6Is2rMIHl3b4EciO9TGFWtW3NjX/mFnnZORQsJo
-	 n4PEqTY7gbDUCBjW04MP4p/HtbYVf64uU8iYH9M8e5MVukZh3hwLIcrghV3I+C8eLO
-	 gdd9cCQA6G1l8VuBlPP3dfVFdc3Ekzrm6sSlefYaf4gGXhkeWYxI6xDG5MeYUs2EfC
-	 W1vxKmUn82gryFgkUmeof9KYWopPjNy3h3rPV6VQLe/tk4FQI1IHLdsjXuecPAAPfc
-	 OoT6YDvRcURhQ==
-From: Eric Biggers <ebiggers@kernel.org>
-To: linux-crypto@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org,
-	Ard Biesheuvel <ardb@kernel.org>,
-	"Jason A . Donenfeld" <Jason@zx2c4.com>,
-	Herbert Xu <herbert@gondor.apana.org.au>,
-	linux-mips@vger.kernel.org,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	Eric Biggers <ebiggers@kernel.org>
-Subject: [PATCH] lib/crypto: mips: Drop optimized MD5 code
-Date: Thu, 26 Mar 2026 13:48:24 -0700
-Message-ID: <20260326204824.62010-1-ebiggers@kernel.org>
-X-Mailer: git-send-email 2.53.0
+	s=arc-20240116; t=1774561239; c=relaxed/simple;
+	bh=Yk5ElyoUqD59NqrI+Foi14c0QkBGwkvf9Lpl4xfDuUs=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=n8H86WgPC9wW74m0hw60MJM1usG/lffdofsSEFHSJ+VYnpPkeI+uZOXOdxIl79u49oJrBQ/F2CBnoa4JdGnSTZXg2262CByYKnuQbPYMhYVDP6bqsvouo3I8FEs3x9Jhw/gUWhsHmpCZhUel8FNz8h104eL5RSslJZ7mwpFeRu0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com; spf=pass smtp.mailfrom=flygoat.com; dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b=Q3UaVvdH; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=vldQ95RZ; arc=none smtp.client-ip=202.12.124.159
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flygoat.com
+Received: from phl-compute-03.internal (phl-compute-03.internal [10.202.2.43])
+	by mailfhigh.stl.internal (Postfix) with ESMTP id 77A477A026B;
+	Thu, 26 Mar 2026 17:40:32 -0400 (EDT)
+Received: from phl-imap-08 ([10.202.2.84])
+  by phl-compute-03.internal (MEProxy); Thu, 26 Mar 2026 17:40:32 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
+	cc:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm2; t=1774561232;
+	 x=1774647632; bh=53kzqvS35Tfpdk+d6POicHdXAb503grGqmPn4kNmz+8=; b=
+	Q3UaVvdHTUK/SfHgTAp+Sc9vyJYZXDqk3D7bsHIa0bH4pBJzszB39Ztg8JAGjheT
+	lZi8iyI6XS1wkN4Sl6Y67K2sfuK/3U6l8VL2Qzn3+bIhELKs73CTIaBKIu7evB4a
+	SEXrXMyAGn7U9YMPKCHTvrtJewA0x7T8TiRQ+qXzWrxPg1OtisaYJEimD7MsHbA8
+	RBrvKrkdzkgfYHKNnekBJrB0IvwABIoHbGCkK4L7cU+bCpqEbIZtvkgZ7JwLQeRi
+	DWDHnBEh9TT/p05J8gbIMZ0mysUjTCXb7VUVF4cQm3jWnCNirKX5Pj3PVnHLiyB2
+	vkPPM851+MZSgR9C2kc8Zw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1774561232; x=
+	1774647632; bh=53kzqvS35Tfpdk+d6POicHdXAb503grGqmPn4kNmz+8=; b=v
+	ldQ95RZ4lBty++sb/ZWl2ojEEzXeI5Vzno2Fp1dkf8h8WNjm/a7rX+RNFxMUoZRY
+	/syfUCtfa+oRXVDwRh+c3HRm9lMQYDK4J+V2oH4PZrgnKjTPMC7LeTMhn40TwSI/
+	MW8GC3Y738o9xQw71WDy1vl06U3TRVsiq/t3S49ICqw5LTv5MExb5Odx11doi0GB
+	JrODFz+HTnlj7b51vyl6Pi1H51NFCtO0C/S6j9Ni6hOiMpqGvc52RLXp9lRD6rUF
+	msNQj3k66me3b7/ih6m82jDX9eEx/QVzcgAP6r4k78QCr/hqU/KI6PnzAY8S6Zfm
+	z6BOjmhwpoJ1vwMxUYU/Q==
+X-ME-Sender: <xms:zqfFaXvb6PMhn0-OiY5cd0lalVAmd064Fp25RLQYlElTFlBNgTt_Jg>
+    <xme:zqfFaTTJSOoN_iu6alYqfc8eqoOusWfwCefTWQRN8mZhIEg9r-97Mc5kRGDRt9twS
+    CSPVGuuLQCFSzyfPjpq1Ni6MTMAC3V-AbrliDdS-n5nYKIG_WRXyy8>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefgedrtddtgdefvdekgeelucetufdoteggodetrf
+    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
+    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
+    gurhepofggfffhvfevkfgjfhfutgfgsehtjeertdertddtnecuhfhrohhmpedflfhirgig
+    uhhnucgjrghnghdfuceojhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomheqne
+    cuggftrfgrthhtvghrnhephfethfdutdeigeelueeitddtheehudevffejtedtkedvueei
+    tddujeefieejieefnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilh
+    hfrhhomhepjhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomhdpnhgspghrtghp
+    thhtohepudegpdhmohguvgepshhmthhpohhuthdprhgtphhtthhopehtshgsohhgvghnug
+    esrghlphhhrgdrfhhrrghnkhgvnhdruggvpdhrtghpthhtohepuhifuhesihgtvghnohif
+    hidrmhgvpdhrtghpthhtohepiihhvghnghigihhnghgurgesihhstggrshdrrggtrdgtnh
+    dprhgtphhtthhopegthhgvnhhhuhgrtggriheskhgvrhhnvghlrdhorhhgpdhrtghpthht
+    oheptghonhhorhdoughtsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehkrhiikhdoug
+    htsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehrohgshheskhgvrhhnvghlrdhorhhg
+    pdhrtghpthhtohepthhglhigsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehlohhonh
+    hgrghrtghhsehlihhsthhsrdhlihhnuhigrdguvghv
+X-ME-Proxy: <xmx:zqfFaTNkgBJRd4mDe8-QGTvCcbuls3msixJEA1P3aHQdduZBGVPYcA>
+    <xmx:zqfFaenrlzTkFQci_KmFnGYOfaii1ZRCAneiXWTK9GskKjAiw5QwZQ>
+    <xmx:zqfFadaXAMK5jAPsCyMdzuRC2l5TR6GGT6npzpltIpwNalaih1uUKA>
+    <xmx:zqfFacT0ncrPkbsMLKcyjComvjY60tNFpJgIpCRc-KwEXZSP5C9bJg>
+    <xmx:0KfFadVOFyBuTlfIqnZw3TUxdjjo5ccBMs3kbSmqPEGLetrF5r6LxhTe>
+Feedback-ID: ifd894703:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id 53D312CE0072; Thu, 26 Mar 2026 17:40:30 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spamd-Result: default: False [-0.66 / 15.00];
+X-ThreadId: ABKrElPPawS7
+Date: Thu, 26 Mar 2026 21:40:09 +0000
+From: "Jiaxun Yang" <jiaxun.yang@flygoat.com>
+To: "Icenowy Zheng" <zhengxingda@iscas.ac.cn>,
+ "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>
+Cc: "Icenowy Zheng" <uwu@icenowy.me>, "Yao Zi" <me@ziyao.cc>,
+ linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+ loongarch@lists.linux.dev,
+ "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+ "Xuerui Wang" <kernel@xen0n.name>, "Thomas Gleixner" <tglx@kernel.org>,
+ "Krzysztof Kozlowski" <krzk+dt@kernel.org>,
+ "Conor Dooley" <conor+dt@kernel.org>, "Rob Herring" <robh@kernel.org>,
+ "Huacai Chen" <chenhuacai@kernel.org>
+Message-Id: <a8cb7352-2d1e-46e9-b526-de4d4dd7b460@app.fastmail.com>
+In-Reply-To: <20260321092032.3502701-2-zhengxingda@iscas.ac.cn>
+References: <20260321092032.3502701-1-zhengxingda@iscas.ac.cn>
+ <20260321092032.3502701-2-zhengxingda@iscas.ac.cn>
+Subject: Re: [PATCH v4 1/6] MIPS: loongson64: Override arch_dynirq_lower_bound to
+ reserve LPC IRQs
+Content-Type: text/plain
+Content-Transfer-Encoding: 7bit
+X-Spamd-Result: default: False [-0.65 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_CONTAINS_FROM(1.00)[];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_MISSING_CHARSET(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	DMARC_POLICY_ALLOW(-0.50)[flygoat.com,none];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
+	R_DKIM_ALLOW(-0.20)[flygoat.com:s=fm2,messagingengine.com:s=fm1];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
+	XM_UA_NO_VERSION(0.01)[];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-13959-lists,linux-mips=lfdr.de];
-	RCVD_COUNT_THREE(0.00)[4];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	FROM_HAS_DN(0.00)[];
+	TAGGED_FROM(0.00)[bounces-13960-lists,linux-mips=lfdr.de];
+	RCPT_COUNT_TWELVE(0.00)[14];
 	MIME_TRACE(0.00)[0:+];
-	FROM_NEQ_ENVFROM(0.00)[ebiggers@kernel.org,linux-mips@vger.kernel.org];
+	TO_DN_EQ_ADDR_SOME(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	RCPT_COUNT_SEVEN(0.00)[8];
-	NEURAL_HAM(-0.00)[-1.000];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	TAGGED_RCPT(0.00)[linux-mips];
+	FROM_NEQ_ENVFROM(0.00)[jiaxun.yang@flygoat.com,linux-mips@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	DKIM_TRACE(0.00)[flygoat.com:+,messagingengine.com:+];
+	RCVD_COUNT_FIVE(0.00)[6];
+	TAGGED_RCPT(0.00)[linux-mips,dt];
+	NEURAL_HAM(-0.00)[-0.999];
 	TO_DN_SOME(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[iki.fi:email,sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 9C2ED33B8CD
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,app.fastmail.com:mid,messagingengine.com:dkim,flygoat.com:dkim,flygoat.com:email,iscas.ac.cn:email]
+X-Rspamd-Queue-Id: 0F31833C0AC
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-MD5 is obsolete.  Continuing to maintain architecture-optimized
-implementations of MD5 is unnecessary and risky.  It diverts resources
-from the modern algorithms that are actually important.
 
-While there was demand for continuing to maintain the PowerPC optimized
-MD5 code to accommodate userspace programs that are misusing AF_ALG
-(https://lore.kernel.org/linux-crypto/c4191597-341d-4fd7-bc3d-13daf7666c41@csgroup.eu/),
-no such demand has been seen for the MIPS Cavium Octeon optimized MD5
-code.  Note that this code runs on only one particular line of SoCs.
 
-Thus, let's drop it and focus effort on the more modern SHA algorithms,
-which already have optimized code for the same SoCs.
+On Sat, 21 Mar 2026, at 9:20 AM, Icenowy Zheng wrote:
+> On some Loongson 3A devices, a LPC bus is present and some legacy
+> devices (e.g. 8259) on it expect hardcoded low interrupt numbers. However
+> currently the expected low range interrupt numbers are not exempted from
+> the dynamic allocation, which leads to confliction when registering LPC
+> interrupts in the fixed range.
+>
+> Override arch_dynirq_lower_bound() to reserve these low range interrupt
+> numbers and prevent them from being dynamically allocated.
+>
+> Signed-off-by: Icenowy Zheng <zhengxingda@iscas.ac.cn>
 
-Signed-off-by: Eric Biggers <ebiggers@kernel.org>
----
+Acked-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
 
-This patch is targeting libcrypto-next
+@Thomas Bogendoerfer, do you mind picking this over MIPS tree?
 
- lib/crypto/Kconfig    |  1 -
- lib/crypto/mips/md5.h | 65 -------------------------------------------
- 2 files changed, 66 deletions(-)
- delete mode 100644 lib/crypto/mips/md5.h
+Thanks
+Jiaxun
 
-diff --git a/lib/crypto/Kconfig b/lib/crypto/Kconfig
-index 4b6f593dc72f..9f31f03062f0 100644
---- a/lib/crypto/Kconfig
-+++ b/lib/crypto/Kconfig
-@@ -132,11 +132,10 @@ config CRYPTO_LIB_MD5
- 	  uses any of the functions from <crypto/md5.h>.
- 
- config CRYPTO_LIB_MD5_ARCH
- 	bool
- 	depends on CRYPTO_LIB_MD5 && !UML
--	default y if MIPS && CPU_CAVIUM_OCTEON
- 	default y if PPC
- 	default y if SPARC64
- 
- config CRYPTO_LIB_MLDSA
- 	tristate
-diff --git a/lib/crypto/mips/md5.h b/lib/crypto/mips/md5.h
-deleted file mode 100644
-index e08e28aeffa4..000000000000
---- a/lib/crypto/mips/md5.h
-+++ /dev/null
-@@ -1,65 +0,0 @@
--/*
-- * Cryptographic API.
-- *
-- * MD5 Message Digest Algorithm (RFC1321).
-- *
-- * Adapted for OCTEON by Aaro Koskinen <aaro.koskinen@iki.fi>.
-- *
-- * Based on crypto/md5.c, which is:
-- *
-- * Derived from cryptoapi implementation, originally based on the
-- * public domain implementation written by Colin Plumb in 1993.
-- *
-- * Copyright (c) Cryptoapi developers.
-- * Copyright (c) 2002 James Morris <jmorris@intercode.com.au>
-- *
-- * This program is free software; you can redistribute it and/or modify it
-- * under the terms of the GNU General Public License as published by the Free
-- * Software Foundation; either version 2 of the License, or (at your option)
-- * any later version.
-- */
--
--#include <asm/octeon/crypto.h>
--#include <asm/octeon/octeon.h>
--
--/*
-- * We pass everything as 64-bit. OCTEON can handle misaligned data.
-- */
--
--static void md5_blocks(struct md5_block_state *state,
--		       const u8 *data, size_t nblocks)
--{
--	struct octeon_cop2_state cop2_state;
--	u64 *state64 = (u64 *)state;
--	unsigned long flags;
--
--	if (!octeon_has_crypto())
--		return md5_blocks_generic(state, data, nblocks);
--
--	cpu_to_le32_array(state->h, ARRAY_SIZE(state->h));
--
--	flags = octeon_crypto_enable(&cop2_state);
--	write_octeon_64bit_hash_dword(state64[0], 0);
--	write_octeon_64bit_hash_dword(state64[1], 1);
--
--	do {
--		const u64 *block = (const u64 *)data;
--
--		write_octeon_64bit_block_dword(block[0], 0);
--		write_octeon_64bit_block_dword(block[1], 1);
--		write_octeon_64bit_block_dword(block[2], 2);
--		write_octeon_64bit_block_dword(block[3], 3);
--		write_octeon_64bit_block_dword(block[4], 4);
--		write_octeon_64bit_block_dword(block[5], 5);
--		write_octeon_64bit_block_dword(block[6], 6);
--		octeon_md5_start(block[7]);
--
--		data += MD5_BLOCK_SIZE;
--	} while (--nblocks);
--
--	state64[0] = read_octeon_64bit_hash_dword(0);
--	state64[1] = read_octeon_64bit_hash_dword(1);
--	octeon_crypto_disable(&cop2_state, flags);
--
--	le32_to_cpu_array(state->h, ARRAY_SIZE(state->h));
--}
+> ---
+>  arch/mips/loongson64/init.c | 6 ++++++
+>  1 file changed, 6 insertions(+)
+>
+> diff --git a/arch/mips/loongson64/init.c b/arch/mips/loongson64/init.c
+> index 5f73f8663ab2d..c7cc5a3d7817f 100644
+> --- a/arch/mips/loongson64/init.c
+> +++ b/arch/mips/loongson64/init.c
+> @@ -7,6 +7,7 @@
+>  #include <linux/irqchip.h>
+>  #include <linux/logic_pio.h>
+>  #include <linux/memblock.h>
+> +#include <linux/minmax.h>
+>  #include <linux/of.h>
+>  #include <linux/of_address.h>
+>  #include <asm/bootinfo.h>
+> @@ -227,3 +228,8 @@ void __init arch_init_irq(void)
+>  	reserve_pio_range();
+>  	irqchip_init();
+>  }
+> +
+> +unsigned int arch_dynirq_lower_bound(unsigned int from)
+> +{
+> +	return MAX(from, NR_IRQS_LEGACY);
+> +}
+> -- 
+> 2.52.0
 
-base-commit: 7ac21b4032e5b9b8a6a312b6f1d54f4ba24d1c16
 -- 
-2.53.0
-
+- Jiaxun
 
