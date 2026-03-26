@@ -1,179 +1,187 @@
-Return-Path: <linux-mips+bounces-13957-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-13958-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 0Eg5DbNyxWkU+QQAu9opvQ
-	(envelope-from <linux-mips+bounces-13957-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Thu, 26 Mar 2026 18:53:55 +0100
+	id QOslCUGIxWlc+wQAu9opvQ
+	(envelope-from <linux-mips+bounces-13958-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Thu, 26 Mar 2026 20:25:53 +0100
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id DFB9A3398C0
-	for <lists+linux-mips@lfdr.de>; Thu, 26 Mar 2026 18:53:54 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4910B33AE6B
+	for <lists+linux-mips@lfdr.de>; Thu, 26 Mar 2026 20:25:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id DF94430A5203
-	for <lists+linux-mips@lfdr.de>; Thu, 26 Mar 2026 17:47:33 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 5A739301515E
+	for <lists+linux-mips@lfdr.de>; Thu, 26 Mar 2026 19:25:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 827883A4F3A;
-	Thu, 26 Mar 2026 17:47:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8830E3A5E70;
+	Thu, 26 Mar 2026 19:25:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ilvokhin.com header.i=@ilvokhin.com header.b="cWmsQBbi"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NfJ/oEz0"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail.ilvokhin.com (mail.ilvokhin.com [178.62.254.231])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31BC13A5453;
-	Thu, 26 Mar 2026 17:47:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.62.254.231
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6196134FF40;
+	Thu, 26 Mar 2026 19:25:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774547239; cv=none; b=FoYD+nVKT8jiQw+/IlQUUlmAGfcK4bIl9fxJXOn2BeS3j3nmhcoUwwVHEaHvVoBigJ+uh50Uyq58F+RvBaA/6RmM+PsldltMU5HVFgHeBICilmgNRmotGogsEIFxwGxvqGodSsGt/dPtqA7OPgUEmFzdps9zLGsnK1+bCt0L+es=
+	t=1774553122; cv=none; b=Bd/Sv5ym515xbZiIMF8BR2K6Q7fLP47OMDqquCAVC+RYYh4aKivv+TpodZf0wbslE2Lw5lyw7A55A0yLCgj5ACfg8OSJqu0HoLcPtZTB/w4DDW9yPskhGZ6UlT+7Vu6kIHFw/thYNhqEfEb8ItytN69R/ANY9d/KUI6+S+ViCX0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774547239; c=relaxed/simple;
-	bh=Q2u1dQxxb/Sxo8KGbrkkNNPYUTk6JEf6lIj8E/mw8C0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=AFsIHL94He1YXy03EXpWwKpqUDjK0b/YeBR+meb7ZmqoMe7bRI4KJLB9jnjvihk8k/gHZmS+Jk4h7n4N2oDptcue/iN42033Z/fR86yjc9iBYVtIk+QhEyx1FIEgFCKevphU0HqdE4YgL7iOF8lBJ8vymwN2Qo29ZQZ1gpYrFXk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=ilvokhin.com; spf=pass smtp.mailfrom=ilvokhin.com; dkim=pass (1024-bit key) header.d=ilvokhin.com header.i=@ilvokhin.com header.b=cWmsQBbi; arc=none smtp.client-ip=178.62.254.231
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=ilvokhin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ilvokhin.com
-Received: from shell.ilvokhin.com (shell.ilvokhin.com [138.68.190.75])
-	(Authenticated sender: d@ilvokhin.com)
-	by mail.ilvokhin.com (Postfix) with ESMTPSA id 4D7D7BDE5F;
-	Thu, 26 Mar 2026 17:47:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ilvokhin.com;
-	s=mail; t=1774547232;
-	bh=HajYBUhAMQvYpmUDUOrZF12EybtGDD0VRMp/h9GItuI=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=cWmsQBbibf2QgNdBv+y0h3RK2/59H9eydWIBxQQ/Q8ag2qRAQ1v6K0wUCTXAFnYQx
-	 slWOiGujhroPzV8XedWtDbXU5Ie8M9N7hNJgF5VHtUliCz64Aj4glFbHKvCamgE00C
-	 9Yl24qMjjoDzdp8XtlZnmEmNqNuRTSb/jAa5mVMo=
-Date: Thu, 26 Mar 2026 17:47:08 +0000
-From: Dmitry Ilvokhin <d@ilvokhin.com>
-To: Matthew Wilcox <willy@infradead.org>
-Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
-	Will Deacon <will@kernel.org>, Boqun Feng <boqun@kernel.org>,
-	Waiman Long <longman@redhat.com>,
+	s=arc-20240116; t=1774553122; c=relaxed/simple;
+	bh=A++szeKtnjRSEovDyZxLISgC62LFBBAIhs/d9OMRhfE=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition:In-Reply-To; b=AUPrHkOfFLbUFbqTxoCtdjkJP+GQBAgusjfSwSWFu5fpV2rIQacPopX7ps8T6PfyA2Epn+TKlMjMxD/p4e3s7/ylB87IwoTbkDDFcw0vkhZZhTfEclftPL7L3y8RG3WW/g4vHnnljqfdKf3jFiwFqPgFjak1G6H6y8yIJUNvD+0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NfJ/oEz0; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0AA1EC116C6;
+	Thu, 26 Mar 2026 19:25:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1774553122;
+	bh=A++szeKtnjRSEovDyZxLISgC62LFBBAIhs/d9OMRhfE=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:From;
+	b=NfJ/oEz0LRYInVcrSbNN88ZD+MdyZe+E5wpkqpNyM7Ggrd+87xrTGdb2eRZTy87DI
+	 3AEY3FowNt2dLBx5bUv4EG4eu546MewpNXZGCLDHkBfe8g3LZwJ102n7t7khlBaszz
+	 Lx4TnfZYWvuNCDHMwl+tUFBLw2zV1Ngq0Csg3zwt51tFeRwFrtv1uYON4+pXGzeX8B
+	 iMHKIRiCjG9dp3POhWU/XzfbitypWNW1N1GDKkwoAv/NyKcEekZl9lBiRmYoXapScF
+	 rKV+yPTbfY8C2bHC3ckb0AISfTndYlJ7pwkpyfMvmqNf9+9J1OGvYPuntH/jG+z1Hp
+	 YXvuT6LOCwG0g==
+Date: Thu, 26 Mar 2026 14:25:20 -0500
+From: Bjorn Helgaas <helgaas@kernel.org>
+To: Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>
+Cc: linux-pci@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>,
+	Guenter Roeck <linux@roeck-us.net>, linux-alpha@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+	linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+	linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+	Russell King <linux@armlinux.org.uk>,
+	Geert Uytterhoeven <geert@linux-m68k.org>,
 	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	Juergen Gross <jgross@suse.com>,
-	Ajay Kaher <ajay.kaher@broadcom.com>,
-	Alexey Makhalov <alexey.makhalov@broadcom.com>,
-	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
-	Thomas Gleixner <tglx@kernel.org>, Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>, Arnd Bergmann <arnd@arndb.de>,
-	Dennis Zhou <dennis@kernel.org>, Tejun Heo <tj@kernel.org>,
-	Christoph Lameter <cl@gentwo.org>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
-	virtualization@lists.linux.dev, linux-arch@vger.kernel.org,
-	linux-mm@kvack.org, linux-trace-kernel@vger.kernel.org,
-	kernel-team@meta.com
-Subject: Re: [PATCH v4 0/5] locking: contended_release tracepoint
- instrumentation
-Message-ID: <acVxHOXgbPXeT6A8@shell.ilvokhin.com>
-References: <cover.1774536681.git.d@ilvokhin.com>
- <acVW6eFGwqACD91Y@casper.infradead.org>
+	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+	Helge Deller <deller@gmx.de>, Michael Ellerman <mpe@ellerman.id.au>,
+	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	"H. Peter Anvin" <hpa@zytor.com>, Chris Zankel <chris@zankel.net>,
+	Max Filippov <jcmvbkbc@gmail.com>,
+	Madhavan Srinivasan <maddy@linux.ibm.com>,
+	Yoshinori Sato <ysato@users.sourceforge.jp>,
+	Rich Felker <dalias@libc.org>,
+	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+	linux-kernel@vger.kernel.org, Xifer <xiferdev@gmail.com>
+Subject: Re: [PATCH 00/10] PCI: Improve head free space usage
+Message-ID: <20260326192520.GA1337681@bhelgaas>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <acVW6eFGwqACD91Y@casper.infradead.org>
-X-Spamd-Result: default: False [-2.16 / 15.00];
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20260324165633.4583-1-ilpo.jarvinen@linux.intel.com>
+X-Spamd-Result: default: False [-1.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[ilvokhin.com,reject];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
-	R_DKIM_ALLOW(-0.20)[ilvokhin.com:s=mail];
+	MID_RHS_NOT_FQDN(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-13957-lists,linux-mips=lfdr.de];
-	FROM_HAS_DN(0.00)[];
+	TAGGED_FROM(0.00)[bounces-13958-lists,linux-mips=lfdr.de];
 	RCVD_COUNT_THREE(0.00)[4];
-	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[30];
-	DKIM_TRACE(0.00)[ilvokhin.com:+];
-	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
-	MISSING_XM_UA(0.00)[];
+	FREEMAIL_CC(0.00)[vger.kernel.org,google.com,roeck-us.net,lists.infradead.org,lists.linux-m68k.org,lists.ozlabs.org,armlinux.org.uk,linux-m68k.org,alpha.franken.de,hansenpartnership.com,gmx.de,ellerman.id.au,kernel.org,redhat.com,alien8.de,linux.intel.com,zytor.com,zankel.net,gmail.com,linux.ibm.com,users.sourceforge.jp,libc.org,physik.fu-berlin.de];
+	RCPT_COUNT_TWELVE(0.00)[31];
+	MIME_TRACE(0.00)[0:+];
+	FROM_HAS_DN(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	TO_DN_SOME(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[d@ilvokhin.com,linux-mips@vger.kernel.org];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	MID_RHS_MATCH_FROMTLD(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[helgaas@kernel.org,linux-mips@vger.kernel.org];
+	DKIM_TRACE(0.00)[kernel.org:+];
 	TAGGED_RCPT(0.00)[linux-mips];
-	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[shell.ilvokhin.com:mid,sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,ilvokhin.com:dkim]
-X-Rspamd-Queue-Id: DFB9A3398C0
+	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	MISSING_XM_UA(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 4910B33AE6B
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On Thu, Mar 26, 2026 at 03:55:21PM +0000, Matthew Wilcox wrote:
-> On Thu, Mar 26, 2026 at 03:09:59PM +0000, Dmitry Ilvokhin wrote:
-> > The existing contention_begin/contention_end tracepoints fire on the
-> > waiter side. The lock holder's identity and stack can be captured at
-> > contention_begin time (e.g. perf lock contention --lock-owner), but
-> > this reflects the holder's state when a waiter arrives, not when the
-> > lock is actually released.
-> > 
-> > This series adds a contended_release tracepoint that fires on the
-> > holder side when a lock with waiters is released. This provides:
-> > 
-> > - Hold time estimation: when the holder's own acquisition was
-> >   contended, its contention_end (acquisition) and contended_release
-> >   can be correlated to measure how long the lock was held under
-> >   contention.
-> > 
-> > - The holder's stack at release time, which may differ from what perf lock
-> >   contention --lock-owner captures if the holder does significant work between
-> >   the waiter's arrival and the unlock.
+[+cc Xifer; thanks very much for reporting and testing!]
+
+On Tue, Mar 24, 2026 at 06:56:23PM +0200, Ilpo Järvinen wrote:
+> Hi all,
 > 
-> As someone who's not an expert in this area (so please use short words
-> to explain it to me), why do we want to know how long this holder took
-> to release the lock from when it became contended?
+> This series attempts to take advantage of free head space (the free
+> space before the aligned start address) in order to generally produce a
+> tighter packing of the resources/bridge windows.
 > 
-> I understand why we want to know how long any given waiter had to wait
-> to gain the lock (but we already have tracepoints which show that).
-
-I think the simplest way to think about it is the following. Waiter time
-is the symptom, while holder time is the cause.
-
-The waiter-side contention_begin/contention_end tells us how long a
-waiter waited, but that time can span multiple holders.
-
-If a waiter waited 10 ms, we can not tell whether one holder held the
-lock for 10 ms or five holders held it for 2 ms each. These need
-different treatments: the first means shrink the critical section, the
-second means reduce lock frequency or split the lock. Today we can not
-distinguish between these cases from waiter-side data alone.
-
+> The recent changes to the resource fitting algorithm caused resource
+> allocation failures in some cases where a bridge window that is sized
+> to be gapless could no longer be assigned. The previous algorithm left
+> a huge gaps which allowed it to place the remainder (non-aligning part
+> of the size) before the start address of used for the gapless fit,
+> whereas the new gapless approach always had to place the remainder
+> after the aligning part of the resources. There is not always space
+> for the remainder triggering those failures (e.g., when the aligning
+> part must be placed at the top of the window).
 > 
-> I also don't understand why we want to know the holder's stack at
-> release time.  The stack at contention-begin time will include
-> the point at which the lock was acquired which should be correlated
-> with where the lock was released.
+> This series attempts to allow placing the remainder once again before
+> the aligning part, but now without leaving huge gaps to retain the
+> benefits of the gapless bridge windows. The approach is somewhat hacky
+> but should work thanks to PCI resources fundamentally consisting only
+> power-of-two atoms.
 > 
-> Perhaps examples might help me understand why we want this?
+> There maybe cases where architecture would not want to do such
+> relocation. This series adds the relocation to arch
+> pcibios_align_resource() functions to allow all of them taking
+> advantage of the better resource packing but if somebody objects doing
+> this relocation for a particular arch, I can remove it, please just let
+> me know (this relocation doesn't seem critical unless there are
+> regressions).
+> 
+> Ilpo Järvinen (10):
+>   resource: Add __resource_contains_unbound() for internal contains
+>     checks
+>   resource: Pass full extent of empty space to resource_alignf CB
+>   resource: Rename 'tmp' variable to 'full_avail'
+>   ARM/PCI: Remove unnecessary second application of align
+>   am68k/PCI: Remove unnecessary second application of align
+>   MIPS: PCI: Remove unnecessary second application of align
+>   parisc/PCI: Cleanup align handling
+>   PCI: Rename window_alignment() to pci_min_window_alignment()
+>   PCI: Align head space better
+>   PCI: Fix alignment calculation for resource size larger than align
+> 
+>  arch/alpha/kernel/pci.c          |  1 +
+>  arch/arm/kernel/bios32.c         |  9 ++++---
+>  arch/m68k/kernel/pcibios.c       |  8 +++++--
+>  arch/mips/pci/pci-generic.c      |  8 ++++---
+>  arch/mips/pci/pci-legacy.c       |  3 +++
+>  arch/parisc/kernel/pci.c         | 17 ++++++++------
+>  arch/powerpc/kernel/pci-common.c |  6 ++++-
+>  arch/s390/pci/pci.c              |  1 +
+>  arch/sh/drivers/pci/pci.c        |  6 ++++-
+>  arch/x86/pci/i386.c              |  5 +++-
+>  arch/xtensa/kernel/pci.c         |  3 +++
+>  drivers/pci/pci.h                |  3 +++
+>  drivers/pci/setup-bus.c          | 15 ++++++++----
+>  drivers/pci/setup-res.c          | 40 +++++++++++++++++++++++++++++++-
+>  drivers/pcmcia/rsrc_nonstatic.c  |  3 ++-
+>  include/linux/ioport.h           | 22 +++++++++++++++---
+>  include/linux/pci.h              | 12 +++++++---
+>  kernel/resource.c                | 33 +++++++++++++-------------
+>  18 files changed, 149 insertions(+), 46 deletions(-)
 
-Holder's stack allows us to understand who exactly waiters were waiting
-for to release the lock.
+I added Xifer's tested-by, fixed the "am68k" and missing "if"
+typos, and applied these to pci/resource for v7.1.
 
-The stack at contention_begin time does not always include the holder's
-stack. The --lock-owner feature works by reading the owner field from
-the lock struct, but it only supports mutex and rwsem. For spinlocks,
-queued rwlocks, semaphores, and several others, the waiter has no
-visibility into the holder whatsoever.
-
-contended_release fires in the holder's context, so we get the holder's
-stack at release time. For spinlocks, this is the only way to get any
-holder-side information.
-
-Original motivation was zone lock contention (a spinlock) in Meta
-production workloads. We could see waiters were blocked, but had no way
-to identify the holders or what they were doing.
+Ilpo, if you post a v2 with more changes, I'll update to it.  I
+applied the series now to get a head start on 0-day building and into
+next.
 
