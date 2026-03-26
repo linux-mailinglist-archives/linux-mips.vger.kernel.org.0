@@ -1,115 +1,137 @@
-Return-Path: <linux-mips+bounces-13956-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-13957-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id QHRxEdhkxWkn+AQAu9opvQ
-	(envelope-from <linux-mips+bounces-13956-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Thu, 26 Mar 2026 17:54:48 +0100
+	id 0Eg5DbNyxWkU+QQAu9opvQ
+	(envelope-from <linux-mips+bounces-13957-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Thu, 26 Mar 2026 18:53:55 +0100
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9AC86338C3E
-	for <lists+linux-mips@lfdr.de>; Thu, 26 Mar 2026 17:54:47 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id DFB9A3398C0
+	for <lists+linux-mips@lfdr.de>; Thu, 26 Mar 2026 18:53:54 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 6E99C3038F4D
-	for <lists+linux-mips@lfdr.de>; Thu, 26 Mar 2026 16:46:25 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id DF94430A5203
+	for <lists+linux-mips@lfdr.de>; Thu, 26 Mar 2026 17:47:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9254841C2EC;
-	Thu, 26 Mar 2026 16:46:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 827883A4F3A;
+	Thu, 26 Mar 2026 17:47:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=ilvokhin.com header.i=@ilvokhin.com header.b="cWmsQBbi"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from relay.hostedemail.com (smtprelay0010.hostedemail.com [216.40.44.10])
+Received: from mail.ilvokhin.com (mail.ilvokhin.com [178.62.254.231])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0EAA7221265;
-	Thu, 26 Mar 2026 16:46:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.40.44.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31BC13A5453;
+	Thu, 26 Mar 2026 17:47:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.62.254.231
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774543584; cv=none; b=mPmsGC7mgQgZka+EpHNlqwWeIF4NZufdo/Bp+oYNpMLEWRtQezOIoDfsLQE6XyI29VBVM9MThYYNz89iJe4Ko0G45kAj5SODCALgk6UVevwlEdBiRaN4R6ybVfR9DAf5DNNWAOXXKXejMJT+4hnD/4I9r+q4vaeU6eiJJ7BYGp0=
+	t=1774547239; cv=none; b=FoYD+nVKT8jiQw+/IlQUUlmAGfcK4bIl9fxJXOn2BeS3j3nmhcoUwwVHEaHvVoBigJ+uh50Uyq58F+RvBaA/6RmM+PsldltMU5HVFgHeBICilmgNRmotGogsEIFxwGxvqGodSsGt/dPtqA7OPgUEmFzdps9zLGsnK1+bCt0L+es=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774543584; c=relaxed/simple;
-	bh=IrNMG8JzJf0gLtDRAMekvNsaWFh/Zj1yl1xgjQeFBX8=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=l5OZZNYtOi+/cUwgQqWM16l7QHXZiht2UyNs17+kCBfbtupgsagydT8cRoDyN59e2CxtWc/qeLqvfsvYtRAYc/fsTrKlkhtPoq3k+DtASL+e45Hs6phZMnA+GyrNOlcvCckxYioR8b3ojhniTATCWVBVBRq3iVqrPPb4mnBNq8s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org; spf=pass smtp.mailfrom=goodmis.org; arc=none smtp.client-ip=216.40.44.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goodmis.org
-Received: from omf07.hostedemail.com (a10.router.float.18 [10.200.18.1])
-	by unirelay08.hostedemail.com (Postfix) with ESMTP id 96E35140E1C;
-	Thu, 26 Mar 2026 16:46:13 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: rostedt@goodmis.org) by omf07.hostedemail.com (Postfix) with ESMTPA id AA7C220032;
-	Thu, 26 Mar 2026 16:46:07 +0000 (UTC)
-Date: Thu, 26 Mar 2026 12:46:54 -0400
-From: Steven Rostedt <rostedt@goodmis.org>
+	s=arc-20240116; t=1774547239; c=relaxed/simple;
+	bh=Q2u1dQxxb/Sxo8KGbrkkNNPYUTk6JEf6lIj8E/mw8C0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=AFsIHL94He1YXy03EXpWwKpqUDjK0b/YeBR+meb7ZmqoMe7bRI4KJLB9jnjvihk8k/gHZmS+Jk4h7n4N2oDptcue/iN42033Z/fR86yjc9iBYVtIk+QhEyx1FIEgFCKevphU0HqdE4YgL7iOF8lBJ8vymwN2Qo29ZQZ1gpYrFXk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=ilvokhin.com; spf=pass smtp.mailfrom=ilvokhin.com; dkim=pass (1024-bit key) header.d=ilvokhin.com header.i=@ilvokhin.com header.b=cWmsQBbi; arc=none smtp.client-ip=178.62.254.231
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=ilvokhin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ilvokhin.com
+Received: from shell.ilvokhin.com (shell.ilvokhin.com [138.68.190.75])
+	(Authenticated sender: d@ilvokhin.com)
+	by mail.ilvokhin.com (Postfix) with ESMTPSA id 4D7D7BDE5F;
+	Thu, 26 Mar 2026 17:47:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ilvokhin.com;
+	s=mail; t=1774547232;
+	bh=HajYBUhAMQvYpmUDUOrZF12EybtGDD0VRMp/h9GItuI=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=cWmsQBbibf2QgNdBv+y0h3RK2/59H9eydWIBxQQ/Q8ag2qRAQ1v6K0wUCTXAFnYQx
+	 slWOiGujhroPzV8XedWtDbXU5Ie8M9N7hNJgF5VHtUliCz64Aj4glFbHKvCamgE00C
+	 9Yl24qMjjoDzdp8XtlZnmEmNqNuRTSb/jAa5mVMo=
+Date: Thu, 26 Mar 2026 17:47:08 +0000
+From: Dmitry Ilvokhin <d@ilvokhin.com>
 To: Matthew Wilcox <willy@infradead.org>
-Cc: Dmitry Ilvokhin <d@ilvokhin.com>, Peter Zijlstra <peterz@infradead.org>,
- Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>, Boqun Feng
- <boqun@kernel.org>, Waiman Long <longman@redhat.com>, Thomas Bogendoerfer
- <tsbogend@alpha.franken.de>, Juergen Gross <jgross@suse.com>, Ajay Kaher
- <ajay.kaher@broadcom.com>, Alexey Makhalov <alexey.makhalov@broadcom.com>,
- Broadcom internal kernel review list
- <bcm-kernel-feedback-list@broadcom.com>, Thomas Gleixner <tglx@kernel.org>,
- Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
- x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>, Arnd Bergmann
- <arnd@arndb.de>, Dennis Zhou <dennis@kernel.org>, Tejun Heo
- <tj@kernel.org>, Christoph Lameter <cl@gentwo.org>, Masami Hiramatsu
- <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
- virtualization@lists.linux.dev, linux-arch@vger.kernel.org,
- linux-mm@kvack.org, linux-trace-kernel@vger.kernel.org,
- kernel-team@meta.com
+Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
+	Will Deacon <will@kernel.org>, Boqun Feng <boqun@kernel.org>,
+	Waiman Long <longman@redhat.com>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Juergen Gross <jgross@suse.com>,
+	Ajay Kaher <ajay.kaher@broadcom.com>,
+	Alexey Makhalov <alexey.makhalov@broadcom.com>,
+	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
+	Thomas Gleixner <tglx@kernel.org>, Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+	"H. Peter Anvin" <hpa@zytor.com>, Arnd Bergmann <arnd@arndb.de>,
+	Dennis Zhou <dennis@kernel.org>, Tejun Heo <tj@kernel.org>,
+	Christoph Lameter <cl@gentwo.org>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
+	virtualization@lists.linux.dev, linux-arch@vger.kernel.org,
+	linux-mm@kvack.org, linux-trace-kernel@vger.kernel.org,
+	kernel-team@meta.com
 Subject: Re: [PATCH v4 0/5] locking: contended_release tracepoint
  instrumentation
-Message-ID: <20260326124654.66b4dbc1@gandalf.local.home>
-In-Reply-To: <acVW6eFGwqACD91Y@casper.infradead.org>
+Message-ID: <acVxHOXgbPXeT6A8@shell.ilvokhin.com>
 References: <cover.1774536681.git.d@ilvokhin.com>
-	<acVW6eFGwqACD91Y@casper.infradead.org>
-X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+ <acVW6eFGwqACD91Y@casper.infradead.org>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Stat-Signature: oxpnmau35kmgbeef69arytyyqjdq4tcm
-X-Session-Marker: 726F737465647440676F6F646D69732E6F7267
-X-Session-ID: U2FsdGVkX18T30hkquOyghpO0b3wg7U69NQLAoKWLEI=
-X-HE-Tag: 1774543567-165604
-X-HE-Meta: U2FsdGVkX1+aucRsg/fJwSO9PcSLmk9Uk3XJJ6a8zNjBvZXhrYnWw8QuFZDYOQAZcKByDBMi6oGlRWtTF/Acf81GjhgOA6h7nGVnnpPy9E5e0/5WaXs311Ddp5diPLuMOv2IW38+0Dk/6tOn+Zkvvq989+N+UF2XvBrebx1sWJWtvBgdDrf9ptRKO/b1FQfSq2VqlITHIQYMVZy7JK1h3nZDehd2eU/kzpM76hR0FzJKGqVYc7rtfpxOV3e5SKzZPSzkoOwAOuxo4uaGOxH6Qi1DWYPmS90pi+Lwbv2tjNOCuDuR2Jn16cNcy8fcYO0C5X4AfXaiHii7M18gBqE54UkvWLH/jjdU1XUWoqlX11A9Tv93kHbWpf7w0uUHT93G
-X-Spamd-Result: default: False [-1.36 / 15.00];
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <acVW6eFGwqACD91Y@casper.infradead.org>
+X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	DMARC_POLICY_ALLOW(-0.50)[ilvokhin.com,reject];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
+	R_DKIM_ALLOW(-0.20)[ilvokhin.com:s=mail];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
-	DMARC_POLICY_SOFTFAIL(0.10)[goodmis.org : SPF not aligned (relaxed), No valid DKIM,none];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	TO_DN_SOME(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[30];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[rostedt@goodmis.org,linux-mips@vger.kernel.org];
-	TAGGED_RCPT(0.00)[linux-mips];
-	RCVD_COUNT_FIVE(0.00)[5];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-13956-lists,linux-mips=lfdr.de];
-	R_DKIM_NA(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[gandalf.local.home:mid,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,infradead.org:email]
-X-Rspamd-Queue-Id: 9AC86338C3E
+	TAGGED_FROM(0.00)[bounces-13957-lists,linux-mips=lfdr.de];
+	FROM_HAS_DN(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
+	MIME_TRACE(0.00)[0:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[30];
+	DKIM_TRACE(0.00)[ilvokhin.com:+];
+	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
+	MISSING_XM_UA(0.00)[];
+	NEURAL_HAM(-0.00)[-1.000];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[d@ilvokhin.com,linux-mips@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	MID_RHS_MATCH_FROMTLD(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TAGGED_RCPT(0.00)[linux-mips];
+	TO_DN_SOME(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[shell.ilvokhin.com:mid,sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,ilvokhin.com:dkim]
+X-Rspamd-Queue-Id: DFB9A3398C0
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On Thu, 26 Mar 2026 15:55:21 +0000
-Matthew Wilcox <willy@infradead.org> wrote:
-
+On Thu, Mar 26, 2026 at 03:55:21PM +0000, Matthew Wilcox wrote:
+> On Thu, Mar 26, 2026 at 03:09:59PM +0000, Dmitry Ilvokhin wrote:
+> > The existing contention_begin/contention_end tracepoints fire on the
+> > waiter side. The lock holder's identity and stack can be captured at
+> > contention_begin time (e.g. perf lock contention --lock-owner), but
+> > this reflects the holder's state when a waiter arrives, not when the
+> > lock is actually released.
+> > 
+> > This series adds a contended_release tracepoint that fires on the
+> > holder side when a lock with waiters is released. This provides:
+> > 
+> > - Hold time estimation: when the holder's own acquisition was
+> >   contended, its contention_end (acquisition) and contended_release
+> >   can be correlated to measure how long the lock was held under
+> >   contention.
+> > 
 > > - The holder's stack at release time, which may differ from what perf lock
 > >   contention --lock-owner captures if the holder does significant work between
-> >   the waiter's arrival and the unlock.  
+> >   the waiter's arrival and the unlock.
 > 
 > As someone who's not an expert in this area (so please use short words
 > to explain it to me), why do we want to know how long this holder took
@@ -117,6 +139,19 @@ Matthew Wilcox <willy@infradead.org> wrote:
 > 
 > I understand why we want to know how long any given waiter had to wait
 > to gain the lock (but we already have tracepoints which show that).
+
+I think the simplest way to think about it is the following. Waiter time
+is the symptom, while holder time is the cause.
+
+The waiter-side contention_begin/contention_end tells us how long a
+waiter waited, but that time can span multiple holders.
+
+If a waiter waited 10 ms, we can not tell whether one holder held the
+lock for 10 ms or five holders held it for 2 ms each. These need
+different treatments: the first means shrink the critical section, the
+second means reduce lock frequency or split the lock. Today we can not
+distinguish between these cases from waiter-side data alone.
+
 > 
 > I also don't understand why we want to know the holder's stack at
 > release time.  The stack at contention-begin time will include
@@ -125,21 +160,20 @@ Matthew Wilcox <willy@infradead.org> wrote:
 > 
 > Perhaps examples might help me understand why we want this?
 
-Dmitry could give his own rationale for this, but I have my only use case.
+Holder's stack allows us to understand who exactly waiters were waiting
+for to release the lock.
 
-This would be useful to find out how long the critical section is. If a
-lock is highly contended by many tasks, you could get a high contention
-time simply because other tasks are causing the delay for the waiter.
-Seeing the release time and location would let you also know how long the
-critical section was held, and if the length of the critical section is
-causing the contention.
+The stack at contention_begin time does not always include the holder's
+stack. The --lock-owner feature works by reading the owner field from
+the lock struct, but it only supports mutex and rwsem. For spinlocks,
+queued rwlocks, semaphores, and several others, the waiter has no
+visibility into the holder whatsoever.
 
-Having a stack trace of the release would differentiate the path that
-released the lock, as there can be many places that release them. Although,
-I have to admit, I'm not sure there are many different places locks are
-released. Especially now that we have guard(), which will make all the
-releases in a function at the same location.
+contended_release fires in the holder's context, so we get the holder's
+stack at release time. For spinlocks, this is the only way to get any
+holder-side information.
 
--- Steve
-
+Original motivation was zone lock contention (a spinlock) in Meta
+production workloads. We could see waiters were blocked, but had no way
+to identify the holders or what they were doing.
 
