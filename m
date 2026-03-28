@@ -1,52 +1,53 @@
-Return-Path: <linux-mips+bounces-13979-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-13980-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id wApoLEj7x2mIfwUAu9opvQ
-	(envelope-from <linux-mips+bounces-13979-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Sat, 28 Mar 2026 17:01:12 +0100
+	id iOgZKlP7x2mIfwUAu9opvQ
+	(envelope-from <linux-mips+bounces-13980-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Sat, 28 Mar 2026 17:01:23 +0100
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5A7EC34F106
-	for <lists+linux-mips@lfdr.de>; Sat, 28 Mar 2026 17:01:12 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4949434F11D
+	for <lists+linux-mips@lfdr.de>; Sat, 28 Mar 2026 17:01:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id CF372305CABD
-	for <lists+linux-mips@lfdr.de>; Sat, 28 Mar 2026 15:55:54 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 3A1823064E8B
+	for <lists+linux-mips@lfdr.de>; Sat, 28 Mar 2026 15:55:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7959035CB62;
-	Sat, 28 Mar 2026 15:55:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 02301367F5B;
+	Sat, 28 Mar 2026 15:55:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tpFKCaCb"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Bm7fMoYF"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 566DB34751C;
-	Sat, 28 Mar 2026 15:55:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3923352927;
+	Sat, 28 Mar 2026 15:55:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774713354; cv=none; b=T6g2MLf9Ad1aPsC1q11isCFyWHn2SmdD/oA+mbvMCpQp4v+vzhYgfwBOZQTtMVGQBSqvLYbqRZgDa+Wfti0Azq0B8w+MSiEI330ZPVikUIaj4JcnboBBHScKODGVHxvsxVBwnEpumA2nZUYARPQbn0OFXAlqctWKp5Oywypqnw8=
+	t=1774713356; cv=none; b=AYkg6vzRnyNaldCPyybmoHtPVb/KGdtDnlyfxhA244TXXw+0wuXu3gtuN3aV6s2AJyjlcqeltHEH6zbGlW4CaaW0LvGdRGOQo32L5+87exGpPaSDgR9ojvjP85NDFWyP91AaiyRL5grT5PVnVVIzPUDHVnXzO3djsFzf0IjBoIE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774713354; c=relaxed/simple;
-	bh=43UWjfwmGTJsvatojEzQ6a+djIbk4+udgzPTzi5vJy0=;
+	s=arc-20240116; t=1774713356; c=relaxed/simple;
+	bh=UD/TwSuuylvsTVk6WuLqLc/i823tJemYw2VTGjQDzOU=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=L64hWrPaqxdVrERqTBby2/dyL3mzeobgavvHZEwBZjh9EVZqqodR8AIGpRZ9bGOJKwHwNjaIiM+shonlUeHIfPl/3Rzk+gg1XOnDH6YlUaRDqWS+X3keb4kbxPorqPB5+FO+v5xOVH4vRTuwZ+dMJr+vHc7d7ucB1UiiKexZRMk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tpFKCaCb; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E2E16C2BCB1;
-	Sat, 28 Mar 2026 15:55:51 +0000 (UTC)
+	 In-Reply-To:To:Cc; b=kMgKiyVhwGX4uyRyXSoWxqVEmksfTZAXyYtqr3rdWe5Ff/RS9HFerBnAgbY7e2OUQrDSAd1ytgY9iwoVKTCcC7rfuT9jcwsXHLq2YrY8XCjbMPsPF1BSyvvz37dfzfb1lfnTOmAIEfskv24c0ViRZ02+SWqbrgQs+3bXug+SljA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Bm7fMoYF; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 64A26C2BC86;
+	Sat, 28 Mar 2026 15:55:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1774713354;
-	bh=43UWjfwmGTJsvatojEzQ6a+djIbk4+udgzPTzi5vJy0=;
+	s=k20201202; t=1774713356;
+	bh=UD/TwSuuylvsTVk6WuLqLc/i823tJemYw2VTGjQDzOU=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=tpFKCaCbTTyDGqXi3yWG6BVj5ObYU89fGMLU9/IJtb5tNISlKPrfcj+GpsGSDNxNR
-	 rT9HTpLkzPGWCydC0sCHje+KrvUXRm3fXOh1XUqmUFCMjvrHimJQzGNR8+0MZR7mdg
-	 1xFEAhAC0gmMNCq8gXsccRa5Up6bZDAjyil4NKJtvrCBC2seVnlh7R1ThCTIpf6D/U
-	 FsTBBuhRTlrJ+WttXdcghPWrBYJlWVLbCvvJ9iWdv7Wul2VT/j3s6WWR/DT44rjqmo
-	 hgtZWEJVYsTEhZIDPHa8wM8OAh9jnxYHENmFEuKNBGJFefSXFa2aJGV+cLWCMWwDHG
-	 CQkOdY0ISBqHw==
+	b=Bm7fMoYFkUbimvOYpNbqJa1zS9jOSlu3hhkd1VIWosEKAiRFMr0AbqbdeuoXQ6za1
+	 slZjp+JbOw4XGUTyGKd83DJdlyE5RLol1fN1LxQZS3Qy5C5ae/SHwu7NvyvLNl+7Kl
+	 Tmy9K7uxnwDUIRiXkcR4sy4eXorE6OLiKOqpKde6NYgCh+LgD0jhwG5nfFsQoePwmZ
+	 5NBVj5J41BY1UqisNpeBe79Z7tqOQ3DxRnBATawJnrhNFinStUy9sE6tcHzv/y5sVB
+	 +qsZ1B1KWFzbeMgHRm8nwy9ZbvEPdthwa1FuEKJx/2bZcB7mlBXeONsodKpwPcFNS7
+	 d0+YXPgPSQ2hA==
 From: Linus Walleij <linusw@kernel.org>
-Date: Sat, 28 Mar 2026 16:55:47 +0100
-Subject: [PATCH 1/2] MIPS/input: Move RB532 button to GPIO descriptors
+Date: Sat, 28 Mar 2026 16:55:48 +0100
+Subject: [PATCH 2/2] MIPS/mtd: Handle READY GPIO in generic NAND platform
+ data
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -55,7 +56,7 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260328-mips-input-rb532-button-v1-1-98e201621501@kernel.org>
+Message-Id: <20260328-mips-input-rb532-button-v1-2-98e201621501@kernel.org>
 References: <20260328-mips-input-rb532-button-v1-0-98e201621501@kernel.org>
 In-Reply-To: <20260328-mips-input-rb532-button-v1-0-98e201621501@kernel.org>
 To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
@@ -71,12 +72,12 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-13979-lists,linux-mips=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-13980-lists,linux-mips=lfdr.de];
 	FROM_HAS_DN(0.00)[];
 	RCVD_COUNT_THREE(0.00)[4];
 	FREEMAIL_TO(0.00)[alpha.franken.de,gmail.com,kernel.org,bootlin.com,nod.at,ti.com];
@@ -84,7 +85,7 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	DKIM_TRACE(0.00)[kernel.org:+];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
 	TO_DN_SOME(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
 	PRECEDENCE_BULK(0.00)[];
@@ -95,217 +96,179 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	RCPT_COUNT_SEVEN(0.00)[11];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 5A7EC34F106
+X-Rspamd-Queue-Id: 4949434F11D
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-Convert the Mikrotik RouterBoard RB532 to use GPIO descriptors
-by defining a software node for the GPIO chip, then register
-the button platform device with full info passing the GPIO
-as a device property.
+The callbacks into the MIPS RB532 platform to read the GPIO pin
+indicating that the NAND chip is ready are oldschool and does
+not assign GPIOs as properties to the NAND device.
 
-This can be used as a base to move more of the RB532 devices
-over to passing GPIOs using device properties.
+Add a capability to the generic platform NAND chip driver to use
+a GPIO line to detect if a NAND chip is ready and override the
+platform-local drv_ready() callback with this check if the GPIO
+is present.
 
-Use the GPIO_ACTIVE_LOW flag and drop the inversion in the
-rb532_button_pressed() function.
+This makes it possible to drop the legacy include header
+<linux/gpio.h> from the RB532 devices.
 
 Signed-off-by: Linus Walleij <linusw@kernel.org>
 ---
- arch/mips/rb532/devices.c         | 47 +++++++++++++++++++++++++++++++++------
- drivers/input/misc/rb532_button.c | 35 ++++++++++++++++++++++++-----
- 2 files changed, 69 insertions(+), 13 deletions(-)
+ arch/mips/rb532/devices.c        | 36 +++++++++++++++++++++---------------
+ drivers/mtd/nand/raw/plat_nand.c | 24 +++++++++++++++++++++++-
+ 2 files changed, 44 insertions(+), 16 deletions(-)
 
 diff --git a/arch/mips/rb532/devices.c b/arch/mips/rb532/devices.c
-index 4f027efbf27b..3f56d9feb73a 100644
+index 3f56d9feb73a..c3d8d96d0ef5 100644
 --- a/arch/mips/rb532/devices.c
 +++ b/arch/mips/rb532/devices.c
-@@ -16,8 +16,10 @@
+@@ -14,7 +14,6 @@
+ #include <linux/platform_device.h>
+ #include <linux/mtd/platnand.h>
  #include <linux/mtd/mtd.h>
- #include <linux/gpio.h>
+-#include <linux/gpio.h>
  #include <linux/gpio/machine.h>
-+#include <linux/gpio/property.h>
+ #include <linux/gpio/property.h>
  #include <linux/gpio_keys.h>
- #include <linux/input.h>
-+#include <linux/property.h>
- #include <linux/serial_8250.h>
- 
- #include <asm/bootinfo.h>
-@@ -38,6 +40,10 @@ extern unsigned int idt_cpu_freq;
- 
- static struct mpmc_device dev3;
- 
-+static const struct software_node rb532_gpio0_node = {
-+	.name = "gpio0",
-+};
-+
- void set_latch_u5(unsigned char or_mask, unsigned char nand_mask)
- {
- 	unsigned long flags;
-@@ -189,11 +195,6 @@ static struct platform_device rb532_led = {
- 	.id = -1,
+@@ -135,12 +134,6 @@ static struct platform_device cf_slot0 = {
+ 	.num_resources = ARRAY_SIZE(cf_slot0_res),
  };
  
--static struct platform_device rb532_button = {
--	.name	= "rb532-button",
--	.id	= -1,
--};
+-/* Resources and device for NAND */
+-static int rb532_dev_ready(struct nand_chip *chip)
+-{
+-	return gpio_get_value(GPIO_RDY);
+-}
 -
- static struct resource rb532_wdt_res[] = {
- 	{
- 		.name = "rb532_wdt_res",
-@@ -236,11 +237,23 @@ static struct platform_device *rb532_devs[] = {
- 	&nand_slot0,
- 	&cf_slot0,
- 	&rb532_led,
--	&rb532_button,
- 	&rb532_uart,
- 	&rb532_wdt
+ static void rb532_cmd_ctrl(struct nand_chip *chip, int cmd, unsigned int ctrl)
+ {
+ 	unsigned char orbits, nandbits;
+@@ -166,16 +159,23 @@ static struct resource nand_slot0_res[] = {
  };
  
-+static const struct property_entry rb532_button_properties[] = {
-+	PROPERTY_ENTRY_GPIO("button-gpios", &rb532_gpio0_node,
-+			    GPIO_BTN_S1, GPIO_ACTIVE_LOW),
+ static struct platform_nand_data rb532_nand_data = {
+-	.ctrl.dev_ready = rb532_dev_ready,
+ 	.ctrl.cmd_ctrl	= rb532_cmd_ctrl,
+ };
+ 
+-static struct platform_device nand_slot0 = {
+-	.name = "gen_nand",
+-	.id = -1,
+-	.resource = nand_slot0_res,
+-	.num_resources = ARRAY_SIZE(nand_slot0_res),
+-	.dev.platform_data = &rb532_nand_data,
++static const struct property_entry nand0_properties[] = {
++	PROPERTY_ENTRY_GPIO("ready-gpios", &rb532_gpio0_node,
++			    GPIO_RDY, GPIO_ACTIVE_HIGH),
 +	{ }
 +};
 +
-+static const struct platform_device_info rb532_button_info  __initconst = {
-+	.name		= "rb532-button",
++static const struct platform_device_info nand0_info  __initconst = {
++	.name		= "gen_nand",
 +	.id		= PLATFORM_DEVID_NONE,
-+	.properties	= rb532_button_properties,
-+};
-+
-+
- /* NAND definitions */
- #define NAND_CHIP_DELAY 25
++	.res		= nand_slot0_res,
++	.num_res	= ARRAY_SIZE(nand_slot0_res),
++	.data		= &rb532_nand_data,
++	.size_data	= sizeof(struct platform_nand_data),
++	.properties	= nand0_properties,
+ };
  
-@@ -267,6 +280,9 @@ static void __init rb532_nand_setup(void)
+ static struct mtd_partition rb532_partition_info[] = {
+@@ -234,7 +234,6 @@ static struct platform_device rb532_uart = {
  
- static int __init plat_setup_devices(void)
- {
-+	struct platform_device *pd;
-+	int ret;
-+
- 	/* Look for the CF card reader */
- 	if (!readl(IDT434_REG_BASE + DEV1MASK))
- 		rb532_devs[2] = NULL;	/* disable cf_slot0 at index 2 */
-@@ -295,7 +311,24 @@ static int __init plat_setup_devices(void)
- 	rb532_uart_res[0].uartclk = idt_cpu_freq;
+ static struct platform_device *rb532_devs[] = {
+ 	&korina_dev0,
+-	&nand_slot0,
+ 	&cf_slot0,
+ 	&rb532_led,
+ 	&rb532_uart,
+@@ -321,6 +320,13 @@ static int __init plat_setup_devices(void)
+ 	 */
+ 	software_node_register(&rb532_gpio0_node);
  
- 	gpiod_add_lookup_table(&cf_slot0_gpio_table);
--	return platform_add_devices(rb532_devs, ARRAY_SIZE(rb532_devs));
-+	ret = platform_add_devices(rb532_devs, ARRAY_SIZE(rb532_devs));
-+	if (ret)
-+		return ret;
-+
-+	/*
-+	 * Stack devices using full info and properties here, after we
-+	 * register the node for the GPIO chip.
-+	 */
-+	software_node_register(&rb532_gpio0_node);
-+
-+	pd = platform_device_register_full(&rb532_button_info);
++	pd = platform_device_register_full(&nand0_info);
 +	ret = PTR_ERR_OR_ZERO(pd);
 +	if (ret) {
-+		pr_err("failed to create RB532 button device: %d\n", ret);
++		pr_err("failed to create NAND slot0 device: %d\n", ret);
 +		return ret;
 +	}
 +
-+	return 0;
- }
+ 	pd = platform_device_register_full(&rb532_button_info);
+ 	ret = PTR_ERR_OR_ZERO(pd);
+ 	if (ret) {
+diff --git a/drivers/mtd/nand/raw/plat_nand.c b/drivers/mtd/nand/raw/plat_nand.c
+index 0bcd455328ef..fe31551bcf5f 100644
+--- a/drivers/mtd/nand/raw/plat_nand.c
++++ b/drivers/mtd/nand/raw/plat_nand.c
+@@ -6,6 +6,7 @@
+  */
  
- #ifdef CONFIG_NET
-diff --git a/drivers/input/misc/rb532_button.c b/drivers/input/misc/rb532_button.c
-index 190a80e1e2c1..40173bf7a235 100644
---- a/drivers/input/misc/rb532_button.c
-+++ b/drivers/input/misc/rb532_button.c
-@@ -8,7 +8,7 @@
- #include <linux/input.h>
+ #include <linux/err.h>
++#include <linux/gpio/consumer.h>
+ #include <linux/io.h>
  #include <linux/module.h>
  #include <linux/platform_device.h>
--#include <linux/gpio.h>
-+#include <linux/gpio/consumer.h>
+@@ -17,6 +18,7 @@ struct plat_nand_data {
+ 	struct nand_controller	controller;
+ 	struct nand_chip	chip;
+ 	void __iomem		*io_base;
++	struct gpio_desc	*ready_gpio;
+ };
  
- #include <asm/mach-rc32434/gpio.h>
- #include <asm/mach-rc32434/rb.h>
-@@ -18,6 +18,14 @@
- #define RB532_BTN_RATE 100 /* msec */
- #define RB532_BTN_KSYM BTN_0
+ static int plat_nand_attach_chip(struct nand_chip *chip)
+@@ -32,6 +34,14 @@ static const struct nand_controller_ops plat_nand_ops = {
+ 	.attach_chip = plat_nand_attach_chip,
+ };
  
-+/**
-+ * struct rb532_button - RB532 button information
-+ * @gpio: GPIO connected to the button
-+ */
-+struct rb532_button {
-+	struct gpio_desc	*gpio;
-+};
++/* Resources and device for NAND */
++static int plat_nand_gpio_dev_ready(struct nand_chip *chip)
++{
++	struct plat_nand_data *data = nand_get_controller_data(chip);
 +
- /* The S1 button state is provided by GPIO pin 1. But as this
-  * pin is also used for uart input as alternate function, the
-  * operational modes must be switched first:
-@@ -31,35 +39,48 @@
-  * The GPIO value occurs to be inverted, so pin high means
-  * button is not pressed.
++	return gpiod_get_value(data->ready_gpio);
++}
++
+ /*
+  * Probe for the NAND device.
   */
--static bool rb532_button_pressed(void)
-+static bool rb532_button_pressed(struct rb532_button *button)
- {
- 	int val;
+@@ -41,6 +51,7 @@ static int plat_nand_probe(struct platform_device *pdev)
+ 	struct plat_nand_data *data;
+ 	struct mtd_info *mtd;
+ 	const char **part_types;
++	struct nand_chip *chip;
+ 	int err = 0;
  
- 	set_latch_u5(0, LO_FOFF);
--	gpio_direction_input(GPIO_BTN_S1);
-+	gpiod_direction_input(button->gpio);
- 
--	val = gpio_get_value(GPIO_BTN_S1);
-+	val = gpiod_get_value(button->gpio);
- 
- 	rb532_gpio_set_func(GPIO_BTN_S1);
- 	set_latch_u5(LO_FOFF, 0);
- 
--	return !val;
-+	return val;
- }
- 
- static void rb532_button_poll(struct input_dev *input)
- {
--	input_report_key(input, RB532_BTN_KSYM, rb532_button_pressed());
-+	struct rb532_button *button = input_get_drvdata(input);
-+
-+	input_report_key(input, RB532_BTN_KSYM, rb532_button_pressed(button));
- 	input_sync(input);
- }
- 
- static int rb532_button_probe(struct platform_device *pdev)
- {
-+	struct rb532_button *button;
- 	struct input_dev *input;
- 	int error;
- 
-+	button = devm_kzalloc(&pdev->dev, sizeof(*button), GFP_KERNEL);
-+	if (!button)
-+		return -ENOMEM;
-+
-+	button->gpio = devm_gpiod_get(&pdev->dev, "button", GPIOD_IN);
-+	if (IS_ERR(button->gpio))
-+		return dev_err_probe(&pdev->dev, PTR_ERR(button->gpio),
-+				     "error getting button GPIO\n");
-+
- 	input = devm_input_allocate_device(&pdev->dev);
- 	if (!input)
+ 	if (!pdata) {
+@@ -59,9 +70,17 @@ static int plat_nand_probe(struct platform_device *pdev)
+ 	if (!data)
  		return -ENOMEM;
-+	input_set_drvdata(input, button);
  
- 	input->name = "rb532 button";
- 	input->phys = "rb532/button0";
-@@ -77,6 +98,8 @@ static int rb532_button_probe(struct platform_device *pdev)
- 	if (error)
- 		return error;
- 
-+	platform_set_drvdata(pdev, button);
++	data->ready_gpio = devm_gpiod_get_optional(&pdev->dev, "ready",
++						   GPIOD_IN);
++	if (IS_ERR(data->ready_gpio))
++		return dev_err_probe(&pdev->dev, PTR_ERR(data->ready_gpio),
++				     "could not get READY GPIO\n");
 +
- 	return 0;
- }
+ 	data->controller.ops = &plat_nand_ops;
+ 	nand_controller_init(&data->controller);
+ 	data->chip.controller = &data->controller;
++	chip = &data->chip;
++	nand_set_controller_data(chip, data);
  
+ 	data->io_base = devm_platform_ioremap_resource(pdev, 0);
+ 	if (IS_ERR(data->io_base))
+@@ -74,7 +93,10 @@ static int plat_nand_probe(struct platform_device *pdev)
+ 	data->chip.legacy.IO_ADDR_R = data->io_base;
+ 	data->chip.legacy.IO_ADDR_W = data->io_base;
+ 	data->chip.legacy.cmd_ctrl = pdata->ctrl.cmd_ctrl;
+-	data->chip.legacy.dev_ready = pdata->ctrl.dev_ready;
++	if (data->ready_gpio)
++		data->chip.legacy.dev_ready = plat_nand_gpio_dev_ready;
++	else
++		data->chip.legacy.dev_ready = pdata->ctrl.dev_ready;
+ 	data->chip.legacy.select_chip = pdata->ctrl.select_chip;
+ 	data->chip.legacy.write_buf = pdata->ctrl.write_buf;
+ 	data->chip.legacy.read_buf = pdata->ctrl.read_buf;
 
 -- 
 2.53.0
