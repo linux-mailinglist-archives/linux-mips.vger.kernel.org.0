@@ -1,276 +1,174 @@
-Return-Path: <linux-mips+bounces-13980-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-13981-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id iOgZKlP7x2mIfwUAu9opvQ
-	(envelope-from <linux-mips+bounces-13980-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Sat, 28 Mar 2026 17:01:23 +0100
+	id KJ15IPZcyGnAkwUAu9opvQ
+	(envelope-from <linux-mips+bounces-13981-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Sat, 28 Mar 2026 23:57:58 +0100
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4949434F11D
-	for <lists+linux-mips@lfdr.de>; Sat, 28 Mar 2026 17:01:23 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id 77D5F3502A1
+	for <lists+linux-mips@lfdr.de>; Sat, 28 Mar 2026 23:57:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 3A1823064E8B
-	for <lists+linux-mips@lfdr.de>; Sat, 28 Mar 2026 15:55:58 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 607BE3008CA3
+	for <lists+linux-mips@lfdr.de>; Sat, 28 Mar 2026 22:57:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 02301367F5B;
-	Sat, 28 Mar 2026 15:55:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2A02733E358;
+	Sat, 28 Mar 2026 22:57:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Bm7fMoYF"
+	dkim=pass (4096-bit key) header.d=envs.net header.i=@envs.net header.b="jj3DKwIY"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail.envs.net (mail.envs.net [157.180.15.194])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3923352927;
-	Sat, 28 Mar 2026 15:55:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D9A639FCE;
+	Sat, 28 Mar 2026 22:57:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=157.180.15.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774713356; cv=none; b=AYkg6vzRnyNaldCPyybmoHtPVb/KGdtDnlyfxhA244TXXw+0wuXu3gtuN3aV6s2AJyjlcqeltHEH6zbGlW4CaaW0LvGdRGOQo32L5+87exGpPaSDgR9ojvjP85NDFWyP91AaiyRL5grT5PVnVVIzPUDHVnXzO3djsFzf0IjBoIE=
+	t=1774738672; cv=none; b=LK+B03MMovYQhStFK/pV31HVqJYJrMlGaTPXOVFp3iCJt4IjhimeJjS4HTQc8phNgv755FH//3FxC4+BJIfVP6bQPk5U0Uh3RPiui6cc5cI9Joxkd6PYHbKAaEL8EAAIcMeaNqnGftddwQ9n4ZQl2JPxMUXbBfVMeZGPErxWkaU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774713356; c=relaxed/simple;
-	bh=UD/TwSuuylvsTVk6WuLqLc/i823tJemYw2VTGjQDzOU=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=kMgKiyVhwGX4uyRyXSoWxqVEmksfTZAXyYtqr3rdWe5Ff/RS9HFerBnAgbY7e2OUQrDSAd1ytgY9iwoVKTCcC7rfuT9jcwsXHLq2YrY8XCjbMPsPF1BSyvvz37dfzfb1lfnTOmAIEfskv24c0ViRZ02+SWqbrgQs+3bXug+SljA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Bm7fMoYF; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 64A26C2BC86;
-	Sat, 28 Mar 2026 15:55:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1774713356;
-	bh=UD/TwSuuylvsTVk6WuLqLc/i823tJemYw2VTGjQDzOU=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=Bm7fMoYFkUbimvOYpNbqJa1zS9jOSlu3hhkd1VIWosEKAiRFMr0AbqbdeuoXQ6za1
-	 slZjp+JbOw4XGUTyGKd83DJdlyE5RLol1fN1LxQZS3Qy5C5ae/SHwu7NvyvLNl+7Kl
-	 Tmy9K7uxnwDUIRiXkcR4sy4eXorE6OLiKOqpKde6NYgCh+LgD0jhwG5nfFsQoePwmZ
-	 5NBVj5J41BY1UqisNpeBe79Z7tqOQ3DxRnBATawJnrhNFinStUy9sE6tcHzv/y5sVB
-	 +qsZ1B1KWFzbeMgHRm8nwy9ZbvEPdthwa1FuEKJx/2bZcB7mlBXeONsodKpwPcFNS7
-	 d0+YXPgPSQ2hA==
-From: Linus Walleij <linusw@kernel.org>
-Date: Sat, 28 Mar 2026 16:55:48 +0100
-Subject: [PATCH 2/2] MIPS/mtd: Handle READY GPIO in generic NAND platform
- data
+	s=arc-20240116; t=1774738672; c=relaxed/simple;
+	bh=PNu7Xdx59gcmUUPzwlcBT1ijOPEJXCY1cQFEGqFTNVQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=jENM/Q+9t/j4t7x6L111mlJzwE4BKRW9NKmbAG6MEtMsK17mvedSuT/rmfg1CGREL73avrkpy7e/PqJSjAfc8TwD7tzYfCAUXBkI9TqMuGWJc6sIH3QYFNyJykM36u1ho86Mi4hWtvlJ5Vsn6Dpoz0uAzEpzpoBS7C44MGIfVKg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=envs.net; spf=pass smtp.mailfrom=envs.net; dkim=pass (4096-bit key) header.d=envs.net header.i=@envs.net header.b=jj3DKwIY; arc=none smtp.client-ip=157.180.15.194
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=envs.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=envs.net
+Received: from localhost (mail.envs.net [127.0.0.1])
+	by mail.envs.net (Postfix) with ESMTP id CD6781C00C1;
+	Sat, 28 Mar 2026 22:57:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=envs.net; s=modoboa;
+	t=1774738665; bh=lNeJDM+mYstoZjlzf26cFMKgMa03rhGm2RloGU6C660=;
+	h=From:To:Cc:Subject:Date:From;
+	b=jj3DKwIYbaIYxEI9mDLjbk5nVsTAUD27D5lQC2sfeQ4fKh8QfQxrHcTAuOf13GIYN
+	 vFONbxRVE6pGbaLq415dsl/m6a/TVmvrehsqG7f5mMnUdhdtNR/i56swOVbikm3n3U
+	 gRo6miTALE0L9MXbdOFaHoNkoABjm/MkT1LCvfZtXZXo4PK5ekvTzZxlGTBHbUou7V
+	 4NO15fKqdbuipjz2779AQMIpS7uNaNlITmBOT5gD2eBZHv34tGRcPpHUIbE5ifrFwN
+	 OtWiocs6QeX5cjR8aiAZWLd7FejPiYnoTSRY1LXr4oMEv2eTJz4eJECcF6r/iuQv61
+	 T+CfCmjGBSEEguA5XBa4YYaIRsbGTPmrw8FKOozgBToLTidOchJJGWUeEMmePktUGx
+	 f7L9eey/x1CFlZz516uWU6KgnbnEreAogJyTpmh/jrkyeeYK93F7/9kRSQhdTOnzVx
+	 SOCgngXlSQva1d7HmO0JF01fiEAxZk8j1Y+o8KrvC1RUfAdyf1PBJaIVSpmkaZr7RJ
+	 xTRV8AyvYakilh3J3zQFeJ8xSWBEeROK2IQbJXG9n0Y6Y5mykYsetWOMiVjCOTy8UE
+	 PLHPhCRFDgYxikF4V2PS0/yKwF1AXWhaIuv1psdah4AK6IAP22705pQSE9tD1hHLlG
+	 CVy0Lmfql3WU13DB8BhumTWA=
+X-Virus-Scanned: Debian amavisd-new at mail.envs.net
+Received: from mail.envs.net ([127.0.0.1])
+	by localhost (mail.envs.net [127.0.0.1]) (amavisd-new, port 10026)
+	with ESMTP id Z2-EqT-5Mjpu; Sat, 28 Mar 2026 22:57:42 +0000 (UTC)
+Received: from xtexx.eu.org (139-162-51-66.ip.linodeusercontent.com [139.162.51.66])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail.envs.net (Postfix) with ESMTPSA;
+	Sat, 28 Mar 2026 22:57:41 +0000 (UTC)
+From: Bingwu Zhang <xtex@envs.net>
+To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Kees Cook <kees@kernel.org>,
+	Matt Redfearn <matt.redfearn@mips.com>
+Cc: Yao Zi <me@ziyao.cc>,
+	Icenowy Zheng <uwu@icenowy.me>,
+	Jiaxun Yang <jiaxun.yang@flygoat.com>,
+	linux-mips@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Bingwu Zhang <xtex@astrafall.org>
+Subject: [PATCH] MIPS: Increase default mmap randomization bits for 64-bit
+Date: Sun, 29 Mar 2026 06:57:39 +0800
+Message-ID: <20260328225738.51613-2-xtex@envs.net>
+X-Mailer: git-send-email 2.52.0
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260328-mips-input-rb532-button-v1-2-98e201621501@kernel.org>
-References: <20260328-mips-input-rb532-button-v1-0-98e201621501@kernel.org>
-In-Reply-To: <20260328-mips-input-rb532-button-v1-0-98e201621501@kernel.org>
-To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
- Dmitry Torokhov <dmitry.torokhov@gmail.com>, 
- Bartosz Golaszewski <brgl@kernel.org>, 
- Miquel Raynal <miquel.raynal@bootlin.com>, 
- Richard Weinberger <richard@nod.at>, Vignesh Raghavendra <vigneshr@ti.com>
-Cc: linux-mips@vger.kernel.org, linux-input@vger.kernel.org, 
- linux-gpio@vger.kernel.org, linux-mtd@lists.infradead.org, 
- Linus Walleij <linusw@kernel.org>
-X-Mailer: b4 0.14.3
+X-Developer-Signature: v=1; a=openssh-sha256; t=1774738658; l=2031; i=xtex@astrafall.org; h=from:subject; bh=VuMFJKI0P3uomhHFxDMcv0oVHwd9fCVI2yDYakie94Q=; b=U1NIU0lHAAAAAQAAADMAAAALc3NoLWVkMjU1MTkAAAAgL1erbbl1jNM9AtzeLFJ5FKVqr/ylJ MBUj5+W9IwwCl4AAAAGcGF0YXR0AAAAAAAAAAZzaGE1MTIAAABTAAAAC3NzaC1lZDI1NTE5AAAA QDMbhoCO6nUj6boAEwu2kZa3mAWpE7xvfrcHaaE4jSi+sMvaG82V4Jp18FUBBqWh2O3HgaX2TsQ xFV08DrU5Uwo=
+X-Developer-Key: i=xtex@astrafall.org; a=openssh; fpr=SHA256:IEYEjkZlkUTr5U9GiDAmZU/4eZus2t2RsxusyhQqwao
+Content-Transfer-Encoding: 8bit
 X-Spamd-Result: default: False [-0.66 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	MID_CONTAINS_FROM(1.00)[];
+	DMARC_POLICY_ALLOW(-0.50)[envs.net,quarantine];
+	R_MISSING_CHARSET(0.50)[];
+	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
+	R_DKIM_ALLOW(-0.20)[envs.net:s=modoboa];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-13980-lists,linux-mips=lfdr.de];
-	FROM_HAS_DN(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	FREEMAIL_TO(0.00)[alpha.franken.de,gmail.com,kernel.org,bootlin.com,nod.at,ti.com];
 	RCVD_TLS_LAST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
+	TAGGED_FROM(0.00)[bounces-13981-lists,linux-mips=lfdr.de];
+	RECEIVED_HELO_LOCALHOST(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	TO_DN_SOME(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
+	FROM_NEQ_ENVFROM(0.00)[xtex@envs.net,linux-mips@vger.kernel.org];
+	MIME_TRACE(0.00)[0:+];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[linusw@kernel.org,linux-mips@vger.kernel.org];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	MID_RHS_MATCH_FROM(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[6];
+	RCPT_COUNT_SEVEN(0.00)[9];
+	NEURAL_HAM(-0.00)[-1.000];
+	DKIM_TRACE(0.00)[envs.net:+];
 	TAGGED_RCPT(0.00)[linux-mips];
-	RCPT_COUNT_SEVEN(0.00)[11];
+	TO_DN_SOME(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 4949434F11D
+	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
+	FROM_HAS_DN(0.00)[]
+X-Rspamd-Queue-Id: 77D5F3502A1
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-The callbacks into the MIPS RB532 platform to read the GPIO pin
-indicating that the NAND chip is ready are oldschool and does
-not assign GPIOs as properties to the NAND device.
+From: Bingwu Zhang <xtex@astrafall.org>
 
-Add a capability to the generic platform NAND chip driver to use
-a GPIO line to detect if a NAND chip is ready and override the
-platform-local drv_ready() callback with this check if the GPIO
-is present.
+Increase mmap randomization bits on 64-bit from [12,18] to [18,20] for
+better strength.
 
-This makes it possible to drop the legacy include header
-<linux/gpio.h> from the RB532 devices.
+The original default, 12, means that ASLR offset has only (1 << 12) =
+4096 possibilities. On average, it can be brute-forced in 2048 attempts.
+If a service is configured to restart automatically or can be started
+easily (e.g. execve a suid program), then trying for 4k times can be
+done in one day even when each attempt takes 20s.
+Increasing it to 18 makes brute-force much more difficult and leaves
+more time for operators to find out attacks.
 
-Signed-off-by: Linus Walleij <linusw@kernel.org>
+On 64-bit platforms, virtual address space is cheap, so the
+randomization bits can be increased safely without disturbing userland.
+
+In 1091458d09e1 ("MIPS: Randomize mmap if randomize_va_space is set")
+where mmap randomization was first introduced to MIPS, the randomization
+range was 256 MiB, equivalent to 16 randomization bits (if 4K page size).
+In 109c32ffd89d ("MIPS: Add support for ARCH_MMAP_RND_{COMPAT_}BITS")
+where MIPS begin to use ARCH_MMAP_RND_BITS, commit message claimed:
+> The minimum(default) for 64bit is 12bits, again with 4k
+> pagesize this is the same as the current 256MB.
+which is incorrect. (1 << 12) * page_size is 256 MiB only when page size
+is 64 KiB, so the strength of mmap randomization was reduced by 4b.
+
+Fixes: 109c32ffd89d ("MIPS: Add support for ARCH_MMAP_RND_{COMPAT_}BITS")
+Signed-off-by: Bingwu Zhang <xtex@astrafall.org>
 ---
- arch/mips/rb532/devices.c        | 36 +++++++++++++++++++++---------------
- drivers/mtd/nand/raw/plat_nand.c | 24 +++++++++++++++++++++++-
- 2 files changed, 44 insertions(+), 16 deletions(-)
+ arch/mips/Kconfig | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/arch/mips/rb532/devices.c b/arch/mips/rb532/devices.c
-index 3f56d9feb73a..c3d8d96d0ef5 100644
---- a/arch/mips/rb532/devices.c
-+++ b/arch/mips/rb532/devices.c
-@@ -14,7 +14,6 @@
- #include <linux/platform_device.h>
- #include <linux/mtd/platnand.h>
- #include <linux/mtd/mtd.h>
--#include <linux/gpio.h>
- #include <linux/gpio/machine.h>
- #include <linux/gpio/property.h>
- #include <linux/gpio_keys.h>
-@@ -135,12 +134,6 @@ static struct platform_device cf_slot0 = {
- 	.num_resources = ARRAY_SIZE(cf_slot0_res),
- };
+diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
+index e48b62b4dc48..c630dab44419 100644
+--- a/arch/mips/Kconfig
++++ b/arch/mips/Kconfig
+@@ -3063,11 +3063,11 @@ config MMU
+ 	default y
  
--/* Resources and device for NAND */
--static int rb532_dev_ready(struct nand_chip *chip)
--{
--	return gpio_get_value(GPIO_RDY);
--}
+ config ARCH_MMAP_RND_BITS_MIN
+-	default 12 if 64BIT
+-	default 8
 -
- static void rb532_cmd_ctrl(struct nand_chip *chip, int cmd, unsigned int ctrl)
- {
- 	unsigned char orbits, nandbits;
-@@ -166,16 +159,23 @@ static struct resource nand_slot0_res[] = {
- };
- 
- static struct platform_nand_data rb532_nand_data = {
--	.ctrl.dev_ready = rb532_dev_ready,
- 	.ctrl.cmd_ctrl	= rb532_cmd_ctrl,
- };
- 
--static struct platform_device nand_slot0 = {
--	.name = "gen_nand",
--	.id = -1,
--	.resource = nand_slot0_res,
--	.num_resources = ARRAY_SIZE(nand_slot0_res),
--	.dev.platform_data = &rb532_nand_data,
-+static const struct property_entry nand0_properties[] = {
-+	PROPERTY_ENTRY_GPIO("ready-gpios", &rb532_gpio0_node,
-+			    GPIO_RDY, GPIO_ACTIVE_HIGH),
-+	{ }
-+};
+-config ARCH_MMAP_RND_BITS_MAX
+ 	default 18 if 64BIT
++	default 8
 +
-+static const struct platform_device_info nand0_info  __initconst = {
-+	.name		= "gen_nand",
-+	.id		= PLATFORM_DEVID_NONE,
-+	.res		= nand_slot0_res,
-+	.num_res	= ARRAY_SIZE(nand_slot0_res),
-+	.data		= &rb532_nand_data,
-+	.size_data	= sizeof(struct platform_nand_data),
-+	.properties	= nand0_properties,
- };
++config ARCH_MMAP_RND_BITS_MAX
++	default 20 if 64BIT
+ 	default 15
  
- static struct mtd_partition rb532_partition_info[] = {
-@@ -234,7 +234,6 @@ static struct platform_device rb532_uart = {
- 
- static struct platform_device *rb532_devs[] = {
- 	&korina_dev0,
--	&nand_slot0,
- 	&cf_slot0,
- 	&rb532_led,
- 	&rb532_uart,
-@@ -321,6 +320,13 @@ static int __init plat_setup_devices(void)
- 	 */
- 	software_node_register(&rb532_gpio0_node);
- 
-+	pd = platform_device_register_full(&nand0_info);
-+	ret = PTR_ERR_OR_ZERO(pd);
-+	if (ret) {
-+		pr_err("failed to create NAND slot0 device: %d\n", ret);
-+		return ret;
-+	}
-+
- 	pd = platform_device_register_full(&rb532_button_info);
- 	ret = PTR_ERR_OR_ZERO(pd);
- 	if (ret) {
-diff --git a/drivers/mtd/nand/raw/plat_nand.c b/drivers/mtd/nand/raw/plat_nand.c
-index 0bcd455328ef..fe31551bcf5f 100644
---- a/drivers/mtd/nand/raw/plat_nand.c
-+++ b/drivers/mtd/nand/raw/plat_nand.c
-@@ -6,6 +6,7 @@
-  */
- 
- #include <linux/err.h>
-+#include <linux/gpio/consumer.h>
- #include <linux/io.h>
- #include <linux/module.h>
- #include <linux/platform_device.h>
-@@ -17,6 +18,7 @@ struct plat_nand_data {
- 	struct nand_controller	controller;
- 	struct nand_chip	chip;
- 	void __iomem		*io_base;
-+	struct gpio_desc	*ready_gpio;
- };
- 
- static int plat_nand_attach_chip(struct nand_chip *chip)
-@@ -32,6 +34,14 @@ static const struct nand_controller_ops plat_nand_ops = {
- 	.attach_chip = plat_nand_attach_chip,
- };
- 
-+/* Resources and device for NAND */
-+static int plat_nand_gpio_dev_ready(struct nand_chip *chip)
-+{
-+	struct plat_nand_data *data = nand_get_controller_data(chip);
-+
-+	return gpiod_get_value(data->ready_gpio);
-+}
-+
- /*
-  * Probe for the NAND device.
-  */
-@@ -41,6 +51,7 @@ static int plat_nand_probe(struct platform_device *pdev)
- 	struct plat_nand_data *data;
- 	struct mtd_info *mtd;
- 	const char **part_types;
-+	struct nand_chip *chip;
- 	int err = 0;
- 
- 	if (!pdata) {
-@@ -59,9 +70,17 @@ static int plat_nand_probe(struct platform_device *pdev)
- 	if (!data)
- 		return -ENOMEM;
- 
-+	data->ready_gpio = devm_gpiod_get_optional(&pdev->dev, "ready",
-+						   GPIOD_IN);
-+	if (IS_ERR(data->ready_gpio))
-+		return dev_err_probe(&pdev->dev, PTR_ERR(data->ready_gpio),
-+				     "could not get READY GPIO\n");
-+
- 	data->controller.ops = &plat_nand_ops;
- 	nand_controller_init(&data->controller);
- 	data->chip.controller = &data->controller;
-+	chip = &data->chip;
-+	nand_set_controller_data(chip, data);
- 
- 	data->io_base = devm_platform_ioremap_resource(pdev, 0);
- 	if (IS_ERR(data->io_base))
-@@ -74,7 +93,10 @@ static int plat_nand_probe(struct platform_device *pdev)
- 	data->chip.legacy.IO_ADDR_R = data->io_base;
- 	data->chip.legacy.IO_ADDR_W = data->io_base;
- 	data->chip.legacy.cmd_ctrl = pdata->ctrl.cmd_ctrl;
--	data->chip.legacy.dev_ready = pdata->ctrl.dev_ready;
-+	if (data->ready_gpio)
-+		data->chip.legacy.dev_ready = plat_nand_gpio_dev_ready;
-+	else
-+		data->chip.legacy.dev_ready = pdata->ctrl.dev_ready;
- 	data->chip.legacy.select_chip = pdata->ctrl.select_chip;
- 	data->chip.legacy.write_buf = pdata->ctrl.write_buf;
- 	data->chip.legacy.read_buf = pdata->ctrl.read_buf;
+ config ARCH_MMAP_RND_COMPAT_BITS_MIN
 
+base-commit: be762d8b6dd7efacb61937d20f8475db8f207655
 -- 
-2.53.0
+2.52.0
 
 
