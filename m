@@ -1,174 +1,141 @@
-Return-Path: <linux-mips+bounces-13981-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-13982-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id KJ15IPZcyGnAkwUAu9opvQ
-	(envelope-from <linux-mips+bounces-13981-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Sat, 28 Mar 2026 23:57:58 +0100
+	id cI+MD1SLyWlHzAUAu9opvQ
+	(envelope-from <linux-mips+bounces-13982-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Sun, 29 Mar 2026 22:28:04 +0200
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id 77D5F3502A1
-	for <lists+linux-mips@lfdr.de>; Sat, 28 Mar 2026 23:57:57 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 74400353F66
+	for <lists+linux-mips@lfdr.de>; Sun, 29 Mar 2026 22:28:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 607BE3008CA3
-	for <lists+linux-mips@lfdr.de>; Sat, 28 Mar 2026 22:57:54 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 449DD3008E33
+	for <lists+linux-mips@lfdr.de>; Sun, 29 Mar 2026 20:28:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2A02733E358;
-	Sat, 28 Mar 2026 22:57:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=envs.net header.i=@envs.net header.b="jj3DKwIY"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5F9C138735D;
+	Sun, 29 Mar 2026 20:28:01 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail.envs.net (mail.envs.net [157.180.15.194])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D9A639FCE;
-	Sat, 28 Mar 2026 22:57:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=157.180.15.194
+Received: from angie.orcam.me.uk (angie.orcam.me.uk [78.133.224.34])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6E58E35F197;
+	Sun, 29 Mar 2026 20:27:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=78.133.224.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774738672; cv=none; b=LK+B03MMovYQhStFK/pV31HVqJYJrMlGaTPXOVFp3iCJt4IjhimeJjS4HTQc8phNgv755FH//3FxC4+BJIfVP6bQPk5U0Uh3RPiui6cc5cI9Joxkd6PYHbKAaEL8EAAIcMeaNqnGftddwQ9n4ZQl2JPxMUXbBfVMeZGPErxWkaU=
+	t=1774816081; cv=none; b=pCyv3a91QQ55FNaRYAeO2ZsGAzVpdwe7TPWXPx9NAxsDJSO4AYWkJF0ASYqxCzY+yl3SfKJ9e9DtKtiujQlz52YWR9QICOuB3euMo1jWaLEwEmuM6DkFl5cWIIQViwqoEE1gEnsc5gI0RRyLJLxFCdAJ6q+Ml70o0c/vsPELSCM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774738672; c=relaxed/simple;
-	bh=PNu7Xdx59gcmUUPzwlcBT1ijOPEJXCY1cQFEGqFTNVQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=jENM/Q+9t/j4t7x6L111mlJzwE4BKRW9NKmbAG6MEtMsK17mvedSuT/rmfg1CGREL73avrkpy7e/PqJSjAfc8TwD7tzYfCAUXBkI9TqMuGWJc6sIH3QYFNyJykM36u1ho86Mi4hWtvlJ5Vsn6Dpoz0uAzEpzpoBS7C44MGIfVKg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=envs.net; spf=pass smtp.mailfrom=envs.net; dkim=pass (4096-bit key) header.d=envs.net header.i=@envs.net header.b=jj3DKwIY; arc=none smtp.client-ip=157.180.15.194
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=envs.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=envs.net
-Received: from localhost (mail.envs.net [127.0.0.1])
-	by mail.envs.net (Postfix) with ESMTP id CD6781C00C1;
-	Sat, 28 Mar 2026 22:57:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=envs.net; s=modoboa;
-	t=1774738665; bh=lNeJDM+mYstoZjlzf26cFMKgMa03rhGm2RloGU6C660=;
-	h=From:To:Cc:Subject:Date:From;
-	b=jj3DKwIYbaIYxEI9mDLjbk5nVsTAUD27D5lQC2sfeQ4fKh8QfQxrHcTAuOf13GIYN
-	 vFONbxRVE6pGbaLq415dsl/m6a/TVmvrehsqG7f5mMnUdhdtNR/i56swOVbikm3n3U
-	 gRo6miTALE0L9MXbdOFaHoNkoABjm/MkT1LCvfZtXZXo4PK5ekvTzZxlGTBHbUou7V
-	 4NO15fKqdbuipjz2779AQMIpS7uNaNlITmBOT5gD2eBZHv34tGRcPpHUIbE5ifrFwN
-	 OtWiocs6QeX5cjR8aiAZWLd7FejPiYnoTSRY1LXr4oMEv2eTJz4eJECcF6r/iuQv61
-	 T+CfCmjGBSEEguA5XBa4YYaIRsbGTPmrw8FKOozgBToLTidOchJJGWUeEMmePktUGx
-	 f7L9eey/x1CFlZz516uWU6KgnbnEreAogJyTpmh/jrkyeeYK93F7/9kRSQhdTOnzVx
-	 SOCgngXlSQva1d7HmO0JF01fiEAxZk8j1Y+o8KrvC1RUfAdyf1PBJaIVSpmkaZr7RJ
-	 xTRV8AyvYakilh3J3zQFeJ8xSWBEeROK2IQbJXG9n0Y6Y5mykYsetWOMiVjCOTy8UE
-	 PLHPhCRFDgYxikF4V2PS0/yKwF1AXWhaIuv1psdah4AK6IAP22705pQSE9tD1hHLlG
-	 CVy0Lmfql3WU13DB8BhumTWA=
-X-Virus-Scanned: Debian amavisd-new at mail.envs.net
-Received: from mail.envs.net ([127.0.0.1])
-	by localhost (mail.envs.net [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id Z2-EqT-5Mjpu; Sat, 28 Mar 2026 22:57:42 +0000 (UTC)
-Received: from xtexx.eu.org (139-162-51-66.ip.linodeusercontent.com [139.162.51.66])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mail.envs.net (Postfix) with ESMTPSA;
-	Sat, 28 Mar 2026 22:57:41 +0000 (UTC)
-From: Bingwu Zhang <xtex@envs.net>
-To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	Kees Cook <kees@kernel.org>,
-	Matt Redfearn <matt.redfearn@mips.com>
-Cc: Yao Zi <me@ziyao.cc>,
-	Icenowy Zheng <uwu@icenowy.me>,
-	Jiaxun Yang <jiaxun.yang@flygoat.com>,
-	linux-mips@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Bingwu Zhang <xtex@astrafall.org>
-Subject: [PATCH] MIPS: Increase default mmap randomization bits for 64-bit
-Date: Sun, 29 Mar 2026 06:57:39 +0800
-Message-ID: <20260328225738.51613-2-xtex@envs.net>
-X-Mailer: git-send-email 2.52.0
+	s=arc-20240116; t=1774816081; c=relaxed/simple;
+	bh=X6fnMJTQQBlb/wbnqjX2VyghGTCT/519AKvV6CMYRoQ=;
+	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=OKdh9CKOjEOsBM6lRSUSgI0esJu/QjmAYsVreagh8y/XnG1nfK1mjn8mvs3nMVWnw3ZWqVEtr+XE1iKm7wI+ZOMqNDgMLcmxLEhXV7k+8IPBidTL9dftjYOJGW2zW39gVey/CVEPoJ98uqi+uDKpMUTiO8M+lXasyqzqGT2ByEE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=orcam.me.uk; spf=none smtp.mailfrom=orcam.me.uk; arc=none smtp.client-ip=78.133.224.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=orcam.me.uk
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=orcam.me.uk
+Received: by angie.orcam.me.uk (Postfix, from userid 500)
+	id E823792009D; Sun, 29 Mar 2026 22:27:56 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+	by angie.orcam.me.uk (Postfix) with ESMTP id E564792009C;
+	Sun, 29 Mar 2026 21:27:56 +0100 (BST)
+Date: Sun, 29 Mar 2026 21:27:56 +0100 (BST)
+From: "Maciej W. Rozycki" <macro@orcam.me.uk>
+To: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+cc: netdev@vger.kernel.org, linux-mips@vger.kernel.org, 
+    Jakub Kicinski <kuba@kernel.org>, Andrew Lunn <andrew+netdev@lunn.ch>, 
+    "David S. Miller" <davem@davemloft.net>, 
+    Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>
+Subject: Re: [PATCH net-next v2] declance: Remove IRQF_ONESHOT
+In-Reply-To: <alpine.DEB.2.21.2601271739250.40317@angie.orcam.me.uk>
+Message-ID: <alpine.DEB.2.21.2603292037020.60268@angie.orcam.me.uk>
+References: <20260127135334.qUEaYP9G@linutronix.de> <alpine.DEB.2.21.2601271508160.40317@angie.orcam.me.uk> <20260127165430.7ui_LGkg@linutronix.de> <alpine.DEB.2.21.2601271739250.40317@angie.orcam.me.uk>
+User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openssh-sha256; t=1774738658; l=2031; i=xtex@astrafall.org; h=from:subject; bh=VuMFJKI0P3uomhHFxDMcv0oVHwd9fCVI2yDYakie94Q=; b=U1NIU0lHAAAAAQAAADMAAAALc3NoLWVkMjU1MTkAAAAgL1erbbl1jNM9AtzeLFJ5FKVqr/ylJ MBUj5+W9IwwCl4AAAAGcGF0YXR0AAAAAAAAAAZzaGE1MTIAAABTAAAAC3NzaC1lZDI1NTE5AAAA QDMbhoCO6nUj6boAEwu2kZa3mAWpE7xvfrcHaaE4jSi+sMvaG82V4Jp18FUBBqWh2O3HgaX2TsQ xFV08DrU5Uwo=
-X-Developer-Key: i=xtex@astrafall.org; a=openssh; fpr=SHA256:IEYEjkZlkUTr5U9GiDAmZU/4eZus2t2RsxusyhQqwao
-Content-Transfer-Encoding: 8bit
-X-Spamd-Result: default: False [-0.66 / 15.00];
+Content-Type: text/plain; charset=US-ASCII
+X-Spamd-Result: default: False [0.04 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_CONTAINS_FROM(1.00)[];
-	DMARC_POLICY_ALLOW(-0.50)[envs.net,quarantine];
-	R_MISSING_CHARSET(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
-	R_DKIM_ALLOW(-0.20)[envs.net:s=modoboa];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
+	MIME_TRACE(0.00)[0:+];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-13982-lists,linux-mips=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-13981-lists,linux-mips=lfdr.de];
 	RECEIVED_HELO_LOCALHOST(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[xtex@envs.net,linux-mips@vger.kernel.org];
-	MIME_TRACE(0.00)[0:+];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	DMARC_NA(0.00)[orcam.me.uk];
+	FROM_HAS_DN(0.00)[];
+	TAGGED_RCPT(0.00)[linux-mips,netdev];
+	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[6];
-	RCPT_COUNT_SEVEN(0.00)[9];
-	NEURAL_HAM(-0.00)[-1.000];
-	DKIM_TRACE(0.00)[envs.net:+];
-	TAGGED_RCPT(0.00)[linux-mips];
+	FROM_NEQ_ENVFROM(0.00)[macro@orcam.me.uk,linux-mips@vger.kernel.org];
 	TO_DN_SOME(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
-	FROM_HAS_DN(0.00)[]
-X-Rspamd-Queue-Id: 77D5F3502A1
+	NEURAL_HAM(-0.00)[-0.986];
+	RCPT_COUNT_SEVEN(0.00)[8];
+	R_DKIM_NA(0.00)[];
+	MID_RHS_MATCH_FROMTLD(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 74400353F66
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-From: Bingwu Zhang <xtex@astrafall.org>
+On Tue, 27 Jan 2026, Maciej W. Rozycki wrote:
 
-Increase mmap randomization bits on 64-bit from [12,18] to [18,20] for
-better strength.
+> > >  I need more data to conclude whether this is the right change to make I'm 
+> > > afraid.  Thank you for looking into it though.
+> > 
+> > Fair enough. Would it work for you if we scratch this from net-next and
+> > you route this or something else via the mips tree?
+> 
+>  No need to, I think I understand the situation now.  Surely the comment 
+> referring IRQF_ONESHOT in arch/mips/dec/ioasic-irq.c needs to be removed, 
+> but otherwise this is:
+> 
+> Acked-by: Maciej W. Rozycki <macro@orcam.me.uk>
+> 
+> Thank you for clarifying this to me, and doing the clean-up in the first 
+> place!
 
-The original default, 12, means that ASLR offset has only (1 << 12) =
-4096 possibilities. On average, it can be brute-forced in 2048 attempts.
-If a service is configured to restart automatically or can be started
-easily (e.g. execve a suid program), then trying for 4k times can be
-done in one day even when each attempt takes 20s.
-Increasing it to 18 makes brute-force much more difficult and leaves
-more time for operators to find out attacks.
+ I've now got back to it and while preparing the justification for the 
+removal of the IRQF_ONESHOT recommendation and having looked through 
+Documentation/core-api/real-time/differences.rst I became stumped and 
+need a further clarification after all.
 
-On 64-bit platforms, virtual address space is cheap, so the
-randomization bits can be increased safely without disturbing userland.
+ I read in the document that:
 
-In 1091458d09e1 ("MIPS: Randomize mmap if randomize_va_space is set")
-where mmap randomization was first introduced to MIPS, the randomization
-range was 256 MiB, equivalent to 16 randomization bits (if 4K page size).
-In 109c32ffd89d ("MIPS: Add support for ARCH_MMAP_RND_{COMPAT_}BITS")
-where MIPS begin to use ARCH_MMAP_RND_BITS, commit message claimed:
-> The minimum(default) for 64bit is 12bits, again with 4k
-> pagesize this is the same as the current 256MB.
-which is incorrect. (1 << 12) * page_size is 256 MiB only when page size
-is 64 KiB, so the strength of mmap randomization was reduced by 4b.
+"However, on a PREEMPT_RT system, interrupts are forced-threaded and no 
+longer run in hard IRQ context."
 
-Fixes: 109c32ffd89d ("MIPS: Add support for ARCH_MMAP_RND_{COMPAT_}BITS")
-Signed-off-by: Bingwu Zhang <xtex@astrafall.org>
----
- arch/mips/Kconfig | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+and:
 
-diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
-index e48b62b4dc48..c630dab44419 100644
---- a/arch/mips/Kconfig
-+++ b/arch/mips/Kconfig
-@@ -3063,11 +3063,11 @@ config MMU
- 	default y
- 
- config ARCH_MMAP_RND_BITS_MIN
--	default 12 if 64BIT
--	default 8
--
--config ARCH_MMAP_RND_BITS_MAX
- 	default 18 if 64BIT
-+	default 8
-+
-+config ARCH_MMAP_RND_BITS_MAX
-+	default 20 if 64BIT
- 	default 15
- 
- config ARCH_MMAP_RND_COMPAT_BITS_MIN
+"All interrupts are forced-threaded in a PREEMPT_RT system. The exceptions 
+are interrupts that are requested with the IRQF_NO_THREAD, IRQF_PERCPU, or 
+IRQF_ONESHOT flags."
 
-base-commit: be762d8b6dd7efacb61937d20f8475db8f207655
--- 
-2.52.0
+-- do I infer correctly that on a PREEMPT_RT system in the absence of any 
+flags passed to request_irq() the handler requested such as one concerned 
+here (i.e. lance_dma_merr_int()) will run with interrupts locally enabled 
+on the CPU?
 
+ If so, then either we need to go back and make sure the originating IRQ 
+line is masked throughout the execution of the handler (and no standard 
+irq-flow method provides it), or any IOASIC DMA error interrupt handlers, 
+including this one, have to use the IRQF_NO_THREAD flag instead or the CPU 
+will hang looping on the interrupt being retriggered at enable time, as in 
+the absence of masking the interrupt output of the interrupt controller 
+remains active until the final EOI action.  Have I missed anything?
+
+ Mind that this is somewhat theoretical, given that declance.c is only for 
+systems using the MIPS CPU and arch/mips does not enable ARCH_SUPPORTS_RT, 
+however should it do sometime, I'd rather all the hell didn't break loose.  
+And there's previous art already as I can see IRQF_NO_THREAD used through 
+arch/mips, following commit 5a4a4ad851dd ("MIPS: Mark cascade and low 
+level interrupts IRQF_NO_THREAD").
+
+  Maciej
 
