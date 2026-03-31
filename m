@@ -1,50 +1,50 @@
-Return-Path: <linux-mips+bounces-13996-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-13997-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id KLdWM0Cjy2kUJwYAu9opvQ
-	(envelope-from <linux-mips+bounces-13996-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Tue, 31 Mar 2026 12:34:40 +0200
+	id UCCaGPOky2kUJwYAu9opvQ
+	(envelope-from <linux-mips+bounces-13997-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Tue, 31 Mar 2026 12:41:55 +0200
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 468D93680DA
-	for <lists+linux-mips@lfdr.de>; Tue, 31 Mar 2026 12:34:40 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id EF6DE368311
+	for <lists+linux-mips@lfdr.de>; Tue, 31 Mar 2026 12:41:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 163893135AE2
-	for <lists+linux-mips@lfdr.de>; Tue, 31 Mar 2026 10:27:32 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id D2650302802F
+	for <lists+linux-mips@lfdr.de>; Tue, 31 Mar 2026 10:35:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 437583ED5A2;
-	Tue, 31 Mar 2026 10:27:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3D0D63A5428;
+	Tue, 31 Mar 2026 10:35:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="o7RBAi13"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="p33ibMJl"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from out-174.mta0.migadu.com (out-174.mta0.migadu.com [91.218.175.174])
+Received: from out-172.mta0.migadu.com (out-172.mta0.migadu.com [91.218.175.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AEBFA3ED5DA
-	for <linux-mips@vger.kernel.org>; Tue, 31 Mar 2026 10:27:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 513BC346FB5
+	for <linux-mips@vger.kernel.org>; Tue, 31 Mar 2026 10:35:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774952846; cv=none; b=fM4vCxTYkGudpySs2PQNhX7n/e/BsoPJeXAXb8FMA1uya7Xj5gi1b7qGRarpav3/GzcfYPxzsjWqC5kb0exVt/zykxx2yi5kTR1KmcnFyE9XaaBw3cmbqtsJ/cQRBgRam6eFBLpBvYdPsr2Mp90JRqeBqJIH2efFkxOumdNhBbo=
+	t=1774953315; cv=none; b=RwKNDhkJO0+uwk77Ij9pnLSy6f/DwiZ5PGHL9sANVL6HHgIei2mhMC0qnSvldIJENdUv8vdywRYtqTt+gkotYdE11ky3SL9agGc6WScWyoV9XUY7QPDhdnnsi5r46qqVXx24V4vgLn06yQtKzMCnozz+Tk2nEnynmwt/zIt2jcs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774952846; c=relaxed/simple;
-	bh=qzZkQ3i93l0FQlsjhTVvBhRGCZM8HqmGjGodNljUlIA=;
+	s=arc-20240116; t=1774953315; c=relaxed/simple;
+	bh=muUGB/hVsXba530bq091OpV1HBQwDeWHgy3f9fXku+A=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ooSRLjo3rkx8Xn5IuNQo/9bcNt1Lj80mZhY4fo51N5SaZ48dFljo8myaxCthjLtPaXPlGxLLo06td8c9EEDhuTee5Ar1fcQ2DMvN8CRsO/QVQy4FRj7CqriJ6qfvF3Ba/nc+dOZgtV3jwV/OI/l7CkvJY4SVN+OS7ZWgqK2b1QA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=o7RBAi13; arc=none smtp.client-ip=91.218.175.174
+	 MIME-Version; b=pXUhhJEPMAYGsA8SxnpAuunCUgE9dncH1MQTZnu4GzcEmV4PIQ43aRrKCU3qlBakDvSlQNb9JcFqi1GAR92EYp886i4zIl6DNe8Cnv9oBbAqlZ1TiTBATI1s5VPlOiUmyTiaLSDisqx6qtD9hkzxkrMi4NABDEdPDN13EXzJE2Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=p33ibMJl; arc=none smtp.client-ip=91.218.175.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1774952832;
+	t=1774953301;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=a18x6ZQjYkqeWxFtayZuE5Lz8yKC0RDpl9ExxmZO+X0=;
-	b=o7RBAi13M3ymJIxeIcVVcVU7ArACtE8dCrjJjGz5z+vEZYGgF1B1ZaS7f35w+NpdDX2Unp
-	f/ElyU26K/tOyOtBeLLhv7VbxMV4S/xMG+FcVulhOO1Crwahfpdetbbi4j8NsAeXAtuv9D
-	TtMRPMhTEuuHOtV/fbSvHdHBJxbrGZs=
+	bh=eGoJpSFt6qPU5Tj1tCTJazBok4fp1H7/lxXOEKF1LAE=;
+	b=p33ibMJltLANQa/bsMRalz0WLn9BlHm8C+vEC5ite7qjEZ0cbDSZL23LJhIXOh4mWTMMG4
+	TBKLq9j8Mz6GbrKJDMbOx9Su5uRTDWM/gjU81JtLwKyzFf6t4mVUaxKYeCN9VzzuGjwlZt
+	rIOn5+Mdz2haHATDFp1JJcwSMAvzAHM=
 From: Usama Arif <usama.arif@linux.dev>
 To: Dmitry Ilvokhin <d@ilvokhin.com>
 Cc: Usama Arif <usama.arif@linux.dev>,
@@ -77,10 +77,10 @@ Cc: Usama Arif <usama.arif@linux.dev>,
 	linux-mm@kvack.org,
 	linux-trace-kernel@vger.kernel.org,
 	kernel-team@meta.com
-Subject: Re: [PATCH v4 0/5] locking: contended_release tracepoint instrumentation
-Date: Tue, 31 Mar 2026 03:27:03 -0700
-Message-ID: <20260331102704.921355-1-usama.arif@linux.dev>
-In-Reply-To: <cover.1774536681.git.d@ilvokhin.com>
+Subject: Re: [PATCH v4 3/5] locking: Add contended_release tracepoint to sleepable locks
+Date: Tue, 31 Mar 2026 03:34:50 -0700
+Message-ID: <20260331103451.1070175-1-usama.arif@linux.dev>
+In-Reply-To: <d2e5763278812499335b22a013aafb4979e3324b.1774536681.git.d@ilvokhin.com>
 References: 
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
@@ -95,13 +95,13 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	R_MISSING_CHARSET(0.50)[];
 	DMARC_POLICY_ALLOW(-0.50)[linux.dev,none];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	R_DKIM_ALLOW(-0.20)[linux.dev:s=key1];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-13996-lists,linux-mips=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-13997-lists,linux-mips=lfdr.de];
 	MIME_TRACE(0.00)[0:+];
 	RCVD_TLS_LAST(0.00)[];
 	RCPT_COUNT_TWELVE(0.00)[31];
@@ -113,42 +113,89 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	FROM_HAS_DN(0.00)[];
 	DKIM_TRACE(0.00)[linux.dev:+];
 	NEURAL_HAM(-0.00)[-1.000];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
 	TAGGED_RCPT(0.00)[linux-mips];
 	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[ilvokhin.com:email,linux.dev:dkim,linux.dev:mid,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 468D93680DA
+	DBL_BLOCKED_OPENRESOLVER(0.00)[linux.dev:dkim,linux.dev:mid,ilvokhin.com:email,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: EF6DE368311
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On Thu, 26 Mar 2026 15:09:59 +0000 Dmitry Ilvokhin <d@ilvokhin.com> wrote:
+On Thu, 26 Mar 2026 15:10:02 +0000 Dmitry Ilvokhin <d@ilvokhin.com> wrote:
 
-> The existing contention_begin/contention_end tracepoints fire on the
-> waiter side. The lock holder's identity and stack can be captured at
-> contention_begin time (e.g. perf lock contention --lock-owner), but
-> this reflects the holder's state when a waiter arrives, not when the
-> lock is actually released.
+> Add the contended_release trace event. This tracepoint fires on the
+> holder side when a contended lock is released, complementing the
+> existing contention_begin/contention_end tracepoints which fire on the
+> waiter side.
 > 
-> This series adds a contended_release tracepoint that fires on the
-> holder side when a lock with waiters is released. This provides:
+> This enables correlating lock hold time under contention with waiter
+> events by lock address.
 > 
-> - Hold time estimation: when the holder's own acquisition was
->   contended, its contention_end (acquisition) and contended_release
->   can be correlated to measure how long the lock was held under
->   contention.
+> Add trace_contended_release() calls to the slowpath unlock paths of
+> sleepable locks: mutex, rtmutex, semaphore, rwsem, percpu-rwsem, and
+> RT-specific rwbase locks.
 > 
-> - The holder's stack at release time, which may differ from what perf lock
->   contention --lock-owner captures if the holder does significant work between
->   the waiter's arrival and the unlock.
+> Where possible, trace_contended_release() fires before the lock is
+> released and before the waiter is woken. For some lock types, the
+> tracepoint fires after the release but before the wake. Making the
+> placement consistent across all lock types is not worth the added
+> complexity.
 > 
-> Note: for reader/writer locks, the tracepoint fires for every reader
-> releasing while a writer is waiting, not only for the last reader.
+> For reader/writer locks, the tracepoint fires for every reader releasing
+> while a writer is waiting, not only for the last reader.
 > 
+> Signed-off-by: Dmitry Ilvokhin <d@ilvokhin.com>
+> ---
+>  include/trace/events/lock.h   | 17 +++++++++++++++++
+>  kernel/locking/mutex.c        |  4 ++++
+>  kernel/locking/percpu-rwsem.c | 11 +++++++++++
+>  kernel/locking/rtmutex.c      |  1 +
+>  kernel/locking/rwbase_rt.c    |  6 ++++++
+>  kernel/locking/rwsem.c        | 10 ++++++++--
+>  kernel/locking/semaphore.c    |  4 ++++
+>  7 files changed, 51 insertions(+), 2 deletions(-)
+> 
+> diff --git a/include/trace/events/lock.h b/include/trace/events/lock.h
+> index da978f2afb45..1ded869cd619 100644
+> --- a/include/trace/events/lock.h
+> +++ b/include/trace/events/lock.h
+> @@ -137,6 +137,23 @@ TRACE_EVENT(contention_end,
+>  	TP_printk("%p (ret=%d)", __entry->lock_addr, __entry->ret)
+>  );
+>  
+> +TRACE_EVENT(contended_release,
+> +
+> +	TP_PROTO(void *lock),
+> +
+> +	TP_ARGS(lock),
+> +
+> +	TP_STRUCT__entry(
+> +		__field(void *, lock_addr)
+> +	),
+> +
+> +	TP_fast_assign(
+> +		__entry->lock_addr = lock;
+> +	),
+> +
+> +	TP_printk("%p", __entry->lock_addr)
+> +);
+> +
+>  #endif /* _TRACE_LOCK_H */
+>  
+>  /* This part must be outside protection */
+> diff --git a/kernel/locking/mutex.c b/kernel/locking/mutex.c
+> index 427187ff02db..6c2c9312eb8f 100644
+> --- a/kernel/locking/mutex.c
+> +++ b/kernel/locking/mutex.c
+> @@ -997,6 +997,9 @@ static noinline void __sched __mutex_unlock_slowpath(struct mutex *lock, unsigne
+>  		wake_q_add(&wake_q, next);
+>  	}
+>  
+> +	if (trace_contended_release_enabled() && waiter)
+> +		trace_contended_release(lock);
+> +
 
-Would it be better to reorder the patches? It would help with git
-bisectability as well. Move the refractoring work in patch 4 and
-5 (excluding adding the tracepoints ofcourse) earlier, and then add
-all the tracepoints in the same commit at the end? It would help
-in the future with git blame to see where all the tracepoints
-were added as well.
+This won't compile? waiter is declared in the if block, so you are using
+it outside scope here.
+
 
