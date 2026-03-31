@@ -1,50 +1,50 @@
-Return-Path: <linux-mips+bounces-13995-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-13996-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id mJMGABCfy2loJgYAu9opvQ
-	(envelope-from <linux-mips+bounces-13995-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Tue, 31 Mar 2026 12:16:48 +0200
+	id KLdWM0Cjy2kUJwYAu9opvQ
+	(envelope-from <linux-mips+bounces-13996-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Tue, 31 Mar 2026 12:34:40 +0200
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5D61A367BEB
-	for <lists+linux-mips@lfdr.de>; Tue, 31 Mar 2026 12:16:47 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 468D93680DA
+	for <lists+linux-mips@lfdr.de>; Tue, 31 Mar 2026 12:34:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 0530D30311A4
-	for <lists+linux-mips@lfdr.de>; Tue, 31 Mar 2026 10:12:02 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 163893135AE2
+	for <lists+linux-mips@lfdr.de>; Tue, 31 Mar 2026 10:27:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0A5DE3CEB98;
-	Tue, 31 Mar 2026 10:12:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 437583ED5A2;
+	Tue, 31 Mar 2026 10:27:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="ZV77eGoB"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="o7RBAi13"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from out-179.mta1.migadu.com (out-179.mta1.migadu.com [95.215.58.179])
+Received: from out-174.mta0.migadu.com (out-174.mta0.migadu.com [91.218.175.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82B9B3A6B77
-	for <linux-mips@vger.kernel.org>; Tue, 31 Mar 2026 10:11:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AEBFA3ED5DA
+	for <linux-mips@vger.kernel.org>; Tue, 31 Mar 2026 10:27:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774951920; cv=none; b=Hfj1W67Xe5BhGi/Jk26QDwyXjCJdcvNn8vB1zfkdWio5dhhcQKzONNGJzHgwPVg/REALe6dNiqSXPV8EuThNOu+Qaxb455PHQGdwSrzWAD6nldmUF/p+3LYhz60UeM4Euh90PueL05zkUZ3NZGMlg21KG/BMhYkaZ0Tzqb1jpXA=
+	t=1774952846; cv=none; b=fM4vCxTYkGudpySs2PQNhX7n/e/BsoPJeXAXb8FMA1uya7Xj5gi1b7qGRarpav3/GzcfYPxzsjWqC5kb0exVt/zykxx2yi5kTR1KmcnFyE9XaaBw3cmbqtsJ/cQRBgRam6eFBLpBvYdPsr2Mp90JRqeBqJIH2efFkxOumdNhBbo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774951920; c=relaxed/simple;
-	bh=HHo+6RORxqzwkw1Oh/DBYbRN33EnFnNxrGcTNZrX4Z0=;
+	s=arc-20240116; t=1774952846; c=relaxed/simple;
+	bh=qzZkQ3i93l0FQlsjhTVvBhRGCZM8HqmGjGodNljUlIA=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Jhcdju/XJHsKeDRFVlOlYyx0oEbwTQwhjkpvUxnGftuPhYTN5tlSWxXALNCcvTEP9c4h875MbKmvU9xMtu4W9gvExVyrwRKLSV421hqZAFjD5jZPUSZbfwjs5UXYt3vMHNibY655MERz94ezyEevFLRI25p9P11VPFlu5cM46u4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=ZV77eGoB; arc=none smtp.client-ip=95.215.58.179
+	 MIME-Version; b=ooSRLjo3rkx8Xn5IuNQo/9bcNt1Lj80mZhY4fo51N5SaZ48dFljo8myaxCthjLtPaXPlGxLLo06td8c9EEDhuTee5Ar1fcQ2DMvN8CRsO/QVQy4FRj7CqriJ6qfvF3Ba/nc+dOZgtV3jwV/OI/l7CkvJY4SVN+OS7ZWgqK2b1QA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=o7RBAi13; arc=none smtp.client-ip=91.218.175.174
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1774951907;
+	t=1774952832;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=G/KT1XoeoGhxQZGd0moPT/YeBL0YVj4iz/EMh/8Na9M=;
-	b=ZV77eGoBYxkTQ01Z1xvT+NwWiLOnJG01ICF7R8IEluW7BoQaYyfRsHnF4bxuJdehzxdj8i
-	m5gLxZ96FaWK0TlLmANrVzEeuUXgeDwIUAYiYJMSXgUyIuQtaXpJnCSPnF9/D0yIb0gnxj
-	f7KmNc4JXej6hhm5RiNUBa77Va9m+5E=
+	bh=a18x6ZQjYkqeWxFtayZuE5Lz8yKC0RDpl9ExxmZO+X0=;
+	b=o7RBAi13M3ymJIxeIcVVcVU7ArACtE8dCrjJjGz5z+vEZYGgF1B1ZaS7f35w+NpdDX2Unp
+	f/ElyU26K/tOyOtBeLLhv7VbxMV4S/xMG+FcVulhOO1Crwahfpdetbbi4j8NsAeXAtuv9D
+	TtMRPMhTEuuHOtV/fbSvHdHBJxbrGZs=
 From: Usama Arif <usama.arif@linux.dev>
 To: Dmitry Ilvokhin <d@ilvokhin.com>
 Cc: Usama Arif <usama.arif@linux.dev>,
@@ -77,10 +77,10 @@ Cc: Usama Arif <usama.arif@linux.dev>,
 	linux-mm@kvack.org,
 	linux-trace-kernel@vger.kernel.org,
 	kernel-team@meta.com
-Subject: Re: [PATCH v4 1/5] tracing/lock: Remove unnecessary linux/sched.h include
-Date: Tue, 31 Mar 2026 03:11:32 -0700
-Message-ID: <20260331101134.643490-1-usama.arif@linux.dev>
-In-Reply-To: <5593ed9718b1a6e4ec51d99772c485734029d4d4.1774536681.git.d@ilvokhin.com>
+Subject: Re: [PATCH v4 0/5] locking: contended_release tracepoint instrumentation
+Date: Tue, 31 Mar 2026 03:27:03 -0700
+Message-ID: <20260331102704.921355-1-usama.arif@linux.dev>
+In-Reply-To: <cover.1774536681.git.d@ilvokhin.com>
 References: 
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
@@ -95,13 +95,13 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	R_MISSING_CHARSET(0.50)[];
 	DMARC_POLICY_ALLOW(-0.50)[linux.dev,none];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
 	R_DKIM_ALLOW(-0.20)[linux.dev:s=key1];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-13995-lists,linux-mips=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-13996-lists,linux-mips=lfdr.de];
 	MIME_TRACE(0.00)[0:+];
 	RCVD_TLS_LAST(0.00)[];
 	RCPT_COUNT_TWELVE(0.00)[31];
@@ -113,24 +113,42 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	FROM_HAS_DN(0.00)[];
 	DKIM_TRACE(0.00)[linux.dev:+];
 	NEURAL_HAM(-0.00)[-1.000];
-	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
 	TAGGED_RCPT(0.00)[linux-mips];
 	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[linux.dev:dkim,linux.dev:email,linux.dev:mid,sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,ilvokhin.com:email]
-X-Rspamd-Queue-Id: 5D61A367BEB
+	DBL_BLOCKED_OPENRESOLVER(0.00)[ilvokhin.com:email,linux.dev:dkim,linux.dev:mid,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 468D93680DA
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On Thu, 26 Mar 2026 15:10:00 +0000 Dmitry Ilvokhin <d@ilvokhin.com> wrote:
+On Thu, 26 Mar 2026 15:09:59 +0000 Dmitry Ilvokhin <d@ilvokhin.com> wrote:
 
-> None of the trace events in lock.h reference anything from
-> linux/sched.h. Remove the unnecessary include.
+> The existing contention_begin/contention_end tracepoints fire on the
+> waiter side. The lock holder's identity and stack can be captured at
+> contention_begin time (e.g. perf lock contention --lock-owner), but
+> this reflects the holder's state when a waiter arrives, not when the
+> lock is actually released.
 > 
-> Signed-off-by: Dmitry Ilvokhin <d@ilvokhin.com>
-> ---
->  include/trace/events/lock.h | 1 -
->  1 file changed, 1 deletion(-)
+> This series adds a contended_release tracepoint that fires on the
+> holder side when a lock with waiters is released. This provides:
+> 
+> - Hold time estimation: when the holder's own acquisition was
+>   contended, its contention_end (acquisition) and contended_release
+>   can be correlated to measure how long the lock was held under
+>   contention.
+> 
+> - The holder's stack at release time, which may differ from what perf lock
+>   contention --lock-owner captures if the holder does significant work between
+>   the waiter's arrival and the unlock.
+> 
+> Note: for reader/writer locks, the tracepoint fires for every reader
+> releasing while a writer is waiting, not only for the last reader.
 > 
 
-Acked-by: Usama Arif <usama.arif@linux.dev>
+Would it be better to reorder the patches? It would help with git
+bisectability as well. Move the refractoring work in patch 4 and
+5 (excluding adding the tracepoints ofcourse) earlier, and then add
+all the tracepoints in the same commit at the end? It would help
+in the future with git blame to see where all the tracepoints
+were added as well.
 
