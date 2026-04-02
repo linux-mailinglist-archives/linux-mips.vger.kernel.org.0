@@ -1,50 +1,50 @@
-Return-Path: <linux-mips+bounces-14019-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-14020-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id uHrpH8jkzmk5rQYAu9opvQ
-	(envelope-from <linux-mips+bounces-14019-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Thu, 02 Apr 2026 23:51:04 +0200
+	id QA1gLxnlzmk5rQYAu9opvQ
+	(envelope-from <linux-mips+bounces-14020-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Thu, 02 Apr 2026 23:52:25 +0200
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id 22E5538E730
-	for <lists+linux-mips@lfdr.de>; Thu, 02 Apr 2026 23:51:04 +0200 (CEST)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id A789B38E755
+	for <lists+linux-mips@lfdr.de>; Thu, 02 Apr 2026 23:52:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 8188730186AB
-	for <lists+linux-mips@lfdr.de>; Thu,  2 Apr 2026 21:51:03 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 0D467301EF09
+	for <lists+linux-mips@lfdr.de>; Thu,  2 Apr 2026 21:52:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5BB6037FF44;
-	Thu,  2 Apr 2026 21:51:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B280E386427;
+	Thu,  2 Apr 2026 21:52:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uh7N/3FR"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PTB78iuK"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30B213783A0;
-	Thu,  2 Apr 2026 21:51:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A39438237A;
+	Thu,  2 Apr 2026 21:52:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775166661; cv=none; b=kfjU5YT3HAsDFexZIRbtxda8FbmF4jHJ2ob87p2pm/4x3/ZwANean7PZszlgumSGGJrDjPSaXgX2GGZtKwznIiVm8Oz4ZlrbZ19FGVeCuvFe1WJ+uhNaw8mQemb3xKwQyAaJSV9fTeVP4cLHOmU236VajARX/58UGEhACSLmFMc=
+	t=1775166741; cv=none; b=jrV8Wi4AL68755IDZGL/yvQkqblhMeOnBa95fmp0I8w7p0a+uBoxSxj3J6eaoz4aFvMAKWADFJG7LiMFA8FQ10bL+nM+fnIZX/UBI/oHyJ4QKORoBCcrmrMw0TbDiEI/BOg37+sLVarolpZZYBD6zW5L5nS0hv6LyxQrIj04efY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775166661; c=relaxed/simple;
-	bh=+iWo8G+lGLAR0AEWKadkwlt32LjzfIOHKPITuBCakWs=;
+	s=arc-20240116; t=1775166741; c=relaxed/simple;
+	bh=v9zJEeNVmz7NcsMkpOPkdYk7q2EoPoCfcmjxBRbg/Gw=;
 	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=OobjlbgR1l4o7IurPzNLwLvNRkSElKo16sx1D0IiIChSvFcY13dbe2tNDdsqfiCbxp8aXjljdE9jzK1B1o8OgPgkaM5RHjW9RVTyGJIFBcU+YE5D0HgI9/3jg/5wI2SE3GCGaxhv1B70rQ9zSDGJNUBjJQpTTkn+g7uydlO4xcs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uh7N/3FR; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81CFAC116C6;
-	Thu,  2 Apr 2026 21:50:55 +0000 (UTC)
+	 MIME-Version:Content-Type; b=kST9lBUpPAwcUljsn4/TDzTuqhzA0G7DHv178sWvx+ViQBDLJO58/07ikIzQQjU7egA4SB5DqziBWqmHlR58m6mdSsrdMsMpnaSly7Ru75MvO01yTwSt7kca/3vGaN7p+nO3bbmHMeP/JdwSXwwPtl9wEgzczEUOXKquKdJzfnc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PTB78iuK; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9A9D9C116C6;
+	Thu,  2 Apr 2026 21:52:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1775166660;
-	bh=+iWo8G+lGLAR0AEWKadkwlt32LjzfIOHKPITuBCakWs=;
+	s=k20201202; t=1775166740;
+	bh=v9zJEeNVmz7NcsMkpOPkdYk7q2EoPoCfcmjxBRbg/Gw=;
 	h=Date:From:To:cc:Subject:In-Reply-To:References:From;
-	b=uh7N/3FRUjqua+aPCo/hGr/AdrmusEl1H/a3Cy2K3ax/7zWAaowq7QLQao9luVbWo
-	 hhp+ELOy56vNZgWo/30UXJ+R+KNwAUX+g9t5upzBm19UO38qCmclRomH9W9JilFn3g
-	 1M3od6tckFksVcXsO4otmEq7oBs2ncVax1WS/48Gk7Y/jRGn5aI6Ty0S32Qrtb3v+N
-	 FCfqxPCfuHXXK+tb8kOeAkmUobWREiK7V0IqzM0OnWy9oCVbOYxajs4XGYlWHY2x7t
-	 AkBA5ON0TiTxqW6AtiPnUW+DWm5PHRBPUIiBBcwzXpeViYkdJ68cXcODxvoTFEl/DM
-	 YZIYLd1IONOQA==
-Date: Thu, 2 Apr 2026 15:50:54 -0600 (MDT)
+	b=PTB78iuKGtB1jnCLkrdAAEbFdUBu6bIVdFt5Wka6j9T73o4DOPCGZwiNrnq4PiEr6
+	 mBFN0TFFR6noe6wbi63LOXrgXpdD106UW3pCqKSxrNzj8GxdtV8MQyp2Vy1SAsdp3d
+	 M6xKXlZbCh0YABGR2JZ5uus7RZzPqgGZDTd9cRTDxhbH89DrUCD35i7ucql2BdpP2E
+	 7ULjB46nbQkz0boFssqZvNz1786uWfD+aGTkjAGmooYiXv+ruQ7/oxb1SnuN7wMHKS
+	 dZy72w3QSkA4WUNCLllLtT+k1bSnFq6cedLa+/KrtjYL9V2SlHZOhBUsWcX1NjRLrv
+	 DcESm7m/FmPPA==
+Date: Thu, 2 Apr 2026 15:52:15 -0600 (MDT)
 From: Paul Walmsley <pjw@kernel.org>
 To: "Vincent Mailhol (Arm)" <mailhol@kernel.org>
 cc: Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>, 
@@ -115,11 +115,11 @@ cc: Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>,
     linux-samsung-soc@vger.kernel.org, imx@lists.linux.dev, 
     linux-renesas-soc@vger.kernel.org, linux-parisc@vger.kernel.org, 
     openbmc@lists.ozlabs.org
-Subject: Re: [PATCH 2/9] configs: remove orphan dependencies of
- NETFILTER_XTABLES_LEGACY
-In-Reply-To: <20260317-arm_defconf_cleanup-v1-2-8eecb7fdd24d@kernel.org>
-Message-ID: <576cec38-a5e4-5391-2a57-b164e84a813f@kernel.org>
-References: <20260317-arm_defconf_cleanup-v1-0-8eecb7fdd24d@kernel.org> <20260317-arm_defconf_cleanup-v1-2-8eecb7fdd24d@kernel.org>
+Subject: Re: [PATCH 3/9] configs: remove obsolete assignments to
+ CONFIG_NFS_V4_1
+In-Reply-To: <20260317-arm_defconf_cleanup-v1-3-8eecb7fdd24d@kernel.org>
+Message-ID: <2a5bb9cf-3f0c-6069-6412-cd4c5c4e8b78@kernel.org>
+References: <20260317-arm_defconf_cleanup-v1-0-8eecb7fdd24d@kernel.org> <20260317-arm_defconf_cleanup-v1-3-8eecb7fdd24d@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -131,20 +131,20 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
 	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	FREEMAIL_CC(0.00)[kernel.org,linaro.org,gmail.com,armlinux.org.uk,iki.fi,kemnade.info,baylibre.com,atomide.com,xen0n.name,alpha.franken.de,linux.ibm.com,ellerman.id.au,dabbelt.com,eecs.berkeley.edu,ghiti.fr,users.sourceforge.jp,libc.org,physik.fu-berlin.de,redhat.com,alien8.de,linux.intel.com,zytor.com,linutronix.de,goodmis.org,netfilter.org,samsung.com,nxp.com,pengutronix.de,mleia.com,timesys.com,arm.com,glider.be,mobileye.com,bootlin.com,HansenPartnership.com,gmx.de,gmx.net,zankel.net,suse.de,arndb.de,sntech.de,renesas.com,quicinc.com,roeck-us.net,oss.qualcomm.com,linuxfoundation.org,oracle.com,vger.kernel.org,lists.infradead.org,lists.linux.dev,lists.ozlabs.org];
-	TAGGED_FROM(0.00)[bounces-14019-lists,linux-mips=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-14020-lists,linux-mips=lfdr.de];
 	FROM_HAS_DN(0.00)[];
 	RCVD_COUNT_THREE(0.00)[4];
 	RCVD_TLS_LAST(0.00)[];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	DKIM_TRACE(0.00)[kernel.org:+];
-	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
+	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
 	MISSING_XM_UA(0.00)[];
 	RCPT_COUNT_GT_50(0.00)[98];
 	PRECEDENCE_BULK(0.00)[];
@@ -156,50 +156,28 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	TO_DN_SOME(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 22E5538E730
+X-Rspamd-Queue-Id: A789B38E755
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
 On Tue, 17 Mar 2026, Vincent Mailhol (Arm) wrote:
 
-> Since its introduction in commit 9fce66583f06 ("netfilter: Exclude
-> LEGACY TABLES on PREEMPT_RT."), the configurations below all depend,
-> either directly or indirectly, on CONFIG_NETFILTER_XTABLES_LEGACY:
+> CONFIG_NFS_V4_1 was revomed in commit 7537db24806f ("NFS: Merge
+> CONFIG_NFS_V4_1 with CONFIG_NFS_V4"). However, some defconfigs are
+> still referring the old configuration.
 > 
->   - CONFIG_NETFILTER_XT_TARGET_CHECKSUM
->   - CONFIG_IP_NF_FILTER
->   - CONFIG_IP_NF_TARGET_REJECT
->   - CONFIG_IP_NF_NAT
->   - CONFIG_IP_NF_TARGET_MASQUERADE
->   - CONFIG_IP_NF_MANGLE
->   - CONFIG_IP6_NF_FILTER
->   - CONFIG_IP6_NF_TARGET_REJECT
->   - CONFIG_IP6_NF_MANGLE
->   - CONFIG_IP6_NF_NAT
->   - CONFIG_IP6_NF_TARGET_MASQUERADE
-> 
-> This new dependency caused many symbols to become orphaned, meaning
-> their dependencies are no longer satisfied and Kconfig drops them from
-> the final configuration.
-> 
-> Note that CONFIG_NFT_COMPAT is another parent dependency, so the
-> above-listed symbols would not become orphaned as long as NFT_COMPAT
-> is present.
-> 
-> Considering that these are legacy options and that nobody complained
-> in recent kernel releases when these options were already missing, it
-> is safe to assume they can be removed.
-> 
-> Suppress all these configuration symbols in all the defconfig files
-> that have neither CONFIG_NETFILTER_XTABLES_LEGACY nor
-> CONFIG_NFT_COMPAT set.
+> Clean-up all the leftover references to CONFIG_NFS_V4_1.
 > 
 > FYI, the suppressions were done using:
 > 
->   git grep -z -L -E '^CONFIG_(NETFILTER_XTABLES_LEGACY|NFT_COMPAT)=(y|m)$' -- 'arch/*/configs/*defconfig' |\
->     xargs -0 sed -i -E '/^CONFIG_(NETFILTER_XT_TARGET_CHECKSUM|IP_NF_FILTER|IP_NF_TARGET_REJECT|IP_NF_NAT|IP_NF_TARGET_MASQUERADE|IP_NF_MANGLE|IP6_NF_FILTER|IP6_NF_TARGET_REJECT|IP6_NF_MANGLE|IP6_NF_NAT|IP6_NF_TARGET_MASQUERADE)=(y|m)$/d'
+>   git grep -z -l '^CONFIG_NFS_V4=' -- 'arch/*/configs/*defconfig' |\
+>     xargs -0 sed -i -E '/^CONFIG_NFS_V4_1=/d'
 > 
-> Fixes: 9fce66583f06 ("netfilter: Exclude LEGACY TABLES on PREEMPT_RT.")
+> CONFIG_NFS_V4_1_IMPLEMENTATION_ID_DOMAIN and CONFIG_NFS_V4_1_MIGRATION
+> were not in scope of the renaming and still use V4_1 in their name, so
+> keep those two untouched.
+> 
+> Fixes: 7537db24806f ("NFS: Merge CONFIG_NFS_V4_1 with CONFIG_NFS_V4")
 > Signed-off-by: Vincent Mailhol (Arm) <mailhol@kernel.org>
 
 Acked-by: Paul Walmsley <pjw@kernel.org> # arch/riscv
