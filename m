@@ -1,61 +1,64 @@
-Return-Path: <linux-mips+bounces-14061-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-14062-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id uErSOU750mk3cwcAu9opvQ
-	(envelope-from <linux-mips+bounces-14061-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Mon, 06 Apr 2026 02:07:42 +0200
+	id IKLxFKb30mmzcgcAu9opvQ
+	(envelope-from <linux-mips+bounces-14062-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Mon, 06 Apr 2026 02:00:38 +0200
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 469503A0C6A
-	for <lists+linux-mips@lfdr.de>; Mon, 06 Apr 2026 02:07:42 +0200 (CEST)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8B4C13A0AB6
+	for <lists+linux-mips@lfdr.de>; Mon, 06 Apr 2026 02:00:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id EC20C300695E
-	for <lists+linux-mips@lfdr.de>; Mon,  6 Apr 2026 00:00:30 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 625703002B3B
+	for <lists+linux-mips@lfdr.de>; Mon,  6 Apr 2026 00:00:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 47AC532D452;
-	Mon,  6 Apr 2026 00:00:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CDE2025A2C6;
+	Mon,  6 Apr 2026 00:00:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=riseup.net header.i=@riseup.net header.b="XCn0bWnt"
+	dkim=pass (1024-bit key) header.d=riseup.net header.i=@riseup.net header.b="boSDY5o+"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mx1.riseup.net (mx1.riseup.net [198.252.153.129])
+Received: from mx0.riseup.net (mx0.riseup.net [198.252.153.6])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F07A92C859
-	for <linux-mips@vger.kernel.org>; Mon,  6 Apr 2026 00:00:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.252.153.129
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8339633262C
+	for <linux-mips@vger.kernel.org>; Mon,  6 Apr 2026 00:00:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.252.153.6
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775433630; cv=none; b=J307vW5snrtu4GFF3p9g+65W55Q0szU8gidlKslOSrScogmGT8b2gtlMHcXeshg+mYEPynr3ic+XFqRNTOF4mOV9LIVWhRzqyQclPr2m8FCSYMOb3Q7S6Q5bAcI/R4IUge6jQcBMDYS0F0ff6PmeaGnMD9IrOMDPm1bKNhHplFc=
+	t=1775433631; cv=none; b=RvWqYx1RWwsaR7mlQuGpBWA7pL2H83oet88V1sMDBPW9bdAcdC0T5pUQQ8XVk+kxsPUVgsxt9SPkO+ww8rW7cTbQEWb8QW1OEFIsZ7c41Kbhf2+jwf5l4Y7oQSAYIwSp3cPfnUDtXzbvVnbHQw4Olz0oNXKaWAqmNWR+PmtI00g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775433630; c=relaxed/simple;
-	bh=Dq+KrhEG0Zbp7rMuJfQLjAlQaF2+4T6+U0LWU1tJMeY=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=So2+yK9x3uwtLdwLjS5KXCV3x0AWVn2UBF+rRskn+D54ELa6tp6Hg/i6SV4WYyIKbOafwEAlpaSBK4h79CKML7SW1GYkchxM1JC0dpUs/HClMammzolca8zlh5H4tr4er0NEqTibLo5ZunJiSnBZHgsYN3st+WtqhSk4lwjzrMk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=riseup.net; spf=pass smtp.mailfrom=riseup.net; dkim=pass (1024-bit key) header.d=riseup.net header.i=@riseup.net header.b=XCn0bWnt; arc=none smtp.client-ip=198.252.153.129
+	s=arc-20240116; t=1775433631; c=relaxed/simple;
+	bh=0wGIuDnhgmSMCIXUcnnFBP1D5zD0z8SHvprnOYg4gTA=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=IAGydnv4o+ERhR2O+FQeMV2lEeSdr6E/p5Hm6onKBSJhzAAXbnRYI7BqVCAUEr23+CanJYc8KT+UMHt7cnNgfJrRtyIlMXbkwTqHUsGfJjDqejkuCWHWqj6GaopWLwdCLJw349RaUsHUBaCbGreVsVfJbbG6bScqHnH6i6RteE0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=riseup.net; spf=pass smtp.mailfrom=riseup.net; dkim=pass (1024-bit key) header.d=riseup.net header.i=@riseup.net header.b=boSDY5o+; arc=none smtp.client-ip=198.252.153.6
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=riseup.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=riseup.net
 Received: from fews03-sea.riseup.net (fews03-sea-pn.riseup.net [10.0.1.153])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mx1.riseup.net (Postfix) with ESMTPS id 4fpqGN2n6CzDqFT;
-	Mon,  6 Apr 2026 00:00:28 +0000 (UTC)
+	by mx0.riseup.net (Postfix) with ESMTPS id 4fpqGQ0zNfz9s1x;
+	Mon,  6 Apr 2026 00:00:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=riseup.net; s=squak;
-	t=1775433628; bh=xjSaC3XXj7Fy4GLOO2ewZDNpRhMJsrhpoo/mq8YVJRQ=;
-	h=From:To:Cc:Subject:Date:From;
-	b=XCn0bWnt+s6O058gitcMwJ98MeKPf+QcVOiu0hoSO7drvlDGM/Nrq2TT7fVFOmWSn
-	 OlT1HkVrlPfB56ZVBJiT02nEwM3j6g1a5wxtTxAfJEpNzrehcxO7+XPJoZUB1B5q0O
-	 JqIKQ0fwRNlregckaFDpKMiW1W245B2nOSgG2Dzo=
-X-Riseup-User-ID: 68DEAC880F3BA3FC3271694453E54B8AB7412B7E1604B674FE3F85DAA15516B8
+	t=1775433630; bh=noUZT6B6rmt+9t+9dOOTGHKgQ8qZJByMqOAJIB5GHc8=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=boSDY5o+7gIWWSNcP53x26yDLYsyaAymJEKseuZ+zloPMUcVvMA76C6pxsYAatpLT
+	 qp8fPHCkoAYLxn+piUHpNZgz0ngQC8r4azJDhNOHa3iYXhb87n2rkypDE2KEQ/qDdj
+	 ZNKdUvSDDrbuj9bnsiuhlytELaZH/mGNy6VKvlFA=
+X-Riseup-User-ID: 2710F069713B2AEC70BA075A6BDDBE04F92BEEA98C2BDE5364533CE4155A0264
 Received: from [127.0.0.1] (localhost [127.0.0.1])
-	 by fews03-sea.riseup.net (Postfix) with ESMTPSA id 4fpqG21kcKz1yLn;
-	Mon,  6 Apr 2026 00:00:09 +0000 (UTC)
+	 by fews03-sea.riseup.net (Postfix) with ESMTPSA id 4fpqGN5KcFz1yLn;
+	Mon,  6 Apr 2026 00:00:28 +0000 (UTC)
 From: Rany Hany <rany_hany@riseup.net>
 To: linux-mips@vger.kernel.org
 Cc: Rany Hany <rany_hany@riseup.net>,
 	Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Subject: [PATCH 0/3] Fix MT7621 restart deadlock
-Date: Mon,  6 Apr 2026 02:59:52 +0300
-Message-ID: <20260405235956.79535-1-rany_hany@riseup.net>
+Subject: [PATCH 1/3] MIPS: Stop secondary CPUs before platform restart/halt/poweroff
+Date: Mon,  6 Apr 2026 02:59:53 +0300
+Message-ID: <20260405235956.79535-2-rany_hany@riseup.net>
+In-Reply-To: <20260405235956.79535-1-rany_hany@riseup.net>
+References: <20260405235956.79535-1-rany_hany@riseup.net>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -68,19 +71,19 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	MID_CONTAINS_FROM(1.00)[];
 	R_MISSING_CHARSET(0.50)[];
 	DMARC_POLICY_ALLOW(-0.50)[riseup.net,none];
+	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
 	R_DKIM_ALLOW(-0.20)[riseup.net:s=squak];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-14061-lists,linux-mips=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-14062-lists,linux-mips=lfdr.de];
 	RECEIVED_HELO_LOCALHOST(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
 	DKIM_TRACE(0.00)[riseup.net:+];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
 	MISSING_XM_UA(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
 	FROM_NEQ_ENVFROM(0.00)[rany_hany@riseup.net,linux-mips@vger.kernel.org];
@@ -91,44 +94,76 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	NEURAL_HAM(-0.00)[-1.000];
 	TO_DN_SOME(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,riseup.net:dkim,riseup.net:mid]
-X-Rspamd-Queue-Id: 469503A0C6A
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 8B4C13A0AB6
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-These patches fix an issue on some MT7621 devices where the reboot
-hangs. They were submitted to OpenWrt and have been merged.
+smp_send_stop() was placed after the platform restart, halt, and
+power-off callbacks. These callbacks never return, so smp_send_stop()
+was dead code and secondary CPUs were never stopped before the system
+reset.
 
-The first two patches aren't particularly remarkable as they just
-align MIPS with ARM behavior and are required for the full fix.
+Move smp_send_stop() before the callbacks.
 
-The last patch is the most interesting as it uses CPC to transition
-the CPU to clock off state. It is not clear to me why this is required
-but without it it ends up hanging. Initially only flushing d-cache
-and using TCHalt was attempted but ClkOff appears to be necessary. 
+Signed-off-by: Rany Hany <rany_hany@riseup.net>
+---
+ arch/mips/kernel/reset.c | 19 +++++++++++--------
+ 1 file changed, 11 insertions(+), 8 deletions(-)
 
-This fix was only tested on ASUS RT-AX53U as I don't have other
-MT7621 devices with this problem.
-
-Unrelated note:
-
-Sorry I had to resend this as my Thunderbird client was not properly
-setup for this. I used imap-send which just caused issues. I am not
-sure how I previously setup Thunderbird so that it groups the patches
-in one thread.
-
-In any case, I ended up just using send-email as I didn't want to mess
-with Thunderbird again.
-
-Rany Hany (3):
-  MIPS: Stop secondary CPUs before platform restart/halt/poweroff
-  MIPS: SMP: Wait for secondary CPUs to stop in smp_send_stop()
-  MIPS: SMP: Properly stop secondary CPUs for restart
-
- arch/mips/kernel/reset.c | 19 ++++++-----
- arch/mips/kernel/smp.c   | 68 +++++++++++++++++++++++++++++++++++++++-
- 2 files changed, 78 insertions(+), 9 deletions(-)
-
+diff --git a/arch/mips/kernel/reset.c b/arch/mips/kernel/reset.c
+index e7ce07b3e..12c54d1b7 100644
+--- a/arch/mips/kernel/reset.c
++++ b/arch/mips/kernel/reset.c
+@@ -87,13 +87,14 @@ static void machine_hang(void)
+ 
+ void machine_restart(char *command)
+ {
+-	if (_machine_restart)
+-		_machine_restart(command);
+-
+ #ifdef CONFIG_SMP
+ 	preempt_disable();
+ 	smp_send_stop();
+ #endif
++
++	if (_machine_restart)
++		_machine_restart(command);
++
+ 	do_kernel_restart(command);
+ 	mdelay(1000);
+ 	pr_emerg("Reboot failed -- System halted\n");
+@@ -102,23 +103,25 @@ void machine_restart(char *command)
+ 
+ void machine_halt(void)
+ {
+-	if (_machine_halt)
+-		_machine_halt();
+-
+ #ifdef CONFIG_SMP
+ 	preempt_disable();
+ 	smp_send_stop();
+ #endif
++
++	if (_machine_halt)
++		_machine_halt();
++
+ 	machine_hang();
+ }
+ 
+ void machine_power_off(void)
+ {
+-	do_kernel_power_off();
+-
+ #ifdef CONFIG_SMP
+ 	preempt_disable();
+ 	smp_send_stop();
+ #endif
++
++	do_kernel_power_off();
++
+ 	machine_hang();
+ }
 -- 
 2.53.0
 
