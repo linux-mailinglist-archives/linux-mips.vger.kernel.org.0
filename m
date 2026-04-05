@@ -1,360 +1,135 @@
-Return-Path: <linux-mips+bounces-14040-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-14042-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 0KZSIm1d0WlnIAcAu9opvQ
-	(envelope-from <linux-mips+bounces-14040-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Sat, 04 Apr 2026 20:50:21 +0200
+	id sLFBEbTJ0WmaNQcAu9opvQ
+	(envelope-from <linux-mips+bounces-14042-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Sun, 05 Apr 2026 04:32:20 +0200
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 035F739C214
-	for <lists+linux-mips@lfdr.de>; Sat, 04 Apr 2026 20:50:20 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 940E639D1C9
+	for <lists+linux-mips@lfdr.de>; Sun, 05 Apr 2026 04:32:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 6577D3015A69
-	for <lists+linux-mips@lfdr.de>; Sat,  4 Apr 2026 18:49:47 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 4A989300C917
+	for <lists+linux-mips@lfdr.de>; Sun,  5 Apr 2026 02:32:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 747B133D503;
-	Sat,  4 Apr 2026 18:49:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cjdns.fr header.i=@cjdns.fr header.b="NSioNvWr"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8AD433264ED;
+	Sun,  5 Apr 2026 02:32:14 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail.cjdns.fr (mail.cjdns.fr [5.135.140.105])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from cstnet.cn (smtp21.cstnet.cn [159.226.251.21])
+	(using TLSv1.2 with cipher DHE-RSA-AES256-SHA (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A48D327C0D;
-	Sat,  4 Apr 2026 18:49:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=5.135.140.105
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 913411A6820;
+	Sun,  5 Apr 2026 02:32:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.226.251.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775328582; cv=none; b=Et0WwWg3oHjzhkHRs4R5RoTednP5JjDqdx3MD5kCSPusMmsCULXH4sFZHuMN4rgOgd5R7d1NDqWbPomTX3mJlq0hQ8Pzi2Mi3lc+7UUQ0d6/GSGme6On8v8aa4/X2IWonRvh75wMi+k0rzlfiDVDLRmpewu8u5tTtJC+E1BP6Ec=
+	t=1775356334; cv=none; b=uQ8vT9ZoRxEslPLkRBqilSArGMyen3JfjH0f9Cm2Te1iz3okpNAirDedYqWLarNXKmqrpOdBwF3akdNjAiL9L9ZeY608EENku+6B/Yxu9ZXnP3ooXzScoSS5YW5IuGKxKDKXWCMhl5nrIvJ74la/1QF4LRSIN27SDASUSoBBtLM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775328582; c=relaxed/simple;
-	bh=Gjnm+BCpDUYp5JIG5gAcz6hI2/fKMUF0+quefTEOqLE=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=BovutD4n3a1VP9TeeHLWMTVPB0z+vh5qKHffiyS7EhWIX0ExxdBb2DqoRWvtbR9Etfa9cPv7/qYYiCELYnTsVKiZ6NoGnKUwz4DEcdiUvRWhaFRcioXi8ZRd0D6moD+LXV38032RdW0oKc+/Ai6PVHDM/qF57DUGCxxo9BBtJGI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=cjdns.fr; spf=none smtp.mailfrom=cjdns.fr; dkim=pass (2048-bit key) header.d=cjdns.fr header.i=@cjdns.fr header.b=NSioNvWr; arc=none smtp.client-ip=5.135.140.105
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=cjdns.fr
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=cjdns.fr
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 6C29118EE6E;
-	Sat,  4 Apr 2026 20:49:34 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cjdns.fr; s=dkim;
-	t=1775328577; h=from:subject:date:message-id:to:cc:mime-version:
-	 content-transfer-encoding:in-reply-to:references;
-	bh=D8WfbgG8z1lQF1hnqRptlhs37W1XwP07P11T/RE55bg=;
-	b=NSioNvWriUEkgTiQBAtVBpfTUIWErXNu/QKQT5NofTtsQn0pc3JhasQobZsHA23WC6AkdB
-	J6Gg2O4FkLnLGwJuObKFsMeG4Bf1rLQJAESuqZvTzugur3us4YACUZylToNkF/zqjWFdT8
-	EZISedFJkAD2eguOzdTUDPwk0dT6nB0+tYesk6QPCgKAlvyR7lem6SeOfY21gwBT/2pjtY
-	tsy2rQjMCrgTZpXOtz8RTHRTBZDztoge5cPRfPKeXHEnAYSnTth0VqrSwpHaqlU80E4lVd
-	ZNlmy3tGwJqStkk4dj2UDtWP8hwLf49SxRp9EEHNqurlC30mm37rfb5wi+Ek2g==
-From: Caleb James DeLisle <cjd@cjdns.fr>
-To: linux-phy@lists.infradead.org
-Cc: naseefkm@gmail.com,
-	vkoul@kernel.org,
-	neil.armstrong@linaro.org,
-	robh@kernel.org,
-	krzk+dt@kernel.org,
-	conor+dt@kernel.org,
-	linux-mips@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Caleb James DeLisle <cjd@cjdns.fr>
-Subject: [PATCH v2 2/2] phy: econet: Add PCIe PHY driver for EcoNet EN751221 and EN7528 SoCs.
-Date: Sat,  4 Apr 2026 18:49:18 +0000
-Message-Id: <20260404184918.2184070-3-cjd@cjdns.fr>
-In-Reply-To: <20260404184918.2184070-1-cjd@cjdns.fr>
-References: <20260404184918.2184070-1-cjd@cjdns.fr>
+	s=arc-20240116; t=1775356334; c=relaxed/simple;
+	bh=3ipgEsSQ6QLb9KUKRZ0++WLCQRF0lGSkABtPEXh7XPg=;
+	h=From:Date:Message-ID:To:Cc:Subject:MIME-Version:Content-Type; b=SnJjZ7WNCcQk5lAdfYhFBLV5etZ23fIBYxXx/0shgz5vvwi29VaYxodmCtY35aKS51vIevvqtzK+bJYT5Kc82l0Cy1P+mcdjc87DCuZuKyu8qhAyEIrbyftv91UzKfX2ywzs9ozUAj8NvR7n3lfEjS0IQNnPZ80rOjHphAsGZmA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn; spf=pass smtp.mailfrom=iscas.ac.cn; arc=none smtp.client-ip=159.226.251.21
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iscas.ac.cn
+Received: from 0000-cover-letter.eml (unknown [111.196.245.197])
+	by APP-01 (Coremail) with SMTP id qwCowABH8GupydFpPVU5DA--.42795S2;
+	Sun, 05 Apr 2026 10:32:09 +0800 (CST)
+From: Pengpeng Hou <pengpeng@iscas.ac.cn>
+Date: Sun, 5 Apr 2026 10:20:00 +0800
+Message-ID: <20260405102000.0-mips-cmdline-series-pengpeng@iscas.ac.cn>
+To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>, "Maciej W. Rozycki" <macro@orcam.me.uk>
+Cc: linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org, pengpeng@iscas.ac.cn
+Subject: [PATCH 0/8] MIPS: bound early command-line construction
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Last-TLS-Session-Version: TLSv1.3
-X-Spamd-Result: default: False [0.84 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+X-CM-TRANSID:qwCowABH8GupydFpPVU5DA--.42795S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxJrW3XF45tF1kZFyDZF4kXrb_yoW8Gw15pa
+	n5tFW3JF9xXFyUu3sFvrW5Xa4fZ3s0ka4qqr15XrykAa4DAa92yF4rtr4rua4jgrsa9343
+	JFW7tw1kWF13Ar7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUkm14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+	rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+	1l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
+	6F4UM28EF7xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwVC2z280aVCY1x0267AKxVWxJr
+	0_GcWle2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
+	2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
+	W8JwACjcxG0xvEwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc7CjxVAaw2AFwI0_JF0_
+	Jw1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxV
+	WUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI
+	7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r
+	1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI
+	42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjfUehL0UUUUU
+X-CM-SenderInfo: pshqw1xhqjqxpvfd2hldfou0/
+X-Spamd-Result: default: False [-0.46 / 15.00];
 	MID_CONTAINS_FROM(1.00)[];
-	R_MISSING_CHARSET(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[cjdns.fr,none];
-	R_DKIM_ALLOW(-0.20)[cjdns.fr:s=dkim];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	MIME_TRACE(0.00)[0:+];
-	FREEMAIL_CC(0.00)[gmail.com,kernel.org,linaro.org,vger.kernel.org,cjdns.fr];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-14040-lists,linux-mips=lfdr.de];
-	RECEIVED_HELO_LOCALHOST(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
+	DMARC_NA(0.00)[iscas.ac.cn];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-14042-lists,linux-mips=lfdr.de];
 	RCVD_COUNT_THREE(0.00)[4];
-	MISSING_XM_UA(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
-	FROM_NEQ_ENVFROM(0.00)[cjd@cjdns.fr,linux-mips@vger.kernel.org];
-	FROM_HAS_DN(0.00)[];
-	DKIM_TRACE(0.00)[cjdns.fr:+];
-	RCPT_COUNT_SEVEN(0.00)[11];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[linux-mips,dt];
 	TO_DN_SOME(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,tyhicks.com:email,cjdns.fr:dkim,cjdns.fr:email,cjdns.fr:mid]
-X-Rspamd-Queue-Id: 035F739C214
+	MIME_TRACE(0.00)[0:+];
+	FROM_HAS_DN(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	MISSING_XM_UA(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[pengpeng@iscas.ac.cn,linux-mips@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	NEURAL_HAM(-0.00)[-0.889];
+	TAGGED_RCPT(0.00)[linux-mips];
+	R_DKIM_NA(0.00)[];
+	RCPT_COUNT_FIVE(0.00)[5];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,iscas.ac.cn:email,iscas.ac.cn:mid]
+X-Rspamd-Queue-Id: 940E639D1C9
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-Introduce support for EcoNet PCIe PHY controllers found in EN751221
-and EN7528 SoCs, these SoCs are not identical but are similar, each
-having one Gen1 port, and one Gen1/Gen2 port.
+From: Pengpeng Hou <pengpeng@iscas.ac.cn>
+Date: Sun, 5 Apr 2026 10:20:00 +0800
+Subject: [PATCH 0/8] MIPS: bound early command-line construction
 
-Co-developed-by: Ahmed Naseef <naseefkm@gmail.com>
-Signed-off-by: Ahmed Naseef <naseefkm@gmail.com>
-[cjd@cjdns.fr: add EN751221 support and refactor for clarity]
-Signed-off-by: Caleb James DeLisle <cjd@cjdns.fr>
----
- MAINTAINERS                   |   1 +
- drivers/phy/Kconfig           |  12 +++
- drivers/phy/Makefile          |   1 +
- drivers/phy/phy-econet-pcie.c | 180 ++++++++++++++++++++++++++++++++++
- 4 files changed, 194 insertions(+)
- create mode 100644 drivers/phy/phy-econet-pcie.c
+These eight fixes harden a set of MIPS early boot paths that build the
+kernel command line in fixed-size buffers with unchecked appends.
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 1b016212e4cb..b2d37c7c80af 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -9177,6 +9177,7 @@ M:	Caleb James DeLisle <cjd@cjdns.fr>
- L:	linux-mips@vger.kernel.org
- S:	Maintained
- F:	Documentation/devicetree/bindings/phy/econet,en751221-pcie-phy.yaml
-+F:	drivers/phy/phy-econet-pcie.c
- 
- ECRYPT FILE SYSTEM
- M:	Tyler Hicks <code@tyhicks.com>
-diff --git a/drivers/phy/Kconfig b/drivers/phy/Kconfig
-index 227b9a4c612e..9aad68829d72 100644
---- a/drivers/phy/Kconfig
-+++ b/drivers/phy/Kconfig
-@@ -66,6 +66,18 @@ config PHY_CAN_TRANSCEIVER
- 	  functional modes using gpios and sets the attribute max link
- 	  rate, for CAN drivers.
- 
-+config PHY_ECONET_PCIE
-+	tristate "EcoNet PCIe-PHY Driver"
-+	depends on ECONET || COMPILE_TEST
-+	depends on OF
-+	select GENERIC_PHY
-+	select REGMAP_MMIO
-+	help
-+	  Say Y here to add support for EcoNet PCIe PHY driver.
-+	  This driver create the basic PHY instance and provides initialize
-+	  callback for PCIe GEN1 and GEN2 ports. This PHY is found on
-+	  EcoNet SoCs including EN751221 and EN7528.
-+
- config PHY_GOOGLE_USB
- 	tristate "Google Tensor SoC USB PHY driver"
- 	select GENERIC_PHY
-diff --git a/drivers/phy/Makefile b/drivers/phy/Makefile
-index f49d83f00a3d..42959ed383fd 100644
---- a/drivers/phy/Makefile
-+++ b/drivers/phy/Makefile
-@@ -9,6 +9,7 @@ obj-$(CONFIG_GENERIC_PHY)		+= phy-core.o
- obj-$(CONFIG_GENERIC_PHY_MIPI_DPHY)	+= phy-core-mipi-dphy.o
- obj-$(CONFIG_PHY_AIROHA_PCIE)		+= phy-airoha-pcie.o
- obj-$(CONFIG_PHY_CAN_TRANSCEIVER)	+= phy-can-transceiver.o
-+obj-$(CONFIG_PHY_ECONET_PCIE)		+= phy-econet-pcie.o
- obj-$(CONFIG_PHY_GOOGLE_USB)		+= phy-google-usb.o
- obj-$(CONFIG_USB_LGM_PHY)		+= phy-lgm-usb.o
- obj-$(CONFIG_PHY_LPC18XX_USB_OTG)	+= phy-lpc18xx-usb-otg.o
-diff --git a/drivers/phy/phy-econet-pcie.c b/drivers/phy/phy-econet-pcie.c
-new file mode 100644
-index 000000000000..d2c6e0c1f331
---- /dev/null
-+++ b/drivers/phy/phy-econet-pcie.c
-@@ -0,0 +1,180 @@
-+// SPDX-License-Identifier: GPL-2.0+
-+/*
-+ * Author: Caleb James DeLisle <cjd@cjdns.fr>
-+ *	   Ahmed Naseef <naseefkm@gmail.com>
-+ */
-+
-+#include <linux/bitfield.h>
-+#include <linux/module.h>
-+#include <linux/of.h>
-+#include <linux/phy/phy.h>
-+#include <linux/platform_device.h>
-+#include <linux/regmap.h>
-+
-+/* Rx detection timing for EN751221: 16*8 clock cycles  */
-+#define EN751221_RXDET_VAL		16
-+
-+/* Rx detection timing when in power mode 3 */
-+#define EN75_RXDET_P3_REG		0xa28
-+#define EN75_RXDET_P3_MASK		GENMASK(17, 9)
-+
-+/* Rx detection timing when in power mode 2 */
-+#define EN75_RXDET_P2_REG		0xa2c
-+#define EN75_RXDET_P2_MASK		GENMASK(8, 0)
-+
-+/* Rx impedance */
-+#define EN75_RX_IMPEDANCE_REG		0xb2c
-+#define EN75_RX_IMPEDANCE_MASK		GENMASK(13, 12)
-+enum en75_rx_impedance {
-+	EN75_RX_IMPEDANCE_100_OHM	= 0,
-+	EN75_RX_IMPEDANCE_95_OHM	= 1,
-+	EN75_RX_IMPEDANCE_90_OHM	= 2,
-+};
-+
-+/* PLL Invert clock */
-+#define EN75_PLL_PH_INV_REG		0x4a0
-+#define EN75_PLL_PH_INV_MASK		BIT(5)
-+
-+struct en75_phy_op {
-+	u32 reg;
-+	u32 mask;
-+	u32 val;
-+};
-+
-+struct en7528_pcie_phy {
-+	struct regmap *regmap;
-+	const struct en75_phy_op *data;
-+};
-+
-+/* Port 0 PHY: set LCDDS_CLK_PH_INV for PLL operation */
-+static const struct en75_phy_op en7528_phy_gen1[] = {
-+	{
-+		.reg = EN75_PLL_PH_INV_REG,
-+		.mask = EN75_PLL_PH_INV_MASK,
-+		.val = 1,
-+	},
-+	{ /* sentinel */ }
-+};
-+
-+/* EN7528 Port 1 PHY: Rx impedance tuning, target R -5 Ohm */
-+static const struct en75_phy_op en7528_phy_gen2[] = {
-+	{
-+		.reg = EN75_RX_IMPEDANCE_REG,
-+		.mask = EN75_RX_IMPEDANCE_MASK,
-+		.val = EN75_RX_IMPEDANCE_95_OHM,
-+	},
-+	{ /* sentinel */ }
-+};
-+
-+/* EN751221 Port 1 PHY, set RX detect to 16*8 clock cycles */
-+static const struct en75_phy_op en751221_phy_gen2[] = {
-+	{
-+		.reg = EN75_RXDET_P3_REG,
-+		.mask = EN75_RXDET_P3_MASK,
-+		.val = EN751221_RXDET_VAL,
-+	},
-+	{
-+		.reg = EN75_RXDET_P2_REG,
-+		.mask = EN75_RXDET_P2_MASK,
-+		.val = EN751221_RXDET_VAL,
-+	},
-+	{ /* sentinel */ }
-+};
-+
-+static int en75_pcie_phy_init(struct phy *phy)
-+{
-+	struct en7528_pcie_phy *ephy = phy_get_drvdata(phy);
-+	const struct en75_phy_op *data = ephy->data;
-+	int i, ret;
-+	u32 val;
-+
-+	for (i = 0; data[i].mask || data[i].val; i++) {
-+		if (i)
-+			usleep_range(1000, 2000);
-+
-+		val = field_prep(data[i].mask, data[i].val);
-+
-+		ret = regmap_update_bits(ephy->regmap, data[i].reg,
-+					 data[i].mask, val);
-+		if (ret)
-+			return ret;
-+	}
-+
-+	return 0;
-+}
-+
-+static const struct phy_ops en75_pcie_phy_ops = {
-+	.init	= en75_pcie_phy_init,
-+	.owner	= THIS_MODULE,
-+};
-+
-+static int en75_pcie_phy_probe(struct platform_device *pdev)
-+{
-+	struct regmap_config regmap_config = {
-+		.reg_bits = 32,
-+		.val_bits = 32,
-+		.reg_stride = 4,
-+	};
-+	struct device *dev = &pdev->dev;
-+	const struct en75_phy_op *data;
-+	struct phy_provider *provider;
-+	struct en7528_pcie_phy *ephy;
-+	void __iomem *base;
-+	struct phy *phy;
-+	int i;
-+
-+	data = of_device_get_match_data(dev);
-+	if (!data)
-+		return -EINVAL;
-+
-+	ephy = devm_kzalloc(dev, sizeof(*ephy), GFP_KERNEL);
-+	if (!ephy)
-+		return -ENOMEM;
-+
-+	ephy->data = data;
-+
-+	base = devm_platform_ioremap_resource(pdev, 0);
-+	if (IS_ERR(base))
-+		return PTR_ERR(base);
-+
-+	/* Set max_register to highest used register */
-+	for (i = 0; data[i].mask || data[i].val; i++)
-+		if (data[i].reg > regmap_config.max_register)
-+			regmap_config.max_register = data[i].reg;
-+
-+	ephy->regmap = devm_regmap_init_mmio(dev, base, &regmap_config);
-+	if (IS_ERR(ephy->regmap))
-+		return PTR_ERR(ephy->regmap);
-+
-+	phy = devm_phy_create(dev, dev->of_node, &en75_pcie_phy_ops);
-+	if (IS_ERR(phy))
-+		return PTR_ERR(phy);
-+
-+	phy_set_drvdata(phy, ephy);
-+
-+	provider = devm_of_phy_provider_register(dev, of_phy_simple_xlate);
-+
-+	return PTR_ERR_OR_ZERO(provider);
-+}
-+
-+static const struct of_device_id en75_pcie_phy_ids[] = {
-+	{ .compatible = "econet,en7528-pcie-gen1", .data = en7528_phy_gen1 },
-+	{ .compatible = "econet,en7528-pcie-gen2", .data = en7528_phy_gen2 },
-+	{ .compatible = "econet,en751221-pcie-gen1", .data = en7528_phy_gen1 },
-+	{ .compatible = "econet,en751221-pcie-gen2", .data = en751221_phy_gen2 },
-+	{ /* sentinel */ }
-+};
-+MODULE_DEVICE_TABLE(of, en75_pcie_phy_ids);
-+
-+static struct platform_driver en75_pcie_phy_driver = {
-+	.probe = en75_pcie_phy_probe,
-+	.driver = {
-+		.name = "econet-pcie-phy",
-+		.of_match_table = en75_pcie_phy_ids,
-+	},
-+};
-+module_platform_driver(en75_pcie_phy_driver);
-+
-+MODULE_AUTHOR("Caleb James DeLisle <cjd@cjdns.fr>");
-+MODULE_DESCRIPTION("EcoNet PCIe PHY driver");
-+MODULE_LICENSE("GPL");
--- 
-2.39.5
+The affected paths take firmware- or PROM-provided arguments and extend
+`arcs_cmdline` or `fw_getcmdline()` with repeated `strcat()`, in-place
+`sprintf()`, or equivalent unchecked copies. A long enough firmware
+argument set can therefore run past the fixed command-line buffer during
+early boot.
+
+This series switches those constructions over to bounded concatenation
+while keeping the existing boot-time behavior otherwise unchanged.
+
+Patches:
+- 1/8 MIPS: dec: bound PROM command-line appends
+- 2/8 MIPS: sni: bound PROM command-line appends
+- 3/8 MIPS: lemote-2f: bound machtype command-line append
+- 4/8 MIPS: txx9: bound command-line reconstruction
+- 5/8 MIPS: arc: bound firmware command-line construction
+- 6/8 MIPS: cavium-octeon: bound default console command-line append
+- 7/8 MIPS: malta-init: bound default console command-line append
+- 8/8 MIPS: malta-setup: bound pci_clock command-line append
+
+Base:
+- `origin/master`
+- `3aae9383f42f`
+
+Checks:
+- all 8 patches apply cleanly to the latest `origin/master`
+- `checkpatch --strict` is clean on all 8 exported patch files
+
+Thanks,
+Pengpeng
+
 
 
