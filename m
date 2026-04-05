@@ -1,164 +1,135 @@
-Return-Path: <linux-mips+bounces-14050-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-14051-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id AP1UJvry0WldRgcAu9opvQ
-	(envelope-from <linux-mips+bounces-14050-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Sun, 05 Apr 2026 07:28:26 +0200
+	id OPpdOFEJ0mkrSwcAu9opvQ
+	(envelope-from <linux-mips+bounces-14051-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Sun, 05 Apr 2026 09:03:45 +0200
 X-Original-To: lists+linux-mips@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 47A0739D5A9
-	for <lists+linux-mips@lfdr.de>; Sun, 05 Apr 2026 07:28:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 3F26B39D898
+	for <lists+linux-mips@lfdr.de>; Sun, 05 Apr 2026 09:03:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 5D7C0300D47E
-	for <lists+linux-mips@lfdr.de>; Sun,  5 Apr 2026 05:28:17 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id B8B8E3007F6B
+	for <lists+linux-mips@lfdr.de>; Sun,  5 Apr 2026 07:03:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C748E34BA5B;
-	Sun,  5 Apr 2026 05:28:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4A987224AFA;
+	Sun,  5 Apr 2026 07:03:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="bejAtE4V"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="U4JLTX8/"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7BFC526A08A;
-	Sun,  5 Apr 2026 05:28:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F39F70818;
+	Sun,  5 Apr 2026 07:03:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775366895; cv=none; b=egXLFmhE/8wWWu3+GNw2nE2BssqQ8owqs0vUJnWHvEUHSF9ZkL1ANZK0+M8Jn8DwEY+dw7pKPZ5iadCTtI5e0fY34UPC+e6Qvb0wiSrqaV073de9LqIvIJAw9bzBMvD5DsUn3b9f5dhvjgwu78cNMEYlpYwX4tys9dzTEO8mYM4=
+	t=1775372622; cv=none; b=dtU8j07nCqZojhFcpZewGRgXd0GdBNtQ4wszIunV6avO5oV2MSIJFSWmU5sRrywKYBx9SGJTZe4YPE1XP9uxOLG+18aA2RC7p8lEljZOESVl0e25w844R4hb9sJaPF3BGmFEVpLgD9mzpYS9Bi4wX5GmvkvOp2YHNXxWb2IKE/8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775366895; c=relaxed/simple;
-	bh=ophk+hp6kRAG0U/TAGAhUuOrKmitf0U0PYwWZuudius=;
+	s=arc-20240116; t=1775372622; c=relaxed/simple;
+	bh=cGZQASeUOD7DEYI24yGkpzM2VpgQdKxFA6eMQ7fZ9Mg=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=uq0WEIfG+YhxDZ3UZx6CF9+CdwJWbvRtYXNxWWruHFMcBHMChd3/3wpYJeruXHbqFQmonNKy2qMgTLOlRsQ6cd5XhnegWBEUMaVoi59/Te8kW4BOyGyb0p/QG7a/QnpIOZUzcE8jDlkMzocdg0ApzlLmaJ0689G3dopB4re4PtY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=bejAtE4V; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 63B7DC116C6;
-	Sun,  5 Apr 2026 05:28:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1775366895;
-	bh=ophk+hp6kRAG0U/TAGAhUuOrKmitf0U0PYwWZuudius=;
+	 Content-Type:Content-Disposition:In-Reply-To; b=AG+kGlLKkBk19njCVwh41LGi9N2voc/I470uXLWan4WWVEVc1Bbzh1dDmCLu3Y8yjwsYkkqRZxIotexBGWriZ60UDBP6o50jo45dSWz+bgYyI6B975W6H70K70Kq3rgo1H5YoK+biNrAOpCXog3z/ELc6KxdRhExq7JXLelngGY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=U4JLTX8/; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17DF8C116C6;
+	Sun,  5 Apr 2026 07:03:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1775372621;
+	bh=cGZQASeUOD7DEYI24yGkpzM2VpgQdKxFA6eMQ7fZ9Mg=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=bejAtE4V1Hz3lTSKLlyBcIyR+JNRKDGMc/G8Z0GN4ZPNsCF585rejSzukgcFioxub
-	 QUbiyQrTx+RcM6s1+Zu0oaI1vfJoHXTXgrhOUb/YXCMVVE2KZgd+scb35TQsQF7wMb
-	 a7Wf9qe7CdkvcplKMPdPqmr9WcFeVQib8uJGDZ1Y=
-Date: Sun, 5 Apr 2026 07:27:46 +0200
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Douglas Anderson <dianders@chromium.org>
-Cc: "Rafael J . Wysocki" <rafael@kernel.org>,
-	Danilo Krummrich <dakr@kernel.org>,
-	Alan Stern <stern@rowland.harvard.edu>,
-	Saravana Kannan <saravanak@kernel.org>,
-	Christoph Hellwig <hch@lst.de>, Eric Dumazet <edumazet@google.com>,
-	Johan Hovold <johan@kernel.org>, Leon Romanovsky <leon@kernel.org>,
-	Alexander Lobakin <aleksander.lobakin@intel.com>,
-	Alexey Kardashevskiy <aik@ozlabs.ru>,
-	Robin Murphy <robin.murphy@arm.com>,
-	Andrew Morton <akpm@linux-foundation.org>, Frank.Li@kernel.org,
-	Jason Gunthorpe <jgg@ziepe.ca>, alex@ghiti.fr,
-	alexander.stein@ew.tq-group.com, andre.przywara@arm.com,
-	andrew@codeconstruct.com.au, andrew@lunn.ch,
-	andriy.shevchenko@linux.intel.com, aou@eecs.berkeley.edu,
-	ardb@kernel.org, bhelgaas@google.com, brgl@kernel.org,
-	broonie@kernel.org, catalin.marinas@arm.com, chleroy@kernel.org,
-	davem@davemloft.net, david@kernel.org, devicetree@vger.kernel.org,
-	dmaengine@vger.kernel.org, driver-core@lists.linux.dev,
-	gbatra@linux.ibm.com, gregory.clement@bootlin.com,
-	hkallweit1@gmail.com, iommu@lists.linux.dev, jirislaby@kernel.org,
-	joel@jms.id.au, joro@8bytes.org, kees@kernel.org,
-	kevin.brodsky@arm.com, kuba@kernel.org, lenb@kernel.org,
-	lgirdwood@gmail.com, linux-acpi@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-aspeed@lists.ozlabs.org,
-	linux-cxl@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-mips@vger.kernel.org, linux-mm@kvack.org,
-	linux-pci@vger.kernel.org, linux-riscv@lists.infradead.org,
-	linux-serial@vger.kernel.org, linux-snps-arc@lists.infradead.org,
-	linux-usb@vger.kernel.org, linux@armlinux.org.uk,
-	linuxppc-dev@lists.ozlabs.org, m.szyprowski@samsung.com,
-	maddy@linux.ibm.com, mani@kernel.org, maz@kernel.org,
-	miko.lenczewski@arm.com, mpe@ellerman.id.au, netdev@vger.kernel.org,
-	npiggin@gmail.com, osalvador@suse.de, oupton@kernel.org,
-	pabeni@redhat.com, palmer@dabbelt.com, peter.ujfalusi@gmail.com,
-	peterz@infradead.org, pjw@kernel.org, robh@kernel.org,
-	sebastian.hesselbarth@gmail.com, tglx@kernel.org,
-	tsbogend@alpha.franken.de, vgupta@kernel.org, vkoul@kernel.org,
-	will@kernel.org, willy@infradead.org, yangyicong@hisilicon.com,
-	yeoreum.yun@arm.com
-Subject: Re: [PATCH v4 0/9] driver core: Fix some race conditions
-Message-ID: <2026040539-sponge-publisher-2b42@gregkh>
-References: <20260404000644.522677-1-dianders@chromium.org>
+	b=U4JLTX8/zDK6FRLC2p7WxuOu6hFXklMMukj9ElNkbETU0DRkXJLsJQ8h+1l6XGg7o
+	 BxaCe6udKIsJLA5gFXj9mFJyPrYMsLFy5M8BwiE0ocE8M/yWRBM7h1pP6yTRhvqzBb
+	 xoDvZ9MWgwDEEymjkd8ILzjWo2jVI0NX/QlshiEnFNMeh5oppoP30SWH5AjOv1IAol
+	 /Pv8ZKG1mXGB/btCYEdFWN+14AOkY8luPUbqGNngYgJwZu+73NZL6i1/TaCCSw2rbB
+	 VP2sPwgb8JFZI+UWYsg/qDFKJ8HVtEOJqdFod70D3pqJpYFZG/PM8m1HEJO8LktkEz
+	 4oasjxw6uhtSw==
+Date: Sun, 5 Apr 2026 09:03:39 +0200
+From: Krzysztof Kozlowski <krzk@kernel.org>
+To: Caleb James DeLisle <cjd@cjdns.fr>
+Cc: linux-pci@vger.kernel.org, linux-mips@vger.kernel.org, 
+	naseefkm@gmail.com, ryder.lee@mediatek.com, helgaas@kernel.org, 
+	lpieralisi@kernel.org, kwilczynski@kernel.org, mani@kernel.org, robh@kernel.org, 
+	krzk+dt@kernel.org, conor+dt@kernel.org, matthias.bgg@gmail.com, 
+	angelogioacchino.delregno@collabora.com, ansuelsmth@gmail.com, linux-mediatek@lists.infradead.org, 
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 1/2] dt-bindings: PCI: mediatek: Add support for
+ EcoNet EN7528
+Message-ID: <20260405-phenomenal-messy-shark-bdefbd@quoll>
+References: <20260404182854.2183651-1-cjd@cjdns.fr>
+ <20260404182854.2183651-2-cjd@cjdns.fr>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20260404000644.522677-1-dianders@chromium.org>
-X-Spamd-Result: default: False [3.84 / 15.00];
-	MID_END_EQ_FROM_USER_PART(4.00)[];
+In-Reply-To: <20260404182854.2183651-2-cjd@cjdns.fr>
+X-Spamd-Result: default: False [-0.16 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[linuxfoundation.org,none];
 	MID_RHS_NOT_FQDN(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
-	R_DKIM_ALLOW(-0.20)[linuxfoundation.org:s=korg];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-14050-lists,linux-mips=lfdr.de];
-	MIME_TRACE(0.00)[0:+];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	RCVD_TLS_LAST(0.00)[];
-	FREEMAIL_CC(0.00)[kernel.org,rowland.harvard.edu,lst.de,google.com,intel.com,ozlabs.ru,arm.com,linux-foundation.org,ziepe.ca,ghiti.fr,ew.tq-group.com,codeconstruct.com.au,lunn.ch,linux.intel.com,eecs.berkeley.edu,davemloft.net,vger.kernel.org,lists.linux.dev,linux.ibm.com,bootlin.com,gmail.com,jms.id.au,8bytes.org,lists.infradead.org,lists.ozlabs.org,kvack.org,armlinux.org.uk,samsung.com,ellerman.id.au,suse.de,redhat.com,dabbelt.com,infradead.org,alpha.franken.de,hisilicon.com];
 	RCVD_COUNT_THREE(0.00)[4];
+	MIME_TRACE(0.00)[0:+];
+	TAGGED_FROM(0.00)[bounces-14051-lists,linux-mips=lfdr.de];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	FREEMAIL_CC(0.00)[vger.kernel.org,gmail.com,mediatek.com,kernel.org,collabora.com,lists.infradead.org];
+	RCVD_TLS_LAST(0.00)[];
 	FROM_HAS_DN(0.00)[];
-	MISSING_XM_UA(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCPT_COUNT_GT_50(0.00)[84];
+	RCPT_COUNT_TWELVE(0.00)[18];
+	NEURAL_HAM(-0.00)[-0.999];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[gregkh@linuxfoundation.org,linux-mips@vger.kernel.org];
-	DKIM_TRACE(0.00)[linuxfoundation.org:+];
-	NEURAL_HAM(-0.00)[-0.990];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[linux-mips];
-	TO_DN_SOME(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[krzk@kernel.org,linux-mips@vger.kernel.org];
+	DKIM_TRACE(0.00)[kernel.org:+];
+	TAGGED_RCPT(0.00)[linux-mips,dt];
 	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 47A0739D5A9
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	MISSING_XM_UA(0.00)[];
+	TO_DN_SOME(0.00)[]
+X-Rspamd-Queue-Id: 3F26B39D898
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On Fri, Apr 03, 2026 at 05:04:54PM -0700, Douglas Anderson wrote:
-> NOTE: one potentially "controversial" choice I made in some patches
-> was to always reserve a flag ID even if a flag is only used under
-> certain CONFIG_ settings. This is a change from how things were
-> before. Keeping the numbering consistent and allowing easy
-> compile-testing of both CONFIG settings seemed worth it, especially
-> since it won't take up any extra space until we've added a lot more
-> flags.
-
-Nah, this is fine, I don't see any problems with this as the original
-code kind of was doing the same thing with the "hole" in the structure
-if those options were not enabled.
-
-> I only marked the first patch as a "Fix" since it is the only one
-> fixing observed problems. Other patches could be considered fixes too
-> if folks want.
+On Sat, Apr 04, 2026 at 06:28:53PM +0000, Caleb James DeLisle wrote:
+> Introduce EcoNet EN7528 SoC compatible in MediaTek PCIe controller
+> binding.
 > 
-> I tested the first patch in the series backported to kernel 6.6 on the
-> Pixel phone that was experiencing the race. I added extra printouts to
-> make sure that the problem was hitting / addressed. The rest of the
-> patches are tested with allmodconfig with arm32, arm64, ppc, and
-> x86. I boot tested on an arm64 Chromebook running mainline.
+> EcoNet PCIe controller has the same configuration model as
+> Mediatek v2 but is initialized more similarly to an MT7621
+> PCIe.
+> 
 
-I'm guessing your tests passed?  :)
+<form letter>
+This is a friendly reminder during the review process.
 
-Anyway, this looks great, unless there are any objections, other than
-the "needs to be undefined", which a follow-on patch can handle, I'll
-queue them up next week for 7.1-rc1.
+It looks like you received a tag and forgot to add it.
 
-thanks,
+If you do not know the process, here is a short explanation:
+Please add Acked-by/Reviewed-by/Tested-by tags when posting new
+versions of patchset, under or above your Signed-off-by tag, unless
+patch changed significantly (e.g. new properties added to the DT
+bindings). Tag is "received", when provided in a message replied to you
+on the mailing list. Tools like b4 can help here. However, there's no
+need to repost patches *only* to add the tags. The upstream maintainer
+will do that for tags received on the version they apply.
 
-greg k-h
+Please read:
+https://elixir.bootlin.com/linux/v6.12-rc3/source/Documentation/process/submitting-patches.rst#L577
+
+If a tag was not added on purpose, please state in the patch changelog
+or cover letter why and what changed.
+</form letter>
+
+Best regards,
+Krzysztof
+
 
