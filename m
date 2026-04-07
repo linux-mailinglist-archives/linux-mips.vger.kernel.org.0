@@ -1,142 +1,140 @@
-Return-Path: <linux-mips+bounces-14081-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-14080-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id sGRcILxn1GnptgcAu9opvQ
-	(envelope-from <linux-mips+bounces-14081-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Tue, 07 Apr 2026 04:11:08 +0200
+	id KFDbOBFo1GnptgcAu9opvQ
+	(envelope-from <linux-mips+bounces-14080-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Tue, 07 Apr 2026 04:12:33 +0200
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id D57AC3A8E6F
-	for <lists+linux-mips@lfdr.de>; Tue, 07 Apr 2026 04:11:07 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3A3F33A8EBB
+	for <lists+linux-mips@lfdr.de>; Tue, 07 Apr 2026 04:12:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 1677E3030C8E
-	for <lists+linux-mips@lfdr.de>; Tue,  7 Apr 2026 02:10:36 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id DF699302D535
+	for <lists+linux-mips@lfdr.de>; Tue,  7 Apr 2026 02:10:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 22F9B2236EE;
-	Tue,  7 Apr 2026 02:10:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 82B7A1B7910;
+	Tue,  7 Apr 2026 02:10:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="s2wlu8lJ"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from cstnet.cn (smtp21.cstnet.cn [159.226.251.21])
-	(using TLSv1.2 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ACE5F274641;
-	Tue,  7 Apr 2026 02:10:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.226.251.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C2F91EA7CE;
+	Tue,  7 Apr 2026 02:10:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775527833; cv=none; b=HqXnbaW5kwGagF9gSv9q2VplRvtCptfA51Hqm47PNkbH0GdDh7UA0krhbZtVr7phSWXYd1AkopfqYEknDOZ3GBhV28mDzcNtvUH3ufeuOtUMbwZ3sPR0O7L+Yoc2RnxkD3WJvgd5MBUXRRK+6mBWMx1NoHaud3h8QzoDTvq/0Tk=
+	t=1775527832; cv=none; b=LFCZ8pdFEniNvcP61BuVEbZ6Fxjm4We+gB4uGgQkOZEHjv7DsEUREKzQE1ao/InRojAQk70hNz3ttYaDDzPz8X2lyXSKtvxFKiHVDB3mWiLouAzQnfgWQe9UAwGDYR9QUQ9nWOWu/VBWCDpfYlJbYmbzG2sISsJFvwoq4EISu+g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775527833; c=relaxed/simple;
-	bh=3rvjttkEyQweBqVRbv41mv3Esj93jRPuU6FzMPkFkYM=;
-	h=From:Date:Message-ID:To:Cc:In-Reply-To:References:Subject; b=ge73UFhb9ERu5URtC43lagej7pQ8rOoq7WrsP1FGm3uzd9XT/IDWUH/DiMobYdCVnLR0YFEIv46dIVtF6PR9Xu9z8h3iAUIjNW2p6JIMqhFQdd652WX9ksxagFh8JBrfQD+l/Ep1IM5FBqQ1MMbjV03q6gHjoRXb8Jhzx7kLFRA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn; spf=pass smtp.mailfrom=iscas.ac.cn; arc=none smtp.client-ip=159.226.251.21
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iscas.ac.cn
-Received: from 0002-mips-dt-bootargs-v2.eml (unknown [111.196.245.197])
-	by APP-01 (Coremail) with SMTP id qwCowABnC2eRZ9Rpt7R2DA--.63235S2;
-	Tue, 07 Apr 2026 10:10:25 +0800 (CST)
-From: Pengpeng Hou <pengpeng@iscas.ac.cn>
-Date: Tue, 7 Apr 2026 09:57:03 +0800
-Message-ID: <20260407120002.2-mips-dt-bootargs-v2-pengpeng@iscas.ac.cn>
-To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc: Sergey Shtylyov <sergei.shtylyov@gmail.com>, linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org, pengpeng@iscas.ac.cn
-In-Reply-To: <20260403161001.1-mips-dt-bootargs-pengpeng@iscas.ac.cn>
-References: <20260403161001.1-mips-dt-bootargs-pengpeng@iscas.ac.cn>
-Subject: [PATCH v2] MIPS: validate DT bootargs before appending them
-X-CM-TRANSID:qwCowABnC2eRZ9Rpt7R2DA--.63235S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7uFy7uw18KF4xur17KF47twb_yoW8GF17pa
-	yqka1DXrs8ZFy7Ja45Ar1Yvr45Xws3Jry7GFyqg3yvv3WaqryDXrsagrnFvr12vrWI93Wa
-	9FWYgrW5CayavrJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUkl14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-	rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-	1l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
-	JVWxJr1l84ACjcxK6I8E87Iv67AKxVWxJr0_GcWl84ACjcxK6I8E87Iv6xkF7I0E14v26r
-	xl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj
-	6xIIjxv20xvE14v26r126r1DMcIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr
-	0_Gr1lF7xvr2IY64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7MxkF7I0En4kS14v26r12
-	6r1DMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI
-	0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y
-	0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1I6r4UMIIF0xvE2Ix0cI8IcVCY1x0267AKxV
-	W8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1l
-	IxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUjiID7UUUU
-	U==
-X-CM-SenderInfo: pshqw1xhqjqxpvfd2hldfou0/
+	s=arc-20240116; t=1775527832; c=relaxed/simple;
+	bh=NUrupb/CF97DyehgDM1bR3YngtCbCXQcoCVeKQ2GbB4=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=aJOQ1vr0uyhNqg2EcdN/RZRMVak633DM7lBB/UMTw5PiqjEpSGhyUHHHS/U4S/v9xLT9or9GW4e1n78isfAnUL36Vc4nN1/1FBmjcSLdLcsQYzLo9UBi7mFv42rdsgF3cbPVABB03ouN3gTi4L/q27LMRgObfcNQu07vPU4gyo8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=s2wlu8lJ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EDB12C4CEF7;
+	Tue,  7 Apr 2026 02:10:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1775527832;
+	bh=NUrupb/CF97DyehgDM1bR3YngtCbCXQcoCVeKQ2GbB4=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=s2wlu8lJlZOw0FDnuFEbb1GIYBBpLFRmBCOwF42KTyNk+9QKJhFGELVg47XWRSkUp
+	 VCwBD9vMkxe0JrC3ionEMbNtZ7rcN4qYPiL842Bqon5zJlQS/4MGH42pP0wgzJnulc
+	 qUY5dxPpk3U5LtvBnHO5cajhh2Toib8iE/1nK3kqWegr6V6WDqPDANtSlJcNcvZKrt
+	 n0BxwclZpplISYN2ZWCorIbmg1+cjijdgDztRpFvfYbKVDh3gm5qTz0uKnaMUUOBlL
+	 BLtNwSE51BS7xdRHIoxvwGsTft8alJ6kvE2VZF7s/XEPVVMsiAQXfWcVv3i6HT/PJj
+	 cp0Z8SZ36lTUg==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 7CCB83809A28;
+	Tue,  7 Apr 2026 02:10:11 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
-X-Spamd-Result: default: False [1.54 / 15.00];
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net-next v2] eth: remove the driver for acenic / tigon1&2
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <177552781030.3342975.4848886248762600181.git-patchwork-notify@kernel.org>
+Date: Tue, 07 Apr 2026 02:10:10 +0000
+References: <20260403220501.2263835-1-kuba@kernel.org>
+In-Reply-To: <20260403220501.2263835-1-kuba@kernel.org>
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: davem@davemloft.net, netdev@vger.kernel.org, edumazet@google.com,
+ pabeni@redhat.com, andrew+netdev@lunn.ch, horms@kernel.org,
+ jes@trained-monkey.org, gregkh@linuxfoundation.org, helgaas@kernel.org,
+ chenhuacai@kernel.org, kernel@xen0n.name, tsbogend@alpha.franken.de,
+ James.Bottomley@HansenPartnership.com, deller@gmx.de, maddy@linux.ibm.com,
+ mpe@ellerman.id.au, npiggin@gmail.com, chleroy@kernel.org, hca@linux.ibm.com,
+ gor@linux.ibm.com, agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
+ svens@linux.ibm.com, ebiggers@google.com, ardb@kernel.org, tiwai@suse.de,
+ tytso@mit.edu, enelsonmoore@gmail.com, martin.petersen@oracle.com,
+ jirislaby@kernel.org, geert@linux-m68k.org, vineethr@linux.ibm.com,
+ lirongqing@baidu.com, kshk@linux.ibm.com, vadim.fedorenko@linux.dev,
+ wangruikang@iscas.ac.cn, dong100@mucse.com, hkallweit1@gmail.com,
+ kees@kernel.org, loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
+ linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+ linux-s390@vger.kernel.org
+X-Spamd-Result: default: False [-0.66 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
-	MID_CONTAINS_FROM(1.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_MISSING_CHARSET(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	DMARC_NA(0.00)[iscas.ac.cn];
-	TAGGED_FROM(0.00)[bounces-14081-lists,linux-mips=lfdr.de];
-	TO_DN_SOME(0.00)[];
-	FREEMAIL_CC(0.00)[gmail.com,vger.kernel.org,iscas.ac.cn];
-	RCVD_TLS_LAST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-14080-lists,linux-mips=lfdr.de,netdevbpf];
+	FREEMAIL_CC(0.00)[davemloft.net,vger.kernel.org,google.com,redhat.com,lunn.ch,kernel.org,trained-monkey.org,linuxfoundation.org,xen0n.name,alpha.franken.de,HansenPartnership.com,gmx.de,linux.ibm.com,ellerman.id.au,gmail.com,suse.de,mit.edu,oracle.com,linux-m68k.org,baidu.com,linux.dev,iscas.ac.cn,mucse.com,lists.linux.dev,lists.ozlabs.org];
+	FROM_NEQ_ENVFROM(0.00)[patchwork-bot@kernel.org,linux-mips@vger.kernel.org];
 	FORGED_SENDER_MAILLIST(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[45];
 	MIME_TRACE(0.00)[0:+];
-	RCVD_COUNT_THREE(0.00)[4];
-	NEURAL_SPAM(0.00)[0.388];
-	RCPT_COUNT_FIVE(0.00)[5];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[pengpeng@iscas.ac.cn,linux-mips@vger.kernel.org];
-	FROM_HAS_DN(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	R_DKIM_NA(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
-	TAGGED_RCPT(0.00)[linux-mips];
+	DKIM_TRACE(0.00)[kernel.org:+];
+	FROM_NO_DN(0.00)[];
 	MISSING_XM_UA(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[iscas.ac.cn:email,iscas.ac.cn:mid,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: D57AC3A8E6F
+	NEURAL_HAM(-0.00)[-0.999];
+	RCVD_COUNT_FIVE(0.00)[5];
+	PRECEDENCE_BULK(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	MID_RHS_MATCH_FROM(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TAGGED_RCPT(0.00)[linux-mips,netdev];
+	TO_DN_SOME(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,trained-monkey.org:email,linuxfoundation.org:email]
+X-Rspamd-Queue-Id: 3A3F33A8EBB
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-bootcmdline_scan_chosen() fetches the raw flat-DT bootargs property and
-passes it straight to bootcmdline_append(). That helper later feeds the
-same pointer into strlcat(), which computes strlen(src) before copying.
-Flat DT properties are external boot input, and this path does not
-prove that bootargs is NUL-terminated within its declared bounds.
+Hello:
 
-Reject unterminated bootargs properties before appending them to the
-kernel command line.
+This patch was applied to netdev/net-next.git (main)
+by Jakub Kicinski <kuba@kernel.org>:
 
-Signed-off-by: Pengpeng Hou <pengpeng@iscas.ac.cn>
----
-Changes since v1:
-- use strnlen() instead of memchr() for the local NUL-termination check
+On Fri,  3 Apr 2026 15:05:01 -0700 you wrote:
+> The entire git history for this driver looks like tree-wide
+> and automated cleanups. There's even more coming now with
+> AI, so let's try to delete it instead.
+> 
+> Acked-by: Jes Sorensen <jes@trained-monkey.org>
+> Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+> 
+> [...]
 
-arch/mips/kernel/setup.c | 4 ++++
- 1 file changed, 4 insertions(+)
+Here is the summary with links:
+  - [net-next,v2] eth: remove the driver for acenic / tigon1&2
+    https://git.kernel.org/netdev/net-next/c/e6b7e1a10cba
 
-diff --git a/arch/mips/kernel/setup.c b/arch/mips/kernel/setup.c
-index f9b228e33f3b..1ae6d0c0e1d6 100644
---- a/arch/mips/kernel/setup.c
-+++ b/arch/mips/kernel/setup.c
-@@ -31,6 +31,7 @@
- #include <linux/of_fdt.h>
- #include <linux/dmi.h>
- #include <linux/crash_dump.h>
-+#include <linux/string.h>
- 
- #include <asm/addrspace.h>
- #include <asm/bootinfo.h>
-@@ -541,6 +542,9 @@ static int __init bootcmdline_scan_chosen(unsigned long node, const char *uname,
- 
- 	p = of_get_flat_dt_prop(node, "bootargs", &l);
- 	if (p != NULL && l > 0) {
-+		if (strnlen(p, l) >= l)
-+			return 1;
-+
- 		bootcmdline_append(p, min(l, COMMAND_LINE_SIZE));
- 		*dt_bootargs = true;
- 	}
+You are awesome, thank you!
 -- 
-2.50.1 (Apple Git-155)
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
 
