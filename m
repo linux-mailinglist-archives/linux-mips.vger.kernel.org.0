@@ -1,152 +1,132 @@
-Return-Path: <linux-mips+bounces-14087-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-14088-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id MKbcFTuM1Wnr7QcAu9opvQ
-	(envelope-from <linux-mips+bounces-14087-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Wed, 08 Apr 2026 00:59:07 +0200
+	id 4AttFVNR1mm8DQgAu9opvQ
+	(envelope-from <linux-mips+bounces-14088-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Wed, 08 Apr 2026 15:00:03 +0200
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 011853B5626
-	for <lists+linux-mips@lfdr.de>; Wed, 08 Apr 2026 00:59:06 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 171633BC814
+	for <lists+linux-mips@lfdr.de>; Wed, 08 Apr 2026 15:00:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 7E46E301E234
-	for <lists+linux-mips@lfdr.de>; Tue,  7 Apr 2026 22:58:48 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 5FE5E30073E9
+	for <lists+linux-mips@lfdr.de>; Wed,  8 Apr 2026 12:59:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 603F03890F4;
-	Tue,  7 Apr 2026 22:58:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 14A5B3C73FF;
+	Wed,  8 Apr 2026 12:59:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YxT4H0gM"
+	dkim=pass (2048-bit key) header.d=cjdns.fr header.i=@cjdns.fr header.b="o0tmtt43"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail.cjdns.fr (mail.cjdns.fr [5.135.140.105])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23C5F37B02E;
-	Tue,  7 Apr 2026 22:58:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2E643BC66C;
+	Wed,  8 Apr 2026 12:59:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=5.135.140.105
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775602726; cv=none; b=e+sI2uhKu2i/P7Z5BZNR0yR/oeOxB+SX6vGPcCc2bzdHMwLrxYb134U5MV5ks5sSOKOnxNuBvjKM2PZXlj17Hrd9wr3LSg8/AOf/19w/vl48l5Sk+QGebZiNIB1qDbU5mJaAh8JJk1uX5Zrh5KRNP0dPUFZU+81PZ0vdA9pqsbw=
+	t=1775653152; cv=none; b=GxB+NNRJdcUzDJpfbVm4DlnKQBRbJ6x2iGF+QSh97Q2tMH0CXlp28+H2tY3ZzXJ2/RmlsuDEdnulnA1wZoaeMaw0HlQGcmAM/PmkxMxXf+YiJuVB5Nw7aduohuSb/4BkKW2sVm8WgsI83QksJVxz1dEOeRn39qXvGvRbaVGiDgs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775602726; c=relaxed/simple;
-	bh=ZxMhQkn/NMJTsfUq+eNI5wRqTDBwCQBg1cjTyGaGSzA=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Subject:Cc:To:From:
-	 References:In-Reply-To; b=CAFvIFUcUCh0VIHYGjMrdQEU7mL056z+zfQGxWKN+y2EY4XuEQ+udsZzjBcgQZOMoNA+EQ4UDQruMAtfVoplvx+xf66OTsQffPw2Syll1ZFr/yBHxAY6sBNTcBP4WY2reidLOzXk6Re7rfFdF3Ro6CnEnIxr81bH/Ngj88si6qA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YxT4H0gM; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77C69C116C6;
-	Tue,  7 Apr 2026 22:58:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1775602726;
-	bh=ZxMhQkn/NMJTsfUq+eNI5wRqTDBwCQBg1cjTyGaGSzA=;
-	h=Date:Subject:Cc:To:From:References:In-Reply-To:From;
-	b=YxT4H0gMU1uiOeHwbtOxxGkfFWJBaCzthqg03Sftf8l9d186Y09INkfJ8VCpcsjUT
-	 Qfd/Qlw+XjxQGpsD/+wtJtFtyh3etr3/mtV9qhSmixByvSXfzBB7nBSEJNPsodmdHd
-	 n6aWnXLqcu6DDQCkFID7N0ab2dedIpF0ftmNXCcvehsYTzafVVvpTSGtJI0Yt78qAh
-	 7zcrBzbK4e2mGEgKbxfT4/RQOcj3aPhgKqv9IwN+ABisbMsvBq2hQAvVVGI9l26vIJ
-	 NOji8KIk0pikMh4DCWmZrmRQsTJnp7fjTB24k9B9hx+3b4Laf7gnEUw1IEsuOG28xo
-	 +wM+h43SmOleg==
+	s=arc-20240116; t=1775653152; c=relaxed/simple;
+	bh=OlbGJrGFwrI24/GJug24fjlXDRLvgepuqrfrL5/BaOs=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=tcS8h34vQiyyUg+7/GgszuATKbnh9J0vH2bA6mIg8oCdKE8sCz3UpiQLkZMnP1KlBZWL3XddK4mj8+R72lq184w4J9k1+ApJBLczzumeJytI7ZepRQhcl91SQ2qczl5AUxcxLS9cZHRp1G7KRqiwOQjhD/J98Vkq+kn+h5cRM+0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=cjdns.fr; spf=none smtp.mailfrom=cjdns.fr; dkim=pass (2048-bit key) header.d=cjdns.fr header.i=@cjdns.fr header.b=o0tmtt43; arc=none smtp.client-ip=5.135.140.105
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=cjdns.fr
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=cjdns.fr
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id E27B91ED994;
+	Wed,  8 Apr 2026 14:58:36 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cjdns.fr; s=dkim;
+	t=1775653141; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 content-transfer-encoding:content-language:in-reply-to:references;
+	bh=eh2Ut171wqmOONOps9l0PZ9TIR9l30BuTl8yI4h9mus=;
+	b=o0tmtt43vL9xqdVsg1urR/4VzYAuHc1fUgU/VJm410m6/gCRT/WDV44NhtCuZKyFmgj7LM
+	r137un5/F3ZTCsLF0JjLzau92j7RqN+4Zvmf1arTW4jTnSteX2YwSigaITaV6pboxUE7Uk
+	9JKxWVIzdkb34nD0lkWZyTCyswJbqrUQJr25VfGvwdexO58xUyTwtpLW5g8IkZfd/8NhvU
+	QZ+Pl+d+z7OrV2Rtdb3G6BHBVZ1uT06dkGImxiE13U9Q+dJVUmP5DmaEvoK6iF2zLDhbND
+	ZigUHx7vKo9ZbcYMKmjhAfMBzu/cnOAZkRjHV93vVOYF2RtdUkD1IcpDTZOP0w==
+Message-ID: <468d439b-9a83-484b-8ada-fabef2d6c8da@cjdns.fr>
+Date: Wed, 8 Apr 2026 14:58:35 +0200
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Wed, 08 Apr 2026 00:58:28 +0200
-Message-Id: <DHNAMNISZJ9O.3B58NWX64GBGE@kernel.org>
-Subject: Re: [PATCH v5 0/9] driver core: Fix some race conditions
-Cc: "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>, "Rafael J . Wysocki"
- <rafael@kernel.org>, "Alan Stern" <stern@rowland.harvard.edu>, "Alexey
- Kardashevskiy" <aik@ozlabs.ru>, "Johan Hovold" <johan@kernel.org>, "Eric
- Dumazet" <edumazet@google.com>, "Leon Romanovsky" <leon@kernel.org>,
- "Christoph Hellwig" <hch@lst.de>, <maz@kernel.org>, "Alexander Lobakin"
- <aleksander.lobakin@intel.com>, "Saravana Kannan" <saravanak@kernel.org>,
- "Andrew Morton" <akpm@linux-foundation.org>, <Frank.Li@kernel.org>, "Jason
- Gunthorpe" <jgg@ziepe.ca>, <alex@ghiti.fr>,
- <alexander.stein@ew.tq-group.com>, <andre.przywara@arm.com>,
- <andrew@codeconstruct.com.au>, <andrew@lunn.ch>,
- <andriy.shevchenko@linux.intel.com>, <aou@eecs.berkeley.edu>,
- <ardb@kernel.org>, <astewart@tektelic.com>, <bhelgaas@google.com>,
- <brgl@kernel.org>, <broonie@kernel.org>, <catalin.marinas@arm.com>,
- <chleroy@kernel.org>, <davem@davemloft.net>, <david@kernel.org>,
- <devicetree@vger.kernel.org>, <dmaengine@vger.kernel.org>,
- <driver-core@lists.linux.dev>, <gbatra@linux.ibm.com>,
- <gregory.clement@bootlin.com>, <hkallweit1@gmail.com>,
- <iommu@lists.linux.dev>, <jirislaby@kernel.org>, <joel@jms.id.au>,
- <joro@8bytes.org>, <kees@kernel.org>, <kevin.brodsky@arm.com>,
- <kuba@kernel.org>, <lenb@kernel.org>, <lgirdwood@gmail.com>,
- <linux-acpi@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
- <linux-aspeed@lists.ozlabs.org>, <linux-cxl@vger.kernel.org>,
- <linux-kernel@vger.kernel.org>, <linux-mips@vger.kernel.org>,
- <linux-mm@kvack.org>, <linux-pci@vger.kernel.org>,
- <linux-riscv@lists.infradead.org>, <linux-serial@vger.kernel.org>,
- <linux-snps-arc@lists.infradead.org>, <linux-usb@vger.kernel.org>,
- <linux@armlinux.org.uk>, <linuxppc-dev@lists.ozlabs.org>,
- <maddy@linux.ibm.com>, <mani@kernel.org>, <miko.lenczewski@arm.com>,
- <mpe@ellerman.id.au>, <netdev@vger.kernel.org>, <npiggin@gmail.com>,
- <osalvador@suse.de>, <oupton@kernel.org>, <pabeni@redhat.com>,
- <palmer@dabbelt.com>, <peter.ujfalusi@gmail.com>, <peterz@infradead.org>,
- <pjw@kernel.org>, <robh@kernel.org>, <sebastian.hesselbarth@gmail.com>,
- <tglx@kernel.org>, <tsbogend@alpha.franken.de>, <vgupta@kernel.org>,
- <vkoul@kernel.org>, <will@kernel.org>, <willy@infradead.org>,
- <yangyicong@hisilicon.com>, <yeoreum.yun@arm.com>
-To: "Douglas Anderson" <dianders@chromium.org>, <m.szyprowski@samsung.com>,
- "Robin Murphy" <robin.murphy@arm.com>
-From: "Danilo Krummrich" <dakr@kernel.org>
-References: <20260406232444.3117516-1-dianders@chromium.org>
-In-Reply-To: <20260406232444.3117516-1-dianders@chromium.org>
-X-Spamd-Result: default: False [-0.16 / 15.00];
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird Beta
+Subject: Re: [PATCH v2 8/8] mips: dts: Add PCIe to EcoNet EN751221
+To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: linux-mips@vger.kernel.org, naseefkm@gmail.com, mturquette@baylibre.com,
+ sboyd@kernel.org, robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
+ ryder.lee@mediatek.com, jianjun.wang@mediatek.com, lpieralisi@kernel.org,
+ kwilczynski@kernel.org, mani@kernel.org, bhelgaas@google.com,
+ vkoul@kernel.org, neil.armstrong@linaro.org, p.zabel@pengutronix.de,
+ matthias.bgg@gmail.com, angelogioacchino.delregno@collabora.com,
+ nbd@nbd.name, ansuelsmth@gmail.com, linux-clk@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-pci@vger.kernel.org, linux-mediatek@lists.infradead.org,
+ linux-phy@lists.infradead.org, linux-arm-kernel@lists.infradead.org
+References: <20260309131818.74467-1-cjd@cjdns.fr>
+ <20260309131818.74467-9-cjd@cjdns.fr> <adOo9xZxXT3FkufM@alpha.franken.de>
+Content-Language: en-US
+From: Caleb James DeLisle <cjd@cjdns.fr>
+In-Reply-To: <adOo9xZxXT3FkufM@alpha.franken.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Last-TLS-Session-Version: TLSv1.3
+X-Spamd-Result: default: False [-0.66 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	MV_CASE(0.50)[];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	DMARC_POLICY_ALLOW(-0.50)[cjdns.fr,none];
+	R_DKIM_ALLOW(-0.20)[cjdns.fr:s=dkim];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FREEMAIL_CC(0.00)[linuxfoundation.org,kernel.org,rowland.harvard.edu,ozlabs.ru,google.com,lst.de,intel.com,linux-foundation.org,ziepe.ca,ghiti.fr,ew.tq-group.com,arm.com,codeconstruct.com.au,lunn.ch,linux.intel.com,eecs.berkeley.edu,tektelic.com,davemloft.net,vger.kernel.org,lists.linux.dev,linux.ibm.com,bootlin.com,gmail.com,jms.id.au,8bytes.org,lists.infradead.org,lists.ozlabs.org,kvack.org,armlinux.org.uk,ellerman.id.au,suse.de,redhat.com,dabbelt.com,infradead.org,alpha.franken.de,hisilicon.com];
-	TAGGED_FROM(0.00)[bounces-14087-lists,linux-mips=lfdr.de];
+	RCVD_TLS_LAST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-14088-lists,linux-mips=lfdr.de];
 	FROM_HAS_DN(0.00)[];
 	RCVD_COUNT_THREE(0.00)[4];
-	RCVD_TLS_LAST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	MISSING_XM_UA(0.00)[];
-	RCPT_COUNT_GT_50(0.00)[85];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[dakr@kernel.org,linux-mips@vger.kernel.org];
+	RECEIVED_HELO_LOCALHOST(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[28];
+	MIME_TRACE(0.00)[0:+];
+	FREEMAIL_CC(0.00)[vger.kernel.org,gmail.com,baylibre.com,kernel.org,mediatek.com,google.com,linaro.org,pengutronix.de,collabora.com,nbd.name,lists.infradead.org];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	MID_RHS_MATCH_FROM(0.00)[];
-	TAGGED_RCPT(0.00)[linux-mips];
-	NEURAL_HAM(-0.00)[-1.000];
 	TO_DN_SOME(0.00)[];
+	NEURAL_HAM(-0.00)[-0.999];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[cjd@cjdns.fr,linux-mips@vger.kernel.org];
+	DKIM_TRACE(0.00)[cjdns.fr:+];
+	MID_RHS_MATCH_FROM(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 011853B5626
+	TAGGED_RCPT(0.00)[linux-mips,dt];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 171633BC814
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On Tue Apr 7, 2026 at 1:22 AM CEST, Douglas Anderson wrote:
 
-Applied to driver-core-testing, thanks!
+On 06/04/2026 14:37, Thomas Bogendoerfer wrote:
+> On Mon, Mar 09, 2026 at 01:18:18PM +0000, Caleb James DeLisle wrote:
+>> Add PCIe based on EN7528 PCIe driver, also add two MT76 wifi devices
+>> to SmartFiber XP8421-B.
+>>
+>> Signed-off-by: Caleb James DeLisle <cjd@cjdns.fr>
+>> ---
+>>   arch/mips/boot/dts/econet/en751221.dtsi       | 114 ++++++++++++++++++
+>>   .../econet/en751221_smartfiber_xp8421-b.dts   |  21 ++++
+>>   arch/mips/econet/Kconfig                      |   2 +
+>>   3 files changed, 137 insertions(+)
+>>
+> applied to mips-next
 
-> Douglas Anderson (9):
->   driver core: Don't let a device probe until it's ready
->   driver core: Replace dev->can_match with dev_can_match()
->   driver core: Replace dev->dma_iommu with dev_dma_iommu()
->   driver core: Replace dev->dma_skip_sync with dev_dma_skip_sync()
->   driver core: Replace dev->dma_ops_bypass with dev_dma_ops_bypass()
->   driver core: Replace dev->state_synced with dev_state_synced()
->   driver core: Replace dev->dma_coherent with dev_dma_coherent()
+Thank you very much.
 
-    [ Since all DEV_FLAG_DMA_COHERENT accessors are exposed unconditionally=
-,
-      also drop the CONFIG guards around dev_assign_dma_coherent() in
-      device_initialize() to ensure a correct default value. - Danilo ]
+Caleb
 
->   driver core: Replace dev->of_node_reused with dev_of_node_reused()
->   driver core: Replace dev->offline + ->offline_disabled with accessors
+>
+> Thomas.
+>
 
