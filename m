@@ -1,169 +1,132 @@
-Return-Path: <linux-mips+bounces-14093-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-14094-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id MEZqAdGl2GkhgggAu9opvQ
-	(envelope-from <linux-mips+bounces-14093-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Fri, 10 Apr 2026 09:25:05 +0200
+	id 4GQ9Hl712GlJkAgAu9opvQ
+	(envelope-from <linux-mips+bounces-14094-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Fri, 10 Apr 2026 15:04:30 +0200
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8E00A3D34A0
-	for <lists+linux-mips@lfdr.de>; Fri, 10 Apr 2026 09:25:04 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id E765D3D7D6B
+	for <lists+linux-mips@lfdr.de>; Fri, 10 Apr 2026 15:04:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 849663012BE9
-	for <lists+linux-mips@lfdr.de>; Fri, 10 Apr 2026 07:25:03 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id A121D30073F2
+	for <lists+linux-mips@lfdr.de>; Fri, 10 Apr 2026 13:04:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 312BE3A0EAB;
-	Fri, 10 Apr 2026 07:25:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="2/IJa6Ai";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="ZgqeBpjS"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A33C73033DE;
+	Fri, 10 Apr 2026 13:04:11 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADD7833F58B;
-	Fri, 10 Apr 2026 07:25:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+Received: from angie.orcam.me.uk (angie.orcam.me.uk [78.133.224.34])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C167B2DB7BA;
+	Fri, 10 Apr 2026 13:04:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=78.133.224.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775805903; cv=none; b=usYeCdBCtmJ4EPYcRzCgK6mRdKQsT6zWu7GmDcS7/HohOktbfa+/jlQePX/X64VkF1MDO7+f/G5L2+fA9gTWflOYkp0aXI0ekMtf1j8sAGKj6mNai5OLoAIxwWVsUOs/DIyt/cC3QKp1DouPV5MWhdI0CxehiTX8g39nUxEqxJQ=
+	t=1775826251; cv=none; b=KFQ7BQvnmEKoMhOQrEOHXQp5B5gAKmqrXLx7NIO7iIyscEwiw+R+L2Wwsf+vueUVRrUFF5771To2aFRP+CKbZ5eTSgvT0ym2YsNqScUnP9Is+VYG5Z0zNs16ZNiUFy5CYy6XKepURc2Lvo/IVzX7cwXXtTB9s/16g5olHqX4Co4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775805903; c=relaxed/simple;
-	bh=nF/QJ3+pNHjwRoaOY9D92D1JSHoUxABQv7SqyNpvQ9c=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=A6C96XYgu4VA6dnVxwJjCzlQTkC3kt6UZvW4L66+qH+CgzC67Fm3/0mRxmPkGHN9UDjmzDRKc9CNiKgbchjRw1fFryhxBJ8Uwtj8TXhugMoVFdhtVNPXw4R9LchKTy+Y1satqi7Y0vbq2vYv/e0Hxw0HeYD2jZJvq0BaB3H70c8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=2/IJa6Ai; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=ZgqeBpjS; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
-Date: Fri, 10 Apr 2026 09:24:54 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1775805899;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=DcWWgAkaawlRZJPPVtqSkGlhDZHKznfQKlRnA0c5Grg=;
-	b=2/IJa6AigsLTvo0bFTGC10WodpRLk8D/N7yIF4mk2hA0ic4uGfAfWjwTdg8E3Nlvtj2Lcs
-	zUJp97laoQ7CRjYNtXcqrcN5fesVUCoUTHK9oEAkQLTjs5LDANQANe67xcylvjxcoOv7E5
-	eDKnPcTyqgGMYYqyi/DFDQYfE2xe27tDKd0TrEyTes2t3NwXyMBw/gN5qP5Xipok4cZa19
-	JmOfy8zJY8p9bTmBgL6Ouwuv+fZenOL0faKHsL3WbwGKwMVtW4TWiwBb4VX2pquCJ4GiPt
-	2TWv/6h7txXmhveenNET8ahEPXsqpd+QkJw1NX7NDma4Qo7TFml40MkDAUuZvg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1775805899;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=DcWWgAkaawlRZJPPVtqSkGlhDZHKznfQKlRnA0c5Grg=;
-	b=ZgqeBpjS2tQJJXjyUQm4vLhm1bLgw03s/xJ7/GPJfbak2qtTH8uDf4tZtuj4uuIZ044A61
-	lpzZZ99OEq3Ku5CA==
-From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-To: Arnd Bergmann <arnd@arndb.de>
-Cc: "H. Peter Anvin" <hpa@zytor.com>, Andy Lutomirski <luto@kernel.org>, 
-	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, Russell King <linux@armlinux.org.uk>, 
-	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
-	Madhavan Srinivasan <maddy@linux.ibm.com>, Michael Ellerman <mpe@ellerman.id.au>, 
-	Nicholas Piggin <npiggin@gmail.com>, Christophe Leroy <chleroy@kernel.org>, 
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, Vincenzo Frascino <vincenzo.frascino@arm.com>, 
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linuxppc-dev@lists.ozlabs.org, linux-mips@vger.kernel.org
-Subject: Re: [PATCH 1/7] x86/vdso: Respect COMPAT_32BIT_TIME
-Message-ID: <20260410091131-46b6354c-9d06-4e47-9345-ee224d8528f7@linutronix.de>
-References: <20260227-vdso-compat_32bit_time-v1-0-3f0286a7bac3@linutronix.de>
- <20260227-vdso-compat_32bit_time-v1-1-3f0286a7bac3@linutronix.de>
- <c29f5e70-bd17-4e1b-a005-5a3282e70075@app.fastmail.com>
- <03cd1e21-a2f2-46a1-a674-cbaef9712016@app.fastmail.com>
- <20260227103226-cc3bb32c-0107-4c09-b81a-ca33ea03ad5c@linutronix.de>
- <49b7c9f9-198a-49f7-880b-6ae74d7bd985@zytor.com>
- <2b1ac7b9-fcc8-4aa3-a0ad-eb37e4bce030@app.fastmail.com>
+	s=arc-20240116; t=1775826251; c=relaxed/simple;
+	bh=PbnntAAMvuuRgvWjuwg06lvgioPBxUoLQWZafRPpE6A=;
+	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=qlRidxCHWZ/fSZmS7Fc39dBLSkVYJ5LD4pGsqL1UfOmSekVpm7qrOa1dF5Knz4jivbHkxT0qkP+5K2g13KBVcMRd5y6wIJHRlUhwPMO/fVyslIgEko0/e+kSTjFEkWcKW79H2hEx6wXukDKWBqo6a7erccO3HvvKPz1KiEykJWo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=orcam.me.uk; spf=none smtp.mailfrom=orcam.me.uk; arc=none smtp.client-ip=78.133.224.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=orcam.me.uk
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=orcam.me.uk
+Received: by angie.orcam.me.uk (Postfix, from userid 500)
+	id A4CFA92009C; Fri, 10 Apr 2026 15:04:06 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+	by angie.orcam.me.uk (Postfix) with ESMTP id 9EA8692009B;
+	Fri, 10 Apr 2026 14:04:06 +0100 (BST)
+Date: Fri, 10 Apr 2026 14:04:06 +0100 (BST)
+From: "Maciej W. Rozycki" <macro@orcam.me.uk>
+To: Stefan Wiehler <stefan.wiehler@nokia.com>
+cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
+    Jiaxun Yang <jiaxun.yang@flygoat.com>, linux-mips@vger.kernel.org, 
+    linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] mips: mm: Call rcutree_report_cpu_starting() even
+ earlier
+In-Reply-To: <20260409164846.3176046-2-stefan.wiehler@nokia.com>
+Message-ID: <alpine.DEB.2.21.2604101353010.29980@angie.orcam.me.uk>
+References: <20260409164846.3176046-2-stefan.wiehler@nokia.com>
+User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <2b1ac7b9-fcc8-4aa3-a0ad-eb37e4bce030@app.fastmail.com>
-X-Spamd-Result: default: False [-2.16 / 15.00];
+Content-Type: text/plain; charset=US-ASCII
+X-Spamd-Result: default: False [-1.46 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[linutronix.de,none];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
-	R_DKIM_ALLOW(-0.20)[linutronix.de:s=2020,linutronix.de:s=2020e];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-14093-lists,linux-mips=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[3];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	FREEMAIL_CC(0.00)[zytor.com,kernel.org,redhat.com,alien8.de,linux.intel.com,armlinux.org.uk,arm.com,linux.ibm.com,ellerman.id.au,gmail.com,alpha.franken.de,vger.kernel.org,lists.infradead.org,lists.ozlabs.org];
-	RCPT_COUNT_TWELVE(0.00)[21];
-	MIME_TRACE(0.00)[0:+];
-	FROM_HAS_DN(0.00)[];
-	MISSING_XM_UA(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[thomas.weissschuh@linutronix.de,linux-mips@vger.kernel.org];
-	DKIM_TRACE(0.00)[linutronix.de:+];
-	MID_RHS_MATCH_FROM(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
+	DMARC_NA(0.00)[orcam.me.uk];
+	MID_RHS_MATCH_FROMTLD(0.00)[];
 	TAGGED_RCPT(0.00)[linux-mips];
+	NEURAL_HAM(-0.00)[-1.000];
+	MIME_TRACE(0.00)[0:+];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	R_DKIM_NA(0.00)[];
+	RECEIVED_HELO_LOCALHOST(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[macro@orcam.me.uk,linux-mips@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
 	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,linutronix.de:dkim,linutronix.de:mid]
-X-Rspamd-Queue-Id: 8E00A3D34A0
+	PRECEDENCE_BULK(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[5];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-14094-lists,linux-mips=lfdr.de];
+	RCPT_COUNT_FIVE(0.00)[5]
+X-Rspamd-Queue-Id: E765D3D7D6B
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On Tue, Mar 03, 2026 at 09:50:33PM +0100, Arnd Bergmann wrote:
-> On Tue, Mar 3, 2026, at 19:11, H. Peter Anvin wrote:
-> > On 2026-02-27 01:34, Thomas Weißschuh wrote:
-> >>>>
-> >>> The thing about gettimeofday() and time() is that they don't have
-> >>> a 64-bit version and libc implementations are expected to call
-> >>> clock_gettime() instead. The result was that there was never a
-> >>> patch to turn the off either.
-> >> 
-> >> gettimeofday() is currently the only way to get the timezone of the kernel.
-> >> But I guess this is a legacy thing anyways. If you say we should drop it,
-> >> let's drop it.
-> >> 
-> >
-> > The time zone in the kernel has never worked anyway, as it would require the
-> > kernel to contain at least the forward portion of the zoneinfo/tzdata table in
-> > order to actually work correctly. The only plausible use of it would be for
-> > local time-based filesystems like FAT, but I don't think we bother.
-> >
-> > A bigger question is whether or not we should omit these from the vDSO
-> > completely (potentially causing link failures) or replace them with stubs
-> > returning -ENOSYS.
+On Thu, 9 Apr 2026, Stefan Wiehler wrote:
+
+> rcutree_report_cpu_starting() must be called on secondary CPUs before
+> allocating memory to avoid the following Lockdep-RCU splat when
+> CONFIG_PROVE_RCU_LIST=y:
 > 
-> I see no harm in keeping gettimeofday() in the vdso when
-> COMPAT_32BIT_TIME is turned on, as existing code will call it
-> no matter whether it's in the vdso or the syscall.
+>   WARNING: suspicious RCU usage
+>   6.6.119-00d46e15c416-fct #1 Not tainted
+>   -----------------------------
+>   /kernel/locking/lockdep.c:3762 RCU-list traversed in non-reader section!!
 
-We would still always keep them for 64-bit ABIs, right?
+ I have tried to verify your change here, but the warning does not trigger 
+with 6.19 as released and CONFIG_SIBYTE_SWARM as the platform (2-way SMP).  
 
-> Equally, I see no point in having either version of
-> gettimeofday() or settimeofday() when COMPAT_32BIT_TIME is
-> disabled, as clearly anything calling it would pass incorrect
-> data for times past 2038.
+$ grep CONFIG_PROVE_RCU_LIST .config
+CONFIG_PROVE_RCU_LIST=y
+$ 
 
-Should we also drop the syscalls in these cases?
-We will need to keep settimeofday() in some form to support the
-timewarping call done by init.
+Am I missing anything here, anything extra to enable?
 
-Recap/Proposal:
+> See also commit 55702ec9603e ("mips/smp: Call
+> rcutree_report_cpu_starting() earlier").
+> 
+> Fixes: 231ac951faba ("MIPS: mm: kmalloc tlb_vpn array to avoid stack overflow")
 
-* Keep the gettimeofday()/time() syscalls when they are y2038 safe or
-  CONFIG_COMPAT_32BIT_TIME is set.
-* Always provide settimeofday(). If CONFIG_COMPAT_32BIT_TIME is *not*
-  set, reject passing any 'tv' argument where it may not be y2038 safe.
-* The vDSO functions always mirror the systemcall availability.
+ This does not appear to be a valid commit hash upstream; this is commit 
+841ecc979b18 AFAICS.
 
+> diff --git a/arch/mips/kernel/smp.c b/arch/mips/kernel/smp.c
+> index 4868e79f3b30..bdb47c70d4f5 100644
+> --- a/arch/mips/kernel/smp.c
+> +++ b/arch/mips/kernel/smp.c
+> @@ -359,8 +359,8 @@ asmlinkage void start_secondary(void)
+>  	unsigned int cpu = raw_smp_processor_id();
+>  
+>  	cpu_probe();
+> -	per_cpu_trap_init(false);
+>  	rcutree_report_cpu_starting(cpu);
+> +	per_cpu_trap_init(false);
+>  	mips_clockevent_init();
+>  	mp_ops->init_secondary();
+>  	cpu_report();
 
-Thomas
+ As I noted in my previous message: is there any reason for cpu_probe() to 
+precede this call?
+
+  Maciej
 
