@@ -1,156 +1,200 @@
-Return-Path: <linux-mips+bounces-14138-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-14139-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id MOE6Hb8Z3WkJaAkAu9opvQ
-	(envelope-from <linux-mips+bounces-14138-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Mon, 13 Apr 2026 18:28:47 +0200
+	id eAMhJ18k3WkzaQkAu9opvQ
+	(envelope-from <linux-mips+bounces-14139-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Mon, 13 Apr 2026 19:14:07 +0200
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id DEED73EF093
-	for <lists+linux-mips@lfdr.de>; Mon, 13 Apr 2026 18:28:46 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id F308C3F10A1
+	for <lists+linux-mips@lfdr.de>; Mon, 13 Apr 2026 19:14:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 0C49F30B5877
-	for <lists+linux-mips@lfdr.de>; Mon, 13 Apr 2026 16:14:01 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id A14FA30B1490
+	for <lists+linux-mips@lfdr.de>; Mon, 13 Apr 2026 16:42:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CCF6F25DB12;
-	Mon, 13 Apr 2026 16:14:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5D48930C359;
+	Mon, 13 Apr 2026 16:42:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="tkXY4nmg";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="LoVkYl6M"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="g8Bra74B";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="j4xancHj"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96B4D27280A;
-	Mon, 13 Apr 2026 16:13:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C2E630DD3C
+	for <linux-mips@vger.kernel.org>; Mon, 13 Apr 2026 16:42:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776096840; cv=none; b=Wry15LH1col0G4YMvUR9StcwKBHNuHgUO7j6u0+L/FltqJjzJ3YmoBP+C1+Mj8p+yas9XnZr9Or6R4ny6ODsLvxy92lGy5XE34iVxRXwq8N1jtH6XZ/4qNl4vt+w0aakxGX18vAd6zRsE2VxpGN5aSfTq6MDENqqQ7os1HUvVM0=
+	t=1776098554; cv=none; b=b3KwqU8gdyQG7wYCd4BCOvVtRgauqibcKtOLbQO0XC1a8Mn11dwr3H6Veq3sW1kLMBhhcl+2WqxNZt4RyFmKkEPDNZ0FBvyRjBUQLDxd5p6CVJECSjNBAVCr/uYtIS5DQuD56lXx/J+mSeS1uyACONKRKz7W50WjIjLht77wiLA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776096840; c=relaxed/simple;
-	bh=YEGAsuIFlSK4e89HOWZ4gJ5oIe5U2yJXD8/MCew1HRo=;
+	s=arc-20240116; t=1776098554; c=relaxed/simple;
+	bh=5W6Zy1XK1TAXTv6rQnCiO3JaK6tOysBBxFy1WxXFYSY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=cUzejb9RNdc1zYHfW1g4la53QCnaRmdN1TBMBxuEtFPkqWrkNG/2zWJpWZDuhwCXDbMXAxH2dVXNySb6862Uawwl6eXgDYiEv+c3ICRGPBCvZCTgWGWTbFLVon0H8H8/KLczC/f3jPD8IDbMbdt99GJK8YJabbYMgrXYD0iUVBY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=tkXY4nmg; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=LoVkYl6M; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
-Date: Mon, 13 Apr 2026 18:13:56 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1776096838;
+	 Content-Type:Content-Disposition:In-Reply-To; b=rYHWCO6mA/0D4UpVWQu8p5GQXURDj3xK7PZj6No5rMJUqoCEsPuzPgtEz9V5lznzObPyLfIuosjSZ2QS9sOqOUqsfSjlCuQKmkMLlwXD6tYvmXMHMt/RRk28MVyAIuBBXZVTaBO+WTOVEZqCvzVSHouEHnGIq9zORO/boSAeT5c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=g8Bra74B; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=j4xancHj; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1776098552;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=QTxZjlPwQbG3YSd8NjMQF965BtCe0lPqly+S72Myshs=;
-	b=tkXY4nmg+ufLH8pIEREGPRIN7lEqDgcVyS4rMzP1pwHp3yL9b7kXJNaCAOrhLb02cE7TGx
-	ggSSsIsYsGtFlAqRc8UG2XgBwu4Qk7X16r+d5lL2igIBjpcbMUvCVDWy7ZLItlTIXxZD2z
-	h84JvMJNCIi1kvdvkxIIavJgYl+u/z8BcToeOgc+aJOW6lKeBrGdb3kEMvdFXGg6XytgEk
-	rPMpXXME1ph1vQl4s9O5z+BEsC7htoA6IsUN921QvLHj7U4PfLX+8Y45VLFAq5AKYwtmoY
-	FG1tRrjVloQGmzZUNVRNkeyCEHHE5ks19vbY61zf1F/NW+xmp2dLuPlt0SZxoA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1776096838;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=QTxZjlPwQbG3YSd8NjMQF965BtCe0lPqly+S72Myshs=;
-	b=LoVkYl6MMLeNBjAM4BvQVhVn1NnaY+OSsVvNNOBvu1HsCV87BqTgHRgkWFHBm1kAvMqe5B
-	HVlxTATbwykTSSCg==
-From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-To: Arnd Bergmann <arnd@arndb.de>
-Cc: "H. Peter Anvin" <hpa@zytor.com>, Andy Lutomirski <luto@kernel.org>, 
-	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, Russell King <linux@armlinux.org.uk>, 
-	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
-	Madhavan Srinivasan <maddy@linux.ibm.com>, Michael Ellerman <mpe@ellerman.id.au>, 
-	Nicholas Piggin <npiggin@gmail.com>, Christophe Leroy <chleroy@kernel.org>, 
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, Vincenzo Frascino <vincenzo.frascino@arm.com>, 
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linuxppc-dev@lists.ozlabs.org, linux-mips@vger.kernel.org
-Subject: Re: [PATCH 1/7] x86/vdso: Respect COMPAT_32BIT_TIME
-Message-ID: <20260413180541-e13f374c-b990-4236-bc83-8fde948899df@linutronix.de>
-References: <20260227-vdso-compat_32bit_time-v1-0-3f0286a7bac3@linutronix.de>
- <20260227-vdso-compat_32bit_time-v1-1-3f0286a7bac3@linutronix.de>
- <c29f5e70-bd17-4e1b-a005-5a3282e70075@app.fastmail.com>
- <03cd1e21-a2f2-46a1-a674-cbaef9712016@app.fastmail.com>
- <20260227103226-cc3bb32c-0107-4c09-b81a-ca33ea03ad5c@linutronix.de>
- <49b7c9f9-198a-49f7-880b-6ae74d7bd985@zytor.com>
- <2b1ac7b9-fcc8-4aa3-a0ad-eb37e4bce030@app.fastmail.com>
- <20260410091131-46b6354c-9d06-4e47-9345-ee224d8528f7@linutronix.de>
- <15925544-1ae5-406a-b9cc-af5935cc9f02@app.fastmail.com>
+	bh=WO6WRptWW4sGTxFeojTyUtfweOrswI8hobePqSBWs7Y=;
+	b=g8Bra74BSZKaYaEBT9WRCsdjuKi/S5PMfi80Y3b6v9T2eoBTDnKW5/uPl91RZBtyxM2ICe
+	2QsZGy38OfLzua9qE65oCQLhu18vrKA7sJWwZ+x9d6FG8kIjPLsH7+4DUlsi236VH24TDr
+	RhbH9dMImApZ4a4pStk8+mgrsvt/LBg=
+Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
+ [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-372-d6bp8mZsMTWt342MZ99IHA-1; Mon, 13 Apr 2026 12:42:31 -0400
+X-MC-Unique: d6bp8mZsMTWt342MZ99IHA-1
+X-Mimecast-MFC-AGG-ID: d6bp8mZsMTWt342MZ99IHA_1776098550
+Received: by mail-qk1-f199.google.com with SMTP id af79cd13be357-8d65190e52fso907339385a.1
+        for <linux-mips@vger.kernel.org>; Mon, 13 Apr 2026 09:42:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=redhat.com; s=google; t=1776098550; x=1776703350; darn=vger.kernel.org;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=WO6WRptWW4sGTxFeojTyUtfweOrswI8hobePqSBWs7Y=;
+        b=j4xancHjo6YvJ/fYARrIgKH9X2E3fVNA9IJsh2RSvV2deRkqRmWtRP3uMqF8OhBqCo
+         uAKSojtnfetM1MfR1wYN6jlwhaZ/kqNqLH9JQ3+pwEEI3aUdDtJkxjQ7hwpEg19LDcqv
+         b7Bt3Aih0NYO5zismZIPpftn/atMxwcqZljkvt7kGUqzh7Erx9pOBjz/qkseH3ncX6oP
+         XkBp3dX0eeK6mmF6+GkYt7F8ps7cTKNyyuxAuoWuCU6XhTi+1E2q5KtM+DQVzk1FBlDP
+         SP7BEZLJi9G0qesCG9Akfkuj/DMMNV/rWdrxSmqd/KeAD7SrV283XftqFt6gU4PdepVC
+         PJoA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1776098550; x=1776703350;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=WO6WRptWW4sGTxFeojTyUtfweOrswI8hobePqSBWs7Y=;
+        b=gpdFUoTWbdaxMTnoyglA241BBhP6J05TbIo7uAuDC0DYFxI3Cr+zlemQX8vxeN2BIX
+         8871pc56ILQutL9QDUzc4rDunRq0sTTv87AqddtRxgYPA+vCRnvVTEvKDWkJ+aM6iCyr
+         nmjzeEogexl+goh3Or6HGpV1CX5wQmgiI45yQf1Sj6tX2QBj9N8qfAj1UO3o74FwVGOC
+         qIBNrFUP0KbFzwQ7noS1+31slTRhEKaFsQaUkjV8RS40L3DcEYF7pkovpVNs21vqC935
+         fe6CNJ+dbD/bhAhDmYhIQXWZDzDj51eU0q67k00LHYXdJ2dNx1HAAvXf888DJaZ4k1bE
+         gEAg==
+X-Forwarded-Encrypted: i=1; AFNElJ+oz9OobcP5etm0VjcCSfPaxw1XaYbKIaYnc4oIGfYiq8J3GfEDVm9AEtvqbStfGceTOWFWfiab2sqK@vger.kernel.org
+X-Gm-Message-State: AOJu0YwIMQP8HuVhrq1A82ABwvuFw3yqRbHKUOAC/RcSFjkwgrMQJyDL
+	iaweCZbbjIk5VFEE4PWJO5wB7zX5CHWkc3BDz6El9pMCSF7sPhevlMAUIN7rwqBZF2GIg+MTXNG
+	DkJceWQmyRU8YG55oxgowVDUVTpgbcZ43/18trdWr8YMT2pNiC9KXjmEaCn17V/I=
+X-Gm-Gg: AeBDietoOgJs0ZlfW0jldlXbP3WwDYWYdJKZFpSVeHZmkMy9pamVqJnl0B+JSEy4XUl
+	qc3j9z9X6WVgQUwmbI4O0dzCFbHYzbxDaByFYz2fq5jvLXKfpTujcdL5fQaxES0QduzAlNOE7Lm
+	T6d9khO4i4kZn+GX4cbWvR8lCZDvZlItTf9NrnfMj3GjJ5GK31MIoiMLmJVooixqY+70lsBGH7U
+	MucqE/iSpyhyrqmNYwa3Iw4t6KENdnHFq9FiR//HRj3WqbsvzhWnomKtnTqzx7ztxOvxd5SM1Bk
+	PPOHIks4e35+1EH6Fn3yOTAJXneF396+6duZuyG/LcuJbQqq4qqgdN9MnNtI+SVK33irpmW64dx
+	QFMWrOHZ7Gm3zB4dQKdX21eY3H+DFFkhZ8TzeFnVZxGlOZA62RtQMiXut
+X-Received: by 2002:a05:620a:4055:b0:8da:384b:9545 with SMTP id af79cd13be357-8ddccb2f661mr1997595285a.12.1776098550192;
+        Mon, 13 Apr 2026 09:42:30 -0700 (PDT)
+X-Received: by 2002:a05:620a:4055:b0:8da:384b:9545 with SMTP id af79cd13be357-8ddccb2f661mr1997589685a.12.1776098549609;
+        Mon, 13 Apr 2026 09:42:29 -0700 (PDT)
+Received: from redhat.com (c-73-183-52-120.hsd1.pa.comcast.net. [73.183.52.120])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-8ddb9833c6asm908617885a.42.2026.04.13.09.42.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Apr 2026 09:42:28 -0700 (PDT)
+Date: Mon, 13 Apr 2026 12:42:27 -0400
+From: Brian Masney <bmasney@redhat.com>
+To: Guangshuo Li <lgs201920130244@gmail.com>
+Cc: Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>,
+	Gregory CLEMENT <gregory.clement@bootlin.com>,
+	=?iso-8859-1?Q?Th=E9o?= Lebrun <theo.lebrun@bootlin.com>,
+	Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>, linux-mips@vger.kernel.org,
+	linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
+	stable@vger.kernel.org
+Subject: Re: [PATCH v2] clk: eyeq: fix memory leak in eqc_auxdev_create()
+ error path
+Message-ID: <ad0c8y1u5zAhheJX@redhat.com>
+References: <20260412124247.2494971-1-lgs201920130244@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <15925544-1ae5-406a-b9cc-af5935cc9f02@app.fastmail.com>
+In-Reply-To: <20260412124247.2494971-1-lgs201920130244@gmail.com>
+User-Agent: Mutt/2.3.1 (2026-03-20)
 X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[linutronix.de,none];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
-	R_DKIM_ALLOW(-0.20)[linutronix.de:s=2020,linutronix.de:s=2020e];
+	DMARC_POLICY_ALLOW(-0.50)[redhat.com,quarantine];
+	R_DKIM_ALLOW(-0.20)[redhat.com:s=mimecast20190719,redhat.com:s=google];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-14138-lists,linux-mips=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[3];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	FREEMAIL_CC(0.00)[zytor.com,kernel.org,redhat.com,alien8.de,linux.intel.com,armlinux.org.uk,arm.com,linux.ibm.com,ellerman.id.au,gmail.com,alpha.franken.de,vger.kernel.org,lists.infradead.org,lists.ozlabs.org];
-	RCPT_COUNT_TWELVE(0.00)[21];
-	MIME_TRACE(0.00)[0:+];
+	DKIM_TRACE(0.00)[redhat.com:+];
+	TAGGED_FROM(0.00)[bounces-14139-lists,linux-mips=lfdr.de];
 	FROM_HAS_DN(0.00)[];
-	MISSING_XM_UA(0.00)[];
+	FREEMAIL_TO(0.00)[gmail.com];
+	RCVD_TLS_LAST(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[thomas.weissschuh@linutronix.de,linux-mips@vger.kernel.org];
-	DKIM_TRACE(0.00)[linutronix.de:+];
-	MID_RHS_MATCH_FROM(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
-	TAGGED_RCPT(0.00)[linux-mips];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,linutronix.de:dkim,linutronix.de:mid]
-X-Rspamd-Queue-Id: DEED73EF093
+	RCVD_COUNT_FIVE(0.00)[6];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[bmasney@redhat.com,linux-mips@vger.kernel.org];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	NEURAL_HAM(-0.00)[-1.000];
+	RCPT_COUNT_SEVEN(0.00)[10];
+	MID_RHS_MATCH_FROM(0.00)[];
+	TAGGED_RCPT(0.00)[linux-mips];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: F308C3F10A1
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On Mon, Apr 13, 2026 at 05:59:52PM +0200, Arnd Bergmann wrote:
-> On Fri, Apr 10, 2026, at 09:24, Thomas Weißschuh wrote:
+Hi Guangshuo,
 
-(...)
-
-> > Recap/Proposal:
-
-(...)
-
-> > * Always provide settimeofday(). If CONFIG_COMPAT_32BIT_TIME is *not*
-> >   set, reject passing any 'tv' argument where it may not be y2038 safe.
+On Sun, Apr 12, 2026 at 08:42:46PM +0800, Guangshuo Li wrote:
+> eqc_auxdev_create() allocates an auxiliary_device with kzalloc() before
+> calling auxiliary_device_init().
 > 
-> This sounds wrong to me now: the case I'm worried about is a 32-bit
-> system calling settimeofday() based on the value of an RTC or NTP.
-> The idea of CONFIG_COMPAT_32BIT_TIME=n is to catch this by causing
-> an intentional ENOSYS error even for valid times, so it doesn't
-> suddenly start breaking in 2038.
+> When auxiliary_device_init() returns an error, the function exits
+> without freeing adev. Since the release callback is only expected to
+> handle cleanup after successful initialization, adev should be freed
+> explicitly in this path.
+> 
+> Add the missing kfree(adev) before returning from the
+> auxiliary_device_init() error path.
+> 
+> Fixes: 25d904946a0b ("clk: eyeq: add driver")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Guangshuo Li <lgs201920130244@gmail.com>
+> ---
+>  drivers/clk/clk-eyeq.c | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/clk/clk-eyeq.c b/drivers/clk/clk-eyeq.c
+> index ea1c3d78e7cd..a48ecec4c9a5 100644
+> --- a/drivers/clk/clk-eyeq.c
+> +++ b/drivers/clk/clk-eyeq.c
+> @@ -346,8 +346,10 @@ static int eqc_auxdev_create(struct device *dev, void __iomem *base,
+>  	adev->id = id;
+>  
+>  	ret = auxiliary_device_init(adev);
+> -	if (ret)
+> +	if (ret) {
+> +		kfree(adev);
+>  		return ret;
+> +	}
+>  
+>  	ret = auxiliary_device_add(adev);
+>  	if (ret)
 
-This is what I meant with "where it *may*" be not y2038 safe.
-Even if the value fits, the call would be rejected.
-My wording was crappy indeed, though.
+There is a leak in the error path here as well. I think this code
+should be converted to devm_kzalloc().
 
-In code:
+There is no devm_kzalloc_obj() yet, however according to [1] that should
+be coming soon.
 
-if (tv && !IS_ENABLED(CONFIG_COMPAT_32BIT_TIME) && sizeof(tv->tv_sec) < 8) {
-	pr_warn_once(...);
-	return -EINVAL;
-}
+[1] https://lore.kernel.org/lkml/20260330154108.GA3389518@killaraus.ideasonboard.com/
 
-Or maybe drop the EINVAL but still emit a warning. That warning would be
-useful for gettimeofday(), too.
+Brian
 
-Thomas
 
