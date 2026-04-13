@@ -1,130 +1,203 @@
-Return-Path: <linux-mips+bounces-14125-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-14126-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id sJWpOAr13GkvYgkAu9opvQ
-	(envelope-from <linux-mips+bounces-14125-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Mon, 13 Apr 2026 15:52:10 +0200
+	id YMvXHxr13GkvYgkAu9opvQ
+	(envelope-from <linux-mips+bounces-14126-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Mon, 13 Apr 2026 15:52:26 +0200
 X-Original-To: lists+linux-mips@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3A96F3ECC3C
-	for <lists+linux-mips@lfdr.de>; Mon, 13 Apr 2026 15:52:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id DAB1D3ECC4B
+	for <lists+linux-mips@lfdr.de>; Mon, 13 Apr 2026 15:52:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 5C30F3011F06
-	for <lists+linux-mips@lfdr.de>; Mon, 13 Apr 2026 13:45:26 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 33368301C89E
+	for <lists+linux-mips@lfdr.de>; Mon, 13 Apr 2026 13:45:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DFBC43CD8B3;
-	Mon, 13 Apr 2026 13:45:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 96F483CEB9E;
+	Mon, 13 Apr 2026 13:45:24 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
 Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EF0B46BFCE;
-	Mon, 13 Apr 2026 13:45:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5C03032AAA7;
+	Mon, 13 Apr 2026 13:45:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.175.24.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776087923; cv=none; b=QlNyxc+hsXmbzBTQ3pGlRV7RFMUb0vKltBXJquA/tZjA+cJ6a2jjN2O1tnzziGSwDv+eaid6Hws9+z4mFJcDyPON7C6N8IUl0aMu9PCWzI0vsJ5lpf5vA+ojXDZ3gxKAvVs5ESvTg8lfGv0EvtKSEbZ5/9hcOW1xSc21CcpA8Uw=
+	t=1776087924; cv=none; b=b0D/dOkT50xAiCCN7V4BynJGLRH3jhg2bgz1hVu/i9SeMjpFXgvA6L+P8mT0S9EDpfhjfAvwoYd9DcMliyZWBQDYUKe6JFDlj7+aiTgMyrYlr86KnUB+5CGJygHw7HBfXR7wk7MyaX7WDIjtLw3jJf36RpkiGd4zCl8GeY9sjCU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776087923; c=relaxed/simple;
-	bh=yh3iJ/MioreNmZnVc0OTHf4MJ0O2cfP9x6JcTisig+o=;
+	s=arc-20240116; t=1776087924; c=relaxed/simple;
+	bh=909Q03nLYzRnV2uD3X2X/W7tkeK+QT5NOhuVd+eYU8g=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=n4E2QDKFn8Nk/t2D4ykpjclu4F9dOJu3RF9noSEghakKF0imU0EkIhtJTi0v9Mu7KyVjz5qItbZtag6YA0tuwpl08+Fl3PL3yheimkhnHHAm8gkb/sJhCILeLHFrOmdsfpPPAUVmcc2jZe97CGRfk8JcDaRFRy4z5tCr++TfVDU=
+	 Content-Type:Content-Disposition:In-Reply-To; b=FhfbsXkNDMUqbP2WUoQztqoRvbR19bDNXKCQTizLEIQZVWRLV0oDMxe8PLdM8VqSnN39AgrxIrWP7Cd8haGBg1gjJ/wxFCdgK+FpgF+gEQuqfHYN/iqsFD+/o0OPp6Jo23g1AOOE/zcqULJD5kX/wUffpHqKIcnnDkIB0QLOuvc=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de; spf=pass smtp.mailfrom=alpha.franken.de; arc=none smtp.client-ip=193.175.24.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alpha.franken.de
 Received: from uucp by elvis.franken.de with local-rmail (Exim 3.36 #1)
-	id 1wCHbE-0004aD-00; Mon, 13 Apr 2026 15:45:12 +0200
+	id 1wCHbE-0004aH-00; Mon, 13 Apr 2026 15:45:12 +0200
 Received: by alpha.franken.de (Postfix, from userid 1000)
-	id 71DA7C0988; Mon, 13 Apr 2026 15:43:25 +0200 (CEST)
-Date: Mon, 13 Apr 2026 15:43:25 +0200
+	id D4B6BC0C39; Mon, 13 Apr 2026 15:44:14 +0200 (CEST)
+Date: Mon, 13 Apr 2026 15:44:14 +0200
 From: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To: Pengpeng Hou <pengpeng@iscas.ac.cn>
-Cc: Sergey Shtylyov <sergei.shtylyov@gmail.com>, linux-mips@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] MIPS: validate DT bootargs before appending them
-Message-ID: <adzy_YQfWWS8OcIF@alpha.franken.de>
-References: <20260403161001.1-mips-dt-bootargs-pengpeng@iscas.ac.cn>
- <20260407120002.2-mips-dt-bootargs-v2-pengpeng@iscas.ac.cn>
+To: =?iso-8859-1?Q?Beno=EEt?= Monin <benoit.monin@bootlin.com>
+Cc: Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>,
+	Gregory CLEMENT <gregory.clement@bootlin.com>,
+	=?iso-8859-1?Q?Th=E9o?= Lebrun <theo.lebrun@bootlin.com>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>,
+	Philipp Zabel <p.zabel@pengutronix.de>,
+	Linus Walleij <linusw@kernel.org>,
+	Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+	Tawfik Bayouk <tawfik.bayouk@mobileye.com>,
+	linux-mips@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+	linux-gpio@vger.kernel.org
+Subject: Re: [PATCH v4 00/13] Introducing the Mobileye EyeQ6Lplus SoC
+Message-ID: <adzzLvq2tA9mzwc2@alpha.franken.de>
+References: <20260316-eyeq6lplus-v4-0-bf44dfc7a261@bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20260407120002.2-mips-dt-bootargs-v2-pengpeng@iscas.ac.cn>
-X-Spamd-Result: default: False [-1.46 / 15.00];
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20260316-eyeq6lplus-v4-0-bf44dfc7a261@bootlin.com>
+X-Spamd-Result: default: False [0.04 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	MISSING_XM_UA(0.00)[];
-	RCVD_TLS_LAST(0.00)[];
-	RCPT_COUNT_THREE(0.00)[4];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	FREEMAIL_CC(0.00)[gmail.com,vger.kernel.org];
-	TAGGED_FROM(0.00)[bounces-14125-lists,linux-mips=lfdr.de];
+	MISSING_XM_UA(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	TAGGED_FROM(0.00)[bounces-14126-lists,linux-mips=lfdr.de];
+	RCVD_TLS_LAST(0.00)[];
 	DMARC_NA(0.00)[franken.de];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
 	FROM_HAS_DN(0.00)[];
-	TAGGED_RCPT(0.00)[linux-mips];
+	TAGGED_RCPT(0.00)[linux-mips,dt];
 	PRECEDENCE_BULK(0.00)[];
 	FROM_NEQ_ENVFROM(0.00)[tsbogend@alpha.franken.de,linux-mips@vger.kernel.org];
-	MIME_TRACE(0.00)[0:+];
+	RCPT_COUNT_TWELVE(0.00)[18];
 	RCVD_COUNT_FIVE(0.00)[5];
 	R_DKIM_NA(0.00)[];
-	NEURAL_HAM(-0.00)[-0.979];
+	NEURAL_HAM(-0.00)[-0.996];
 	MID_RHS_MATCH_FROM(0.00)[];
 	TO_DN_SOME(0.00)[]
-X-Rspamd-Queue-Id: 3A96F3ECC3C
+X-Rspamd-Queue-Id: DAB1D3ECC4B
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On Tue, Apr 07, 2026 at 09:57:03AM +0800, Pengpeng Hou wrote:
-> bootcmdline_scan_chosen() fetches the raw flat-DT bootargs property and
-> passes it straight to bootcmdline_append(). That helper later feeds the
-> same pointer into strlcat(), which computes strlen(src) before copying.
-> Flat DT properties are external boot input, and this path does not
-> prove that bootargs is NUL-terminated within its declared bounds.
+On Mon, Mar 16, 2026 at 04:25:37PM +0100, Benoît Monin wrote:
+> The Eyeq6Lplus is a new system-on-chip part of Mobileye's EyeQ family
+> of SoC aimed at Advanced Driver Assistance Systems (ADAS). It is built
+> around a multicore MIPS I6500 with 2 cores and 8 threads and integrates
+> controllers and accelerators dedicated to driving assistance.
 > 
-> Reject unterminated bootargs properties before appending them to the
-> kernel command line.
+> This patchset adds the initial support for the EyeQ6Lplus and its
+> evaluation board with the following list of controllers:
+> * The OLB ("Other Logic Block") providing clocks, resets and pin controls.
+> * One UART from DesignWare.
+> * One GPIO controller from DesignWare.
+> * Two SPI controllers from DesignWare, one in host mode and one in target
+>   mode.
+> * One octoSPI flash controller from Cadence, identical to the one found
+>   in the EyeQ5.
+> * Two I2C controllers from Designware.
 > 
-> Signed-off-by: Pengpeng Hou <pengpeng@iscas.ac.cn>
+> The patch series adds the device tree bindings for the SoC and the OLB.
+> It also adds the Kconfig entry for the EyeQ6Lplus, the SoC and evaluation
+> board device tree, and the defconfig. For the OLB, the series adds the
+> match data to the clk-eyeq, reset-eyeq and pinctrl-eyeq5 drivers.
+> 
+> It also brings three other changes. One is for the pinctrl-eyeq5 driver
+> to access the pin descriptions, pin functions, and pin bank registers
+> via the match data instead of directly. This is needed to add support
+> for the EyeQ6Lplus alongside the EyeQ5 to the pinctrl driver.
+> 
+> To be able to match against compatible entries, an OF node is needed
+> but the pinctrl-eyeq5 does not have one as it is an auxiliary device
+> of clk-eyeq. As part of his MACB phy series[1], Théo switched to
+> devm_auxiliary_device_create() to register the auxiliary devices, and
+> this helper sets the OF node of the auxiliary device.
+> 
+> So this series depends on Théo's patchset so that eq5p_probe() can use
+> the OF node to get the match data, similar to what is done in eqr_probe()
+> in reset-eyeq.
+> 
+> The two other changes are in the clk-eyeq driver. First we skip the
+> post-divisor when computing the PLL frequency in the clk-eyeq driver,
+> to match how the clock signal is wired internally in all EyeQ PLL and
+> compute the correct frequency for the PLL of the EyeQ6Lplus. Second we
+> adjust the accuracy and down spreading computation of the PLL frequency
+> as the spread spectrum of all EyeQ PLL is in 1/1024 and not in 1/1000
+> as previously thought.
+> 
+> [1]: https://lore.kernel.org/lkml/20260225-macb-phy-v7-0-665bd8619d51@bootlin.com/
+> 
+> Signed-off-by: Benoît Monin <benoit.monin@bootlin.com>
 > ---
-> Changes since v1:
-> - use strnlen() instead of memchr() for the local NUL-termination check
+> Changes in v4:
+> - Simplify entries in Kconfig for clk-eyeq and reset-eyeq, since all
+>   Mobileye EyeQ SoCs use these drivers.
+> - Link to v3: https://lore.kernel.org/r/20260226-eyeq6lplus-v3-0-9cbeb59268b0@bootlin.com
 > 
-> arch/mips/kernel/setup.c | 4 ++++
->  1 file changed, 4 insertions(+)
+> Changes in v3:
+> - Rebase series on v7.0-rc1 + Théo's patchset[1].
+> - Refresh the defconfig.
+> - Add missing cdns,fifo-depth entry in octospi node of the SoC device tree.
+> - Simplify eq5p_probe() now that the OF node is set in clk-eyeq driver.
+> - Link to v2: https://lore.kernel.org/r/20251223-eyeq6lplus-v2-0-cd1fd21d182c@bootlin.com
 > 
-> diff --git a/arch/mips/kernel/setup.c b/arch/mips/kernel/setup.c
-> index f9b228e33f3b..1ae6d0c0e1d6 100644
-> --- a/arch/mips/kernel/setup.c
-> +++ b/arch/mips/kernel/setup.c
-> @@ -31,6 +31,7 @@
->  #include <linux/of_fdt.h>
->  #include <linux/dmi.h>
->  #include <linux/crash_dump.h>
-> +#include <linux/string.h>
->  
->  #include <asm/addrspace.h>
->  #include <asm/bootinfo.h>
-> @@ -541,6 +542,9 @@ static int __init bootcmdline_scan_chosen(unsigned long node, const char *uname,
->  
->  	p = of_get_flat_dt_prop(node, "bootargs", &l);
->  	if (p != NULL && l > 0) {
-> +		if (strnlen(p, l) >= l)
-> +			return 1;
-> +
->  		bootcmdline_append(p, min(l, COMMAND_LINE_SIZE));
->  		*dt_bootargs = true;
->  	}
-> -- 
-> 2.50.1 (Apple Git-155)
+> Changes in v2:
+> - Rebased on v6.19-rc2.
+> - Drop spidev nodes from the evaluation board DT, they were
+>   here for test only.
+> - Fix bug in eq5p_pinconf_set() using uninitialized value.
+> - Link to v1: https://lore.kernel.org/r/20251217-eyeq6lplus-v1-0-e9cdbd3af4c2@bootlin.com
+> 
+> ---
+> Benoît Monin (13):
+>       dt-bindings: mips: Add Mobileye EyeQ6Lplus SoC
+>       dt-bindings: soc: mobileye: Add EyeQ6Lplus OLB
+>       MIPS: Add Mobileye EyeQ6Lplus support
+>       reset: eyeq: Add Mobileye EyeQ6Lplus OLB
+>       pinctrl: eyeq5: Use match data
+>       pinctrl: eyeq5: Add Mobileye EyeQ6Lplus OLB
+>       clk: eyeq: Skip post-divisor when computing PLL frequency
+>       clk: eyeq: Adjust PLL accuracy computation
+>       clk: eyeq: Add Mobileye EyeQ6Lplus OLB
+>       MIPS: Add Mobileye EyeQ6Lplus SoC dtsi
+>       MIPS: Add Mobileye EyeQ6Lplus evaluation board dts
+>       MIPS: config: add eyeq6lplus_defconfig
+>       MAINTAINERS: Mobileye: Add EyeQ6Lplus files
+> 
+>  .../devicetree/bindings/mips/mobileye.yaml         |   5 +
+>  .../soc/mobileye/mobileye,eyeq6lplus-olb.yaml      | 208 ++++++++++
+>  MAINTAINERS                                        |   4 +-
+>  arch/mips/boot/dts/mobileye/Makefile               |   1 +
+>  arch/mips/boot/dts/mobileye/eyeq6lplus-epm6.dts    | 103 +++++
+>  arch/mips/boot/dts/mobileye/eyeq6lplus-pins.dtsi   |  84 ++++
+>  arch/mips/boot/dts/mobileye/eyeq6lplus.dtsi        | 170 ++++++++
+>  arch/mips/configs/eyeq6lplus_defconfig             | 117 ++++++
+>  arch/mips/mobileye/Kconfig                         |   3 +
+>  arch/mips/mobileye/Platform                        |   1 +
+>  drivers/clk/Kconfig                                |   4 +-
+>  drivers/clk/clk-eyeq.c                             |  90 ++++-
+>  drivers/pinctrl/Kconfig                            |   4 +-
+>  drivers/pinctrl/pinctrl-eyeq5.c                    | 437 +++++++++++++++------
+>  drivers/reset/Kconfig                              |   4 +-
+>  drivers/reset/reset-eyeq.c                         |  31 ++
+>  .../dt-bindings/clock/mobileye,eyeq6lplus-clk.h    |  37 ++
+>  17 files changed, 1156 insertions(+), 147 deletions(-)
 
-applied to mips-next
+series applied to mips-next
 
 Thomas.
 
