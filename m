@@ -1,40 +1,41 @@
-Return-Path: <linux-mips+bounces-14111-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-14112-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id YJP3N+9i3GkHQQkAu9opvQ
-	(envelope-from <linux-mips+bounces-14111-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Mon, 13 Apr 2026 05:28:47 +0200
+	id gGwOLexi3GkHQQkAu9opvQ
+	(envelope-from <linux-mips+bounces-14112-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Mon, 13 Apr 2026 05:28:44 +0200
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7AFEB3E6F67
-	for <lists+linux-mips@lfdr.de>; Mon, 13 Apr 2026 05:28:47 +0200 (CEST)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id C02813E6F4A
+	for <lists+linux-mips@lfdr.de>; Mon, 13 Apr 2026 05:28:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 925AF3009525
-	for <lists+linux-mips@lfdr.de>; Mon, 13 Apr 2026 03:28:35 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id DDED73002B46
+	for <lists+linux-mips@lfdr.de>; Mon, 13 Apr 2026 03:28:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 14F7B23ED6A;
-	Mon, 13 Apr 2026 03:28:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EFB39241665;
+	Mon, 13 Apr 2026 03:28:39 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
 Received: from angie.orcam.me.uk (angie.orcam.me.uk [78.133.224.34])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CA4022E3FE;
-	Mon, 13 Apr 2026 03:28:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A4DD92E3FE;
+	Mon, 13 Apr 2026 03:28:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=78.133.224.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776050915; cv=none; b=vBTPIN0WmZi2+tgO9Sk321+yPCMZ++DMGhV/70axz/cqDJvs2WWjNE3O7ssbWnggRcf8zpL5xFOxxJomIbsYSKJqoWT5+ETHF86xG0DAb4Uz0jkb4CB3BbWFmVhCs8LK500bHB7tkHbn0kF9GTT8dQnRBseKi25LcO8nUAITuoY=
+	t=1776050919; cv=none; b=l8mQim/U4lXBHmzptmi6Of7RAfFHIslIKGnlgz36qap350r16HPnE8CHsrmKCwZZN4R837JIj1npzAzjXOKPrXwm7Du3MeQxTVdg/xOY2wTkb1fSgKchuFPKR3lOr3+G/6Gu5dhe/XccbjkpsU3ODemi564aFpfsqUqw6dP9XXw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776050915; c=relaxed/simple;
-	bh=tdmIlm4xawZg9c91HigNM/ksIlEOvWt3Ih65ZDATfyc=;
-	h=Date:From:To:cc:Subject:Message-ID:MIME-Version:Content-Type; b=pL9+HfBFHibeLtxJtDnXgYeeP7CJJguUuYgaLh9OZaBK6GIGRvXgDBp/pBd1+1NSLNHhkcIdjnrM0Xze53VcXWNqNsAq31mZs5OpNN8V92BWFvn6yS+EQWJzkPeFOkhGpGvz56Y6kwmvj24gqora2m6I0lf6glnUcf+KcEvGs4M=
+	s=arc-20240116; t=1776050919; c=relaxed/simple;
+	bh=6cO/k2fN4Miux7ObDyS5y9RjMbmn5QmpTnUykSJ22G4=;
+	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=P75dmtd2wFOtvgWNAGYAgFZKUw4y82FbCVp/45USnRI4etEJxINweBCrZ5VK3u7qZmDcxWEq+62YeBbVCN9B9L9M72HEMejLhqy6xGoiOoT3DY9uaX4NDTmVPoke7mOHOu29sdHcuORJI+5tNSUXJP0NiFFhnIttjUWtXybtl74=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=orcam.me.uk; spf=none smtp.mailfrom=orcam.me.uk; arc=none smtp.client-ip=78.133.224.34
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=orcam.me.uk
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=orcam.me.uk
 Received: by angie.orcam.me.uk (Postfix, from userid 500)
-	id 0B85992009D; Mon, 13 Apr 2026 05:28:33 +0200 (CEST)
+	id AEDCC9200B3; Mon, 13 Apr 2026 05:28:37 +0200 (CEST)
 Received: from localhost (localhost [127.0.0.1])
-	by angie.orcam.me.uk (Postfix) with ESMTP id 05E1F92009B;
-	Mon, 13 Apr 2026 04:28:32 +0100 (BST)
-Date: Mon, 13 Apr 2026 04:28:32 +0100 (BST)
+	by angie.orcam.me.uk (Postfix) with ESMTP id A843E92009E;
+	Mon, 13 Apr 2026 04:28:37 +0100 (BST)
+Date: Mon, 13 Apr 2026 04:28:37 +0100 (BST)
 From: "Maciej W. Rozycki" <macro@orcam.me.uk>
 To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
     Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
@@ -43,8 +44,11 @@ cc: Elena Reshetova <elena.reshetova@intel.com>,
     David Windsor <dwindsor@gmail.com>, Kees Cook <kees@kernel.org>, 
     Hans Liljestrand <ishkamiel@gmail.com>, linux-mips@vger.kernel.org, 
     linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 0/4] MIPS: SiByte: Fix serial device regressions
-Message-ID: <alpine.DEB.2.21.2604130239560.29980@angie.orcam.me.uk>
+Subject: [PATCH 1/4] MIPS: SiByte: Fix console message clobbering at channel
+ resets
+In-Reply-To: <alpine.DEB.2.21.2604130239560.29980@angie.orcam.me.uk>
+Message-ID: <alpine.DEB.2.21.2604130321540.29980@angie.orcam.me.uk>
+References: <alpine.DEB.2.21.2604130239560.29980@angie.orcam.me.uk>
 User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
@@ -55,16 +59,16 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 X-Spamd-Result: default: False [-1.46 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	FREEMAIL_CC(0.00)[intel.com,gmail.com,kernel.org,vger.kernel.org];
-	TAGGED_FROM(0.00)[bounces-14111-lists,linux-mips=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-14112-lists,linux-mips=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
 	RECEIVED_HELO_LOCALHOST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
 	MIME_TRACE(0.00)[0:+];
 	DMARC_NA(0.00)[orcam.me.uk];
 	FORGED_SENDER_MAILLIST(0.00)[];
@@ -78,45 +82,66 @@ X-Spamd-Result: default: False [-1.46 / 15.00];
 	RCPT_COUNT_SEVEN(0.00)[10];
 	R_DKIM_NA(0.00)[];
 	MID_RHS_MATCH_FROMTLD(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,angie.orcam.me.uk:mid]
-X-Rspamd-Queue-Id: 7AFEB3E6F67
+	DBL_BLOCKED_OPENRESOLVER(0.00)[angie.orcam.me.uk:mid,sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,orcam.me.uk:email]
+X-Rspamd-Queue-Id: C02813E6F4A
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-Hi,
+Ensure any characters outstanding have been sent before issuing channel 
+resets so as to prevent messages issued to the bootconsole from getting 
+clobbered.
 
- Starting from commit 84a9582fd203 ("serial: core: Start managing serial 
-controllers to enable runtime PM") the driver for the SiByte onchip DUART 
-has stopped working due to a null pointer dereference in the serial core, 
-which means a kernel crash at bootstrap if the driver has been enabled, as 
-is usually the case for the system console.
+Contrary to device documentation at the time the transmitter empty bit 
+is set only the transmit FIFO has been drained and there is still data 
+outstanding in the transmitter shift register, so wait an extra amount 
+of time for that register to drain too.  This also prevents subsequent 
+messages produced to the console from getting clobbered, owing to what
+seems a transmitter synchronisation issue.
 
- This patch series addresses the issue by switching the driver away from 
-legacy probing to using platform devices.  A notable consequence of this 
-is the serial console is only switched from the bootconsole handler that 
-uses firmware calls over to our serial driver at the time the driver is 
-being properly brought up.  This causes messages to be produced to the 
-console between the device reset and console setup, which in turn causes 
-the firmware still being called via the bootconsole handler to loop 
-forever owing to the transmitter having been disabled.
+When called from sbd_serial_console_init() it is too early for fsleep() 
+to work and even before lpj has been calculated and therefore the delay 
+is actually not sufficient for the transmitter to drain and is merely a 
+placeholder now.  This will be addressed in a follow-up change.
 
- Therefore introductory change 2/4 is included to fix the issue by doing a 
-rudimentary device setup right after reset, using parameters compatible 
-with those used by the firmware (115200n8).  There is auxiliary change 1/4 
-included as well that prevents message corruption from happening at reset, 
-which becomes more prominent due to the change in timing, with the driver 
-switch to the platform device, of messages produced to the console.
+Fixes: 84a9582fd203 ("serial: core: Start managing serial controllers to enable runtime PM")
+Signed-off-by: Maciej W. Rozycki <macro@orcam.me.uk>
+Cc: stable@vger.kernel.org # v6.5+
+---
+ drivers/tty/serial/sb1250-duart.c |   22 ++++++++++++++++++++++
+ 1 file changed, 22 insertions(+)
 
- Additionally there is a revert included as change 4/4 for a regression 
-introduced by an earlier change that caused previously good code to fail 
-requesting the control register resource shared between DUART channels, 
-and issue a warning to the kernel log.  Not to be backported as strictly 
-speaking the driver works just fine despite the missing reservation.
-
- See individual change descriptions for details.  Verified with a SWARM
-(BCM91250A) system.
-
- Please apply.
-
-  Maciej
+linux-serial-sb1250-duart-reset-drain.diff
+Index: linux-macro/drivers/tty/serial/sb1250-duart.c
+===================================================================
+--- linux-macro.orig/drivers/tty/serial/sb1250-duart.c
++++ linux-macro/drivers/tty/serial/sb1250-duart.c
+@@ -516,6 +516,28 @@ static void sbd_init_port(struct sbd_por
+ 
+ 	if (sport->initialised)
+ 		return;
++	/*
++	 * Contrary to documentation, which says that the transmitter
++	 * empty bit is set when "there are no characters to send and
++	 * the transmitter is idle," the bit is already set by hardware
++	 * once the transmit FIFO has been drained only and while the
++	 * transmitter shift register still holds data being supplied
++	 * to the line.  Consequently issuing a transmitter reset at
++	 * this point causes the final character outstanding to be lost.
++	 *
++	 * Moreover, resetting the transmitter while transmission is
++	 * in progress appears to make the transmitter go out of sync
++	 * and subsequent characters issued after the transmitter has
++	 * been reprogrammed and re-enabled are sent corrupted or with
++	 * their bit patterns shifted.
++	 *
++	 * So once the transmitter empty bit has been set wait an extra
++	 * amount of time, sufficient for the transmitter shift register
++	 * to drain at 115200bps, which is the baud rate setting used by
++	 * a standard CFE firmware compilation.
++	 */
++	sbd_line_drain(sport);
++	udelay(100);
+ 
+ 	/* There is no DUART reset feature, so just set some sane defaults.  */
+ 	write_sbdchn(sport, R_DUART_CMD, V_DUART_MISC_CMD_RESET_TX);
 
