@@ -1,448 +1,162 @@
-Return-Path: <linux-mips+bounces-14131-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-14132-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id AM5CEhj83Gk3YwkAu9opvQ
-	(envelope-from <linux-mips+bounces-14131-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Mon, 13 Apr 2026 16:22:16 +0200
+	id cIkbIlj83GlJYwkAu9opvQ
+	(envelope-from <linux-mips+bounces-14132-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Mon, 13 Apr 2026 16:23:20 +0200
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 989983ED43B
-	for <lists+linux-mips@lfdr.de>; Mon, 13 Apr 2026 16:22:15 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id F40673ED490
+	for <lists+linux-mips@lfdr.de>; Mon, 13 Apr 2026 16:23:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id AB0FE3008D39
-	for <lists+linux-mips@lfdr.de>; Mon, 13 Apr 2026 14:15:18 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 0B1EF305D172
+	for <lists+linux-mips@lfdr.de>; Mon, 13 Apr 2026 14:16:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 616C73C4569;
-	Mon, 13 Apr 2026 14:15:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C31AD3D8116;
+	Mon, 13 Apr 2026 14:16:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nokia.com header.i=@nokia.com header.b="uhAMtMjn"
+	dkim=pass (2048-bit key) header.d=cjdns.fr header.i=@cjdns.fr header.b="vAqWeFdP"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from AS8PR04CU009.outbound.protection.outlook.com (mail-westeuropeazon11011014.outbound.protection.outlook.com [52.101.70.14])
+Received: from mail.cjdns.fr (mail.cjdns.fr [5.135.140.105])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 597C33D75C5;
-	Mon, 13 Apr 2026 14:15:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.70.14
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776089718; cv=fail; b=Z/ihMfrCLJsyxqj5nTtJjMrkoThJuvBSRAanM+5cHu9FLFDudax416PD4ddrtPRasi3ZahyEA3LRt7e9bHZU/HvKv5KzAerwVRUNN2zUPeOR7iUixRGfxthpxLp2xl+vKXkas06uC+8c+1VkVjIDOwx0wy+LBLzQUOSas5LVcC8=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776089718; c=relaxed/simple;
-	bh=JRDvH44WEs3+Ywmj60BtinuoVVZ95fkgATcMpGJYbyk=;
-	h=Content-Type:Message-ID:Date:Subject:To:Cc:References:From:
-	 In-Reply-To:MIME-Version; b=jOoJCsnzW0ofWFRwXgXCpTjd8sdYhc2bgP0LjQXEy2cghuCp9yte+fC/O6XoNXGoao5s+EQOPMlLzT0JFJ/HmgD2XHJ63kQu8iFN8wgs00xF2AIMsTpDkFCZPQDFDY39XuzR3aaUjGVwjBDdkev0en2R/NfDMUNF4FuOQQOYBIQ=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nokia.com; spf=fail smtp.mailfrom=nokia.com; dkim=pass (2048-bit key) header.d=nokia.com header.i=@nokia.com header.b=uhAMtMjn; arc=fail smtp.client-ip=52.101.70.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nokia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nokia.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=nJNWXG1sShf9Z7nQ3h+YmMkyn+NkxRBuaVgQIfEg3K23WGGsvkZHhn2i8R0ejXytJSjtRKy8KcsKwLAQFXbvCXPHJ/vZBKRpnQSxtbd4cI/1as5pgHk8zFVwheTwKEF35kPyt5GHDBh402Il9hWExQYqfUWFLp4NO7mxscBo48fhKocCo/jWI923Mn++OWW6XHbbbTRx89sI3Yw19y08tF2R9+cIcznD3AH4SDStpNqUVgxn6DQ8MS7TYtabry8WVAYLJ4TojF7bnx5e/LGY6MDrNdzU32W0MAWLErL3777Ys8urAvFMOdsUrR+kzplD+flDKtEYPS7W2T9Ruw5q+g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=qIkMO0zxtlUykViJdCFWTxyyjthHagakY6Wn7IDKIGI=;
- b=CkhxeUavCBwzhkYLBsb58gwuqXKSvEkzVqH3fNbcQNgBamjDnnx2YtB5gdMGM8JRI6RX2DviPgojyGX/L2zRuZjDHntgpFxnajuvclRycOiyQq3HkwZhhz8wES9mWdXFaOQ8zIyKye54MrUGQk4g2rsbC0cmZcauXdABSs5OPmq95JL2qIRKWJFRV1q8DkkfF6JFF3m7mfcB6gbPSNShF6TQ69raW8TuppY3hda7Oy9SjJ9DpbATNqOnDnMLf8dR1jlQG1TQdvLqabiVDkqTPr6q+Za9COO4lq2rhBsPs1HdVN3nLNcHMYq6J1DNHP0XkQFY1pRwHxHD1NVKyJYnWw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nokia.com; dmarc=pass action=none header.from=nokia.com;
- dkim=pass header.d=nokia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nokia.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=qIkMO0zxtlUykViJdCFWTxyyjthHagakY6Wn7IDKIGI=;
- b=uhAMtMjnF0FMdaM6GJbKcXpYr2U1DZrUXHI8j4s5He+vSX1p3L/0KuRUACmDW83lWBRk623DBTJFUmlS82KMQiul1E4domgVIn61zMVqQQSep3Jc/5yhFGxLDWEtdTu/x8CSUSymmFASA+F/0gTqsR2fzl4tGs15t2nmwC18aDuLEAc8YcRLTIpK4dz4JiUsvcVY6PJegQL7GyN6QMzwLgnUZLxrDVB1m0JrhQY1h9kbVviAXfvMR/QiYT6SvRqqMmUBvk7es7JedRmgJo+K90r/Q3Mi2goQHJwAT/ZEZJuKLo9BuDSvsx5bBrZZC/sGa1gUYzvtoe2M8e8kvBlvqA==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nokia.com;
-Received: from PAWPR07MB9688.eurprd07.prod.outlook.com (2603:10a6:102:383::17)
- by MRWPR07MB11772.eurprd07.prod.outlook.com (2603:10a6:501:8b::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9769.48; Mon, 13 Apr
- 2026 14:15:13 +0000
-Received: from PAWPR07MB9688.eurprd07.prod.outlook.com
- ([fe80::3a2d:5997:c1c7:3809]) by PAWPR07MB9688.eurprd07.prod.outlook.com
- ([fe80::3a2d:5997:c1c7:3809%4]) with mapi id 15.20.9769.046; Mon, 13 Apr 2026
- 14:15:13 +0000
-Content-Type: multipart/mixed; boundary="------------NQ17R8syhvru0qpEUoXK0uuV"
-Message-ID: <dff4fa6e-8eed-4dde-be99-f8adced872e2@nokia.com>
-Date: Mon, 13 Apr 2026 16:15:05 +0200
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] mips: mm: Call rcutree_report_cpu_starting() even
- earlier
-To: "Maciej W. Rozycki" <macro@orcam.me.uk>
-Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
- Jiaxun Yang <jiaxun.yang@flygoat.com>, linux-mips@vger.kernel.org,
- linux-kernel@vger.kernel.org, Huacai Chen <chenhuacai@kernel.org>
-References: <20260409164846.3176046-2-stefan.wiehler@nokia.com>
- <alpine.DEB.2.21.2604101353010.29980@angie.orcam.me.uk>
-Content-Language: en-US
-From: Stefan Wiehler <stefan.wiehler@nokia.com>
-In-Reply-To: <alpine.DEB.2.21.2604101353010.29980@angie.orcam.me.uk>
-X-ClientProxiedBy: FR3P281CA0026.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:1c::17) To PAWPR07MB9688.eurprd07.prod.outlook.com
- (2603:10a6:102:383::17)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4DAD83D8137;
+	Mon, 13 Apr 2026 14:16:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=5.135.140.105
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1776089772; cv=none; b=E3IWFljn0VK9JvyQ4sJsI5QBb2nzeqt5TAj7G4bjF/dG5wScsrL0fm0Lzw6D61/1qjPKiT1QUPWOnqc8DRdU8BQJEzkMsmI1PWAmlHkuqs0G0H9UrAY3bFHBBwEDB45z1jAE+ll5IvJYBjDMP+dR+Iw42/jcWu7EBoWe6bOtSPA=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1776089772; c=relaxed/simple;
+	bh=15HVRr9FxS7zuALkTAS7ae7c5cS7VQL2Gnqx813nRu8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=cln8nt+CCyFXI1O8YeJ+nhhm90c+mlNRio5BLNkHGuclSiyC0OuGHIqfyhnO7vBvjrt5HsZ1fGl0vGibtzuO1kgPn1ycKDFGCUJPeYTXbJ8ZQ4Q93dwn7b1RiVh4nmxKdVxyIKO9GznoGxIzqfacDdQz5/4MX3DWcrGcA/geA2I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=cjdns.fr; spf=pass smtp.mailfrom=cjdns.fr; dkim=pass (2048-bit key) header.d=cjdns.fr header.i=@cjdns.fr header.b=vAqWeFdP; arc=none smtp.client-ip=5.135.140.105
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=cjdns.fr
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cjdns.fr
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id D63519C872;
+	Mon, 13 Apr 2026 16:16:03 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cjdns.fr; s=dkim;
+	t=1776089768; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 content-transfer-encoding:content-language:in-reply-to:references;
+	bh=dDjfswQvvaWRNlZ37ECbTNWQHjOFehAi3h2ZA2ux8mw=;
+	b=vAqWeFdPZrKKkFY0SIIySs8uOjXErPN6nbCPAv/6UdHLFVsJ8vkyN++K2XluZ21nNUCJwO
+	/HpmVcGMpibr0ffg99vtP3bG7GrX4GYt9RUFySVXp7OxGqXJeeyyJzc0DC7ysM11s2HWHY
+	xuXLfh4WajtJ1W1tv74SqFXRuJwjmqV2NMRLujWvA3ei6QCophgyiM4VWgLnFL+AVLVQcL
+	077SyZKCgIakAst/y3OQqM44JxPZkUUw3mMYiLvzCcYTBOq6HbMECT+suHJN78jwXXIkv8
+	g93TDo2oSD+nbvkuwsX0vFEyDI8UPoCUPByBrR9bKF5nrrWsV6vi5m57vli9FQ==
+Message-ID: <b74f2951-4905-4190-bee5-f43016e8fb4d@cjdns.fr>
+Date: Mon, 13 Apr 2026 16:16:00 +0200
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PAWPR07MB9688:EE_|MRWPR07MB11772:EE_
-X-MS-Office365-Filtering-Correlation-Id: 60154fe5-259e-454b-b45f-08de99671443
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|1800799024|366016|376014|6049299003|4053099003|18002099003|22082099003|56012099003;
-X-Microsoft-Antispam-Message-Info:
-	GzUACxMfz2rGQZ8/HwLn1akqBbIOa8H+wMTPU8T8rvBbW4PYjudGNT1zGXkjMVkcMhLLY4XeUcAtpjSoufQ9FLQWE7zEJpjZRYTl/uVyEwHSDO3vc+25gGQRe+//eh0fZhJulzXe9Az5DT58xgVbc+75jUHE+BpbQfPYtFCSMoCIzU0D9lg2v5azyHWqBvY66LHnGpyQg4ZlMez85t5Ns0n5ppA51BJVkZxUmQB7mdw6I3vh8nExEjh3NP64SIGsFVQ+TN2l1Ark1ggq7J5KP9olE+kulM7K+OqLWm3K8rMz6wBxoW67XRt8id32JMNUOGwD1g/5zHFEJfyQoUWF1wIJhzB3SfmBv1vHr4o9sVUvUgZtQWdjY2x1WMayDZSVf+HvOH4njCoHIcRA3grWOr+7BkcvJEFV0du/YLq5/ZS6it0weg5R2KXbRkdjhKpmPMF4jC4q0KER/LTXrgMKmtYfHU7ezTRR+YJ8yduyBfEDnOlasBJ3NrraG4UpGbIQNcQ76lZcico+P26rSQfbrZixIt3r32WkZpSXbM3H7W+s0yEjQmOGUlThSVpYmTNO7Y4njiNmG2rFjsZtT9D4LW7oogwlngbO9PMqVryiE488vUH6KPw1VOmibU/VVa/XGamrq0o8QTDHenJmcq+TvAzu7SFHEwah1ikNUrCh2OFu2DqptXAplA5/0wlSLDjol2zLJkqYcHk3wSns9ix1X3xybCsAuEW29boVN8FRgtY=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAWPR07MB9688.eurprd07.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(376014)(6049299003)(4053099003)(18002099003)(22082099003)(56012099003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?OHdoOWE2dWloN09iTC9nb3pneFo2R3dqVXZ4TUtTckx2ckpVc3ZaT1J5dVJD?=
- =?utf-8?B?Wkt2SU5ITTBoYXJFL1oxdFFETjNrTUpkT0F2d01QSE54VWFjdzdSZDdoNXdw?=
- =?utf-8?B?TTRiQzhGZk5HRzNwS0F1TWZaRjZvTHJXSzZxd2lQdktzcDJTaTBScFZuZ3Bw?=
- =?utf-8?B?L1dnRTJmKzNlVlFDNEpCWGVVVjVmcThIeUVsdFVFWjlFZ1YzemQ4TTYrVld6?=
- =?utf-8?B?T1F3YStNOHhMWTkxNUpoVU1ZTjl2SlRLVlF4VG50SVZ5VnR0bFhLZWJRb3p5?=
- =?utf-8?B?Y2V5RWxITkpiYTZKVy9mdUNRM2t4anVUQkw4Z3FHajQxNFNhOFFKbXNjZ2RK?=
- =?utf-8?B?dkE4QVRhdHY0amtvSHNvOS9acDJDak1XcHlaOHRIdFFuVFVhVkcrNHgwRUpa?=
- =?utf-8?B?aVQ3dGFKT0RzOU85TkpHK1BIaFhpdEk1ZGFCTUtkVFpVdmJvSy8vdERVam5s?=
- =?utf-8?B?N2lQb0pIeFN0RE1QVG96VEEzL0tsWURtOGNpQ3FRQndMYTNBWjhFTkFYVnAz?=
- =?utf-8?B?UERINXVxaWpEZGJtN3JralBwbHIxTVN1UkZHT2o4ZUpTZnEzRGN2cjg0Q1By?=
- =?utf-8?B?VWlHTUR0S2g4cTMwVWNGMDZKZUxFQjZsTWovSGVITHNOeHZ6YXJrbTZXbUtw?=
- =?utf-8?B?NERXNGRMQ1BjVCt5elJRZlQzOW9DaDFZY3FtaUNxY0h3KzJvK0MyMjlwdTFs?=
- =?utf-8?B?ejlpUUh4TFBycTNDanZGbU5wNkIvTFlGdkd1aEc3SGFISnlEcjVSUHdlTmVW?=
- =?utf-8?B?VlhReGRjUjVvYVNLNXUyMEZ1eFI5SzdXbFRSM2VrMC94OWp1NFEyWndDUGRS?=
- =?utf-8?B?MW9OZmhoTm90cEw3NmhVV3FnenFmWUp1eHIyNGpjd1hhUkRBbjQ4cElLTysr?=
- =?utf-8?B?ekJYY2hCcU9yM0lUUC9NWmtkK1NSRHZkQTJqWTdEZTE5OEY5TmRUZGNSQ1pv?=
- =?utf-8?B?WDMrMDdSVHVGRjRscE13b3Z6aUV3czBjaVkvdzVOU1Nvc0E1WGZIWk83a2VL?=
- =?utf-8?B?M2pBMWJrNHNGYTlwWW1mUFhZWDJnRElwNVo1anFZRUlKQUVUcG93UzJYbGM2?=
- =?utf-8?B?NHpCaEpXYXdxZ3pDNWRtNWxrUUhjVUNQcWVUUXdQU1h6T3AwTnhhekNDT1dV?=
- =?utf-8?B?Z0ErQWxrK1JDQ3RxTHR3Z3VyWHJ5bnhxekxnRmdkRmNBNHZPNWg2dkNsRlFw?=
- =?utf-8?B?VDR2ZzRSakw4S0FXclNaWUVlWTNQL0R3blBSSnVzTktQdVB4aEphcGo1SFFv?=
- =?utf-8?B?czBSKzJlTkJyYVBld1FKQXBkWUU4OWczbGpTSEhZZU1ma1NMM1phNVBZM3lw?=
- =?utf-8?B?YjFzd2I2Y2pwUS9iK0ZmZW9HUWFMZUh5bDJaYmVWOCtyQ3lNRHBXVmlMVGp0?=
- =?utf-8?B?dHBXSVFEcmV3TVE2VHljN0RydVQ5Q0hHVlEvTUlTTlNrUnByRHJ3TmhkZTQr?=
- =?utf-8?B?cDJkM3luTUJ6TVRJTEE5SHZPM3hQemRXMnNkcWZYd3IvUWtuYlhxTDlLSjlt?=
- =?utf-8?B?Vk9lOWFONHR5a0E2WE05TFI0WTBEbUJzM3RvOGJ3TWJ6YzFDNE12WStHY1hU?=
- =?utf-8?B?Ym4wZzlOWldHd0FCcjZmSDlpcmU3K3VrK1ZJRkZ2ckNJUkJzSnY3dk1taHlC?=
- =?utf-8?B?Z0lYd3h2dnk1SnkzU0pxbkVXdk8vYmZHS1cvOCtiWnRJd3A4S1JGZWRmZ0Nx?=
- =?utf-8?B?R25tWDNPTzl0dFZ6TDJVd1FpYzZRZTdUeVZoS2VLM2w1dkNuZFBKNWpWRkFS?=
- =?utf-8?B?SGkreWo0ZHh3Z01oMWdWb1dPMzgrcGdaMVpNM0l6WEpidHVIbGtyQzhvbTJF?=
- =?utf-8?B?bVRmRUM0VVJMNloranl4bWdjS0N4elpPYUl2eVlmRXluZFBvTjBFZGhQZFVQ?=
- =?utf-8?B?cDZYbEF2KzFnRmxwVEhrQmNmbEdVWjVsaTd5YWxWZDJEaERZc3VhZzI4VVd0?=
- =?utf-8?B?M0ZFU3RyNUptSnE0K0c2T3FsUGh4dWpHVHBjUmdiZHlmM3R1WUpaNldWUTFZ?=
- =?utf-8?B?SVJyR1FUZHdBdkFUYUwzaWIyZElGanlHdTI5dVQ5VkJuejBHbE9GOG1oNExz?=
- =?utf-8?B?UFdHQjFhQnU2cm40TEgxZCsza1dNcWlBMkpGaXR6UnNVdHFLWE9KNTFESXBx?=
- =?utf-8?B?S010enk1U29nWEI5N3BXS3U1NXBhUkI4V2x2ZUZ1UEpyRTlERWpieTlDT1Zz?=
- =?utf-8?B?VHQ4Q0hQRHJMSnlYZHdWb2RvNGdJeDlmL0VSMVpsbWUrU0w1bzMrOEFjemtX?=
- =?utf-8?B?ZHdqRTBwS0pnVkJXOWliTXpSQVNnK200VnZramxMcmdDSDlWZnAvd2x0dmEz?=
- =?utf-8?B?cms4WUdGaTlTTGtCTlk4NHlGbGtSRWNXQjlRcE8wQ0tXV3ZPdXhocmJYZmgw?=
- =?utf-8?Q?iGIGmxGGvvoo2juY=3D?=
-X-OriginatorOrg: nokia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 60154fe5-259e-454b-b45f-08de99671443
-X-MS-Exchange-CrossTenant-AuthSource: PAWPR07MB9688.eurprd07.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Apr 2026 14:15:13.5321
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 5d471751-9675-428d-917b-70f44f9630b0
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 65TM98mP95M+bjqstJuWYL15WzGqEzfzmDejyaEFF1wYBXAlV0vqZ3x4HzAhLdLfV5aZmKxcIr0dqTDHy2J8Lilxu8Kb9oDPLmP3Pvw9LTM=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MRWPR07MB11772
-X-Spamd-Result: default: False [0.94 / 15.00];
-	MIME_BASE64_TEXT_BOGUS(1.00)[];
-	ARC_REJECT(1.00)[cv is fail on i=2];
-	DMARC_POLICY_ALLOW(-0.50)[nokia.com,reject];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
-	R_DKIM_ALLOW(-0.20)[nokia.com:s=selector1];
+User-Agent: Mozilla Thunderbird Beta
+Subject: Re: [PATCH 1/2] clocksource: timer-econet-en751221: fix timer block
+ mapping at boot
+To: kpursoty@proton.me,
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+ "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>,
+ "tglx@linutronix.de" <tglx@linutronix.de>
+Cc: "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+ "tsbogend@alpha.franken.de" <tsbogend@alpha.franken.de>,
+ "naseefkm@gmail.com" <naseefkm@gmail.com>
+References: <9Rwn4wIPxs9vc3ZNs2cz2TiRae-nX8aEihtdbFI1uMH5BC4KrwDh-70Pg2UbBsUTAB7ltbnSuVpGQ-fGz02o5XJmJRYhz9YIrzilyyiBdlk=@proton.me>
+Content-Language: en-US
+From: Caleb James DeLisle <cjd@cjdns.fr>
+In-Reply-To: <9Rwn4wIPxs9vc3ZNs2cz2TiRae-nX8aEihtdbFI1uMH5BC4KrwDh-70Pg2UbBsUTAB7ltbnSuVpGQ-fGz02o5XJmJRYhz9YIrzilyyiBdlk=@proton.me>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Last-TLS-Session-Version: TLSv1.3
+X-Spamd-Result: default: False [-2.16 / 15.00];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	DMARC_POLICY_ALLOW(-0.50)[cjdns.fr,none];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_DKIM_ALLOW(-0.20)[cjdns.fr:s=dkim];
 	MAILLIST(-0.15)[generic];
-	MIME_BASE64_TEXT(0.10)[];
-	MIME_GOOD(-0.10)[multipart/mixed,text/plain];
+	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-14131-lists,linux-mips=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	TO_DN_SOME(0.00)[];
-	MIME_TRACE(0.00)[0:+,1:+,2:+];
+	TAGGED_FROM(0.00)[bounces-14132-lists,linux-mips=lfdr.de];
+	FREEMAIL_CC(0.00)[vger.kernel.org,alpha.franken.de,gmail.com];
 	FROM_HAS_DN(0.00)[];
-	HAS_ATTACHMENT(0.00)[];
-	RCPT_COUNT_FIVE(0.00)[6];
-	RCVD_COUNT_FIVE(0.00)[5];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[stefan.wiehler@nokia.com,linux-mips@vger.kernel.org];
-	DKIM_TRACE(0.00)[nokia.com:+];
+	RCVD_COUNT_THREE(0.00)[4];
+	RECEIVED_HELO_LOCALHOST(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	TO_DN_EQ_ADDR_SOME(0.00)[];
+	DKIM_TRACE(0.00)[cjdns.fr:+];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	FORGED_SENDER_MAILLIST(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
-	TAGGED_RCPT(0.00)[linux-mips];
-	MID_RHS_MATCH_FROM(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[cjd@cjdns.fr,linux-mips@vger.kernel.org];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[nokia.com:dkim,nokia.com:mid,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 989983ED43B
+	MID_RHS_MATCH_FROM(0.00)[];
+	TAGGED_RCPT(0.00)[linux-mips];
+	RCPT_COUNT_SEVEN(0.00)[7];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[cjdns.fr:dkim,cjdns.fr:email,cjdns.fr:mid,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,proton.me:email]
+X-Rspamd-Queue-Id: F40673ED490
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
---------------NQ17R8syhvru0qpEUoXK0uuV
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
 
->  I have tried to verify your change here, but the warning does not trigger
-> with 6.19 as released and CONFIG_SIBYTE_SWARM as the platform (2-way SMP).
-> 
-> $ grep CONFIG_PROVE_RCU_LIST .config
-> CONFIG_PROVE_RCU_LIST=y
-> $
-> 
-> Am I missing anything here, anything extra to enable?
+On 13/04/2026 12:12, kpursoty@proton.me wrote:
+> timer_init() used DIV_ROUND_UP(num_possible_cpus(), 2) to determine how
+> many register blocks to iomap. At early boot with VPE-based SMP, MIPS
+> reports num_possible_cpus()=1 (VPEs not yet brought online), giving
+> num_blocks=1. Only membase[0] is then mapped via of_iomap.
+>
+> The EN751627 SoC has 2 physical cores, each with 2 VPEs, giving NR_CPUS=4
+> and two timer register blocks (one per core). Each block serves two VPEs:
+> block 0 handles CPU0+CPU1 (core 0), block 1 handles CPU2+CPU3 (core 1).
+> The block count is a silicon constant: DIV_ROUND_UP(NR_CPUS, 2) = 2.
+>
+> cevt_init() calls cevt_dev_init(i) for each possible CPU via
+> for_each_possible_cpu(). On EN7528/EN751627 with 4 VPEs, NR_CPUS=4 so
+> cevt_dev_init(2) is called. cevt_dev_init(2) writes to reg_compare(2)
+> which dereferences membase[2>>1] = membase[1], which is NULL:
+>
+>    CPU 0 Unable to handle kernel paging request at virtual address 00000008
+>    epc : iowrite32+0x4/0x10
+>    ra  : cevt_dev_init+0x40/0x64
+>
+> Fix: replace the runtime calculation with ECONET_NUM_BLOCKS, which is
+> DIV_ROUND_UP(NR_CPUS, 2) evaluated at compile time. This is the same
+> expression used to declare the membase[] array, so the loop bound and
+> array size are provably consistent. For NR_CPUS=4 this is always 2,
+> correctly mapping both register blocks regardless of how many VPEs are
+> visible at early boot.
+>
+> Fixes: 3b4c33ac87d0 ("clocksource/drivers: Add EcoNet Timer HPT driver")
+> Signed-off-by: Kervin Pursoty <kpursoty@proton.me>
 
-I was able to reproduce this splat on latest mainline with the attached
-defconfig on QEMU, which I invoked as follows:
+Reviewed-by: Caleb James DeLisle <cjd@cjdns.fr>
 
-$ qemu-system-mips64 -cpu I6400 -smp 2 -kernel vmlinux -nographic
-
-  =============================
-  WARNING: suspicious RCU usage
-  7.0.0-rc7-dirty #13 Not tainted
-  -----------------------------
-  kernel/locking/lockdep.c:3801 RCU-list traversed in non-reader section!!
-  
-  other info that might help us debug this:
-  
-  
-  RCU used illegally from offline CPU!
-  rcu_scheduler_active = 1, debug_locks = 1
-  no locks held by swapper/1/0.
-  
-  stack backtrace:
-  CPU: 1 UID: 0 PID: 0 Comm: swapper/1 Not tainted 7.0.0-rc7-dirty #13 VOLUNTARY 
-  Hardware name: mti,malta
-  Stack : a8000000021fb938 0000000000000000 0000000000000018 a8000000021fb888
-          a8000000021fb888 a8000000021fb9b8 0000000000000000 0000000000000000
-          00f87412b0603bdf 0000000000000001 0000000000000000 0000000000000000
-          ffffffff80f9e5b0 0000000000000000 ffffffff80abb824 000000000000001b
-          ffffffffffffffff 0000000000000000 0000000000000000 ffffffff80d2ea28
-          ffffffff80e10000 ffffffff80ccf9e0 0000000000000001 0000000000000000
-          0000000000000003 0000000000000000 a8000000021fb680 0000000030400080
-          0000000000000000 a8000000021f8000 a8000000021fb880 ffffffff80f00000
-          ffffffff801190dc 0000000000000000 0000000000000000 0000000000000000
-          0000000000000000 0000000000000000 ffffffff801190f4 00f87412b0603bdf
-          ...
-  Call Trace:
-  [<ffffffff801190f4>] show_stack+0x5c/0x150
-  [<ffffffff8010eeac>] dump_stack_lvl+0xa4/0xe8
-  [<ffffffff801bd250>] lockdep_rcu_suspicious+0x180/0x228
-  [<ffffffff801c2020>] __lock_acquire+0x15b0/0x2b00
-  [<ffffffff801c421c>] lock_acquire+0x144/0x490
-  [<ffffffff80ac9e9c>] _raw_spin_lock_irqsave+0x54/0x88
-  [<ffffffff8031ec90>] ___slab_alloc+0x190/0x950
-  [<ffffffff8032282c>] __kmalloc_noprof+0x344/0x520
-  [<ffffffff80323d88>] __alloc_empty_sheaf+0x48/0x78
-  [<ffffffff80321904>] __pcs_replace_empty_main+0x4ec/0x680
-  [<ffffffff80322944>] __kmalloc_noprof+0x45c/0x520
-  [<ffffffff80abe770>] r4k_tlb_uniquify+0x58/0x2c8
-  [<ffffffff8013af6c>] r4k_tlb_configure+0xb4/0xd0
-  [<ffffffff8013c5fc>] tlb_init+0xc/0x80
-  [<ffffffff8011b054>] per_cpu_trap_init+0xfc/0x168
-  [<ffffffff80123a68>] start_secondary+0x28/0x118
-  [<ffffffff80125864>] mips_cps_core_boot+0x74/0x88
-
-However, on that platform even before that you will see various Lockdep RCU
-splats complaining about taking the console lock from an offline CPU
-originating from c-r4k.c; one more reason to call rcutree_report_cpu_starting()
-earlier.
-
->> See also commit 55702ec9603e ("mips/smp: Call
->> rcutree_report_cpu_starting() earlier").
->>
->> Fixes: 231ac951faba ("MIPS: mm: kmalloc tlb_vpn array to avoid stack overflow")
-> 
->  This does not appear to be a valid commit hash upstream; this is commit
-> 841ecc979b18 AFAICS.
-
-You are right, I accidentally referenced the commit in our internal branch,
-fixed in v3.
-
->> diff --git a/arch/mips/kernel/smp.c b/arch/mips/kernel/smp.c
->> index 4868e79f3b30..bdb47c70d4f5 100644
->> --- a/arch/mips/kernel/smp.c
->> +++ b/arch/mips/kernel/smp.c
->> @@ -359,8 +359,8 @@ asmlinkage void start_secondary(void)
->>       unsigned int cpu = raw_smp_processor_id();
->>
->>       cpu_probe();
->> -     per_cpu_trap_init(false);
->>       rcutree_report_cpu_starting(cpu);
->> +     per_cpu_trap_init(false);
->>       mips_clockevent_init();
->>       mp_ops->init_secondary();
->>       cpu_report();
-> 
->  As I noted in my previous message: is there any reason for cpu_probe() to
-> precede this call?
-
-In principal, we can also make the call before cpu_probe(), however as Huacai
-pointed out calling rcutree_report_cpu_starting() early is not inherently safe:
-
-> Please see 5056c596c3d1848021a4eaa76ee42f4c05c50346 ("LoongArch/smp:
-> Call rcutree_report_cpu_starting() at tlb_init()"), maybe MIPS will
-> have similar issues.
-
-I think this specific issue is not relevant for us as MIPS does not use DMW
-(please correct me if I am wrong). Given cpu_probe()'s highly SoC-specific
-nature, I think it should be excluded unless there is a specific reason for its
-inclusion.
-
-Kind regards,
-
-Stefan
---------------NQ17R8syhvru0qpEUoXK0uuV
-Content-Type: text/plain; charset=UTF-8; name="defconfig"
-Content-Disposition: attachment; filename="defconfig"
-Content-Transfer-Encoding: base64
-
-Q09ORklHX1NZU1ZJUEM9eQpDT05GSUdfTk9fSFo9eQpDT05GSUdfSElHSF9SRVNfVElNRVJTPXkK
-Q09ORklHX1JDVV9FWFBFUlQ9eQpDT05GSUdfTE9HX0JVRl9TSElGVD0xNQpDT05GSUdfTkFNRVNQ
-QUNFUz15CkNPTkZJR19SRUxBWT15CkNPTkZJR19CTEtfREVWX0lOSVRSRD15CkNPTkZJR19FWFBF
-UlQ9eQpDT05GSUdfTUlQU19NQUxUQT15CkNPTkZJR19DUFVfTUlQUzY0X1I2PXkKQ09ORklHXzY0
-QklUPXkKQ09ORklHX01JUFNfQ1BTPXkKQ09ORklHX05SX0NQVVM9MgpDT05GSUdfSFpfMTAwPXkK
-Q09ORklHX1BBR0VfU0laRV8xNktCPXkKQ09ORklHX0NPTVBBVF8zMkJJVF9USU1FPXkKQ09ORklH
-X01PRFVMRVM9eQpDT05GSUdfTU9EVUxFX1VOTE9BRD15CkNPTkZJR19NT0RWRVJTSU9OUz15CkNP
-TkZJR19NT0RVTEVfU1JDVkVSU0lPTl9BTEw9eQojIENPTkZJR19DT01QQVRfQlJLIGlzIG5vdCBz
-ZXQKQ09ORklHX05FVD15CkNPTkZJR19QQUNLRVQ9eQpDT05GSUdfVU5JWD15CkNPTkZJR19YRlJN
-X1VTRVI9bQpDT05GSUdfTkVUX0tFWT15CkNPTkZJR19ORVRfS0VZX01JR1JBVEU9eQpDT05GSUdf
-SU5FVD15CkNPTkZJR19JUF9NVUxUSUNBU1Q9eQpDT05GSUdfSVBfQURWQU5DRURfUk9VVEVSPXkK
-Q09ORklHX0lQX01VTFRJUExFX1RBQkxFUz15CkNPTkZJR19JUF9ST1VURV9NVUxUSVBBVEg9eQpD
-T05GSUdfSVBfUk9VVEVfVkVSQk9TRT15CkNPTkZJR19JUF9QTlA9eQpDT05GSUdfSVBfUE5QX0RI
-Q1A9eQpDT05GSUdfSVBfUE5QX0JPT1RQPXkKQ09ORklHX05FVF9JUElQPW0KQ09ORklHX0lQX01S
-T1VURT15CkNPTkZJR19JUF9QSU1TTV9WMT15CkNPTkZJR19JUF9QSU1TTV9WMj15CkNPTkZJR19T
-WU5fQ09PS0lFUz15CkNPTkZJR19JTkVUX0FIPW0KQ09ORklHX0lORVRfRVNQPW0KQ09ORklHX0lO
-RVRfSVBDT01QPW0KQ09ORklHX1RDUF9NRDVTSUc9eQpDT05GSUdfSVBWNl9ST1VURVJfUFJFRj15
-CkNPTkZJR19JUFY2X1JPVVRFX0lORk89eQpDT05GSUdfSVBWNl9PUFRJTUlTVElDX0RBRD15CkNP
-TkZJR19JTkVUNl9BSD1tCkNPTkZJR19JTkVUNl9FU1A9bQpDT05GSUdfSU5FVDZfSVBDT01QPW0K
-Q09ORklHX0lQVjZfVFVOTkVMPW0KQ09ORklHX0lQVjZfTVJPVVRFPXkKQ09ORklHX0lQVjZfUElN
-U01fVjI9eQpDT05GSUdfTkVUV09SS19TRUNNQVJLPXkKQ09ORklHX05FVEZJTFRFUj15CkNPTkZJ
-R19ORl9DT05OVFJBQ0s9bQpDT05GSUdfTkZfQ09OTlRSQUNLX1NFQ01BUks9eQpDT05GSUdfTkZf
-Q09OTlRSQUNLX0VWRU5UUz15CkNPTkZJR19ORl9DT05OVFJBQ0tfQU1BTkRBPW0KQ09ORklHX05G
-X0NPTk5UUkFDS19GVFA9bQpDT05GSUdfTkZfQ09OTlRSQUNLX0gzMjM9bQpDT05GSUdfTkZfQ09O
-TlRSQUNLX0lSQz1tCkNPTkZJR19ORl9DT05OVFJBQ0tfUFBUUD1tCkNPTkZJR19ORl9DT05OVFJB
-Q0tfU0FORT1tCkNPTkZJR19ORl9DT05OVFJBQ0tfU0lQPW0KQ09ORklHX05GX0NPTk5UUkFDS19U
-RlRQPW0KQ09ORklHX05GX0NUX05FVExJTks9bQpDT05GSUdfTkVURklMVEVSX1hUX1RBUkdFVF9D
-TEFTU0lGWT1tCkNPTkZJR19ORVRGSUxURVJfWFRfVEFSR0VUX0NPTk5NQVJLPW0KQ09ORklHX05F
-VEZJTFRFUl9YVF9UQVJHRVRfTUFSSz1tCkNPTkZJR19ORVRGSUxURVJfWFRfVEFSR0VUX05GTE9H
-PW0KQ09ORklHX05FVEZJTFRFUl9YVF9UQVJHRVRfTkZRVUVVRT1tCkNPTkZJR19ORVRGSUxURVJf
-WFRfVEFSR0VUX1NFQ01BUks9bQpDT05GSUdfTkVURklMVEVSX1hUX1RBUkdFVF9UQ1BNU1M9bQpD
-T05GSUdfTkVURklMVEVSX1hUX01BVENIX0NPTU1FTlQ9bQpDT05GSUdfTkVURklMVEVSX1hUX01B
-VENIX0NPTk5CWVRFUz1tCkNPTkZJR19ORVRGSUxURVJfWFRfTUFUQ0hfQ09OTkxJTUlUPW0KQ09O
-RklHX05FVEZJTFRFUl9YVF9NQVRDSF9DT05OTUFSSz1tCkNPTkZJR19ORVRGSUxURVJfWFRfTUFU
-Q0hfQ09OTlRSQUNLPW0KQ09ORklHX05FVEZJTFRFUl9YVF9NQVRDSF9FU1A9bQpDT05GSUdfTkVU
-RklMVEVSX1hUX01BVENIX0hBU0hMSU1JVD1tCkNPTkZJR19ORVRGSUxURVJfWFRfTUFUQ0hfSEVM
-UEVSPW0KQ09ORklHX05FVEZJTFRFUl9YVF9NQVRDSF9JUFJBTkdFPW0KQ09ORklHX05FVEZJTFRF
-Ul9YVF9NQVRDSF9MRU5HVEg9bQpDT05GSUdfTkVURklMVEVSX1hUX01BVENIX0xJTUlUPW0KQ09O
-RklHX05FVEZJTFRFUl9YVF9NQVRDSF9NQUM9bQpDT05GSUdfTkVURklMVEVSX1hUX01BVENIX01B
-Uks9bQpDT05GSUdfTkVURklMVEVSX1hUX01BVENIX01VTFRJUE9SVD1tCkNPTkZJR19ORVRGSUxU
-RVJfWFRfTUFUQ0hfT1dORVI9bQpDT05GSUdfTkVURklMVEVSX1hUX01BVENIX1BPTElDWT1tCkNP
-TkZJR19ORVRGSUxURVJfWFRfTUFUQ0hfUEtUVFlQRT1tCkNPTkZJR19ORVRGSUxURVJfWFRfTUFU
-Q0hfUVVPVEE9bQpDT05GSUdfTkVURklMVEVSX1hUX01BVENIX1JBVEVFU1Q9bQpDT05GSUdfTkVU
-RklMVEVSX1hUX01BVENIX1JFQUxNPW0KQ09ORklHX05FVEZJTFRFUl9YVF9NQVRDSF9SRUNFTlQ9
-bQpDT05GSUdfTkVURklMVEVSX1hUX01BVENIX1NPQ0tFVD1tCkNPTkZJR19ORVRGSUxURVJfWFRf
-TUFUQ0hfU1RBVEU9bQpDT05GSUdfTkVURklMVEVSX1hUX01BVENIX1NUQVRJU1RJQz1tCkNPTkZJ
-R19ORVRGSUxURVJfWFRfTUFUQ0hfU1RSSU5HPW0KQ09ORklHX05FVEZJTFRFUl9YVF9NQVRDSF9U
-Q1BNU1M9bQpDT05GSUdfTkVURklMVEVSX1hUX01BVENIX1RJTUU9bQpDT05GSUdfTkVURklMVEVS
-X1hUX01BVENIX1UzMj1tCkNPTkZJR19JUF9WUz1tCkNPTkZJR19JUF9WU19JUFY2PXkKQ09ORklH
-X0lQX1ZTX1BST1RPX1RDUD15CkNPTkZJR19JUF9WU19QUk9UT19VRFA9eQpDT05GSUdfSVBfVlNf
-UFJPVE9fRVNQPXkKQ09ORklHX0lQX1ZTX1BST1RPX0FIPXkKQ09ORklHX0lQX1ZTX1JSPW0KQ09O
-RklHX0lQX1ZTX1dSUj1tCkNPTkZJR19JUF9WU19MQz1tCkNPTkZJR19JUF9WU19XTEM9bQpDT05G
-SUdfSVBfVlNfTEJMQz1tCkNPTkZJR19JUF9WU19MQkxDUj1tCkNPTkZJR19JUF9WU19ESD1tCkNP
-TkZJR19JUF9WU19TSD1tCkNPTkZJR19JUF9WU19TRUQ9bQpDT05GSUdfSVBfVlNfTlE9bQpDT05G
-SUdfSVBfTkZfSVBUQUJMRVM9bQpDT05GSUdfSVBfTkZfTUFUQ0hfQUg9bQpDT05GSUdfSVBfTkZf
-TUFUQ0hfRUNOPW0KQ09ORklHX0lQX05GX01BVENIX1RUTD1tCkNPTkZJR19CUklER0VfTkZfRUJU
-QUJMRVM9bQpDT05GSUdfQlJJREdFX0VCVF84MDJfMz1tCkNPTkZJR19CUklER0VfRUJUX0FNT05H
-PW0KQ09ORklHX0JSSURHRV9FQlRfQVJQPW0KQ09ORklHX0JSSURHRV9FQlRfSVA9bQpDT05GSUdf
-QlJJREdFX0VCVF9JUDY9bQpDT05GSUdfQlJJREdFX0VCVF9MSU1JVD1tCkNPTkZJR19CUklER0Vf
-RUJUX01BUks9bQpDT05GSUdfQlJJREdFX0VCVF9QS1RUWVBFPW0KQ09ORklHX0JSSURHRV9FQlRf
-U1RQPW0KQ09ORklHX0JSSURHRV9FQlRfVkxBTj1tCkNPTkZJR19CUklER0VfRUJUX0FSUFJFUExZ
-PW0KQ09ORklHX0JSSURHRV9FQlRfRE5BVD1tCkNPTkZJR19CUklER0VfRUJUX01BUktfVD1tCkNP
-TkZJR19CUklER0VfRUJUX1JFRElSRUNUPW0KQ09ORklHX0JSSURHRV9FQlRfU05BVD1tCkNPTkZJ
-R19CUklER0VfRUJUX0xPRz1tCkNPTkZJR19CUklER0VfRUJUX05GTE9HPW0KQ09ORklHX0lQX1ND
-VFA9bQpDT05GSUdfQlJJREdFPW0KQ09ORklHX1ZMQU5fODAyMVE9bQpDT05GSUdfVkxBTl84MDIx
-UV9HVlJQPXkKQ09ORklHX0FUQUxLPW0KQ09ORklHX1BIT05FVD1tCkNPTkZJR19ORVRfU0NIRUQ9
-eQpDT05GSUdfTkVUX1NDSF9IVEI9bQpDT05GSUdfTkVUX1NDSF9IRlNDPW0KQ09ORklHX05FVF9T
-Q0hfUFJJTz1tCkNPTkZJR19ORVRfU0NIX1JFRD1tCkNPTkZJR19ORVRfU0NIX1NGUT1tCkNPTkZJ
-R19ORVRfU0NIX1RFUUw9bQpDT05GSUdfTkVUX1NDSF9UQkY9bQpDT05GSUdfTkVUX1NDSF9HUkVE
-PW0KQ09ORklHX05FVF9TQ0hfTkVURU09bQpDT05GSUdfTkVUX1NDSF9JTkdSRVNTPW0KQ09ORklH
-X05FVF9DTFNfQkFTSUM9bQpDT05GSUdfTkVUX0NMU19ST1VURTQ9bQpDT05GSUdfTkVUX0NMU19G
-Vz1tCkNPTkZJR19ORVRfQ0xTX1UzMj1tCkNPTkZJR19ORVRfQ0xTX0ZMT1c9bQpDT05GSUdfTkVU
-X0NMU19BQ1Q9eQpDT05GSUdfTkVUX0FDVF9QT0xJQ0U9eQpDT05GSUdfTkVUX0FDVF9HQUNUPW0K
-Q09ORklHX0dBQ1RfUFJPQj15CkNPTkZJR19ORVRfQUNUX01JUlJFRD1tCkNPTkZJR19ORVRfQUNU
-X05BVD1tCkNPTkZJR19ORVRfQUNUX1BFRElUPW0KQ09ORklHX05FVF9BQ1RfU0lNUD1tCkNPTkZJ
-R19ORVRfQUNUX1NLQkVESVQ9bQpDT05GSUdfQ0ZHODAyMTE9bQpDT05GSUdfTUFDODAyMTE9bQpD
-T05GSUdfTUFDODAyMTFfTUVTSD15CkNPTkZJR19SRktJTEw9bQpDT05GSUdfUENJPXkKQ09ORklH
-X0RFVlRNUEZTPXkKQ09ORklHX0NPTk5FQ1RPUj1tCkNPTkZJR19NVEQ9eQpDT05GSUdfTVREX0JM
-T0NLPXkKQ09ORklHX01URF9PT1BTPW0KQ09ORklHX01URF9DRkk9eQpDT05GSUdfTVREX0NGSV9J
-TlRFTEVYVD15CkNPTkZJR19NVERfQ0ZJX0FNRFNURD15CkNPTkZJR19NVERfQ0ZJX1NUQUE9eQpD
-T05GSUdfTVREX1VCST1tCkNPTkZJR19NVERfVUJJX0dMVUVCST1tCkNPTkZJR19CTEtfREVWX0ZE
-PW0KQ09ORklHX0JMS19ERVZfTE9PUD1tCkNPTkZJR19CTEtfREVWX05CRD1tCkNPTkZJR19CTEtf
-REVWX1JBTT15CkNPTkZJR19BVEFfT1ZFUl9FVEg9bQpDT05GSUdfUkFJRF9BVFRSUz1tCkNPTkZJ
-R19CTEtfREVWX1NEPXkKQ09ORklHX0NIUl9ERVZfU1Q9bQpDT05GSUdfQkxLX0RFVl9TUj15CkNP
-TkZJR19DSFJfREVWX1NHPW0KQ09ORklHX1NDU0lfQ09OU1RBTlRTPXkKQ09ORklHX1NDU0lfTE9H
-R0lORz15CkNPTkZJR19TQ1NJX1NDQU5fQVNZTkM9eQpDT05GSUdfU0NTSV9GQ19BVFRSUz1tCkNP
-TkZJR19JU0NTSV9UQ1A9bQpDT05GSUdfQkxLX0RFVl8zV19YWFhYX1JBSUQ9bQpDT05GSUdfU0NT
-SV8zV185WFhYPW0KQ09ORklHX1NDU0lfQUNBUkQ9bQpDT05GSUdfU0NTSV9BQUNSQUlEPW0KQ09O
-RklHX1NDU0lfQUlDN1hYWD1tCkNPTkZJR19BSUM3WFhYX1JFU0VUX0RFTEFZX01TPTE1MDAwCiMg
-Q09ORklHX0FJQzdYWFhfREVCVUdfRU5BQkxFIGlzIG5vdCBzZXQKQ09ORklHX0FUQT15CkNPTkZJ
-R19BVEFfUElJWD15CkNPTkZJR19QQVRBX0xFR0FDWT15CkNPTkZJR19NRD15CkNPTkZJR19CTEtf
-REVWX01EPW0KQ09ORklHX01EX0xJTkVBUj1tCkNPTkZJR19NRF9SQUlEMD1tCkNPTkZJR19NRF9S
-QUlEMT1tCkNPTkZJR19NRF9SQUlEMTA9bQpDT05GSUdfTURfUkFJRDQ1Nj1tCkNPTkZJR19CTEtf
-REVWX0RNPW0KQ09ORklHX0RNX0NSWVBUPW0KQ09ORklHX0RNX1NOQVBTSE9UPW0KQ09ORklHX0RN
-X01JUlJPUj1tCkNPTkZJR19ETV9aRVJPPW0KQ09ORklHX0RNX01VTFRJUEFUSD1tCkNPTkZJR19O
-RVRERVZJQ0VTPXkKQ09ORklHX0JPTkRJTkc9bQpDT05GSUdfRFVNTVk9bQpDT05GSUdfRVFVQUxJ
-WkVSPW0KQ09ORklHX0lGQj1tCkNPTkZJR19NQUNWTEFOPW0KQ09ORklHX1RVTj1tCkNPTkZJR19W
-RVRIPW0KIyBDT05GSUdfTkVUX1ZFTkRPUl8zQ09NIGlzIG5vdCBzZXQKQ09ORklHX1BDTkVUMzI9
-eQpDT05GSUdfQ0hFTFNJT19UMz1tCkNPTkZJR19BWDg4Nzk2PW0KQ09ORklHX05FVFhFTl9OSUM9
-bQpDT05GSUdfVEMzNTgxNT1tCkNPTkZJR19CUk9BRENPTV9QSFk9bQpDT05GSUdfQ0lDQURBX1BI
-WT1tCkNPTkZJR19EQVZJQ09NX1BIWT1tCkNPTkZJR19JQ1BMVVNfUEhZPW0KQ09ORklHX0xYVF9Q
-SFk9bQpDT05GSUdfTUFSVkVMTF9QSFk9bQpDT05GSUdfUVNFTUlfUEhZPW0KQ09ORklHX1JFQUxU
-RUtfUEhZPW0KQ09ORklHX1NNU0NfUEhZPW0KQ09ORklHX1ZJVEVTU0VfUEhZPW0KQ09ORklHX0lQ
-VzIxMDA9bQpDT05GSUdfSVBXMjEwMF9NT05JVE9SPXkKQ09ORklHX0lOUFVUX01PVVNFREVWPXkK
-Q09ORklHX01PVVNFX1BTMl9FTEFOVEVDSD15CkNPTkZJR19TRVJJQUxfODI1MD15CkNPTkZJR19T
-RVJJQUxfODI1MF9DT05TT0xFPXkKQ09ORklHX1BPV0VSX1JFU0VUPXkKQ09ORklHX1BPV0VSX1JF
-U0VUX1BJSVg0X1BPV0VST0ZGPXkKQ09ORklHX1BPV0VSX1JFU0VUX1NZU0NPTj15CiMgQ09ORklH
-X0hXTU9OIGlzIG5vdCBzZXQKQ09ORklHX0ZCPXkKQ09ORklHX0ZCX0NJUlJVUz15CiMgQ09ORklH
-X1ZHQV9DT05TT0xFIGlzIG5vdCBzZXQKQ09ORklHX0ZSQU1FQlVGRkVSX0NPTlNPTEU9eQpDT05G
-SUdfSElEPW0KQ09ORklHX1JUQ19DTEFTUz15CkNPTkZJR19SVENfRFJWX0NNT1M9eQpDT05GSUdf
-VUlPPW0KQ09ORklHX1VJT19DSUY9bQpDT05GSUdfRVhUMl9GUz15CkNPTkZJR19FWFQ0X0ZTPXkK
-Q09ORklHX0pGU19GUz1tCkNPTkZJR19KRlNfUE9TSVhfQUNMPXkKQ09ORklHX0pGU19TRUNVUklU
-WT15CkNPTkZJR19YRlNfRlM9bQpDT05GSUdfWEZTX1FVT1RBPXkKQ09ORklHX1hGU19QT1NJWF9B
-Q0w9eQpDT05GSUdfUVVPVEE9eQpDT05GSUdfUUZNVF9WMj15CkNPTkZJR19GVVNFX0ZTPW0KQ09O
-RklHX0lTTzk2NjBfRlM9bQpDT05GSUdfSk9MSUVUPXkKQ09ORklHX1pJU09GUz15CkNPTkZJR19V
-REZfRlM9bQpDT05GSUdfTVNET1NfRlM9bQpDT05GSUdfVkZBVF9GUz1tCkNPTkZJR19QUk9DX0tD
-T1JFPXkKQ09ORklHX1RNUEZTPXkKQ09ORklHX0FGRlNfRlM9bQpDT05GSUdfSEZTX0ZTPW0KQ09O
-RklHX0hGU1BMVVNfRlM9bQpDT05GSUdfQkVGU19GUz1tCkNPTkZJR19CRlNfRlM9bQpDT05GSUdf
-RUZTX0ZTPW0KQ09ORklHX0pGRlMyX0ZTPW0KQ09ORklHX0pGRlMyX0ZTX1hBVFRSPXkKQ09ORklH
-X0pGRlMyX0NPTVBSRVNTSU9OX09QVElPTlM9eQpDT05GSUdfSkZGUzJfUlVCSU49eQpDT05GSUdf
-Q1JBTUZTPW0KQ09ORklHX1ZYRlNfRlM9bQpDT05GSUdfTUlOSVhfRlM9bQpDT05GSUdfUk9NRlNf
-RlM9bQpDT05GSUdfVUZTX0ZTPW0KQ09ORklHX05GU19GUz15CkNPTkZJR19ST09UX05GUz15CkNP
-TkZJR19ORlNEPXkKQ09ORklHX05MU19DT0RFUEFHRV80Mzc9bQpDT05GSUdfTkxTX0NPREVQQUdF
-XzczNz1tCkNPTkZJR19OTFNfQ09ERVBBR0VfNzc1PW0KQ09ORklHX05MU19DT0RFUEFHRV84NTA9
-bQpDT05GSUdfTkxTX0NPREVQQUdFXzg1Mj1tCkNPTkZJR19OTFNfQ09ERVBBR0VfODU1PW0KQ09O
-RklHX05MU19DT0RFUEFHRV84NTc9bQpDT05GSUdfTkxTX0NPREVQQUdFXzg2MD1tCkNPTkZJR19O
-TFNfQ09ERVBBR0VfODYxPW0KQ09ORklHX05MU19DT0RFUEFHRV84NjI9bQpDT05GSUdfTkxTX0NP
-REVQQUdFXzg2Mz1tCkNPTkZJR19OTFNfQ09ERVBBR0VfODY0PW0KQ09ORklHX05MU19DT0RFUEFH
-RV84NjU9bQpDT05GSUdfTkxTX0NPREVQQUdFXzg2Nj1tCkNPTkZJR19OTFNfQ09ERVBBR0VfODY5
-PW0KQ09ORklHX05MU19DT0RFUEFHRV85MzY9bQpDT05GSUdfTkxTX0NPREVQQUdFXzk1MD1tCkNP
-TkZJR19OTFNfQ09ERVBBR0VfOTMyPW0KQ09ORklHX05MU19DT0RFUEFHRV85NDk9bQpDT05GSUdf
-TkxTX0NPREVQQUdFXzg3ND1tCkNPTkZJR19OTFNfSVNPODg1OV84PW0KQ09ORklHX05MU19DT0RF
-UEFHRV8xMjUwPW0KQ09ORklHX05MU19DT0RFUEFHRV8xMjUxPW0KQ09ORklHX05MU19BU0NJST1t
-CkNPTkZJR19OTFNfSVNPODg1OV8xPW0KQ09ORklHX05MU19JU084ODU5XzI9bQpDT05GSUdfTkxT
-X0lTTzg4NTlfMz1tCkNPTkZJR19OTFNfSVNPODg1OV80PW0KQ09ORklHX05MU19JU084ODU5XzU9
-bQpDT05GSUdfTkxTX0lTTzg4NTlfNj1tCkNPTkZJR19OTFNfSVNPODg1OV83PW0KQ09ORklHX05M
-U19JU084ODU5Xzk9bQpDT05GSUdfTkxTX0lTTzg4NTlfMTM9bQpDT05GSUdfTkxTX0lTTzg4NTlf
-MTQ9bQpDT05GSUdfTkxTX0lTTzg4NTlfMTU9bQpDT05GSUdfTkxTX0tPSThfUj1tCkNPTkZJR19O
-TFNfS09JOF9VPW0KQ09ORklHX0NSWVBUT19DUllQVEQ9bQpDT05GSUdfQ1JZUFRPX0JMT1dGSVNI
-PW0KQ09ORklHX0NSWVBUT19DQU1FTExJQT1tCkNPTkZJR19DUllQVE9fQ0FTVDU9bQpDT05GSUdf
-Q1JZUFRPX0NBU1Q2PW0KQ09ORklHX0NSWVBUT19GQ1JZUFQ9bQpDT05GSUdfQ1JZUFRPX1NFUlBF
-TlQ9bQpDT05GSUdfQ1JZUFRPX1RXT0ZJU0g9bQpDT05GSUdfQ1JZUFRPX0xSVz1tCkNPTkZJR19D
-UllQVE9fUENCQz1tCkNPTkZJR19DUllQVE9fSE1BQz15CkNPTkZJR19DUllQVE9fTUQ0PW0KQ09O
-RklHX0NSWVBUT19XUDUxMj1tCkNPTkZJR19DUllQVE9fWENCQz1tCkNPTkZJR19GUkFNRV9XQVJO
-PTEyODAKQ09ORklHX1BST1ZFX0xPQ0tJTkc9eQpDT05GSUdfUFJPVkVfUkNVX0xJU1Q9eQo=
-
---------------NQ17R8syhvru0qpEUoXK0uuV--
+> ---
+>   drivers/clocksource/timer-econet-en751221.c | 3 +--
+>   1 file changed, 1 insertion(+), 2 deletions(-)
+>
+> diff --git a/drivers/clocksource/timer-econet-en751221.c b/drivers/clocksource/timer-econet-en751221.c
+> --- a/drivers/clocksource/timer-econet-en751221.c
+> +++ b/drivers/clocksource/timer-econet-en751221.c
+> @@ -160,7 +160,6 @@ static u64 notrace sched_clock_read(void)
+>   static int __init timer_init(struct device_node *np)
+>   {
+> -	int num_blocks = DIV_ROUND_UP(num_possible_cpus(), 2);
+>   	struct clk *clk;
+>   	int ret;
+>
+> @@ -172,7 +171,7 @@ static int __init timer_init(struct device_node *np)
+>
+>   	econet_timer.freq_hz = clk_get_rate(clk);
+>
+> -	for (int i = 0; i < num_blocks; i++) {
+> +	for (int i = 0; i < ECONET_NUM_BLOCKS; i++) {
+>   		econet_timer.membase[i] = of_iomap(np, i);
+>   		if (!econet_timer.membase[i]) {
+>   			pr_err("%pOFn: failed to map register [%d]\n", np, i);
+>
 
