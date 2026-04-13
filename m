@@ -1,162 +1,229 @@
-Return-Path: <linux-mips+bounces-14132-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-14133-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id cIkbIlj83GlJYwkAu9opvQ
-	(envelope-from <linux-mips+bounces-14132-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Mon, 13 Apr 2026 16:23:20 +0200
+	id CJATCU383GlJYwkAu9opvQ
+	(envelope-from <linux-mips+bounces-14133-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Mon, 13 Apr 2026 16:23:09 +0200
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id F40673ED490
-	for <lists+linux-mips@lfdr.de>; Mon, 13 Apr 2026 16:23:19 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 923183ED480
+	for <lists+linux-mips@lfdr.de>; Mon, 13 Apr 2026 16:23:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 0B1EF305D172
-	for <lists+linux-mips@lfdr.de>; Mon, 13 Apr 2026 14:16:13 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 5299330128E9
+	for <lists+linux-mips@lfdr.de>; Mon, 13 Apr 2026 14:19:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C31AD3D8116;
-	Mon, 13 Apr 2026 14:16:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9C7E83D9DCD;
+	Mon, 13 Apr 2026 14:19:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cjdns.fr header.i=@cjdns.fr header.b="vAqWeFdP"
+	dkim=pass (2048-bit key) header.d=nokia.com header.i=@nokia.com header.b="SOZk0cNV"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail.cjdns.fr (mail.cjdns.fr [5.135.140.105])
+Received: from OSPPR02CU001.outbound.protection.outlook.com (mail-norwayeastazon11013036.outbound.protection.outlook.com [40.107.159.36])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4DAD83D8137;
-	Mon, 13 Apr 2026 14:16:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=5.135.140.105
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776089772; cv=none; b=E3IWFljn0VK9JvyQ4sJsI5QBb2nzeqt5TAj7G4bjF/dG5wScsrL0fm0Lzw6D61/1qjPKiT1QUPWOnqc8DRdU8BQJEzkMsmI1PWAmlHkuqs0G0H9UrAY3bFHBBwEDB45z1jAE+ll5IvJYBjDMP+dR+Iw42/jcWu7EBoWe6bOtSPA=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776089772; c=relaxed/simple;
-	bh=15HVRr9FxS7zuALkTAS7ae7c5cS7VQL2Gnqx813nRu8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=cln8nt+CCyFXI1O8YeJ+nhhm90c+mlNRio5BLNkHGuclSiyC0OuGHIqfyhnO7vBvjrt5HsZ1fGl0vGibtzuO1kgPn1ycKDFGCUJPeYTXbJ8ZQ4Q93dwn7b1RiVh4nmxKdVxyIKO9GznoGxIzqfacDdQz5/4MX3DWcrGcA/geA2I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=cjdns.fr; spf=pass smtp.mailfrom=cjdns.fr; dkim=pass (2048-bit key) header.d=cjdns.fr header.i=@cjdns.fr header.b=vAqWeFdP; arc=none smtp.client-ip=5.135.140.105
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=cjdns.fr
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cjdns.fr
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id D63519C872;
-	Mon, 13 Apr 2026 16:16:03 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cjdns.fr; s=dkim;
-	t=1776089768; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding:content-language:in-reply-to:references;
-	bh=dDjfswQvvaWRNlZ37ECbTNWQHjOFehAi3h2ZA2ux8mw=;
-	b=vAqWeFdPZrKKkFY0SIIySs8uOjXErPN6nbCPAv/6UdHLFVsJ8vkyN++K2XluZ21nNUCJwO
-	/HpmVcGMpibr0ffg99vtP3bG7GrX4GYt9RUFySVXp7OxGqXJeeyyJzc0DC7ysM11s2HWHY
-	xuXLfh4WajtJ1W1tv74SqFXRuJwjmqV2NMRLujWvA3ei6QCophgyiM4VWgLnFL+AVLVQcL
-	077SyZKCgIakAst/y3OQqM44JxPZkUUw3mMYiLvzCcYTBOq6HbMECT+suHJN78jwXXIkv8
-	g93TDo2oSD+nbvkuwsX0vFEyDI8UPoCUPByBrR9bKF5nrrWsV6vi5m57vli9FQ==
-Message-ID: <b74f2951-4905-4190-bee5-f43016e8fb4d@cjdns.fr>
-Date: Mon, 13 Apr 2026 16:16:00 +0200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C4EB3D6CB5;
+	Mon, 13 Apr 2026 14:19:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.159.36
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1776089946; cv=fail; b=g+qb1eFS9aGTw42qDegOYgGl5x1Fd2LklZeMaUa3gE8+VzoyUDq9MlR7fv2geoXzKj9vjHOFzHj5SCZdZji0DSdlmWNClZNhOtE/DPWFG8sKspSONaSb5UZ9AjsAlIncpb/sf57NbTVfD5zfuxTIlNlvMZhuTtPW/nDcgHlGCOM=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1776089946; c=relaxed/simple;
+	bh=PycDfAQnAl9Q2MwjGW/kJ0wFBW5g7jqrg2Ts+u13Sa0=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=mcW2k9CVDKzbk1TmO224Io8A5e9GBXmJ0SdkxgCjr5zYx9TmCzuCjbRYVIXNqqoe33jspLrOxW8L/OQU+LnO4GWdkayqMhRwsLQaPPoLSOfDIk0E+FXXy5Hsd50woQLXbpl9s4gKWdjFL+rbpxLX0f7HC1t4herZ2MtuYDqZh1o=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nokia.com; spf=fail smtp.mailfrom=nokia.com; dkim=pass (2048-bit key) header.d=nokia.com header.i=@nokia.com header.b=SOZk0cNV; arc=fail smtp.client-ip=40.107.159.36
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nokia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nokia.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=gQYOegEctGUc9AZ0FSNHZp2mcYiKaP3ChCsXSV9U9Jy/AGv3MpPjMx0wMYsNPzSyP8evF3puiial/h12jVDOZUjITkOrpGlFb+2uz6IP9kLoOxR+Weu8NqzSBORkABT19JWHf3zeaetA8HyuPMUqKs3TcuDcLsKpxJjQbpbfICbEnC4ZGUZRXdUg8CRq56mJM4Z6uY67t5wWO+aEjqe1DvUbaJhBc6a8jfjy73ryLT6MhTxLGw7220Gc/fNuNpaY96Vlj3eqcj1K1qlOTLmU/h3bQyl9S4FPykjCZS5RFo7rqQ83j67WpHAbOlduCRp1u4dyYwsI4/yu8FqeuJ5CcA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=3OKsASrj3OIg4ltBGLusST/gnFcmHWaP4j82YPJgMBg=;
+ b=i3hOYWoixGVGgAwqyonc7xP5C5vFBAiem1Zr4sPUgb140EHsU8rQFkuV0U6rXJivzjEf5j4XIEW0IhoMcLiRjObKxsut7DHYpv43zQXk12qNAJe2gviDEuGIkChiGzhAAPD3gTfcY00fqMZhlZRwKA/Qi0IPpl30p3zPymsMl2h77ndcl3GPD0KdbH+EyaDq+tR8FtXPIbJ7cyCqmNHeCiA9abuN6I9nYa+vl76kEFB+rDNMZn9Bp/EK7SVTg05jslwH9HbzCl48XGBD7xL4Jwgpje03ZN53OYJWCfHuni8nc9nw4v9VxDwHCixVAute7DBw+bZtRJ/PU98m8SZgmw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 131.228.2.85) smtp.rcpttodomain=alpha.franken.de smtp.mailfrom=nokia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nokia.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nokia.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=3OKsASrj3OIg4ltBGLusST/gnFcmHWaP4j82YPJgMBg=;
+ b=SOZk0cNVkZRF3C4mhtW17FW6UD0rghKcW2UJjyGDi2w7YpRAx/hqDREJJ3BujymUXMawnIehrp7CkwbActNKT2kWWfkSrcAdPb53Rz4Av/xDCU2wfOq/UEvxvGrIgiWBnxyYHQL4kuRSbCV5j/mzn1SvyLn0YIPq4iMS3bM6xRwweiy3k0n1eqHnZn7Bt4208YfTE2t+i6Sb1I711/5kIaDvehsIsQ/CVOceJMpp+cIpaRnPMz656KqB8mAIgTnZ9FSNYfgiahkVRSMcL2SfCCxR3NDCI4XWGQQBBnYePxakR2GaTUyS1r2288xcsvp9kSForB42IhljEIPe+7yAdA==
+Received: from DUZPR01CA0161.eurprd01.prod.exchangelabs.com
+ (2603:10a6:10:4bd::18) by DU0PR07MB10757.eurprd07.prod.outlook.com
+ (2603:10a6:10:5a3::14) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9769.48; Mon, 13 Apr
+ 2026 14:19:01 +0000
+Received: from DB5PEPF00014B93.eurprd02.prod.outlook.com
+ (2603:10a6:10:4bd:cafe::2) by DUZPR01CA0161.outlook.office365.com
+ (2603:10a6:10:4bd::18) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.9769.48 via Frontend Transport; Mon,
+ 13 Apr 2026 14:19:01 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 131.228.2.85)
+ smtp.mailfrom=nokia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nokia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nokia.com designates
+ 131.228.2.85 as permitted sender) receiver=protection.outlook.com;
+ client-ip=131.228.2.85; helo=fihe02smtplvp01.emea.nsn-net.net; pr=C
+Received: from fihe02smtplvp01.emea.nsn-net.net (131.228.2.85) by
+ DB5PEPF00014B93.mail.protection.outlook.com (10.167.8.231) with Microsoft
+ SMTP Server (version=TLS1_3, cipher=TLS_AES_256_GCM_SHA384) id 15.20.9769.17
+ via Frontend Transport; Mon, 13 Apr 2026 14:19:01 +0000
+Received: from uleclfsdev02.linsee.dyn.nesc.nokia.net.net (uleclfsdev02.linsee.dyn.nesc.nokia.net [10.47.240.2])
+	by fihe02smtplvp01.emea.nsn-net.net (Postfix) with ESMTP id 62684800008E;
+	Mon, 13 Apr 2026 17:19:00 +0300 (EEST)
+From: Stefan Wiehler <stefan.wiehler@nokia.com>
+To: "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
+	"Maciej W. Rozycki" <macro@orcam.me.uk>,
+	"Jiaxun Yang" <jiaxun.yang@flygoat.com>,
+	Huacai Chen <chenhuacai@kernel.org>
+Cc: linux-mips@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	stable@vger.kernel.org,
+	Stefan Wiehler <stefan.wiehler@nokia.com>
+Subject: [PATCH v3] mips: mm: Call rcutree_report_cpu_starting() even earlier
+Date: Mon, 13 Apr 2026 16:17:00 +0200
+Message-ID: <20260413141659.2593550-2-stefan.wiehler@nokia.com>
+X-Mailer: git-send-email 2.42.0
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird Beta
-Subject: Re: [PATCH 1/2] clocksource: timer-econet-en751221: fix timer block
- mapping at boot
-To: kpursoty@proton.me,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
- "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>,
- "tglx@linutronix.de" <tglx@linutronix.de>
-Cc: "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
- "tsbogend@alpha.franken.de" <tsbogend@alpha.franken.de>,
- "naseefkm@gmail.com" <naseefkm@gmail.com>
-References: <9Rwn4wIPxs9vc3ZNs2cz2TiRae-nX8aEihtdbFI1uMH5BC4KrwDh-70Pg2UbBsUTAB7ltbnSuVpGQ-fGz02o5XJmJRYhz9YIrzilyyiBdlk=@proton.me>
-Content-Language: en-US
-From: Caleb James DeLisle <cjd@cjdns.fr>
-In-Reply-To: <9Rwn4wIPxs9vc3ZNs2cz2TiRae-nX8aEihtdbFI1uMH5BC4KrwDh-70Pg2UbBsUTAB7ltbnSuVpGQ-fGz02o5XJmJRYhz9YIrzilyyiBdlk=@proton.me>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Last-TLS-Session-Version: TLSv1.3
-X-Spamd-Result: default: False [-2.16 / 15.00];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[cjdns.fr,none];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
-	R_DKIM_ALLOW(-0.20)[cjdns.fr:s=dkim];
+Content-Transfer-Encoding: 8bit
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DB5PEPF00014B93:EE_|DU0PR07MB10757:EE_
+Content-Type: text/plain
+X-MS-Office365-Filtering-Correlation-Id: 3ad84e73-0b08-4c73-740a-08de99679c07
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|1800799024|376014|36860700016|82310400026|13003099007|18002099003|56012099003;
+X-Microsoft-Antispam-Message-Info:
+	qrR7DdMTAzAcpzeN7Xdtcty4mQrX/j9rpYkwylw59i5U1UFK8bFYDSXyvBbkQl7AaqFGpcPeI4fJ8ci0eCxN33EVLWOY59S4c3LIwM4EzsqreSVGIQCmI46RC3mTU34wgXaua+k3q2bI4KjHDIiWOEu1lT52oTai21UE9pXEEeGUvR5omuSUE2R85Rtt/org4OYbhqKOENDW+Cq/QOaB59V/d6wIWZZmQuO2nqfBhs+Ojg9SlzddIO7dC3llcj3qN9DatqNt2o//BERtDZhMSiw1Fl/glbzDGbuBOCnCesDLPeTdkyYozBmLQBmk/vIO79ZE7wNbXnTo4CeUZwFt53Nl8lsCL2ikrBEaDj7Gbf0+SKVBLbRw9/CD6evpbt9+YOc1V1ZyKUgEbcQZcNxMqQaOKnrs4KGfAorUp5B/qp0dJ4qlzwQ6nO8bcxxFTppgZRa2nQ+694LyxDWvstZKsBPs5Ky4cfgjJCM56p6ZOYvb2WgxLqJaKyqO/BtxdkNvGAj85i+fDljG+/7TLaf3KzdTDYrTQwRqTG5X9DA48F68RHQhN3lUnQ2HVI8WzpgBuaSfbsBpx5dcMeGPxoPHdGYz9aZRlMlYaFRb97rNYRyGjYOAWLsiztqbAy3xFm0/lSlU+dGzd95Wo+6WBbBMxSnGyeIIdIK5Gd2uoOWY1jvNd+DgMKR5rpymrd+gZqphu65duiMV03fz6BsQGMyvE30dSFyKR01ZdvZR63qUkwqicQvgOZVFFMuVNy830qcPZGtoiKFP6Wsvq8pJgD7F5A==
+X-Forefront-Antispam-Report:
+	CIP:131.228.2.85;CTRY:FI;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:fihe02smtplvp01.emea.nsn-net.net;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(1800799024)(376014)(36860700016)(82310400026)(13003099007)(18002099003)(56012099003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	uv96utp4hIsgGfr3rTrBIjuiYdNfmDxqqlytIGOmBPKBCvHeFft6q7PazX4MmjmQfKe6ylhVpcGc01eDWhPCbVSZOSNeWnh+gWH25bxmyJFuxs+UBXTb9bcNQsCEJBNmQAm49YB74bmwt9RWdcufM6zcQMJL+jmD5dAvk6FIt91F0+rjg2eOFo0LSLhpgiUhYJ1HlenLT3e1r9UileseykCl65TlbfpgvOYSXFxcmucAL8nOXBgpWT/RjMvvf1aNvB4A35l9+BHFymUg/ImaGcshKO0e59OLlg92tMUhGMkWz6qhGLpftPouJq3YWTUC5jNL8DPPPrs5bHweoHK+4jSylZWxAx55Wf6gpl90/AZBYm9TOHATY5NPmeSW/9nijo5Ezdj8lLu80bzLYNTCtGyHAAU8+gW8kAujpz7pxBdgcslQYHhtlBK9rFzKnKn3
+X-OriginatorOrg: nokia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Apr 2026 14:19:01.0538
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3ad84e73-0b08-4c73-740a-08de99679c07
+X-MS-Exchange-CrossTenant-Id: 5d471751-9675-428d-917b-70f44f9630b0
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=5d471751-9675-428d-917b-70f44f9630b0;Ip=[131.228.2.85];Helo=[fihe02smtplvp01.emea.nsn-net.net]
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: TreatMessagesAsInternal-DB5PEPF00014B93.eurprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU0PR07MB10757
+X-Spamd-Result: default: False [1.34 / 15.00];
+	ARC_REJECT(1.00)[cv is fail on i=2];
+	MID_CONTAINS_FROM(1.00)[];
+	R_MISSING_CHARSET(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[nokia.com,reject];
+	R_DKIM_ALLOW(-0.20)[nokia.com:s=selector1];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-14132-lists,linux-mips=lfdr.de];
-	FREEMAIL_CC(0.00)[vger.kernel.org,alpha.franken.de,gmail.com];
-	FROM_HAS_DN(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	RECEIVED_HELO_LOCALHOST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-14133-lists,linux-mips=lfdr.de];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,nokia.com:dkim,nokia.com:email,nokia.com:mid];
+	FORGED_SENDER_MAILLIST(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
 	MIME_TRACE(0.00)[0:+];
-	TO_DN_EQ_ADDR_SOME(0.00)[];
-	DKIM_TRACE(0.00)[cjdns.fr:+];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[cjd@cjdns.fr,linux-mips@vger.kernel.org];
+	DKIM_TRACE(0.00)[nokia.com:+];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	TO_DN_SOME(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[stefan.wiehler@nokia.com,linux-mips@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	MID_RHS_MATCH_FROM(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	RCPT_COUNT_SEVEN(0.00)[8];
+	NEURAL_HAM(-0.00)[-0.999];
 	TAGGED_RCPT(0.00)[linux-mips];
-	RCPT_COUNT_SEVEN(0.00)[7];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[cjdns.fr:dkim,cjdns.fr:email,cjdns.fr:mid,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,proton.me:email]
-X-Rspamd-Queue-Id: F40673ED490
+	RCVD_COUNT_SEVEN(0.00)[7]
+X-Rspamd-Queue-Id: 923183ED480
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
+rcutree_report_cpu_starting() must be called on secondary CPUs before
+allocating memory to avoid the following Lockdep-RCU splat when
+CONFIG_PROVE_RCU_LIST=y:
 
-On 13/04/2026 12:12, kpursoty@proton.me wrote:
-> timer_init() used DIV_ROUND_UP(num_possible_cpus(), 2) to determine how
-> many register blocks to iomap. At early boot with VPE-based SMP, MIPS
-> reports num_possible_cpus()=1 (VPEs not yet brought online), giving
-> num_blocks=1. Only membase[0] is then mapped via of_iomap.
->
-> The EN751627 SoC has 2 physical cores, each with 2 VPEs, giving NR_CPUS=4
-> and two timer register blocks (one per core). Each block serves two VPEs:
-> block 0 handles CPU0+CPU1 (core 0), block 1 handles CPU2+CPU3 (core 1).
-> The block count is a silicon constant: DIV_ROUND_UP(NR_CPUS, 2) = 2.
->
-> cevt_init() calls cevt_dev_init(i) for each possible CPU via
-> for_each_possible_cpu(). On EN7528/EN751627 with 4 VPEs, NR_CPUS=4 so
-> cevt_dev_init(2) is called. cevt_dev_init(2) writes to reg_compare(2)
-> which dereferences membase[2>>1] = membase[1], which is NULL:
->
->    CPU 0 Unable to handle kernel paging request at virtual address 00000008
->    epc : iowrite32+0x4/0x10
->    ra  : cevt_dev_init+0x40/0x64
->
-> Fix: replace the runtime calculation with ECONET_NUM_BLOCKS, which is
-> DIV_ROUND_UP(NR_CPUS, 2) evaluated at compile time. This is the same
-> expression used to declare the membase[] array, so the loop bound and
-> array size are provably consistent. For NR_CPUS=4 this is always 2,
-> correctly mapping both register blocks regardless of how many VPEs are
-> visible at early boot.
->
-> Fixes: 3b4c33ac87d0 ("clocksource/drivers: Add EcoNet Timer HPT driver")
-> Signed-off-by: Kervin Pursoty <kpursoty@proton.me>
+  WARNING: suspicious RCU usage
+  6.6.119-00d46e15c416-fct #1 Not tainted
+  -----------------------------
+  /kernel/locking/lockdep.c:3762 RCU-list traversed in non-reader section!!
 
-Reviewed-by: Caleb James DeLisle <cjd@cjdns.fr>
+  other info that might help us debug this:
 
-> ---
->   drivers/clocksource/timer-econet-en751221.c | 3 +--
->   1 file changed, 1 insertion(+), 2 deletions(-)
->
-> diff --git a/drivers/clocksource/timer-econet-en751221.c b/drivers/clocksource/timer-econet-en751221.c
-> --- a/drivers/clocksource/timer-econet-en751221.c
-> +++ b/drivers/clocksource/timer-econet-en751221.c
-> @@ -160,7 +160,6 @@ static u64 notrace sched_clock_read(void)
->   static int __init timer_init(struct device_node *np)
->   {
-> -	int num_blocks = DIV_ROUND_UP(num_possible_cpus(), 2);
->   	struct clk *clk;
->   	int ret;
->
-> @@ -172,7 +171,7 @@ static int __init timer_init(struct device_node *np)
->
->   	econet_timer.freq_hz = clk_get_rate(clk);
->
-> -	for (int i = 0; i < num_blocks; i++) {
-> +	for (int i = 0; i < ECONET_NUM_BLOCKS; i++) {
->   		econet_timer.membase[i] = of_iomap(np, i);
->   		if (!econet_timer.membase[i]) {
->   			pr_err("%pOFn: failed to map register [%d]\n", np, i);
->
+  RCU used illegally from offline CPU!
+  rcu_scheduler_active = 1, debug_locks = 1
+  no locks held by swapper/1/0.
+
+  stack backtrace:
+  CPU: 1 PID: 0 Comm: swapper/1 Not tainted 6.6.119-00d46e15c416-fct #1
+  Stack : 80000000029e37d8 0000000000000000 0000000000000008 80000000029e37e8
+          80000000029e37e8 80000000029e3978 0000000000000000 0000000000000000
+          0000000000000000 0000000000000001 ffffffff80d9df38 ffffffff810e19c0
+          0000000000000000 0000000000000010 ffffffff80a7d140 0000000000000000
+          ffffffff81c20814 0000000000000000 ffffffff80da0000 0000000000000000
+          ffffffff80cadf38 0000000000000000 0000000000000000 80000000029ab680
+          72f093276415c1f3 ffffffff81c2084f ffffffff80da0000 ffffffffc0149ed8
+          fffffffffffffffe 80000000029e0000 80000000029e37e0 80000000029abf58
+          ffffffff80129fb0 0000000000000000 0000000000000000 0000000000000000
+          0000000000000000 0000000000000000 ffffffff80129fd0 0000000000000000
+          ...
+  Call Trace:
+  [<ffffffff80129fd0>] show_stack+0x60/0x158
+  [<ffffffff80a8cd84>] dump_stack_lvl+0x88/0xbc
+  [<ffffffff801c78f8>] lockdep_rcu_suspicious+0x1c0/0x240
+  [<ffffffff801cc80c>] __lock_acquire+0x121c/0x29d8
+  [<ffffffff801ce14c>] lock_acquire+0x184/0x448
+  [<ffffffff80a9ba30>] _raw_spin_lock_irqsave+0x50/0x90
+  [<ffffffff80367038>] ___slab_alloc+0xa08/0x1808
+  [<ffffffff80367e70>] __slab_alloc.isra.0+0x38/0x78
+  [<ffffffff8036b7d4>] __kmem_cache_alloc_node+0x35c/0x370
+  [<ffffffff80308ed8>] __kmalloc+0x58/0xd0
+  [<ffffffff80a8f064>] r4k_tlb_uniquify+0x7c/0x428
+  [<ffffffff80143e8c>] tlb_init+0x7c/0x110
+  [<ffffffff8012bdb4>] per_cpu_trap_init+0x16c/0x1d0
+  [<ffffffff80133258>] start_secondary+0x28/0x128
+
+See also commit 55702ec9603e ("mips/smp: Call
+rcutree_report_cpu_starting() earlier").
+
+Fixes: 841ecc979b18 ("MIPS: mm: kmalloc tlb_vpn array to avoid stack overflow")
+Signed-off-by: Stefan Wiehler <stefan.wiehler@nokia.com>
+Cc: stable@vger.kernel.org
+---
+V2 -> V3: Fix commit ID in Fixes: tag
+V1 -> V2: Reorder rcutree_report_cpu_starting() call in
+start_secondary(), fix function name
+
+v1: https://patchwork.kernel.org/project/linux-mips/patch/20260407083324.906742-2-stefan.wiehler@nokia.com/
+v2: https://patchwork.kernel.org/project/linux-mips/patch/20260409164846.3176046-2-stefan.wiehler@nokia.com/
+---
+ arch/mips/kernel/smp.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/arch/mips/kernel/smp.c b/arch/mips/kernel/smp.c
+index 4868e79f3b30..bdb47c70d4f5 100644
+--- a/arch/mips/kernel/smp.c
++++ b/arch/mips/kernel/smp.c
+@@ -359,8 +359,8 @@ asmlinkage void start_secondary(void)
+ 	unsigned int cpu = raw_smp_processor_id();
+ 
+ 	cpu_probe();
+-	per_cpu_trap_init(false);
+ 	rcutree_report_cpu_starting(cpu);
++	per_cpu_trap_init(false);
+ 	mips_clockevent_init();
+ 	mp_ops->init_secondary();
+ 	cpu_report();
+-- 
+2.42.0
+
 
