@@ -1,50 +1,50 @@
-Return-Path: <linux-mips+bounces-14108-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-14109-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id ELphC9li3GkHQQkAu9opvQ
-	(envelope-from <linux-mips+bounces-14108-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Mon, 13 Apr 2026 05:28:25 +0200
+	id qG8bCeNi3GkMQQkAu9opvQ
+	(envelope-from <linux-mips+bounces-14109-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Mon, 13 Apr 2026 05:28:35 +0200
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id C352F3E6F20
-	for <lists+linux-mips@lfdr.de>; Mon, 13 Apr 2026 05:28:24 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id E0A613E6F35
+	for <lists+linux-mips@lfdr.de>; Mon, 13 Apr 2026 05:28:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 3BD8A3002B38
-	for <lists+linux-mips@lfdr.de>; Mon, 13 Apr 2026 03:28:24 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 0E04D300CBF8
+	for <lists+linux-mips@lfdr.de>; Mon, 13 Apr 2026 03:28:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9BE4B23EA84;
-	Mon, 13 Apr 2026 03:28:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0797F23EA84;
+	Mon, 13 Apr 2026 03:28:26 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
 Received: from angie.orcam.me.uk (angie.orcam.me.uk [78.133.224.34])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AF7BD2E3FE;
-	Mon, 13 Apr 2026 03:28:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C82532E3FE;
+	Mon, 13 Apr 2026 03:28:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=78.133.224.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776050902; cv=none; b=X1YLFgxEMe+l/xpMfXonfQ3uWWA9sB89dEmOAnwB5ddhvmtMks+3vnLbZqbJo+EPPhxQemsgmOIcsVac4jwIDTjfDHjcVMUaKi4Y9yDkDeNAs45MJVIMTHdcvQfJpvmk017aJ7cRkEVr6qQSRpTu4TMNFgVhNJYdYelm0Qgil5Q=
+	t=1776050905; cv=none; b=VbnNm/D/Xm2WiV54LhsklNp0Qc1/jb0psDcWa+8Sytc2rMDwSUE/qoixc0ERKiG2jeCMYhvgcmO6cAGgFcBwTyXoRwViT1qsrp/JKTqxFBYvZmHFcvaiLmJRK0/SIH/+9JlkfmvW7y8MGI1S/9BX4H3sUxs9IIzJufPGlZyF2Os=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776050902; c=relaxed/simple;
-	bh=qATSKUfBKXk0spXgbpYMt8b+oFKUCHWz+Lek8g1XJBg=;
+	s=arc-20240116; t=1776050905; c=relaxed/simple;
+	bh=kzFTt3RGSm/NFkEZa37Z1XBEbCivSsLNbeX2FLbW8gM=;
 	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=WcLlQ8FtkzcIB95MqxqZ8/9/zsSsCr4l156tOGmJfxlMms8Q1PgOe/CcZiCk4HmN9+yPGlAksc+WlLTeSpgvW+K2NU2SP5HG/RuhRFbuLYF6Ptr7c568Y3sjiyfj6OBQQBj907s6WY9U8l1qZeZTm6xitOGNLzJpyY4+0o7fNzw=
+	 MIME-Version:Content-Type; b=U4pYV3ykC4bngacVRnwy3UREFeSmpjkanRs9rwJmIZABZKiiKYRVYcId875BwxufG9lb98eAfEPunri0ngnm3eygFgg4/RxrxSIyMj/dS1RlxMx9uZXRMya9X8Y5HsnlVgKWITiwtYV9+vI+AZgvjt8Bx+69vmuZMLo6F+/2sdE=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=orcam.me.uk; spf=none smtp.mailfrom=orcam.me.uk; arc=none smtp.client-ip=78.133.224.34
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=orcam.me.uk
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=orcam.me.uk
 Received: by angie.orcam.me.uk (Postfix, from userid 500)
-	id BF51592009D; Mon, 13 Apr 2026 05:28:19 +0200 (CEST)
+	id D9D559200B3; Mon, 13 Apr 2026 05:28:23 +0200 (CEST)
 Received: from localhost (localhost [127.0.0.1])
-	by angie.orcam.me.uk (Postfix) with ESMTP id BC6D092009B;
-	Mon, 13 Apr 2026 04:28:19 +0100 (BST)
-Date: Mon, 13 Apr 2026 04:28:19 +0100 (BST)
+	by angie.orcam.me.uk (Postfix) with ESMTP id D6CB992009D;
+	Mon, 13 Apr 2026 04:28:23 +0100 (BST)
+Date: Mon, 13 Apr 2026 04:28:23 +0100 (BST)
 From: "Maciej W. Rozycki" <macro@orcam.me.uk>
 To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
     Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
     Jiri Slaby <jirislaby@kernel.org>
 cc: linux-mips@vger.kernel.org, linux-serial@vger.kernel.org, 
     linux-serial@vger.kernel.org
-Subject: [PATCH 6/8] serial: zs: Convert to use a platform device
+Subject: [PATCH 7/8] serial: dz: Enable modular build
 In-Reply-To: <alpine.DEB.2.21.2604102250060.29980@angie.orcam.me.uk>
-Message-ID: <alpine.DEB.2.21.2604110034160.29980@angie.orcam.me.uk>
+Message-ID: <alpine.DEB.2.21.2604130133470.29980@angie.orcam.me.uk>
 References: <alpine.DEB.2.21.2604102250060.29980@angie.orcam.me.uk>
 User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
 Precedence: bulk
@@ -56,19 +56,19 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 X-Spamd-Result: default: False [-1.46 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-14108-lists,linux-mips=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-14109-lists,linux-mips=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
 	RECEIVED_HELO_LOCALHOST(0.00)[];
 	DMARC_NA(0.00)[orcam.me.uk];
 	MIME_TRACE(0.00)[0:+];
 	TO_DN_SOME(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
 	FROM_HAS_DN(0.00)[];
 	TAGGED_RCPT(0.00)[linux-mips];
 	PRECEDENCE_BULK(0.00)[];
@@ -78,479 +78,32 @@ X-Spamd-Result: default: False [-1.46 / 15.00];
 	R_DKIM_NA(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
 	MID_RHS_MATCH_FROMTLD(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[orcam.me.uk:email,angie.orcam.me.uk:mid,sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: C352F3E6F20
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,orcam.me.uk:email,angie.orcam.me.uk:mid]
+X-Rspamd-Queue-Id: E0A613E6F35
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-Prevent a crash from happening as the first serial port is initialised:
+Enable modular build since the driver now has a proper module_exit() 
+handler.  There's nothing specific to DZ hardware to prevent driver 
+unloading and reloading from working.
 
-  Console: switching to mono frame buffer device 160x64
-  fb0: PMAG-AA frame buffer device at tc0
-  DECstation Z85C30 serial driver version 0.10
-  CPU 0 Unable to handle kernel paging request at virtual address 0000002c, epc == 803ab00c, ra == 803aafe0
-  Oops[#1]:
-  CPU: 0 PID: 1 Comm: swapper Not tainted 6.4.0-rc3-00031-g84a9582fd203-dirty #57
-  $ 0   : 00000000 10012c00 803aaeb0 00000000
-  $ 4   : 80e12f60 80e12f50 80e12f58 81000030
-  $ 8   : 00000000 805ff37c 00000000 33433538
-  $12   : 65732030 00000006 80c2915d 6c616972
-  $16   : 80e12f00 807b7630 00000000 00000000
-  $20   : 00000004 00000348 000001a0 807623b8
-  $24   : 00000018 00000000                  
-  $28   : 80c24000 80c25d60 8078b148 803aafe0
-  Hi    : 00000000
-  Lo    : 00000000
-  epc   : 803ab00c serial_base_ctrl_add+0x78/0xf4
-  ra    : 803aafe0 serial_base_ctrl_add+0x4c/0xf4
-  Status: 10012c03	KERNEL EXL IE 
-  Cause : 00000008 (ExcCode 02)
-  BadVA : 0000002c
-  PrId  : 00000440 (R4400SC)
-  Modules linked in:
-  Process swapper (pid: 1, threadinfo=(ptrval), task=(ptrval), tls=00000000)
-  Stack : 80760000 00000cc0 00400044 00400040 803aa02c 80d61ab8 00000000 807b7630
-          80760000 807623b8 807b7628 803aa644 80386998 00000000 80e17780 80220f68
-          80e17780 80d61ab8 80c17d80 80e17780 80e17780 8063c798 80e17780 80383fa0
-          00000010 80e17780 00000000 80386998 807a0000 00000000 00400040 8038f848
-          807623b8 80d61ab8 00000004 80e17780 00000000 803a68e4 80c25e2c 803bb884
-          ...
-  Call Trace:
-  [<803ab00c>] serial_base_ctrl_add+0x78/0xf4
-  [<803aa644>] serial_core_register_port+0x174/0x69c
-  [<8077e9ac>] zs_init+0xc8/0xfc
-  [<800404d4>] do_one_initcall+0x40/0x2ac
-  [<8076cecc>] kernel_init_freeable+0x1e4/0x270
-  [<80605bec>] kernel_init+0x20/0x108
-  [<800431e8>] ret_from_kernel_thread+0x14/0x1c
-  
-  Code: 2442aeb0  ae120024  ae0200d0 <8c67002c> 50e00001  8c670000  3c06806e  3c05806e  afb30010 
-  
-  ---[ end trace 0000000000000000 ]---
-
-(report at the offending commit) -- where a pointer is dereferenced that 
-has been derived from a null pointer to the port's parent device.
-
-Since no device is available with legacy probing and it's not anymore a
-preferable way to discover devices anyway, switch the driver to using a
-platform device and use it as the port's parent device.  Update resource
-handling accordingly and only request the actual span of addresses used
-within the slot, which will have had its resource already requested by
-generic platform device code.
-
-Use platform_driver_probe() not just because SCC devices are fixed with 
-solder on board and not straightforward to remove, but foremost because 
-the associated TTY's major device number is the same as used by the dz 
-driver and the first driver to claim it will prevent the other one from 
-using it.  Either one DZ device or some SCC devices will be present in a 
-given system but never both at a time, and therefore we want the major 
-device number to be claimed by the first driver to actually successfully 
-bind to its device and platform_driver_probe() is a way to fulfil that.
-
-An unfortunate consequence of the switch to a platform device is we now
-hand the console over from the bootconsole much later in the bootstrap.
-The firmware console handler appears good enough though to work so late
-and in particular with interrupts enabled.
-
-Since there is one way only remaining to reach zs_reset() now, remove 
-the port initialisation marker as no longer needed and go through the 
-channel reset unconditionally.
-
-Fixes: 84a9582fd203 ("serial: core: Start managing serial controllers to enable runtime PM")
 Signed-off-by: Maciej W. Rozycki <macro@orcam.me.uk>
-Cc: stable@vger.kernel.org # needs to use .remove_new for <= 6.10
 ---
- arch/mips/dec/platform.c |   60 ++++++++++++++-
- drivers/tty/serial/zs.c  |  184 +++++++++++++++++------------------------------
- drivers/tty/serial/zs.h  |    1 
- 3 files changed, 125 insertions(+), 120 deletions(-)
+ drivers/tty/serial/Kconfig |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-linux-serial-zs-platform.diff
-Index: linux-macro/arch/mips/dec/platform.c
+linux-serial-dz-module.diff
+Index: linux-macro/drivers/tty/serial/Kconfig
 ===================================================================
---- linux-macro.orig/arch/mips/dec/platform.c
-+++ linux-macro/arch/mips/dec/platform.c
-@@ -13,6 +13,7 @@
- #include <asm/bootinfo.h>
+--- linux-macro.orig/drivers/tty/serial/Kconfig
++++ linux-macro/drivers/tty/serial/Kconfig
+@@ -335,7 +335,7 @@ config SERIAL_MAX310X
+ 	  Say Y here if you want to support this ICs.
  
- #include <asm/dec/interrupts.h>
-+#include <asm/dec/ioasic_addrs.h>
- #include <asm/dec/kn01.h>
- #include <asm/dec/kn02.h>
- #include <asm/dec/system.h>
-@@ -53,10 +54,37 @@ static struct platform_device *dec_dz_de
- 	&dec_dz_device,
- };
- 
-+static struct resource dec_zs_resources[][2] = {
-+	{
-+		{ .name = "scc0", .flags = IORESOURCE_MEM, },
-+		{ .name = "scc0", .flags = IORESOURCE_IRQ, },
-+	},
-+	{
-+		{ .name = "scc1", .flags = IORESOURCE_MEM, },
-+		{ .name = "scc1", .flags = IORESOURCE_IRQ, },
-+	},
-+};
-+
-+static struct platform_device dec_zs_device[] = {
-+	{
-+		.name = "zs",
-+		.id = 0,
-+		.resource = dec_zs_resources[0],
-+		.num_resources = ARRAY_SIZE(dec_zs_resources[0]),
-+	},
-+	{
-+		.name = "zs",
-+		.id = 1,
-+		.resource = dec_zs_resources[1],
-+		.num_resources = ARRAY_SIZE(dec_zs_resources[1]),
-+	},
-+};
-+
- static int __init dec_add_devices(void)
- {
--	int ret1, ret2;
--	int num_dz;
-+	struct platform_device *dec_zs_devices[ARRAY_SIZE(dec_zs_device)];
-+	int ret1, ret2, ret3;
-+	int num_dz, num_zs;
- 	int irq, i;
- 
- 	dec_rtc_resources[0].start = RTC_PORT(0);
-@@ -84,10 +112,36 @@ static int __init dec_add_devices(void)
- 	}
- 	num_dz = i;
- 
-+	i = 0;
-+	irq = dec_interrupt[DEC_IRQ_SCC0];
-+	if (irq >= 0) {
-+		resource_size_t base = dec_kn_slot_base + IOASIC_SCC0;
-+
-+		dec_zs_device[i].resource[0].start = base;
-+		dec_zs_device[i].resource[0].end = base + dec_kn_slot_size - 1;
-+		dec_zs_device[i].resource[1].start = irq;
-+		dec_zs_device[i].resource[1].end = irq;
-+		dec_zs_devices[i] = &dec_zs_device[i];
-+		i++;
-+	}
-+	irq = dec_interrupt[DEC_IRQ_SCC1];
-+	if (irq >= 0) {
-+		resource_size_t base = dec_kn_slot_base + IOASIC_SCC1;
-+
-+		dec_zs_device[i].resource[0].start = base;
-+		dec_zs_device[i].resource[0].end = base + dec_kn_slot_size - 1;
-+		dec_zs_device[i].resource[1].start = irq;
-+		dec_zs_device[i].resource[1].end = irq;
-+		dec_zs_devices[i] = &dec_zs_device[i];
-+		i++;
-+	}
-+	num_zs = i;
-+
- 	ret1 = platform_device_register(&dec_rtc_device);
- 	ret2 = IS_ENABLED(CONFIG_32BIT) ?
- 	       platform_add_devices(dec_dz_devices, num_dz) : 0;
--	return ret1 ? ret1 : ret2;
-+	ret3 = platform_add_devices(dec_zs_devices, num_zs);
-+	return ret1 ? ret1 : ret2 ? ret2 : ret3;
- }
- 
- device_initcall(dec_add_devices);
-Index: linux-macro/drivers/tty/serial/zs.c
-===================================================================
---- linux-macro.orig/drivers/tty/serial/zs.c
-+++ linux-macro/drivers/tty/serial/zs.c
-@@ -56,6 +56,7 @@
- #include <linux/kernel.h>
- #include <linux/module.h>
- #include <linux/major.h>
-+#include <linux/platform_device.h>
- #include <linux/serial.h>
- #include <linux/serial_core.h>
- #include <linux/spinlock.h>
-@@ -66,10 +67,6 @@
- 
- #include <linux/atomic.h>
- 
--#include <asm/dec/interrupts.h>
--#include <asm/dec/ioasic_addrs.h>
--#include <asm/dec/system.h>
--
- #include "zs.h"
- 
- 
-@@ -79,7 +76,7 @@ MODULE_LICENSE("GPL");
- 
- 
- static char zs_name[] __initdata = "DECstation Z85C30 serial driver version ";
--static char zs_version[] __initdata = "0.10";
-+static char zs_version[] __initdata = "0.11";
- 
- /*
-  * It would be nice to dynamically allocate everything that
-@@ -98,12 +95,8 @@ static char zs_version[] __initdata = "0
- 
- #define to_zport(uport) container_of(uport, struct zs_port, port)
- 
--struct zs_parms {
--	resource_size_t scc[ZS_NUM_SCCS];
--	int irq[ZS_NUM_SCCS];
--};
--
- static struct zs_scc zs_sccs[ZS_NUM_SCCS];
-+static struct uart_driver zs_reg;
- 
- /*
-  * Set parameters in WR5, WR12, WR13 such as not to interfere
-@@ -839,16 +832,15 @@ static void zs_reset(struct zs_port *zpo
- 
- 	spin_lock_irqsave(&scc->zlock, flags);
- 	irq = !irqs_disabled_flags(flags);
--	if (!zport->initialised) {
--		/* Reset the pointer first, just in case...  */
--		read_zsreg(zport, R0);
--		/* And let the current transmission finish.  */
--		zs_line_drain(zport, irq);
--		write_zsreg(zport, R9, zport == zport_a ? CHRA : CHRB);
--		udelay(10);
--		write_zsreg(zport, R9, 0);
--		zport->initialised = 1;
--	}
-+
-+	/* Reset the pointer first, just in case...  */
-+	read_zsreg(zport, R0);
-+	/* And let the current transmission finish.  */
-+	zs_line_drain(zport, irq);
-+	write_zsreg(zport, R9, zport == zport_a ? CHRA : CHRB);
-+	udelay(10);
-+	write_zsreg(zport, R9, 0);
-+
- 	load_zsregs(zport, zport->regs, irq);
- 	spin_unlock_irqrestore(&scc->zlock, flags);
- }
-@@ -1055,63 +1047,62 @@ static const struct uart_ops zs_ops = {
- /*
-  * Initialize Z85C30 port structures.
-  */
--static int __init zs_probe_sccs(void)
-+static int __init zs_probe(struct platform_device *pdev)
- {
--	static int probed;
--	struct zs_parms zs_parms;
--	int chip, side, irq;
--	int n_chips = 0;
-+	struct resource *mem_resource, *irq_resource;
-+	int chip, side;
- 	int i;
- 
--	if (probed)
--		return 0;
--
--	irq = dec_interrupt[DEC_IRQ_SCC0];
--	if (irq >= 0) {
--		zs_parms.scc[n_chips] = IOASIC_SCC0;
--		zs_parms.irq[n_chips] = dec_interrupt[DEC_IRQ_SCC0];
--		n_chips++;
--	}
--	irq = dec_interrupt[DEC_IRQ_SCC1];
--	if (irq >= 0) {
--		zs_parms.scc[n_chips] = IOASIC_SCC1;
--		zs_parms.irq[n_chips] = dec_interrupt[DEC_IRQ_SCC1];
--		n_chips++;
--	}
--	if (!n_chips)
--		return -ENXIO;
-+	mem_resource = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-+	irq_resource = platform_get_resource(pdev, IORESOURCE_IRQ, 0);
-+	if (!mem_resource || !irq_resource)
-+		return -ENODEV;
- 
--	probed = 1;
-+	chip = pdev->id;
-+	spin_lock_init(&zs_sccs[chip].zlock);
-+	for (side = 0; side < ZS_NUM_CHAN; side++) {
-+		struct zs_port *zport = &zs_sccs[chip].zport[side];
-+		struct uart_port *uport = &zport->port;
- 
--	for (chip = 0; chip < n_chips; chip++) {
--		spin_lock_init(&zs_sccs[chip].zlock);
--		for (side = 0; side < ZS_NUM_CHAN; side++) {
--			struct zs_port *zport = &zs_sccs[chip].zport[side];
--			struct uart_port *uport = &zport->port;
-+		zport->scc	= &zs_sccs[chip];
-+		zport->clk_mode	= 16;
- 
--			zport->scc	= &zs_sccs[chip];
--			zport->clk_mode	= 16;
-+		uport->dev	= &pdev->dev;
-+		uport->has_sysrq = IS_ENABLED(CONFIG_SERIAL_ZS_CONSOLE);
-+		uport->irq	= irq_resource->start;
-+		uport->uartclk	= ZS_CLOCK;
-+		uport->fifosize	= 1;
-+		uport->iotype	= UPIO_MEM;
-+		uport->flags	= UPF_BOOT_AUTOCONF;
-+		uport->ops	= &zs_ops;
-+		uport->line	= chip * ZS_NUM_CHAN + side;
-+		uport->mapbase	= mem_resource->start +
-+				  (side ^ ZS_CHAN_B) * ZS_CHAN_IO_SIZE;
- 
--			uport->has_sysrq = IS_ENABLED(CONFIG_SERIAL_ZS_CONSOLE);
--			uport->irq	= zs_parms.irq[chip];
--			uport->uartclk	= ZS_CLOCK;
--			uport->fifosize	= 1;
--			uport->iotype	= UPIO_MEM;
--			uport->flags	= UPF_BOOT_AUTOCONF;
--			uport->ops	= &zs_ops;
--			uport->line	= chip * ZS_NUM_CHAN + side;
--			uport->mapbase	= dec_kn_slot_base +
--					  zs_parms.scc[chip] +
--					  (side ^ ZS_CHAN_B) * ZS_CHAN_IO_SIZE;
-+		for (i = 0; i < ZS_NUM_REGS; i++)
-+			zport->regs[i] = zs_init_regs[i];
- 
--			for (i = 0; i < ZS_NUM_REGS; i++)
--				zport->regs[i] = zs_init_regs[i];
--		}
-+		if (uart_add_one_port(&zs_reg, uport))
-+			uport->dev = NULL;
- 	}
- 
- 	return 0;
- }
- 
-+static void __exit zs_remove(struct platform_device *pdev)
-+{
-+	int chip, side;
-+
-+	chip = pdev->id;
-+	for (side = ZS_NUM_CHAN - 1; side >= 0; side--) {
-+		struct zs_port *zport = &zs_sccs[chip].zport[side];
-+		struct uart_port *uport = &zport->port;
-+
-+		if (uport->dev)
-+			uart_remove_one_port(&zs_reg, uport);
-+	}
-+}
-+
- 
- #ifdef CONFIG_SERIAL_ZS_CONSOLE
- static void zs_console_putchar(struct uart_port *uport, unsigned char ch)
-@@ -1192,20 +1183,14 @@ static int __init zs_console_setup(struc
- 	int bits = 8;
- 	int parity = 'n';
- 	int flow = 'n';
--	int ret;
--
--	ret = zs_map_port(uport);
--	if (ret)
--		return ret;
--
--	zs_reset(zport);
- 
-+	if (!zport->scc)
-+		return -ENODEV;
- 	if (options)
- 		uart_parse_options(options, &baud, &parity, &bits, &flow);
- 	return uart_set_options(uport, co, baud, parity, bits, flow);
- }
- 
--static struct uart_driver zs_reg;
- static struct console zs_console = {
- 	.name	= "ttyS",
- 	.write	= zs_console_write,
-@@ -1216,23 +1201,6 @@ static struct console zs_console = {
- 	.data	= &zs_reg,
- };
- 
--/*
-- *	Register console.
-- */
--static int __init zs_serial_console_init(void)
--{
--	int ret;
--
--	ret = zs_probe_sccs();
--	if (ret)
--		return ret;
--	register_console(&zs_console);
--
--	return 0;
--}
--
--console_initcall(zs_serial_console_init);
--
- #define SERIAL_ZS_CONSOLE	&zs_console
- #else
- #define SERIAL_ZS_CONSOLE	NULL
-@@ -1248,47 +1216,31 @@ static struct uart_driver zs_reg = {
- 	.cons			= SERIAL_ZS_CONSOLE,
- };
- 
-+static struct platform_driver zs_driver = {
-+	.remove = __exit_p(zs_remove),
-+	.driver = { .name = "zs" },
-+};
-+
- /* zs_init inits the driver. */
- static int __init zs_init(void)
- {
--	int i, ret;
-+	int ret;
- 
- 	pr_info("%s%s\n", zs_name, zs_version);
- 
--	/* Find out how many Z85C30 SCCs we have.  */
--	ret = zs_probe_sccs();
--	if (ret)
--		return ret;
--
- 	ret = uart_register_driver(&zs_reg);
- 	if (ret)
- 		return ret;
-+	ret = platform_driver_probe(&zs_driver, zs_probe);
-+	if (ret)
-+		uart_unregister_driver(&zs_reg);
- 
--	for (i = 0; i < ZS_NUM_SCCS * ZS_NUM_CHAN; i++) {
--		struct zs_scc *scc = &zs_sccs[i / ZS_NUM_CHAN];
--		struct zs_port *zport = &scc->zport[i % ZS_NUM_CHAN];
--		struct uart_port *uport = &zport->port;
--
--		if (zport->scc)
--			uart_add_one_port(&zs_reg, uport);
--	}
--
--	return 0;
-+	return ret;
- }
- 
- static void __exit zs_exit(void)
- {
--	int i;
--
--	for (i = ZS_NUM_SCCS * ZS_NUM_CHAN - 1; i >= 0; i--) {
--		struct zs_scc *scc = &zs_sccs[i / ZS_NUM_CHAN];
--		struct zs_port *zport = &scc->zport[i % ZS_NUM_CHAN];
--		struct uart_port *uport = &zport->port;
--
--		if (zport->scc)
--			uart_remove_one_port(&zs_reg, uport);
--	}
--
-+	platform_driver_unregister(&zs_driver);
- 	uart_unregister_driver(&zs_reg);
- }
- 
-Index: linux-macro/drivers/tty/serial/zs.h
-===================================================================
---- linux-macro.orig/drivers/tty/serial/zs.h
-+++ linux-macro/drivers/tty/serial/zs.h
-@@ -22,7 +22,6 @@
- struct zs_port {
- 	struct zs_scc	*scc;			/* Containing SCC.  */
- 	struct uart_port port;			/* Underlying UART.  */
--	int		initialised;		/* For the console port.  */
- 
- 	int		clk_mode;		/* May be 1, 16, 32, or 64.  */
- 
+ config SERIAL_DZ
+-	bool "DECstation DZ serial driver"
++	tristate "DECstation DZ serial driver"
+ 	depends on MACH_DECSTATION && 32BIT
+ 	select SERIAL_CORE
+ 	default y
 
