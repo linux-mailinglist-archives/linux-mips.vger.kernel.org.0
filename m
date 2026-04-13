@@ -1,50 +1,50 @@
-Return-Path: <linux-mips+bounces-14129-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-14130-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id EIvtMO/33GlaYgkAu9opvQ
-	(envelope-from <linux-mips+bounces-14129-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Mon, 13 Apr 2026 16:04:31 +0200
+	id iPDkAf/33GlaYgkAu9opvQ
+	(envelope-from <linux-mips+bounces-14130-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Mon, 13 Apr 2026 16:04:47 +0200
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 49DC93ECEE2
-	for <lists+linux-mips@lfdr.de>; Mon, 13 Apr 2026 16:04:31 +0200 (CEST)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id 85E5F3ECF0E
+	for <lists+linux-mips@lfdr.de>; Mon, 13 Apr 2026 16:04:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id CB8F43002B1F
-	for <lists+linux-mips@lfdr.de>; Mon, 13 Apr 2026 14:04:16 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 5DD203012228
+	for <lists+linux-mips@lfdr.de>; Mon, 13 Apr 2026 14:04:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 931CF3D3D15;
-	Mon, 13 Apr 2026 14:04:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A55BA37CD55;
+	Mon, 13 Apr 2026 14:04:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cjdns.fr header.i=@cjdns.fr header.b="DidLOiHD"
+	dkim=pass (2048-bit key) header.d=cjdns.fr header.i=@cjdns.fr header.b="A4Yk1ABG"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from mail.cjdns.fr (mail.cjdns.fr [5.135.140.105])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9CE7D3D3CEE;
-	Mon, 13 Apr 2026 14:04:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4C4A3D3CE2;
+	Mon, 13 Apr 2026 14:04:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=5.135.140.105
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776089047; cv=none; b=OHFy/HGGqJ34y3VZ0oABx3ukXz74dORoBXGwavGfVQbr0qUkjebvQ0RiCO8K1talmZW1NrcMyJpF9IffRdEggXlHE1eTBGV0KMHtX569tJR9y3RmAIkesz9XJaA6t6yVlB71seT3LWSlAkTovBpEHZymN4HyqcaT+lDrlXg5NmI=
+	t=1776089048; cv=none; b=ftzSONOUb3i9vi1m8yIcrW7WznMgzYXPOA/N3aMfnWgYE0uWq1R4ueIj1oW2FuCrxfaNL10TH0xF2o1H/neHWCzs3065yVvrsjpzCbO0D1kIGutTpClT+imWssKadNz3s6PPy7en1uKuBjnvg5gRMT+ibXDTrGP7+TKeYJ8D+Sk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776089047; c=relaxed/simple;
-	bh=ntgvT589fzB4YGv2Bh8ztRC9IObndKMqwGaMWUU8JCo=;
+	s=arc-20240116; t=1776089048; c=relaxed/simple;
+	bh=O3z31uVT+Dfd8j0b4hkRpmwYzvLPn03LuNW3yKqjl40=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=ajxeCz7dvztDbRbjMp5BuWtaYZCr9ribKEYReB1EjoSXmmBqWMCndZaPtFBDNvfPkP0SOO/5CwUGsT9tu2n4mg5rWPPJb7wDmSpvu+1bTNm+bJlJfFvRf/tjG+NJ8n6Fpi82DvENkzsYcaSpipozaRI0RkAVBjomIO7oPYFH3eY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=cjdns.fr; spf=pass smtp.mailfrom=cjdns.fr; dkim=pass (2048-bit key) header.d=cjdns.fr header.i=@cjdns.fr header.b=DidLOiHD; arc=none smtp.client-ip=5.135.140.105
+	 MIME-Version; b=f47+M5kiNpj6mMANf4Uia8F0XqG71iTaJ0Bp5TDpzytf03A1WFBhrQcBU+HryaNOoTfaWqzmlOFTAcfWLB8e0r8zDK7aSUrH3JcLhh946xD8XkVm/7Bvku11WmEc8ixj8qd/ZbmRdz4BzhVykpQVoCFC2ncIoTQGm2ftddALoYs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=cjdns.fr; spf=none smtp.mailfrom=cjdns.fr; dkim=pass (2048-bit key) header.d=cjdns.fr header.i=@cjdns.fr header.b=A4Yk1ABG; arc=none smtp.client-ip=5.135.140.105
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=cjdns.fr
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cjdns.fr
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 18D8D9ACAC;
-	Mon, 13 Apr 2026 16:03:50 +0200 (CEST)
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=cjdns.fr
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 7094F9D108;
+	Mon, 13 Apr 2026 16:03:54 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cjdns.fr; s=dkim;
-	t=1776089033; h=from:subject:date:message-id:to:cc:mime-version:
+	t=1776089038; h=from:subject:date:message-id:to:cc:mime-version:
 	 content-transfer-encoding:in-reply-to:references;
-	bh=GbaYGCVJ/e4zvTDmh7Ra8wHMVZemBwajoPoC5ZoV0ek=;
-	b=DidLOiHD8PzO7KcjjxLQaoNIKy33RUXYbz/Hv0xLa6jS/gVZGlaNnfKrxPCO9f9csZGewK
-	apzTHsh4J1ZezH4noJxbWYgfqtZux7KCEvtCgdrAF+ggpYHIDCJIwPY/zLST/OsrCW0Rpo
-	V/n4D/Oi3aOh3AVwCAvpW28kI7Sh7lpti7e7BrvAkwoa2nwNA2Qz57KBTnrui0R2/rVsQk
-	sHQ/qH4vf0SzM0cM0lZ5PqtZhEg4oUDBAh/V+6elPldO6xmkME96ocfdPs1lt12t3M6Ps1
-	sUu2z7zvQeAql03YRGFQiQVMGExfMsPhR1m9fYsgWvDhQ+l409u35uRx/musAA==
+	bh=GdKZudBiZWRmnj2Q8xLAe5Ktsw/srDvDPRU3HuRREMc=;
+	b=A4Yk1ABGxWLdq40Gvch9gUgy3szNqMcS5sYkVGBWDOnj4Nwan2XZP22vijpjyuVRBjDhqB
+	3G1ZCKZPIg4V4m5YvBV354jG7tjV5X2AxfKcElxeT3ZZf2R/vaoLVaq1XoeoE0yykz2Mvq
+	LFeJ1k6NgjymqkhJlyrnvM9q30oM3Hp3DGYSbAVz77pCYDk95kEB9BBg/osYwb2V91+F+Y
+	Gcbc4F8O4Eve/+A+iv75RxLZf4E3swTCpoGZ+oHXSr0aFPHsrLsRpJ4E8A6ZcWdua8J8RW
+	dCxubAeiJY3/3d4Ko0VMUfcralaaf0UBQJ1EyHRl9pdQBD2HreeL/wsb7sMHEA==
 From: Caleb James DeLisle <cjd@cjdns.fr>
 To: linux-pci@vger.kernel.org
 Cc: linux-mips@vger.kernel.org,
@@ -63,11 +63,10 @@ Cc: linux-mips@vger.kernel.org,
 	linux-mediatek@lists.infradead.org,
 	devicetree@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
-	Caleb James DeLisle <cjd@cjdns.fr>,
-	Conor Dooley <conor.dooley@microchip.com>
-Subject: [PATCH v5 1/2] dt-bindings: PCI: mediatek: Add support for EcoNet EN7528
-Date: Mon, 13 Apr 2026 14:03:38 +0000
-Message-Id: <20260413140339.16238-2-cjd@cjdns.fr>
+	Caleb James DeLisle <cjd@cjdns.fr>
+Subject: [PATCH v5 2/2] PCI: mediatek: Add support for EcoNet EN7528 SoC
+Date: Mon, 13 Apr 2026 14:03:39 +0000
+Message-Id: <20260413140339.16238-3-cjd@cjdns.fr>
 In-Reply-To: <20260413140339.16238-1-cjd@cjdns.fr>
 References: <20260413140339.16238-1-cjd@cjdns.fr>
 Precedence: bulk
@@ -84,14 +83,14 @@ X-Spamd-Result: default: False [0.84 / 15.00];
 	MID_CONTAINS_FROM(1.00)[];
 	DMARC_POLICY_ALLOW(-0.50)[cjdns.fr,none];
 	R_MISSING_CHARSET(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
 	R_DKIM_ALLOW(-0.20)[cjdns.fr:s=dkim];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCPT_COUNT_TWELVE(0.00)[19];
-	FREEMAIL_CC(0.00)[vger.kernel.org,gmail.com,mediatek.com,kernel.org,collabora.com,lists.infradead.org,cjdns.fr,microchip.com];
-	TAGGED_FROM(0.00)[bounces-14129-lists,linux-mips=lfdr.de];
+	RCPT_COUNT_TWELVE(0.00)[18];
+	FREEMAIL_CC(0.00)[vger.kernel.org,gmail.com,mediatek.com,kernel.org,collabora.com,lists.infradead.org,cjdns.fr];
+	TAGGED_FROM(0.00)[bounces-14130-lists,linux-mips=lfdr.de];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
@@ -103,73 +102,243 @@ X-Spamd-Result: default: False [0.84 / 15.00];
 	FROM_NEQ_ENVFROM(0.00)[cjd@cjdns.fr,linux-mips@vger.kernel.org];
 	FROM_HAS_DN(0.00)[];
 	DKIM_TRACE(0.00)[cjdns.fr:+];
-	NEURAL_HAM(-0.00)[-0.985];
+	NEURAL_HAM(-0.00)[-0.961];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-mips,dt];
 	MISSING_XM_UA(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[cjdns.fr:dkim,cjdns.fr:email,cjdns.fr:mid,sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 49DC93ECEE2
+	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,mediatek.com:email,cjdns.fr:dkim,cjdns.fr:email,cjdns.fr:mid]
+X-Rspamd-Queue-Id: 85E5F3ECF0E
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-Introduce EcoNet EN7528 SoC compatible in MediaTek PCIe controller
-binding.
+Add support for the PCIe present on the EcoNet EN7528 (and EN751221) SoCs.
 
-EcoNet PCIe controller has the same configuration model as
-Mediatek v2 but is initialized more similarly to an MT7621
-PCIe.
+These SoCs have a mix of Gen1 and Gen2 capable ports, but the Gen2 ports
+require re-training after startup.
 
+Co-developed-by: Ahmed Naseef <naseefkm@gmail.com>
+Signed-off-by: Ahmed Naseef <naseefkm@gmail.com>
 Signed-off-by: Caleb James DeLisle <cjd@cjdns.fr>
-Acked-by: Conor Dooley <conor.dooley@microchip.com>
 ---
- .../bindings/pci/mediatek-pcie.yaml           | 26 +++++++++++++++++++
- 1 file changed, 26 insertions(+)
+ drivers/pci/controller/Kconfig         |   2 +-
+ drivers/pci/controller/pcie-mediatek.c | 133 +++++++++++++++++++++++++
+ 2 files changed, 134 insertions(+), 1 deletion(-)
 
-diff --git a/Documentation/devicetree/bindings/pci/mediatek-pcie.yaml b/Documentation/devicetree/bindings/pci/mediatek-pcie.yaml
-index 0b8c78ec4f91..7e1b0876c291 100644
---- a/Documentation/devicetree/bindings/pci/mediatek-pcie.yaml
-+++ b/Documentation/devicetree/bindings/pci/mediatek-pcie.yaml
-@@ -14,6 +14,7 @@ properties:
-     oneOf:
-       - enum:
-           - airoha,an7583-pcie
-+          - econet,en7528-pcie
-           - mediatek,mt2712-pcie
-           - mediatek,mt7622-pcie
-           - mediatek,mt7629-pcie
-@@ -226,6 +227,31 @@ allOf:
+diff --git a/drivers/pci/controller/Kconfig b/drivers/pci/controller/Kconfig
+index 686349e09cd3..5808d5e407fd 100644
+--- a/drivers/pci/controller/Kconfig
++++ b/drivers/pci/controller/Kconfig
+@@ -209,7 +209,7 @@ config PCI_MVEBU
  
-         mediatek,pbus-csr: false
+ config PCIE_MEDIATEK
+ 	tristate "MediaTek PCIe controller"
+-	depends on ARCH_AIROHA || ARCH_MEDIATEK || COMPILE_TEST
++	depends on ARCH_AIROHA || ARCH_MEDIATEK || ECONET || COMPILE_TEST
+ 	depends on OF
+ 	depends on PCI_MSI
+ 	select IRQ_MSI_LIB
+diff --git a/drivers/pci/controller/pcie-mediatek.c b/drivers/pci/controller/pcie-mediatek.c
+index 75722524fe74..915a35825ce1 100644
+--- a/drivers/pci/controller/pcie-mediatek.c
++++ b/drivers/pci/controller/pcie-mediatek.c
+@@ -7,6 +7,7 @@
+  *	   Honghui Zhang <honghui.zhang@mediatek.com>
+  */
  
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            const: econet,en7528-pcie
-+    then:
-+      properties:
-+        clocks:
-+          maxItems: 1
-+
-+        clock-names:
-+          maxItems: 1
-+
-+        reset: false
-+
-+        reset-names: false
-+
-+        power-domains: false
-+
-+        mediatek,pbus-csr: false
-+
-+      required:
-+        - phys
-+        - phy-names
-+
- unevaluatedProperties: false
++#include <asm-generic/errno-base.h>
+ #include <linux/clk.h>
+ #include <linux/delay.h>
+ #include <linux/iopoll.h>
+@@ -14,6 +15,7 @@
+ #include <linux/irqchip/chained_irq.h>
+ #include <linux/irqchip/irq-msi-lib.h>
+ #include <linux/irqdomain.h>
++#include <linux/kconfig.h>
+ #include <linux/kernel.h>
+ #include <linux/mfd/syscon.h>
+ #include <linux/msi.h>
+@@ -77,6 +79,7 @@
  
- examples:
+ #define PCIE_CONF_VEND_ID	0x100
+ #define PCIE_CONF_DEVICE_ID	0x102
++#define PCIE_CONF_REV_CLASS	0x104
+ #define PCIE_CONF_CLASS_ID	0x106
+ 
+ #define PCIE_INT_MASK		0x420
+@@ -89,6 +92,11 @@
+ #define MSI_MASK		BIT(23)
+ #define MTK_MSI_IRQS_NUM	32
+ 
++#define EN7528_HOST_MODE	0x00804201
++#define EN7528_LINKUP_REG	0x50
++#define EN7528_RC0_LINKUP	BIT(1)
++#define EN7528_RC1_LINKUP	BIT(2)
++
+ #define PCIE_AHB_TRANS_BASE0_L	0x438
+ #define PCIE_AHB_TRANS_BASE0_H	0x43c
+ #define AHB2PCIE_SIZE(x)	((x) & GENMASK(4, 0))
+@@ -148,12 +156,15 @@ struct mtk_pcie_port;
+  * @MTK_PCIE_FIX_DEVICE_ID: host's device ID needed to be fixed
+  * @MTK_PCIE_NO_MSI: Bridge has no MSI support, and relies on an external block
+  * @MTK_PCIE_SKIP_RSTB: Skip calling RSTB bits on PCIe probe
++ * @MTK_PCIE_RETRAIN: Re-train link to bridge after startup because some
++ *                    Gen2-capable devices start as Gen1.
+  */
+ enum mtk_pcie_quirks {
+ 	MTK_PCIE_FIX_CLASS_ID = BIT(0),
+ 	MTK_PCIE_FIX_DEVICE_ID = BIT(1),
+ 	MTK_PCIE_NO_MSI = BIT(2),
+ 	MTK_PCIE_SKIP_RSTB = BIT(3),
++	MTK_PCIE_RETRAIN = BIT(4),
+ };
+ 
+ /**
+@@ -753,6 +764,80 @@ static int mtk_pcie_startup_port_v2(struct mtk_pcie_port *port)
+ 	return 0;
+ }
+ 
++static int mtk_pcie_startup_port_en7528(struct mtk_pcie_port *port)
++{
++	struct mtk_pcie *pcie = port->pcie;
++	struct pci_host_bridge *host = pci_host_bridge_from_priv(pcie);
++	struct resource *mem = NULL;
++	struct resource_entry *entry;
++	u32 val, link_mask;
++	int err;
++
++	entry = resource_list_first_type(&host->windows, IORESOURCE_MEM);
++	if (entry)
++		mem = entry->res;
++	if (!mem)
++		return -EINVAL;
++
++	if (!pcie->cfg) {
++		dev_err(pcie->dev, "EN7528: pciecfg syscon not available\n");
++		return -EINVAL;
++	}
++
++	/* Assert all reset signals */
++	writel(0, port->base + PCIE_RST_CTRL);
++
++	/*
++	 * Enable PCIe link down reset, if link status changed from link up to
++	 * link down, this will reset MAC control registers and configuration
++	 * space.
++	 */
++	writel(PCIE_LINKDOWN_RST_EN, port->base + PCIE_RST_CTRL);
++
++	msleep(PCIE_T_PVPERL_MS);
++
++	/* De-assert PHY, PE, PIPE, MAC and configuration reset */
++	val = readl(port->base + PCIE_RST_CTRL);
++	val |= PCIE_PHY_RSTB | PCIE_PERSTB | PCIE_PIPE_SRSTB |
++	       PCIE_MAC_SRSTB | PCIE_CRSTB;
++	writel(val, port->base + PCIE_RST_CTRL);
++
++	writel(PCIE_CLASS_CODE | PCIE_REVISION_ID,
++	       port->base + PCIE_CONF_REV_CLASS);
++	writel(EN7528_HOST_MODE, port->base);
++
++	link_mask = (port->slot == 0) ? EN7528_RC0_LINKUP : EN7528_RC1_LINKUP;
++
++	/* 100ms timeout value should be enough for Gen1/2 training */
++	err = regmap_read_poll_timeout(pcie->cfg, EN7528_LINKUP_REG, val,
++				       !!(val & link_mask), 20,
++				       PCI_PM_D3COLD_WAIT * USEC_PER_MSEC);
++	if (err) {
++		dev_err(pcie->dev, "EN7528: port%d link timeout\n", port->slot);
++		return -ETIMEDOUT;
++	}
++
++	/* Activate INTx interrupts */
++	val = readl(port->base + PCIE_INT_MASK);
++	val &= ~INTX_MASK;
++	writel(val, port->base + PCIE_INT_MASK);
++
++	if (IS_ENABLED(CONFIG_PCI_MSI))
++		mtk_pcie_enable_msi(port);
++
++	/* Set AHB to PCIe translation windows */
++	val = lower_32_bits(mem->start) |
++	      AHB2PCIE_SIZE(fls(resource_size(mem)));
++	writel(val, port->base + PCIE_AHB_TRANS_BASE0_L);
++
++	val = upper_32_bits(mem->start);
++	writel(val, port->base + PCIE_AHB_TRANS_BASE0_H);
++
++	writel(WIN_ENABLE, port->base + PCIE_AXI_WINDOW0);
++
++	return 0;
++}
++
+ static void __iomem *mtk_pcie_map_bus(struct pci_bus *bus,
+ 				      unsigned int devfn, int where)
+ {
+@@ -1149,6 +1234,46 @@ static int mtk_pcie_probe(struct platform_device *pdev)
+ 	if (err)
+ 		goto put_resources;
+ 
++	/* EN7528 PCIe initially comes up as Gen1 even if Gen2 is supported.
++	 * The cannonical way to achieve Gen2 is to re-train the link
++	 * immediately after setup. However, to save a lot of duplicated code
++	 * we use pcie_retrain_link() which is usable once we have the pci_dev
++	 * struct for the bridge, i.e. after pci_host_probe(). */
++	if (pcie->soc->quirks & MTK_PCIE_RETRAIN) {
++		int slot = of_get_pci_domain_nr(dev->of_node);
++		struct pci_dev *rc = NULL;
++		int ret = -ENOENT;
++
++		if (slot >= 0)
++			rc = pci_get_slot(host->bus, PCI_DEVFN(slot, 0));
++
++		if (rc) {
++			ret = -EOPNOTSUPP;
++
++			/* pcie_retrain_link() is not an exported symbol but
++			 * this driver supports being built as a loadable
++			 * module. Someone using this on an EN7528 should make
++			 * it builtin, or accept Gen1 PCI. */
++#if IS_BUILTIN(CONFIG_PCIE_MEDIATEK)
++			ret = pcie_retrain_link(rc, true);
++#endif
++		}
++
++		if (ret) {
++			dev_info(dev, "port%d failed to retrain %pe\n", slot,
++				 ERR_PTR(ret));
++		} else {
++			u16 lnksta;
++			u32 speed;
++
++			pcie_capability_read_word(rc, PCI_EXP_LNKSTA, &lnksta);
++			speed = lnksta & PCI_EXP_LNKSTA_CLS;
++
++			dev_info(dev, "port%d link retrained, speed %s\n", slot,
++				 pci_speed_string(pcie_link_speed[speed]));
++		}
++	}
++
+ 	return 0;
+ 
+ put_resources:
+@@ -1264,8 +1389,16 @@ static const struct mtk_pcie_soc mtk_pcie_soc_mt7629 = {
+ 	.quirks = MTK_PCIE_FIX_CLASS_ID | MTK_PCIE_FIX_DEVICE_ID,
+ };
+ 
++static const struct mtk_pcie_soc mtk_pcie_soc_en7528 = {
++	.ops = &mtk_pcie_ops_v2,
++	.startup = mtk_pcie_startup_port_en7528,
++	.setup_irq = mtk_pcie_setup_irq,
++	.quirks = MTK_PCIE_RETRAIN,
++};
++
+ static const struct of_device_id mtk_pcie_ids[] = {
+ 	{ .compatible = "airoha,an7583-pcie", .data = &mtk_pcie_soc_an7583 },
++	{ .compatible = "econet,en7528-pcie", .data = &mtk_pcie_soc_en7528 },
+ 	{ .compatible = "mediatek,mt2701-pcie", .data = &mtk_pcie_soc_v1 },
+ 	{ .compatible = "mediatek,mt7623-pcie", .data = &mtk_pcie_soc_v1 },
+ 	{ .compatible = "mediatek,mt2712-pcie", .data = &mtk_pcie_soc_mt2712 },
 -- 
 2.39.5
 
