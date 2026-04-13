@@ -1,50 +1,50 @@
-Return-Path: <linux-mips+bounces-14104-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-14105-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 6BxSA8xi3GkHQQkAu9opvQ
-	(envelope-from <linux-mips+bounces-14104-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Mon, 13 Apr 2026 05:28:12 +0200
+	id qDNJA89i3GkHQQkAu9opvQ
+	(envelope-from <linux-mips+bounces-14105-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Mon, 13 Apr 2026 05:28:15 +0200
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id 178C53E6EE1
-	for <lists+linux-mips@lfdr.de>; Mon, 13 Apr 2026 05:28:11 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id A90653E6EEF
+	for <lists+linux-mips@lfdr.de>; Mon, 13 Apr 2026 05:28:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 23F453002B41
-	for <lists+linux-mips@lfdr.de>; Mon, 13 Apr 2026 03:28:08 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id F1FB13008774
+	for <lists+linux-mips@lfdr.de>; Mon, 13 Apr 2026 03:28:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9C09623D7C2;
-	Mon, 13 Apr 2026 03:28:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E96AA23ABA8;
+	Mon, 13 Apr 2026 03:28:09 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
 Received: from angie.orcam.me.uk (angie.orcam.me.uk [78.133.224.34])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8929B2E3FE;
-	Mon, 13 Apr 2026 03:28:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 75E222E3FE;
+	Mon, 13 Apr 2026 03:28:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=78.133.224.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776050886; cv=none; b=uc5Jh3+DE1SHBgguct04kFW0W8XyDl2TmoOcF/KLm2RxgmnZ4EaDy4LgR3s4BLpjcIIOp/pGrUdHLGbBBoCInIsCCGIxUg1+RLfqm/AoByb0wStgVKIzlJXprQB8oPaeWEAGAtNrbWMylKQF5upSSpk4xLg6uHyfKJlb57wdgzY=
+	t=1776050889; cv=none; b=RGaBR8rtvNJOnAtyGuY1ZYStudF5zpppUExANExcAyd/Th/DrWSEEjf1ujkoRHDfl8BWWQRi6T2+K/veDYmuIDf9DBFyi4EK9PIuPBASe2rWoEU4Wz7PPxuNl6p03jkoHiXFJUjzteKBnuu89+hP60gJIyW5usbARj6Z9Fc5M6c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776050886; c=relaxed/simple;
-	bh=FoYrFPECjKtOh8OVJnvuemqyk4KTWfrs9PzXSWmSfj0=;
+	s=arc-20240116; t=1776050889; c=relaxed/simple;
+	bh=K+gE2g+I6iZCj/MIcj8ghflTj614mmS74N2MHRqMlvU=;
 	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=gQyFy+Nfd635DZXxJGeJ18w/7U/aCXVolYEsEUfAbMSTf7brk/YImNjtq5bRkhvOQio1WfrRB2B0Zqt/soz28r7CVifxDJ4myvGYJL2o/AtFzlPgWiwbRrffRW0hq3fw4WSnn7O2HS7J1+RXH28nZ4VO1DN2AJBHh1p17DE/o30=
+	 MIME-Version:Content-Type; b=eExUsv29s9K93JPqdGSUOlfZw/s4XpBRoe3Dof8TQSYIMnzoDz+/c8uK5JyJ9TPl2u7NBTW6ZCEBXtFkne+4eBn9TQVNyVZU/XgH5kSme2tgpnoFQoviVjAcfJtYsuDzgiFt1a0AT+2YESQ8im2a3fHYE0GuN/wQvqjpiFUdaLM=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=orcam.me.uk; spf=none smtp.mailfrom=orcam.me.uk; arc=none smtp.client-ip=78.133.224.34
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=orcam.me.uk
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=orcam.me.uk
 Received: by angie.orcam.me.uk (Postfix, from userid 500)
-	id 0DBB192009E; Mon, 13 Apr 2026 05:28:03 +0200 (CEST)
+	id 978AC92009D; Mon, 13 Apr 2026 05:28:07 +0200 (CEST)
 Received: from localhost (localhost [127.0.0.1])
-	by angie.orcam.me.uk (Postfix) with ESMTP id 0709692009B;
-	Mon, 13 Apr 2026 04:28:02 +0100 (BST)
-Date: Mon, 13 Apr 2026 04:28:02 +0100 (BST)
+	by angie.orcam.me.uk (Postfix) with ESMTP id 89CD992009C;
+	Mon, 13 Apr 2026 04:28:07 +0100 (BST)
+Date: Mon, 13 Apr 2026 04:28:07 +0100 (BST)
 From: "Maciej W. Rozycki" <macro@orcam.me.uk>
 To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
     Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
     Jiri Slaby <jirislaby@kernel.org>
 cc: linux-mips@vger.kernel.org, linux-serial@vger.kernel.org, 
     linux-serial@vger.kernel.org
-Subject: [PATCH 2/8] serial: dz: Fix bootconsole handover lockup
+Subject: [PATCH 3/8] serial: zs: Fix bootconsole handover lockup
 In-Reply-To: <alpine.DEB.2.21.2604102250060.29980@angie.orcam.me.uk>
-Message-ID: <alpine.DEB.2.21.2604102338300.29980@angie.orcam.me.uk>
+Message-ID: <alpine.DEB.2.21.2604102346290.29980@angie.orcam.me.uk>
 References: <alpine.DEB.2.21.2604102250060.29980@angie.orcam.me.uk>
 User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
 Precedence: bulk
@@ -56,19 +56,19 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 X-Spamd-Result: default: False [-1.46 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-14104-lists,linux-mips=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-14105-lists,linux-mips=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
 	RECEIVED_HELO_LOCALHOST(0.00)[];
 	DMARC_NA(0.00)[orcam.me.uk];
 	MIME_TRACE(0.00)[0:+];
 	TO_DN_SOME(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
 	FROM_HAS_DN(0.00)[];
 	TAGGED_RCPT(0.00)[linux-mips];
 	PRECEDENCE_BULK(0.00)[];
@@ -78,57 +78,68 @@ X-Spamd-Result: default: False [-1.46 / 15.00];
 	R_DKIM_NA(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
 	MID_RHS_MATCH_FROMTLD(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 178C53E6EE1
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: A90653E6EEF
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-Calling dz_reset() in the course of setting up the serial device causes 
+Calling zs_reset() in the course of setting up the serial device causes 
 line parameters to be reset and the transmitter disabled.  We've been 
 lucky in that no message is usually produced to the kernel log between 
 this call and the later call to uart_set_options() in the course of 
-console setup done by dz_serial_console_init(), or the system would hang 
+console setup done by zs_serial_console_init(), or the system would hang 
 as the console output handler in the firmware tried to access a port 
 whose transmitter has been disabled and line parameters messed up.
 
-This will change with the next change to the driver, so fix dz_reset() 
+This will change with the next change to the driver, so fix zs_reset() 
 such that line parameters are set for 9600n8 console operation as with 
 the system firmware and the transmitter re-enabled after reset.  This 
-also means dz_pm() serves no purpose anymore, so drop it.
+also means zs_pm() serves no purpose anymore, so drop it.
 
-Fixes: e6ee512f5a77 ("dz.c: Resource management")
+Switch to using the channel reset rather than the hardware reset, since 
+this simplifies handling by removing the interfere
+
+Fixes: 8b4a40809e53 ("zs: move to the serial subsystem")
 Signed-off-by: Maciej W. Rozycki <macro@orcam.me.uk>
-Cc: stable@vger.kernel.org # v2.6.25+
+Cc: stable@vger.kernel.org # v2.6.23+
 ---
- drivers/tty/serial/dz.c |   36 ++++++++++++------------------------
- 1 file changed, 12 insertions(+), 24 deletions(-)
+ drivers/tty/serial/zs.c |   29 ++++++++---------------------
+ 1 file changed, 8 insertions(+), 21 deletions(-)
 
-linux-serial-dz-prom-console.diff
-Index: linux-macro/drivers/tty/serial/dz.c
+linux-serial-zs-prom-console.diff
+Index: linux-macro/drivers/tty/serial/zs.c
 ===================================================================
---- linux-macro.orig/drivers/tty/serial/dz.c
-+++ linux-macro/drivers/tty/serial/dz.c
-@@ -571,6 +571,18 @@ static void dz_reset(struct dz_port *dpo
- 	while (dz_in(dport, DZ_CSR) & DZ_CLR);
- 	iob();
+--- linux-macro.orig/drivers/tty/serial/zs.c
++++ linux-macro/drivers/tty/serial/zs.c
+@@ -105,18 +105,24 @@ struct zs_parms {
  
-+	/*
-+	 * Set parameters across all lines such as not to interfere
-+	 * with the initial PROM-based console.  Otherwise any output
-+	 * produced before the console handover would cause the system
-+	 * firmware to produce rubbish.
-+	 */
-+	for (int line = 0; line < DZ_NB_PORT; line++)
-+		dz_out(dport, DZ_LPR, DZ_B9600 | DZ_CS8 | line);
-+
-+	/* Re-enable transmission for the initial PROM-based console.  */
-+	dz_out(dport, DZ_TCR, tcr);
-+
- 	/* Enable scanning.  */
- 	dz_out(dport, DZ_CSR, DZ_MSE);
+ static struct zs_scc zs_sccs[ZS_NUM_SCCS];
  
-@@ -654,26 +666,6 @@ static void dz_set_termios(struct uart_p
- 	uart_port_unlock_irqrestore(&dport->port, flags);
++/*
++ * Set parameters in WR5, WR12, WR13 such as not to interfere
++ * with the initial PROM-based console.  Otherwise any output
++ * produced before the console handover would cause the system
++ * firmware to hang (TxENAB) or produce rubbish (Tx8, B9600).
++ */
+ static u8 zs_init_regs[ZS_NUM_REGS] __initdata = {
+ 	0,				/* write 0 */
+ 	PAR_SPEC,			/* write 1 */
+ 	0,				/* write 2 */
+ 	0,				/* write 3 */
+ 	X16CLK | SB1,			/* write 4 */
+-	0,				/* write 5 */
++	Tx8 | TxENAB,			/* write 5 */
+ 	0, 0, 0,			/* write 6, 7, 8 */
+ 	MIE | DLC | NV,			/* write 9 */
+ 	NRZ,				/* write 10 */
+ 	TCBR | RCBR,			/* write 11 */
+-	0, 0,				/* BRG time constant, write 12 + 13 */
++	0x16, 0x00,			/* BRG time constant, write 12 + 13 */
+ 	BRSRC | BRENABL,		/* write 14 */
+ 	0,				/* write 15 */
+ };
+@@ -956,23 +962,6 @@ static void zs_set_termios(struct uart_p
+ 	spin_unlock_irqrestore(&scc->zlock, flags);
  }
  
 -/*
@@ -136,40 +147,34 @@ Index: linux-macro/drivers/tty/serial/dz.c
 - * Required solely so that the initial PROM-based console
 - * works undisturbed in parallel with this one.
 - */
--static void dz_pm(struct uart_port *uport, unsigned int state,
+-static void zs_pm(struct uart_port *uport, unsigned int state,
 -		  unsigned int oldstate)
 -{
--	struct dz_port *dport = to_dport(uport);
--	unsigned long flags;
+-	struct zs_port *zport = to_zport(uport);
 -
--	uart_port_lock_irqsave(&dport->port, &flags);
 -	if (state < 3)
--		dz_start_tx(&dport->port);
+-		zport->regs[5] |= TxENAB;
 -	else
--		dz_stop_tx(&dport->port);
--	uart_port_unlock_irqrestore(&dport->port, flags);
+-		zport->regs[5] &= ~TxENAB;
+-	write_zsreg(zport, R5, zport->regs[5]);
 -}
 -
--
- static const char *dz_type(struct uart_port *uport)
+ 
+ static const char *zs_type(struct uart_port *uport)
  {
- 	return "DZ";
-@@ -769,7 +761,6 @@ static const struct uart_ops dz_ops = {
- 	.startup	= dz_startup,
- 	.shutdown	= dz_shutdown,
- 	.set_termios	= dz_set_termios,
--	.pm		= dz_pm,
- 	.type		= dz_type,
- 	.release_port	= dz_release_port,
- 	.request_port	= dz_request_port,
-@@ -894,10 +885,7 @@ static int __init dz_console_setup(struc
- 	if (ret)
+@@ -1055,7 +1044,6 @@ static const struct uart_ops zs_ops = {
+ 	.startup	= zs_startup,
+ 	.shutdown	= zs_shutdown,
+ 	.set_termios	= zs_set_termios,
+-	.pm		= zs_pm,
+ 	.type		= zs_type,
+ 	.release_port	= zs_release_port,
+ 	.request_port	= zs_request_port,
+@@ -1210,7 +1198,6 @@ static int __init zs_console_setup(struc
  		return ret;
  
--	spin_lock_init(&dport->port.lock);	/* For dz_pm().  */
--
- 	dz_reset(dport);
--	dz_pm(uport, 0, -1);
+ 	zs_reset(zport);
+-	zs_pm(uport, 0, -1);
  
  	if (options)
  		uart_parse_options(options, &baud, &parity, &bits, &flow);
