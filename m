@@ -1,186 +1,147 @@
-Return-Path: <linux-mips+bounces-14121-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-14122-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id EKD/Ii2k3GkEUgkAu9opvQ
-	(envelope-from <linux-mips+bounces-14121-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Mon, 13 Apr 2026 10:07:09 +0200
+	id sAt1BjPE3Gn5VwkAu9opvQ
+	(envelope-from <linux-mips+bounces-14122-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Mon, 13 Apr 2026 12:23:47 +0200
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0FF303E8CE2
-	for <lists+linux-mips@lfdr.de>; Mon, 13 Apr 2026 10:07:09 +0200 (CEST)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1C9B13EA90F
+	for <lists+linux-mips@lfdr.de>; Mon, 13 Apr 2026 12:23:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id B9D493016D36
-	for <lists+linux-mips@lfdr.de>; Mon, 13 Apr 2026 08:04:37 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 524FE303583C
+	for <lists+linux-mips@lfdr.de>; Mon, 13 Apr 2026 10:12:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C325E3A450F;
-	Mon, 13 Apr 2026 08:04:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C1E5A30B514;
+	Mon, 13 Apr 2026 10:12:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="LPttxcex"
+	dkim=pass (2048-bit key) header.d=proton.me header.i=@proton.me header.b="LNFtGwi9"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
+Received: from mail-24425.protonmail.ch (mail-24425.protonmail.ch [109.224.244.25])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43B1C389111;
-	Mon, 13 Apr 2026 08:04:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.171.202.116
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17AE0336885
+	for <linux-mips@vger.kernel.org>; Mon, 13 Apr 2026 10:12:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=109.224.244.25
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776067475; cv=none; b=Os0JbEa5U4C05v7Nwuh700tfPpLv7ey3Whi82Bk8TkIce3LZA0HHTiYVFXFkrc97/HOvMPWeRFjoS0hDokDVObVbQjMSZ+u/bJugiUZKkclGDQc3PTN6hOo8+WT/hLYJ5InF7GD1q3BkbgTtxl6GwM47DrBrtuVel1med7crdCA=
+	t=1776075153; cv=none; b=bWdaObpT361bV2FDR6wms8DgHiVCb3mjjTemSQhRtqz7H43KhDdeM8Nhi8+2GtqAGWfzxb4G+iDG3EXPmNmRY5ZwCiHEqwBWkaOne7dXkbF8nzPt4xCmHLJrTHbvBdU0AQp4hDdiAw+IWqBLkOW3nK0waUGbYJnVRkAWkreMw/4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776067475; c=relaxed/simple;
-	bh=nRwmameaeIsZPQfij1qNyLreaRDR+ql4yfEH+VgvVs4=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Subject:Cc:To:From:
-	 References:In-Reply-To; b=sE9fJRzOjGPfmF2Lsg1dg9bUvjLxg5CC2SjWrrJcFpHZxSI09K6YRk5IB3GvBaXV6vjlkNTd7hAdc/HEfaPmTpW9i8M1F6pkUkstCZZNZkEiARacDCP5CZhgkq/TUmdjrGLQYcych8CBdheq42v/GewiMw7m8jqgm8MAQ5JXT64=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=LPttxcex; arc=none smtp.client-ip=185.171.202.116
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-04.galae.net (Postfix) with ESMTPS id 1C880C5B19E;
-	Mon, 13 Apr 2026 08:05:07 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id 923D65FFB9;
-	Mon, 13 Apr 2026 08:04:30 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 8B4AF10450246;
-	Mon, 13 Apr 2026 10:04:28 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1776067470; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding:in-reply-to:references;
-	bh=jeaWaNAvawAg39iZTdMC6jFeHce/2BRX0MTNxqAljDM=;
-	b=LPttxcexn+oaDeFgkWoAO0WDpImIBkeUzYnlP/fWz8BA+vHb6j/2ugl//byfEYJb4JSIs6
-	DgSkSeFCio+Cti3XrG+HJe3khQRopbUduuRplWxzmdPPAE+H1MbWu9nzTMBFUP5xWgZqBG
-	PZIJz/H92OODJQSHecGxXb6WVxx9YwWLI3n/TEDOXqPiBOYBffbdddnavf8hifaDSsqzTv
-	be2bIfqYmLHfVZrhjPnXRmX7kLRDAlArdDW3crTok2ine0xEyqZlfyKCm4+VPAkGkQQXuZ
-	ecNoZ2Va04cH8idKk0uYWZdHN1b88546HTlutS+NzS9ZSvwwRt8rViRmxLsDbw==
+	s=arc-20240116; t=1776075153; c=relaxed/simple;
+	bh=Bkgyp1srywDta6av8h+wQUNWC2/ChhupZ8HJq+9w6vQ=;
+	h=Date:To:From:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=Fge5HJJgV/NxlrMPHm8qay8I5Aid632vINzA/JobbuztZVq8to8erIcwhY6UkBVUN+74mPSQdPbrQyJ9Zbz5c/xS8VPpj+FZQDlZ/b3Nim29lzigVRC7QR3MCwHN+k3HdRi6OnqfMUK5PO3Po3ap8fbJh5e0YwB7dU7rgnnyVQ8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=proton.me; spf=pass smtp.mailfrom=proton.me; dkim=pass (2048-bit key) header.d=proton.me header.i=@proton.me header.b=LNFtGwi9; arc=none smtp.client-ip=109.224.244.25
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=proton.me
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=proton.me
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=proton.me;
+	s=protonmail; t=1776075146; x=1776334346;
+	bh=VXZ+255pbO9K9qEtIZvxXsIOt29LhdfgvI++igo56VI=;
+	h=Date:To:From:Cc:Subject:Message-ID:Feedback-ID:From:To:Cc:Date:
+	 Subject:Reply-To:Feedback-ID:Message-ID:BIMI-Selector;
+	b=LNFtGwi9pEadouNJaOVcAcAzYWMb154SPmaTtFwGrzOB+2eMtJsqkSQ/QAi5y4+KR
+	 xs5STfoHO00D3FMD2e8reEFSUl/jF/TLeLBrBSEYIT/X9j0jXNNJMb5WJzFco3n6x8
+	 3BxVDQosdOavbU8+rWaZb/rL4uDe6SbovqGtH6fC6FLKZg4qnHYqSKTMUxSgg+XhVa
+	 51wgaoXweIL/UvY/uD6Rkbir7VZv+ErPOchFl68iWW3xKl6hDn37lHRevPbTiF3WfU
+	 uycIH9jYB0Ok3tOg2Uji1MrApWuIStXnKnri7eG1ha0kbcInp7P0MyPERLXN6MRkNf
+	 UhJ18iEs5p/jg==
+Date: Mon, 13 Apr 2026 10:12:22 +0000
+To: "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>, "tglx@linutronix.de" <tglx@linutronix.de>
+From: kpursoty@proton.me
+Cc: "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>, "tsbogend@alpha.franken.de" <tsbogend@alpha.franken.de>, "cjd@cjdns.fr" <cjd@cjdns.fr>, "naseefkm@gmail.com" <naseefkm@gmail.com>
+Subject: [PATCH 1/2] clocksource: timer-econet-en751221: fix timer block mapping at boot
+Message-ID: <9Rwn4wIPxs9vc3ZNs2cz2TiRae-nX8aEihtdbFI1uMH5BC4KrwDh-70Pg2UbBsUTAB7ltbnSuVpGQ-fGz02o5XJmJRYhz9YIrzilyyiBdlk=@proton.me>
+Feedback-ID: 133470881:user:proton
+X-Pm-Message-ID: 8277d36aceacfc4389448d10650af7e830296549
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Mon, 13 Apr 2026 10:04:27 +0200
-Message-Id: <DHRVDETB559R.1J1MUGSZ0VVEX@bootlin.com>
-Subject: Re: [PATCH v2] clk: eyeq: fix memory leak in eqc_auxdev_create()
- error path
-Cc: <stable@vger.kernel.org>
-To: "Guangshuo Li" <lgs201920130244@gmail.com>, "Vladimir Kondratiev"
- <vladimir.kondratiev@mobileye.com>, "Gregory CLEMENT"
- <gregory.clement@bootlin.com>, "Michael Turquette"
- <mturquette@baylibre.com>, "Stephen Boyd" <sboyd@kernel.org>,
- <linux-mips@vger.kernel.org>, <linux-clk@vger.kernel.org>,
- <linux-kernel@vger.kernel.org>
-From: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
-X-Mailer: aerc 0.21.0-0-g5549850facc2
-References: <20260412124247.2494971-1-lgs201920130244@gmail.com>
-In-Reply-To: <20260412124247.2494971-1-lgs201920130244@gmail.com>
-X-Last-TLS-Session-Version: TLSv1.3
-X-Spamd-Result: default: False [-1.66 / 15.00];
+X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[bootlin.com,reject];
-	MV_CASE(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
-	R_DKIM_ALLOW(-0.20)[bootlin.com:s=dkim];
+	DMARC_POLICY_ALLOW(-0.50)[proton.me,quarantine];
+	R_DKIM_ALLOW(-0.20)[proton.me:s=protonmail];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-14121-lists,linux-mips=lfdr.de];
-	MIME_TRACE(0.00)[0:+];
-	FREEMAIL_TO(0.00)[gmail.com,mobileye.com,bootlin.com,baylibre.com,kernel.org,vger.kernel.org];
-	RECEIVED_HELO_LOCALHOST(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
+	TO_DN_EQ_ADDR_ALL(0.00)[];
+	FREEMAIL_CC(0.00)[vger.kernel.org,alpha.franken.de,cjdns.fr,gmail.com];
+	FROM_NEQ_ENVFROM(0.00)[kpursoty@proton.me,linux-mips@vger.kernel.org];
 	RCVD_TLS_LAST(0.00)[];
-	DKIM_TRACE(0.00)[bootlin.com:+];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
-	RCVD_COUNT_FIVE(0.00)[6];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[theo.lebrun@bootlin.com,linux-mips@vger.kernel.org];
-	NEURAL_HAM(-0.00)[-1.000];
+	RCVD_COUNT_THREE(0.00)[3];
+	TAGGED_FROM(0.00)[bounces-14122-lists,linux-mips=lfdr.de];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	DKIM_TRACE(0.00)[proton.me:+];
+	FROM_NO_DN(0.00)[];
+	MISSING_XM_UA(0.00)[];
 	MID_RHS_MATCH_FROM(0.00)[];
+	NEURAL_HAM(-0.00)[-0.999];
+	PRECEDENCE_BULK(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCPT_COUNT_SEVEN(0.00)[7];
+	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
 	TAGGED_RCPT(0.00)[linux-mips];
-	RCPT_COUNT_SEVEN(0.00)[9];
-	TO_DN_SOME(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,bootlin.com:dkim,bootlin.com:mid,bootlin.com:url]
-X-Rspamd-Queue-Id: 0FF303E8CE2
+	MIME_TRACE(0.00)[0:+];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[proton.me:dkim,proton.me:email,proton.me:mid,sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 1C9B13EA90F
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-Hello Guangshuo,
+timer_init() used DIV_ROUND_UP(num_possible_cpus(), 2) to determine how
+many register blocks to iomap. At early boot with VPE-based SMP, MIPS
+reports num_possible_cpus()=3D1 (VPEs not yet brought online), giving
+num_blocks=3D1. Only membase[0] is then mapped via of_iomap.
 
-Subject is:
+The EN751627 SoC has 2 physical cores, each with 2 VPEs, giving NR_CPUS=3D4
+and two timer register blocks (one per core). Each block serves two VPEs:
+block 0 handles CPU0+CPU1 (core 0), block 1 handles CPU2+CPU3 (core 1).
+The block count is a silicon constant: DIV_ROUND_UP(NR_CPUS, 2) =3D 2.
 
-> Subject: [PATCH v2] clk: eyeq: fix memory leak in eqc_auxdev_create()
->          error path
+cevt_init() calls cevt_dev_init(i) for each possible CPU via
+for_each_possible_cpu(). On EN7528/EN751627 with 4 VPEs, NR_CPUS=3D4 so
+cevt_dev_init(2) is called. cevt_dev_init(2) writes to reg_compare(2)
+which dereferences membase[2>>1] =3D membase[1], which is NULL:
 
-I cannot find a public V1?
-https://lore.kernel.org/lkml/?q=3Ds%3Aeyeq+f%3AGuangshuo
+  CPU 0 Unable to handle kernel paging request at virtual address 00000008
+  epc : iowrite32+0x4/0x10
+  ra  : cevt_dev_init+0x40/0x64
 
-On Sun Apr 12, 2026 at 2:42 PM CEST, Guangshuo Li wrote:
-> eqc_auxdev_create() allocates an auxiliary_device with kzalloc() before
-> calling auxiliary_device_init().
->
-> When auxiliary_device_init() returns an error, the function exits
-> without freeing adev. Since the release callback is only expected to
-> handle cleanup after successful initialization, adev should be freed
-> explicitly in this path.
->
-> Add the missing kfree(adev) before returning from the
-> auxiliary_device_init() error path.
->
-> Fixes: 25d904946a0b ("clk: eyeq: add driver")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Guangshuo Li <lgs201920130244@gmail.com>
+Fix: replace the runtime calculation with ECONET_NUM_BLOCKS, which is
+DIV_ROUND_UP(NR_CPUS, 2) evaluated at compile time. This is the same
+expression used to declare the membase[] array, so the loop bound and
+array size are provably consistent. For NR_CPUS=3D4 this is always 2,
+correctly mapping both register blocks regardless of how many VPEs are
+visible at early boot.
 
-I have a guess this is LLM generated?
-Are you missing the Assisted-by trailer?
-https://docs.kernel.org/process/coding-assistants.html#attribution
+Fixes: 3b4c33ac87d0 ("clocksource/drivers: Add EcoNet Timer HPT driver")
+Signed-off-by: Kervin Pursoty <kpursoty@proton.me>
+---
+ drivers/clocksource/timer-econet-en751221.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-The patch could be in theory useful.
-In practice however, it's a different story.
+diff --git a/drivers/clocksource/timer-econet-en751221.c b/drivers/clocksou=
+rce/timer-econet-en751221.c
+--- a/drivers/clocksource/timer-econet-en751221.c
++++ b/drivers/clocksource/timer-econet-en751221.c
+@@ -160,7 +160,6 @@ static u64 notrace sched_clock_read(void)
+ static int __init timer_init(struct device_node *np)
+ {
+-=09int num_blocks =3D DIV_ROUND_UP(num_possible_cpus(), 2);
+ =09struct clk *clk;
+ =09int ret;
 
- - Comit message says "Since the release callback is only expected to
-   handle cleanup after successful initialization, adev should be freed
-   explicitly in this path".
+@@ -172,7 +171,7 @@ static int __init timer_init(struct device_node *np)
 
-   Two things are wrong here:
+ =09econet_timer.freq_hz =3D clk_get_rate(clk);
 
-   1. the driver cannot be removed so there is no "release
-      callback" (guessing you mean driver remove?).
-
-   2. this text seems to imply eqc_auxdev_create() makes probe fail,
-      which it doesn't. It only generates a warning and keeps probing.
-
- - This driver cannot be built as module (will always be probed at boot)
-   and cannot be removed. So the "leak" we are talking about is
-   2 * sizeof(struct auxiliary_device)
-
-   But in no sensible case it can occur. The platforms that use this
-   driver probably cannot boot if our auxiliary drivers aren't present.
-   So if eqc_auxdev_create() fails then the warning is here to be nice
-   but you probably will fail booting afterwards.
-
-   My guess is: you might succeed booting without the reset driver but
-   if you fail the pinctrl one then you won't have a UART. Anyway in no
-   world do you have a sensible EyeQ kernel config that leads to
-   clk-eyeq probing but not its auxdevs.
-
- - If you fix this then there are other resources cleanup to "fix".
-
-    - ioremap() in eqc_probe()
-    - kzalloc of cells in eqc_probe()
-    - probably others
-
-   But, same as above, "fixing" those will only be useful in kernels
-   that will panic in a few milliseconds.
-
-Thanks,
-
---
-Th=C3=A9o Lebrun, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+-=09for (int i =3D 0; i < num_blocks; i++) {
++=09for (int i =3D 0; i < ECONET_NUM_BLOCKS; i++) {
+ =09=09econet_timer.membase[i] =3D of_iomap(np, i);
+ =09=09if (!econet_timer.membase[i]) {
+ =09=09=09pr_err("%pOFn: failed to map register [%d]\n", np, i);
 
 
