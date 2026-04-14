@@ -1,150 +1,197 @@
-Return-Path: <linux-mips+bounces-14141-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-14142-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 0FahHhwU3mlBmwkAu9opvQ
-	(envelope-from <linux-mips+bounces-14141-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Tue, 14 Apr 2026 12:17:00 +0200
+	id 6FrOOQ0q3mmSoQkAu9opvQ
+	(envelope-from <linux-mips+bounces-14142-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Tue, 14 Apr 2026 13:50:37 +0200
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id 51AE03F888A
-	for <lists+linux-mips@lfdr.de>; Tue, 14 Apr 2026 12:16:59 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 44EA13F99A5
+	for <lists+linux-mips@lfdr.de>; Tue, 14 Apr 2026 13:50:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id B2809300F11E
-	for <lists+linux-mips@lfdr.de>; Tue, 14 Apr 2026 10:16:58 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id E792D304D5E3
+	for <lists+linux-mips@lfdr.de>; Tue, 14 Apr 2026 11:49:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8075E303CAB;
-	Tue, 14 Apr 2026 10:16:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 083053DDDB1;
+	Tue, 14 Apr 2026 11:49:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="OSiqxWwo";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="M7Iqvv7a"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="URejJB3K"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yx1-f47.google.com (mail-yx1-f47.google.com [74.125.224.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DEFEF38F62A;
-	Tue, 14 Apr 2026 10:16:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776161816; cv=none; b=CitQAk41oQxtz5YY+qpiV2TAlmHECK9aklxEPZEASA0i6c3vHz5KJ9TYcCitih4p2hJBkjIqzSsbN5RAdbaagKRg2qWZWqxf+SucNHueUWJC/HeO45PyTzK2JECWbdzN+O7ctjR7PHeDCFuI5pw0PEabPUm6TUMcFm7oc0qQOhM=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776161816; c=relaxed/simple;
-	bh=STvLb1j4bAVjgTtL1DKdc+anp0JioeV+OKz220hDD0A=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=iAf/+D8fgWhQqfRPLmWEQHVpwSNtr3W/evOIWIBv4KyZwRiB7f+tscBctSyB6pqRK6uomSXNGVl6kQ0qS4R4GVWfaomiQZTQZIehx5l5G/IRoq3HdMBFcAAVD9lLFSm9yR2NYhozMGC4/dVZ/W+3gappK8tIMeFlPwUNbJ7ChYY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=OSiqxWwo; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=M7Iqvv7a; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
-Date: Tue, 14 Apr 2026 12:16:49 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1776161811;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=BiErSfuvJerZIQ4L+JF5tzrkBbOhwbYuWVg9ZYwOn2Q=;
-	b=OSiqxWwog8Eyo5f66GW9p/l3q7TUrwpoIhrfJTw1X9DwXVATfIR9taZHEoi2HlR1g93VOJ
-	eWDOYZFl9F7WspBEmNsFtXcOp7KlR84eLbwD94B1YXA/2DperGZ+c2FryF4Vkagz0HohfD
-	H4Iwp6tgQJHAeYDhYNpAFW8TOIJpoZDAl6g3jq+josSBCcV8cQmHyl2aYHQ3f+/agOFmuj
-	8cRkDhm+/y6dcV4xI2TF9VXKk37gtYgHC/6VtixvpKy4MVxbp+otsY11rquc2cydJJTitW
-	d5YHjEvCWtOUvedgzu4xwx1jPp2fPPB6TxTX1g80dUPcZ96+w3zRG2fwJZE+0g==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1776161811;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=BiErSfuvJerZIQ4L+JF5tzrkBbOhwbYuWVg9ZYwOn2Q=;
-	b=M7Iqvv7amB/lm/Bd9iU0BxSxraoC4Y4+3sMwzQ/SGLGAc2KrGilQkv7tAoHXQw2xoJuVJv
-	+oP09+VAFyvd00DQ==
-From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-To: Arnd Bergmann <arnd@arndb.de>
-Cc: "H. Peter Anvin" <hpa@zytor.com>, Andy Lutomirski <luto@kernel.org>, 
-	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, Russell King <linux@armlinux.org.uk>, 
-	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
-	Madhavan Srinivasan <maddy@linux.ibm.com>, Michael Ellerman <mpe@ellerman.id.au>, 
-	Nicholas Piggin <npiggin@gmail.com>, Christophe Leroy <chleroy@kernel.org>, 
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, Vincenzo Frascino <vincenzo.frascino@arm.com>, 
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linuxppc-dev@lists.ozlabs.org, linux-mips@vger.kernel.org
-Subject: Re: [PATCH 1/7] x86/vdso: Respect COMPAT_32BIT_TIME
-Message-ID: <20260414121405-29c9514e-590c-404e-a31d-905b1848afb4@linutronix.de>
-References: <20260227-vdso-compat_32bit_time-v1-1-3f0286a7bac3@linutronix.de>
- <c29f5e70-bd17-4e1b-a005-5a3282e70075@app.fastmail.com>
- <03cd1e21-a2f2-46a1-a674-cbaef9712016@app.fastmail.com>
- <20260227103226-cc3bb32c-0107-4c09-b81a-ca33ea03ad5c@linutronix.de>
- <49b7c9f9-198a-49f7-880b-6ae74d7bd985@zytor.com>
- <2b1ac7b9-fcc8-4aa3-a0ad-eb37e4bce030@app.fastmail.com>
- <20260410091131-46b6354c-9d06-4e47-9345-ee224d8528f7@linutronix.de>
- <15925544-1ae5-406a-b9cc-af5935cc9f02@app.fastmail.com>
- <20260413180541-e13f374c-b990-4236-bc83-8fde948899df@linutronix.de>
- <e9487ebe-3730-438a-9c23-e45f75986ecc@app.fastmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0DEA42AA9
+	for <linux-mips@vger.kernel.org>; Tue, 14 Apr 2026 11:49:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.224.47
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1776167381; cv=pass; b=OjZDm62stYt8Ahl5RC56HI85VQlZQkaWVAn4y58ZDhHsbGk2eHMNzOaEHFpSXIS3Tf4OBuQOpEf6Q7xBxBQeafiEtGlogZUiJJeTdU6rR83AiVxNe+irG/Vcd6QZZBfaJlNIHLKJaGAaYGC6XzuCXVhruqOmbpgi9CdgZvRHIrQ=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1776167381; c=relaxed/simple;
+	bh=Ufv4J6baPU2WSi/6wgzJOqGGMtNG672dGk0L3nk8cPg=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=oxd2sAmuLB0mE2OgEtX28kTENj7KPIQ0GEkGzj/RaBdjzSsoLYHDNTNQcnOXqIM2XKuZTYdWsFspKIBJbkKzY07IMwCH0R6KRPxYSFCo0AUQKkqYPrZ+X9T9zgLnW0VAhQRJXGzdvfECoAoDErKZ9ptkLvNaY/DAJimEpXf2INs=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=URejJB3K; arc=pass smtp.client-ip=74.125.224.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-yx1-f47.google.com with SMTP id 956f58d0204a3-651c8371ed5so1209593d50.2
+        for <linux-mips@vger.kernel.org>; Tue, 14 Apr 2026 04:49:40 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1776167380; cv=none;
+        d=google.com; s=arc-20240605;
+        b=KiyUsWl94BCy5SZzfi1Q4TDqkoMK8SV2NLSD7i1YjTCjzFjgt4+63c6X9Dq6o8QCaO
+         MsLOFNY2WMd2Q67Hz10pPt7rdf2ZDaiqk7Uo6ZPgGJXDhA/2Wa67nBUw9U0tZWL16kL3
+         Z8KpPbGL/F9eRUL2Uzdug54fgcFn//PqHE5Cvlx4n/gTJlrvGNd5TrXUJOx6Ba0/hdJQ
+         N461NEH8quU/XACf2RZd5n5f9dr6cAeUCplgH7xx3rryPK7aQk0VFmTHL+7dMFBiX2UU
+         kbd6giVYQBW+msgor4xa+gaqnTOaRqEKaSizicO6Br8IkF/qd4VLqWfy8DNiqC8tHPYl
+         gkfg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:dkim-signature;
+        bh=HiDQJibsW8Dy2yLg815wN14aFJJg7FhsN8DrnEwbqfQ=;
+        fh=9q4pBHmKqRuhkw8aJiHPMHO6kXoPvgoFDSdr/faOPw4=;
+        b=POm8xbaU2z57iSqfw/g7BQ/NxVkxAjgb5D7AkkEGDSu4o/qv5f0ZocqVXmuJi5a/MV
+         nezLFPgsUCBgUxlHjwCAzXF01v6lv1tNDpc8iY+dBJKoqjhNA2N9j8vqvvLiYBerNIjH
+         x1m2+cL+sNIo8JV2UGZYsdrZ6fAiUYzZsEoN8lIL2+ekWc5UrbzI1HyuHjnfJiDeNi2u
+         /RcTPxFHSuDqyhDzxCqLCAq4/MZuYkRmvtTjwcaG0O4uWrzfe6oEx0SrQs0fVCEbrOEx
+         ZlXmvXYGGCTC3hoM444wttXHk13CDGuH8U9w+FDVEaGVOY2CqC81n38X1Aj1+Ywp7NQ7
+         WIeA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1776167380; x=1776772180; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=HiDQJibsW8Dy2yLg815wN14aFJJg7FhsN8DrnEwbqfQ=;
+        b=URejJB3KMDS8eGFvlvpxhNXW3QoWDlX/5lhYSui6BdQxQoOi/imB9QpwVpMUK5XJ2q
+         pyJMDP1AwRbZc6+dO1yrrKtCpsO3ybftnZMw+5hHNX0Jhh7M54nGq8ZiwnpR/MzbtRhR
+         fZhZHGZzpSnpLhvBp9YWmAOHqRwiyhoXYxnsU+rRmBF7wotHxbb8XJnzu4iRWpZFDsv3
+         P++dFwmXobx5MdArAgHOSW/J2KSyr89uYTxHiuf1ewJKBAxBSLWxKXLOz5OHk1tZ3Rgs
+         2FY0ym9LO32IDmfUN139hggs36w4u8pBUePz+6c8cO65zKoCjvdO8nEqkx/xUO4snRk1
+         gHCQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1776167380; x=1776772180;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=HiDQJibsW8Dy2yLg815wN14aFJJg7FhsN8DrnEwbqfQ=;
+        b=kf3sQGptsLhTGZMZhm8snERW55NPF6VmGsrEIUvWpAoBhadYaj89uhrnNZE8dxNVbo
+         yoEp+AD/JX3REw2Ej3d//9XwqfvxX2fA3vo6gnw9Ejeu/3jWMH0GX4TlbSqc+ktM6QXz
+         BR3G6Ko6Vzf/V+Tw4pPeY2Yqj0pIJZi2zDQJoLATvdrIRyUV0pJh039oQ3kGcxI6CkYf
+         iLxJ+wHBEvO/4mYGdLS1mLvjriBPlRk0rK5YAfhZgu5FqdyO2KjzpGawzeJlgu5g74Rq
+         yuUNQeIQ7EYcJahZfoHEZEUsRiJ6Mdzh9mjXZHftxa/lXO1K+khK6/vUfyEyWu3IQcNO
+         G3Ew==
+X-Forwarded-Encrypted: i=1; AFNElJ8M7oVeYZVuTVOpTIFQMrRSb0Gu7lVcX/PQiNLYUVuy3On84BPfSUE/P2fuIuh1tVWIk+3vwSBmxbka@vger.kernel.org
+X-Gm-Message-State: AOJu0YzhBXWPkvGAE7H008GO1tbUra7xBXC9Li10EZL3binCC5YxnflV
+	QNLuo6fnWgr+H2tPdxerjywtOVcF/efhVumhDZwUq3oxugqAAgPcu7/yLVPJOQqEyx3HCkEQnbI
+	2KsfWYpH3Lbu704hxS488IFmZ5FyMxJw=
+X-Gm-Gg: AeBDietYqzLScV0hdEdIEIsSN4at80IrY0u1x/rApADpMsOL4l2KiKJhvkoV7pcWgRW
+	ZiUOut8A3Yg6dsZe6aEGA0lgO73l5aNqRUg4j1EXvNiEpdtcXI/nhrzLhNevKhyADVWsbVxUjEc
+	UVlyKwLS3yIq7fu9OG+GfuUkTOAlq4KXPJaxo8PpabRt3/OBmJSLRHlc4NANKOO9JFTKsa5pU7P
+	1DInxbfllON7o+5ffj+IMdl3ryLy18gf8uSzdpLBksJEgLZew9VpEZuu9nkf+3qL0lq/Z1aPO3G
+	5eTR3Gmxyg==
+X-Received: by 2002:a05:690e:1511:b0:651:cf23:6612 with SMTP id
+ 956f58d0204a3-651cf23695cmr5327604d50.34.1776167379766; Tue, 14 Apr 2026
+ 04:49:39 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <e9487ebe-3730-438a-9c23-e45f75986ecc@app.fastmail.com>
+References: <20260412124247.2494971-1-lgs201920130244@gmail.com> <ad0c8y1u5zAhheJX@redhat.com>
+In-Reply-To: <ad0c8y1u5zAhheJX@redhat.com>
+From: Guangshuo Li <lgs201920130244@gmail.com>
+Date: Tue, 14 Apr 2026 19:49:31 +0800
+X-Gm-Features: AQROBzAHa2QmuGgpHDSe-Y4PCign0qhbR1MGtTMMAaOeS4o008iXPrSOjj65ZYk
+Message-ID: <CANUHTR-9HYnCuavM9O_wcVg3VuDyV4zQH4P9jYhViBj_PbYV9A@mail.gmail.com>
+Subject: Re: [PATCH v2] clk: eyeq: fix memory leak in eqc_auxdev_create()
+ error path
+To: Brian Masney <bmasney@redhat.com>
+Cc: Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>, 
+	Gregory CLEMENT <gregory.clement@bootlin.com>, =?UTF-8?B?VGjDqW8gTGVicnVu?= <theo.lebrun@bootlin.com>, 
+	Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, linux-mips@vger.kernel.org, 
+	linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spamd-Result: default: False [-2.16 / 15.00];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[linutronix.de,none];
-	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
-	R_DKIM_ALLOW(-0.20)[linutronix.de:s=2020,linutronix.de:s=2020e];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-14141-lists,linux-mips=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[3];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	FREEMAIL_CC(0.00)[zytor.com,kernel.org,redhat.com,alien8.de,linux.intel.com,armlinux.org.uk,arm.com,linux.ibm.com,ellerman.id.au,gmail.com,alpha.franken.de,vger.kernel.org,lists.infradead.org,lists.ozlabs.org];
-	RCPT_COUNT_TWELVE(0.00)[21];
-	MIME_TRACE(0.00)[0:+];
 	FROM_HAS_DN(0.00)[];
+	TAGGED_FROM(0.00)[bounces-14142-lists,linux-mips=lfdr.de];
+	RCVD_TLS_LAST(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
+	MIME_TRACE(0.00)[0:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	TO_DN_SOME(0.00)[];
+	DKIM_TRACE(0.00)[gmail.com:+];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
 	MISSING_XM_UA(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[thomas.weissschuh@linutronix.de,linux-mips@vger.kernel.org];
-	DKIM_TRACE(0.00)[linutronix.de:+];
-	MID_RHS_MATCH_FROM(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
+	FROM_NEQ_ENVFROM(0.00)[lgs201920130244@gmail.com,linux-mips@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	MID_RHS_MATCH_FROMTLD(0.00)[];
 	TAGGED_RCPT(0.00)[linux-mips];
-	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,linutronix.de:dkim,linutronix.de:mid]
-X-Rspamd-Queue-Id: 51AE03F888A
+	RCPT_COUNT_SEVEN(0.00)[10];
+	FREEMAIL_FROM(0.00)[gmail.com];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[mail.gmail.com:mid,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 44EA13F99A5
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On Mon, Apr 13, 2026 at 06:57:57PM +0200, Arnd Bergmann wrote:
-> On Mon, Apr 13, 2026, at 18:13, Thomas Weißschuh wrote:
+Hi Brian,
 
-(...)
+Thanks for reviewing.
 
-> > if (tv && !IS_ENABLED(CONFIG_COMPAT_32BIT_TIME) && sizeof(tv->tv_sec) < 8) {
-> > 	pr_warn_once(...);
-> > 	return -EINVAL;
-> > }
-> >
-> > Or maybe drop the EINVAL but still emit a warning. That warning would be
-> > useful for gettimeofday(), too.
-> 
-> We discussed this during the original y2038 work and decided
-> at the time to not have those warnings for syscalls. We could
-> bring that back, but I think I would want one level of abstraction
-> there and control this using a global Kconfig switch for all
-> syscalls as well as ioctl commands that could use such a check.
+On Tue, 14 Apr 2026 at 00:42, Brian Masney <bmasney@redhat.com> wrote:
+>
+> There is a leak in the error path here as well. I think this code
+> should be converted to devm_kzalloc().
+>
+> There is no devm_kzalloc_obj() yet, however according to [1] that should
+> be coming soon.
+>
+> [1] https://lore.kernel.org/lkml/20260330154108.GA3389518@killaraus.ideasonboard.com/
+>
+> Brian
+>
 
-I'd like to avoid another kconfig option. Linus doesn't sound too
-excited about those [0].
+I may be missing something, but I think the auxiliary_device_add() error
+path is already handled here:
 
+ret = auxiliary_device_add(adev);
+if (ret)
+        auxiliary_device_uninit(adev);
 
-Thomas
+The auxiliary device also has:
 
-[0] https://lore.kernel.org/lkml/CAHk-=whigg3hvOy7c1j1MXFy6o6CHp0g4Tc3Y-MAk+XDssHU0A@mail.gmail.com/
+adev->dev.release = eqc_auxdev_release;
+
+with:
+
+static void eqc_auxdev_release(struct device *dev)
+{
+        struct auxiliary_device *adev = to_auxiliary_dev(dev);
+
+        kfree(adev);
+}
+
+So my understanding was that after a successful auxiliary_device_init(),
+the auxiliary_device_add() failure path should be cleaned up through
+auxiliary_device_uninit(), which would eventually invoke the release
+callback and free adev.
+
+The leak I was trying to fix is only the auxiliary_device_init() failure
+path, where the function returns directly before that cleanup path is
+available.
+
+Please let me know if I overlooked something.
+
+Thanks,
+Guangshuo
 
