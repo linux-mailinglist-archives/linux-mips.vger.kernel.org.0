@@ -1,135 +1,136 @@
-Return-Path: <linux-mips+bounces-14142-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-14143-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 6FrOOQ0q3mmSoQkAu9opvQ
-	(envelope-from <linux-mips+bounces-14142-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Tue, 14 Apr 2026 13:50:37 +0200
+	id OI10EbUq3mmSoQkAu9opvQ
+	(envelope-from <linux-mips+bounces-14143-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Tue, 14 Apr 2026 13:53:25 +0200
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 44EA13F99A5
-	for <lists+linux-mips@lfdr.de>; Tue, 14 Apr 2026 13:50:37 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id C0C353F9A2C
+	for <lists+linux-mips@lfdr.de>; Tue, 14 Apr 2026 13:53:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id E792D304D5E3
-	for <lists+linux-mips@lfdr.de>; Tue, 14 Apr 2026 11:49:42 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 868043045665
+	for <lists+linux-mips@lfdr.de>; Tue, 14 Apr 2026 11:51:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 083053DDDB1;
-	Tue, 14 Apr 2026 11:49:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 91B7D3E5562;
+	Tue, 14 Apr 2026 11:51:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="URejJB3K"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Tdwna6hw"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-yx1-f47.google.com (mail-yx1-f47.google.com [74.125.224.47])
+Received: from mail-yx1-f41.google.com (mail-yx1-f41.google.com [74.125.224.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0DEA42AA9
-	for <linux-mips@vger.kernel.org>; Tue, 14 Apr 2026 11:49:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.224.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F4193DA7FD
+	for <linux-mips@vger.kernel.org>; Tue, 14 Apr 2026 11:51:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.224.41
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776167381; cv=pass; b=OjZDm62stYt8Ahl5RC56HI85VQlZQkaWVAn4y58ZDhHsbGk2eHMNzOaEHFpSXIS3Tf4OBuQOpEf6Q7xBxBQeafiEtGlogZUiJJeTdU6rR83AiVxNe+irG/Vcd6QZZBfaJlNIHLKJaGAaYGC6XzuCXVhruqOmbpgi9CdgZvRHIrQ=
+	t=1776167513; cv=pass; b=PR+ehhVu2Gqdyz7gXCW1bzmqijCNK1Wl4KAcsSBE4dOq3S80mkccLIqv6hl9rzpKG7GW4IqTBAuE9ffxMreVQCVHT6hMnTtBgcE6ybaVCDrUM2aDGTDZdYSnYEVazUrdEchXf8yJn+rz2gw1wBu4vq3/LhZ4SxheUzkpt2fDqUI=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776167381; c=relaxed/simple;
-	bh=Ufv4J6baPU2WSi/6wgzJOqGGMtNG672dGk0L3nk8cPg=;
+	s=arc-20240116; t=1776167513; c=relaxed/simple;
+	bh=MSQdTqohWprHSSGxPUw63cRNJJ4jH1n4U88mAvfhB0Y=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=oxd2sAmuLB0mE2OgEtX28kTENj7KPIQ0GEkGzj/RaBdjzSsoLYHDNTNQcnOXqIM2XKuZTYdWsFspKIBJbkKzY07IMwCH0R6KRPxYSFCo0AUQKkqYPrZ+X9T9zgLnW0VAhQRJXGzdvfECoAoDErKZ9ptkLvNaY/DAJimEpXf2INs=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=URejJB3K; arc=pass smtp.client-ip=74.125.224.47
+	 To:Cc:Content-Type; b=srXne3fg0zLgDTQwO9S8zd2wtHDZwpjeXIU1HmZuqr9hhtzlVPRsq/lIXdRG5w7BbOH+4fKQePYg4eAXOZi+ItPZ/KGwN7yJ6N+KgLSZfbMdPBHi6UNp4HKLYgGAuJe6inMEuEeZY8pYw0CI0jLgKkI2luyEyFq9TCki70cbP0g=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Tdwna6hw; arc=pass smtp.client-ip=74.125.224.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yx1-f47.google.com with SMTP id 956f58d0204a3-651c8371ed5so1209593d50.2
-        for <linux-mips@vger.kernel.org>; Tue, 14 Apr 2026 04:49:40 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1776167380; cv=none;
+Received: by mail-yx1-f41.google.com with SMTP id 956f58d0204a3-651ce2484d5so2160662d50.1
+        for <linux-mips@vger.kernel.org>; Tue, 14 Apr 2026 04:51:51 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1776167511; cv=none;
         d=google.com; s=arc-20240605;
-        b=KiyUsWl94BCy5SZzfi1Q4TDqkoMK8SV2NLSD7i1YjTCjzFjgt4+63c6X9Dq6o8QCaO
-         MsLOFNY2WMd2Q67Hz10pPt7rdf2ZDaiqk7Uo6ZPgGJXDhA/2Wa67nBUw9U0tZWL16kL3
-         Z8KpPbGL/F9eRUL2Uzdug54fgcFn//PqHE5Cvlx4n/gTJlrvGNd5TrXUJOx6Ba0/hdJQ
-         N461NEH8quU/XACf2RZd5n5f9dr6cAeUCplgH7xx3rryPK7aQk0VFmTHL+7dMFBiX2UU
-         kbd6giVYQBW+msgor4xa+gaqnTOaRqEKaSizicO6Br8IkF/qd4VLqWfy8DNiqC8tHPYl
-         gkfg==
+        b=BWXtQXswrz1yB71A/C8laXmVBgINZLzV8lcnWhwPAn/IAg5NWrFU7z5VyLZZA6nxHM
+         DKqmxH6+aZuoxzLSg4SuUJuSG3Knznfq4uaiopQQd9Ayt9vzXWwrdayD4SZGJ2Z4R5MC
+         k8dHuVmH5jASzYM3BKwwxd775nBctLtRkoKOFFTsdbYXymGpBLYKcY1i4OaTQAcAC5bX
+         I7oH6bYN3KEDqRD4LgoUDMywmPZVus730ZHtLNZWtaxAsn06DFgy7lyngPsN0osh1rGc
+         DcNWfp+57Xr6NlhFt5CO9xjmp4KDU3SExGFIYCAw/tvykCaYWs6040aXe6KuOidfwCfM
+         P58Q==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:dkim-signature;
-        bh=HiDQJibsW8Dy2yLg815wN14aFJJg7FhsN8DrnEwbqfQ=;
-        fh=9q4pBHmKqRuhkw8aJiHPMHO6kXoPvgoFDSdr/faOPw4=;
-        b=POm8xbaU2z57iSqfw/g7BQ/NxVkxAjgb5D7AkkEGDSu4o/qv5f0ZocqVXmuJi5a/MV
-         nezLFPgsUCBgUxlHjwCAzXF01v6lv1tNDpc8iY+dBJKoqjhNA2N9j8vqvvLiYBerNIjH
-         x1m2+cL+sNIo8JV2UGZYsdrZ6fAiUYzZsEoN8lIL2+ekWc5UrbzI1HyuHjnfJiDeNi2u
-         /RcTPxFHSuDqyhDzxCqLCAq4/MZuYkRmvtTjwcaG0O4uWrzfe6oEx0SrQs0fVCEbrOEx
-         ZlXmvXYGGCTC3hoM444wttXHk13CDGuH8U9w+FDVEaGVOY2CqC81n38X1Aj1+Ywp7NQ7
-         WIeA==;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=nsoXP8uz7XDMohejorwTrPXwgpEvvkD5CIJw+jNU9jE=;
+        fh=Ke+1mFYp+eoE1118EfRzqw+ynoAqWet75BgZ1VGQC4s=;
+        b=Q+GiBTrm8nol115GohMfP1cTqU/oqOppAZ6uaY9g+etbRzn3Bw7mm3ibB46z7OF2t6
+         G/cH4Yg7qxAfr2DgjH7kmC8QOQeMcygZXwLdgQJRVA43lcVPg6h5bEfeC+Mr44/NVcp9
+         ecPmlk0ejtgBAk+PMPY5zk551jKfdtc9bvDVjthGBkg8veDbL7KzmMnQ2AVU+i3Vg2K+
+         sifzSlftP8dRGNt3ZwOlw/cdjo+9WCMq8knSM/8Qcfqj2fbz9aQd9oDCxd/xyQYtJyd0
+         Y5sg6ncgJ++/HIC5gWDqE8PXF5N7XdRXtyilnY8Mad/bQLPxm4hFQbj+YxSX2W++yBq0
+         TA1Q==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1776167380; x=1776772180; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=HiDQJibsW8Dy2yLg815wN14aFJJg7FhsN8DrnEwbqfQ=;
-        b=URejJB3KMDS8eGFvlvpxhNXW3QoWDlX/5lhYSui6BdQxQoOi/imB9QpwVpMUK5XJ2q
-         pyJMDP1AwRbZc6+dO1yrrKtCpsO3ybftnZMw+5hHNX0Jhh7M54nGq8ZiwnpR/MzbtRhR
-         fZhZHGZzpSnpLhvBp9YWmAOHqRwiyhoXYxnsU+rRmBF7wotHxbb8XJnzu4iRWpZFDsv3
-         P++dFwmXobx5MdArAgHOSW/J2KSyr89uYTxHiuf1ewJKBAxBSLWxKXLOz5OHk1tZ3Rgs
-         2FY0ym9LO32IDmfUN139hggs36w4u8pBUePz+6c8cO65zKoCjvdO8nEqkx/xUO4snRk1
-         gHCQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776167380; x=1776772180;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20251104; t=1776167511; x=1776772311; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=HiDQJibsW8Dy2yLg815wN14aFJJg7FhsN8DrnEwbqfQ=;
-        b=kf3sQGptsLhTGZMZhm8snERW55NPF6VmGsrEIUvWpAoBhadYaj89uhrnNZE8dxNVbo
-         yoEp+AD/JX3REw2Ej3d//9XwqfvxX2fA3vo6gnw9Ejeu/3jWMH0GX4TlbSqc+ktM6QXz
-         BR3G6Ko6Vzf/V+Tw4pPeY2Yqj0pIJZi2zDQJoLATvdrIRyUV0pJh039oQ3kGcxI6CkYf
-         iLxJ+wHBEvO/4mYGdLS1mLvjriBPlRk0rK5YAfhZgu5FqdyO2KjzpGawzeJlgu5g74Rq
-         yuUNQeIQ7EYcJahZfoHEZEUsRiJ6Mdzh9mjXZHftxa/lXO1K+khK6/vUfyEyWu3IQcNO
-         G3Ew==
-X-Forwarded-Encrypted: i=1; AFNElJ8M7oVeYZVuTVOpTIFQMrRSb0Gu7lVcX/PQiNLYUVuy3On84BPfSUE/P2fuIuh1tVWIk+3vwSBmxbka@vger.kernel.org
-X-Gm-Message-State: AOJu0YzhBXWPkvGAE7H008GO1tbUra7xBXC9Li10EZL3binCC5YxnflV
-	QNLuo6fnWgr+H2tPdxerjywtOVcF/efhVumhDZwUq3oxugqAAgPcu7/yLVPJOQqEyx3HCkEQnbI
-	2KsfWYpH3Lbu704hxS488IFmZ5FyMxJw=
-X-Gm-Gg: AeBDietYqzLScV0hdEdIEIsSN4at80IrY0u1x/rApADpMsOL4l2KiKJhvkoV7pcWgRW
-	ZiUOut8A3Yg6dsZe6aEGA0lgO73l5aNqRUg4j1EXvNiEpdtcXI/nhrzLhNevKhyADVWsbVxUjEc
-	UVlyKwLS3yIq7fu9OG+GfuUkTOAlq4KXPJaxo8PpabRt3/OBmJSLRHlc4NANKOO9JFTKsa5pU7P
-	1DInxbfllON7o+5ffj+IMdl3ryLy18gf8uSzdpLBksJEgLZew9VpEZuu9nkf+3qL0lq/Z1aPO3G
-	5eTR3Gmxyg==
-X-Received: by 2002:a05:690e:1511:b0:651:cf23:6612 with SMTP id
- 956f58d0204a3-651cf23695cmr5327604d50.34.1776167379766; Tue, 14 Apr 2026
- 04:49:39 -0700 (PDT)
+        bh=nsoXP8uz7XDMohejorwTrPXwgpEvvkD5CIJw+jNU9jE=;
+        b=Tdwna6hwYAIB8yoLcNRMbiiVtVJiErO5uglUlLXPyiUNW+lGyjuzeT2AIUl0AGATGh
+         v8enquRi6EoviLglLBQO8Zcvcm0Spv+kFQNHYuYe7tOJHZa5KUmZ5Cmy2/RLbXZ/Nk97
+         6o/MbSVIKIU+v02JsWO1F8tHGnzj8RP376KRWTSV9xUBj0scFAxXKzh10kxtU13Puhz2
+         2aFnpqIM7U8DQWeiEX8Fiv9U1IMv+twmlW4zTpppI+S28PyBUkSG7TKN9ojQ5KRu0Qjm
+         T+I7YMcVigs6DPmOC43xrHv0aiEJEWPxCMFBvQyRZVgg9E8HokCIMxcp+wbTe35NcAFy
+         tBVA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1776167511; x=1776772311;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=nsoXP8uz7XDMohejorwTrPXwgpEvvkD5CIJw+jNU9jE=;
+        b=rqxcgb/i+XMqzUANuNzRUdTuBiDvuZychdbbU3prNre7HT+CODcfNLlQlSQ4wHccsx
+         +M13IXlZ8UXTJBTRvj+XNh2IZj9e1ZuZs33qLRpLEF9NrO7QFPm3JNH0sjUqaip5e6/6
+         k9gMOQ8GPq9deV30+KHtYhyAzWABeDY3HO9/jJqNcqFggPnCNftHRnclFfCK5T+d/g4a
+         7f24P/o4DUO7mweJT2xVhWdhHIMroMFSPAWxntxk125iipdezyZhUMW0CqcRp91pVrH/
+         50BQn/eKVU7KrV+tS1ku7Zkk1g/cKkl582u48ns4foJ3d/MAxSod1Vfrt2L0yChCxXTO
+         wjpA==
+X-Forwarded-Encrypted: i=1; AFNElJ92Q7oJYTkzzFuSVjOh3n0sQ41o8DkMxe8umGTu0S9ZnxFkjQzX4HTtbgFQ0FdahMrIUcYRhKa1R2jk@vger.kernel.org
+X-Gm-Message-State: AOJu0YxiA0Tc82tUGv0x307eQ9pQ+OIn5jFz+j4SrFf5JeCdRjqu8XYe
+	xLZdZIEn7lTNoALlYdRsGj6/FafnHsPPEH0033wy7Z+KQsxGfuVmIkkAAoV4wbOisZlkq3i/UbT
+	BwskJc7uR3X1AESaZN3QU4Cs8gJdLSDw=
+X-Gm-Gg: AeBDiesWYnesACTQWQFvroc5we3APqvOKYBP9IAEq/RTDclTSd1K/PapOzqy98ApbC8
+	Lh0UdTH3SbLODq7ALCl6KZeBsDTI8S+ihDe4z7+LqVJu2XTGskB9+h8vBNDPNbmDle82Krk2O9z
+	NsmlQq4PkdpOzbnyiFceAiSrOTQiz2aZNrajuBdVCaUdJeNi1BiyBN+Ph8fJjHyEvZ15SMxglC2
+	EUsT6txOquHK5a0tmuMiHOMuErLTZpEvOqsQpgMfubVEwjmkzLjO7dGmoeuSQ4rT43PLIp8SjzZ
+	YeHf49Mnl8mTPNcVt797
+X-Received: by 2002:a05:690e:12c9:b0:651:d0a5:ce2 with SMTP id
+ 956f58d0204a3-651d0a52b0emr5661070d50.60.1776167511068; Tue, 14 Apr 2026
+ 04:51:51 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260412124247.2494971-1-lgs201920130244@gmail.com> <ad0c8y1u5zAhheJX@redhat.com>
-In-Reply-To: <ad0c8y1u5zAhheJX@redhat.com>
+References: <20260412124247.2494971-1-lgs201920130244@gmail.com> <DHRVDETB559R.1J1MUGSZ0VVEX@bootlin.com>
+In-Reply-To: <DHRVDETB559R.1J1MUGSZ0VVEX@bootlin.com>
 From: Guangshuo Li <lgs201920130244@gmail.com>
-Date: Tue, 14 Apr 2026 19:49:31 +0800
-X-Gm-Features: AQROBzAHa2QmuGgpHDSe-Y4PCign0qhbR1MGtTMMAaOeS4o008iXPrSOjj65ZYk
-Message-ID: <CANUHTR-9HYnCuavM9O_wcVg3VuDyV4zQH4P9jYhViBj_PbYV9A@mail.gmail.com>
+Date: Tue, 14 Apr 2026 19:51:42 +0800
+X-Gm-Features: AQROBzCY4aPdRp-vnBolaOekj7WjGOydLpVV0P-0ovLpEH5T-_12fQUc1CoHGng
+Message-ID: <CANUHTR-+Dn0uSn8ian_COzX-8=BajnkopK9iUiFNcvurh=CkLg@mail.gmail.com>
 Subject: Re: [PATCH v2] clk: eyeq: fix memory leak in eqc_auxdev_create()
  error path
-To: Brian Masney <bmasney@redhat.com>
+To: =?UTF-8?B?VGjDqW8gTGVicnVu?= <theo.lebrun@bootlin.com>
 Cc: Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>, 
-	Gregory CLEMENT <gregory.clement@bootlin.com>, =?UTF-8?B?VGjDqW8gTGVicnVu?= <theo.lebrun@bootlin.com>, 
-	Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, linux-mips@vger.kernel.org, 
-	linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	stable@vger.kernel.org
+	Gregory CLEMENT <gregory.clement@bootlin.com>, Michael Turquette <mturquette@baylibre.com>, 
+	Stephen Boyd <sboyd@kernel.org>, linux-mips@vger.kernel.org, linux-clk@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
 	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
 	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	FROM_HAS_DN(0.00)[];
-	TAGGED_FROM(0.00)[bounces-14142-lists,linux-mips=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-14143-lists,linux-mips=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
 	RCVD_COUNT_THREE(0.00)[4];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	TO_DN_SOME(0.00)[];
 	DKIM_TRACE(0.00)[gmail.com:+];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
 	MISSING_XM_UA(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
 	PRECEDENCE_BULK(0.00)[];
@@ -137,60 +138,98 @@ X-Spamd-Result: default: False [-2.16 / 15.00];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	MID_RHS_MATCH_FROMTLD(0.00)[];
 	TAGGED_RCPT(0.00)[linux-mips];
-	RCPT_COUNT_SEVEN(0.00)[10];
+	RCPT_COUNT_SEVEN(0.00)[9];
 	FREEMAIL_FROM(0.00)[gmail.com];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[mail.gmail.com:mid,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 44EA13F99A5
+	DBL_BLOCKED_OPENRESOLVER(0.00)[mail.gmail.com:mid,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,bootlin.com:email]
+X-Rspamd-Queue-Id: C0C353F9A2C
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-Hi Brian,
+Hi Th=C3=A9o,
 
-Thanks for reviewing.
+Thank you for the review, and sorry for the confusion here.
 
-On Tue, 14 Apr 2026 at 00:42, Brian Masney <bmasney@redhat.com> wrote:
->
-> There is a leak in the error path here as well. I think this code
-> should be converted to devm_kzalloc().
->
-> There is no devm_kzalloc_obj() yet, however according to [1] that should
-> be coming soon.
->
-> [1] https://lore.kernel.org/lkml/20260330154108.GA3389518@killaraus.ideasonboard.com/
->
-> Brian
+On Mon, 13 Apr 2026 at 16:04, Th=C3=A9o Lebrun <theo.lebrun@bootlin.com> wr=
+ote:
 >
 
-I may be missing something, but I think the auxiliary_device_add() error
-path is already handled here:
+> Subject is:
+>
+> > Subject: [PATCH v2] clk: eyeq: fix memory leak in eqc_auxdev_create()
+> >          error path
+>
+> I cannot find a public V1?
+> https://lore.kernel.org/lkml/?q=3Ds%3Aeyeq+f%3AGuangshuo
 
-ret = auxiliary_device_add(adev);
-if (ret)
-        auxiliary_device_uninit(adev);
+This was my mistake: I did not send a public V1 and sent this directly as V=
+2.
 
-The auxiliary device also has:
+> I have a guess this is LLM generated?
+> Are you missing the Assisted-by trailer?
+> https://docs.kernel.org/process/coding-assistants.html#attribution
 
-adev->dev.release = eqc_auxdev_release;
+This issue was found by a static analysis tool I developed.
 
-with:
+That said, the changelog was clearly too brief and did not explain the
+actual situation well enough, which likely caused the confusion.
 
-static void eqc_auxdev_release(struct device *dev)
-{
-        struct auxiliary_device *adev = to_auxiliary_dev(dev);
+> The patch could be in theory useful.
+> In practice however, it's a different story.
+>
+>  - Comit message says "Since the release callback is only expected to
+>    handle cleanup after successful initialization, adev should be freed
+>    explicitly in this path".
+>
+>    Two things are wrong here:
+>
+>    1. the driver cannot be removed so there is no "release
+>       callback" (guessing you mean driver remove?).
+>
+>    2. this text seems to imply eqc_auxdev_create() makes probe fail,
+>       which it doesn't. It only generates a warning and keeps probing.
+>
+>  - This driver cannot be built as module (will always be probed at boot)
+>    and cannot be removed. So the "leak" we are talking about is
+>    2 * sizeof(struct auxiliary_device)
+>
+>    But in no sensible case it can occur. The platforms that use this
+>    driver probably cannot boot if our auxiliary drivers aren't present.
+>    So if eqc_auxdev_create() fails then the warning is here to be nice
+>    but you probably will fail booting afterwards.
+>
+>    My guess is: you might succeed booting without the reset driver but
+>    if you fail the pinctrl one then you won't have a UART. Anyway in no
+>    world do you have a sensible EyeQ kernel config that leads to
+>    clk-eyeq probing but not its auxdevs.
+>
+>  - If you fix this then there are other resources cleanup to "fix".
+>
+>     - ioremap() in eqc_probe()
+>     - kzalloc of cells in eqc_probe()
+>     - probably others
+>
+>    But, same as above, "fixing" those will only be useful in kernels
+>    that will panic in a few milliseconds.
+>
+What I intended to express with:
 
-        kfree(adev);
-}
+"Since the release callback is only expected to handle cleanup after
+successful initialization, adev should be freed explicitly in this
+path"
 
-So my understanding was that after a successful auxiliary_device_init(),
-the auxiliary_device_add() failure path should be cleaned up through
-auxiliary_device_uninit(), which would eventually invoke the release
-callback and free adev.
+was more specifically this:
 
-The leak I was trying to fix is only the auxiliary_device_init() failure
-path, where the function returns directly before that cleanup path is
-available.
+eqc_auxdev_release() is the callback that eventually frees adev, but
+this path is only reachable after auxiliary_device_init() has
+succeeded. For example, when auxiliary_device_add() fails,
+auxiliary_device_uninit() can lead to that release path. By contrast,
+if auxiliary_device_init() itself fails, the function returns
+directly, and adev is not explicitly freed in that path.
 
-Please let me know if I overlooked something.
+So the point I meant to describe was only the missing explicit free in
+the auxiliary_device_init() failure path.
+
+Sorry again for the misunderstanding caused by the previous changelog.
 
 Thanks,
 Guangshuo
