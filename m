@@ -1,169 +1,150 @@
-Return-Path: <linux-mips+bounces-14151-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-14152-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id aW3/OKEM32nVOAAAu9opvQ
-	(envelope-from <linux-mips+bounces-14151-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Wed, 15 Apr 2026 05:57:21 +0200
+	id uP1YNxhF32nzRAAAu9opvQ
+	(envelope-from <linux-mips+bounces-14152-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Wed, 15 Apr 2026 09:58:16 +0200
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 431B0400280
-	for <lists+linux-mips@lfdr.de>; Wed, 15 Apr 2026 05:57:20 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 438114019F0
+	for <lists+linux-mips@lfdr.de>; Wed, 15 Apr 2026 09:58:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 9617A300BC8A
-	for <lists+linux-mips@lfdr.de>; Wed, 15 Apr 2026 03:52:37 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 2840431322AA
+	for <lists+linux-mips@lfdr.de>; Wed, 15 Apr 2026 07:53:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EF5F2331218;
-	Wed, 15 Apr 2026 03:52:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D4A8A3A1CF3;
+	Wed, 15 Apr 2026 07:53:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="grq5wOz4"
+	dkim=pass (2048-bit key) header.d=proton.me header.i=@proton.me header.b="Aiy83F9F"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
+Received: from mail-24426.protonmail.ch (mail-24426.protonmail.ch [109.224.244.26])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47A9F328B7B;
-	Wed, 15 Apr 2026 03:52:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A7093B27D4
+	for <linux-mips@vger.kernel.org>; Wed, 15 Apr 2026 07:53:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=109.224.244.26
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776225155; cv=none; b=YPqcHGurxgm1BYo/gcL/gAX9y7yHwLG4MQIdI14S8r5LDhba4+2euAxgdsxhf8I1GhInrwMb3PdahEpz814j1XZ/C9CVXBmBYK3ZW+IGNd+RPxIruazLvlF/gQTj2z3GQMr/bWdde2pzb5jDWuM/6McqxnFUyJsaMY7K4qImfAk=
+	t=1776239608; cv=none; b=YuBwsVIdpX2N9Vg+HUg70/wGqrUGRu76w1KXVcZC5MjHhzDMpGdy+A9W6i64Yos0o7NiLDpb0Ctq7xGDflKTJVF7IGjsWQSIWfgstYbN7RcLyGrxX3yFI49u+f/4NpTjGmeAlzSlbGXxmMkvoL0EPeyxmvMQ0nlFpdx2VLSDDJg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776225155; c=relaxed/simple;
-	bh=m99qQZ4dx7BtKKpohQv3Y87bczeOuN8Pk/9zrNr5G/Q=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=l0v5lAzpnY2NY+/BzOdPW3ATBOSSRlboe1r7Q4+IIq5at0TW0AbtlgpwlpNkJ2hRF2bkOZKZq50k2KMUAkfFpg9kTdYdNuoOKI3dfl/kuiWypBp2ifFY3CZsgyZ4PAV8FpNkCfobUOWyaUnA+neCov81SRxg9smN+C+hjsrXqGw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=grq5wOz4; arc=none smtp.client-ip=192.198.163.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1776225153; x=1807761153;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=m99qQZ4dx7BtKKpohQv3Y87bczeOuN8Pk/9zrNr5G/Q=;
-  b=grq5wOz4UKwvSEaY3Ny//gwTL8l7cN9GfL5obi5PLtARk/wBPltwVicb
-   EKt/KHxSQOjIEca4+2Wj6gT9X7XSADNoXqWpAYEhQJ4eHa2976t8xusqX
-   3wk53GMDaYAmRGKkhpFFT1xfZ1v/BmODUSSo0/egnHvI4OEj7L9sVkXME
-   Fa6NbRAPXK9tLUjhKM6Ph6M1VLwVS0bFZ1lh7yCsMFVjbwHadPhdqQ3g5
-   88aCUQCmZv8ZcbWKwttFUJjgW6k0h4M+ecE5zFjEjhRcHNr8HdwvgnSkB
-   g55Ha3o3hrvIFGt80Dm+Wm3iWnaU5fOS0nSWen5kYBi9QkxB6GRzraGsS
-   A==;
-X-CSE-ConnectionGUID: dBFbkQnOSvuzTzTKqJbMnw==
-X-CSE-MsgGUID: y69rFlOmRWiBfZYWiY5Z2Q==
-X-IronPort-AV: E=McAfee;i="6800,10657,11759"; a="81075961"
-X-IronPort-AV: E=Sophos;i="6.23,179,1770624000"; 
-   d="scan'208";a="81075961"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Apr 2026 20:52:32 -0700
-X-CSE-ConnectionGUID: Hyw66PRaSJ2o2KSC0fSSww==
-X-CSE-MsgGUID: St9lG8kbRIe3aaTcAhVb/g==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,179,1770624000"; 
-   d="scan'208";a="225590728"
-Received: from lkp-server01.sh.intel.com (HELO 7f3b36e5d6a5) ([10.239.97.150])
-  by fmviesa006.fm.intel.com with ESMTP; 14 Apr 2026 20:52:29 -0700
-Received: from kbuild by 7f3b36e5d6a5 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1wCrIg-0000000007F-2owl;
-	Wed, 15 Apr 2026 03:52:26 +0000
-Date: Wed, 15 Apr 2026 11:51:50 +0800
-From: kernel test robot <lkp@intel.com>
-To: Maxwell Doose <m32285159@gmail.com>, gregkh@linuxfoundation.org,
-	tsbogend@alpha.franken.de
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	yoelvisoliveros@gmail.com, len.bao@gmx.us,
-	linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-staging@lists.linux.dev
-Subject: Re: [PATCH] staging: octeon: remove SPI, POW, PKO, and Helper
- typedef enums
-Message-ID: <202604151159.fZkPsdWl-lkp@intel.com>
-References: <20260412000226.2711800-1-m32285159@gmail.com>
+	s=arc-20240116; t=1776239608; c=relaxed/simple;
+	bh=W4x/58XgIv5XI7jhWh4j8cARAN9k4mITWH2qk9/UthI=;
+	h=Date:To:From:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=lGPoOOFQnGIQ1dEmCHS6jegdiJAAPZd8bQhXNlipMcTgt8aiz2pMAYVsDi14SQLzstfxqrfxmtxj2H9ENRIGjTSZUi4LHibsbALOEEh85gDKwKFz7rciRShmGnjQ/AfR0OxCA5d6c9Xn0M/YZAVESRmXAbgmGs4X0iw51KUG6v8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=proton.me; spf=pass smtp.mailfrom=proton.me; dkim=pass (2048-bit key) header.d=proton.me header.i=@proton.me header.b=Aiy83F9F; arc=none smtp.client-ip=109.224.244.26
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=proton.me
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=proton.me
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=proton.me;
+	s=3ltqacpkzzfcxl75v7gii5t4m4.protonmail; t=1776239597; x=1776498797;
+	bh=aOLx3Q8yHI6Qs9EHpVk/UjtK8hz2zOx9P3hITrevSuE=;
+	h=Date:To:From:Cc:Subject:Message-ID:Feedback-ID:From:To:Cc:Date:
+	 Subject:Reply-To:Feedback-ID:Message-ID:BIMI-Selector;
+	b=Aiy83F9FtZbcG0mMNniof9zE2P6NOQnRgWoXJ6M6G+0sH9r7n+EUh+qy5poIKgwSi
+	 uGZ7cDm6aX5FMmN58i3bwN5uSFLaZqjbxccsyVlHK8IjEwOhLCro+evlYGOwDiPzy1
+	 ueotgPdin31OBo1vKGJrKmry1Zz0js/nNx+Vkoac72RcylSdlZuV3gNO3qe8H5Vpwx
+	 373ooQ+Hn5M3S+C2x+N8E4gaSOEVIm4faFnq7FYZr4E6DhdkOHA9Fa4acQ3HS93J44
+	 PLO0ee4VYzZLtuXOC5aQ9Y+nKdp6ojhReOP96nUTh3w8iX1314sfIJDkZj5QkFeslD
+	 A313KADE8WamA==
+Date: Wed, 15 Apr 2026 07:53:12 +0000
+To: "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>, "tglx@linutronix.de" <tglx@linutronix.de>
+From: kpursoty@proton.me
+Cc: "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>, "tsbogend@alpha.franken.de" <tsbogend@alpha.franken.de>, "cjd@cjdns.fr" <cjd@cjdns.fr>, "naseefkm@gmail.com" <naseefkm@gmail.com>
+Subject: [PATCH v3 1/2] clocksource: timer-econet-en751221: fix timer block mapping at boot
+Message-ID: <o_cMD_cD6PNolsucCVtoojfSsfFgjsNiEop7YJ_QW8jrX1aCkIF8Rhdk-8_DSCBU1WrKSjr9STxTuCjiRK8yJ6vDA4Q1Ck2BCgOzYaBqSEs=@proton.me>
+Feedback-ID: 133470881:user:proton
+X-Pm-Message-ID: ee175f24970d808c9ea6043e25897b51ed4de194
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260412000226.2711800-1-m32285159@gmail.com>
-X-Spamd-Result: default: False [-1.16 / 15.00];
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_CONTAINS_FROM(1.00)[];
-	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
-	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
+	DMARC_POLICY_ALLOW(-0.50)[proton.me,quarantine];
+	R_DKIM_ALLOW(-0.20)[proton.me:s=3ltqacpkzzfcxl75v7gii5t4m4.protonmail];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FREEMAIL_CC(0.00)[lists.linux.dev,gmail.com,gmx.us,vger.kernel.org];
-	TAGGED_FROM(0.00)[bounces-14151-lists,linux-mips=lfdr.de];
-	FROM_HAS_DN(0.00)[];
-	FREEMAIL_TO(0.00)[gmail.com,linuxfoundation.org,alpha.franken.de];
+	TO_DN_EQ_ADDR_ALL(0.00)[];
+	FREEMAIL_CC(0.00)[vger.kernel.org,alpha.franken.de,cjdns.fr,gmail.com];
+	FROM_NEQ_ENVFROM(0.00)[kpursoty@proton.me,linux-mips@vger.kernel.org];
 	RCVD_TLS_LAST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
+	RCVD_COUNT_THREE(0.00)[3];
+	TAGGED_FROM(0.00)[bounces-14152-lists,linux-mips=lfdr.de];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	DKIM_TRACE(0.00)[intel.com:+];
+	DKIM_TRACE(0.00)[proton.me:+];
+	FROM_NO_DN(0.00)[];
 	MISSING_XM_UA(0.00)[];
-	TO_DN_SOME(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[6];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[lkp@intel.com,linux-mips@vger.kernel.org];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	MID_RHS_MATCH_FROM(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
+	PRECEDENCE_BULK(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCPT_COUNT_SEVEN(0.00)[7];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
 	TAGGED_RCPT(0.00)[linux-mips];
-	RCPT_COUNT_SEVEN(0.00)[10];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[intel.com:email,intel.com:dkim,intel.com:mid,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,01.org:url]
-X-Rspamd-Queue-Id: 431B0400280
+	MIME_TRACE(0.00)[0:+];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[cjdns.fr:email,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,proton.me:email,proton.me:dkim,proton.me:mid]
+X-Rspamd-Queue-Id: 438114019F0
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-Hi Maxwell,
+timer_init() used DIV_ROUND_UP(num_possible_cpus(), 2) to determine how
+many register blocks to iomap. At early boot with VPE-based SMP, MIPS
+reports num_possible_cpus()=3D1 (VPEs not yet brought online), giving
+num_blocks=3D1. Only membase[0] is then mapped via of_iomap.
 
-kernel test robot noticed the following build errors:
+The EN751627 SoC has 2 physical cores, each with 2 VPEs, giving NR_CPUS=3D4
+and two timer register blocks (one per core). Each block serves two VPEs:
+block 0 handles CPU0+CPU1 (core 0), block 1 handles CPU2+CPU3 (core 1).
+The block count is a silicon constant: DIV_ROUND_UP(NR_CPUS, 2) =3D 2.
 
-[auto build test ERROR on staging/staging-testing]
+cevt_init() calls cevt_dev_init(i) for each possible CPU via
+for_each_possible_cpu(). On EN7528/EN751627 with 4 VPEs, NR_CPUS=3D4 so
+cevt_dev_init(2) is called. cevt_dev_init(2) writes to reg_compare(2)
+which dereferences membase[2>>1] =3D membase[1], which is NULL:
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Maxwell-Doose/staging-octeon-remove-SPI-POW-PKO-and-Helper-typedef-enums/20260415-004127
-base:   staging/staging-testing
-patch link:    https://lore.kernel.org/r/20260412000226.2711800-1-m32285159%40gmail.com
-patch subject: [PATCH] staging: octeon: remove SPI, POW, PKO, and Helper typedef enums
-config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20260415/202604151159.fZkPsdWl-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260415/202604151159.fZkPsdWl-lkp@intel.com/reproduce)
+  CPU 0 Unable to handle kernel paging request at virtual address 00000008
+  epc : iowrite32+0x4/0x10
+  ra  : cevt_dev_init+0x40/0x64
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202604151159.fZkPsdWl-lkp@intel.com/
+Fix: replace the runtime calculation with ECONET_NUM_BLOCKS, which is
+DIV_ROUND_UP(NR_CPUS, 2) evaluated at compile time. This is the same
+expression used to declare the membase[] array, so the loop bound and
+array size are provably consistent. For NR_CPUS=3D4 this is always 2,
+correctly mapping both register blocks regardless of how many VPEs are
+visible at early boot.
 
-All errors (new ones prefixed by >>):
+Fixes: 3b4c33ac87d0 ("clocksource/drivers: Add EcoNet Timer HPT driver")
+Signed-off-by: Kervin Pursoty <kpursoty@proton.me>
+Reviewed-by: Caleb James DeLisle <cjd@cjdns.fr>
+---
+v3: No changes. Resent as v3 to keep version in sync with 2/2.
+v2: Add Reviewed-by from Caleb James DeLisle.
 
-   In file included from drivers/staging/octeon/ethernet.c:23:
-   In file included from drivers/staging/octeon/octeon-ethernet.h:41:
->> drivers/staging/octeon/octeon-stubs.h:1270:15: error: use of 'cvmx_helper_interface_mode' with tag type that does not match previous declaration
-    1270 | static inline struct cvmx_helper_interface_mode cvmx_helper_interface_get_mode(int
-         |               ^
-   drivers/staging/octeon/octeon-stubs.h:225:6: note: previous use is here
-     225 | enum cvmx_helper_interface_mode {
-         |      ^
->> drivers/staging/octeon/octeon-stubs.h:1273:9: error: returning 'int' from a function with incompatible result type 'struct (unnamed struct at drivers/staging/octeon/octeon-stubs.h:1270:22)'
-    1273 |         return 0;
-         |                ^
-   2 errors generated.
+ drivers/clocksource/timer-econet-en751221.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
+diff --git a/drivers/clocksource/timer-econet-en751221.c b/drivers/clocksou=
+rce/timer-econet-en751221.c
+--- a/drivers/clocksource/timer-econet-en751221.c
++++ b/drivers/clocksource/timer-econet-en751221.c
+@@ -160,5 +160,4 @@ static u64 notrace sched_clock_read(void)
+ static int __init timer_init(struct device_node *np)
+ {
+-=09int num_blocks =3D DIV_ROUND_UP(num_possible_cpus(), 2);
+ =09struct clk *clk;
+ =09int ret;
 
-vim +/cvmx_helper_interface_mode +1270 drivers/staging/octeon/octeon-stubs.h
+@@ -172,5 +171,5 @@ static int __init timer_init(struct device_node *np)
 
-  1269	
-> 1270	static inline struct cvmx_helper_interface_mode cvmx_helper_interface_get_mode(int
-  1271									   interface)
-  1272	{
-> 1273		return 0;
-  1274	}
-  1275	
+ =09econet_timer.freq_hz =3D clk_get_rate(clk);
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+-=09for (int i =3D 0; i < num_blocks; i++) {
++=09for (int i =3D 0; i < ECONET_NUM_BLOCKS; i++) {
+ =09=09econet_timer.membase[i] =3D of_iomap(np, i);
+ =09=09if (!econet_timer.membase[i]) {
+ =09=09=09pr_err("%pOFn: failed to map register [%d]\n", np, i);
 
