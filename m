@@ -1,165 +1,190 @@
-Return-Path: <linux-mips+bounces-14159-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-14160-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id eOaBKe6m32nQXQAAu9opvQ
-	(envelope-from <linux-mips+bounces-14159-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Wed, 15 Apr 2026 16:55:42 +0200
+	id 6IjIFkDO32maZAAAu9opvQ
+	(envelope-from <linux-mips+bounces-14160-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Wed, 15 Apr 2026 19:43:28 +0200
 X-Original-To: lists+linux-mips@lfdr.de
 Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 20CCD4058DD
-	for <lists+linux-mips@lfdr.de>; Wed, 15 Apr 2026 16:55:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id DF62E406E15
+	for <lists+linux-mips@lfdr.de>; Wed, 15 Apr 2026 19:43:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id C66DB3020EDB
-	for <lists+linux-mips@lfdr.de>; Wed, 15 Apr 2026 14:54:28 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 805DC302735B
+	for <lists+linux-mips@lfdr.de>; Wed, 15 Apr 2026 17:43:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 01C1D3D47DC;
-	Wed, 15 Apr 2026 14:54:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C0BBB3E3C5E;
+	Wed, 15 Apr 2026 17:43:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DyeJG2YC"
+	dkim=pass (1024-bit key) header.d=ilvokhin.com header.i=@ilvokhin.com header.b="SM6B0AO6"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-yw1-f169.google.com (mail-yw1-f169.google.com [209.85.128.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.ilvokhin.com (mail.ilvokhin.com [178.62.254.231])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE3963BD64D
-	for <linux-mips@vger.kernel.org>; Wed, 15 Apr 2026 14:54:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.169
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776264867; cv=pass; b=NNP0Rg/FO1k5FwtWGUckJWHldTcnz+qJ+lNqBgtx9AW4bJDgFh1+TIpFnxPe0CZ6g486B5QpgLvGgp2EPDatHbJDISWChsEI2TPdaglrJMIDBg3M7xRXVH8mV9s6YMX7NZfcN/9LGVTqrY3fxW8aW+aEWr1c0L2VTI1hAwzFIe8=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776264867; c=relaxed/simple;
-	bh=1FmkV2LWMuaZfhbD5FtwEBtx99sGRwi7IC6H8W4R0jU=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Isf0og1DyVm24L1taApUPU+mhIrnLD6tF77J+OmQvjNa6NWSvd/otk1br+aXJjUcg5wGDUDmsCeTjuI2FtiNDfXrcsrak76aKfczIzQpO3wMFcmUftAe2Lw+AFnYb1qPvqmnQ1A5I/j1fPTQh3r5rBI5TKI+7Sz1FcbZn4X1cJc=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DyeJG2YC; arc=pass smtp.client-ip=209.85.128.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-7b4ee3a88e1so22150417b3.1
-        for <linux-mips@vger.kernel.org>; Wed, 15 Apr 2026 07:54:26 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1776264866; cv=none;
-        d=google.com; s=arc-20240605;
-        b=B+YBDv7E8AMDCCN/LEwkpFToIFlcH7mxqZPJREGcoiLclseaLUApzgmf+IIqi7kXar
-         ZChYb/TnLKb8hf4F3jda3W0Or/LbB1/5zAR7pOFYtwXRYTJw9tXQ4P7gRfmdVX/zJHy0
-         +3r4qQ8Zw6IP/b44pBy5EQL7KFpaxrnh6VGRM8XJNsnC3qYxa+ZMuqRyN2TQLgpS2bUa
-         gFTIcL1TotAQTXXyxCQffA+qzZugTdJKIyoa+UhCZ8U046NtekKUbLxyF3UZ/2BU1g2K
-         n+sHlDy9MjaC5Ns9Ukm7eMaqF13+JOvl4uyyZaqf52NP9GKmC5RL3O33kT9h2ID4Y1Bf
-         Kpnw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=5NbyNwKQiN4ucjEG40sD5wfDcp1ycSKcsBCugZj/lPk=;
-        fh=5f++RJ3PTzp9irAlX3Y4Lx1UwZnW/wA7fF1eHd8+05Q=;
-        b=PSqImiHmgZwko+GJld0GozAWnDwstl7KHVj3mNRrJcr/2ZouNRFiMsbFTPIZaOu/JP
-         lu2zEGv8qxBg2TJZNoieqxuiMXiY9FpRqll+5PmE+qxqP1hCed3t2p1wypVFLq4u5+I6
-         EgYHM9jHM2otZTRNXfk0EQArR7Ni2nGVUGfRUybp5MgWUnn/KQRjkoZob4NeTxnm6C8s
-         FPRin32PmZ1gVzQlOJPZ2jBL3ZK1aqVymXweYJiuUUjMmDcaIReN0bFcCQVktkOcqEez
-         KgsGCXHhD+QCzMfTIv4Z/4t5q1DP2pATp0Y8iUHm/RzBMpymd5Y8idNn126uP3/1dXKY
-         ENMA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1776264866; x=1776869666; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=5NbyNwKQiN4ucjEG40sD5wfDcp1ycSKcsBCugZj/lPk=;
-        b=DyeJG2YCYlm5Jfo28jyiMGJIb8OH19ofc05s5mTCKKGwgjJSTH2O9Yz8v2WAaEJuUH
-         fTZ5guI4UujdmROwdgGNPrblinUsBKNtLdLK+++RHtqa6VM9bfKiUVCYl/swqUadBnPW
-         VelcZWzIko36UPzF+ZyqHe+TpO5U8w43JXDO+IsQmc8r+xdARDmVa2678pQZbeVZYt4+
-         HlpW2y8fFK2+c/PAsXGqWAP2gFwdcz2khxG6W5LttBRttlW2GsX15IyiMFjPEFpQ/5FC
-         UldcmEtqcHxdn5vLqLBHQtfsGIUKvjvmz+M/3tOhrR/KUIsCc8vxwV+qRuHSef317Ig2
-         g0UA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776264866; x=1776869666;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=5NbyNwKQiN4ucjEG40sD5wfDcp1ycSKcsBCugZj/lPk=;
-        b=Vnnqxz64dSPePSTFbFnwEkQzLuYVhADATADvNLLw91l5tYtkncBgBl5O2GiFjxpMWg
-         SCPKOAJKUtjRrVm0HFEgQ9zhtvsCpX/4OWwW6LQWX3CboOqW/DDmliqyjQdc86o7FDBz
-         +ZbOFVHDhEzXIlE78WoXEFSl4WQdwMPydA6Z/nCtiqksyYmBWrQYzv83HMc06qQObsHY
-         L/Pbfqgg/oMiIaOI28BIfMiCUqfY8HWwW6LEuJU2y5eb4IwbzH+bWWxt8ZMPO2uJ0uvN
-         4ZUo0OOW9iv66F1+KzbTVhb92japFXHRA+C5ci3vYbTQR5VLRTUm+CobKzCRS6BYXEJ+
-         pLCg==
-X-Forwarded-Encrypted: i=1; AFNElJ+QmlgnrM5QlLxD4hxwY2i11sgeKWx4wMM1EbK8VxOHJzaAZV6ANIjnoRIZvfBv/QexOSqFfR5YCjfu@vger.kernel.org
-X-Gm-Message-State: AOJu0YzMT3Q+ZQ5Jf8fJdiqnOPg7ButjngCZ9FzRRsPFBGz7QG2BHxxb
-	Odhro/aKtFZnfgvkOlvhbU9+MHsV1/Blx29Lbk2y3T5KCMSBVRfISzVX19k/hvjJg7/JMni/cqx
-	2s3sJoKIe7KpmxXRXIIQNVYO4CO6YYTI=
-X-Gm-Gg: AeBDietl8/TMfPnxvPgM6qZ5a2XXvtZAZbZSonM4FP93VoWQC2x6JkP3spi5/QPGDX6
-	IpquoXqsT5sRDj2C+fHc8dzqmssgkCwe5FbDgcU3NsuWt8TCtUtaET5xJCW4r7Grph3Ry4AZ795
-	GCdh06VA0vyBKwNo4BKkTBLQkRdpD5ZPUKfDdVEiHtR49Pogti/CLS5EMuoscGhKhhkk+WNjbjZ
-	8J+KqcirODgwPJ6OdakHgAWPenrqtvXtkEMvngC0jD0q3eSpHA5FeGBjfDJoDelZE1+5RL5Zf+f
-	BrJ5rt7/+/mg05sXn3Cn
-X-Received: by 2002:a05:690e:1407:b0:651:ca68:be25 with SMTP id
- 956f58d0204a3-651ca68c0b3mr11838654d50.66.1776264865801; Wed, 15 Apr 2026
- 07:54:25 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F48B3CBE7F;
+	Wed, 15 Apr 2026 17:43:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.62.254.231
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1776275005; cv=none; b=MA9t4FD6B7bd3U8MsvMDt4pGENjVsrOZj4N3BOL99fFyjh8IfcibIyDLmUwhFkDQBIPJFcODWAJoqkj4glBIeerkxfW3hvhPNsmYRq+EuNL/1yZFwHl5ZHudgxD6yW6s36cOxmkgj/7iV4MTR8PkMpLE5yw0ECcrADDsx6pgB/o=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1776275005; c=relaxed/simple;
+	bh=wz37IEghmnvxBAYYIPenClkYXs37gFVCzGp061LZKqs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=VFdudc3e1axEgko8MuXAs/ORn/PTkYRXLF0b9HSvEgWvHdcloF8DUALbVeylR3Ehjbav5VLGW5c5z9HgZSPq9JGQdzzdHzZTJWlyjfFCncINh0ry/uE4V7xONA4kjsifY3mGS8V2Krn7t52qmz3BEr92xZke4jhRd0FyirmFnnA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=ilvokhin.com; spf=pass smtp.mailfrom=ilvokhin.com; dkim=pass (1024-bit key) header.d=ilvokhin.com header.i=@ilvokhin.com header.b=SM6B0AO6; arc=none smtp.client-ip=178.62.254.231
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=ilvokhin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ilvokhin.com
+Received: from shell.ilvokhin.com (shell.ilvokhin.com [138.68.190.75])
+	(Authenticated sender: d@ilvokhin.com)
+	by mail.ilvokhin.com (Postfix) with ESMTPSA id 93F3CC73A9;
+	Wed, 15 Apr 2026 17:43:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ilvokhin.com;
+	s=mail; t=1776274996;
+	bh=SOJSWDSELeB0YTngjDwuIRTiVa2seMMmI2D7vgbLJHE=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=SM6B0AO6SmMcSfXheaPbbVLMC7aRcI7Hs4se/r4k9imn2nObg2IzOFbNYHgZgva9b
+	 ow5wVC2t14ax/460besk2BLk2ZWreZ/iowSL/PsDXW8Jvz0IPJzEXCWLkYn3Z/5pOK
+	 biOqNAzm1emEyoQaB5lwW/xPsxIFCbmK8c4HniVw=
+Date: Wed, 15 Apr 2026 17:43:13 +0000
+From: Dmitry Ilvokhin <d@ilvokhin.com>
+To: "Paul E. McKenney" <paulmck@kernel.org>
+Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
+	Will Deacon <will@kernel.org>, Boqun Feng <boqun@kernel.org>,
+	Waiman Long <longman@redhat.com>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Juergen Gross <jgross@suse.com>,
+	Ajay Kaher <ajay.kaher@broadcom.com>,
+	Alexey Makhalov <alexey.makhalov@broadcom.com>,
+	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
+	Thomas Gleixner <tglx@kernel.org>, Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+	"H. Peter Anvin" <hpa@zytor.com>, Arnd Bergmann <arnd@arndb.de>,
+	Dennis Zhou <dennis@kernel.org>, Tejun Heo <tj@kernel.org>,
+	Christoph Lameter <cl@gentwo.org>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
+	virtualization@lists.linux.dev, linux-arch@vger.kernel.org,
+	linux-mm@kvack.org, linux-trace-kernel@vger.kernel.org,
+	kernel-team@meta.com
+Subject: Re: [PATCH v4 5/5] locking: Add contended_release tracepoint to
+ spinning locks
+Message-ID: <ad_OMbqBSjtTPsok@shell.ilvokhin.com>
+References: <cover.1774536681.git.d@ilvokhin.com>
+ <81eb8e0cd90b31e761e12721dbacb967281f840f.1774536681.git.d@ilvokhin.com>
+ <8d98d9f4-ccab-4864-b406-d3eb684cab45@paulmck-laptop>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260415122939.77847-1-m32285159@gmail.com> <ad-FcZeXsFlSPXQj@stanley.mountain>
- <CAKqfh0EEvEwF3QmgtNk2znsaamGFCc0muGjY3zsH6OogsZS8-Q@mail.gmail.com> <ad-XuNMor_ORjyOt@stanley.mountain>
-In-Reply-To: <ad-XuNMor_ORjyOt@stanley.mountain>
-From: Max <m32285159@gmail.com>
-Date: Wed, 15 Apr 2026 09:54:14 -0500
-X-Gm-Features: AQROBzCQeILbpKdwQzAuRTa5locP_gLXQMJMn9T_kCeBS40cbnqZGMIS571WEFY
-Message-ID: <CAKqfh0HadgG84FXd2--CwOQR00V7CHpEWhL2OfkZJSyo3PepTg@mail.gmail.com>
-Subject: Re: [PATCH v2] staging: octeon: remove SPI, POW, PKO, and Helper
- typedef enums
-To: Dan Carpenter <error27@gmail.com>
-Cc: gregkh@linuxfoundation.org, tsbogend@alpha.franken.de, len.bao@gmx.us, 
-	yoelvisoliveros@gmail.com, linux-mips@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <8d98d9f4-ccab-4864-b406-d3eb684cab45@paulmck-laptop>
 X-Spamd-Result: default: False [-2.16 / 15.00];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
-	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	DMARC_POLICY_ALLOW(-0.50)[ilvokhin.com,reject];
 	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
-	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
+	R_DKIM_ALLOW(-0.20)[ilvokhin.com:s=mail];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-14159-lists,linux-mips=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	FREEMAIL_TO(0.00)[gmail.com];
-	FREEMAIL_CC(0.00)[linuxfoundation.org,alpha.franken.de,gmx.us,gmail.com,vger.kernel.org,lists.linux.dev];
-	TO_DN_SOME(0.00)[];
+	TAGGED_FROM(0.00)[bounces-14160-lists,linux-mips=lfdr.de];
+	FROM_HAS_DN(0.00)[];
 	RCVD_COUNT_THREE(0.00)[4];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	FROM_HAS_DN(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[30];
+	DKIM_TRACE(0.00)[ilvokhin.com:+];
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
 	MISSING_XM_UA(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[m32285159@gmail.com,linux-mips@vger.kernel.org];
-	DKIM_TRACE(0.00)[gmail.com:+];
+	FROM_NEQ_ENVFROM(0.00)[d@ilvokhin.com,linux-mips@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	MID_RHS_MATCH_FROMTLD(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-mips];
-	RCPT_COUNT_SEVEN(0.00)[8];
-	FREEMAIL_FROM(0.00)[gmail.com];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,mail.gmail.com:mid]
-X-Rspamd-Queue-Id: 20CCD4058DD
+	TO_DN_SOME(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: DF62E406E15
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On Wed, Apr 15, 2026 at 8:50=E2=80=AFAM Dan Carpenter <error27@gmail.com> w=
-rote:
->
-> I haven't looked at the conflict.  No idea.  Sorry.
->
-> regards,
-> dan carpenter
+On Tue, Apr 14, 2026 at 04:20:26PM -0700, Paul E. McKenney wrote:
+
+[...]
+
+> > +static inline void queued_read_unlock(struct qrwlock *lock)
+> > +{
+> > +	/*
+> > +	 * Trace and unlock are combined in the traced unlock variant so
+> > +	 * the compiler does not need to preserve the lock pointer across
+> > +	 * the function call, avoiding callee-saved register save/restore
+> > +	 * on the hot path.
+> > +	 */
+> > +	if (tracepoint_enabled(contended_release)) {
+> > +		queued_read_unlock_traced(lock);
+> > +		return;
+> > +	}
+> > +
+> > +	__queued_read_unlock(lock);
+> > +}
+> 
+> Shouldn't this refactoring be its own separate patch, similar to 4/5?
+> 
+> That would probably clean up this diff a bit.
+> 
+> > +
+> > +static __always_inline void __queued_write_unlock(struct qrwlock *lock)
+> >  {
+> >  	smp_store_release(&lock->wlocked, 0);
+> >  }
+> >  
+> >  /**
+> > - * queued_rwlock_is_contended - check if the lock is contended
+> > + * queued_write_unlock - release write lock of a queued rwlock
+> >   * @lock : Pointer to queued rwlock structure
+> > - * Return: 1 if lock contended, 0 otherwise
+> >   */
+> > -static inline int queued_rwlock_is_contended(struct qrwlock *lock)
+> > +static inline void queued_write_unlock(struct qrwlock *lock)
+> >  {
+> > -	return arch_spin_is_locked(&lock->wait_lock);
+> > +	/* See comment in queued_read_unlock(). */
+> > +	if (tracepoint_enabled(contended_release)) {
+> > +		queued_write_unlock_traced(lock);
+> > +		return;
+> > +	}
+> > +
+> > +	__queued_write_unlock(lock);
+> 
+> And the same here, so one patch for interposing __queued_read_unlock()
+> and another for interposing __queued_write_unlock().
+> 
 >
 
-No worries, if you or anybody else can suggest a better name then I'd be ha=
-ppy
-to send over a v3.
+[...]
 
-Best regards,
-Maxwell
+> And is it possible to have one patch for qspinlock and another for qrwlock?
+> It *looks* like it should be.
+> 
+> 							Thanx, Paul
+> 
+
+Thanks for the suggestion, Paul.
+
+I think separate commits for the read and write paths of qrwlock is a
+bit too fine-grained, but I like the point about mixing refactoring with
+instrumentation and keeping different lock types separate.
+
+I'll split this commit into four.
+
+    locking: Factor out __queued_read_unlock()/__queued_write_unlock()                                                    
+    locking: Add contended_release tracepoint to qrwlock
+    locking: Factor out queued_spin_release()                                                                             
+    locking: Add contended_release tracepoint to qspinlock
 
