@@ -1,160 +1,238 @@
-Return-Path: <linux-mips+bounces-14166-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-14167-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id eOmKHXSO4Gl6jwAAu9opvQ
-	(envelope-from <linux-mips+bounces-14166-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Thu, 16 Apr 2026 09:23:32 +0200
+	id mBWYAMC24GlYlAAAu9opvQ
+	(envelope-from <linux-mips+bounces-14167-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Thu, 16 Apr 2026 12:15:28 +0200
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6E3F140AFDC
-	for <lists+linux-mips@lfdr.de>; Thu, 16 Apr 2026 09:23:31 +0200 (CEST)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id 97F7C40CC94
+	for <lists+linux-mips@lfdr.de>; Thu, 16 Apr 2026 12:15:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 8F1763019531
-	for <lists+linux-mips@lfdr.de>; Thu, 16 Apr 2026 07:20:22 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 157773025798
+	for <lists+linux-mips@lfdr.de>; Thu, 16 Apr 2026 10:15:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6914338657A;
-	Thu, 16 Apr 2026 07:20:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 593393947AA;
+	Thu, 16 Apr 2026 10:15:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=proton.me header.i=@proton.me header.b="MQwu36y1"
+	dkim=pass (1024-bit key) header.d=crapouillou.net header.i=@crapouillou.net header.b="UqkpgA+D"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-24425.protonmail.ch (mail-24425.protonmail.ch [109.224.244.25])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from aposti.net (aposti.net [185.119.170.32])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64756379980
-	for <linux-mips@vger.kernel.org>; Thu, 16 Apr 2026 07:20:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=109.224.244.25
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6547A54654;
+	Thu, 16 Apr 2026 10:15:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.119.170.32
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776324021; cv=none; b=LQM5Fmj/LxwycJLvxhrIuvnHvpnzP5LKW+EktfJSUtkLbt2PRb009v8XptoCYnRAC5Foz60wuuIt1AKPW+69bJF/VEsHsIauI0GlleVdX7Uk0IyhIbctbgdqXHsdZDSSXNc42VL1drBFVu7K4cyZTD5V0DMATngnEI8CPUbgb7E=
+	t=1776334522; cv=none; b=Wv7k+OwxY3GNRT6xsxFzDeHCYAItPOdfEomopvyz+Hr6zzLC2OfFzlKzYRxz6xBsJfo7kBj9CcHOdZop4TPk1i59ADdQIY1qSDXO9CUT2gMRQwTcjIadsZ6Yoj3Z81eGpKv80MI/tnx7912WZeN143xmXkcPl9afiR56cVNgBEY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776324021; c=relaxed/simple;
-	bh=2leeVpgyLPwASky/Yop0Iuo/ADClfnGz/9CpgzIvk+Y=;
-	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=ZEoxu0tjiCCYhQSd9TsRdryZxsIY93mty69lliDZJ7Kq3qvTWLa0oCHcZslEGNVw6Tgpren3+75kNKWaNTBXBamiDcZDxCI/b8xUlCY/aSHziwB5q6RwSm9E7UNTUmqwnWMSn36W2HPhs0fxIaG3qVM29Sebl3e9L5HGWvmzPZo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=proton.me; spf=pass smtp.mailfrom=proton.me; dkim=pass (2048-bit key) header.d=proton.me header.i=@proton.me header.b=MQwu36y1; arc=none smtp.client-ip=109.224.244.25
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=proton.me
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=proton.me
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=proton.me;
-	s=protonmail; t=1776324011; x=1776583211;
-	bh=TZCjlK5hHtVsCucnYEDyzZ5YQED9QNOF9aMEcyB8log=;
-	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-	 Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
-	 Message-ID:BIMI-Selector;
-	b=MQwu36y1cUX1rpoZGIJYgTk54ZEn9XHuXfAxW1Q6tQAwru7Dswd0KJZ7xoNdNlgkx
-	 Y0yp+PK7hJCoVjkuWCMiDNiu9yBkxgJyo7J5FaKx3tiU/Ws7qsOWJiF8BL02e0qE3u
-	 hwhUVnD3ui00m8JEOJpJbdgJYRepyDRxPyx1/AMloCfLolVxaMuD+abM3D6b6j3K4Z
-	 8uQJUlA6t3dwajcXKFCHQMdO8pflv+pZLdwbGytvcvhTj7628OKtXbSRE0LCIePAlm
-	 wLp6DHAJAWpsgeyhuLw3ujDtkcPk6OMYXa8JKTuttMu8+vk4tbwBfZKjgZjKgNyRKH
-	 87Bp6WWj4G1gA==
-Date: Thu, 16 Apr 2026 07:20:06 +0000
-To: "openwrt-devel@lists.openwrt.org" <openwrt-devel@lists.openwrt.org>
-From: kpursoty@proton.me
-Cc: "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>, "tsbogend@alpha.franken.de" <tsbogend@alpha.franken.de>, "cjd@cjdns.fr" <cjd@cjdns.fr>
-Subject: Re: [PATCH] mips: econet: add EN751627 SoC Kconfig entry
-Message-ID: <-sv9JxeX2cGKwZjY8mDH4WskIKOXfbsD_7ZcziekWVCIS83Lu7MjK_baP7ycyvzHkWx9B6SQyxiaCJ37G8B-YCi-Vxy_9fdbeaYIMwF1pew=@proton.me>
-In-Reply-To: <E5Pgm6Vp9MRV0KHJ_KOh8hEjTukhx1F2X5nlmbJeG-EW0j44NRslk1EuiB6AQt7zLQykmY_QzPU0haPtiH7Yb3fd7QhMFxWBxxx4_2684RA=@proton.me>
-References: <E5Pgm6Vp9MRV0KHJ_KOh8hEjTukhx1F2X5nlmbJeG-EW0j44NRslk1EuiB6AQt7zLQykmY_QzPU0haPtiH7Yb3fd7QhMFxWBxxx4_2684RA=@proton.me>
-Feedback-ID: 133470881:user:proton
-X-Pm-Message-ID: 928c08e46ba8842bc9397d4731799f216d8ad4bc
+	s=arc-20240116; t=1776334522; c=relaxed/simple;
+	bh=6+vCQ8HoSEy1R07WjiNOuOnlpOqYtNKsO1+XSB2RpK0=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=GLZ9jPSQBMRZayaZFAZAHkjx7mhAJuXTukDuI8ovolb+FKXJHESVX4ZU5d4DFY9yg3+FBYjjRJ01hfStFY5gOLvGNIMiHHphXYjl+9rTdnqQtFL/azzrtoTDQq7RS72rGPDFF/iNClhVvjOxTrzLaDIGGzj7cxiJqw6ZM1GHdvE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=crapouillou.net; spf=pass smtp.mailfrom=crapouillou.net; dkim=pass (1024-bit key) header.d=crapouillou.net header.i=@crapouillou.net header.b=UqkpgA+D; arc=none smtp.client-ip=185.119.170.32
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=crapouillou.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=crapouillou.net
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=crapouillou.net;
+	s=mail; t=1776334136;
+	bh=6+vCQ8HoSEy1R07WjiNOuOnlpOqYtNKsO1+XSB2RpK0=;
+	h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+	b=UqkpgA+DMIo1TZXaqJN4J42EsA54KYEKIpBsFFOU0GFwsqT7Xg0FyXPzTuZy+BKNB
+	 P2GtTkBpXv29YYegmzae7IPi2ur+0wZKdLTX6dXRVshhwJyj8Nx00klgZ9Q1jsAw2W
+	 I1B0kGGAJE16v4iaFzYzVt1JOw1+vKtRdUdpogQ0=
+Message-ID: <2412f5b041f89557c238164065e7f8d704579c58.camel@crapouillou.net>
+Subject: Re: [PATCH] iio: adc: ingenic-adc: use guard(mutex)(&lock) to
+ handle synchronisation
+From: Paul Cercueil <paul@crapouillou.net>
+To: Felipe Ribeiro de Souza <felipers@ime.usp.br>, jic23@kernel.org, 
+	dlechner@baylibre.com, nuno.sa@analog.com, andy@kernel.org
+Cc: Lucas Ivars Cadima Ciziks <lucas@ciziks.com>,
+ linux-mips@vger.kernel.org, 	linux-iio@vger.kernel.org
+Date: Thu, 16 Apr 2026 12:08:52 +0200
+In-Reply-To: <20260416011815.9140-1-felipers@ime.usp.br>
+References: <20260416011815.9140-1-felipers@ime.usp.br>
+Autocrypt: addr=paul@crapouillou.net; prefer-encrypt=mutual;
+ keydata=mQENBF0KhcEBCADkfmrzdTOp/gFOMQX0QwKE2WgeCJiHPWkpEuPH81/HB2dpjPZNW03ZM
+ LQfECbbaEkdbN4YnPfXgcc1uBe5mwOAPV1MBlaZcEt4M67iYQwSNrP7maPS3IaQJ18ES8JJ5Uf5Uz
+ FZaUawgH+oipYGW+v31cX6L3k+dGsPRM0Pyo0sQt52fsopNPZ9iag0iY7dGNuKenaEqkYNjwEgTtN
+ z8dt6s3hMpHIKZFL3OhAGi88wF/21isv0zkF4J0wlf9gYUTEEY3Eulx80PTVqGIcHZzfavlWIdzhe
+ +rxHTDGVwseR2Y1WjgFGQ2F+vXetAB8NEeygXee+i9nY5qt9c07m8mzjABEBAAG0JFBhdWwgQ2VyY
+ 3VlaWwgPHBhdWxAY3JhcG91aWxsb3UubmV0PokBTgQTAQoAOBYhBNdHYd8OeCBwpMuVxnPua9InSr
+ 1BBQJdCoXBAhsDBQsJCAcCBhUKCQgLAgQWAgMBAh4BAheAAAoJEHPua9InSr1BgvIH/0kLyrI3V0f
+ 33a6D3BJwc1grbygPVYGuC5l5eMnAI+rDmLR19E2yvibRpgUc87NmPEQPpbbtAZt8On/2WZoE5OIP
+ dlId/AHNpdgAtGXo0ZX4LGeVPjxjdkbrKVHxbcdcnY+zzaFglpbVSvp76pxqgVg8PgxkAAeeJV+ET
+ 4t0823Gz2HzCL/6JZhvKAEtHVulOWoBh368SYdolp1TSfORWmHzvQiCCCA+j0cMkYVGzIQzEQhX7U
+ rf9N/nhU5/SGLFEi9DcBfXoGzhyQyLXflhJtKm3XGB1K/pPulbKaPcKAl6rIDWPuFpHkSbmZ9r4KF
+ lBwgAhlGy6nqP7O3u7q23hRU=
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
 X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[proton.me,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
-	R_DKIM_ALLOW(-0.20)[proton.me:s=protonmail];
+	DMARC_POLICY_ALLOW(-0.50)[crapouillou.net,none];
+	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
+	R_DKIM_ALLOW(-0.20)[crapouillou.net:s=mail];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TO_DN_EQ_ADDR_ALL(0.00)[];
+	TAGGED_FROM(0.00)[bounces-14167-lists,linux-mips=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-14166-lists,linux-mips=lfdr.de];
-	MIME_TRACE(0.00)[0:+];
+	FROM_HAS_DN(0.00)[];
 	RCVD_COUNT_THREE(0.00)[3];
-	DKIM_TRACE(0.00)[proton.me:+];
+	DKIM_TRACE(0.00)[crapouillou.net:+];
+	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[kpursoty@proton.me,linux-mips@vger.kernel.org];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	ASN_FAIL(0.00)[10.253.234.172.asn.rspamd.com:server fail];
-	NEURAL_HAM(-0.00)[-1.000];
+	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
+	TO_DN_SOME(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	RCPT_COUNT_THREE(0.00)[4];
-	MID_RHS_MATCH_FROM(0.00)[];
-	FROM_NO_DN(0.00)[];
-	TAGGED_RCPT(0.00)[linux-mips];
+	FROM_NEQ_ENVFROM(0.00)[paul@crapouillou.net,linux-mips@vger.kernel.org];
 	MISSING_XM_UA(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[proton.me:email,proton.me:dkim,proton.me:mid,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 6E3F140AFDC
+	NEURAL_HAM(-0.00)[-1.000];
+	RCPT_COUNT_SEVEN(0.00)[8];
+	MID_RHS_MATCH_FROM(0.00)[];
+	TAGGED_RCPT(0.00)[linux-mips];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,ciziks.com:email]
+X-Rspamd-Queue-Id: 97F7C40CC94
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-Thanks for your notes. Patch withdrawn.
+Hi Felipe,
 
-On Wednesday, 15 April 2026 at 20:48, kpursoty@proton.me <kpursoty@proton.m=
-e> wrote:
+Le mercredi 15 avril 2026 =C3=A0 22:18 -0300, Felipe Ribeiro de Souza a
+=C3=A9crit=C2=A0:
+> Replace mutex_lock(&lock) and mutex_unlock(&lock) calls with
+> guard(mutex)(&lock) in functions ingenic_adc_set_adcmd,
+> ingenic_adc_set_config, ingenic_adc_enable, ingenic_adc_capture
+> and ingenic_adc_read_chan_info_raw.
+>=20
+> This removes the need to call the unlock function, as the lock is
+> automatically released when the function return or the scope exits
+> for any other case.
+>=20
+> Signed-off-by: Felipe Ribeiro de Souza <felipers@ime.usp.br>
+> Co-developed-by: Lucas Ivars Cadima Ciziks <lucas@ciziks.com>
+> Signed-off-by: Lucas Ivars Cadima Ciziks <lucas@ciziks.com>
 
->
-> The EN751627 family (EN7516 DSL, EN7527 xPON) is a big-endian dual-core
-> MIPS 1004Kc SoC (2 VPEs per core, NR_CPUS=3D4) used in DSL/WiFi gateway
-> devices such as the ZyXEL EX3301-T0. It shares the MIPS GIC interrupt
-> controller with EN7528 but is big-endian.
->
-> Key differences from existing SoCs:
-> - EN751221: BE, single-core 34Kc, custom INTC
-> - EN7528:   LE, dual-core 1004Kc, MIPS GIC
-> - EN751627: BE, dual-core 2-VPE 1004Kc, MIPS GIC
->
-> The SMP plumbing (CM/CPC probe + CPS SMP ops) is shared with EN7528 and
-> lives in patch 100 (device_tree_init). This patch adds only the Kconfig
-> entry.
->
-> Note: on EN751627, mips_cpc_probe() must be called before
-> register_cps_smp_ops(). Without it, core 1 never comes online because
-> write_gcr_co_reset_release(0) is insufficient on this SoC. This is
-> different from EN7528 where CPC probe behaves identically. Both SoCs
-> are covered by the shared #if in device_tree_init().
->
-> Signed-off-by: Kervin Pursoty <kpursoty@proton.me>
+I see a slight behaviour change in ingenic_adc_read_chan_info_raw()
+where the mutex is now unlocked after the clk_disable(). I think that's
+fine though. So:
+
+Reviewed-by: Paul Cercueil <paul@crapouillou.net>
+
+Cheers,
+-Paul
+
 > ---
->  arch/mips/econet/Kconfig | 25 +++++++++++++++++++++++++
->  1 file changed, 25 insertions(+)
->
-> diff --git a/arch/mips/econet/Kconfig b/arch/mips/econet/Kconfig
-> --- a/arch/mips/econet/Kconfig
-> +++ b/arch/mips/econet/Kconfig
-> @@ -41,3 +41,28 @@ choice
->  =09=09  The EN7528 family with dual-core MIPS 1004Kc.
->  =09=09  Requires MIPS_RAW_APPENDED_DTB=3Dy for boot.
+> =C2=A0drivers/iio/adc/ingenic-adc.c | 19 +++++++------------
+> =C2=A01 file changed, 7 insertions(+), 12 deletions(-)
+>=20
+> diff --git a/drivers/iio/adc/ingenic-adc.c b/drivers/iio/adc/ingenic-
+> adc.c
+> index 1e802c877..bb7abdcd8 100644
+> --- a/drivers/iio/adc/ingenic-adc.c
+> +++ b/drivers/iio/adc/ingenic-adc.c
+> @@ -20,6 +20,7 @@
+> =C2=A0#include <linux/of.h>
+> =C2=A0#include <linux/platform_device.h>
+> =C2=A0#include <linux/property.h>
+> +#include <linux/cleanup.h>
+> =C2=A0
+> =C2=A0#define JZ_ADC_REG_ENABLE		0x00
+> =C2=A0#define JZ_ADC_REG_CFG			0x04
+> @@ -115,7 +116,7 @@ static void ingenic_adc_set_adcmd(struct iio_dev
+> *iio_dev, unsigned long mask)
+> =C2=A0{
+> =C2=A0	struct ingenic_adc *adc =3D iio_priv(iio_dev);
+> =C2=A0
+> -	mutex_lock(&adc->lock);
+> +	guard(mutex)(&adc->lock);
+> =C2=A0
+> =C2=A0	/* Init ADCMD */
+> =C2=A0	readl(adc->base + JZ_ADC_REG_ADCMD);
+> @@ -162,8 +163,6 @@ static void ingenic_adc_set_adcmd(struct iio_dev
+> *iio_dev, unsigned long mask)
+> =C2=A0
+> =C2=A0	/* We're done */
+> =C2=A0	writel(0, adc->base + JZ_ADC_REG_ADCMD);
+> -
+> -	mutex_unlock(&adc->lock);
+> =C2=A0}
+> =C2=A0
+> =C2=A0static void ingenic_adc_set_config(struct ingenic_adc *adc,
+> @@ -172,13 +171,11 @@ static void ingenic_adc_set_config(struct
+> ingenic_adc *adc,
+> =C2=A0{
+> =C2=A0	uint32_t cfg;
+> =C2=A0
+> -	mutex_lock(&adc->lock);
+> +	guard(mutex)(&adc->lock);
+> =C2=A0
+> =C2=A0	cfg =3D readl(adc->base + JZ_ADC_REG_CFG) & ~mask;
+> =C2=A0	cfg |=3D val;
+> =C2=A0	writel(cfg, adc->base + JZ_ADC_REG_CFG);
+> -
+> -	mutex_unlock(&adc->lock);
+> =C2=A0}
+> =C2=A0
+> =C2=A0static void ingenic_adc_enable_unlocked(struct ingenic_adc *adc,
+> @@ -201,9 +198,8 @@ static void ingenic_adc_enable(struct ingenic_adc
+> *adc,
+> =C2=A0			=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 int engine,
+> =C2=A0			=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 bool enabled)
+> =C2=A0{
+> -	mutex_lock(&adc->lock);
+> +	guard(mutex)(&adc->lock);
+> =C2=A0	ingenic_adc_enable_unlocked(adc, engine, enabled);
+> -	mutex_unlock(&adc->lock);
+> =C2=A0}
+> =C2=A0
+> =C2=A0static int ingenic_adc_capture(struct ingenic_adc *adc,
+> @@ -218,7 +214,7 @@ static int ingenic_adc_capture(struct ingenic_adc
+> *adc,
+> =C2=A0	 * probably due to the switch of VREF. We must keep the lock
+> here to
+> =C2=A0	 * avoid races with the buffer enable/disable functions.
+> =C2=A0	 */
+> -	mutex_lock(&adc->lock);
+> +	guard(mutex)(&adc->lock);
+> =C2=A0	cfg =3D readl(adc->base + JZ_ADC_REG_CFG);
+> =C2=A0	writel(cfg & ~JZ_ADC_REG_CFG_CMD_SEL, adc->base +
+> JZ_ADC_REG_CFG);
+> =C2=A0
+> @@ -229,7 +225,6 @@ static int ingenic_adc_capture(struct ingenic_adc
+> *adc,
+> =C2=A0		ingenic_adc_enable_unlocked(adc, engine, false);
+> =C2=A0
+> =C2=A0	writel(cfg, adc->base + JZ_ADC_REG_CFG);
+> -	mutex_unlock(&adc->lock);
+> =C2=A0
+> =C2=A0	return ret;
+> =C2=A0}
+> @@ -643,7 +638,8 @@ static int ingenic_adc_read_chan_info_raw(struct
+> iio_dev *iio_dev,
+> =C2=A0	}
+> =C2=A0
+> =C2=A0	/* We cannot sample the aux channels in parallel. */
+> -	mutex_lock(&adc->aux_lock);
+> +	guard(mutex)(&adc->lock);
 > +
-> +=09config SOC_ECONET_EN751627
-> +=09=09bool "EN751627 family"
-> +=09=09select COMMON_CLK
-> +=09=09select CPU_BIG_ENDIAN
-> +=09=09select HAVE_PCI
-> +=09=09select IRQ_MIPS_CPU
-> +=09=09select MIPS_CM
-> +=09=09select MIPS_CPC
-> +=09=09select MIPS_CPS
-> +=09=09select MIPS_CPU_SCACHE
-> +=09=09select MIPS_GIC
-> +=09=09select MIPS_MT_SMP
-> +=09=09select PCI_DRIVERS_GENERIC
-> +=09=09select SMP
-> +=09=09select SMP_UP
-> +=09=09select SYS_SUPPORTS_HIGHMEM
-> +=09=09select SYS_SUPPORTS_MIPS_CPS
-> +=09=09select SYS_SUPPORTS_MULTITHREADING
-> +=09=09select SYS_SUPPORTS_SMP
-> +=09=09help
-> +=09=09  The EN751627 family (EN7516 DSL, EN7527 xPON) with big-endian
-> +=09=09  dual-core, 2-VPE-per-core MIPS 1004Kc and MIPS GIC. Used in
-> +=09=09  DSL+WiFi gateways. Requires MIPS_RAW_APPENDED_DTB=3Dy for boot.
->  endchoice
->
+> =C2=A0	if (adc->soc_data->has_aux_md && engine =3D=3D 0) {
+> =C2=A0		switch (chan->channel) {
+> =C2=A0		case INGENIC_ADC_AUX0:
+> @@ -677,7 +673,6 @@ static int ingenic_adc_read_chan_info_raw(struct
+> iio_dev *iio_dev,
+> =C2=A0
+> =C2=A0	ret =3D IIO_VAL_INT;
+> =C2=A0out:
+> -	mutex_unlock(&adc->aux_lock);
+> =C2=A0	clk_disable(adc->clk);
+> =C2=A0
+> =C2=A0	return ret;
 
