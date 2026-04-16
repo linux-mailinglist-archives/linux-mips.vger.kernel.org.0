@@ -1,48 +1,50 @@
-Return-Path: <linux-mips+bounces-14178-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-14179-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id wKl8Bf4i4WkBpgAAu9opvQ
-	(envelope-from <linux-mips+bounces-14178-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Thu, 16 Apr 2026 19:57:18 +0200
+	id SE4ZI54h4WnMpQAAu9opvQ
+	(envelope-from <linux-mips+bounces-14179-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Thu, 16 Apr 2026 19:51:26 +0200
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 647A44135F3
-	for <lists+linux-mips@lfdr.de>; Thu, 16 Apr 2026 19:57:17 +0200 (CEST)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id ABEFF413533
+	for <lists+linux-mips@lfdr.de>; Thu, 16 Apr 2026 19:51:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id A80303009FBE
-	for <lists+linux-mips@lfdr.de>; Thu, 16 Apr 2026 17:51:15 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 2D344302EEE1
+	for <lists+linux-mips@lfdr.de>; Thu, 16 Apr 2026 17:51:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 430EE2737E0;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D5289302767;
 	Thu, 16 Apr 2026 17:51:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cjdns.fr header.i=@cjdns.fr header.b="giLrKqEz"
+	dkim=pass (2048-bit key) header.d=cjdns.fr header.i=@cjdns.fr header.b="Y1yHITel"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from mail.cjdns.fr (mail.cjdns.fr [5.135.140.105])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3EFD221275;
-	Thu, 16 Apr 2026 17:51:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73091253340;
+	Thu, 16 Apr 2026 17:51:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=5.135.140.105
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776361875; cv=none; b=q6hSUTmrnmvEgiDGaZamdD59g4wv6i+0k+2+nsOFnOb7N6MyBn6weXQxG/RNAfNxmdtqyJ1U+dpWVQ+duig0OADEfUFlobVlq3NUYINn4uGUdyK7KzN1xcRMIihplMqM+mcsR/oUd4H9Zyi1EJc178dIaiXxTRRsMXZN2K4CvEY=
+	t=1776361875; cv=none; b=d0WYoVNZJFFW4jo5znjue04xn+9oD7UUUAzIaZRiN774Gzf3Zq8oyBH06HNbDk1D72Jx0spP2+D3HNK9u/TQJNGg44YPxIdhLubi4z4/2E/VFw2vCI/zMzKZbJryk+oIt/3qCz0T0VOXWSoCus8dI3P3fCpePaBSXBqD1BgUxDo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1776361875; c=relaxed/simple;
-	bh=yuQWORxJKRnUyRGZmBa1Cz2oUxC9/FiTLkK0A21tAOM=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=BfZs8mgihLVGLdk+GlnRfbSQ/iheb0pBNFimcKVuByGw76EzH3/fs3AYARmvny4j+SuCLLSQAW2hccuIqgDbJ3WXhMgXkfngGxq6dcYm9RUyytEll5zOnJUGoLAclihswO5iURFthMlSE/tb/ZyBAzb0jYljSNlJyhM5eVicH7M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=cjdns.fr; spf=none smtp.mailfrom=cjdns.fr; dkim=pass (2048-bit key) header.d=cjdns.fr header.i=@cjdns.fr header.b=giLrKqEz; arc=none smtp.client-ip=5.135.140.105
+	bh=LlTdgu7xpklfNJdbjEayTPx4kyGDXyAve+dyGyQtu2I=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=FlcPed9/K/hlwbp3ngWITLN6P555R0PwuSEB2J1sIFlaGfDiZ2neVwmY9ZwEcG+sSPdG1uRkr/fN6TEJc0cuNGmyme21KKblMt4ZokYdSsq5jQzJGT9l9DPf6IN+qq9D4fzGkHyaPJ2lpvBhvYkCPy5yZB7talY8KXI4F0Rgg+c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=cjdns.fr; spf=pass smtp.mailfrom=cjdns.fr; dkim=pass (2048-bit key) header.d=cjdns.fr header.i=@cjdns.fr header.b=Y1yHITel; arc=none smtp.client-ip=5.135.140.105
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=cjdns.fr
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=cjdns.fr
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id AF4DBFBF63;
-	Thu, 16 Apr 2026 19:51:03 +0200 (CEST)
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cjdns.fr
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id F1049FD412;
+	Thu, 16 Apr 2026 19:51:05 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cjdns.fr; s=dkim;
-	t=1776361865; h=from:subject:date:message-id:to:cc:mime-version:
-	 content-transfer-encoding; bh=09cXq4kMFgSJtMoxapD51NPJqiDpj1lEGNS2iDhOrMU=;
-	b=giLrKqEz7yi5TNG06JZtaEGiBXcIQRM3vgQtD6Dm9njuiFFi+ixt57ufxLbvKZBQv9cTZp
-	0XCsGdjFWv1xnke1a45cAqscJIZxmro4Gx6WzwAcBP1i9Ng2QbwACOjtptddpIAY6EYddy
-	1jvq+pn/gX+VBhIJJD0kZyw5Mkvi48B+z8PrlNB3ug/xq8ywXtss2FlFgoj+d8HclQu2tl
-	9Q3Lk496trtR0TAmBTeZy7laCSwJXpU55cR0TpPVmoF5UMBj1cizkbzE5bDzf8W0S1EQkO
-	5UuvkKFdIKLYJVaa8O7tsJjJZG6D2ju8Pg6TUh7U0u3hp9C9DQR/jLf4PwyFHw==
+	t=1776361867; h=from:subject:date:message-id:to:cc:mime-version:
+	 content-transfer-encoding:in-reply-to:references;
+	bh=AxfSVxs5649KBWpRUEZiLQP9o0YA4S8QqYmLn9Xyq2A=;
+	b=Y1yHITelWp6jVww88es0vS1HHRoeFYM90+RfYNqr1HFn5MuzOAfDE0f5tTlXQtcXbwrpJ9
+	xj2mFsC49ZipYZLkIrer+MeOHr51xI4bQIVEaZeBm7eqeug0dxR0WhenrhGLam9cSvu0ee
+	Up+KCOLptCs5c/uC6ux3jX+VuVhajdbhyeFPHmO3ZJTVRQRUPjnnOKl/DwxURZtoRWMyyt
+	VEzB2uHZPHP6CQM65ECbrthuZzI1UIlj8OB3Erho7Yc6f8K790JNrEcyYw+XvSxn00S25s
+	2FZGG8yF9U+Q4RhvlIOqPWEkFTTAotYE0kP/ltZmRKa33bJhJe3ZP94Lsfc+9w==
 From: Caleb James DeLisle <cjd@cjdns.fr>
 To: linux-mips@vger.kernel.org
 Cc: naseefkm@gmail.com,
@@ -54,9 +56,11 @@ Cc: naseefkm@gmail.com,
 	linux-kernel@vger.kernel.org,
 	devicetree@vger.kernel.org,
 	Caleb James DeLisle <cjd@cjdns.fr>
-Subject: [PATCH 0/2] clocksource/timer-econet-en751221: Support irq number per timer
-Date: Thu, 16 Apr 2026 17:50:59 +0000
-Message-Id: <20260416175101.958073-1-cjd@cjdns.fr>
+Subject: [PATCH 1/2] dt-bindings: timer: econet: Update EN751627 for multi-IRQ
+Date: Thu, 16 Apr 2026 17:51:00 +0000
+Message-Id: <20260416175101.958073-2-cjd@cjdns.fr>
+In-Reply-To: <20260416175101.958073-1-cjd@cjdns.fr>
+References: <20260416175101.958073-1-cjd@cjdns.fr>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -72,14 +76,14 @@ X-Spamd-Result: default: False [0.84 / 15.00];
 	R_MISSING_CHARSET(0.50)[];
 	DMARC_POLICY_ALLOW(-0.50)[cjdns.fr,none];
 	R_DKIM_ALLOW(-0.20)[cjdns.fr:s=dkim];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	MIME_TRACE(0.00)[0:+];
 	FREEMAIL_CC(0.00)[gmail.com,kernel.org,vger.kernel.org,cjdns.fr];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-14178-lists,linux-mips=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-14179-lists,linux-mips=lfdr.de];
 	RECEIVED_HELO_LOCALHOST(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
 	RCVD_COUNT_THREE(0.00)[4];
@@ -94,28 +98,73 @@ X-Spamd-Result: default: False [0.84 / 15.00];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-mips,dt];
 	TO_DN_SOME(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,cjdns.fr:dkim,cjdns.fr:mid]
-X-Rspamd-Queue-Id: 647A44135F3
+	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,1fbf0400:email]
+X-Rspamd-Queue-Id: ABEFF413533
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-In prep for adding EN751627 and EN7528 SoCs, we need to support the GIC
-interrupt controller. Unlike the intc in the EN751221, this intc does
-not create a percpu interrupt for the timers, so we update the timer
-driver to support both models.
+From conception, this driver supported EN751627 as it is the same
+hardware that is used in EN751221. However, it was expected that
+EN751627 would use a percpu IRQ as does EN751221, this is how it
+works in vendor code. However upon finding that the "mti,gic" intc
+works on EN751627 with no modification - but it provides a unique
+interrupt per-timer, it is deemed best to make this driver use
+multiple IRQs when on the EN751627 platform.
 
-Caleb James DeLisle (2):
-  dt-bindings: timer: econet: Update EN751627 for multi-IRQ
-  clocksource/timer-econet-en751221: Support irq number per timer
+Signed-off-by: Caleb James DeLisle <cjd@cjdns.fr>
+---
+ .../bindings/timer/econet,en751221-timer.yaml    | 16 +++++++++++++---
+ 1 file changed, 13 insertions(+), 3 deletions(-)
 
- .../bindings/timer/econet,en751221-timer.yaml |  16 +-
- drivers/clocksource/Kconfig                   |   5 +-
- drivers/clocksource/timer-econet-en751221.c   | 137 ++++++++++++++----
- 3 files changed, 127 insertions(+), 31 deletions(-)
-
-
-base-commit: ff1c0c5d07028a84837950b619d30da623f8ddb2
+diff --git a/Documentation/devicetree/bindings/timer/econet,en751221-timer.yaml b/Documentation/devicetree/bindings/timer/econet,en751221-timer.yaml
+index c1e7c2b6afde..f338739e039c 100644
+--- a/Documentation/devicetree/bindings/timer/econet,en751221-timer.yaml
++++ b/Documentation/devicetree/bindings/timer/econet,en751221-timer.yaml
+@@ -28,8 +28,8 @@ properties:
+     maxItems: 2
+ 
+   interrupts:
+-    maxItems: 1
+-    description: A percpu-devid timer interrupt shared across CPUs.
++    minItems: 1
++    maxItems: 4
+ 
+   clocks:
+     maxItems: 1
+@@ -52,21 +52,31 @@ allOf:
+           items:
+             - description: VPE timers 0 and 1
+             - description: VPE timers 2 and 3
++        interrupts:
++          description: An interrupt for each timer (one per VPE)
++          minItems: 4
+     else:
+       properties:
+         reg:
+           items:
+             - description: VPE timers 0 and 1
++        interrupts:
++          description: A percpu-devid timer interrupt shared across timers
++          maxItems: 1
+ 
+ additionalProperties: false
+ 
+ examples:
+   - |
++    #include <dt-bindings/interrupt-controller/mips-gic.h>
+     timer@1fbf0400 {
+         compatible = "econet,en751627-timer", "econet,en751221-timer";
+         reg = <0x1fbf0400 0x100>, <0x1fbe0000 0x100>;
+         interrupt-parent = <&intc>;
+-        interrupts = <30>;
++        interrupts = <GIC_SHARED 30 IRQ_TYPE_LEVEL_HIGH>,
++                     <GIC_SHARED 29 IRQ_TYPE_LEVEL_HIGH>,
++                     <GIC_SHARED 37 IRQ_TYPE_LEVEL_HIGH>,
++                     <GIC_SHARED 36 IRQ_TYPE_LEVEL_HIGH>;
+         clocks = <&hpt_clock>;
+     };
+   - |
 -- 
 2.39.5
 
