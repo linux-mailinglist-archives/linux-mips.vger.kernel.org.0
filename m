@@ -1,151 +1,239 @@
-Return-Path: <linux-mips+bounces-14161-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-14162-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 2NsBGKnr32m/aQAAu9opvQ
-	(envelope-from <linux-mips+bounces-14161-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Wed, 15 Apr 2026 21:48:57 +0200
+	id EImCNPs44GmDdgAAu9opvQ
+	(envelope-from <linux-mips+bounces-14162-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Thu, 16 Apr 2026 03:18:51 +0200
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 016A94076E5
-	for <lists+linux-mips@lfdr.de>; Wed, 15 Apr 2026 21:48:56 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id B4FED4096D0
+	for <lists+linux-mips@lfdr.de>; Thu, 16 Apr 2026 03:18:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 132583042391
-	for <lists+linux-mips@lfdr.de>; Wed, 15 Apr 2026 19:48:56 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id CA6E530179FF
+	for <lists+linux-mips@lfdr.de>; Thu, 16 Apr 2026 01:18:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E4B8013DDA4;
-	Wed, 15 Apr 2026 19:48:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 51C8F13B58C;
+	Thu, 16 Apr 2026 01:18:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=proton.me header.i=@proton.me header.b="gU6dfNL6"
+	dkim=pass (2048-bit key) header.d=usp.br header.i=@usp.br header.b="uhsScY13"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-106102.protonmail.ch (mail-106102.protonmail.ch [79.135.106.102])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dy1-f177.google.com (mail-dy1-f177.google.com [74.125.82.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54A773090D9
-	for <linux-mips@vger.kernel.org>; Wed, 15 Apr 2026 19:48:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=79.135.106.102
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4D68EEB3
+	for <linux-mips@vger.kernel.org>; Thu, 16 Apr 2026 01:18:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776282533; cv=none; b=DLjBw/19DgPpwSroUGvThxOTJW6NWjSFTbVwt/1fbQKhCEJuYFq21W6ctqxq28owjPbOCkdCxMxcMAWloz0LDLVGMKE2QIQ/nSobpKDrqpeKyNyRe4gZiQhiqjcSZYdiwidIG5k5mj3dpv88ni8pjiJiiaKdmx0hrB6tCLbUQho=
+	t=1776302318; cv=none; b=YUxuQUlGJPGn4hj+/kZWj4458MaqK+cotg5HHFdwEHYHHgJI31K5lqtxkfOEwG1gt78tehbLyp+q07/uNIMB6w7pkrqqmTPVepGA9NrQFSAFn1yR03J4gl5nVzYFk8XiYNzQH2a+YLHmGWFMcBfRWltT8ePCS5+IUzz7d5qd71I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776282533; c=relaxed/simple;
-	bh=hdtID7yAC1FF82zLPXyM3bNFP3eb9HeHJkiu7XzULMU=;
-	h=Date:To:From:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=ICR5XZaYEL0lWdX6Gae1zBjpAzVyDe4c39V7qPy6bnd/VuI+P4vNb9OXP4l+Vgiijl9WjwZ6kmePUIA6Z2ZeBRNLo91UH2P3wwUJ6xTdUTaJE+ZpcpT2BD3MKGoL/37J1eXxiv/HlmwqqLIpo/AEedb3WvzuU9FasGCqq/H8k5M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=proton.me; spf=pass smtp.mailfrom=proton.me; dkim=pass (2048-bit key) header.d=proton.me header.i=@proton.me header.b=gU6dfNL6; arc=none smtp.client-ip=79.135.106.102
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=proton.me
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=proton.me
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=proton.me;
-	s=protonmail; t=1776282521; x=1776541721;
-	bh=/kTtC+TC32NWYr+4OixgMYOkG40+XyIDHTPjwk+esB4=;
-	h=Date:To:From:Cc:Subject:Message-ID:Feedback-ID:From:To:Cc:Date:
-	 Subject:Reply-To:Feedback-ID:Message-ID:BIMI-Selector;
-	b=gU6dfNL6w0ROGU2qmP1CpC6o+4yM29eAxus5Ti8LpXeMjQUcJlVYogINw2rnKyuQw
-	 UKRx8olUPkzv52WSW5/iCE9oWnlor42VMjy83ARW1paPBnwAmlq1xfLX2sozbIbgCi
-	 ai04MoXcGpBtqaYyD9nYR7g/ut57YZwQr3T0dnPup3RSyfN/WCSUjtdpxdRuDx6q8a
-	 PaL0r3rAxcfxjmO2bp/bNVwmhZKUeErItySR657WTnxGC9WYJhjMODcX9uhCSB2wED
-	 CZTdaydqAIA04wAMCIvfN3Tzh10QLSGCLSpd5qRn/tKLkRWSuD43quzsBkZPPUznOp
-	 +9o5t3v98FPHg==
-Date: Wed, 15 Apr 2026 19:48:35 +0000
-To: "openwrt-devel@lists.openwrt.org" <openwrt-devel@lists.openwrt.org>
-From: kpursoty@proton.me
-Cc: "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>, "tsbogend@alpha.franken.de" <tsbogend@alpha.franken.de>, "cjd@cjdns.fr" <cjd@cjdns.fr>
-Subject: [PATCH] mips: econet: add EN751627 SoC Kconfig entry
-Message-ID: <E5Pgm6Vp9MRV0KHJ_KOh8hEjTukhx1F2X5nlmbJeG-EW0j44NRslk1EuiB6AQt7zLQykmY_QzPU0haPtiH7Yb3fd7QhMFxWBxxx4_2684RA=@proton.me>
-Feedback-ID: 133470881:user:proton
-X-Pm-Message-ID: 68c5da9132949abb36e1d18bf5147f91154bb8aa
+	s=arc-20240116; t=1776302318; c=relaxed/simple;
+	bh=ix4MQCZb0a7oEzoizvKx4388P7WPEzrvMfERUWG1iq8=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=lpxYuF2cEBNn3i+BM4R9t9kQfrkgsrziq0zE3gKh/hZEK3YZGCibf49SYeJyq7CnmdbczH4qQZv4MFMVOTlaa/d/dsHwtjBYb0ekG8N2tOTNGL40TAqgBSej3OHaIHMKPrn4bjbEInDr79rNTph9DRXQGSwRagQO3H6OpTC1uzQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ime.usp.br; spf=pass smtp.mailfrom=ime.usp.br; dkim=pass (2048-bit key) header.d=usp.br header.i=@usp.br header.b=uhsScY13; arc=none smtp.client-ip=74.125.82.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ime.usp.br
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ime.usp.br
+Received: by mail-dy1-f177.google.com with SMTP id 5a478bee46e88-2b6b0500e06so14149982eec.1
+        for <linux-mips@vger.kernel.org>; Wed, 15 Apr 2026 18:18:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=usp.br; s=usp-google; t=1776302313; x=1776907113; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=0mERTpe6+VkhMm65vrjqdw31z57F7sMaKCjw0DTf6B0=;
+        b=uhsScY139xv8hOp7fiJ6iwGD4wtybXEvk3hlvzO+5j21yD5zlSFwxNhqU9prxtPJce
+         bBe2vFuOPWPcxvV1l095lCfYFJdzljLj2Gh2qfBXyYOav3LIoQ9J339WTuRdz3pfVf7e
+         kB79dmV7cK3g6EFaa0N1kwvJ+b7X+7SMPq+O7/H4qfyP4F1EysZvu7z7d9wDR8mfiAc8
+         liYbZYvyAWmgo9t8fz+RsnKhyetrg9Pz7ZUpuWwqhMlMXD/meXlwESc81e5SsCw60XYd
+         OxtYpEFbEEDK/X8fAp5MW5M69Qgj5Vnc876o3gCJkeBh/46kbq4Pi4pr7dQ7QLCqV5q4
+         1R2w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1776302313; x=1776907113;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=0mERTpe6+VkhMm65vrjqdw31z57F7sMaKCjw0DTf6B0=;
+        b=qx/2mKCOTSF40LxW0p4MTByIzwqWOzqZEqZlr7AZDfOoURX1xP4DGBiaTaTrfQ1q2N
+         +Y5YzmFa+E4oFmX/4OKKBAA+qkfR0iNhKuW+YMbXdeabK8a/jscmVAoHuxFEEbfo4r0y
+         rIzSZZSHuMkZprXH5ZzWpA8XiH/gD5hQZYyyi8JWxQW4hP/Wy6n/yDyWvm7PKJ3aSFzT
+         Tc0t7xi3p9ZYqcPfd+KOObj0T0/8tToInjN/zf3qAwpWmcsxv7ijdXwytEWpDCzviQO1
+         FlJGmqFkpIm7vLhEGSOIcZEDEHXdHQRtyHU0QNYQm54Ery5N2zEYxZkrXH1LK6fK6S4q
+         iwug==
+X-Forwarded-Encrypted: i=1; AFNElJ9kEAhxDbZXo6wt1RapHJe1Z3UnbclO5k6FvENJCeniIX/gBM9ME9ouZbpKCsAuN5weaCPqWgP5MqrN@vger.kernel.org
+X-Gm-Message-State: AOJu0YwKOvubGlJQlysLwFILEBCgCqH/XOyJ+TnLEQli/Qj50IDRlEcE
+	/H5riDcHnsY/LA0bJYiGPIxwFB6fBajI+AFY+ThYQLDCDPrg5vx8FA4QlsXZBR8tSco=
+X-Gm-Gg: AeBDievrWQsYCpOvjQlkba0T0QMWQBB61UNCR+m98h5VErCbYmyw0g4O6AAcYrnW3uX
+	B1VDMpsnAf620nB/5XK+EXqfAo+eIVWoWkjPZ80GrxevnC21Ckt4D1J1sJT5WA1bpiOFmLvZ4hl
+	kmsvYgFWtbHsrqQUrROxLYsK+oerzTj6SsuOKjNRy2K9S09WsZHbr1OwOr9iRfIvocCNrFHXlBK
+	vGpAHHN2EsDL3xoPIZQHVhMrudqR+Z2kBzlD0HtBeGo6qez+1Q8fN4/k9i26vibBO//ha3mblJx
+	+O55pRtGqyB2YDp4tu3Rc/g2TNx3WMwaKvtdjFzNHNAbrX26B7gzcJWJ8STN/n+oO2j9751IsZ5
+	g2sf+ihZwR7fHShm0i7NUrWy8FI3FaTIebm783PMgaP1FlgmBsvCGq09Kunhvt2FIgxCXff3u/d
+	lASol1Eo8cFV/WVmxny76AyhgGeJ26D4acSTmhmqMpkFdVpQ==
+X-Received: by 2002:a05:7300:a583:b0:2de:9470:5e88 with SMTP id 5a478bee46e88-2de94705f86mr2550130eec.21.1776302313352;
+        Wed, 15 Apr 2026 18:18:33 -0700 (PDT)
+Received: from localhost.localdomain ([177.81.10.105])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2de8919f9a0sm5325973eec.0.2026.04.15.18.18.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 Apr 2026 18:18:32 -0700 (PDT)
+From: Felipe Ribeiro de Souza <felipers@ime.usp.br>
+To: paul@crapouillou.net,
+	jic23@kernel.org,
+	dlechner@baylibre.com,
+	nuno.sa@analog.com,
+	andy@kernel.org
+Cc: Felipe Ribeiro de Souza <felipers@ime.usp.br>,
+	Lucas Ivars Cadima Ciziks <lucas@ciziks.com>,
+	linux-mips@vger.kernel.org,
+	linux-iio@vger.kernel.org
+Subject: [PATCH] iio: adc: ingenic-adc: use guard(mutex)(&lock) to handle synchronisation
+Date: Wed, 15 Apr 2026 22:18:11 -0300
+Message-ID: <20260416011815.9140-1-felipers@ime.usp.br>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spamd-Result: default: False [-2.16 / 15.00];
+Content-Transfer-Encoding: 8bit
+X-Spamd-Result: default: False [-0.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[proton.me,quarantine];
-	R_DKIM_ALLOW(-0.20)[proton.me:s=protonmail];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
+	MID_CONTAINS_FROM(1.00)[];
+	R_MISSING_CHARSET(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[usp.br,none];
+	R_DKIM_ALLOW(-0.20)[usp.br:s=usp-google];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FROM_NEQ_ENVFROM(0.00)[kpursoty@proton.me,linux-mips@vger.kernel.org];
-	TO_DN_EQ_ADDR_ALL(0.00)[];
-	DKIM_TRACE(0.00)[proton.me:+];
-	TAGGED_FROM(0.00)[bounces-14161-lists,linux-mips=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[3];
-	RCPT_COUNT_THREE(0.00)[4];
-	MISSING_XM_UA(0.00)[];
 	MIME_TRACE(0.00)[0:+];
-	NEURAL_HAM(-0.00)[-1.000];
+	ASN_FAIL(0.00)[10.253.234.172.asn.rspamd.com:server fail];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-14162-lists,linux-mips=lfdr.de];
+	DKIM_TRACE(0.00)[usp.br:+];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TO_DN_SOME(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[felipers@ime.usp.br,linux-mips@vger.kernel.org];
 	PRECEDENCE_BULK(0.00)[];
+	FROM_HAS_DN(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	MID_RHS_MATCH_FROM(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
+	RCVD_COUNT_FIVE(0.00)[5];
+	RCPT_COUNT_SEVEN(0.00)[9];
+	NEURAL_HAM(-0.00)[-1.000];
 	TAGGED_RCPT(0.00)[linux-mips];
-	FROM_NO_DN(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[proton.me:email,proton.me:dkim,proton.me:mid,sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 016A94076E5
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,usp.br:dkim,usp.br:email,ciziks.com:email]
+X-Rspamd-Queue-Id: B4FED4096D0
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
+Replace mutex_lock(&lock) and mutex_unlock(&lock) calls with
+guard(mutex)(&lock) in functions ingenic_adc_set_adcmd,
+ingenic_adc_set_config, ingenic_adc_enable, ingenic_adc_capture
+and ingenic_adc_read_chan_info_raw.
 
-The EN751627 family (EN7516 DSL, EN7527 xPON) is a big-endian dual-core
-MIPS 1004Kc SoC (2 VPEs per core, NR_CPUS=3D4) used in DSL/WiFi gateway
-devices such as the ZyXEL EX3301-T0. It shares the MIPS GIC interrupt
-controller with EN7528 but is big-endian.
+This removes the need to call the unlock function, as the lock is
+automatically released when the function return or the scope exits
+for any other case.
 
-Key differences from existing SoCs:
-- EN751221: BE, single-core 34Kc, custom INTC
-- EN7528:   LE, dual-core 1004Kc, MIPS GIC
-- EN751627: BE, dual-core 2-VPE 1004Kc, MIPS GIC
-
-The SMP plumbing (CM/CPC probe + CPS SMP ops) is shared with EN7528 and
-lives in patch 100 (device_tree_init). This patch adds only the Kconfig
-entry.
-
-Note: on EN751627, mips_cpc_probe() must be called before
-register_cps_smp_ops(). Without it, core 1 never comes online because
-write_gcr_co_reset_release(0) is insufficient on this SoC. This is
-different from EN7528 where CPC probe behaves identically. Both SoCs
-are covered by the shared #if in device_tree_init().
-
-Signed-off-by: Kervin Pursoty <kpursoty@proton.me>
+Signed-off-by: Felipe Ribeiro de Souza <felipers@ime.usp.br>
+Co-developed-by: Lucas Ivars Cadima Ciziks <lucas@ciziks.com>
+Signed-off-by: Lucas Ivars Cadima Ciziks <lucas@ciziks.com>
 ---
- arch/mips/econet/Kconfig | 25 +++++++++++++++++++++++++
- 1 file changed, 25 insertions(+)
+ drivers/iio/adc/ingenic-adc.c | 19 +++++++------------
+ 1 file changed, 7 insertions(+), 12 deletions(-)
 
-diff --git a/arch/mips/econet/Kconfig b/arch/mips/econet/Kconfig
---- a/arch/mips/econet/Kconfig
-+++ b/arch/mips/econet/Kconfig
-@@ -41,3 +41,28 @@ choice
- =09=09  The EN7528 family with dual-core MIPS 1004Kc.
- =09=09  Requires MIPS_RAW_APPENDED_DTB=3Dy for boot.
+diff --git a/drivers/iio/adc/ingenic-adc.c b/drivers/iio/adc/ingenic-adc.c
+index 1e802c877..bb7abdcd8 100644
+--- a/drivers/iio/adc/ingenic-adc.c
++++ b/drivers/iio/adc/ingenic-adc.c
+@@ -20,6 +20,7 @@
+ #include <linux/of.h>
+ #include <linux/platform_device.h>
+ #include <linux/property.h>
++#include <linux/cleanup.h>
+ 
+ #define JZ_ADC_REG_ENABLE		0x00
+ #define JZ_ADC_REG_CFG			0x04
+@@ -115,7 +116,7 @@ static void ingenic_adc_set_adcmd(struct iio_dev *iio_dev, unsigned long mask)
+ {
+ 	struct ingenic_adc *adc = iio_priv(iio_dev);
+ 
+-	mutex_lock(&adc->lock);
++	guard(mutex)(&adc->lock);
+ 
+ 	/* Init ADCMD */
+ 	readl(adc->base + JZ_ADC_REG_ADCMD);
+@@ -162,8 +163,6 @@ static void ingenic_adc_set_adcmd(struct iio_dev *iio_dev, unsigned long mask)
+ 
+ 	/* We're done */
+ 	writel(0, adc->base + JZ_ADC_REG_ADCMD);
+-
+-	mutex_unlock(&adc->lock);
+ }
+ 
+ static void ingenic_adc_set_config(struct ingenic_adc *adc,
+@@ -172,13 +171,11 @@ static void ingenic_adc_set_config(struct ingenic_adc *adc,
+ {
+ 	uint32_t cfg;
+ 
+-	mutex_lock(&adc->lock);
++	guard(mutex)(&adc->lock);
+ 
+ 	cfg = readl(adc->base + JZ_ADC_REG_CFG) & ~mask;
+ 	cfg |= val;
+ 	writel(cfg, adc->base + JZ_ADC_REG_CFG);
+-
+-	mutex_unlock(&adc->lock);
+ }
+ 
+ static void ingenic_adc_enable_unlocked(struct ingenic_adc *adc,
+@@ -201,9 +198,8 @@ static void ingenic_adc_enable(struct ingenic_adc *adc,
+ 			       int engine,
+ 			       bool enabled)
+ {
+-	mutex_lock(&adc->lock);
++	guard(mutex)(&adc->lock);
+ 	ingenic_adc_enable_unlocked(adc, engine, enabled);
+-	mutex_unlock(&adc->lock);
+ }
+ 
+ static int ingenic_adc_capture(struct ingenic_adc *adc,
+@@ -218,7 +214,7 @@ static int ingenic_adc_capture(struct ingenic_adc *adc,
+ 	 * probably due to the switch of VREF. We must keep the lock here to
+ 	 * avoid races with the buffer enable/disable functions.
+ 	 */
+-	mutex_lock(&adc->lock);
++	guard(mutex)(&adc->lock);
+ 	cfg = readl(adc->base + JZ_ADC_REG_CFG);
+ 	writel(cfg & ~JZ_ADC_REG_CFG_CMD_SEL, adc->base + JZ_ADC_REG_CFG);
+ 
+@@ -229,7 +225,6 @@ static int ingenic_adc_capture(struct ingenic_adc *adc,
+ 		ingenic_adc_enable_unlocked(adc, engine, false);
+ 
+ 	writel(cfg, adc->base + JZ_ADC_REG_CFG);
+-	mutex_unlock(&adc->lock);
+ 
+ 	return ret;
+ }
+@@ -643,7 +638,8 @@ static int ingenic_adc_read_chan_info_raw(struct iio_dev *iio_dev,
+ 	}
+ 
+ 	/* We cannot sample the aux channels in parallel. */
+-	mutex_lock(&adc->aux_lock);
++	guard(mutex)(&adc->lock);
 +
-+=09config SOC_ECONET_EN751627
-+=09=09bool "EN751627 family"
-+=09=09select COMMON_CLK
-+=09=09select CPU_BIG_ENDIAN
-+=09=09select HAVE_PCI
-+=09=09select IRQ_MIPS_CPU
-+=09=09select MIPS_CM
-+=09=09select MIPS_CPC
-+=09=09select MIPS_CPS
-+=09=09select MIPS_CPU_SCACHE
-+=09=09select MIPS_GIC
-+=09=09select MIPS_MT_SMP
-+=09=09select PCI_DRIVERS_GENERIC
-+=09=09select SMP
-+=09=09select SMP_UP
-+=09=09select SYS_SUPPORTS_HIGHMEM
-+=09=09select SYS_SUPPORTS_MIPS_CPS
-+=09=09select SYS_SUPPORTS_MULTITHREADING
-+=09=09select SYS_SUPPORTS_SMP
-+=09=09help
-+=09=09  The EN751627 family (EN7516 DSL, EN7527 xPON) with big-endian
-+=09=09  dual-core, 2-VPE-per-core MIPS 1004Kc and MIPS GIC. Used in
-+=09=09  DSL+WiFi gateways. Requires MIPS_RAW_APPENDED_DTB=3Dy for boot.
- endchoice
+ 	if (adc->soc_data->has_aux_md && engine == 0) {
+ 		switch (chan->channel) {
+ 		case INGENIC_ADC_AUX0:
+@@ -677,7 +673,6 @@ static int ingenic_adc_read_chan_info_raw(struct iio_dev *iio_dev,
+ 
+ 	ret = IIO_VAL_INT;
+ out:
+-	mutex_unlock(&adc->aux_lock);
+ 	clk_disable(adc->clk);
+ 
+ 	return ret;
+-- 
+2.43.0
 
 
