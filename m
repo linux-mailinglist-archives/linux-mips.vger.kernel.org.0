@@ -1,50 +1,50 @@
-Return-Path: <linux-mips+bounces-14175-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-14177-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id cLBHJJr74GlloAAAu9opvQ
-	(envelope-from <linux-mips+bounces-14175-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Thu, 16 Apr 2026 17:09:14 +0200
+	id kPoXOjr74GlloAAAu9opvQ
+	(envelope-from <linux-mips+bounces-14177-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Thu, 16 Apr 2026 17:07:38 +0200
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 382FD410457
-	for <lists+linux-mips@lfdr.de>; Thu, 16 Apr 2026 17:09:14 +0200 (CEST)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id CEF1D4103D3
+	for <lists+linux-mips@lfdr.de>; Thu, 16 Apr 2026 17:07:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 0F38F3143D26
-	for <lists+linux-mips@lfdr.de>; Thu, 16 Apr 2026 15:06:01 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 3317D305702D
+	for <lists+linux-mips@lfdr.de>; Thu, 16 Apr 2026 15:06:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 313723E3D93;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E99EF3E4C74;
 	Thu, 16 Apr 2026 15:05:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ilvokhin.com header.i=@ilvokhin.com header.b="D5DQ6guF"
+	dkim=pass (1024-bit key) header.d=ilvokhin.com header.i=@ilvokhin.com header.b="NftkS5tz"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from mail.ilvokhin.com (mail.ilvokhin.com [178.62.254.231])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E1083E3141;
-	Thu, 16 Apr 2026 15:05:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4808C3E3C5F;
+	Thu, 16 Apr 2026 15:05:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.62.254.231
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776351941; cv=none; b=nZaX4LXkXe56Bm0we1PH3Y7mx2xacM12+/hfirC0T3orbNdNt2bBEqUUCGvo0IlLKxLYCztUJvXGfqGwuypi82NDCZn9tNEI6Md8zpF30+a9E5B0HSIhLzIZJ9k6ULsAl75o2tf5HfK3rg+UpbdWPy7bMrZqoHiKQNWnvhpXwQs=
+	t=1776351941; cv=none; b=HPThDDyPbsGLC60bpfBioDjbrh+ugsTGd3fD5VOy3OHGbowiOJKOjYPPDaNGieUsqyibxZRjk1PhIz/WUR5Wk4U1ibIhWtwVa3UGtP/CXE/r9vC582R85XpucQK165O/pKijtuApoPNHu6hY+HGLkkptjj2BfI5Spv7fj5nZe+E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1776351941; c=relaxed/simple;
-	bh=1//1gpUQ+YOXooIwXf8hc5fY5X87ufQRlK9LsUNDHCw=;
+	bh=CmTwc6lZx5Nin0oUCny/HSosoc9TIxZV/AgROqAveRM=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=D3eHO0JKowNvvmfjJO5vF6HnaaKFSq27aurev2L9FlU1hOV8ASdTDhi1F9zD4YTPTLP11w1PPF1mPH1VR8MVv5uXetqr8R3hHWEe1vYCqpf06zqvUP+S5JarNQu9XeSumG67yXI/gj3tliwA7UgX/jA79KHHbwV5Qw4AzTN+CHI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=ilvokhin.com; spf=pass smtp.mailfrom=ilvokhin.com; dkim=pass (1024-bit key) header.d=ilvokhin.com header.i=@ilvokhin.com header.b=D5DQ6guF; arc=none smtp.client-ip=178.62.254.231
+	 MIME-Version; b=Fr01X6NtIpg9hhlPm72zp0pS2jNu85TCCX4VYU0lMX72zfR4lyMJJG3+dLasCFKylymjYmqcwmQo0QcXa/qvgDn5fWCyfjKHQjNJOTRcVSjwsQjLJYGDsQUqtPTRkzEE1F99LrR2OlHVcnOHLNn4wdkNx6/phaAY8je/VKw6ckw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=ilvokhin.com; spf=pass smtp.mailfrom=ilvokhin.com; dkim=pass (1024-bit key) header.d=ilvokhin.com header.i=@ilvokhin.com header.b=NftkS5tz; arc=none smtp.client-ip=178.62.254.231
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=ilvokhin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ilvokhin.com
 Received: from localhost.localdomain (shell.ilvokhin.com [138.68.190.75])
 	(Authenticated sender: d@ilvokhin.com)
-	by mail.ilvokhin.com (Postfix) with ESMTPSA id A14B2C7449;
-	Thu, 16 Apr 2026 15:05:36 +0000 (UTC)
+	by mail.ilvokhin.com (Postfix) with ESMTPSA id 09DCCC744F;
+	Thu, 16 Apr 2026 15:05:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ilvokhin.com;
-	s=mail; t=1776351936;
-	bh=D8xulR7JjCNqJss+1hEV+Wl86yGJuhLSBNqNTNYuFwc=;
+	s=mail; t=1776351937;
+	bh=+VNXsfwo1hWIpxn/gK53LLCns39qj3Tz5b8p/6O9yoc=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=D5DQ6guF7Ywnq+T4TcmGaOvR9vQeJOZ5qbphM7VEVdzCduoknOLynXGcqMXroOQUD
-	 Sy/KkZXeMb1oW4Rc6STD5g6Ymo5SiON6w8WYKu6yeJpskapDA5zGG5U4OYXtNR31Jl
-	 29TqDiToONSpxM/rdWX86C2ZYc/cO7sAuVqOo4oI=
+	b=NftkS5tzXrASQNIrqYJxqv7yuKDzVytqt/4J+FFcCxu+RQq5ADLuajrMtGINxGj7T
+	 nunbbBVG/b/KD91hn6VinZ1Gof65ZUG0LjUrkVC5N5hq8MeAnWYLXy6tbasbpkNFuM
+	 +iB3XJIjf/JzdW7Di0ju9WhAvy4AoDwh0DB+Ui6I=
 From: Dmitry Ilvokhin <d@ilvokhin.com>
 To: Peter Zijlstra <peterz@infradead.org>,
 	Ingo Molnar <mingo@redhat.com>,
@@ -77,9 +77,9 @@ Cc: linux-kernel@vger.kernel.org,
 	kernel-team@meta.com,
 	"Paul E. McKenney" <paulmck@kernel.org>,
 	Dmitry Ilvokhin <d@ilvokhin.com>
-Subject: [PATCH v5 6/7] locking: Factor out __queued_read_unlock()/__queued_write_unlock()
-Date: Thu, 16 Apr 2026 15:05:12 +0000
-Message-ID: <eabc9de3347ca042eb0593c9b81c8e48254a4874.1776350944.git.d@ilvokhin.com>
+Subject: [PATCH v5 7/7] locking: Add contended_release tracepoint to qrwlock
+Date: Thu, 16 Apr 2026 15:05:13 +0000
+Message-ID: <f71b196c7877c57d6a1ab615cc1f470476f55938.1776350944.git.d@ilvokhin.com>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <cover.1776350944.git.d@ilvokhin.com>
 References: <cover.1776350944.git.d@ilvokhin.com>
@@ -95,18 +95,18 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	R_MISSING_CHARSET(0.50)[];
 	DMARC_POLICY_ALLOW(-0.50)[ilvokhin.com,reject];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
 	R_DKIM_ALLOW(-0.20)[ilvokhin.com:s=mail];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-14175-lists,linux-mips=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-14177-lists,linux-mips=lfdr.de];
 	MIME_TRACE(0.00)[0:+];
 	RCPT_COUNT_TWELVE(0.00)[31];
 	RCVD_TLS_LAST(0.00)[];
 	RCVD_COUNT_THREE(0.00)[4];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
 	FROM_NEQ_ENVFROM(0.00)[d@ilvokhin.com,linux-mips@vger.kernel.org];
@@ -116,66 +116,98 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-mips];
 	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,ilvokhin.com:email,ilvokhin.com:dkim,ilvokhin.com:mid]
-X-Rspamd-Queue-Id: 382FD410457
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,ilvokhin.com:email,ilvokhin.com:dkim,ilvokhin.com:mid]
+X-Rspamd-Queue-Id: CEF1D4103D3
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-This is a preparatory refactoring for the next commit, which adds
-contended_release tracepoint instrumentation and needs to call the
-unlock from both traced and non-traced paths.
-
-No functional change.
+Extend the contended_release tracepoint to queued rwlocks, using the
+same out-of-line traced unlock approach as queued spinlocks.
 
 Signed-off-by: Dmitry Ilvokhin <d@ilvokhin.com>
 ---
- include/asm-generic/qrwlock.h | 20 +++++++++++++++-----
- 1 file changed, 15 insertions(+), 5 deletions(-)
+ include/asm-generic/qrwlock.h | 22 ++++++++++++++++++++++
+ kernel/locking/qrwlock.c      | 16 ++++++++++++++++
+ 2 files changed, 38 insertions(+)
 
 diff --git a/include/asm-generic/qrwlock.h b/include/asm-generic/qrwlock.h
-index 75b8f4601b28..4b627bafba8b 100644
+index 4b627bafba8b..274c19006125 100644
 --- a/include/asm-generic/qrwlock.h
 +++ b/include/asm-generic/qrwlock.h
-@@ -101,16 +101,26 @@ static inline void queued_write_lock(struct qrwlock *lock)
- 	queued_write_lock_slowpath(lock);
- }
+@@ -14,6 +14,7 @@
+ #define __ASM_GENERIC_QRWLOCK_H
  
-+static __always_inline void __queued_read_unlock(struct qrwlock *lock)
-+{
-+	/*
-+	 * Atomically decrement the reader count
-+	 */
-+	(void)atomic_sub_return_release(_QR_BIAS, &lock->cnts);
-+}
+ #include <linux/atomic.h>
++#include <linux/tracepoint-defs.h>
+ #include <asm/barrier.h>
+ #include <asm/processor.h>
+ 
+@@ -35,6 +36,10 @@
+  */
+ extern void queued_read_lock_slowpath(struct qrwlock *lock);
+ extern void queued_write_lock_slowpath(struct qrwlock *lock);
++extern void queued_read_unlock_traced(struct qrwlock *lock);
++extern void queued_write_unlock_traced(struct qrwlock *lock);
 +
++DECLARE_TRACEPOINT(contended_release);
+ 
  /**
-  * queued_read_unlock - release read lock of a queued rwlock
-  * @lock : Pointer to queued rwlock structure
+  * queued_read_trylock - try to acquire read lock of a queued rwlock
+@@ -115,6 +120,17 @@ static __always_inline void __queued_read_unlock(struct qrwlock *lock)
   */
  static inline void queued_read_unlock(struct qrwlock *lock)
  {
--	/*
--	 * Atomically decrement the reader count
--	 */
--	(void)atomic_sub_return_release(_QR_BIAS, &lock->cnts);
-+	__queued_read_unlock(lock);
-+}
++	/*
++	 * Trace and unlock are combined in the traced unlock variant so
++	 * the compiler does not need to preserve the lock pointer across
++	 * the function call, avoiding callee-saved register save/restore
++	 * on the hot path.
++	 */
++	if (tracepoint_enabled(contended_release)) {
++		queued_read_unlock_traced(lock);
++		return;
++	}
 +
-+static __always_inline void __queued_write_unlock(struct qrwlock *lock)
-+{
-+	smp_store_release(&lock->wlocked, 0);
+ 	__queued_read_unlock(lock);
  }
  
- /**
-@@ -119,7 +129,7 @@ static inline void queued_read_unlock(struct qrwlock *lock)
+@@ -129,6 +145,12 @@ static __always_inline void __queued_write_unlock(struct qrwlock *lock)
   */
  static inline void queued_write_unlock(struct qrwlock *lock)
  {
--	smp_store_release(&lock->wlocked, 0);
-+	__queued_write_unlock(lock);
++	/* See comment in queued_read_unlock(). */
++	if (tracepoint_enabled(contended_release)) {
++		queued_write_unlock_traced(lock);
++		return;
++	}
++
+ 	__queued_write_unlock(lock);
  }
  
- /**
+diff --git a/kernel/locking/qrwlock.c b/kernel/locking/qrwlock.c
+index d2ef312a8611..5f7a0fc2b27a 100644
+--- a/kernel/locking/qrwlock.c
++++ b/kernel/locking/qrwlock.c
+@@ -90,3 +90,19 @@ void __lockfunc queued_write_lock_slowpath(struct qrwlock *lock)
+ 	trace_contention_end(lock, 0);
+ }
+ EXPORT_SYMBOL(queued_write_lock_slowpath);
++
++void __lockfunc queued_read_unlock_traced(struct qrwlock *lock)
++{
++	if (queued_rwlock_is_contended(lock))
++		trace_contended_release(lock);
++	__queued_read_unlock(lock);
++}
++EXPORT_SYMBOL(queued_read_unlock_traced);
++
++void __lockfunc queued_write_unlock_traced(struct qrwlock *lock)
++{
++	if (queued_rwlock_is_contended(lock))
++		trace_contended_release(lock);
++	__queued_write_unlock(lock);
++}
++EXPORT_SYMBOL(queued_write_unlock_traced);
 -- 
 2.52.0
 
