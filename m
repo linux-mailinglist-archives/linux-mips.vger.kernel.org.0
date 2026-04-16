@@ -1,50 +1,50 @@
-Return-Path: <linux-mips+bounces-14171-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-14173-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id sCHDKSv74GlloAAAu9opvQ
-	(envelope-from <linux-mips+bounces-14171-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Thu, 16 Apr 2026 17:07:23 +0200
+	id AItKFk374GlloAAAu9opvQ
+	(envelope-from <linux-mips+bounces-14173-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Thu, 16 Apr 2026 17:07:57 +0200
 X-Original-To: lists+linux-mips@lfdr.de
 Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5BDF44103A4
-	for <lists+linux-mips@lfdr.de>; Thu, 16 Apr 2026 17:07:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 0CA994103FF
+	for <lists+linux-mips@lfdr.de>; Thu, 16 Apr 2026 17:07:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 1C8AD30CEC65
-	for <lists+linux-mips@lfdr.de>; Thu, 16 Apr 2026 15:05:43 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 167F131070A5
+	for <lists+linux-mips@lfdr.de>; Thu, 16 Apr 2026 15:05:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 099D03E1D1C;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9DACA3E314C;
 	Thu, 16 Apr 2026 15:05:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ilvokhin.com header.i=@ilvokhin.com header.b="C15xYElv"
+	dkim=pass (1024-bit key) header.d=ilvokhin.com header.i=@ilvokhin.com header.b="Gf2mkIEe"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from mail.ilvokhin.com (mail.ilvokhin.com [178.62.254.231])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93775395DBC;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F39C83B38BE;
 	Thu, 16 Apr 2026 15:05:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.62.254.231
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776351938; cv=none; b=uZAuFhiNckL2HPcR2M9NP/aciqqM1ujvrdSlO7b7kvvEcBEA4PSfIbBWn2TDfThO0fhv9nwpapNCFUOZYbbOdkguaCT6GqQcMcpaHXe7g1nRKCuK7CP0fmq3LhZnVX5i+xK5jftLtbMZhvsSxTzuS/kIE70Rc0IkLV95Ze/Nv4o=
+	t=1776351939; cv=none; b=U2hrVFsHcCku+qdspic5NNrQNwUO5AXt/RkTerPpOJ5HJlMmY4mQctuvspd4ozoEWCHm7vqLnaWZsUHAufu7A6rq8jtfMNX39YmKOZCHjc+USmLuPbVoAfGLRO/JXD/XV0dfwsexVMzllD6GFQrDC0peJgIHnZYH3psm57eDdPs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776351938; c=relaxed/simple;
-	bh=nkS2FNHvuD93wdW/3Ky4EndgW9Xd2ntRYc4kP5U6umY=;
+	s=arc-20240116; t=1776351939; c=relaxed/simple;
+	bh=2U8aVEOLW/6+cIz9XpgXjvvpAYYgZ5IOmYp1ff9bn3k=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=N/Ud1e0yB6H3SpBkU2rTK9z6zdKnJzRy528OoNXr8yp86hUKGbaygijZPozsi4IA5Malj1t1BT4628fXmROzOL835iWMNfn9AYNA1MLUWTVXclXFIQrzLG6XDQYE7KhJndMTBubZf6xBjaYMGERcs917VzkR5OxCn6/9T1ouUNA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=ilvokhin.com; spf=pass smtp.mailfrom=ilvokhin.com; dkim=pass (1024-bit key) header.d=ilvokhin.com header.i=@ilvokhin.com header.b=C15xYElv; arc=none smtp.client-ip=178.62.254.231
+	 MIME-Version; b=Fzkm+br0b7FkSFpsmjYlM+a6JiBSf8rlR5qw9xTbT3CLTEFBV6fctZ65k5Bu1oZvXQ5gNi8RtQ0Rc4fSkYf+eVqBMLRUE4yiOTpmS7r4TCOKJVKkxzM3KpxAna5I90Z4OK1bUTsVttROYMh8WKEDFZiY7Ml03fLU7eBnWURttpM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=ilvokhin.com; spf=pass smtp.mailfrom=ilvokhin.com; dkim=pass (1024-bit key) header.d=ilvokhin.com header.i=@ilvokhin.com header.b=Gf2mkIEe; arc=none smtp.client-ip=178.62.254.231
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=ilvokhin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ilvokhin.com
 Received: from localhost.localdomain (shell.ilvokhin.com [138.68.190.75])
 	(Authenticated sender: d@ilvokhin.com)
-	by mail.ilvokhin.com (Postfix) with ESMTPSA id 336ADC743B;
+	by mail.ilvokhin.com (Postfix) with ESMTPSA id 8C7E0C743E;
 	Thu, 16 Apr 2026 15:05:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ilvokhin.com;
 	s=mail; t=1776351935;
-	bh=Jiq9HHreSKv9gJ1OxNDx05z/LXXiM1SwacfPI7vtSKY=;
+	bh=9s+loRtFAzfD79lyKEPuPxMA+1b2QD2AJxg+DhNBrpc=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=C15xYElvp+LqvswEbao4hVIFhLbGPaifVVgX+TK3myIRVWqDZFvJ7VDIDSKeM3C8l
-	 LkXbFwG30KvpM8GK9Le30ZdI1gdhb1ow9kfbdmWLIgr5u6B2C1F/IA3JZrcQy6p/gG
-	 a5oD5Hj4dbR39vb+u3cc+zxoKE783CcJvTuCx/oY=
+	b=Gf2mkIEeYywB6lpxUFYIx8wZ2oSrNjV4kIUzjIfksdZsnwL+zbgxBig7yFFDJ5URC
+	 HuDV/WO6z8Iy6BfCDBINswdSJ3w8Pat1nbxeGssSCaZTZ8TcxsVG1J2oDUvIlsexOF
+	 1xzYIS9uZIj6UxfZvaAxxtHH+qXIORRQ9gEb2y6o=
 From: Dmitry Ilvokhin <d@ilvokhin.com>
 To: Peter Zijlstra <peterz@infradead.org>,
 	Ingo Molnar <mingo@redhat.com>,
@@ -76,11 +76,10 @@ Cc: linux-kernel@vger.kernel.org,
 	linux-trace-kernel@vger.kernel.org,
 	kernel-team@meta.com,
 	"Paul E. McKenney" <paulmck@kernel.org>,
-	Dmitry Ilvokhin <d@ilvokhin.com>,
-	Usama Arif <usama.arif@linux.dev>
-Subject: [PATCH v5 2/7] locking/percpu-rwsem: Extract __percpu_up_read()
-Date: Thu, 16 Apr 2026 15:05:08 +0000
-Message-ID: <a3a45d087f56b9c4454d35140dbcbc3c45f4dc09.1776350944.git.d@ilvokhin.com>
+	Dmitry Ilvokhin <d@ilvokhin.com>
+Subject: [PATCH v5 3/7] locking: Add contended_release tracepoint to sleepable locks
+Date: Thu, 16 Apr 2026 15:05:09 +0000
+Message-ID: <a9e6ce4611ee4b1c42aa81bb431dc3e7c38531b3.1776350944.git.d@ilvokhin.com>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <cover.1776350944.git.d@ilvokhin.com>
 References: <cover.1776350944.git.d@ilvokhin.com>
@@ -102,9 +101,9 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-14171-lists,linux-mips=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-14173-lists,linux-mips=lfdr.de];
 	MIME_TRACE(0.00)[0:+];
-	RCPT_COUNT_TWELVE(0.00)[32];
+	RCPT_COUNT_TWELVE(0.00)[31];
 	RCVD_TLS_LAST(0.00)[];
 	RCVD_COUNT_THREE(0.00)[4];
 	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
@@ -117,81 +116,218 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-mips];
 	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[linux.dev:email,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,ilvokhin.com:email,ilvokhin.com:dkim,ilvokhin.com:mid]
-X-Rspamd-Queue-Id: 5BDF44103A4
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,ilvokhin.com:email,ilvokhin.com:dkim,ilvokhin.com:mid]
+X-Rspamd-Queue-Id: 0CA994103FF
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-Move the percpu_up_read() slowpath out of the inline function into a new
-__percpu_up_read() to avoid binary size increase from adding a
-tracepoint to an inlined function.
+Add the contended_release trace event. This tracepoint fires on the
+holder side when a contended lock is released, complementing the
+existing contention_begin/contention_end tracepoints which fire on the
+waiter side.
+
+This enables correlating lock hold time under contention with waiter
+events by lock address.
+
+Add trace_contended_release() calls to the slowpath unlock paths of
+sleepable locks: mutex, rtmutex, semaphore, rwsem, percpu-rwsem, and
+RT-specific rwbase locks.
+
+Where possible, trace_contended_release() fires before the lock is
+released and before the waiter is woken. For some lock types, the
+tracepoint fires after the release but before the wake. Making the
+placement consistent across all lock types is not worth the added
+complexity.
+
+For reader/writer locks, the tracepoint fires for every reader releasing
+while a writer is waiting, not only for the last reader.
 
 Signed-off-by: Dmitry Ilvokhin <d@ilvokhin.com>
-Acked-by: Usama Arif <usama.arif@linux.dev>
+Acked-by: Paul E. McKenney <paulmck@kernel.org>
 ---
- include/linux/percpu-rwsem.h  | 15 +++------------
- kernel/locking/percpu-rwsem.c | 18 ++++++++++++++++++
- 2 files changed, 21 insertions(+), 12 deletions(-)
+ include/trace/events/lock.h   | 17 +++++++++++++++++
+ kernel/locking/mutex.c        |  4 ++++
+ kernel/locking/percpu-rwsem.c | 11 +++++++++++
+ kernel/locking/rtmutex.c      |  1 +
+ kernel/locking/rwbase_rt.c    |  6 ++++++
+ kernel/locking/rwsem.c        | 10 ++++++++--
+ kernel/locking/semaphore.c    |  4 ++++
+ 7 files changed, 51 insertions(+), 2 deletions(-)
 
-diff --git a/include/linux/percpu-rwsem.h b/include/linux/percpu-rwsem.h
-index c8cb010d655e..39d5bf8e6562 100644
---- a/include/linux/percpu-rwsem.h
-+++ b/include/linux/percpu-rwsem.h
-@@ -107,6 +107,8 @@ static inline bool percpu_down_read_trylock(struct percpu_rw_semaphore *sem)
- 	return ret;
- }
+diff --git a/include/trace/events/lock.h b/include/trace/events/lock.h
+index da978f2afb45..1ded869cd619 100644
+--- a/include/trace/events/lock.h
++++ b/include/trace/events/lock.h
+@@ -137,6 +137,23 @@ TRACE_EVENT(contention_end,
+ 	TP_printk("%p (ret=%d)", __entry->lock_addr, __entry->ret)
+ );
  
-+extern void __percpu_up_read(struct percpu_rw_semaphore *sem);
++TRACE_EVENT(contended_release,
 +
- static inline void percpu_up_read(struct percpu_rw_semaphore *sem)
- {
- 	rwsem_release(&sem->dep_map, _RET_IP_);
-@@ -118,18 +120,7 @@ static inline void percpu_up_read(struct percpu_rw_semaphore *sem)
- 	if (likely(rcu_sync_is_idle(&sem->rss))) {
- 		this_cpu_dec(*sem->read_count);
- 	} else {
--		/*
--		 * slowpath; reader will only ever wake a single blocked
--		 * writer.
--		 */
--		smp_mb(); /* B matches C */
--		/*
--		 * In other words, if they see our decrement (presumably to
--		 * aggregate zero, as that is the only time it matters) they
--		 * will also see our critical section.
--		 */
--		this_cpu_dec(*sem->read_count);
--		rcuwait_wake_up(&sem->writer);
-+		__percpu_up_read(sem);
++	TP_PROTO(void *lock),
++
++	TP_ARGS(lock),
++
++	TP_STRUCT__entry(
++		__field(void *, lock_addr)
++	),
++
++	TP_fast_assign(
++		__entry->lock_addr = lock;
++	),
++
++	TP_printk("%p", __entry->lock_addr)
++);
++
+ #endif /* _TRACE_LOCK_H */
+ 
+ /* This part must be outside protection */
+diff --git a/kernel/locking/mutex.c b/kernel/locking/mutex.c
+index 427187ff02db..6c2c9312eb8f 100644
+--- a/kernel/locking/mutex.c
++++ b/kernel/locking/mutex.c
+@@ -997,6 +997,9 @@ static noinline void __sched __mutex_unlock_slowpath(struct mutex *lock, unsigne
+ 		wake_q_add(&wake_q, next);
  	}
- 	preempt_enable();
- }
+ 
++	if (trace_contended_release_enabled() && waiter)
++		trace_contended_release(lock);
++
+ 	if (owner & MUTEX_FLAG_HANDOFF)
+ 		__mutex_handoff(lock, next);
+ 
+@@ -1194,6 +1197,7 @@ EXPORT_SYMBOL(ww_mutex_lock_interruptible);
+ 
+ EXPORT_TRACEPOINT_SYMBOL_GPL(contention_begin);
+ EXPORT_TRACEPOINT_SYMBOL_GPL(contention_end);
++EXPORT_TRACEPOINT_SYMBOL_GPL(contended_release);
+ 
+ /**
+  * atomic_dec_and_mutex_lock - return holding mutex if we dec to 0
 diff --git a/kernel/locking/percpu-rwsem.c b/kernel/locking/percpu-rwsem.c
-index ef234469baac..f3ee7a0d6047 100644
+index f3ee7a0d6047..46b5903989b8 100644
 --- a/kernel/locking/percpu-rwsem.c
 +++ b/kernel/locking/percpu-rwsem.c
-@@ -288,3 +288,21 @@ void percpu_up_write(struct percpu_rw_semaphore *sem)
- 	rcu_sync_exit(&sem->rss);
- }
- EXPORT_SYMBOL_GPL(percpu_up_write);
+@@ -263,6 +263,9 @@ void percpu_up_write(struct percpu_rw_semaphore *sem)
+ {
+ 	rwsem_release(&sem->dep_map, _RET_IP_);
+ 
++	if (trace_contended_release_enabled() && wq_has_sleeper(&sem->waiters))
++		trace_contended_release(sem);
 +
-+void __percpu_up_read(struct percpu_rw_semaphore *sem)
-+{
-+	lockdep_assert_preemption_disabled();
+ 	/*
+ 	 * Signal the writer is done, no fast path yet.
+ 	 *
+@@ -292,6 +295,14 @@ EXPORT_SYMBOL_GPL(percpu_up_write);
+ void __percpu_up_read(struct percpu_rw_semaphore *sem)
+ {
+ 	lockdep_assert_preemption_disabled();
 +	/*
-+	 * slowpath; reader will only ever wake a single blocked
-+	 * writer.
++	 * After percpu_up_write() completes, rcu_sync_is_idle() can still
++	 * return false during the grace period, forcing readers into this
++	 * slowpath. Only trace when a writer is actually waiting for
++	 * readers to drain.
 +	 */
-+	smp_mb(); /* B matches C */
-+	/*
-+	 * In other words, if they see our decrement (presumably to
-+	 * aggregate zero, as that is the only time it matters) they
-+	 * will also see our critical section.
-+	 */
-+	this_cpu_dec(*sem->read_count);
-+	rcuwait_wake_up(&sem->writer);
-+}
-+EXPORT_SYMBOL_GPL(__percpu_up_read);
++	if (trace_contended_release_enabled() && rcuwait_active(&sem->writer))
++		trace_contended_release(sem);
+ 	/*
+ 	 * slowpath; reader will only ever wake a single blocked
+ 	 * writer.
+diff --git a/kernel/locking/rtmutex.c b/kernel/locking/rtmutex.c
+index ccaba6148b61..3db8a840b4e8 100644
+--- a/kernel/locking/rtmutex.c
++++ b/kernel/locking/rtmutex.c
+@@ -1466,6 +1466,7 @@ static void __sched rt_mutex_slowunlock(struct rt_mutex_base *lock)
+ 		raw_spin_lock_irqsave(&lock->wait_lock, flags);
+ 	}
+ 
++	trace_contended_release(lock);
+ 	/*
+ 	 * The wakeup next waiter path does not suffer from the above
+ 	 * race. See the comments there.
+diff --git a/kernel/locking/rwbase_rt.c b/kernel/locking/rwbase_rt.c
+index 82e078c0665a..74da5601018f 100644
+--- a/kernel/locking/rwbase_rt.c
++++ b/kernel/locking/rwbase_rt.c
+@@ -174,6 +174,8 @@ static void __sched __rwbase_read_unlock(struct rwbase_rt *rwb,
+ static __always_inline void rwbase_read_unlock(struct rwbase_rt *rwb,
+ 					       unsigned int state)
+ {
++	if (trace_contended_release_enabled() && rt_mutex_owner(&rwb->rtmutex))
++		trace_contended_release(rwb);
+ 	/*
+ 	 * rwb->readers can only hit 0 when a writer is waiting for the
+ 	 * active readers to leave the critical section.
+@@ -205,6 +207,8 @@ static inline void rwbase_write_unlock(struct rwbase_rt *rwb)
+ 	unsigned long flags;
+ 
+ 	raw_spin_lock_irqsave(&rtm->wait_lock, flags);
++	if (trace_contended_release_enabled() && rt_mutex_has_waiters(rtm))
++		trace_contended_release(rwb);
+ 	__rwbase_write_unlock(rwb, WRITER_BIAS, flags);
+ }
+ 
+@@ -214,6 +218,8 @@ static inline void rwbase_write_downgrade(struct rwbase_rt *rwb)
+ 	unsigned long flags;
+ 
+ 	raw_spin_lock_irqsave(&rtm->wait_lock, flags);
++	if (trace_contended_release_enabled() && rt_mutex_has_waiters(rtm))
++		trace_contended_release(rwb);
+ 	/* Release it and account current as reader */
+ 	__rwbase_write_unlock(rwb, WRITER_BIAS - 1, flags);
+ }
+diff --git a/kernel/locking/rwsem.c b/kernel/locking/rwsem.c
+index bf647097369c..602d5fd3c91a 100644
+--- a/kernel/locking/rwsem.c
++++ b/kernel/locking/rwsem.c
+@@ -1387,6 +1387,8 @@ static inline void __up_read(struct rw_semaphore *sem)
+ 	rwsem_clear_reader_owned(sem);
+ 	tmp = atomic_long_add_return_release(-RWSEM_READER_BIAS, &sem->count);
+ 	DEBUG_RWSEMS_WARN_ON(tmp < 0, sem);
++	if (trace_contended_release_enabled() && (tmp & RWSEM_FLAG_WAITERS))
++		trace_contended_release(sem);
+ 	if (unlikely((tmp & (RWSEM_LOCK_MASK|RWSEM_FLAG_WAITERS)) ==
+ 		      RWSEM_FLAG_WAITERS)) {
+ 		clear_nonspinnable(sem);
+@@ -1413,8 +1415,10 @@ static inline void __up_write(struct rw_semaphore *sem)
+ 	preempt_disable();
+ 	rwsem_clear_owner(sem);
+ 	tmp = atomic_long_fetch_add_release(-RWSEM_WRITER_LOCKED, &sem->count);
+-	if (unlikely(tmp & RWSEM_FLAG_WAITERS))
++	if (unlikely(tmp & RWSEM_FLAG_WAITERS)) {
++		trace_contended_release(sem);
+ 		rwsem_wake(sem);
++	}
+ 	preempt_enable();
+ }
+ 
+@@ -1437,8 +1441,10 @@ static inline void __downgrade_write(struct rw_semaphore *sem)
+ 	tmp = atomic_long_fetch_add_release(
+ 		-RWSEM_WRITER_LOCKED+RWSEM_READER_BIAS, &sem->count);
+ 	rwsem_set_reader_owned(sem);
+-	if (tmp & RWSEM_FLAG_WAITERS)
++	if (tmp & RWSEM_FLAG_WAITERS) {
++		trace_contended_release(sem);
+ 		rwsem_downgrade_wake(sem);
++	}
+ 	preempt_enable();
+ }
+ 
+diff --git a/kernel/locking/semaphore.c b/kernel/locking/semaphore.c
+index 74d41433ba13..35ac3498dca5 100644
+--- a/kernel/locking/semaphore.c
++++ b/kernel/locking/semaphore.c
+@@ -230,6 +230,10 @@ void __sched up(struct semaphore *sem)
+ 		sem->count++;
+ 	else
+ 		__up(sem, &wake_q);
++
++	if (trace_contended_release_enabled() && !wake_q_empty(&wake_q))
++		trace_contended_release(sem);
++
+ 	raw_spin_unlock_irqrestore(&sem->lock, flags);
+ 	if (!wake_q_empty(&wake_q))
+ 		wake_up_q(&wake_q);
 -- 
 2.52.0
 
