@@ -1,160 +1,164 @@
-Return-Path: <linux-mips+bounces-14186-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-14187-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 6DwXBSrq4WmKzgAAu9opvQ
-	(envelope-from <linux-mips+bounces-14186-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Fri, 17 Apr 2026 10:07:06 +0200
+	id wHR0Lt8y4mkZ3QAAu9opvQ
+	(envelope-from <linux-mips+bounces-14187-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Fri, 17 Apr 2026 15:17:19 +0200
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 96842418651
-	for <lists+linux-mips@lfdr.de>; Fri, 17 Apr 2026 10:07:01 +0200 (CEST)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id B227141B87B
+	for <lists+linux-mips@lfdr.de>; Fri, 17 Apr 2026 15:17:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id E0FF830DAF10
-	for <lists+linux-mips@lfdr.de>; Fri, 17 Apr 2026 08:01:56 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id D8EA5301CAB3
+	for <lists+linux-mips@lfdr.de>; Fri, 17 Apr 2026 13:16:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 850C6388E7B;
-	Fri, 17 Apr 2026 08:01:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7E69D374E4E;
+	Fri, 17 Apr 2026 13:16:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Yj1+szGk"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="R0j2okB+"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f180.google.com (mail-yw1-f180.google.com [209.85.128.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA43F388E60;
-	Fri, 17 Apr 2026 08:01:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776412916; cv=none; b=XfH0hocjA9qdWOVkRg+Wp17OFCE6IUcBUBb3F75dE8nOxwMQ2CJMIMWtQV0EoPw2V0i84n3tqe0np/MGFR5jtbLNot5Kr9Rqt/VyWulvAFTsouQiiSvjn3/RxyScKBMEzAL+WVrdMCa70p5QKxBeLEgRT448D3tIJ6el6cCkyk4=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776412916; c=relaxed/simple;
-	bh=D3XsKtf/DWrxBLu1AcgfGhF6zzU3o81w6oIhyh5xwOU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=UuqDSwzxXN5AtAXmuevJIrsddY0lJcHuHLxDF1mW3KFqGN7Yk13Tt6jFZSENxmw2AAoO6fiGF/IOcpR4pulVG3UOsEshoyhFtrH8NRlIKkdXA4r633Lh5kQyf2mz2gm09U5J0gzHOcJYZBWiDJZJnuOgw+Ywr/O2csA3m5Jw9o8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Yj1+szGk; arc=none smtp.client-ip=198.175.65.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1776412913; x=1807948913;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=D3XsKtf/DWrxBLu1AcgfGhF6zzU3o81w6oIhyh5xwOU=;
-  b=Yj1+szGkux5ejJGVk9fIjfnlkeFJXBTcO9A6+YOgiDK+3BHHzxI+Ffh0
-   VOCDMJ+uNiWOlJiLmwx656ly7GSWN1zILWabvS6S/PMfb5Sj9MXNCHLCg
-   fBmPdyCMZUH0DvUDKkEkNTEJHSssJdLlTDonS3eM5PgYFGfLVFZT0kcjx
-   fIha3yCuSizZUc59a5o44hOTuZPmrL+b2LsZ6g/w6EnOt6mPmJg6tzDQE
-   KfJlBL/VWviFscvrOvXQbOgVSfFsDl60wn297wpELAn8yHDDXjURYGj0E
-   3C5kjW0bBng+IHhy1y4l7slyfL+zoakmyjdQaY2NHGrRUZ8eyvL0hlLsA
-   A==;
-X-CSE-ConnectionGUID: JROjbd+tRNC8tw1JrBpc8Q==
-X-CSE-MsgGUID: 9q5+xQnrSqKhcaU3GYyUOw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11761"; a="100072833"
-X-IronPort-AV: E=Sophos;i="6.23,183,1770624000"; 
-   d="scan'208";a="100072833"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Apr 2026 01:01:53 -0700
-X-CSE-ConnectionGUID: ot7oOc28QkKKr0WR1EZLiw==
-X-CSE-MsgGUID: ePIeW+7dTtGaoF/0CnVc+g==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,183,1770624000"; 
-   d="scan'208";a="230902678"
-Received: from hrotuna-mobl2.ger.corp.intel.com (HELO localhost) ([10.245.245.78])
-  by orviesa008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Apr 2026 01:01:51 -0700
-Date: Fri, 17 Apr 2026 11:01:48 +0300
-From: Andy Shevchenko <andriy.shevchenko@intel.com>
-To: Felipe Ribeiro de Souza <felipers@ime.usp.br>
-Cc: paul@crapouillou.net, jic23@kernel.org, dlechner@baylibre.com,
-	nuno.sa@analog.com, andy@kernel.org,
-	Lucas Ivars Cadima Ciziks <lucas@ciziks.com>,
-	linux-mips@vger.kernel.org, linux-iio@vger.kernel.org
-Subject: Re: [PATCH] iio: adc: ingenic-adc: use guard(mutex)(&lock) to handle
- synchronisation
-Message-ID: <aeHo7NFgvWe_3kPQ@ashevche-desk.local>
-References: <20260416011815.9140-1-felipers@ime.usp.br>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3041C2DC78C
+	for <linux-mips@vger.kernel.org>; Fri, 17 Apr 2026 13:16:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.180
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1776431810; cv=pass; b=LvhiXwxqgD9VGxaIYofjyqh4SQAT9tHRNhCukDVYslqFmiDnyJg8UpvowXYHJ1NBJAB6fPg3LikZV9+Ewp0oGUkT7hPjo443LeN+9PTl1EDN76qjEn3p9Gz7AeHjVNY/pa869QKIlcXRR3BFXbsbJlQa7D4xUOAyKkqW1tncVJQ=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1776431810; c=relaxed/simple;
+	bh=3s/oC2gxFO0+InhCcu7xTpMSDsPip0QFs52mALT2Uco=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=iZSHNu4wzMGUjVCxZt2K8fg80Wjo269XDkFrx69Ln4jhH2dq4o6I+3AjuFEodH2ohd+TkdYnm3beLvHQlxyWxRKCm0S3lvEz+mEoMn5jnH6R7mNz7QXfWIyYqkdzC7GA4GwdKJhSvTLEIG2s/x0eysw166PvfxwFc+RfNvlwKes=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=R0j2okB+; arc=pass smtp.client-ip=209.85.128.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-yw1-f180.google.com with SMTP id 00721157ae682-79a7109f568so7544797b3.1
+        for <linux-mips@vger.kernel.org>; Fri, 17 Apr 2026 06:16:49 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1776431808; cv=none;
+        d=google.com; s=arc-20240605;
+        b=emWLPZeLWlAx5WiQa/OJLUewPy+yH6DSnxP7xCpJwscphZoY/98FI0e6B1YLWzpKL1
+         ULBxCqw3+1ZexqTHNY6KV4FM4c+22NfeEVe1i3juIx8lRBxeeGQOu4kNtsGY+RmI4Byl
+         xHYMQbEdXK2GxCgxLMVgnhBvg2zSjJY7mjzY9ptxDOGYadTLzglSXXqyB3+Kdm33gTdl
+         pkkYqGVpM2LIxKDid0iwa4hok5oDQhDjdt8OUugQsgqpAcqWvfub17JvJqgtOZkky2si
+         iB7uwaQHvv2FI9bkZ9DbraSl5F+kXi+Mu77Ay2e54XhOGkweTqOqNohk+f3GWxarl6cM
+         qPQw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=x+nruM5WdcsT+s2FX2xDd+GGGup7vVQS/qf22af7xvk=;
+        fh=c4OINXt0vMC6gKg5yK5YXAxXi0ard5B2Vwsi6K367mI=;
+        b=P0aN0fKGfto9oY7iVr/L5leCGkkU3HpIjDtq2SbEXcoEglgsbOmHobe0S2ul/X02q+
+         Q1tLPpiQEauM6Ln2MCbDqKVlwJTvKGEFKdJZYqtEZ5GRPSYaWgBQ3UP1CXsljGRGibQc
+         +jEzlLbxZsQZKZBVni6BMF+oabFpDJ9An22u7JyF+zmXbl7aN8II0FiIG73iRChK+4sU
+         oIZQlPUkJ2gARol2DG3WYLr9SIj9MXbf+vSUTFRz+SCKbKTneCR6OXIHvttOCFbJ6E/E
+         Q2yhmHaTLKKs/2O84OAnGEXItHTlj89u2hDlIIcNjU32cwM/eQLWYCnLbF8GF6I3k7SL
+         rNEw==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1776431808; x=1777036608; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=x+nruM5WdcsT+s2FX2xDd+GGGup7vVQS/qf22af7xvk=;
+        b=R0j2okB+yGHD7IE/y5ZYxYH3fYdG30YwgmglJPpJ+waEU21PNMEO8mwxEdZRJnJaUv
+         AcBrBpSvlTckr1PqBWmM4tYr1iF5QpI4PYgzVDnIRrlbQZGUGxzgWnXMTxd8vIUjcmw1
+         Dgo2Vms1P+i/3A2sj8V+CdY0u7hULm33XuckBpSuHV8EKBEmw+jdqmG6l7paBuhzX2Vz
+         duwvgHPeOelsge+sb7dts8XgGakmw7cK9x5LTpw/lEQ2cjF93QjbQsL8qL44SfoMK+UF
+         pUMzLntWPBXmwi4XSkebe08o01LCaBIjHcHKHOV/vF1VSzlMe0x6BpQqKLW6Va809PnZ
+         4RyQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1776431808; x=1777036608;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=x+nruM5WdcsT+s2FX2xDd+GGGup7vVQS/qf22af7xvk=;
+        b=Xb/avgbf6Ac012XLmQnNEF+o9aofq9o9Inux4EQNY5otvgUXM9Ypm14NfJnSVuEIAN
+         Y06day9Phn2QcaON5WHZkJolac9HhSPELvzZAncV6EM0tEkHovXIjs0eO1m702sn9Kt+
+         5qQ9KQ+yfEy8VOtz8hWsXGYvT0fvqBdggwdcQrbLl8+CqqPuvwuqUvbcrrXZWk/ylFhs
+         VjPtD4d0wtvLUtARG4YEgokHsNKuWUVZet3nLuHGoFnm4rZBXt+DW8W12zqAQ0bMgW7n
+         G8P54gXDAoCDsAdghnSAftSwZHAHMn3htjyYfk084W9OJU7I9OT9/XGtjoUbwt9D+5JN
+         vBdQ==
+X-Forwarded-Encrypted: i=1; AFNElJ/gjxf0vjJc26tkPz7qWp64Q9SfUaBRFpC+ZHi0u4ljf7zuffGxurdEhEBHhKYaokY4QZGe70l5WtWE@vger.kernel.org
+X-Gm-Message-State: AOJu0YwbY9vO9nwA/T7cN+sERridfmzN87eGCkePz0PYn5XxQZCYwRIX
+	9w68H95JuY2Fj8Gf6ZlwpxSXy88DV2HilccK2dmMZlDsgukrgCGgePxYSo9Qt5+UgNE5h2NnyAN
+	lszOQ2YE3WihnGu4wpH7hFixCXRQIbpM=
+X-Gm-Gg: AeBDieupjNYbiz15EbKrKsLchJbsahDNJ+1DQplW3UBRmErqAsVd8FW0Ue7MLFJ8Qzn
+	oEqxXbyFCgS69oBBhJdznBKPDJeQk603AyBRwZHVUFaQ/CtRIbuGOpNBW+LP709KUUci12+h5KF
+	lx1B1/GrQ5nLKtW/+THvRQL+esjHTc1q9TC/DLPTgCgRUI4J2JB+0b+2GNPmv/K6rJa3872qe+x
+	8GRQga6a8U5DMIxAsBLJO4cjnZnxUvItJQk5Tqsph6A5XdF+5XjV4s17XfPH3BEfP4CgJDhZq65
+	twaMmjH/sR2BbdldZVpX
+X-Received: by 2002:a05:690e:d59:b0:652:5567:b408 with SMTP id
+ 956f58d0204a3-65310869318mr2273093d50.26.1776431808068; Fri, 17 Apr 2026
+ 06:16:48 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260416011815.9140-1-felipers@ime.usp.br>
-Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6
- krs, Bertel Jungin Aukio 5, 02600 Espoo
+References: <20260417023602.112359-1-m32285159@gmail.com> <aeHERE58gSbAe795@stanley.mountain>
+In-Reply-To: <aeHERE58gSbAe795@stanley.mountain>
+From: Maxwell Doose <m32285159@gmail.com>
+Date: Fri, 17 Apr 2026 08:16:37 -0500
+X-Gm-Features: AQROBzDE4fwvUAcvG1BxbCof6C0YQgw_F8sU6xGyy5kWPzV7c0WRMlziP1U8oBA
+Message-ID: <CAKqfh0HaG1fQw2_g9P7wHPyqib05CeyPcTVQREYyz4u2xRgbQw@mail.gmail.com>
+Subject: Re: [PATCH] mips: cavium-octeon: remove cmd queue state and related typedefs
+To: Dan Carpenter <error27@gmail.com>
+Cc: tsbogend@alpha.franken.de, gregkh@linuxfoundation.org, 
+	linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-staging@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spamd-Result: default: False [-2.16 / 15.00];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
-	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-14186-lists,linux-mips=lfdr.de];
+	RCVD_COUNT_THREE(0.00)[4];
 	RCVD_TLS_LAST(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	HAS_ORG_HEADER(0.00)[];
-	DKIM_TRACE(0.00)[intel.com:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-14187-lists,linux-mips=lfdr.de];
+	FREEMAIL_FROM(0.00)[gmail.com];
+	FREEMAIL_TO(0.00)[gmail.com];
 	TO_DN_SOME(0.00)[];
 	MIME_TRACE(0.00)[0:+];
+	FROM_HAS_DN(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[andriy.shevchenko@intel.com,linux-mips@vger.kernel.org];
-	MISSING_XM_UA(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
-	RCPT_COUNT_SEVEN(0.00)[9];
+	RCPT_COUNT_FIVE(0.00)[6];
 	NEURAL_HAM(-0.00)[-1.000];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[m32285159@gmail.com,linux-mips@vger.kernel.org];
+	DKIM_TRACE(0.00)[gmail.com:+];
+	MID_RHS_MATCH_FROMTLD(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
 	TAGGED_RCPT(0.00)[linux-mips];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,intel.com:dkim,ashevche-desk.local:mid]
-X-Rspamd-Queue-Id: 96842418651
+	MISSING_XM_UA(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,mail.gmail.com:mid]
+X-Rspamd-Queue-Id: B227141B87B
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On Wed, Apr 15, 2026 at 10:18:11PM -0300, Felipe Ribeiro de Souza wrote:
-> Replace mutex_lock(&lock) and mutex_unlock(&lock) calls with
-> guard(mutex)(&lock) in functions ingenic_adc_set_adcmd,
-> ingenic_adc_set_config, ingenic_adc_enable, ingenic_adc_capture
-> and ingenic_adc_read_chan_info_raw.
+On Fri, Apr 17, 2026 at 12:25=E2=80=AFAM Dan Carpenter <error27@gmail.com> =
+wrote:
+>
+> This should be two different patches.  Is there no way to move the
+> variable declarations around first and then get rid of the typedef?
+>
+> regards,
+> dan carpenter
+>
 
-We refer to the functions as func().
+When I was test-compiling the patch yesterday, sparse raised
+a "should it be static?" error, and that was resolved by moving
+the extern for the __cvmx_queue_state_ptr in the header to the
+top of the file.
 
-> This removes the need to call the unlock function, as the lock is
-> automatically released when the function return or the scope exits
-> for any other case.
-
-...
-
->  #include <linux/of.h>
->  #include <linux/platform_device.h>
->  #include <linux/property.h>
-> +#include <linux/cleanup.h>
-
-Preserve ordering.
-
-...
-
->  	/* We cannot sample the aux channels in parallel. */
-> -	mutex_lock(&adc->aux_lock);
-> +	guard(mutex)(&adc->lock);
-
-	...
-
->  	ret = IIO_VAL_INT;
->  out:
-> -	mutex_unlock(&adc->aux_lock);
->  	clk_disable(adc->clk);
-
-Not sure about this. At bare minimum you should elaborate on this change in the
-commit message.
-
->  	return ret;
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+best regards,
+maxwell doose
 
