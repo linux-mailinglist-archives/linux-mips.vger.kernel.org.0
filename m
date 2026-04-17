@@ -1,218 +1,152 @@
-Return-Path: <linux-mips+bounces-14185-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-14184-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id YN/rKYjE4WndxwAAu9opvQ
-	(envelope-from <linux-mips+bounces-14185-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Fri, 17 Apr 2026 07:26:32 +0200
+	id gMRSO1LE4WndxwAAu9opvQ
+	(envelope-from <linux-mips+bounces-14184-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Fri, 17 Apr 2026 07:25:38 +0200
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id C28E3417152
-	for <lists+linux-mips@lfdr.de>; Fri, 17 Apr 2026 07:26:31 +0200 (CEST)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id B95ED417116
+	for <lists+linux-mips@lfdr.de>; Fri, 17 Apr 2026 07:25:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 1C4F830488FA
-	for <lists+linux-mips@lfdr.de>; Fri, 17 Apr 2026 05:26:20 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id EF12330247A3
+	for <lists+linux-mips@lfdr.de>; Fri, 17 Apr 2026 05:25:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7FF7E31B830;
-	Fri, 17 Apr 2026 05:26:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 020BD361DB1;
+	Fri, 17 Apr 2026 05:25:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oss.cipunited.com header.i=@oss.cipunited.com header.b="kzSnDhwk"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="X+RQ6/lX"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from va-2-36.ptr.blmpb.com (va-2-36.ptr.blmpb.com [209.127.231.36])
+Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2EB63624B2
-	for <linux-mips@vger.kernel.org>; Fri, 17 Apr 2026 05:26:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.127.231.36
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A258E31D375
+	for <linux-mips@vger.kernel.org>; Fri, 17 Apr 2026 05:25:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776403579; cv=none; b=jyGThbaD5pP+TM9J4A1P3LipjogGll4olJKRBw6HRfFF8iEFD8mEV3RT/moahOxmXXq/ITa5irIVQxsm7ueequLWUQL2my8L0mFIi55q5L97vlAx1XE5ZXgLlnC3Nxz8NSShYUz08eVUPkmTbazVGo0Ccj3FDBBODfZl6pK+QhM=
+	t=1776403531; cv=none; b=QtgFQMLSScIGzVTkuBqfyBZfN5NgUpmKJZiFZ/gDzL+Z/o1OtWrCA5Fg1zq6GjZMps4wjYvfPajh1MHv+fl5C/BbaVHsbc4FHOTAMiN0l7ggFK9+WHovB0K7oDBc2Nxj/KWa2/fGP27YxpTkI2Z+6wSOqcqCbNjNOnTIIdILiWg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776403579; c=relaxed/simple;
-	bh=2qhpwsOerN2zephpVI/+rM3QvqBkuMsPMbEkN44RHio=;
-	h=In-Reply-To:References:Subject:Cc:Date:To:Content-Type:
-	 Mime-Version:Message-Id:From; b=q+h0CznZn2AqtBkZ9Gfrx7RcZbiqiOhP1Q2CJTcdBzWOJU21ttBX5ZoLeNBsPpBTZ090HFwQAnaPBpimiqdLDlFsUiyXjeHGIVu2l3hDP9tuXtrwm52et1q4Kha+cf6KgQYE74bUadtPXLp5b/si6UXp8dEL/AZ7+EjNLjtzWkU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oss.cipunited.com; spf=pass smtp.mailfrom=oss.cipunited.com; dkim=pass (2048-bit key) header.d=oss.cipunited.com header.i=@oss.cipunited.com header.b=kzSnDhwk; arc=none smtp.client-ip=209.127.231.36
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oss.cipunited.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.cipunited.com
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
- s=feishu2303200042; d=oss.cipunited.com; t=1776403445;
-  h=from:subject:mime-version:from:date:message-id:subject:to:cc:
- reply-to:content-type:mime-version:in-reply-to:message-id;
- bh=8uKUjmboHagm+FlOR0a5cgZRJN50CFrwF7YGFzp6e9M=;
- b=kzSnDhwkoPhZ60rVpsW/q3eiVwncsZg6sHPoqfBlj9/GwLG6IUELvIpS+U/TIaG9uz9PGq
- dhzhxLFCkxvS8A3o8jPf1TWJyIl6trYKWsL6f2aDNr0FOv6zt50rfUt3mXV8/ijpvZ43xI
- f82egA18THqiEAafbsJwpug7Qz2osB6yp8OXdEIFDIpkhK79hapHQLbmEL6BBylF2Ti+Gb
- bGvmyJNFlMZi7a3dAodCxucTibw6upk6Wfqq2buX7+uHFkNohex4tUuhVIkK5U1Bp2dPKQ
- QMID+KZvvv7SY9pscmbdf02CGCv9OGU7dEOMTk+9v6Wnh6CY519hwV2BVsoJ/g==
-In-Reply-To: <20260416011815.9140-1-felipers@ime.usp.br>
-Received: from [192.168.8.156] ([123.52.19.211]) by smtp.feishu.cn with ESMTPS; Fri, 17 Apr 2026 13:24:02 +0800
-References: <20260416011815.9140-1-felipers@ime.usp.br>
-Subject: Re: [PATCH] iio: adc: ingenic-adc: use guard(mutex)(&lock) to handle synchronisation
-Cc: "Rong Zhang" <i@rong.moe>, 
-	"Lucas Ivars Cadima Ciziks" <lucas@ciziks.com>, 
-	<linux-mips@vger.kernel.org>, <linux-iio@vger.kernel.org>
-Date: Fri, 17 Apr 2026 13:18:52 +0800
-To: "Felipe Ribeiro de Souza" <felipers@ime.usp.br>, <paul@crapouillou.net>, 
-	<jic23@kernel.org>, <dlechner@baylibre.com>, <nuno.sa@analog.com>, 
-	<andy@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-User-Agent: Evolution 3.56.2-9
-Content-Transfer-Encoding: 7bit
+	s=arc-20240116; t=1776403531; c=relaxed/simple;
+	bh=ewSRNKHD3tCT/saduSwvvYMg/lug1Tof1ThFhOaIBv4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=gcG8fVbJikDTTmYq0rPRo5Ux8bg7jNOu+3834MSQeZ0zd2ghhalmWewPaRAFgmspLq9skZZ6JzkgCHAeEglbT9kkv2lvj30ndCG7THfqUm4x9oJzPZK51XUGer5idjUwb3IyaoIuxEZZNUzWgzzBJiz7INnmZ1oHitJ10sueUTE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=X+RQ6/lX; arc=none smtp.client-ip=209.85.128.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-488e1a8ac40so3262655e9.2
+        for <linux-mips@vger.kernel.org>; Thu, 16 Apr 2026 22:25:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1776403529; x=1777008329; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=pBOcs8If319sZczMI7MZUp1nUcUA46ONaU7CO4kO+eQ=;
+        b=X+RQ6/lXYjkSiOdLsxJG2UwajdG6BJxibMmzMHjSiGyHt7/jDwaM6e/Nw//IGBk3VZ
+         2Qjrqah7gyuZe2UDEp6SK3d1RrqSgo/9dwzkCDLoBnF49nqCWwZmjbDwN/+YLOKHwMTz
+         2IvkECwBtyjdNqBa9wziD4Dfq9lgcgu/Q0sYOvHK5o7BJPP4+dCcanqOMwpfItLWrdPt
+         zZyg257Zk+5cu3CPdvdKmCoTXRWW+i/4dLICI+tpQLxbm32cRlBdz7YI4Z9t+cf6HU2U
+         tBKJ6oROvyyaM3W0NrgUGC+QhrCxR94kanWTR23tJzt8W5MSVNYTST5qGj/BMz4A+iOU
+         j1uw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1776403529; x=1777008329;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=pBOcs8If319sZczMI7MZUp1nUcUA46ONaU7CO4kO+eQ=;
+        b=plAm/r0LLNa1RF8E0wNEYNgdX1PwEyty7j4qAChEOFtrSm4EIbnsIhhySNEXEuH+Y7
+         iVtrai+U2MLK5WSp4AtKqQFP5THOj6TJZYgn9nFdUpwTxsK0l9jRmHzyObhMFTNecGCO
+         RFZpBqZv1rZLlZmmwWm/rahCb30TBQLBJlCY58a+jJHZJqbUPpOjgQChBec8HV4qMUfQ
+         XhN+dYYeBcet4Qdw3wD+ysU+UgQglLNJBqj0AdFIvmgXV/BCNNRQXjqBq4ikM1yldyTI
+         inaRDuNQxeh685qLEcd2IJKDqcT4q/4KGKEGVmaau08p72iLPnG3VpvE6tVi+dg8fl0z
+         Hj/w==
+X-Forwarded-Encrypted: i=1; AFNElJ/pf0uVAQz8CfOJlb9GfycwjWRxZ3WrjoMtdTM3CizxRg9hXPmw8tBNrHQCEG8OVw2r/bEAbFr/RD6g@vger.kernel.org
+X-Gm-Message-State: AOJu0YzxNN0O/Ti0SPHYQyU4yp08uD97zrlJdnRM6b6uTlOMQU5oR8og
+	94vEu1ASXJNJCa7R5O9R9N19y34kc1kKDp5bQV/iTSHzKJk1GG8lj87M
+X-Gm-Gg: AeBDievxfnJM7j6SwwPvRpXEU+jD8VUfb/2he7L6hIyBE3uAm14VxHppoJLgU34GK52
+	A7TDDrcmqEemMiP42ynIPZXF3ydJVbJ66vXgXzmy3gRaUtOx1Smc2cPfglROfQpIEp6VOr+zBIQ
+	7+B8eTGNhIKuzpKhA01U/U1AHG+V8z0Z1H3OZQpMjvLA2Uh34hlvrYqXTTm1SxN8TEA5PP802L/
+	+5v+ldvnXVFmqrU7GcmOOPx8AAfTbr2CZHK3HzCek4f1Dq+bl4wqCHzBwEeR3hVR33e5SyH2L2S
+	EahVzimcEAgIy+KWwbztQVG8RmPeTmzUdxBi31f9flWVhBz3NVV2g0by0lc5PWU5rA/B/hirpwj
+	iBARg0ze/EmjQAcAJOzuDVMTGSQSGkl33iAtJDmuKFZWrauUZua6NZS2fsWEy32AB9fQMDd+25f
+	czITZOusDubCU+RIiVH3AgtUB7JHB/0A==
+X-Received: by 2002:a05:600c:4750:b0:486:fdba:f5db with SMTP id 5b1f17b1804b1-488fb6e7316mr19178335e9.0.1776403528847;
+        Thu, 16 Apr 2026 22:25:28 -0700 (PDT)
+Received: from localhost ([196.207.164.177])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-488fc16f93dsm20285885e9.3.2026.04.16.22.25.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 16 Apr 2026 22:25:28 -0700 (PDT)
+Date: Fri, 17 Apr 2026 08:25:24 +0300
+From: Dan Carpenter <error27@gmail.com>
+To: Maxwell Doose <m32285159@gmail.com>
+Cc: tsbogend@alpha.franken.de, gregkh@linuxfoundation.org,
+	linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-staging@lists.linux.dev
+Subject: Re: [PATCH] mips: cavium-octeon: remove cmd queue state and related
+ typedefs
+Message-ID: <aeHERE58gSbAe795@stanley.mountain>
+References: <20260417023602.112359-1-m32285159@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Message-Id: <d47618d58e88a65f5b28f1a8e3474819894b2f9b.camel@oss.cipunited.com>
-X-Original-From: Rong Zhang <rongrong@oss.cipunited.com>
-X-Lms-Return-Path: <lba+269e1c3f3+3068bd+vger.kernel.org+rongrong@oss.cipunited.com>
-From: "Rong Zhang" <rongrong@oss.cipunited.com>
-X-Spamd-Result: default: False [-1.66 / 15.00];
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260417023602.112359-1-m32285159@gmail.com>
+X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MV_CASE(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[oss.cipunited.com,none];
-	R_DKIM_ALLOW(-0.20)[oss.cipunited.com:s=feishu2303200042];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-14185-lists,linux-mips=lfdr.de];
-	URIBL_MULTI_FAIL(0.00)[tor.lore.kernel.org:server fail,usp.br:server fail,oss.cipunited.com:server fail,ciziks.com:server fail];
-	RCVD_COUNT_THREE(0.00)[4];
-	FORGED_SENDER_MAILLIST(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	DKIM_TRACE(0.00)[oss.cipunited.com:+];
-	FROM_HAS_DN(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
-	MID_RHS_MATCH_FROM(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[rongrong@oss.cipunited.com,linux-mips@vger.kernel.org];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCPT_COUNT_SEVEN(0.00)[10];
-	NEURAL_HAM(-0.00)[-1.000];
-	TAGGED_RCPT(0.00)[linux-mips];
+	RECEIVED_HELO_LOCALHOST(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-14184-lists,linux-mips=lfdr.de];
+	FREEMAIL_FROM(0.00)[gmail.com];
+	FREEMAIL_TO(0.00)[gmail.com];
 	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,usp.br:email]
-X-Rspamd-Queue-Id: C28E3417152
+	MIME_TRACE(0.00)[0:+];
+	FROM_HAS_DN(0.00)[];
+	MISSING_XM_UA(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[5];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[error27@gmail.com,linux-mips@vger.kernel.org];
+	DKIM_TRACE(0.00)[gmail.com:+];
+	NEURAL_HAM(-0.00)[-1.000];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TAGGED_RCPT(0.00)[linux-mips];
+	RCPT_COUNT_FIVE(0.00)[6];
+	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: B95ED417116
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-Hi Felipe,
-
-On Wed, 2026-04-15 at 22:18 -0300, Felipe Ribeiro de Souza wrote:
-> Replace mutex_lock(&lock) and mutex_unlock(&lock) calls with
-> guard(mutex)(&lock) in functions ingenic_adc_set_adcmd,
-> ingenic_adc_set_config, ingenic_adc_enable, ingenic_adc_capture
-> and ingenic_adc_read_chan_info_raw.
+On Thu, Apr 16, 2026 at 09:36:02PM -0500, Maxwell Doose wrote:
+> This change removes the cmd queue state typedefs to work towards the
+> "code cleanup" task in the staging's TODO, and aligns the codebase further with the
+> Linux Kernel Code Style.
 > 
-> This removes the need to call the unlock function, as the lock is
-> automatically released when the function return or the scope exits
-> for any other case.
+> The following structs are affected:
 > 
-> Signed-off-by: Felipe Ribeiro de Souza <felipers@ime.usp.br>
-> Co-developed-by: Lucas Ivars Cadima Ciziks <lucas@ciziks.com>
-> Signed-off-by: Lucas Ivars Cadima Ciziks <lucas@ciziks.com>
-> ---
->  drivers/iio/adc/ingenic-adc.c | 19 +++++++------------
->  1 file changed, 7 insertions(+), 12 deletions(-)
+> - __cvmx_cmd_queue_state_t (now struct __cvmx_cmd_queue_state)
+> - __cvmx_cmd_queue_all_state_t (now struct __cvmx_cmd_queue_all_state)
 > 
-> diff --git a/drivers/iio/adc/ingenic-adc.c b/drivers/iio/adc/ingenic-adc.c
-> index 1e802c877..bb7abdcd8 100644
-> --- a/drivers/iio/adc/ingenic-adc.c
-> +++ b/drivers/iio/adc/ingenic-adc.c
-> @@ -20,6 +20,7 @@
->  #include <linux/of.h>
->  #include <linux/platform_device.h>
->  #include <linux/property.h>
-> +#include <linux/cleanup.h>
+> In addition, the global exported pointer __cvmx_cmd_queue_state_ptr has
+> also been updated to use the new names, and its extern statement in
+> cvmx-cmd-queue.h has been moved to the top of the file to satisfy the
+> requirements for EXPORT_SYMBOL_GPL.
+> 
 
-Can you keep #include sorted?
+This should be two different patches.  Is there no way to move the
+variable declarations around first and then get rid of the typedef?
 
-Thanks,
-Rong
+regards,
+dan carpenter
 
->  
->  #define JZ_ADC_REG_ENABLE		0x00
->  #define JZ_ADC_REG_CFG			0x04
-> @@ -115,7 +116,7 @@ static void ingenic_adc_set_adcmd(struct iio_dev *iio_dev, unsigned long mask)
->  {
->  	struct ingenic_adc *adc = iio_priv(iio_dev);
->  
-> -	mutex_lock(&adc->lock);
-> +	guard(mutex)(&adc->lock);
->  
->  	/* Init ADCMD */
->  	readl(adc->base + JZ_ADC_REG_ADCMD);
-> @@ -162,8 +163,6 @@ static void ingenic_adc_set_adcmd(struct iio_dev *iio_dev, unsigned long mask)
->  
->  	/* We're done */
->  	writel(0, adc->base + JZ_ADC_REG_ADCMD);
-> -
-> -	mutex_unlock(&adc->lock);
->  }
->  
->  static void ingenic_adc_set_config(struct ingenic_adc *adc,
-> @@ -172,13 +171,11 @@ static void ingenic_adc_set_config(struct ingenic_adc *adc,
->  {
->  	uint32_t cfg;
->  
-> -	mutex_lock(&adc->lock);
-> +	guard(mutex)(&adc->lock);
->  
->  	cfg = readl(adc->base + JZ_ADC_REG_CFG) & ~mask;
->  	cfg |= val;
->  	writel(cfg, adc->base + JZ_ADC_REG_CFG);
-> -
-> -	mutex_unlock(&adc->lock);
->  }
->  
->  static void ingenic_adc_enable_unlocked(struct ingenic_adc *adc,
-> @@ -201,9 +198,8 @@ static void ingenic_adc_enable(struct ingenic_adc *adc,
->  			       int engine,
->  			       bool enabled)
->  {
-> -	mutex_lock(&adc->lock);
-> +	guard(mutex)(&adc->lock);
->  	ingenic_adc_enable_unlocked(adc, engine, enabled);
-> -	mutex_unlock(&adc->lock);
->  }
->  
->  static int ingenic_adc_capture(struct ingenic_adc *adc,
-> @@ -218,7 +214,7 @@ static int ingenic_adc_capture(struct ingenic_adc *adc,
->  	 * probably due to the switch of VREF. We must keep the lock here to
->  	 * avoid races with the buffer enable/disable functions.
->  	 */
-> -	mutex_lock(&adc->lock);
-> +	guard(mutex)(&adc->lock);
->  	cfg = readl(adc->base + JZ_ADC_REG_CFG);
->  	writel(cfg & ~JZ_ADC_REG_CFG_CMD_SEL, adc->base + JZ_ADC_REG_CFG);
->  
-> @@ -229,7 +225,6 @@ static int ingenic_adc_capture(struct ingenic_adc *adc,
->  		ingenic_adc_enable_unlocked(adc, engine, false);
->  
->  	writel(cfg, adc->base + JZ_ADC_REG_CFG);
-> -	mutex_unlock(&adc->lock);
->  
->  	return ret;
->  }
-> @@ -643,7 +638,8 @@ static int ingenic_adc_read_chan_info_raw(struct iio_dev *iio_dev,
->  	}
->  
->  	/* We cannot sample the aux channels in parallel. */
-> -	mutex_lock(&adc->aux_lock);
-> +	guard(mutex)(&adc->lock);
-> +
->  	if (adc->soc_data->has_aux_md && engine == 0) {
->  		switch (chan->channel) {
->  		case INGENIC_ADC_AUX0:
-> @@ -677,7 +673,6 @@ static int ingenic_adc_read_chan_info_raw(struct iio_dev *iio_dev,
->  
->  	ret = IIO_VAL_INT;
->  out:
-> -	mutex_unlock(&adc->aux_lock);
->  	clk_disable(adc->clk);
->  
->  	return ret;
 
