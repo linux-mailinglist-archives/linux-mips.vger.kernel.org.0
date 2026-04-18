@@ -1,90 +1,81 @@
-Return-Path: <linux-mips+bounces-14195-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-14196-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id A8+dNhgy42k0DQEAu9opvQ
-	(envelope-from <linux-mips+bounces-14195-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Sat, 18 Apr 2026 09:26:16 +0200
+	id RHCMFYSY42nxIwEAu9opvQ
+	(envelope-from <linux-mips+bounces-14196-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Sat, 18 Apr 2026 16:43:16 +0200
 X-Original-To: lists+linux-mips@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 33D01420478
-	for <lists+linux-mips@lfdr.de>; Sat, 18 Apr 2026 09:26:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 2B6CC42156A
+	for <lists+linux-mips@lfdr.de>; Sat, 18 Apr 2026 16:43:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 8426C302C6EB
-	for <lists+linux-mips@lfdr.de>; Sat, 18 Apr 2026 07:26:14 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 138BE302BA54
+	for <lists+linux-mips@lfdr.de>; Sat, 18 Apr 2026 14:43:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2254033F59A;
-	Sat, 18 Apr 2026 07:26:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 082DF38F645;
+	Sat, 18 Apr 2026 14:43:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gjAYgDz9"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="P0xMOc4V"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD25472623
-	for <linux-mips@vger.kernel.org>; Sat, 18 Apr 2026 07:26:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC3AD37D11F;
+	Sat, 18 Apr 2026 14:43:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776497174; cv=none; b=hktggMrtu5YSPvxBXLe+/KhI2etwRrQ5hgs74vC2IT3xkOTmMk5hxuyiEkH/GkqDQcTa3Y2T1VnijYrOueinlVeJVO8+nM7aiYi/mW78JnFamWXPAhOcmrJVXbbJnSlUq3pAhN2b0OCS0waW4FD6t//UkENoP4F5OPfhxKhT5Rc=
+	t=1776523391; cv=none; b=iPIavXcAoptKae5U9pA7n0295F/MAy8XhOhgf1pDKlImb32+mY5g5c7Qhs9+GGbxa/lc11mVPJrMXtkC9mv7YUtQsw0CSMsaQIz9QpL1N1L6o6M/HQdV8qP5RMJdDLt1qmHhGYrqKcL5RXdi5AVW0bOrwUvxV0XbDJrsPWzh0vs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776497174; c=relaxed/simple;
-	bh=NfBO74AWzsORexJezbldg0Bpla0pHuFV2AP5imYCS6I=;
+	s=arc-20240116; t=1776523391; c=relaxed/simple;
+	bh=XxhFp5+/P5pN6VOUfaLEFlvpAi694cTffY8GiO/VoD8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=c/ujCEYr4cSJl0315SexVthGbz3oB64KjlWOuTUyWrW+Yh2tNsDH6685dWreYEH62kl/06Bq/GM6BiIQ//ayUyAN0JIWb8pVDJd2I+ti1M8qMvA9WYyKtMMsv3tMmOTXWxY5os3opiGPB7ZBt/DieM7O2oeJsjdPj0ucIIgEAAU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gjAYgDz9; arc=none smtp.client-ip=209.85.128.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-488a4bc360bso8281395e9.0
-        for <linux-mips@vger.kernel.org>; Sat, 18 Apr 2026 00:26:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1776497171; x=1777101971; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=RMJY5sJFMFRVZoxP4MSEGf9jQstn+5lnWoe32mr/X0w=;
-        b=gjAYgDz9u9bw78oRT4n1MWGT+QhtYrF7aPlrxmwW8bb2qy6AeTwmXcyPbZxFy8+f6Y
-         vldAOwL+hV3XB/iJgXY6bQ/6Ia+JC94rMuregG6xN1YGe/mTvzUvpDnQHOXLWgXHFmgL
-         sgHtGVcf6Hlpog+fqEjWLSqCLCG6HMHNpCuxNf+sRLGfsHQ/ohhI5FjL//nfKXb2dXL5
-         OMbyr07baBRX6xzedQRV/v+IfTZ8Do9leigkhwCVPenlhz2xbwq/Hh6MQ02BOiei5F6R
-         a01A8FYHPlwJOdL8+N5ToXVhOtT3zIb8ZPpevkenvnVn83zxb+KtmrnDGYDEhSyJa+9W
-         w5vg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776497171; x=1777101971;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=RMJY5sJFMFRVZoxP4MSEGf9jQstn+5lnWoe32mr/X0w=;
-        b=Uo67PD2BC0V5XFFCJ1P3mNHdpaIEHzkIFwgsgRwf5+onHg7hjXZDoBDCE8o85eflB0
-         3wOnFP5tqCTMqK9vXEgabPlLcTzsEen0aWoFJb2Z9wvOchRL20sxOcV5ubrcvsL6+mns
-         ecUgiFiz4SsvGuwWvF0tX1OMnp9tdcR1BzMIrbsImCpW/ZMjtIIru81hFaYXiZW6MK/m
-         U+QH4/kBt+L3DBFDt2kjJ1AAypNT3AG3Ku5k5dZSWY9Afgsm/67ubUNaz3fqAN+A5tSt
-         OvAxXh9jNxr+jLoJZQabAsklEQ0tk9zb7L3VuewxfrTREu7t1pzQ14aRA7Qoj7e1tSqR
-         cM7Q==
-X-Forwarded-Encrypted: i=1; AFNElJ9PWwWGUje81oEUDf/uW4ff0sNAqihdwL8883PsgAygR5v47v1sDkYT7phqDLAEjDPHrqCiwgJJzjX6@vger.kernel.org
-X-Gm-Message-State: AOJu0YzBI/zAfKfMfw7EOcQIJ5uuR35xUEJOWP3aPJ+8/CAO6qM3KkY8
-	CQ2PoC/8ix7iSswK+Z71aSjy4lfFEwoR1+mMlipobNJetH+TH4rhU2gs
-X-Gm-Gg: AeBDietyYdcZzyx27DJr4hnxuWWJ9j1rSOr2WTanOYTWM8zfk35jF9AogIdOXQa7oq+
-	1zoEgfCCj1daLbIEM3xjQyiUXLTpevaAxbef/6fsA46YmI6lPix7aEBOjeX5fYugAH+Zj5r5cgx
-	qAD6sSPj5YAY7q5VbhHjpGLGVYo9GMdxU33e6zwzIuVTiISZPmdmNwRUNzc+/XtLqnjHwHj/sLU
-	Y8c3l550IxAzKmyM5uJkShjgM9+ONAqek3LazkcCv4ADqqVN8XmGtaqU7vgeH0wk29FRPNlZMgc
-	0vexIA+9H9xU+mapivLE4AIEMd4Fa1pL0lcqtA5EfIy1fEW4y2AFGaGsZrqEMqFTKgweayG6KPf
-	z2LANGNq33RSW0qzILuPHzY5bi4zp5WHxkdf/6tQZ4FYqXtuPii+Kvv4X2pZhp+CHsOMtLSdzAx
-	4O3NDyl7jREHewZ6kKoJiIm4Ahlyi57Q==
-X-Received: by 2002:a05:600c:a318:b0:488:a2ac:a340 with SMTP id 5b1f17b1804b1-488fb7579demr62981685e9.12.1776497171022;
-        Sat, 18 Apr 2026 00:26:11 -0700 (PDT)
-Received: from localhost ([196.207.164.177])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43fe4e4d525sm9959884f8f.31.2026.04.18.00.26.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 18 Apr 2026 00:26:10 -0700 (PDT)
-Date: Sat, 18 Apr 2026 10:26:05 +0300
-From: Dan Carpenter <error27@gmail.com>
-To: Maxwell Doose <m32285159@gmail.com>
-Cc: tsbogend@alpha.franken.de, gregkh@linuxfoundation.org, len.bao@gmx.us,
+	 Content-Type:Content-Disposition:In-Reply-To; b=Y8LVXB8i2Rix3VU5c+i5Z+gBFCslkeES9S+dLwQ/UmQzhRng+aSgJ/ECEOE3dm/2gxuBBGKAL4Ye0m6Qtyx6kwIfudpXUfLEpbuX8bx5gHSR/zBKFdmfBVn8IK4TaO23jp63oHmOgMlgUYjSf4xn2xoHfkw8gwo0M2rjTCTT6m0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=P0xMOc4V; arc=none smtp.client-ip=198.175.65.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1776523389; x=1808059389;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=XxhFp5+/P5pN6VOUfaLEFlvpAi694cTffY8GiO/VoD8=;
+  b=P0xMOc4VR90WMWykiDBmwMKvDwQHg4nHEaLMJXOpHFJLGECobQk5/dOy
+   lE70I/3fX9fzZYPbPXf30b3tKypPKDGbTSkDGzJZMVipNrXMVa1ihe7Re
+   tyWeeNkVf6Hr5fgtN8j4D4lB9BbjskyZaIAl3AtapIJMpxCiOkFVWVRF5
+   RYORSdehgY3N0dRGkviZM9kJrCO6Irz33k06IJVCmgVmkqhi0U5BCqRMF
+   mMcy6cgWzR7jwZ+DVelB6uqbTGto/FZ5Lw3/Y72rPj4z0c6qNpZJK7NWY
+   XgB5fYI1vg0JNgOecAwcBPK93xYF4MeqEocjQh5PO9YYv0i8VrpjyY/Rv
+   Q==;
+X-CSE-ConnectionGUID: YxgqHouEQKaXKdUy4w0KYw==
+X-CSE-MsgGUID: Hl//FbxxQqSpr3kLUNWCtA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11762"; a="81380409"
+X-IronPort-AV: E=Sophos;i="6.23,186,1770624000"; 
+   d="scan'208";a="81380409"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Apr 2026 07:43:08 -0700
+X-CSE-ConnectionGUID: FIFSXmEXQmealTJq79bCIQ==
+X-CSE-MsgGUID: xN46cubwSB+cZgtyp0zPJw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,186,1770624000"; 
+   d="scan'208";a="261684563"
+Received: from lkp-server01.sh.intel.com (HELO 7e48d0ff8e22) ([10.239.97.150])
+  by orviesa002.jf.intel.com with ESMTP; 18 Apr 2026 07:43:05 -0700
+Received: from kbuild by 7e48d0ff8e22 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1wE6sw-000000001Hk-3TGP;
+	Sat, 18 Apr 2026 14:43:02 +0000
+Date: Sat, 18 Apr 2026 22:42:57 +0800
+From: kernel test robot <lkp@intel.com>
+To: Maxwell Doose <m32285159@gmail.com>, gregkh@linuxfoundation.org,
+	tsbogend@alpha.franken.de
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, len.bao@gmx.us,
 	yoelvisoliveros@gmail.com, linux-mips@vger.kernel.org,
 	linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev
-Subject: Re: [PATCH v3] staging: octeon: remove SPI, POW, PKO, and Helper
+Subject: Re: [PATCH v2] staging: octeon: remove SPI, POW, PKO, and Helper
  typedef enums
-Message-ID: <aeMyDXlMrLTY9EgE@stanley.mountain>
-References: <20260417231908.45323-2-m32285159@gmail.com>
+Message-ID: <202604182238.w0EH6tRa-lkp@intel.com>
+References: <20260415122939.77847-1-m32285159@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -93,71 +84,183 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260417231908.45323-2-m32285159@gmail.com>
-X-Spamd-Result: default: False [-2.16 / 15.00];
+In-Reply-To: <20260415122939.77847-1-m32285159@gmail.com>
+X-Spamd-Result: default: False [-1.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
-	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
+	MID_CONTAINS_FROM(1.00)[];
+	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10];
+	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-14195-lists,linux-mips=lfdr.de];
-	FREEMAIL_CC(0.00)[alpha.franken.de,linuxfoundation.org,gmx.us,gmail.com,vger.kernel.org,lists.linux.dev];
-	RCVD_TLS_LAST(0.00)[];
+	FREEMAIL_CC(0.00)[lists.linux.dev,gmx.us,gmail.com,vger.kernel.org];
+	TAGGED_FROM(0.00)[bounces-14196-lists,linux-mips=lfdr.de];
 	FROM_HAS_DN(0.00)[];
-	RECEIVED_HELO_LOCALHOST(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	FREEMAIL_TO(0.00)[gmail.com];
-	TO_DN_SOME(0.00)[];
+	FREEMAIL_TO(0.00)[gmail.com,linuxfoundation.org,alpha.franken.de];
+	RCVD_TLS_LAST(0.00)[];
 	MIME_TRACE(0.00)[0:+];
-	DKIM_TRACE(0.00)[gmail.com:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	DKIM_TRACE(0.00)[intel.com:+];
 	MISSING_XM_UA(0.00)[];
-	FREEMAIL_FROM(0.00)[gmail.com];
-	RCVD_COUNT_FIVE(0.00)[5];
+	TO_DN_SOME(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[6];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[error27@gmail.com,linux-mips@vger.kernel.org];
+	FROM_NEQ_ENVFROM(0.00)[lkp@intel.com,linux-mips@vger.kernel.org];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
 	TAGGED_RCPT(0.00)[linux-mips];
-	RCPT_COUNT_SEVEN(0.00)[8];
+	RCPT_COUNT_SEVEN(0.00)[10];
 	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 33D01420478
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,intel.com:email,intel.com:dkim,intel.com:mid]
+X-Rspamd-Queue-Id: 2B6CC42156A
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On Fri, Apr 17, 2026 at 06:19:09PM -0500, Maxwell Doose wrote:
-> This patch removes custom typedef enums and replaces them with standard
-> enums to address the "General code review and cleanup" task in TODO.
-> 
-> The following enums are affected:
-> 
-> - cvmx_spi_mode_t (now enum cvmx_spi_mode)
-> - cvmx_helper_interface_mode_t (now enum cvmx_helper_interface_mode_e)
-> - cvmx_pow_wait_t (now enum cvmx_pow_wait)
-> - cvmx_pko_lock_t (now enum cvmx_pko_lock)
-> - cvmx_pko_status_t (now enum cvmx_pko_status)
-> 
-> This patch aligns the octeon codebase more closely with the Linux kernel
-> code style, and will address the "cleanup" task in TODO.
-> 
-> Signed-off-by: Maxwell Doose <m32285159@gmail.com>
-> ---
-> v2:
->  - Appended "_e" to enum cvmx_helper_interface_mode to prevent namespace
->    collisions with a struct of the same name
->  - Fixed errors that were indirect results of the namespace collisions
-> 
-> v3:
->  - Fixed function return type in cvmx_helper_interface_get_mode
+Hi Maxwell,
 
-We're still not going to accept the _e on the end of
-cvmx_helper_interface_mode_e.  Try figure out a better solution to
-having two types with the same name.
+kernel test robot noticed the following build warnings:
 
-regards,
-dan carpenter
+[auto build test WARNING on staging/staging-testing]
 
+url:    https://github.com/intel-lab-lkp/linux/commits/Maxwell-Doose/staging-octeon-remove-SPI-POW-PKO-and-Helper-typedef-enums/20260417-103458
+base:   staging/staging-testing
+patch link:    https://lore.kernel.org/r/20260415122939.77847-1-m32285159%40gmail.com
+patch subject: [PATCH v2] staging: octeon: remove SPI, POW, PKO, and Helper typedef enums
+config: sparc64-allmodconfig (https://download.01.org/0day-ci/archive/20260418/202604182238.w0EH6tRa-lkp@intel.com/config)
+compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project 5bac06718f502014fade905512f1d26d578a18f3)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260418/202604182238.w0EH6tRa-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202604182238.w0EH6tRa-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   In file included from drivers/staging/octeon/ethernet.c:23:
+   In file included from drivers/staging/octeon/octeon-ethernet.h:41:
+   drivers/staging/octeon/octeon-stubs.h:1270:49: error: incomplete result type 'struct cvmx_helper_interface_mode' in function definition
+    1270 | static inline struct cvmx_helper_interface_mode cvmx_helper_interface_get_mode(int
+         |                                                 ^
+   drivers/staging/octeon/octeon-stubs.h:1270:22: note: forward declaration of 'struct cvmx_helper_interface_mode'
+    1270 | static inline struct cvmx_helper_interface_mode cvmx_helper_interface_get_mode(int
+         |                      ^
+   drivers/staging/octeon/octeon-stubs.h:1273:9: error: returning 'int' from a function with incompatible result type 'struct cvmx_helper_interface_mode'
+    1273 |         return 0;
+         |                ^
+   In file included from drivers/staging/octeon/ethernet.c:28:
+   In file included from drivers/staging/octeon/ethernet-mdio.h:20:
+   In file included from include/net/xfrm.h:20:
+   In file included from include/net/sock.h:60:
+>> include/linux/poll.h:134:27: warning: division by zero is undefined [-Wdivision-by-zero]
+     134 |                 M(RDNORM) | M(RDBAND) | M(WRNORM) | M(WRBAND) |
+         |                                         ^~~~~~~~~
+   include/linux/poll.h:132:32: note: expanded from macro 'M'
+     132 | #define M(X) (__force __poll_t)__MAP(val, POLL##X, (__force __u16)EPOLL##X)
+         |                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/poll.h:118:51: note: expanded from macro '__MAP'
+     118 |         (from < to ? (v & from) * (to/from) : (v & from) / (from/to))
+         |                                                          ^ ~~~~~~~~~
+   include/linux/poll.h:134:39: warning: division by zero is undefined [-Wdivision-by-zero]
+     134 |                 M(RDNORM) | M(RDBAND) | M(WRNORM) | M(WRBAND) |
+         |                                                     ^~~~~~~~~
+   include/linux/poll.h:132:32: note: expanded from macro 'M'
+     132 | #define M(X) (__force __poll_t)__MAP(val, POLL##X, (__force __u16)EPOLL##X)
+         |                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/poll.h:118:51: note: expanded from macro '__MAP'
+     118 |         (from < to ? (v & from) * (to/from) : (v & from) / (from/to))
+         |                                                          ^ ~~~~~~~~~
+   include/linux/poll.h:135:12: warning: division by zero is undefined [-Wdivision-by-zero]
+     135 |                 M(HUP) | M(RDHUP) | M(MSG);
+         |                          ^~~~~~~~
+   include/linux/poll.h:132:32: note: expanded from macro 'M'
+     132 | #define M(X) (__force __poll_t)__MAP(val, POLL##X, (__force __u16)EPOLL##X)
+         |                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/poll.h:118:51: note: expanded from macro '__MAP'
+     118 |         (from < to ? (v & from) * (to/from) : (v & from) / (from/to))
+         |                                                          ^ ~~~~~~~~~
+   include/linux/poll.h:135:23: warning: division by zero is undefined [-Wdivision-by-zero]
+     135 |                 M(HUP) | M(RDHUP) | M(MSG);
+         |                                     ^~~~~~
+   include/linux/poll.h:132:32: note: expanded from macro 'M'
+     132 | #define M(X) (__force __poll_t)__MAP(val, POLL##X, (__force __u16)EPOLL##X)
+         |                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/poll.h:118:51: note: expanded from macro '__MAP'
+     118 |         (from < to ? (v & from) * (to/from) : (v & from) / (from/to))
+         |                                                          ^ ~~~~~~~~~
+   4 warnings and 2 errors generated.
+--
+   In file included from ethernet.c:23:
+   In file included from ./octeon-ethernet.h:41:
+   ./octeon-stubs.h:1270:49: error: incomplete result type 'struct cvmx_helper_interface_mode' in function definition
+    1270 | static inline struct cvmx_helper_interface_mode cvmx_helper_interface_get_mode(int
+         |                                                 ^
+   ./octeon-stubs.h:1270:22: note: forward declaration of 'struct cvmx_helper_interface_mode'
+    1270 | static inline struct cvmx_helper_interface_mode cvmx_helper_interface_get_mode(int
+         |                      ^
+   ./octeon-stubs.h:1273:9: error: returning 'int' from a function with incompatible result type 'struct cvmx_helper_interface_mode'
+    1273 |         return 0;
+         |                ^
+   In file included from ethernet.c:28:
+   In file included from ./ethernet-mdio.h:20:
+   In file included from include/net/xfrm.h:20:
+   In file included from include/net/sock.h:60:
+>> include/linux/poll.h:134:27: warning: division by zero is undefined [-Wdivision-by-zero]
+     134 |                 M(RDNORM) | M(RDBAND) | M(WRNORM) | M(WRBAND) |
+         |                                         ^~~~~~~~~
+   include/linux/poll.h:132:32: note: expanded from macro 'M'
+     132 | #define M(X) (__force __poll_t)__MAP(val, POLL##X, (__force __u16)EPOLL##X)
+         |                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/poll.h:118:51: note: expanded from macro '__MAP'
+     118 |         (from < to ? (v & from) * (to/from) : (v & from) / (from/to))
+         |                                                          ^ ~~~~~~~~~
+   include/linux/poll.h:134:39: warning: division by zero is undefined [-Wdivision-by-zero]
+     134 |                 M(RDNORM) | M(RDBAND) | M(WRNORM) | M(WRBAND) |
+         |                                                     ^~~~~~~~~
+   include/linux/poll.h:132:32: note: expanded from macro 'M'
+     132 | #define M(X) (__force __poll_t)__MAP(val, POLL##X, (__force __u16)EPOLL##X)
+         |                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/poll.h:118:51: note: expanded from macro '__MAP'
+     118 |         (from < to ? (v & from) * (to/from) : (v & from) / (from/to))
+         |                                                          ^ ~~~~~~~~~
+   include/linux/poll.h:135:12: warning: division by zero is undefined [-Wdivision-by-zero]
+     135 |                 M(HUP) | M(RDHUP) | M(MSG);
+         |                          ^~~~~~~~
+   include/linux/poll.h:132:32: note: expanded from macro 'M'
+     132 | #define M(X) (__force __poll_t)__MAP(val, POLL##X, (__force __u16)EPOLL##X)
+         |                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/poll.h:118:51: note: expanded from macro '__MAP'
+     118 |         (from < to ? (v & from) * (to/from) : (v & from) / (from/to))
+         |                                                          ^ ~~~~~~~~~
+   include/linux/poll.h:135:23: warning: division by zero is undefined [-Wdivision-by-zero]
+     135 |                 M(HUP) | M(RDHUP) | M(MSG);
+         |                                     ^~~~~~
+   include/linux/poll.h:132:32: note: expanded from macro 'M'
+     132 | #define M(X) (__force __poll_t)__MAP(val, POLL##X, (__force __u16)EPOLL##X)
+         |                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/poll.h:118:51: note: expanded from macro '__MAP'
+     118 |         (from < to ? (v & from) * (to/from) : (v & from) / (from/to))
+         |                                                          ^ ~~~~~~~~~
+   4 warnings and 2 errors generated.
+
+
+vim +134 include/linux/poll.h
+
+7a163b2195cda0 Al Viro 2018-02-01  129  
+7a163b2195cda0 Al Viro 2018-02-01  130  static inline __poll_t demangle_poll(u16 val)
+7a163b2195cda0 Al Viro 2018-02-01  131  {
+7a163b2195cda0 Al Viro 2018-02-01  132  #define M(X) (__force __poll_t)__MAP(val, POLL##X, (__force __u16)EPOLL##X)
+7a163b2195cda0 Al Viro 2018-02-01  133  	return M(IN) | M(OUT) | M(PRI) | M(ERR) | M(NVAL) |
+7a163b2195cda0 Al Viro 2018-02-01 @134  		M(RDNORM) | M(RDBAND) | M(WRNORM) | M(WRBAND) |
+7a163b2195cda0 Al Viro 2018-02-01  135  		M(HUP) | M(RDHUP) | M(MSG);
+7a163b2195cda0 Al Viro 2018-02-01  136  #undef M
+7a163b2195cda0 Al Viro 2018-02-01  137  }
+7a163b2195cda0 Al Viro 2018-02-01  138  #undef __MAP
+7a163b2195cda0 Al Viro 2018-02-01  139  
+7a163b2195cda0 Al Viro 2018-02-01  140  
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
