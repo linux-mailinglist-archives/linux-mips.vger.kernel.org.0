@@ -1,162 +1,247 @@
-Return-Path: <linux-mips+bounces-14212-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-14213-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id TK/AHRVo52ke8AEAu9opvQ
-	(envelope-from <linux-mips+bounces-14212-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Tue, 21 Apr 2026 14:05:41 +0200
+	id 0MKnGvpo52ke8AEAu9opvQ
+	(envelope-from <linux-mips+bounces-14213-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Tue, 21 Apr 2026 14:09:30 +0200
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id D8A5343A6A1
-	for <lists+linux-mips@lfdr.de>; Tue, 21 Apr 2026 14:05:40 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id BA7BD43A73E
+	for <lists+linux-mips@lfdr.de>; Tue, 21 Apr 2026 14:09:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 986C13005173
-	for <lists+linux-mips@lfdr.de>; Tue, 21 Apr 2026 12:05:00 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 8FBE4302E93E
+	for <lists+linux-mips@lfdr.de>; Tue, 21 Apr 2026 12:07:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 96A163A7825;
-	Tue, 21 Apr 2026 12:04:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0B8B72D73A1;
+	Tue, 21 Apr 2026 12:07:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="HEiBlf68"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-oo1-f47.google.com (mail-oo1-f47.google.com [209.85.161.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14ADD1B4F09
-	for <linux-mips@vger.kernel.org>; Tue, 21 Apr 2026 12:04:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1D6E279334;
+	Tue, 21 Apr 2026 12:07:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776773098; cv=none; b=fSto5LuHMNtkRVNeiKyB8Qzo3zt+GrSo4b9heBO0JHg+FEYWy7O4VZyCO4pflBiU4ShXlZrK1d1tJkVYltgpSykVSii+szFt2CPmUNSb278T6iPNRQDu0ff7uaVJFqTmQRpREiY9sVwSzgYsV9JTJlq9ur4DoGkshOFEC5fNMa4=
+	t=1776773224; cv=none; b=fjCeP5fxp81XEuZkeiCzhXidIgbAAQw2Sqx5hRB+yTvtabI8l85BxeePYZJDGNeugExh2Sr0hFYviMmsgApUwfIfBSik6ltHj+JgPpbTePbSHcUILFqq+Y65lS2+NwNU2rDoP6ecv8o2LN0XdmanQ97XEwRJG0CX+q3vDgWr03k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776773098; c=relaxed/simple;
-	bh=D2pg4QST6SQsj9Y0AlZ3xwmYOqacTuU/qi+aAUKUt00=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=pEXw/EmpxIDDTDTXhwvMgPxIa7KkSSiOHQxmnSIHAPLKSIoBsdSVaLTD7C4xPBgN+uQ06nxLUOJKrrfUbTj2CefuKFhhVMCjaSv4j9Zrr4ZfMlClNfl/AARjEAR+QOE/sKIZUCrrPN+/yxfSMJG2E7/XueEGZlECSfNZiotv9Ds=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.161.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-oo1-f47.google.com with SMTP id 006d021491bc7-694885bf090so914909eaf.0
-        for <linux-mips@vger.kernel.org>; Tue, 21 Apr 2026 05:04:56 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776773096; x=1777377896;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=+Ji5jUeRQ9s6IdrcvkqpKzzaDEFKSxwSRUCTUPQc2w4=;
-        b=BEzMidp/8yDs3bo06vOKJgypowa8awVn3I4f3XyYw7dkQ3qiv6+Phwghv42sK5bF3w
-         OnWJpWbf5AkvOhUdguBskKa18lvfg/hsbb88FVgUUBvVJgiLYrigO9oaOgUbtJb8u/J3
-         fYVgsueIRFdfdD7cBIg0wVaBHlM/ScogPOOK8iLeLojjp3qgnhicybNWVea/6NVebFym
-         S1SAh3fWK/jvPVtabmZnp7jKgDYXzHoym27TyurzPOW+0n87NQF23tt6iTB2Ozojg6X9
-         EpEo0WF00tzdqpi60WcUKnIGvx0JAO9eSbS0p4mlNbN193xJb/ebTD6IfdaoqRaP7DFr
-         BRtQ==
-X-Forwarded-Encrypted: i=1; AFNElJ/qvbO28fu+gao+3W6MNxWnQlq+we65yqYdo7UFXxEbV30HiGLXNzLOWuBWrV5Ajggd+d32lg5rtXon@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxn9BbJsbfLF7iud+TK/1pmQ1rmr39ZFtpe5ndwyoflXbI+UFb+
-	zZdeD14Nt/P7rLo3x/E6K2RKHln35nayg1AwvXBGq0hBOYAPLb8CUeUxCe7PIoSlEKU=
-X-Gm-Gg: AeBDievgWneOX3vMM5mrozHLIrjWVHWR05fNAr68XexK0qzAgtByIBEAKhYWiLpoRs0
-	rL0DCsHOZJrPI5Mo4+Vk6ihRsiZpt1vXa80riWjvw3RrP0ITR/YrUMpzkTty/dWl3AT/UY3jv3+
-	mf+5pTpIVl4OZSVX+/caB/2klQWmVsYN8IrAt1ovGYbcjjsUHITl4GH+SMXV/pSqkwEpa5x4GTN
-	vbrYhptaY9un2Jy0vdUg1eucDCSGOfxZZfRIXssvghbl2wqmyQzHihIofWFDw7l42B7sa2Z6upg
-	AzVvgFluxJ/Z8uhb07P9CKX3M7hz2KujhBjfa+X8KwyE9YoD9uqtMvp6fFkUmQ6aYw3Vick90Qg
-	LUTNNjZyK+1KXWLlU7AMSaKCsCX7iTIAYrNg5xwb4ndNK5L+fKMx4Uak1S4TtdplhkwxKTCbvLD
-	gAquZqVQpOA7hux5Gf7VqVPJJsuF9RvNfk7D5RJYc+ez/4YYveZX2x9IMCcimw33Yf9LcdC+g=
-X-Received: by 2002:a05:6820:1384:b0:689:613a:f2fe with SMTP id 006d021491bc7-69462ef2380mr9454811eaf.36.1776773095904;
-        Tue, 21 Apr 2026 05:04:55 -0700 (PDT)
-Received: from mail-ot1-f48.google.com (mail-ot1-f48.google.com. [209.85.210.48])
-        by smtp.gmail.com with ESMTPSA id 006d021491bc7-6949127c1e2sm2306910eaf.15.2026.04.21.05.04.54
-        for <linux-mips@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 21 Apr 2026 05:04:55 -0700 (PDT)
-Received: by mail-ot1-f48.google.com with SMTP id 46e09a7af769-7dbccf6a23dso3517982a34.2
-        for <linux-mips@vger.kernel.org>; Tue, 21 Apr 2026 05:04:54 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AFNElJ/Z6fmKEZGhLJD5XfbbbCEhkO0Q3lb1g720CphxDeNwRs347LlIXIe7KQL9Beh2cwvgl/ISXfe3P+ig@vger.kernel.org
-X-Received: by 2002:a05:6102:f8b:b0:601:f386:9ed2 with SMTP id
- ada2fe7eead31-616f4d67f72mr7641295137.7.1776772665998; Tue, 21 Apr 2026
- 04:57:45 -0700 (PDT)
+	s=arc-20240116; t=1776773224; c=relaxed/simple;
+	bh=PNPmGlZC+yKOIjYYTwsUftsaSEF+Y62itbzem4MiqCw=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=TwTSZ7v1JxgmqwyXnh+romke3omw7Ow2gEgmsQtwjTAQ993fu/WVjmkqOCuYS5idmwOdHouufmryDBEb66xzUq7VDM5br8HOegnr3DZ3uZ2c9nbQyvGfz20wf+gV3AGBfXnuTXotapMSw67qMvrBkvem4JHCIuiEJDZHZB/bdyQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=desiato.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=HEiBlf68; arc=none smtp.client-ip=90.155.92.199
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=desiato.srs.infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=desiato.20200630; h=MIME-Version:Content-Type:References:
+	In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=PNPmGlZC+yKOIjYYTwsUftsaSEF+Y62itbzem4MiqCw=; b=HEiBlf68XY594ugioZkZsYwri4
+	zPqxWGgjUFUCLCCBEfedLY36EjXej/x4768JmHvqEzor+qtnbwY++kwQH9jLcy6xry1AvhnY63xvW
+	9f0A0sAlgiL4fudXzeiGzXPULermcxunWHepjSdkqErAiPIZltbEn9djUNekKqPAcwMBWSbAtLKC1
+	MKGeoSgIvytl3oCLsbDZhOyF+PNd7vqlDQqbVS2kweCZeP5keC9d++uzKklRiY28qYYpdXlyPfP7W
+	tdovRG0y3xvvoUw6FWvqjGbjgnaGvh0UC+u/+7TssfF3H1SMKzBMFbQrIoxhoHmXRgcT6cdIElo3l
+	2BY0c3rw==;
+Received: from [172.31.31.148] (helo=u09cd745991455d.ant.amazon.com)
+	by desiato.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
+	id 1wF9sT-00000009h1D-3jWj;
+	Tue, 21 Apr 2026 12:06:54 +0000
+Message-ID: <6f7f93d389a0d209886a34898badd7d59908fe0f.camel@infradead.org>
+Subject: Re: [PATCH net-deletions] net: remove unused ATM protocols and
+ legacy ATM device drivers
+From: David Woodhouse <dwmw2@infradead.org>
+To: Geert Uytterhoeven <geert@linux-m68k.org>, Herbert Xu
+	 <herbert@gondor.apana.org.au>
+Cc: Jakub Kicinski <kuba@kernel.org>, davem@davemloft.net, 
+ netdev@vger.kernel.org, edumazet@google.com, pabeni@redhat.com, 
+ andrew+netdev@lunn.ch, horms@kernel.org, corbet@lwn.net,
+ skhan@linuxfoundation.org,  linux@armlinux.org.uk,
+ tsbogend@alpha.franken.de, maddy@linux.ibm.com,  mpe@ellerman.id.au,
+ npiggin@gmail.com, chleroy@kernel.org, 3chas3@gmail.com, 
+ razor@blackwall.org, idosch@nvidia.com, jani.nikula@intel.com, 
+ mchehab+huawei@kernel.org, tytso@mit.edu, ebiggers@kernel.org, 
+ johannes.berg@intel.com, jonathan.cameron@huawei.com, kees@kernel.org, 
+ kuniyu@google.com, fourier.thomas@gmail.com, andriy.shevchenko@intel.com, 
+ rdunlap@infradead.org, akpm@linux-foundation.org,
+ linux-doc@vger.kernel.org,  linux-mips@vger.kernel.org,
+ linuxppc-dev@lists.ozlabs.org,  bridge@lists.linux.dev
+Date: Tue, 21 Apr 2026 13:06:53 +0100
+In-Reply-To: <CAMuHMdU96F_42faeqNzDwaXks7mFrLrkPSJB_QTwxEn9HmVWpQ@mail.gmail.com>
+References: <20260421021943.1295109-1-kuba@kernel.org>
+	 <c7506c225ce22a71c03abc2673823cf84bbb5b0d.camel@infradead.org>
+	 <aedkZ5bizasuBPI8@gondor.apana.org.au>
+	 <CAMuHMdU96F_42faeqNzDwaXks7mFrLrkPSJB_QTwxEn9HmVWpQ@mail.gmail.com>
+Content-Type: multipart/signed; micalg="sha-256"; protocol="application/pkcs7-signature";
+	boundary="=-pkxpaXNCHGUYkmCZd6V2"
+User-Agent: Evolution 3.52.3-0ubuntu1.1 
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260421021943.1295109-1-kuba@kernel.org> <c7506c225ce22a71c03abc2673823cf84bbb5b0d.camel@infradead.org>
- <aedkZ5bizasuBPI8@gondor.apana.org.au>
-In-Reply-To: <aedkZ5bizasuBPI8@gondor.apana.org.au>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Tue, 21 Apr 2026 13:57:34 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdU96F_42faeqNzDwaXks7mFrLrkPSJB_QTwxEn9HmVWpQ@mail.gmail.com>
-X-Gm-Features: AQROBzAVi0Fh-UpifM1LaPGNEDH0ax6I6xOmcEB0yUP_KKo8UOyxGmDNb2nIMYw
-Message-ID: <CAMuHMdU96F_42faeqNzDwaXks7mFrLrkPSJB_QTwxEn9HmVWpQ@mail.gmail.com>
-Subject: Re: [PATCH net-deletions] net: remove unused ATM protocols and legacy
- ATM device drivers
-To: Herbert Xu <herbert@gondor.apana.org.au>
-Cc: David Woodhouse <dwmw2@infradead.org>, Jakub Kicinski <kuba@kernel.org>, davem@davemloft.net, 
-	netdev@vger.kernel.org, edumazet@google.com, pabeni@redhat.com, 
-	andrew+netdev@lunn.ch, horms@kernel.org, corbet@lwn.net, 
-	skhan@linuxfoundation.org, linux@armlinux.org.uk, tsbogend@alpha.franken.de, 
-	maddy@linux.ibm.com, mpe@ellerman.id.au, npiggin@gmail.com, 
-	chleroy@kernel.org, 3chas3@gmail.com, razor@blackwall.org, idosch@nvidia.com, 
-	jani.nikula@intel.com, mchehab+huawei@kernel.org, tytso@mit.edu, 
-	ebiggers@kernel.org, johannes.berg@intel.com, jonathan.cameron@huawei.com, 
-	kees@kernel.org, kuniyu@google.com, fourier.thomas@gmail.com, 
-	andriy.shevchenko@intel.com, rdunlap@infradead.org, akpm@linux-foundation.org, 
-	linux-doc@vger.kernel.org, linux-mips@vger.kernel.org, 
-	linuxppc-dev@lists.ozlabs.org, bridge@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-X-Spamd-Result: default: False [0.04 / 15.00];
+X-SRS-Rewrite: SMTP reverse-path rewritten from <dwmw2@infradead.org> by desiato.infradead.org. See http://www.infradead.org/rpr.html
+X-Spamd-Result: default: False [-2.76 / 15.00];
+	SIGNED_SMIME(-2.00)[];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+	DMARC_POLICY_ALLOW(-0.50)[infradead.org,none];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10];
+	R_DKIM_ALLOW(-0.20)[infradead.org:s=desiato.20200630];
+	MIME_GOOD(-0.20)[multipart/signed,text/plain];
 	MAILLIST(-0.15)[generic];
-	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FREEMAIL_CC(0.00)[infradead.org,kernel.org,davemloft.net,vger.kernel.org,google.com,redhat.com,lunn.ch,lwn.net,linuxfoundation.org,armlinux.org.uk,alpha.franken.de,linux.ibm.com,ellerman.id.au,gmail.com,blackwall.org,nvidia.com,intel.com,mit.edu,huawei.com,linux-foundation.org,lists.ozlabs.org,lists.linux.dev];
-	TAGGED_FROM(0.00)[bounces-14212-lists,linux-mips=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-14213-lists,linux-mips=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	DMARC_NA(0.00)[linux-m68k.org];
+	RCVD_COUNT_THREE(0.00)[4];
+	MIME_TRACE(0.00)[0:+,1:+,2:~];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[36];
-	MIME_TRACE(0.00)[0:+];
-	MISSING_XM_UA(0.00)[];
-	FROM_HAS_DN(0.00)[];
 	TO_DN_SOME(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[6];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[geert@linux-m68k.org,linux-mips@vger.kernel.org];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	RCPT_COUNT_TWELVE(0.00)[36];
+	FROM_HAS_DN(0.00)[];
+	HAS_ATTACHMENT(0.00)[];
+	DKIM_TRACE(0.00)[infradead.org:+];
 	NEURAL_HAM(-0.00)[-1.000];
-	TAGGED_RCPT(0.00)[linux-mips,netdev,huawei];
-	R_DKIM_NA(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[dwmw2@infradead.org,linux-mips@vger.kernel.org];
+	FREEMAIL_CC(0.00)[kernel.org,davemloft.net,vger.kernel.org,google.com,redhat.com,lunn.ch,lwn.net,linuxfoundation.org,armlinux.org.uk,alpha.franken.de,linux.ibm.com,ellerman.id.au,gmail.com,blackwall.org,nvidia.com,intel.com,mit.edu,huawei.com,infradead.org,linux-foundation.org,lists.ozlabs.org,lists.linux.dev];
+	MID_RHS_MATCH_FROM(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[linux-m68k.org:email,mail.gmail.com:mid,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,apana.org.au:email]
-X-Rspamd-Queue-Id: D8A5343A6A1
+	TAGGED_RCPT(0.00)[linux-mips,netdev,huawei];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,infradead.org:dkim,infradead.org:mid,apana.org.au:email]
+X-Rspamd-Queue-Id: BA7BD43A73E
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-Hi Herbert,
 
-On Tue, 21 Apr 2026 at 13:51, Herbert Xu <herbert@gondor.apana.org.au> wrote:
-> On Tue, Apr 21, 2026 at 10:26:18AM +0100, David Woodhouse wrote:
-> > I suspect they don't have a huge amount of interest in the Solos any
-> > more, or the Geode-based SBC they sold with two of them on-board. But
-> > OpenWrt does still support them, and I even have one here (although no
-> > ADSL line to test it with). They were briefly popular as fully Linux-
-> > supported ADSL routers.
->
-> ADSL is history, it only ever made sense in rich countries where
-> physical copper cables were pre-installed in homes.  While rich
-> countries have moved to fibre, the rest of the world won't use
-> ADSL either because there is no copper cable to begin with.  So
-> it's actually cheaper to just lay a fibre cable for a new install.
+--=-pkxpaXNCHGUYkmCZd6V2
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-I am afraid the move to fibre hasn't been completed yet.
-ADSL (VDSL2?) is still being used.
+On Tue, 2026-04-21 at 13:57 +0200, Geert Uytterhoeven wrote:
+> Hi Herbert,
+>=20
+> On Tue, 21 Apr 2026 at 13:51, Herbert Xu <herbert@gondor.apana.org.au> wr=
+ote:
+> > On Tue, Apr 21, 2026 at 10:26:18AM +0100, David Woodhouse wrote:
+> > > I suspect they don't have a huge amount of interest in the Solos any
+> > > more, or the Geode-based SBC they sold with two of them on-board. But
+> > > OpenWrt does still support them, and I even have one here (although n=
+o
+> > > ADSL line to test it with). They were briefly popular as fully Linux-
+> > > supported ADSL routers.
+> >=20
+> > ADSL is history, it only ever made sense in rich countries where
+> > physical copper cables were pre-installed in homes.=C2=A0 While rich
+> > countries have moved to fibre, the rest of the world won't use
+> > ADSL either because there is no copper cable to begin with.=C2=A0 So
+> > it's actually cheaper to just lay a fibre cable for a new install.
+>=20
+> I am afraid the move to fibre hasn't been completed yet.
+> ADSL (VDSL2?) is still being used.
 
-Gr{oetje,eeting}s,
+VSDL is different, and isn't ATM-based. But even ADSL is still in use;
+in the UK some rural areas haven't got fibre yet.
 
-                        Geert
+--=-pkxpaXNCHGUYkmCZd6V2
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Transfer-Encoding: base64
 
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+MIAGCSqGSIb3DQEHAqCAMIACAQExDzANBglghkgBZQMEAgEFADCABgkqhkiG9w0BBwEAAKCCD9Aw
+ggSOMIIDdqADAgECAhAOmiw0ECVD4cWj5DqVrT9PMA0GCSqGSIb3DQEBCwUAMGUxCzAJBgNVBAYT
+AlVTMRUwEwYDVQQKEwxEaWdpQ2VydCBJbmMxGTAXBgNVBAsTEHd3dy5kaWdpY2VydC5jb20xJDAi
+BgNVBAMTG0RpZ2lDZXJ0IEFzc3VyZWQgSUQgUm9vdCBDQTAeFw0yNDAxMzAwMDAwMDBaFw0zMTEx
+MDkyMzU5NTlaMEExCzAJBgNVBAYTAkFVMRAwDgYDVQQKEwdWZXJva2V5MSAwHgYDVQQDExdWZXJv
+a2V5IFNlY3VyZSBFbWFpbCBHMjCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAMjvgLKj
+jfhCFqxYyRiW8g3cNFAvltDbK5AzcOaR7yVzVGadr4YcCVxjKrEJOgi7WEOH8rUgCNB5cTD8N/Et
+GfZI+LGqSv0YtNa54T9D1AWJy08ZKkWvfGGIXN9UFAPMJ6OLLH/UUEgFa+7KlrEvMUupDFGnnR06
+aDJAwtycb8yXtILj+TvfhLFhafxroXrflspavejQkEiHjNjtHnwbZ+o43g0/yxjwnarGI3kgcak7
+nnI9/8Lqpq79tLHYwLajotwLiGTB71AGN5xK+tzB+D4eN9lXayrjcszgbOv2ZCgzExQUAIt98mre
+8EggKs9mwtEuKAhYBIP/0K6WsoMnQCcCAwEAAaOCAVwwggFYMBIGA1UdEwEB/wQIMAYBAf8CAQAw
+HQYDVR0OBBYEFIlICOogTndrhuWByNfhjWSEf/xwMB8GA1UdIwQYMBaAFEXroq/0ksuCMS1Ri6en
+IZ3zbcgPMA4GA1UdDwEB/wQEAwIBhjAdBgNVHSUEFjAUBggrBgEFBQcDBAYIKwYBBQUHAwIweQYI
+KwYBBQUHAQEEbTBrMCQGCCsGAQUFBzABhhhodHRwOi8vb2NzcC5kaWdpY2VydC5jb20wQwYIKwYB
+BQUHMAKGN2h0dHA6Ly9jYWNlcnRzLmRpZ2ljZXJ0LmNvbS9EaWdpQ2VydEFzc3VyZWRJRFJvb3RD
+QS5jcnQwRQYDVR0fBD4wPDA6oDigNoY0aHR0cDovL2NybDMuZGlnaWNlcnQuY29tL0RpZ2lDZXJ0
+QXNzdXJlZElEUm9vdENBLmNybDARBgNVHSAECjAIMAYGBFUdIAAwDQYJKoZIhvcNAQELBQADggEB
+ACiagCqvNVxOfSd0uYfJMiZsOEBXAKIR/kpqRp2YCfrP4Tz7fJogYN4fxNAw7iy/bPZcvpVCfe/H
+/CCcp3alXL0I8M/rnEnRlv8ItY4MEF+2T/MkdXI3u1vHy3ua8SxBM8eT9LBQokHZxGUX51cE0kwa
+uEOZ+PonVIOnMjuLp29kcNOVnzf8DGKiek+cT51FvGRjV6LbaxXOm2P47/aiaXrDD5O0RF5SiPo6
+xD1/ClkCETyyEAE5LRJlXtx288R598koyFcwCSXijeVcRvBB1cNOLEbg7RMSw1AGq14fNe2cH1HG
+W7xyduY/ydQt6gv5r21mDOQ5SaZSWC/ZRfLDuEYwggWbMIIEg6ADAgECAhAH5JEPagNRXYDiRPdl
+c1vgMA0GCSqGSIb3DQEBCwUAMEExCzAJBgNVBAYTAkFVMRAwDgYDVQQKEwdWZXJva2V5MSAwHgYD
+VQQDExdWZXJva2V5IFNlY3VyZSBFbWFpbCBHMjAeFw0yNDEyMzAwMDAwMDBaFw0yODAxMDQyMzU5
+NTlaMB4xHDAaBgNVBAMME2R3bXcyQGluZnJhZGVhZC5vcmcwggIiMA0GCSqGSIb3DQEBAQUAA4IC
+DwAwggIKAoICAQDali7HveR1thexYXx/W7oMk/3Wpyppl62zJ8+RmTQH4yZeYAS/SRV6zmfXlXaZ
+sNOE6emg8WXLRS6BA70liot+u0O0oPnIvnx+CsMH0PD4tCKSCsdp+XphIJ2zkC9S7/yHDYnqegqt
+w4smkqUqf0WX/ggH1Dckh0vHlpoS1OoxqUg+ocU6WCsnuz5q5rzFsHxhD1qGpgFdZEk2/c//ZvUN
+i12vPWipk8TcJwHw9zoZ/ZrVNybpMCC0THsJ/UEVyuyszPtNYeYZAhOJ41vav1RhZJzYan4a1gU0
+kKBPQklcpQEhq48woEu15isvwWh9/+5jjh0L+YNaN0I//nHSp6U9COUG9Z0cvnO8FM6PTqsnSbcc
+0j+GchwOHRC7aP2t5v2stVx3KbptaYEzi4MQHxm/0+HQpMEVLLUiizJqS4PWPU6zfQTOMZ9uLQRR
+ci+c5xhtMEBszlQDOvEQcyEG+hc++fH47K+MmZz21bFNfoBxLP6bjR6xtPXtREF5lLXxp+CJ6KKS
+blPKeVRg/UtyJHeFKAZXO8Zeco7TZUMVHmK0ZZ1EpnZbnAhKE19Z+FJrQPQrlR0gO3lBzuyPPArV
+hvWxjlO7S4DmaEhLzarWi/ze7EGwWSuI2eEa/8zU0INUsGI4ywe7vepQz7IqaAovAX0d+f1YjbmC
+VsAwjhLmveFjNwIDAQABo4IBsDCCAawwHwYDVR0jBBgwFoAUiUgI6iBOd2uG5YHI1+GNZIR//HAw
+HQYDVR0OBBYEFFxiGptwbOfWOtMk5loHw7uqWUOnMDAGA1UdEQQpMCeBE2R3bXcyQGluZnJhZGVh
+ZC5vcmeBEGRhdmlkQHdvb2Rob3Uuc2UwFAYDVR0gBA0wCzAJBgdngQwBBQEBMA4GA1UdDwEB/wQE
+AwIF4DAdBgNVHSUEFjAUBggrBgEFBQcDAgYIKwYBBQUHAwQwewYDVR0fBHQwcjA3oDWgM4YxaHR0
+cDovL2NybDMuZGlnaWNlcnQuY29tL1Zlcm9rZXlTZWN1cmVFbWFpbEcyLmNybDA3oDWgM4YxaHR0
+cDovL2NybDQuZGlnaWNlcnQuY29tL1Zlcm9rZXlTZWN1cmVFbWFpbEcyLmNybDB2BggrBgEFBQcB
+AQRqMGgwJAYIKwYBBQUHMAGGGGh0dHA6Ly9vY3NwLmRpZ2ljZXJ0LmNvbTBABggrBgEFBQcwAoY0
+aHR0cDovL2NhY2VydHMuZGlnaWNlcnQuY29tL1Zlcm9rZXlTZWN1cmVFbWFpbEcyLmNydDANBgkq
+hkiG9w0BAQsFAAOCAQEAQXc4FPiPLRnTDvmOABEzkIumojfZAe5SlnuQoeFUfi+LsWCKiB8Uextv
+iBAvboKhLuN6eG/NC6WOzOCppn4mkQxRkOdLNThwMHW0d19jrZFEKtEG/epZ/hw/DdScTuZ2m7im
+8ppItAT6GXD3aPhXkXnJpC/zTs85uNSQR64cEcBFjjoQDuSsTeJ5DAWf8EMyhMuD8pcbqx5kRvyt
+JPsWBQzv1Dsdv2LDPLNd/JUKhHSgr7nbUr4+aAP2PHTXGcEBh8lTeYea9p4d5k969pe0OHYMV5aL
+xERqTagmSetuIwolkAuBCzA9vulg8Y49Nz2zrpUGfKGOD0FMqenYxdJHgDCCBZswggSDoAMCAQIC
+EAfkkQ9qA1FdgOJE92VzW+AwDQYJKoZIhvcNAQELBQAwQTELMAkGA1UEBhMCQVUxEDAOBgNVBAoT
+B1Zlcm9rZXkxIDAeBgNVBAMTF1Zlcm9rZXkgU2VjdXJlIEVtYWlsIEcyMB4XDTI0MTIzMDAwMDAw
+MFoXDTI4MDEwNDIzNTk1OVowHjEcMBoGA1UEAwwTZHdtdzJAaW5mcmFkZWFkLm9yZzCCAiIwDQYJ
+KoZIhvcNAQEBBQADggIPADCCAgoCggIBANqWLse95HW2F7FhfH9bugyT/danKmmXrbMnz5GZNAfj
+Jl5gBL9JFXrOZ9eVdpmw04Tp6aDxZctFLoEDvSWKi367Q7Sg+ci+fH4KwwfQ8Pi0IpIKx2n5emEg
+nbOQL1Lv/IcNiep6Cq3DiyaSpSp/RZf+CAfUNySHS8eWmhLU6jGpSD6hxTpYKye7PmrmvMWwfGEP
+WoamAV1kSTb9z/9m9Q2LXa89aKmTxNwnAfD3Ohn9mtU3JukwILRMewn9QRXK7KzM+01h5hkCE4nj
+W9q/VGFknNhqfhrWBTSQoE9CSVylASGrjzCgS7XmKy/BaH3/7mOOHQv5g1o3Qj/+cdKnpT0I5Qb1
+nRy+c7wUzo9OqydJtxzSP4ZyHA4dELto/a3m/ay1XHcpum1pgTOLgxAfGb/T4dCkwRUstSKLMmpL
+g9Y9TrN9BM4xn24tBFFyL5znGG0wQGzOVAM68RBzIQb6Fz758fjsr4yZnPbVsU1+gHEs/puNHrG0
+9e1EQXmUtfGn4InoopJuU8p5VGD9S3Ikd4UoBlc7xl5yjtNlQxUeYrRlnUSmdlucCEoTX1n4UmtA
+9CuVHSA7eUHO7I88CtWG9bGOU7tLgOZoSEvNqtaL/N7sQbBZK4jZ4Rr/zNTQg1SwYjjLB7u96lDP
+sipoCi8BfR35/ViNuYJWwDCOEua94WM3AgMBAAGjggGwMIIBrDAfBgNVHSMEGDAWgBSJSAjqIE53
+a4blgcjX4Y1khH/8cDAdBgNVHQ4EFgQUXGIam3Bs59Y60yTmWgfDu6pZQ6cwMAYDVR0RBCkwJ4ET
+ZHdtdzJAaW5mcmFkZWFkLm9yZ4EQZGF2aWRAd29vZGhvdS5zZTAUBgNVHSAEDTALMAkGB2eBDAEF
+AQEwDgYDVR0PAQH/BAQDAgXgMB0GA1UdJQQWMBQGCCsGAQUFBwMCBggrBgEFBQcDBDB7BgNVHR8E
+dDByMDegNaAzhjFodHRwOi8vY3JsMy5kaWdpY2VydC5jb20vVmVyb2tleVNlY3VyZUVtYWlsRzIu
+Y3JsMDegNaAzhjFodHRwOi8vY3JsNC5kaWdpY2VydC5jb20vVmVyb2tleVNlY3VyZUVtYWlsRzIu
+Y3JsMHYGCCsGAQUFBwEBBGowaDAkBggrBgEFBQcwAYYYaHR0cDovL29jc3AuZGlnaWNlcnQuY29t
+MEAGCCsGAQUFBzAChjRodHRwOi8vY2FjZXJ0cy5kaWdpY2VydC5jb20vVmVyb2tleVNlY3VyZUVt
+YWlsRzIuY3J0MA0GCSqGSIb3DQEBCwUAA4IBAQBBdzgU+I8tGdMO+Y4AETOQi6aiN9kB7lKWe5Ch
+4VR+L4uxYIqIHxR7G2+IEC9ugqEu43p4b80LpY7M4KmmfiaRDFGQ50s1OHAwdbR3X2OtkUQq0Qb9
+6ln+HD8N1JxO5nabuKbymki0BPoZcPdo+FeRecmkL/NOzzm41JBHrhwRwEWOOhAO5KxN4nkMBZ/w
+QzKEy4PylxurHmRG/K0k+xYFDO/UOx2/YsM8s138lQqEdKCvudtSvj5oA/Y8dNcZwQGHyVN5h5r2
+nh3mT3r2l7Q4dgxXlovERGpNqCZJ624jCiWQC4ELMD2+6WDxjj03PbOulQZ8oY4PQUyp6djF0keA
+MYIDuzCCA7cCAQEwVTBBMQswCQYDVQQGEwJBVTEQMA4GA1UEChMHVmVyb2tleTEgMB4GA1UEAxMX
+VmVyb2tleSBTZWN1cmUgRW1haWwgRzICEAfkkQ9qA1FdgOJE92VzW+AwDQYJYIZIAWUDBAIBBQCg
+ggE3MBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTI2MDQyMTEyMDY1
+M1owLwYJKoZIhvcNAQkEMSIEILdzQKtvQhnfI/s6FrUj3fn29zIqzC9j/DH4dx7FW9VoMGQGCSsG
+AQQBgjcQBDFXMFUwQTELMAkGA1UEBhMCQVUxEDAOBgNVBAoTB1Zlcm9rZXkxIDAeBgNVBAMTF1Zl
+cm9rZXkgU2VjdXJlIEVtYWlsIEcyAhAH5JEPagNRXYDiRPdlc1vgMGYGCyqGSIb3DQEJEAILMVeg
+VTBBMQswCQYDVQQGEwJBVTEQMA4GA1UEChMHVmVyb2tleTEgMB4GA1UEAxMXVmVyb2tleSBTZWN1
+cmUgRW1haWwgRzICEAfkkQ9qA1FdgOJE92VzW+AwDQYJKoZIhvcNAQEBBQAEggIAeVuv9br9naNR
+eeKf7+C+rMVqiUQonOL6inI+VFS1U2Vca0tNCvETyZOG9TxUProznhSqLK5fqwDrLmHpc9RRsTlP
+FsU2jf9/s6yhAxra5cHidHzkGsIzJRpIYpl4zsSbcqH99xiGL9R6s6hJzfVljMzFRGrks7FROsv7
+FwhH9pbzQaerkGlsRTGkzy9R3+K0YErGmXxkLrOH6bcI1EXv/GvExNyuM7le7DZbi5FF3Nw5t88U
+k139iPbD1cYo2Nh/Hh0nZggEFXOgBh/zgV+8SM04HoOo4iWZ5zhhZrwDMsH2m3vQUDuT2efvVCs5
+1oWR5iwaWqg5bcLdeE42q2prmlAtKAIb8jTWukfOodipucLfn+SNh/UzsKx/7QqI0488UREV9ks6
+AQV9EzN0XuOXGkJuBXG42yjLgEHrY4sLk0a4zDPUftbcB4QdJxKjp2rWIgXGK4HdK3O/06ZGeTkP
+aXEtibuJjAhQ1K5+0fXIozcPYKwjfinOwuhTpINpcwjPYiIB2gYDTpgBrQdf1suXjHi46acGkVDT
+4ueZcyJ+iBLtM31Vj2Yh0kbwbQ9OnaGWAzM+cNSGoD70tyJdBctWrk0iYKMSn+Bto2jsQBegpzGo
+vu4VRlnPbEBNlMMTkgO3hkqh8LHkpm+UBrNavAzvIlnGxYps3DhE7rTAvz/2L5sAAAAAAAA=
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+
+--=-pkxpaXNCHGUYkmCZd6V2--
 
