@@ -1,73 +1,71 @@
-Return-Path: <linux-mips+bounces-14228-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-14229-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id yKl3FiSn6GmZOQIAu9opvQ
-	(envelope-from <linux-mips+bounces-14228-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Wed, 22 Apr 2026 12:47:00 +0200
+	id wIgXNgup6GnEOQIAu9opvQ
+	(envelope-from <linux-mips+bounces-14229-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Wed, 22 Apr 2026 12:55:07 +0200
 X-Original-To: lists+linux-mips@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id B7396444EF6
-	for <lists+linux-mips@lfdr.de>; Wed, 22 Apr 2026 12:46:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 38252445016
+	for <lists+linux-mips@lfdr.de>; Wed, 22 Apr 2026 12:55:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 450243018282
-	for <lists+linux-mips@lfdr.de>; Wed, 22 Apr 2026 10:45:37 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 63597300F9C3
+	for <lists+linux-mips@lfdr.de>; Wed, 22 Apr 2026 10:53:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 98CF23CCFC1;
-	Wed, 22 Apr 2026 10:45:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 311CE3ACEE0;
+	Wed, 22 Apr 2026 10:53:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="f6bKDgI9"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fUNttYnM"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E1CB3BF67A;
-	Wed, 22 Apr 2026 10:45:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0ACBF46B5;
+	Wed, 22 Apr 2026 10:53:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776854736; cv=none; b=Lwzfnh2hqBaREHemN62p+57Ap9aBU4hGXRHfy9V0ZL/HjO/nXgow+qV/hBU+YG09P6AUfgwGVME4gUblfDvTKFl0NNKA3DVbwPScb4S7eUViqwr5l2ny4FIy6qPcohqWyACFIl+ZZH+T9kkNa92m3KcwbhDTvPhTSFkfP3qayk4=
+	t=1776855217; cv=none; b=KkA03jfqtktAckqo31yvk8FVRs8Yx1NvFyw6S+3TmKuibfxdm3P2BgNbPq7bDYvmX9LAulDh3yBQBm2rPsNGUUxNXPCtN8AFuJkGVjpQu33sG1U8FKZ/I+9uVCuHj53Zn0rMDIlyeCyDb1RmEqtCnst8nzvOQ+8Hzn2v7OEpIV4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776854736; c=relaxed/simple;
-	bh=TpfNQlTkSNL7BzUK+Pd9K+KxRlrlEHZM5h0NyDeSYWQ=;
+	s=arc-20240116; t=1776855217; c=relaxed/simple;
+	bh=ft71bsoOUWGTJtW1ZFq6hY21ozdG2v4Dg7mr51X6pLE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=KQ4twTkSPfcFUS6b1fhCR8KPzYiAq+wtzBkdLYopemJ7i2U0uTwXPAPxrXVBs7v+say2+SKg3DPhRCWs2ZoTDFLIuZIr1tKoruQjQntLfrye3sClOMizyqMk2ASnchQD037CDHfKmAx2VXCaUskPmmKaZIX3GYCh6kEC59cS/Fg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=f6bKDgI9; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7891FC19425;
-	Wed, 22 Apr 2026 10:45:26 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=kx8v2+QW/AiFCOB/rsosGYbM43rId2fxbS4C5SxrIQJ/s6LfsYqPiNP/89TvywWVfaKPahdLDPG74upHgE6cFO+rzHSSH2yKV19mCvpkSrhLksU1hqHSw1ifcrFEUllvtNX0b+mk7lzaMGSN8nms4j8vx1Q0WKAh5uJCpJW1lfU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fUNttYnM; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E5B4DC19425;
+	Wed, 22 Apr 2026 10:53:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1776854736;
-	bh=TpfNQlTkSNL7BzUK+Pd9K+KxRlrlEHZM5h0NyDeSYWQ=;
+	s=k20201202; t=1776855216;
+	bh=ft71bsoOUWGTJtW1ZFq6hY21ozdG2v4Dg7mr51X6pLE=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=f6bKDgI9RhEZIh7+hobdoxWlVq1gHUaQyXR4m+1d0/IMupVsD0m/usRRM6n2xHp7w
-	 LH52RTuZgV1klLheUCo5ynp4FP35Zj2EpxRVJQAfRpTDi6myG7w3JNn51MqTLFPfnh
-	 wdac20g8lTLSUjPxwCmZD7CQtRijt3WcBBiETSDJE4f41maAgeucEBT1IFzjLcQr6x
-	 KeIgEayOFRii/pXgvj2J3i3jcx9/lrZYwLlqo/03Lp+YKKbwfxyUkgJHA6/eCQ1fD5
-	 849kcCG7giSQotmykPgpASc+/lfbQNCloBaFITkZI0pmIu1agXk7hFNzKZLNhjSrkd
-	 DReCWtzjFLzJQ==
-Date: Wed, 22 Apr 2026 11:45:22 +0100
+	b=fUNttYnMtOBg3D7mM/O3lX1Z0FGZo8PMNwpzoutfIDAn1mbNGCjRXJSl+TuSgdOyK
+	 voHy0YijRIzCz++rwem8APKKdDeE8s793e91t43vmEdEhOj0EZnTwM105OAHoRQShU
+	 auQ8TY+v1/K0im0i8CavgL8HaGtVtSHk+65Nw59rZpq7leNkAfWR+T89MjKp8I6Yg7
+	 H0c1EwBiPYCgS2l4XJCJd1rF2F8DnoAnXtVcfcUCgQYfVXUUGhb+CzGEorgrtJKHoc
+	 oAbdruxMz7gX4PABqsOKDE7h6be9BAug9JX4rJ2h/Sezp7wUDXbKZEZGrQEzonePmc
+	 K3P9S60/wfmjg==
+Date: Wed, 22 Apr 2026 11:53:24 +0100
 From: Simon Horman <horms@kernel.org>
 To: Jakub Kicinski <kuba@kernel.org>
 Cc: davem@davemloft.net, netdev@vger.kernel.org, edumazet@google.com,
 	pabeni@redhat.com, andrew+netdev@lunn.ch, corbet@lwn.net,
-	skhan@linuxfoundation.org, federico.vaga@vaga.pv.it,
-	carlos.bilbao@kernel.org, avadhut.naik@amd.com, alexs@kernel.org,
-	si.yanteng@linux.dev, dzm91@hust.edu.cn,
-	2023002089@link.tyut.edu.cn, tsbogend@alpha.franken.de,
-	dsahern@kernel.org, jani.nikula@intel.com,
-	mchehab+huawei@kernel.org, gregkh@linuxfoundation.org,
-	jirislaby@kernel.org, tytso@mit.edu, herbert@gondor.apana.org.au,
-	ebiggers@kernel.org, johannes.berg@intel.com, geert@linux-m68k.org,
-	pablo@netfilter.org, tglx@kernel.org, mashiro.chen@mailbox.org,
-	mingo@kernel.org, dqfext@gmail.com, jreuter@yaina.de,
-	sdf@fomichev.me, pkshih@realtek.com, enelsonmoore@gmail.com,
-	mkl@pengutronix.de, toke@toke.dk, kees@kernel.org, crossd@gmail.com,
-	jlayton@kernel.org, wangliang74@huawei.com, aha310510@gmail.com,
-	takamitz@amazon.co.jp, kuniyu@google.com, linux-doc@vger.kernel.org,
-	linux-mips@vger.kernel.org
-Subject: Re: [PATCH net-deletions] net: remove ax25 and amateur radio
- (hamradio) subsystem
-Message-ID: <20260422104522.GK651125@horms.kernel.org>
-References: <20260421021824.1293976-1-kuba@kernel.org>
+	skhan@linuxfoundation.org, linux@armlinux.org.uk,
+	tsbogend@alpha.franken.de, maddy@linux.ibm.com, mpe@ellerman.id.au,
+	npiggin@gmail.com, chleroy@kernel.org, 3chas3@gmail.com,
+	razor@blackwall.org, idosch@nvidia.com, jani.nikula@intel.com,
+	mchehab+huawei@kernel.org, tytso@mit.edu,
+	herbert@gondor.apana.org.au, geert@linux-m68k.org,
+	ebiggers@kernel.org, johannes.berg@intel.com,
+	jonathan.cameron@huawei.com, kees@kernel.org, kuniyu@google.com,
+	fourier.thomas@gmail.com, andriy.shevchenko@intel.com,
+	rdunlap@infradead.org, akpm@linux-foundation.org,
+	linux-doc@vger.kernel.org, linux-mips@vger.kernel.org,
+	linuxppc-dev@lists.ozlabs.org, bridge@lists.linux.dev,
+	dwmw2@infradead.org
+Subject: Re: [PATCH net-deletions v2] net: remove unused ATM protocols and
+ legacy ATM device drivers
+Message-ID: <20260422105324.GM651125@horms.kernel.org>
+References: <20260422041846.2035118-1-kuba@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -76,7 +74,7 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260421021824.1293976-1-kuba@kernel.org>
+In-Reply-To: <20260422041846.2035118-1-kuba@kernel.org>
 X-Spamd-Result: default: False [-0.66 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
@@ -86,12 +84,12 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-14228-lists,linux-mips=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-14229-lists,linux-mips=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
 	RCVD_COUNT_THREE(0.00)[4];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	FREEMAIL_CC(0.00)[davemloft.net,vger.kernel.org,google.com,redhat.com,lunn.ch,lwn.net,linuxfoundation.org,vaga.pv.it,kernel.org,amd.com,linux.dev,hust.edu.cn,link.tyut.edu.cn,alpha.franken.de,intel.com,mit.edu,gondor.apana.org.au,linux-m68k.org,netfilter.org,mailbox.org,gmail.com,yaina.de,fomichev.me,realtek.com,pengutronix.de,toke.dk,huawei.com,amazon.co.jp];
-	RCPT_COUNT_TWELVE(0.00)[46];
+	FREEMAIL_CC(0.00)[davemloft.net,vger.kernel.org,google.com,redhat.com,lunn.ch,lwn.net,linuxfoundation.org,armlinux.org.uk,alpha.franken.de,linux.ibm.com,ellerman.id.au,gmail.com,kernel.org,blackwall.org,nvidia.com,intel.com,mit.edu,gondor.apana.org.au,linux-m68k.org,huawei.com,infradead.org,linux-foundation.org,lists.ozlabs.org,lists.linux.dev];
+	RCPT_COUNT_TWELVE(0.00)[36];
 	MIME_TRACE(0.00)[0:+];
 	FROM_HAS_DN(0.00)[];
 	MISSING_XM_UA(0.00)[];
@@ -106,28 +104,55 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	TO_DN_SOME(0.00)[];
 	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
 	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,horms.kernel.org:mid]
-X-Rspamd-Queue-Id: B7396444EF6
+X-Rspamd-Queue-Id: 38252445016
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On Mon, Apr 20, 2026 at 07:18:23PM -0700, Jakub Kicinski wrote:
-> Remove the amateur radio (AX.25, NET/ROM, ROSE) protocol implementation
-> and all associated hamradio device drivers from the kernel tree.
-> This set of protocols has long been a huge bug/syzbot magnet,
-> and since nobody stepped up to help us deal with the influx
-> of the AI-generated bug reports we need to move it out of tree
-> to protect our sanity.
+On Tue, Apr 21, 2026 at 09:18:44PM -0700, Jakub Kicinski wrote:
+> Remove the ATM protocol modules and PCI/SBUS ATM device drivers
+> that are no longer in active use.
 > 
-> The code is moved to an out-of-tree repo:
-> https://github.com/linux-netdev/mod-orphan
-> if it's cleaned up and reworked there we can accept it back.
+> The ATM core protocol stack, PPPoATM, BR2684, and USB DSL modem
+> drivers (drivers/usb/atm/) are retained in-tree to maintain PPP
+> over ATM (PPPoA) and PPPoE-over-BR2684 support for DSL connections.
 > 
-> Minimal stub headers are kept for include/net/ax25.h (AX25_P_IP,
-> AX25_ADDR_LEN, ax25_address) and include/net/rose.h (ROSE_ADDR_LEN)
-> so that the conditional integration code in arp.c and tun.c continues
-> to compile and work when the out-of-tree modules are loaded.
+> Removed ATM protocol modules:
+>  - net/atm/clip.c - Classical IP over ATM (RFC 2225)
+>  - net/atm/lec.c - LAN Emulation Client (LANE)
+>  - net/atm/mpc.c, mpoa_caches.c, mpoa_proc.c - Multi-Protocol Over ATM
+> 
+> Removed PCI/SBUS ATM device drivers (drivers/atm/):
+>  - adummy, atmtcp - software/testing ATM devices
+>  - eni - Efficient Networks ENI155P (OC-3, ~1995)
+>  - fore200e - FORE Systems 200E PCI/SBUS (OC-3, ~1999)
+>  - he - ForeRunner HE (OC-3/OC-12, ~2000)
+>  - idt77105 - IDT 77105 25 Mbps ATM PHY
+>  - idt77252 - IDT 77252 NICStAR II (OC-3, ~2000)
+>  - iphase - Interphase ATM PCI (OC-3/DS3/E3)
+>  - lanai - Efficient Networks Speedstream 3010
+>  - nicstar - IDT 77201 NICStAR (155/25 Mbps, ~1999)
+>  - solos-pci - Traverse Technologies ADSL2+ PCI
+>  - suni - PMC S/UNI SONET PHY library
+> 
+> Also clean up references in:
+>  - net/bridge/ - remove ATM LANE hook (br_fdb_test_addr_hook,
+>    br_fdb_test_addr)
+>  - net/core/dev.c - remove br_fdb_test_addr_hook export
+>  - defconfig files - remove ATM driver config options
+> 
+> The removed code is moved to an out-of-tree module package (mod-orphan).
 > 
 > Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+> ---
+> v2:
+>  - keep BR2684
+>  - correct the claim that Traverse Technologies is defunct,
+>    I'm still deleting the solos driver, chances are nobody uses it.
+>    Easy enough to revert back in since core is still around.
+>    The guiding principle is to keep USB modems and delete
+>    the rest as USB ADSL2+ CPEs were most popular historically.
+> v1: https://lore.kernel.org/20260421021943.1295109-1-kuba@kernel.org
 
 Reviewed-by: Simon Horman <horms@kernel.org>
+
 
