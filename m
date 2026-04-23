@@ -1,59 +1,59 @@
-Return-Path: <linux-mips+bounces-14275-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-14276-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id bcJMBOfn6Wm2nAIAu9opvQ
-	(envelope-from <linux-mips+bounces-14275-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Thu, 23 Apr 2026 11:35:35 +0200
+	id eLdeA3no6Wm2nAIAu9opvQ
+	(envelope-from <linux-mips+bounces-14276-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Thu, 23 Apr 2026 11:38:01 +0200
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 60DB744FBD1
-	for <lists+linux-mips@lfdr.de>; Thu, 23 Apr 2026 11:35:34 +0200 (CEST)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0036544FCD1
+	for <lists+linux-mips@lfdr.de>; Thu, 23 Apr 2026 11:37:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id A4BE131146F9
-	for <lists+linux-mips@lfdr.de>; Thu, 23 Apr 2026 09:26:59 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id B5A7B304D98E
+	for <lists+linux-mips@lfdr.de>; Thu, 23 Apr 2026 09:27:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A38A53E51FD;
-	Thu, 23 Apr 2026 09:26:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A3F633E51D5;
+	Thu, 23 Apr 2026 09:26:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="CO+COdkK"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="IQvytSRz"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
+Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 731F23E3DA8;
-	Thu, 23 Apr 2026 09:26:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.84.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08E2D3E5564;
+	Thu, 23 Apr 2026 09:26:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.85.4
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776936374; cv=none; b=qAPlUruRIUB4WA9Cq74cgzu0VF0BEvd5Z85a1qKhkdeQI7/z3HUzTaOF4NU5kzGzAlle4/Xj3W4nNE3nZA79x5iTedhdQ6i/iph7OBeyZp3E7ZXvtUlSA7vQw3ULf06ihsdPW3coLJGQygeutvnrc2aK25jK1//4ibXEsojR3pc=
+	t=1776936388; cv=none; b=rtInATh4Xnye3dpYKmw53NzkbIJcCadwtD+qX5kKKERiQtWczJClgxf1NGQsmVcmLde0Zn+C+SJqgUQZhK7fywWwzec2P1TeU89HG2EtPEZ8BwR82crKpOGO9Els5XbXwCOuz+8XkE9LRvj0DrrSd3W5ZMHhhOtuOb99EXJFDXA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776936374; c=relaxed/simple;
-	bh=lY1xXQjDNVyB2lrAF5/S1oTc8Wv0+WVH+sd9jwpc0YY=;
+	s=arc-20240116; t=1776936388; c=relaxed/simple;
+	bh=kCgmnTFJpVbs4xzDDYwF02TG2EBLDa4aw1ZxeSRRwhI=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=gNJu8S+FwKGB0rFZsZVucW8TyIhYNwVcCPE7I1zHB3AkEOYAJYkSkj0dvZA1s7rKd2fYDz/GC7QEmMlZvNFS7amhDbMxpULV6uCjjQaGwayFez66/nf+x9+AtNNZGo9I0Z4mOL7H+/vz6wVgdUmgUbv8pkHH3TSv5q5DyerIa6Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=CO+COdkK; arc=none smtp.client-ip=185.246.84.56
+	 In-Reply-To:To:Cc; b=HVbbhIpMvanXUspvMQkZOdAGeJz9wvFpQkrBEett1Q1x4NCiWRcsMWaONYTu1O+VSigPOFts488z34XGpWGLSL0VTdL9HpaUkTI121BGA5s5FBCNojdWNYZX2TCvM6oGhMLVNH88etSrEiTBfa0J3p/f+sKITIs1RoS5E8QPcyQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=IQvytSRz; arc=none smtp.client-ip=185.246.85.4
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-02.galae.net (Postfix) with ESMTPS id 318201A33BC;
-	Thu, 23 Apr 2026 09:26:10 +0000 (UTC)
+	by smtpout-03.galae.net (Postfix) with ESMTPS id B0ADB4E42A97;
+	Thu, 23 Apr 2026 09:26:25 +0000 (UTC)
 Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id 014B860495;
-	Thu, 23 Apr 2026 09:26:10 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id A050D10460BC3;
-	Thu, 23 Apr 2026 11:25:52 +0200 (CEST)
+	by smtpout-01.galae.net (Postfix) with ESMTPS id 871CB60495;
+	Thu, 23 Apr 2026 09:26:25 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 62CAF10460B12;
+	Thu, 23 Apr 2026 11:26:07 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1776936366; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	t=1776936381; h=from:subject:date:message-id:to:cc:mime-version:content-type:
 	 content-transfer-encoding:in-reply-to:references;
-	bh=puUy+SIf5/qKSteeednrIf5mLYz5IrBkti3jKdbP/U8=;
-	b=CO+COdkKAz7cQMOYAjz34tsoveju6S6rmROu9NnR2eqNDX5AG7jrJY7a0Edba8v847dlc3
-	yx8WNr52UOwI40ioF78sk/hrSxhW259FjpwHYhw7mqELkGCIlMeBJBYIbpKoq300XAHTZM
-	jzIpfh88ceXkgUdpSmkro+aQw+RISo13OND8pL2BTgMKQYy0oc6X9L5ZotjXxPyUx00AI9
-	L3kFUZFmzdVT3PuhnjMgQ1cOXEIgrh4WmUcgE89alYIBCXnbdqTjtqDugBiPMfvztmPUB6
-	piuA2fEp/Z2AoxU29ztMf/MkDazIQZgwFbepWF+PhkEMtfUbZnAoJxaSG1z6Nw==
+	bh=GIM+dcxS8lu18rSAReKvcdwXLUTzXndT5z9nh1cB178=;
+	b=IQvytSRzpsEOLxllhrLM7XVBKE6Q6FqujYN+9FSRtCOKYpPEhe60imY7rMaEAaYPEpQsk3
+	rtL6n93qEz03CyzsIK0TiatLnIN4tJpVNC3KiW2ShXeCPKtSHQPjyPn9z5hm1KUF5c807y
+	+lHubBshNWPsXZAsJa/0WJHC8n/bNBJH/oplJzQKD0dGXtH/FxY46YNwqrAFRnFPhdzOeU
+	T9TUrXroqHDRPS1CzdcOJCVnnu2++ZX/0MpqzvMaPnJ/zuEWGZm1+Zrkiq6qzLzH5pMhiR
+	opv78w6nhZ1h0Kut8qn2uDYNGWuHfgV+9I06O2l0VF2L009wTE4KuXH+obJJbA==
 From: Luca Ceresoli <luca.ceresoli@bootlin.com>
-Date: Thu, 23 Apr 2026 11:17:26 +0200
-Subject: [PATCH v2 32/41] drm/msm/mdp4: remove now-redundant call to
+Date: Thu, 23 Apr 2026 11:17:27 +0200
+Subject: [PATCH v2 33/41] drm/msm/dsi: remove now-redundant call to
  drm_connector_attach_encoder()
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
@@ -63,7 +63,7 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260423-drm-bridge-connector-attach_encoder-v2-32-2ae6ca69b390@bootlin.com>
+Message-Id: <20260423-drm-bridge-connector-attach_encoder-v2-33-2ae6ca69b390@bootlin.com>
 References: <20260423-drm-bridge-connector-attach_encoder-v2-0-2ae6ca69b390@bootlin.com>
 In-Reply-To: <20260423-drm-bridge-connector-attach_encoder-v2-0-2ae6ca69b390@bootlin.com>
 To: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>, 
@@ -128,7 +128,7 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[bootlin.com,reject];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
 	R_DKIM_ALLOW(-0.20)[bootlin.com:s=dkim];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
@@ -136,7 +136,7 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	MIME_TRACE(0.00)[0:+];
 	FREEMAIL_TO(0.00)[oss.qualcomm.com,intel.com,linaro.org,kernel.org,ideasonboard.com,kwiboo.se,gmail.com,linux.intel.com,suse.de,ffwll.ch,jannau.net,nxp.com,chromium.org,oss.nxp.com,pengutronix.de,crapouillou.net,collabora.com,baylibre.com,googlemail.com,linux.dev,poorly.run,somainline.org,rock-chips.com,sntech.de,nvidia.com,iscas.ac.cn,samsung.com,glider.be,bp.renesas.com,denx.de,agner.ch,iki.fi,amd.com];
-	TAGGED_FROM(0.00)[bounces-14275-lists,linux-mips=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-14276-lists,linux-mips=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
 	RECEIVED_HELO_LOCALHOST(0.00)[];
 	DKIM_TRACE(0.00)[bootlin.com:+];
@@ -146,14 +146,14 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	RCVD_COUNT_FIVE(0.00)[6];
 	PRECEDENCE_BULK(0.00)[];
 	FROM_NEQ_ENVFROM(0.00)[luca.ceresoli@bootlin.com,linux-mips@vger.kernel.org];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
 	RCPT_COUNT_GT_50(0.00)[79];
 	MID_RHS_MATCH_FROM(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-mips,renesas];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,bootlin.com:email,bootlin.com:dkim,bootlin.com:mid]
-X-Rspamd-Queue-Id: 60DB744FBD1
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,bootlin.com:email,bootlin.com:dkim,bootlin.com:mid]
+X-Rspamd-Queue-Id: 0036544FCD1
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
@@ -162,27 +162,24 @@ drm_bridge_connector_init().
 
 Signed-off-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
 ---
- drivers/gpu/drm/msm/disp/mdp4/mdp4_kms.c | 7 -------
- 1 file changed, 7 deletions(-)
+ drivers/gpu/drm/msm/dsi/dsi_manager.c | 4 ----
+ 1 file changed, 4 deletions(-)
 
-diff --git a/drivers/gpu/drm/msm/disp/mdp4/mdp4_kms.c b/drivers/gpu/drm/msm/disp/mdp4/mdp4_kms.c
-index 809ca191e9de..7726edb0d4ed 100644
---- a/drivers/gpu/drm/msm/disp/mdp4/mdp4_kms.c
-+++ b/drivers/gpu/drm/msm/disp/mdp4/mdp4_kms.c
-@@ -232,13 +232,6 @@ static int mdp4_modeset_init_intf(struct mdp4_kms *mdp4_kms,
- 			return PTR_ERR(connector);
- 		}
+diff --git a/drivers/gpu/drm/msm/dsi/dsi_manager.c b/drivers/gpu/drm/msm/dsi/dsi_manager.c
+index ca400924d4ee..46faeaae9d94 100644
+--- a/drivers/gpu/drm/msm/dsi/dsi_manager.c
++++ b/drivers/gpu/drm/msm/dsi/dsi_manager.c
+@@ -485,10 +485,6 @@ int msm_dsi_manager_connector_init(struct msm_dsi *msm_dsi,
+ 		return PTR_ERR(connector);
+ 	}
  
--		ret = drm_connector_attach_encoder(connector, encoder);
--		if (ret) {
--			DRM_DEV_ERROR(dev->dev, "failed to attach LVDS connector: %d\n", ret);
+-	ret = drm_connector_attach_encoder(connector, encoder);
+-	if (ret < 0)
+-		return ret;
 -
--			return ret;
--		}
--
- 		break;
- 	case DRM_MODE_ENCODER_TMDS:
- 		encoder = mdp4_dtv_encoder_init(dev);
+ 	return 0;
+ }
+ 
 
 -- 
 2.53.0
