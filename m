@@ -1,56 +1,56 @@
-Return-Path: <linux-mips+bounces-14284-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-14285-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id UJphLLcK6mnFsgIAu9opvQ
-	(envelope-from <linux-mips+bounces-14284-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Thu, 23 Apr 2026 14:04:07 +0200
+	id AFWHNxEL6mnFsgIAu9opvQ
+	(envelope-from <linux-mips+bounces-14285-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Thu, 23 Apr 2026 14:05:37 +0200
 X-Original-To: lists+linux-mips@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5706A451B2D
-	for <lists+linux-mips@lfdr.de>; Thu, 23 Apr 2026 14:04:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 463FF451BB3
+	for <lists+linux-mips@lfdr.de>; Thu, 23 Apr 2026 14:05:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id A5C2E301AF62
-	for <lists+linux-mips@lfdr.de>; Thu, 23 Apr 2026 11:58:59 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 2928F301FD70
+	for <lists+linux-mips@lfdr.de>; Thu, 23 Apr 2026 11:59:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 12EA63EB7FC;
-	Thu, 23 Apr 2026 11:58:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AE7C33EB7FF;
+	Thu, 23 Apr 2026 11:59:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="XTHFxHbo"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="RxLtjtbt"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
+Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2F453EB7EC;
-	Thu, 23 Apr 2026 11:58:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.84.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 458213EB7F0;
+	Thu, 23 Apr 2026 11:59:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.171.202.116
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776945539; cv=none; b=UgRuZ4utXCZR+vZZ/66R7VeGUiUyT+cRQvwNrjlYNYEF2PlG0x5gVc0KQXUTMvIu+MLLpt9JjzqNXZGQfTp7ltnYoOgMIcewWm+4uAZPf2LfOxoNlM9ZhCTxFgnRMuAjppstgRzXPrOVFej6mOPXBIOCEkntNGwVXiW92V5XDvE=
+	t=1776945555; cv=none; b=SaaV0BPoCU1+mAwZY3wQdjsjjz59LR875w2jHbY+TfZBgdtzZNIL3gPZ8imOPr88rd1u2Iz1ytan9kTrN4C9iNZvAGYakvyu0CMN1jr19HgnC3l1HzgydABPMbdalaRRY9nEN54UjVOB6SnR24/9w+t5Z86jiuPumGlfJ+zZPHU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776945539; c=relaxed/simple;
-	bh=5wvIDREICz/txs1BaTAx24rHc+znjdWHDiJOYfCANJA=;
+	s=arc-20240116; t=1776945555; c=relaxed/simple;
+	bh=qXcJDTFDsVgYrVpaWMF54ktXjzoGNngZP3kPuEBOMBw=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=h4KINLcpEF04eQ0k61MttsY2H8J4vsJDlKcKul9eCdjnzOuivo+1HchAQWIjiEdWlyXCoVLOT/QLN9osnF+bT0hEgy1F2SlcqLFHH8eBoFzwb8UTih4fL12+mBlXC9cMxnvtnB5wKjJt5/O2AFQG3VZCnX7rlg4pkwlHy1z9E7A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=XTHFxHbo; arc=none smtp.client-ip=185.246.84.56
+	 MIME-Version; b=SFON01omOv0wqkzDFtwiks3S+O4aXRS7VLj1wPuXPnDAlOVTuT4ZXr14Lve0dkJqmq4ORMxISyzjtfMpnvOgvTjiEqqPXP6Wc4pol+EaJtZZkXUd+oczd4eWN0zaJtIOJCFFsy3ZwemiDy+SN6eHqj9iovhFXrMPyre/Qnh5WW8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=RxLtjtbt; arc=none smtp.client-ip=185.171.202.116
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-02.galae.net (Postfix) with ESMTPS id 9C9651A33C4;
-	Thu, 23 Apr 2026 11:58:56 +0000 (UTC)
+	by smtpout-04.galae.net (Postfix) with ESMTPS id 67D17C5EF0F;
+	Thu, 23 Apr 2026 11:59:54 +0000 (UTC)
 Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id 6DAC360495;
-	Thu, 23 Apr 2026 11:58:56 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 42BDC10460BE8;
-	Thu, 23 Apr 2026 13:58:35 +0200 (CEST)
+	by smtpout-01.galae.net (Postfix) with ESMTPS id 25354604EB;
+	Thu, 23 Apr 2026 11:59:13 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 848A910460B5E;
+	Thu, 23 Apr 2026 13:58:53 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1776945532; h=from:subject:date:message-id:to:cc:mime-version:
+	t=1776945549; h=from:subject:date:message-id:to:cc:mime-version:
 	 content-transfer-encoding:in-reply-to:references;
-	bh=PUIDWkbcRwpZYuphmxAziPOp15aXBh5kOwqw0rtwOsU=;
-	b=XTHFxHboIvl/LIBlHJU528+kDa23FmOiUgqr0VV5ErFHLS43Stlm/xIT8pL+GFKMDKNxh8
-	RLg2l5gFh22XCB0srYfTcuVSl7ih8VLxvsPNGATLG1xrIQkQ8js5xjSOo9aoHz3loBaoyd
-	o3olag5bwGuCR+ygew4xdw5ny8WmLEQ0lnptNLfqoeiVzoNSFDcTvsW5M6qSoKomEpixmu
-	PYywYAoDOBuHprJQL2Cyio5XS0ySmtre3xmuBDongNzAQAKoOgq6Mf8n9TCdGnmh4vFjbg
-	EXQ/Laym9/5ULtKmF0RKqQ5Qsmi9f9O0OYoUv1TwedquXxfdB6INAhqbAInuSg==
+	bh=0Yo9wZsFFE9sHJLLCvELIs6e+T0vsT5uBdV5hkdpgr0=;
+	b=RxLtjtbttWJnRHn5HAhuZhKI4xu2K0A1azRLLkOYXuHgJYcSWVRrxTxqH3VqLE/WgW1R2n
+	DBWm5uRgj+6xXoURdAu3MvXQO6c+oQSmeFqe2dW0ijV57EL2AqhFQM8mUTdo1UbpUW7UTE
+	heUXpwDvmJyOcKZZ3rO1SD5KONtnv/GaXX2O3HEvG7d8NTGAX53hB8754MwA9ISb9PPJFd
+	9ywffc63zSxwy3AfIGGlXHFXHTpPWiVbqdtJ2p8meG5A69x4XjeT2ZrvDenBvcvX1G30Ej
+	/4mBDcMM4p1iGPkZJAquNPsTX80DEPJovHvqTHjjFETSr07VY5ZgreKhA1okXQ==
 From: Luca Ceresoli <luca.ceresoli@bootlin.com>
 To: Andrzej Hajda <andrzej.hajda@intel.com>,
 	Neil Armstrong <neil.armstrong@linaro.org>,
@@ -130,9 +130,9 @@ Cc: Hui Pu <Hui.Pu@gehealthcare.com>,
 	linux-samsung-soc@vger.kernel.org,
 	linux-renesas-soc@vger.kernel.org,
 	Luca Ceresoli <luca.ceresoli@bootlin.com>
-Subject: [PATCH v2 39/41] drm/imx: remove now-redundant call to drm_connector_attach_encoder()
-Date: Thu, 23 Apr 2026 13:55:48 +0200
-Message-ID: <20260423115550.444930-5-luca.ceresoli@bootlin.com>
+Subject: [PATCH v2 40/41] drm/rockchip: rgb: remove now-redundant call to drm_connector_attach_encoder()
+Date: Thu, 23 Apr 2026 13:55:49 +0200
+Message-ID: <20260423115550.444930-6-luca.ceresoli@bootlin.com>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260423-drm-bridge-connector-attach_encoder-v2-0-2ae6ca69b390@bootlin.com>
 References: <20260423-drm-bridge-connector-attach_encoder-v2-0-2ae6ca69b390@bootlin.com>
@@ -146,35 +146,36 @@ Content-Transfer-Encoding: 8bit
 X-Last-TLS-Session-Version: TLSv1.3
 X-Spamd-Result: default: False [0.84 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	MID_CONTAINS_FROM(1.00)[];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[bootlin.com,reject];
 	R_MISSING_CHARSET(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	R_DKIM_ALLOW(-0.20)[bootlin.com:s=dkim];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	FREEMAIL_TO(0.00)[intel.com,linaro.org,kernel.org,ideasonboard.com,kwiboo.se,gmail.com,linux.intel.com,suse.de,ffwll.ch,jannau.net,nxp.com,chromium.org,oss.nxp.com,pengutronix.de,crapouillou.net,collabora.com,baylibre.com,googlemail.com,oss.qualcomm.com,linux.dev,poorly.run,somainline.org,rock-chips.com,sntech.de,nvidia.com,iscas.ac.cn,samsung.com,glider.be,bp.renesas.com,denx.de,agner.ch,iki.fi,amd.com];
-	TAGGED_FROM(0.00)[bounces-14284-lists,linux-mips=lfdr.de];
-	RECEIVED_HELO_LOCALHOST(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
-	DKIM_TRACE(0.00)[bootlin.com:+];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	TO_DN_SOME(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[luca.ceresoli@bootlin.com,linux-mips@vger.kernel.org];
-	FROM_HAS_DN(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	RCVD_COUNT_FIVE(0.00)[6];
+	TAGGED_FROM(0.00)[bounces-14285-lists,linux-mips=lfdr.de];
+	RECEIVED_HELO_LOCALHOST(0.00)[];
+	FREEMAIL_TO(0.00)[intel.com,linaro.org,kernel.org,ideasonboard.com,kwiboo.se,gmail.com,linux.intel.com,suse.de,ffwll.ch,jannau.net,nxp.com,chromium.org,oss.nxp.com,pengutronix.de,crapouillou.net,collabora.com,baylibre.com,googlemail.com,oss.qualcomm.com,linux.dev,poorly.run,somainline.org,rock-chips.com,sntech.de,nvidia.com,iscas.ac.cn,samsung.com,glider.be,bp.renesas.com,denx.de,agner.ch,iki.fi,amd.com];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	FROM_NEQ_ENVFROM(0.00)[luca.ceresoli@bootlin.com,linux-mips@vger.kernel.org];
+	DKIM_TRACE(0.00)[bootlin.com:+];
+	MAILSPIKE_FAIL(0.00)[2600:3c0a:e001:db::12fc:5321:query timed out];
+	TAGGED_RCPT(0.00)[linux-mips,renesas];
 	NEURAL_HAM(-0.00)[-1.000];
 	RCPT_COUNT_GT_50(0.00)[78];
+	PRECEDENCE_BULK(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[linux-mips,renesas];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	TO_DN_SOME(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,bootlin.com:email,bootlin.com:dkim,bootlin.com:mid]
-X-Rspamd-Queue-Id: 5706A451B2D
+X-Rspamd-Queue-Id: 463FF451BB3
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
@@ -183,28 +184,31 @@ drm_bridge_connector_init().
 
 Signed-off-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
 ---
- drivers/gpu/drm/imx/dc/dc-kms.c | 8 +-------
- 1 file changed, 1 insertion(+), 7 deletions(-)
+ drivers/gpu/drm/rockchip/rockchip_rgb.c | 9 ---------
+ 1 file changed, 9 deletions(-)
 
-diff --git a/drivers/gpu/drm/imx/dc/dc-kms.c b/drivers/gpu/drm/imx/dc/dc-kms.c
-index 2b18aa37a4a8..0f8cfaf4c4d1 100644
---- a/drivers/gpu/drm/imx/dc/dc-kms.c
-+++ b/drivers/gpu/drm/imx/dc/dc-kms.c
-@@ -81,13 +81,7 @@ static int dc_kms_init_encoder_per_crtc(struct dc_drm_device *dc_drm,
- 		return ret;
- 	}
+diff --git a/drivers/gpu/drm/rockchip/rockchip_rgb.c b/drivers/gpu/drm/rockchip/rockchip_rgb.c
+index 5c0c6e2cc28d..add3123e5ce7 100644
+--- a/drivers/gpu/drm/rockchip/rockchip_rgb.c
++++ b/drivers/gpu/drm/rockchip/rockchip_rgb.c
+@@ -162,17 +162,8 @@ struct rockchip_rgb *rockchip_rgb_init(struct device *dev,
+ 
+ 	rgb->encoder.crtc_endpoint_id = endpoint_id;
  
 -	ret = drm_connector_attach_encoder(connector, encoder);
--	if (ret)
--		dev_err(dev,
--			"failed to attach encoder to connector for CRTC%u: %d\n",
--			crtc->index, ret);
+-	if (ret < 0) {
+-		DRM_DEV_ERROR(drm_dev->dev,
+-			      "failed to attach encoder: %d\n", ret);
+-		goto err_free_connector;
+-	}
 -
--	return ret;
-+	return 0;
- }
+ 	return rgb;
  
- int dc_kms_init(struct dc_drm_device *dc_drm)
+-err_free_connector:
+-	drm_connector_cleanup(connector);
+ err_free_encoder:
+ 	drm_encoder_cleanup(encoder);
+ 	return ERR_PTR(ret);
 -- 
 2.53.0
 
