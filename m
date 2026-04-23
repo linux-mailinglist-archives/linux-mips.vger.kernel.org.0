@@ -1,214 +1,189 @@
-Return-Path: <linux-mips+bounces-14294-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-14295-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id oLDbGUQz6mkCwwIAu9opvQ
-	(envelope-from <linux-mips+bounces-14294-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Thu, 23 Apr 2026 16:57:08 +0200
+	id wL6FN+9R6mkhxgIAu9opvQ
+	(envelope-from <linux-mips+bounces-14295-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Thu, 23 Apr 2026 19:07:59 +0200
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7D8AB453F45
-	for <lists+linux-mips@lfdr.de>; Thu, 23 Apr 2026 16:57:07 +0200 (CEST)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id 954F0455586
+	for <lists+linux-mips@lfdr.de>; Thu, 23 Apr 2026 19:07:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 24B9030787A9
-	for <lists+linux-mips@lfdr.de>; Thu, 23 Apr 2026 14:54:50 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 24E4A30348B4
+	for <lists+linux-mips@lfdr.de>; Thu, 23 Apr 2026 16:46:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E60AF1E9906;
-	Thu, 23 Apr 2026 14:54:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1FD8F37DE9B;
+	Thu, 23 Apr 2026 16:46:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="SfAHexMD";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="CnA0t39G"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="2l2tjOxb"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A23C346AE1
-	for <linux-mips@vger.kernel.org>; Thu, 23 Apr 2026 14:54:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA40031DDBF;
+	Thu, 23 Apr 2026 16:46:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.85.4
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776956089; cv=none; b=O23ca/gwQkj5ZO20Hz38Jlpr0biaCnQMUji+Aag3/rBIhqaNN6zWQvsPjOYihw/I667+3sVG+lp92bZ55AtaYZj/gaqrYcgEP1WevJ9y+Oih9xcNku/BSPSJqI39xNM4YCK4+9QmyntlQXima0TbB+EAnyG20uGMUuKXGNpOFCg=
+	t=1776962794; cv=none; b=b+WOzGNLDTuJztz08ighGPyhH2AotMd6O69eZLEzLgCzfA2b0L+u8VZRpirygXnEaxvLARzrGEMD9nahzGmfy7dM7Pc5Yqj5/q801kJPTkjrYB03zrT3upstHIVQ+RbruxdV3pDZX+u6YMSiPjL9Uv2/3nGpkigcn6mJsaFbOBA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776956089; c=relaxed/simple;
-	bh=hfUHLyKJSvrgtYgi0uQNctjhIyNjTTEmXV7g3LiZRcc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=snYoqAzVh1X8yqSZoyYA0l2DYV2zHPBnJscSr/38cWZEyZPR/6p5OooovplXBExarYlellVNTD/Ijg3y3+GZ5n8DRpPeNZwjSm5CgA/EXaA0OR6uPHYlswp8N6f0tGy9Qz/SKCkjk0AmHcMLxp3KY7H3+K/ID8OmlIOHYOHYAks=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=SfAHexMD; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=CnA0t39G; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1776956087;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=TdUVkFiLAqBCJes+oJ0QB0pTbT2jdIw+uaSjtun6geI=;
-	b=SfAHexMDbMRdSrRfoy3cVgU1vLA0pgqP8ocNXXxq8OHW5SodFpGTfwCUszAxVP4y9gSoyf
-	lXCLAhbLf0uH9TiFubj/tCHtjoovPK9Qz2V7W45QncZqrky0jJGu5Ku3LkFRRbwQyidJ8Q
-	nXXs9CEA23yKd+k6vmxGUR8IQa0ozAk=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-124-EUac1pkOOeCp9xO_kd2RSw-1; Thu, 23 Apr 2026 10:54:43 -0400
-X-MC-Unique: EUac1pkOOeCp9xO_kd2RSw-1
-X-Mimecast-MFC-AGG-ID: EUac1pkOOeCp9xO_kd2RSw_1776956082
-Received: by mail-wr1-f69.google.com with SMTP id ffacd0b85a97d-43d780757eeso4185769f8f.1
-        for <linux-mips@vger.kernel.org>; Thu, 23 Apr 2026 07:54:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1776956082; x=1777560882; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=TdUVkFiLAqBCJes+oJ0QB0pTbT2jdIw+uaSjtun6geI=;
-        b=CnA0t39GN66aBCJ4CDapQLEd1l/vYCwSFJVzw3qIP3LONwah90G/Q3P4BoRjL3USHz
-         tlOtLuR5Y0ss5TTjpQe3njEOdeveV068jGv89jjpLnQYln0ZleIpCcJMi9xrBS/9Ntsm
-         s/H6E2YaeTs6uFA7TanZZHwDwQbcJ2rqKI5s0uSDpTgiuOREN4w9JVWTKwXA3jqLUvwl
-         CCfhjaQvTG2pmQ9JqeqQJe5VMtWaIqQn0SxeX4fu89daIa+IbvmplirS96ucOMLOJgFi
-         0ExVMmPcmx3srJbPUgKDIB7HRFXG6bChJez5ViuIwziPCcsjoB4YCtadti4McbKqCOMq
-         NsgA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776956082; x=1777560882;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=TdUVkFiLAqBCJes+oJ0QB0pTbT2jdIw+uaSjtun6geI=;
-        b=YrgVg6zfPyXujNdb0LsxEg/KD4Ge+OeR8ODPbjRDRWoYGXrKayzK/n7tyrCFWQ1mqz
-         YWynFnrrGqUvBigZ4k6zwmA2llMy48hO9DA9cMZdWQ5y+B6mh9sdydwRfdbf2jKXbhiK
-         rkAQY+8fy0CodYmbG5kBhVzBUFhrRf8dCTTwG+jX6qAW16L8mkgjxbBTogmVPBfHpKzS
-         0VgTUUW2TyckPGcCV7ZC8HLensqe+6L2azbiPdrK3mbpkAwQpAzkSrMhiFoWee1SGqtw
-         HWUWE0IftppSHppv2iD363GvvvtexyBy/nktCd8lrHej0wp25Z6luAlASoqh2fF3GkJi
-         Ff9w==
-X-Forwarded-Encrypted: i=1; AFNElJ90eAN8lmI4YgZB4Aj4dtj2XRGHyRuDU8xT9ga3i1bBk45xz3eq67OSL68O28/mUHfO1Cy3zT99lcPs@vger.kernel.org
-X-Gm-Message-State: AOJu0YzQhYZeInNlOmT/hCSimU0YOCuo8oj3fPErg4smmcpBKWyXpV6c
-	+/6ax4YGW5GYNWZ5D722v4kV6utbeCriHTOESSrMQbcBwLTciiRXHdlEQjttyZQRxRHq/OlWd0u
-	aYDFuUl9kqv0IQDTkxrtGqx1Zf7/aQ/UZwER8CJ46Lb7orbAmnztSJeo77BLYvHg=
-X-Gm-Gg: AeBDievXq+xzPmQYY3kxt8QRRzycb034vGpH1eNpBqVXHeUo0VWMqvzc7V0jGzhbq+E
-	j01gw4mfdXrEuVyUubSra72PEr/WSvBOnblKRaOEM4m581HDJgKKOGPj2J3h7PiYIWbzTw9w5SY
-	LEWYkluaCWyOguYCsDCL2IObI5Axg8vjqEbBvGfXdDcfrTsY3LImLG7+r/fopxg5tcitcqBZ9rO
-	9zUmWQ8du/TN5PZEnD7Qz/8i8t/T5AwV7SlbMCy24KUaS2u3SxOedSiZus+CcX19pLKPDQCdxUo
-	6+Hp4H20CNpIfnb46OoWvQ2uN1gwooEM8MHePHBYfZoRFrFFEFgBfjEBWwno1+I9D99L51Mv2qY
-	awcc2j004zRjgHMl2Z7BkjycVXPMYi36x0lsRdjCiWRLBFeCXpwKp/BeX/HwPJciiLqo=
-X-Received: by 2002:a05:6000:4a1a:b0:43e:a8d8:f3dc with SMTP id ffacd0b85a97d-43fe4052190mr36059652f8f.13.1776956081728;
-        Thu, 23 Apr 2026 07:54:41 -0700 (PDT)
-X-Received: by 2002:a05:6000:4a1a:b0:43e:a8d8:f3dc with SMTP id ffacd0b85a97d-43fe4052190mr36059588f8f.13.1776956081154;
-        Thu, 23 Apr 2026 07:54:41 -0700 (PDT)
-Received: from [192.168.88.32] ([150.228.93.216])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43fe4e4daf2sm52345982f8f.33.2026.04.23.07.54.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 23 Apr 2026 07:54:40 -0700 (PDT)
-Message-ID: <8e81d2a9-e095-4687-ae37-e4328bedb7a6@redhat.com>
-Date: Thu, 23 Apr 2026 16:54:37 +0200
+	s=arc-20240116; t=1776962794; c=relaxed/simple;
+	bh=S05j6aseg7c7u3xV5vOsljLds3FQ6L9R3JcogXmLNZs=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Subject:Cc:To:From:
+	 References:In-Reply-To; b=o6QTSB+UIDWrJm9XCmc3jMjFM3bSjdHkm9a9FCqL6D4mZ4zTC+YfZY/UZ2ovb+MxjPAA026WAZxx/NPuK7AyFyra2c5t1usdBGfkOSNw/S9gDaYmcSRNeuCH45KnLnGUlj1nOX76exubhgXFBUQzityI48uq8f05kf552gtz1lc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=2l2tjOxb; arc=none smtp.client-ip=185.246.85.4
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+	by smtpout-03.galae.net (Postfix) with ESMTPS id 543B84E42AD2;
+	Thu, 23 Apr 2026 16:46:29 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+	by smtpout-01.galae.net (Postfix) with ESMTPS id 11F65604EB;
+	Thu, 23 Apr 2026 16:46:29 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 66CE510720005;
+	Thu, 23 Apr 2026 18:46:01 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
+	t=1776962785; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 content-transfer-encoding:in-reply-to:references;
+	bh=S05j6aseg7c7u3xV5vOsljLds3FQ6L9R3JcogXmLNZs=;
+	b=2l2tjOxbp/muwVUTt1iYaIz8b7OLe+mJ2gwHjUl/Zi9B+c+A9VYP6Ja5C2fCxD7EBcL8KE
+	tj9o1FWt6yl5MwmosOaOCmM5hg14Gf6FQCD6xO4NlTRrX8rWJO7AXZiqzKJUGSdGNfq0dX
+	90/Fet3eusoHdXKPgHJviW0bm/BmWmkW8WJGQJXu+6RINWTT2CgIMhDV/YcJ+q/TJAH7GV
+	wy8CB9xvhkE+fTuzqLnN9+emGn4BkhcJVhKXnLTSZCbNekK5oVrGCbiUFXMRSBxTBCE1Lo
+	fGJwcmZCjXWgzqASXiN/aqIJ5NiJ8amWgtQeCTnheHeEOAEeGBshs0HQdugKjg==
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-deletions v2] net: remove unused ATM protocols and
- legacy ATM device drivers
-To: Andy Shevchenko <andriy.shevchenko@intel.com>,
- Jakub Kicinski <kuba@kernel.org>
-Cc: davem@davemloft.net, netdev@vger.kernel.org, edumazet@google.com,
- andrew+netdev@lunn.ch, horms@kernel.org, corbet@lwn.net,
- skhan@linuxfoundation.org, linux@armlinux.org.uk, tsbogend@alpha.franken.de,
- maddy@linux.ibm.com, mpe@ellerman.id.au, npiggin@gmail.com,
- chleroy@kernel.org, 3chas3@gmail.com, razor@blackwall.org,
- idosch@nvidia.com, jani.nikula@intel.com, mchehab+huawei@kernel.org,
- tytso@mit.edu, herbert@gondor.apana.org.au, geert@linux-m68k.org,
- ebiggers@kernel.org, johannes.berg@intel.com, jonathan.cameron@huawei.com,
- kees@kernel.org, kuniyu@google.com, fourier.thomas@gmail.com,
- rdunlap@infradead.org, akpm@linux-foundation.org, linux-doc@vger.kernel.org,
- linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
- bridge@lists.linux.dev, dwmw2@infradead.org
-References: <20260422041846.2035118-1-kuba@kernel.org>
- <aeh0CV3UQw1quCXv@ashevche-desk.local>
-Content-Language: en-US
-From: Paolo Abeni <pabeni@redhat.com>
-In-Reply-To: <aeh0CV3UQw1quCXv@ashevche-desk.local>
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spamd-Result: default: False [-0.66 / 15.00];
+Date: Thu, 23 Apr 2026 18:46:00 +0200
+Message-Id: <DI0OQ6JRMPTR.1FP9UHPJBYI7M@bootlin.com>
+Subject: Re: [PATCH v2 00/41] drm/display: bridge-connector: attach encoder
+ to the connector
+Cc: "Andrzej Hajda" <andrzej.hajda@intel.com>, "Neil Armstrong"
+ <neil.armstrong@linaro.org>, "Robert Foss" <rfoss@kernel.org>, "Laurent
+ Pinchart" <Laurent.pinchart@ideasonboard.com>, "Jonas Karlman"
+ <jonas@kwiboo.se>, "Jernej Skrabec" <jernej.skrabec@gmail.com>, "Maarten
+ Lankhorst" <maarten.lankhorst@linux.intel.com>, "Maxime Ripard"
+ <mripard@kernel.org>, "Thomas Zimmermann" <tzimmermann@suse.de>, "David
+ Airlie" <airlied@gmail.com>, "Simona Vetter" <simona@ffwll.ch>, "Sasha
+ Finkelstein" <fnkl.kernel@gmail.com>, "Janne Grunau" <j@jannau.net>, "Liu
+ Ying" <victor.liu@nxp.com>, "Douglas Anderson" <dianders@chromium.org>,
+ "Laurentiu Palcu" <laurentiu.palcu@oss.nxp.com>, "Lucas Stach"
+ <l.stach@pengutronix.de>, "Frank Li" <Frank.Li@nxp.com>, "Sascha Hauer"
+ <s.hauer@pengutronix.de>, "Pengutronix Kernel Team"
+ <kernel@pengutronix.de>, "Fabio Estevam" <festevam@gmail.com>, "Philipp
+ Zabel" <p.zabel@pengutronix.de>, "Paul Cercueil" <paul@crapouillou.net>,
+ "Anitha Chrisanthus" <anitha.chrisanthus@intel.com>, "Chun-Kuang Hu"
+ <chunkuang.hu@kernel.org>, "Matthias Brugger" <matthias.bgg@gmail.com>,
+ "AngeloGioacchino Del Regno" <angelogioacchino.delregno@collabora.com>,
+ "Kevin Hilman" <khilman@baylibre.com>, "Jerome Brunet"
+ <jbrunet@baylibre.com>, "Martin Blumenstingl"
+ <martin.blumenstingl@googlemail.com>, "Rob Clark"
+ <robin.clark@oss.qualcomm.com>, "Dmitry Baryshkov" <lumag@kernel.org>,
+ "Abhinav Kumar" <abhinav.kumar@linux.dev>, "Jessica Zhang"
+ <jesszhan0024@gmail.com>, "Sean Paul" <sean@poorly.run>, "Marijn Suijten"
+ <marijn.suijten@somainline.org>, "Tomi Valkeinen"
+ <tomi.valkeinen@ideasonboard.com>, "Sandy Huang" <hjc@rock-chips.com>,
+ =?utf-8?q?Heiko_St=C3=BCbner?= <heiko@sntech.de>, "Andy Yan"
+ <andy.yan@rock-chips.com>, "Thierry Reding" <thierry.reding@gmail.com>,
+ "Mikko Perttunen" <mperttunen@nvidia.com>, "Jonathan Hunter"
+ <jonathanh@nvidia.com>, "Icenowy Zheng" <zhengxingda@iscas.ac.cn>, "Jingoo
+ Han" <jingoohan1@gmail.com>, "Inki Dae" <inki.dae@samsung.com>, "Seung-Woo
+ Kim" <sw0312.kim@samsung.com>, "Kyungmin Park" <kyungmin.park@samsung.com>,
+ "Krzysztof Kozlowski" <krzk@kernel.org>, "Alim Akhtar"
+ <alim.akhtar@samsung.com>, "Laurent Pinchart"
+ <laurent.pinchart+renesas@ideasonboard.com>, "Tomi Valkeinen"
+ <tomi.valkeinen+renesas@ideasonboard.com>, "Kieran Bingham"
+ <kieran.bingham+renesas@ideasonboard.com>, "Geert Uytterhoeven"
+ <geert+renesas@glider.be>, "Magnus Damm" <magnus.damm@gmail.com>, "Biju
+ Das" <biju.das.jz@bp.renesas.com>, "Marek Vasut" <marex@denx.de>, "Stefan
+ Agner" <stefan@agner.ch>, "Jyri Sarha" <jyri.sarha@iki.fi>, "Michal Simek"
+ <michal.simek@amd.com>, "Hui Pu" <Hui.Pu@gehealthcare.com>, "Ian Ray"
+ <ian.ray@gehealthcare.com>, "Thomas Petazzoni"
+ <thomas.petazzoni@bootlin.com>, <dri-devel@lists.freedesktop.org>,
+ <linux-kernel@vger.kernel.org>, <asahi@lists.linux.dev>,
+ <imx@lists.linux.dev>, <linux-arm-kernel@lists.infradead.org>,
+ <linux-mips@vger.kernel.org>, <linux-mediatek@lists.infradead.org>,
+ <linux-amlogic@lists.infradead.org>, <linux-arm-msm@vger.kernel.org>,
+ <freedreno@lists.freedesktop.org>, <linux-rockchip@lists.infradead.org>,
+ <linux-tegra@vger.kernel.org>, <linux-samsung-soc@vger.kernel.org>,
+ <linux-renesas-soc@vger.kernel.org>
+To: "Dmitry Baryshkov" <dmitry.baryshkov@oss.qualcomm.com>
+From: "Luca Ceresoli" <luca.ceresoli@bootlin.com>
+X-Mailer: aerc 0.20.1
+References: <20260423-drm-bridge-connector-attach_encoder-v2-0-2ae6ca69b390@bootlin.com> <wanzalswb3lez6kyklprqojcnidab5fkxgu57lfka45w2rt4ic@xdatq5o7yiub>
+In-Reply-To: <wanzalswb3lez6kyklprqojcnidab5fkxgu57lfka45w2rt4ic@xdatq5o7yiub>
+X-Last-TLS-Session-Version: TLSv1.3
+X-Spamd-Result: default: False [-0.16 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[redhat.com,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
-	R_DKIM_ALLOW(-0.20)[redhat.com:s=mimecast20190719,redhat.com:s=google];
+	DMARC_POLICY_ALLOW(-0.50)[bootlin.com,reject];
+	MV_CASE(0.50)[];
+	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
+	R_DKIM_ALLOW(-0.20)[bootlin.com:s=dkim];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FREEMAIL_CC(0.00)[davemloft.net,vger.kernel.org,google.com,lunn.ch,kernel.org,lwn.net,linuxfoundation.org,armlinux.org.uk,alpha.franken.de,linux.ibm.com,ellerman.id.au,gmail.com,blackwall.org,nvidia.com,intel.com,mit.edu,gondor.apana.org.au,linux-m68k.org,huawei.com,infradead.org,linux-foundation.org,lists.ozlabs.org,lists.linux.dev];
-	TAGGED_FROM(0.00)[bounces-14294-lists,linux-mips=lfdr.de];
-	FROM_HAS_DN(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	RCVD_TLS_LAST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[36];
+	FREEMAIL_CC(0.00)[intel.com,linaro.org,kernel.org,ideasonboard.com,kwiboo.se,gmail.com,linux.intel.com,suse.de,ffwll.ch,jannau.net,nxp.com,chromium.org,oss.nxp.com,pengutronix.de,crapouillou.net,collabora.com,baylibre.com,googlemail.com,oss.qualcomm.com,linux.dev,poorly.run,somainline.org,rock-chips.com,sntech.de,nvidia.com,iscas.ac.cn,samsung.com,glider.be,bp.renesas.com,denx.de,agner.ch,iki.fi,amd.com,gehealthcare.com,bootlin.com,lists.freedesktop.org,vger.kernel.org,lists.linux.dev,lists.infradead.org];
 	MIME_TRACE(0.00)[0:+];
-	DKIM_TRACE(0.00)[redhat.com:+];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-14295-lists,linux-mips=lfdr.de];
+	RCVD_TLS_LAST(0.00)[];
+	RECEIVED_HELO_LOCALHOST(0.00)[];
+	DKIM_TRACE(0.00)[bootlin.com:+];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	FROM_HAS_DN(0.00)[];
 	TO_DN_SOME(0.00)[];
 	RCVD_COUNT_FIVE(0.00)[6];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[pabeni@redhat.com,linux-mips@vger.kernel.org];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[luca.ceresoli@bootlin.com,linux-mips@vger.kernel.org];
+	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
+	RCPT_COUNT_GT_50(0.00)[78];
 	NEURAL_HAM(-0.00)[-1.000];
-	TAGGED_RCPT(0.00)[linux-mips,netdev,huawei];
 	MID_RHS_MATCH_FROM(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 7D8AB453F45
+	TAGGED_RCPT(0.00)[linux-mips,renesas];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[qualcomm.com:email,bootlin.com:mid,bootlin.com:dkim,bootlin.com:url,sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 954F0455586
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On 4/22/26 9:08 AM, Andy Shevchenko wrote:
-> On Tue, Apr 21, 2026 at 09:18:44PM -0700, Jakub Kicinski wrote:
->> Remove the ATM protocol modules and PCI/SBUS ATM device drivers
->> that are no longer in active use.
+On Thu Apr 23, 2026 at 2:45 PM CEST, Dmitry Baryshkov wrote:
+> On Thu, Apr 23, 2026 at 11:16:54AM +0200, Luca Ceresoli wrote:
+>> This series simplifies using the bridge-connector by removing the need t=
+o
+>> attach the newly created connector to the encoder.
 >>
->> The ATM core protocol stack, PPPoATM, BR2684, and USB DSL modem
->> drivers (drivers/usb/atm/) are retained in-tree to maintain PPP
->> over ATM (PPPoA) and PPPoE-over-BR2684 support for DSL connections.
+>> =3D=3D Series description
 >>
->> Removed ATM protocol modules:
->>  - net/atm/clip.c - Classical IP over ATM (RFC 2225)
->>  - net/atm/lec.c - LAN Emulation Client (LANE)
->>  - net/atm/mpc.c, mpoa_caches.c, mpoa_proc.c - Multi-Protocol Over ATM
+>> Currently all users of the bridge-connector must call
+>> drm_connector_attach_encoder() immediately after a successful
+>> drm_bridge_connector_init().
 >>
->> Removed PCI/SBUS ATM device drivers (drivers/atm/):
->>  - adummy, atmtcp - software/testing ATM devices
->>  - eni - Efficient Networks ENI155P (OC-3, ~1995)
->>  - fore200e - FORE Systems 200E PCI/SBUS (OC-3, ~1999)
->>  - he - ForeRunner HE (OC-3/OC-12, ~2000)
->>  - idt77105 - IDT 77105 25 Mbps ATM PHY
->>  - idt77252 - IDT 77252 NICStAR II (OC-3, ~2000)
->>  - iphase - Interphase ATM PCI (OC-3/DS3/E3)
->>  - lanai - Efficient Networks Speedstream 3010
->>  - nicstar - IDT 77201 NICStAR (155/25 Mbps, ~1999)
->>  - solos-pci - Traverse Technologies ADSL2+ PCI
->>  - suni - PMC S/UNI SONET PHY library
+>> This is an unnecessary burden for users. Move the call to the end of
+>> drm_bridge_connector_init() so all callers can be simplified.
 >>
->> Also clean up references in:
->>  - net/bridge/ - remove ATM LANE hook (br_fdb_test_addr_hook,
->>    br_fdb_test_addr)
->>  - net/core/dev.c - remove br_fdb_test_addr_hook export
->>  - defconfig files - remove ATM driver config options
->>
->> The removed code is moved to an out-of-tree module package (mod-orphan).
->>
->> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
->> ---
->> v2:
->>  - keep BR2684
->>  - correct the claim that Traverse Technologies is defunct,
->>    I'm still deleting the solos driver, chances are nobody uses it.
->>    Easy enough to revert back in since core is still around.
->>    The guiding principle is to keep USB modems and delete
->>    the rest as USB ADSL2+ CPEs were most popular historically.
+>
+> I don't know which one is more correct in this situation, but let it be
+> R-B for the series:
+>
+> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
+>
+> Feel free to take the msm patches through drm-misc-next (A-b).
 
-A possible alternative would be moving the solos driver (and others
-similarly old, possibly not used anymore drivers into the staging dir
-(and let them be removed after some reasonable grace period).
+Meaning: Acked-by on the msm patches + Reviewed-by on all the series,
+right?
 
-/P
+Thank you very much!
 
+Luca
+
+--
+Luca Ceresoli, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 
