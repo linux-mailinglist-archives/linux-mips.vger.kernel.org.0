@@ -1,61 +1,66 @@
-Return-Path: <linux-mips+bounces-14306-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-14305-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id UPyOBq1G62kmKgAAu9opvQ
-	(envelope-from <linux-mips+bounces-14306-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Fri, 24 Apr 2026 12:32:13 +0200
+	id sISZDqxG62kmKgAAu9opvQ
+	(envelope-from <linux-mips+bounces-14305-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Fri, 24 Apr 2026 12:32:12 +0200
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id DD8C945D1A1
-	for <lists+linux-mips@lfdr.de>; Fri, 24 Apr 2026 12:32:12 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8FFD845D192
+	for <lists+linux-mips@lfdr.de>; Fri, 24 Apr 2026 12:32:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 26FD73020A42
+	by sea.lore.kernel.org (Postfix) with ESMTP id 14CE4301FD49
 	for <lists+linux-mips@lfdr.de>; Fri, 24 Apr 2026 10:29:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E48C7366558;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E3020366548;
 	Fri, 24 Apr 2026 10:28:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="H4Z/1M55"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="To/ca2/u"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF11B364E9C;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF0AA36404E;
 	Fri, 24 Apr 2026 10:28:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777026538; cv=none; b=ObFR0+XIgz5BM6zTgMU78BBRn49MsEAq73TrZddS1axPlreeglozLP/98umEIG+0gzjPLO3Ua49HhF+uY4sLngXUn5iTw6YKMpI2r+krpAHBTPPzYhZkcHnpswTYRNXQuBYq54rOzJWSL+2ivEFxw/ckXbLEXZlbjkdKSAMnGfk=
+	t=1777026538; cv=none; b=mkB1dOEuKnf+VySNnrTLZpAsLOhFOTbUMccInMBzAfrHEMinrYie0sB2A9JMVFWQE1Ae6SsK3oFPM9I4P8C7V3eynWQmucyxls5k3+vvAJ410dW+y5GiMfiwy2UbV26mUnXZRGnvxSZ0wLZTeiQZcIwV6eayDzQTsEZUPKlmKxg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1777026538; c=relaxed/simple;
-	bh=bg9oJZjssjl8PSO+dx5xJ3p5/zle9VIUhCA1mWT3A/Y=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Qu86sygNZyB/afISVffcBAn0Sy+RmFmnrlNFoLbNLyylhs8XCc1NZwbx4kiR8djWv5IXd2ljT/GoPGw9V0edwdLwNZfsODRlQkJOBD8DJBu6YZ2HpfIOThyFz3TYy2zTWnvBO/+7/VTpkt1CPM+5Y2PprLAJWjjt37CrYPOW8g4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=H4Z/1M55; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 84146C2BCB6;
+	bh=mBLk79tpLvFZr9NTaxRLYUufLtc4UoesdD3r8nUWZ38=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=OEcqfUVqQ0euZ0jRufT6F94ZF6KIaquEwimkxG5kItRBUpy+xbih001++txby7gJXSeId4ll9fox247nvxhZDN4SOnJOjIHnwXJ5DMXECuZlPEsQEeE0K16en/noiN3HPFpAzcWhodo4LmBnSA4NJMH5OvP4EpJOqjU0NOzQKIM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=To/ca2/u; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88884C2BCB5;
 	Fri, 24 Apr 2026 10:28:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1777026538;
-	bh=bg9oJZjssjl8PSO+dx5xJ3p5/zle9VIUhCA1mWT3A/Y=;
-	h=From:To:Cc:Subject:Date:From;
-	b=H4Z/1M55f68XcqrcbJAp1N5aaLx1+ub8CTTB8Z/P5L/g7zqrwfh78pIj1X7MHbFFk
-	 Rr07JR2Hx8bx52sJQgFw+gYJcinEPLoQQ5l+UivXpcWT+RJ02J7y3TvnxAQks+/XLC
-	 QEPS+tJKlz+eMLHgH1RI60bKHxgLQ+CpMT//2rTf82cY5n1iewVvvdGGToUZRqh+Q7
-	 iZkkVX+ErKff5aAipdnVuJ7w9we5rdPrND1VjQGAxJTgLcJhky0Z5y+jLivCM6K8uc
-	 IgqWtGO0LzGyyHekeWU6rolbLfmDhklU/D/uSEAhJC3d76hXFkx3ukqnUqHRLdo/Rn
-	 bsMggAtkACy3w==
+	bh=mBLk79tpLvFZr9NTaxRLYUufLtc4UoesdD3r8nUWZ38=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=To/ca2/ujYPSc773yko2Uu2VCOCbQLsbwqbC0jR8Tp/Vmdq5H6bRQ3SUF9DTqKmq1
+	 XIvaiQ5pas6PHlZhzNaSZU8+0BFf+JS/6BdL18JEYJaCISwSIOe3hhk4tNbPPIRW8T
+	 EQleT1dwZicQaDa/qaWp2nanlaBYhym4MaRaGAbjaao/2aGMyttK9N8Sni+0mRusM9
+	 gRO0KAA33edI/1WFdcEvuk4e7FLHLXUmG/Wevf8QPop5z+hHVd/eJF2EpPWnuGy6dr
+	 zTmJL5mi5tsCXnMw4tJHDmXJiI8/luvxw54KYtr476aN4UEKpEblYW6ikITQj81hZ3
+	 l3YaENhvZGljA==
 Received: from johan by xi.lan with local (Exim 4.98.2)
 	(envelope-from <johan@kernel.org>)
-	id 1wGDmK-0000000AyYS-1e0C;
+	id 1wGDmK-0000000AyYU-1k5c;
 	Fri, 24 Apr 2026 12:28:56 +0200
 From: Johan Hovold <johan@kernel.org>
 To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 Cc: linux-mips@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
-	Johan Hovold <johan@kernel.org>
-Subject: [PATCH 0/5] MIPS: ip22-gio: fix leaks and replace static root
-Date: Fri, 24 Apr 2026 12:28:44 +0200
-Message-ID: <20260424102849.2616035-1-johan@kernel.org>
+	Johan Hovold <johan@kernel.org>,
+	stable@vger.kernel.org,
+	Levente Kurusa <levex@linux.com>
+Subject: [PATCH 1/5] MIPS: ip22-gio: fix kfree() of static object
+Date: Fri, 24 Apr 2026 12:28:45 +0200
+Message-ID: <20260424102849.2616035-2-johan@kernel.org>
 X-Mailer: git-send-email 2.53.0
+In-Reply-To: <20260424102849.2616035-1-johan@kernel.org>
+References: <20260424102849.2616035-1-johan@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -63,7 +68,7 @@ List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Rspamd-Queue-Id: DD8C945D1A1
+X-Rspamd-Queue-Id: 8FFD845D192
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-0.66 / 15.00];
@@ -71,46 +76,52 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	MID_CONTAINS_FROM(1.00)[];
 	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
 	R_MISSING_CHARSET(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-14306-lists,linux-mips=lfdr.de];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
+	TAGGED_FROM(0.00)[bounces-14305-lists,linux-mips=lfdr.de];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	FROM_HAS_DN(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[5];
 	MIME_TRACE(0.00)[0:+];
+	FROM_HAS_DN(0.00)[];
+	TO_DN_SOME(0.00)[];
 	FROM_NEQ_ENVFROM(0.00)[johan@kernel.org,linux-mips@vger.kernel.org];
-	RCPT_COUNT_THREE(0.00)[4];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
 	TAGGED_RCPT(0.00)[linux-mips];
 	NEURAL_HAM(-0.00)[-1.000];
 	DKIM_TRACE(0.00)[kernel.org:+];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	RCPT_COUNT_FIVE(0.00)[6];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[linux.com:email,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
 
-This series fixes some issues found through inspection when looking into
-replacing the statically allocated gio bus root device.
+The gio bus root device is a statically allocated object which must not
+be freed by kfree() on failure to register the device or bus.
 
-Johan
+Fixes: 82242d28ff8b ("MIPS: IP22: Add missing put_device call")
+Cc: stable@vger.kernel.org	# 3.17
+Cc: Levente Kurusa <levex@linux.com>
+Signed-off-by: Johan Hovold <johan@kernel.org>
+---
+ arch/mips/sgi-ip22/ip22-gio.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-
-Johan Hovold (5):
-  MIPS: ip22-gio: fix kfree() of static object
-  MIPS: ip22-gio: fix gio device memory leak
-  MIPS: ip22-gio: fix device reference leak in probe
-  MIPS: ip22-gio: switch to dynamic root device
-  MIPS: ip22-gio: do not export device release function
-
- arch/mips/include/asm/gio_device.h |  6 ------
- arch/mips/sgi-ip22/ip22-gio.c      | 34 ++++++++++--------------------
- 2 files changed, 11 insertions(+), 29 deletions(-)
-
+diff --git a/arch/mips/sgi-ip22/ip22-gio.c b/arch/mips/sgi-ip22/ip22-gio.c
+index 9eec8842ffb7..a574441fa44b 100644
+--- a/arch/mips/sgi-ip22/ip22-gio.c
++++ b/arch/mips/sgi-ip22/ip22-gio.c
+@@ -30,7 +30,6 @@ static struct {
+ 
+ static void gio_bus_release(struct device *dev)
+ {
+-	kfree(dev);
+ }
+ 
+ static struct device gio_bus = {
 -- 
 2.53.0
 
