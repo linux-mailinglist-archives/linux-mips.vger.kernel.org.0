@@ -1,128 +1,141 @@
-Return-Path: <linux-mips+bounces-14310-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-14311-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id gL5zDKCU7Gl8aAAAu9opvQ
-	(envelope-from <linux-mips+bounces-14310-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Sat, 25 Apr 2026 12:17:04 +0200
+	id iDC6N1627GmzbwAAu9opvQ
+	(envelope-from <linux-mips+bounces-14311-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Sat, 25 Apr 2026 14:41:02 +0200
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 818D6465DBF
-	for <lists+linux-mips@lfdr.de>; Sat, 25 Apr 2026 12:17:03 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 838274663BA
+	for <lists+linux-mips@lfdr.de>; Sat, 25 Apr 2026 14:41:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id F1D8830063A0
-	for <lists+linux-mips@lfdr.de>; Sat, 25 Apr 2026 10:17:01 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 402D9300E72E
+	for <lists+linux-mips@lfdr.de>; Sat, 25 Apr 2026 12:41:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 57C5936D9F5;
-	Sat, 25 Apr 2026 10:17:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AF1E7363C50;
+	Sat, 25 Apr 2026 12:40:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=cjdns.fr header.i=@cjdns.fr header.b="iIuobtd7"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from angie.orcam.me.uk (angie.orcam.me.uk [78.133.224.34])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D941D29898F;
-	Sat, 25 Apr 2026 10:16:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=78.133.224.34
+Received: from mail.cjdns.fr (mail.cjdns.fr [5.135.140.105])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23B5B64;
+	Sat, 25 Apr 2026 12:40:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=5.135.140.105
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777112221; cv=none; b=TwDptoSeX3FXDqeaseph6Wmh/6FnyzLZgZvEBWxkNgGW+Ij5H+qYOjGl6ZyJRzvGVkm63IVJcSrIiAH6C9Rg+9TP1L41ZZU7keDVON6QybNAO1jmcRlocOfV4AquSZrceNvBsOXOKbQ9Fy3qGaAJbPOfb5/CjTVLS9znL3dBMik=
+	t=1777120857; cv=none; b=fUnnm+chlJx/deCKSmTsJNJFBQUD9MPqNZ7MC1a2O+hOIbO5KMqfhn9pmPq2MoI3ORo2VfIdvy4A4wi5Do3f2v2ovHws9lVMJOfze50RTzAX8MXA0tfo3+1chSaemBB/H0nxaO9eTGwhi8nMvISAfUF1p0sCDI37A/VFn6dEGK8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777112221; c=relaxed/simple;
-	bh=tNX+qwy+nTQrdmx+we0M6zUS/XBnFj97S7HY1QMEqGg=;
-	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=AJ1vixR8aT9nsXkZpNC8kfcmXjp99JkrJwtwXzAn4b0uJAEJOx4Km7fuFzllo+1I6GWxW+kzRMmMxrBaQ5V2McJ9LkPuvosU2l56vqdEHf6sc7k38W6F4wZN8YfcWOH7JaHD295P4tkogJKEHhLStlovOqbT97mgLZWuZcs86AU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=orcam.me.uk; spf=none smtp.mailfrom=orcam.me.uk; arc=none smtp.client-ip=78.133.224.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=orcam.me.uk
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=orcam.me.uk
-Received: by angie.orcam.me.uk (Postfix, from userid 500)
-	id 1C9A99200B3; Sat, 25 Apr 2026 12:16:50 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-	by angie.orcam.me.uk (Postfix) with ESMTP id 17A9992009D;
-	Sat, 25 Apr 2026 11:16:50 +0100 (BST)
-Date: Sat, 25 Apr 2026 11:16:50 +0100 (BST)
-From: "Maciej W. Rozycki" <macro@orcam.me.uk>
-To: Jakub Kicinski <kuba@kernel.org>
-cc: "David S. Miller" <davem@davemloft.net>, netdev@vger.kernel.org, 
-    edumazet@google.com, pabeni@redhat.com, andrew+netdev@lunn.ch, 
-    horms@kernel.org, corbet@lwn.net, skhan@linuxfoundation.org, 
-    linux@armlinux.org.uk, Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
-    maddy@linux.ibm.com, mpe@ellerman.id.au, npiggin@gmail.com, 
-    chleroy@kernel.org, 3chas3@gmail.com, razor@blackwall.org, 
-    idosch@nvidia.com, jani.nikula@intel.com, mchehab+huawei@kernel.org, 
-    tytso@mit.edu, herbert@gondor.apana.org.au, 
-    Geert Uytterhoeven <geert@linux-m68k.org>, ebiggers@kernel.org, 
-    johannes.berg@intel.com, jonathan.cameron@huawei.com, kees@kernel.org, 
-    kuniyu@google.com, fourier.thomas@gmail.com, andriy.shevchenko@intel.com, 
-    rdunlap@infradead.org, Andrew Morton <akpm@linux-foundation.org>, 
-    linux-doc@vger.kernel.org, linux-mips@vger.kernel.org, 
-    linuxppc-dev@lists.ozlabs.org, bridge@lists.linux.dev, 
-    David Woodhouse <dwmw2@infradead.org>
-Subject: Re: [PATCH net-deletions v2] net: remove unused ATM protocols and
- legacy ATM device drivers
-In-Reply-To: <20260422041846.2035118-1-kuba@kernel.org>
-Message-ID: <alpine.DEB.2.21.2604251104030.28583@angie.orcam.me.uk>
-References: <20260422041846.2035118-1-kuba@kernel.org>
-User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
+	s=arc-20240116; t=1777120857; c=relaxed/simple;
+	bh=C1FiZQSWN4pNHKqEHtDiqhgEmtODFXmwC/SsPIKbs98=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=I/zcPLvjC9+Dfc4CCg6gafgHD+l+yREqErIt4cESD23YPDPMy/n7C4cippSpmJOAmX3UaJTY/i7T5aalTp2QECj1Dz4FpoKNWAJeFkMzj5QXuB6AJM/4w7sWF8OI1/gLZML1/VNUFUb+twy0nc2lelMM4WCsZB9tCJAvtITuSHY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=cjdns.fr; spf=pass smtp.mailfrom=cjdns.fr; dkim=pass (2048-bit key) header.d=cjdns.fr header.i=@cjdns.fr header.b=iIuobtd7; arc=none smtp.client-ip=5.135.140.105
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=cjdns.fr
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cjdns.fr
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 033ED1E62B9;
+	Sat, 25 Apr 2026 14:35:34 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cjdns.fr; s=dkim;
+	t=1777120536; h=from:subject:date:message-id:to:cc:mime-version:
+	 content-transfer-encoding; bh=ZC/i3BeoVR8HoA2zXNVtcnaHT1wH14+5t/jHFOLtJ8E=;
+	b=iIuobtd7LawtBn0RMt/s0AMW1OX7mCfg4l+cEJR+B8va0+BxjuTpKKv+Ddjo8ohQDj6m3G
+	R6EuQqxXeDIdybBNnn9KH7kp1tEBwGr9QCACs5dh2VvHzLzF0FYWd94gh/EvMojSD+ccV9
+	W3CnjO0WeCUelSq9XHdXVmQfFR/Htdo5+RRNyGArnM7m4r079AUXhS+6U4qZTKfNYjP0oM
+	zOYjtUIfsLoG6iZG3vgfJNicWx0DdfY/e8P5H6Pa62ab+5GKSwliNOVuOLQ9p6tfpnJgcz
+	GYPz4ewECuG3hksEHGEugyUuFIceFzv0pmdWy5OVu3ax/GH2WZlHmA99cAOuQA==
+From: Caleb James DeLisle <cjd@cjdns.fr>
+To: linux-mips@vger.kernel.org
+Cc: tglx@kernel.org,
+	robh@kernel.org,
+	krzk+dt@kernel.org,
+	conor+dt@kernel.org,
+	linux-kernel@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	Caleb James DeLisle <cjd@cjdns.fr>
+Subject: [PATCH 0/2] irqchip/econet-en751221: Support MIPS 34Kc VEIC mode
+Date: Sat, 25 Apr 2026 12:35:29 +0000
+Message-Id: <20260425123531.270548-1-cjd@cjdns.fr>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Rspamd-Queue-Id: 818D6465DBF
+Content-Transfer-Encoding: 8bit
+X-Last-TLS-Session-Version: TLSv1.3
+X-Rspamd-Queue-Id: 838274663BA
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [0.04 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+X-Spamd-Result: default: False [-0.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	MID_CONTAINS_FROM(1.00)[];
+	DMARC_POLICY_ALLOW(-0.50)[cjdns.fr,none];
+	R_MISSING_CHARSET(0.50)[];
+	R_DKIM_ALLOW(-0.20)[cjdns.fr:s=dkim];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	TAGGED_FROM(0.00)[bounces-14310-lists,linux-mips=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-14311-lists,linux-mips=lfdr.de];
+	RCVD_COUNT_THREE(0.00)[4];
 	RECEIVED_HELO_LOCALHOST(0.00)[];
-	DMARC_NA(0.00)[orcam.me.uk];
-	FREEMAIL_CC(0.00)[davemloft.net,vger.kernel.org,google.com,redhat.com,lunn.ch,kernel.org,lwn.net,linuxfoundation.org,armlinux.org.uk,alpha.franken.de,linux.ibm.com,ellerman.id.au,gmail.com,blackwall.org,nvidia.com,intel.com,mit.edu,gondor.apana.org.au,linux-m68k.org,huawei.com,infradead.org,linux-foundation.org,lists.ozlabs.org,lists.linux.dev];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[37];
-	RCVD_COUNT_FIVE(0.00)[5];
+	RCVD_TLS_LAST(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	DKIM_TRACE(0.00)[cjdns.fr:+];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	MISSING_XM_UA(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[macro@orcam.me.uk,linux-mips@vger.kernel.org];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	NEURAL_HAM(-0.00)[-0.999];
-	MID_RHS_MATCH_FROMTLD(0.00)[];
-	R_DKIM_NA(0.00)[];
-	TAGGED_RCPT(0.00)[linux-mips,netdev,huawei];
-	TO_DN_SOME(0.00)[]
+	FROM_NEQ_ENVFROM(0.00)[cjd@cjdns.fr,linux-mips@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	NEURAL_HAM(-0.00)[-1.000];
+	TAGGED_RCPT(0.00)[linux-mips,dt];
+	RCPT_COUNT_SEVEN(0.00)[8];
+	TO_DN_SOME(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
 
-On Tue, 21 Apr 2026, Jakub Kicinski wrote:
+MIPS 34Kc and 1004Kc have a Vectored External Interrupt mode, where
+CPU interrupts are re-routed to the external interrupt controller,
+which prioritizes them, renumbers them, and integrates them with its
+own, creating a flat interrupt table.
 
-> Removed PCI/SBUS ATM device drivers (drivers/atm/):
->  - adummy, atmtcp - software/testing ATM devices
->  - eni - Efficient Networks ENI155P (OC-3, ~1995)
+This bypasses the CPU interrupt controller entirely, which is not ideal
+for modern Linux which formalizes the interrupt hierarchy. The 1004Kc
+standardized the interrupt controller (MIPS_GIC) so it can be viewed as
+"part of the CPU" and it's tolerable for it to be more closely coupled
+to arch/mips/* than a typical interrupt controller driver.
 
- I have one of those though sadly it broke a couple years back and doesn't 
-work anymore.
+The 34Kc supports VEIC mode, but the interrupt controller is not
+standardized, so it's different per-SoC. This creates a challenge of
+writing a reasonably modular driver, given hardware that actually does
+take over the interrupt hierarchy.
 
->  - fore200e - FORE Systems 200E PCI/SBUS (OC-3, ~1999)
->  - he - ForeRunner HE (OC-3/OC-12, ~2000)
->  - idt77105 - IDT 77105 25 Mbps ATM PHY
->  - idt77252 - IDT 77252 NICStAR II (OC-3, ~2000)
->  - iphase - Interphase ATM PCI (OC-3/DS3/E3)
->  - lanai - Efficient Networks Speedstream 3010
->  - nicstar - IDT 77201 NICStAR (155/25 Mbps, ~1999)
+Ordinarily we wouldn't bother with VEIC on the 34Kc but it is required
+for MIPS_MT_SMP, so without it you get a single thread processor. The
+only other 34Kc device which has an in-tree DTS file is
+realtek,rtl9302-soc, in OpenWrt there is this, realtek,rtl839x-soc, and
+lantiq,xway. Of these, only the realtek,rtl839x-soc has multi-thread
+support via an out-of-tree patch to its interrupt controller. Everybody
+else is not solving this problem and instead sacrificing multi-thread
+support.
 
- And I have a number of these, both 77201 and 77211 variants, scattered 
-across several systems of various architectures in my lab.
+This patchset aims to tackle this challenge in a way that is most
+likely generalizable to other 34Kc interrupt controllers which are
+facing the same problem.
 
->  - solos-pci - Traverse Technologies ADSL2+ PCI
->  - suni - PMC S/UNI SONET PHY library
+Caleb James DeLisle (2):
+  dt-bindings: interrupt-controller: econet: Add CPU interrupt mapping
+  irqchip/econet-en751221: Support MIPS 34Kc VEIC mode
 
- Plus a bunch of TURBOchannel ATM interfaces, a couple of LightStream ATM 
-switches and some Ethernet switches with LANE ports.  Never found time to 
-get this all set up, so I guess I can't complain really to see this stuff 
-go.  Still sad to see the continuous trend to strip Linux of features. :(
+ .../econet,en751221-intc.yaml                 |  20 ++
+ drivers/irqchip/irq-econet-en751221.c         | 176 +++++++++++++++++-
+ 2 files changed, 193 insertions(+), 3 deletions(-)
 
-  Maciej
+
+base-commit: e8be82c2d77ec1bb0148406e54b105028a83537e
+-- 
+2.39.5
+
 
