@@ -1,195 +1,183 @@
-Return-Path: <linux-mips+bounces-14314-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-14315-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id C6EwF33B7GmDcQAAu9opvQ
-	(envelope-from <linux-mips+bounces-14314-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Sat, 25 Apr 2026 15:28:29 +0200
+	id gKvGF/Pa7GlEdAAAu9opvQ
+	(envelope-from <linux-mips+bounces-14315-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Sat, 25 Apr 2026 17:17:07 +0200
 X-Original-To: lists+linux-mips@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 87BB74667EF
-	for <lists+linux-mips@lfdr.de>; Sat, 25 Apr 2026 15:28:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id B4EF5466B2B
+	for <lists+linux-mips@lfdr.de>; Sat, 25 Apr 2026 17:17:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id A0803300421D
-	for <lists+linux-mips@lfdr.de>; Sat, 25 Apr 2026 13:28:24 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 72C18300C59F
+	for <lists+linux-mips@lfdr.de>; Sat, 25 Apr 2026 15:17:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2B9C036495F;
-	Sat, 25 Apr 2026 13:28:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Byz97KSu"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E1D412264AB;
+	Sat, 25 Apr 2026 15:17:04 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from cstnet.cn (smtp25.cstnet.cn [159.226.251.25])
+	(using TLSv1.2 with cipher DHE-RSA-AES256-SHA (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06B7948CFC;
-	Sat, 25 Apr 2026 13:28:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03CE7175A62;
+	Sat, 25 Apr 2026 15:17:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.226.251.25
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777123704; cv=none; b=rk5a/Ss7zi4ag+yEsKi3znh/QOuKeY8916ic5Go+k8Xf/Y28OeMH7MvMhXZP/lcghfcG185WNwwX3DIoUtl9uMLAPmCsgaOAf34YDYmXbYKEEDdlisRCAQDK4n1izJW2Jgjuko7B6qjsBwFuGRj0Ct2bYAHjfM/lza8oK64RT0s=
+	t=1777130224; cv=none; b=UaP5pY7NsqgYVzXrDQVXGZs6qy3b8xgC1FB7PxphzHi0lwtnxOLEmcgNotmDX/XiMrd5InOQbl4XPXc+M+QGnAIJKsD2y+tYpJlJV3Tw2xJqocio/Xfjsst0cfhFYSq6NDQGuhY7bTLD35wCvmZh2Pavp41COJcHIqC9z3Q7ykY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777123704; c=relaxed/simple;
-	bh=RpVYcg4z4nIQKAhR9yXzFiSfQ4/6e/Se/DGml1cZ7kI=;
-	h=Date:Content-Type:MIME-Version:From:Cc:To:In-Reply-To:References:
-	 Message-Id:Subject; b=KM4aZD4bqWmbE/p3kUzUeFy1B8YlDJbP8pgW+YDNV4EQbl55KMgx3AF8ki75Ka8d7Fg0wGQpOVnQDk0YZz77Eh4G6gpnnRXa1WAZXXmid7gbKN7tsWR4cZPcbNKdyzt5Bj35+/iCoTGU3cTB7wkug0dka+ADXjWXu/FNxagK0zg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Byz97KSu; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6B0C1C2BCB0;
-	Sat, 25 Apr 2026 13:28:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1777123703;
-	bh=RpVYcg4z4nIQKAhR9yXzFiSfQ4/6e/Se/DGml1cZ7kI=;
-	h=Date:From:Cc:To:In-Reply-To:References:Subject:From;
-	b=Byz97KSum+2En1+WWGicqm+WTFaszrCiFj/WvOwSKtKHje512GdjSWYieGPNdJzrJ
-	 MjGBCrRZpq+0R1FEu/W/cXb7FxNbxKxrVaGo/dQX7gwURqA3qhfE8oqIqyEAF2oogy
-	 fH/dpTqksNbvcUFxJtIvnEiwyoQi9+/F75iXxzvnDJ1nscyVK5gLzVCYoACxj8lgEo
-	 sjuaihNB/Kn3+jy7BD4BI/umAWcVtJFPkdinC3VFGaa2Tijd7n62ycCOXpAFy4BnqA
-	 n/EuKvfd4aRevSy4du+VQ9B5M09bD0v/92KT26GygZPbK+FYVLBkH6VvQ5XcX4nCgY
-	 t8rhYDKja4WbQ==
-Date: Sat, 25 Apr 2026 08:28:21 -0500
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	s=arc-20240116; t=1777130224; c=relaxed/simple;
+	bh=3Z/IqMkalHLCJW6aIeSbicuakoof3CvwT79KtHgSsqE=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=Nu8kT3grv93/UoHnc3KCwyVsiTqWTBT1aseYa5/KWOZIvd2SilJTCAqLl1XdDK6RVf3yMOV4xSfdnoiZQuNVygm7cPQXGVGFkUiuFxSchj8TQFgNGZIqR9tNrVQx+XCnFS6GEwA5hRtKz7j+Si4lTkSiDi5y3oeBmnMAN7pxTzU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn; spf=pass smtp.mailfrom=iscas.ac.cn; arc=none smtp.client-ip=159.226.251.25
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iscas.ac.cn
+Received: from edelgard.fodlan.icenowy.me (unknown [112.94.102.10])
+	by APP-05 (Coremail) with SMTP id zQCowAD3hAiZ2uxpJCOPDg--.10690S2;
+	Sat, 25 Apr 2026 23:15:40 +0800 (CST)
+Message-ID: <fb1d8dc6a764b50456e86d75646c4e4ca574cbb7.camel@iscas.ac.cn>
+Subject: Re: [PATCH v2 24/41] drm: verisilicon: remove now-redundant call to
+ drm_connector_attach_encoder()
+From: Icenowy Zheng <zhengxingda@iscas.ac.cn>
+To: Luca Ceresoli <luca.ceresoli@bootlin.com>, Dmitry Baryshkov	
+ <dmitry.baryshkov@oss.qualcomm.com>, Andrzej Hajda
+ <andrzej.hajda@intel.com>,  Neil Armstrong <neil.armstrong@linaro.org>,
+ Robert Foss <rfoss@kernel.org>, Laurent Pinchart	
+ <Laurent.pinchart@ideasonboard.com>, Jonas Karlman <jonas@kwiboo.se>,
+ Jernej Skrabec <jernej.skrabec@gmail.com>, Maarten Lankhorst
+ <maarten.lankhorst@linux.intel.com>,  Maxime Ripard <mripard@kernel.org>,
+ Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>, 
+ Simona Vetter <simona@ffwll.ch>, Sasha Finkelstein <fnkl.kernel@gmail.com>,
+ Janne Grunau <j@jannau.net>, Liu Ying <victor.liu@nxp.com>, Douglas
+ Anderson <dianders@chromium.org>, Laurentiu Palcu	
+ <laurentiu.palcu@oss.nxp.com>, Lucas Stach <l.stach@pengutronix.de>, Frank
+ Li	 <Frank.Li@nxp.com>, Sascha Hauer <s.hauer@pengutronix.de>, Pengutronix
+ Kernel Team <kernel@pengutronix.de>, Fabio Estevam <festevam@gmail.com>,
+ Philipp Zabel	 <p.zabel@pengutronix.de>, Paul Cercueil
+ <paul@crapouillou.net>, Anitha Chrisanthus <anitha.chrisanthus@intel.com>,
+ Chun-Kuang Hu <chunkuang.hu@kernel.org>, Matthias Brugger	
+ <matthias.bgg@gmail.com>, AngeloGioacchino Del Regno	
+ <angelogioacchino.delregno@collabora.com>, Kevin Hilman
+ <khilman@baylibre.com>,  Jerome Brunet <jbrunet@baylibre.com>, Martin
+ Blumenstingl <martin.blumenstingl@googlemail.com>, Rob Clark	
+ <robin.clark@oss.qualcomm.com>, Dmitry Baryshkov <lumag@kernel.org>,
+ Abhinav Kumar <abhinav.kumar@linux.dev>, Jessica Zhang
+ <jesszhan0024@gmail.com>, Sean Paul	 <sean@poorly.run>, Marijn Suijten
+ <marijn.suijten@somainline.org>, Tomi Valkeinen
+ <tomi.valkeinen@ideasonboard.com>, Sandy Huang <hjc@rock-chips.com>, Heiko
+ =?ISO-8859-1?Q?St=FCbner?=	 <heiko@sntech.de>, Andy Yan
+ <andy.yan@rock-chips.com>, Thierry Reding	 <thierry.reding@gmail.com>,
+ Mikko Perttunen <mperttunen@nvidia.com>,  Jonathan Hunter
+ <jonathanh@nvidia.com>, Jingoo Han <jingoohan1@gmail.com>, Inki Dae
+ <inki.dae@samsung.com>,  Seung-Woo Kim <sw0312.kim@samsung.com>, Kyungmin
+ Park <kyungmin.park@samsung.com>, Krzysztof Kozlowski	 <krzk@kernel.org>,
+ Alim Akhtar <alim.akhtar@samsung.com>, Laurent Pinchart	
+ <laurent.pinchart+renesas@ideasonboard.com>, Tomi Valkeinen	
+ <tomi.valkeinen+renesas@ideasonboard.com>, Kieran Bingham	
+ <kieran.bingham+renesas@ideasonboard.com>, Geert Uytterhoeven	
+ <geert+renesas@glider.be>, Magnus Damm <magnus.damm@gmail.com>, Biju Das	
+ <biju.das.jz@bp.renesas.com>, Marek Vasut <marex@denx.de>, Stefan Agner	
+ <stefan@agner.ch>, Jyri Sarha <jyri.sarha@iki.fi>, Michal Simek	
+ <michal.simek@amd.com>
+Cc: Hui Pu <Hui.Pu@gehealthcare.com>, Ian Ray <ian.ray@gehealthcare.com>, 
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org, 
+	asahi@lists.linux.dev, imx@lists.linux.dev,
+ linux-arm-kernel@lists.infradead.org, 	linux-mips@vger.kernel.org,
+ linux-mediatek@lists.infradead.org, 	linux-amlogic@lists.infradead.org,
+ linux-arm-msm@vger.kernel.org, 	freedreno@lists.freedesktop.org,
+ linux-rockchip@lists.infradead.org, 	linux-tegra@vger.kernel.org,
+ linux-samsung-soc@vger.kernel.org, 	linux-renesas-soc@vger.kernel.org
+Date: Sat, 25 Apr 2026 23:15:37 +0800
+In-Reply-To: <20260423-drm-bridge-connector-attach_encoder-v2-24-2ae6ca69b390@bootlin.com>
+References: 
+	<20260423-drm-bridge-connector-attach_encoder-v2-0-2ae6ca69b390@bootlin.com>
+	 <20260423-drm-bridge-connector-attach_encoder-v2-24-2ae6ca69b390@bootlin.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.58.3 
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-From: "Rob Herring (Arm)" <robh@kernel.org>
-Cc: tglx@kernel.org, conor+dt@kernel.org, linux-mips@vger.kernel.org, 
- krzk+dt@kernel.org, linux-kernel@vger.kernel.org, 
- devicetree@vger.kernel.org
-To: Caleb James DeLisle <cjd@cjdns.fr>
-In-Reply-To: <20260425123531.270548-2-cjd@cjdns.fr>
-References: <20260425123531.270548-1-cjd@cjdns.fr>
- <20260425123531.270548-2-cjd@cjdns.fr>
-Message-Id: <177712370148.1527749.7565214035200790095.robh@kernel.org>
-Subject: Re: [PATCH 1/2] dt-bindings: interrupt-controller: econet: Add CPU
- interrupt mapping
-X-Rspamd-Queue-Id: 87BB74667EF
+X-CM-TRANSID:zQCowAD3hAiZ2uxpJCOPDg--.10690S2
+X-Coremail-Antispam: 1UD129KBjvdXoW7GFWxKr15Xw1xXw48Jr4rGrg_yoWftFg_u3
+	ZY9F9rWry5KF1DG3WxJrn5Zry2v3Z5CFW8Zrnrt3yfKws7Aw18Z347Xryav34UuFy8AFsF
+	kw4DGFZ7Ar1akjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+	9fnUUIcSsGvfJTRUUUbV8YjsxI4VWxJwAYFVCjjxCrM7AC8VAFwI0_Wr0E3s1l1xkIjI8I
+	6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM2
+	8CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW8JVW5JwA2z4x0Y4vE2Ix0
+	cI8IcVCY1x0267AKxVWxJVW8Jr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4
+	A2jsIEc7CjxVAFwI0_GcCE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IE
+	w4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMc
+	vjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwACI402YVCY1x02628vn2kIc2xKxwCY
+	1x0262kKe7AKxVW3AVW8Zr1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr
+	1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE
+	14v26rWY6r4UJwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2I
+	x0cI8IcVCY1x0267AKxVWxJVW8Jr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvE
+	x4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvj
+	DU0xZFpf9x07j7fHUUUUUU=
+X-CM-SenderInfo: x2kh0wp0lqwv3d6l2u1dvotugofq/
+X-Rspamd-Queue-Id: B4EF5466B2B
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-1.16 / 15.00];
-	MID_CONTAINS_FROM(1.00)[];
+X-Spamd-Result: default: False [0.04 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
 	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-14314-lists,linux-mips=lfdr.de];
-	FROM_HAS_DN(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	RCVD_TLS_LAST(0.00)[];
+	FREEMAIL_TO(0.00)[bootlin.com,oss.qualcomm.com,intel.com,linaro.org,kernel.org,ideasonboard.com,kwiboo.se,gmail.com,linux.intel.com,suse.de,ffwll.ch,jannau.net,nxp.com,chromium.org,oss.nxp.com,pengutronix.de,crapouillou.net,collabora.com,baylibre.com,googlemail.com,linux.dev,poorly.run,somainline.org,rock-chips.com,sntech.de,nvidia.com,samsung.com,glider.be,bp.renesas.com,denx.de,agner.ch,iki.fi,amd.com];
+	TAGGED_FROM(0.00)[bounces-14315-lists,linux-mips=lfdr.de];
 	MIME_TRACE(0.00)[0:+];
+	RCVD_TLS_LAST(0.00)[];
+	DMARC_NA(0.00)[iscas.ac.cn];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	MISSING_XM_UA(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[robh@kernel.org,linux-mips@vger.kernel.org];
+	RCVD_COUNT_THREE(0.00)[4];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCPT_COUNT_SEVEN(0.00)[7];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[linux-mips,dt];
+	FROM_HAS_DN(0.00)[];
 	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[cjdns.fr:email,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+	RCPT_COUNT_GT_50(0.00)[78];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[zhengxingda@iscas.ac.cn,linux-mips@vger.kernel.org];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	NEURAL_HAM(-0.00)[-0.994];
+	MID_RHS_MATCH_FROM(0.00)[];
+	R_DKIM_NA(0.00)[];
+	TAGGED_RCPT(0.00)[linux-mips,renesas];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,bootlin.com:email]
 
-
-On Sat, 25 Apr 2026 12:35:30 +0000, Caleb James DeLisle wrote:
-> In MIPS VEIC mode (Vectored External Interrupt Controller), the
-> hardware stops directly dispatching CPU interrupts such as IPIs or CPU
-> performance counters, and instead it communicates them to the external
-> interrupt controller (the hardware described here) which prioritizes,
-> renumbers, and integrates them with its own hardware interrupt pins.
-> Interrupts from the external controller are then dispatched through a
-> different method via a dispatch table. In effect, the external
-> controller subsumes the CPU controller and becomes the root.
-> 
-> 34K Manual (MD00534) Section 6.3.1.3 rev 1.13 page 136
-> 
-> Since there are interrupts which ought to be controlled by the CPU
-> controller driver - particularly the IPI interrupts - we create a
-> reverse mapping where those interrupts may be sent back to the CPU
-> intc when they are received. This maintains the fiction that there is
-> still a hierarchy, and keeps the DT the same no matter whether the
-> processor is in VEIC mode or not. The econet,cpu-interrupt-map is
-> optional and if omitted, it's assumed that no interrupts need to be
-> mapped.
-> 
-> Signed-off-by: Caleb James DeLisle <cjd@cjdns.fr>
+=E5=9C=A8 2026-04-23=E5=9B=9B=E7=9A=84 11:17 +0200=EF=BC=8CLuca Ceresoli=E5=
+=86=99=E9=81=93=EF=BC=9A
+> drm_connector_attach_encoder() is now called by
+> drm_bridge_connector_init().
+>=20
+> Signed-off-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
 > ---
->  .../econet,en751221-intc.yaml                 | 20 +++++++++++++++++++
->  1 file changed, 20 insertions(+)
-> 
+> =C2=A0drivers/gpu/drm/verisilicon/vs_bridge.c | 1 -
+> =C2=A01 file changed, 1 deletion(-)
+>=20
+> diff --git a/drivers/gpu/drm/verisilicon/vs_bridge.c
+> b/drivers/gpu/drm/verisilicon/vs_bridge.c
+> index 2a0ad00a94d6..83c91d5ce397 100644
+> --- a/drivers/gpu/drm/verisilicon/vs_bridge.c
+> +++ b/drivers/gpu/drm/verisilicon/vs_bridge.c
+> @@ -365,7 +365,6 @@ struct vs_bridge *vs_bridge_init(struct
+> drm_device *drm_dev,
+> =C2=A0		ret =3D PTR_ERR(bridge->conn);
+> =C2=A0		return ERR_PTR(ret);
+> =C2=A0	}
+> -	drm_connector_attach_encoder(bridge->conn, bridge->enc);
 
-My bot found errors running 'make dt_binding_check' on your patch:
+Checked the source of this function and it looks idempotent.
 
-yamllint warnings/errors:
+Acked-by: Icenowy Zheng <zhengxingda@iscas.ac.cn>
 
-dtschema/dtc warnings/errors:
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/interrupt-controller/econet,en751221-intc.yaml: ignoring, error in schema: properties: econet,cpu-interrupt-map: items
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/interrupt-controller/econet,en751221-intc.yaml: properties:econet,cpu-interrupt-map:items: 'anyOf' conditional failed, one must be fixed:
-	{'items': ['The interrupt number which will be received in this controller', 'The interrupt number which must then be dispatched on the CPU intc']} is not of type 'array'
-	/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/interrupt-controller/econet,en751221-intc.yaml: properties:econet,cpu-interrupt-map:items:items: 'anyOf' conditional failed, one must be fixed:
-		['The interrupt number which will be received in this controller', 'The interrupt number which must then be dispatched on the CPU intc'] is not of type 'object', 'boolean'
-		'The interrupt number which will be received in this controller' is not of type 'object', 'boolean'
-		'The interrupt number which must then be dispatched on the CPU intc' is not of type 'object', 'boolean'
-Traceback (most recent call last):
-  File "/usr/local/bin/dt-doc-validate", line 8, in <module>
-    sys.exit(main())
-             ~~~~^^
-  File "/usr/local/lib/python3.13/dist-packages/dtschema/doc_validate.py", line 66, in main
-    ret |= check_doc(f)
-           ~~~~~~~~~^^^
-  File "/usr/local/lib/python3.13/dist-packages/dtschema/doc_validate.py", line 37, in check_doc
-    dtsch.check_schema_refs()
-    ~~~~~~~~~~~~~~~~~~~~~~~^^
-  File "/usr/local/lib/python3.13/dist-packages/dtschema/schema.py", line 241, in check_schema_refs
-    self._check_schema_refs(resolver, self)
-    ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
-  File "/usr/local/lib/python3.13/dist-packages/dtschema/schema.py", line 212, in _check_schema_refs
-    self._check_schema_refs(resolver, v, parent=k, is_common=is_common,
-    ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-                            has_constraint=has_constraint)
-                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/usr/local/lib/python3.13/dist-packages/dtschema/schema.py", line 216, in _check_schema_refs
-    self._check_schema_refs(resolver, schema[i], parent=parent, is_common=is_common,
-    ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-                            has_constraint=has_constraint)
-                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/usr/local/lib/python3.13/dist-packages/dtschema/schema.py", line 203, in _check_schema_refs
-    ref_sch = resolver.lookup(schema['$ref']).contents
-              ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
-  File "/usr/local/lib/python3.13/dist-packages/referencing/_core.py", line 682, in lookup
-    retrieved = self._registry.get_or_retrieve(uri)
-  File "/usr/local/lib/python3.13/dist-packages/referencing/_core.py", line 422, in get_or_retrieve
-    registry = self.crawl()
-  File "/usr/local/lib/python3.13/dist-packages/referencing/_core.py", line 500, in crawl
-    id = resource.id()
-  File "/usr/local/lib/python3.13/dist-packages/referencing/_core.py", line 231, in id
-    id = self._specification.id_of(self.contents)
-  File "/usr/local/lib/python3.13/dist-packages/referencing/jsonschema.py", line 50, in _dollar_id
-    return contents.get("$id")
-           ^^^^^^^^^^^^
-AttributeError: 'str' object has no attribute 'get'
-Documentation/devicetree/bindings/interrupt-controller/econet,en751221-intc.example.dtb: /example-0/interrupt-controller@1fb40000: failed to match any schema with compatible: ['econet,en751221-intc']
-
-doc reference errors (make refcheckdocs):
-
-See https://patchwork.kernel.org/project/devicetree/patch/20260425123531.270548-2-cjd@cjdns.fr
-
-The base for the series is generally the latest rc1. A different dependency
-should be noted in *this* patch.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit after running the above command yourself. Note
-that DT_SCHEMA_FILES can be set to your schema file to speed up checking
-your schema. However, it must be unset to test all examples with your schema.
+> =C2=A0
+> =C2=A0	return bridge;
+> =C2=A0}
 
 
