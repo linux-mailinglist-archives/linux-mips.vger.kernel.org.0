@@ -1,225 +1,178 @@
-Return-Path: <linux-mips+bounces-14343-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-14344-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id aH8mM+6L72kPCgEAu9opvQ
-	(envelope-from <linux-mips+bounces-14343-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Mon, 27 Apr 2026 18:16:46 +0200
+	id KO9DBJ2R72nRCwEAu9opvQ
+	(envelope-from <linux-mips+bounces-14344-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Mon, 27 Apr 2026 18:41:01 +0200
 X-Original-To: lists+linux-mips@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1ED7E4762AA
-	for <lists+linux-mips@lfdr.de>; Mon, 27 Apr 2026 18:16:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 662F54768F7
+	for <lists+linux-mips@lfdr.de>; Mon, 27 Apr 2026 18:41:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 2D72B30F66C5
-	for <lists+linux-mips@lfdr.de>; Mon, 27 Apr 2026 15:55:55 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id AF1E430465E5
+	for <lists+linux-mips@lfdr.de>; Mon, 27 Apr 2026 16:32:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AB8F035AC31;
-	Mon, 27 Apr 2026 15:54:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 379EA3CD8AF;
+	Mon, 27 Apr 2026 16:32:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="X6IOcJGP"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="FnKAsJfy"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 48D70359A9B
-	for <linux-mips@vger.kernel.org>; Mon, 27 Apr 2026 15:54:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0EEF730C62E;
+	Mon, 27 Apr 2026 16:32:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777305295; cv=none; b=b8A416xu7c3456JVFXvfoZfXfu1cWl5aYvggyfV+cXsbyjDAFCYCDQF2tA65upL7ns3C+MxnbZPHVY+BnLPS+xBlwoxP3bT2q/0kgf24QmVSw6sHbLTpjslAFaqrTwxx+ad+Y/RI/IjgJ10YETCgkf/XCDIbogdDAyHxDqZ9JbU=
+	t=1777307533; cv=none; b=pgMCMKXrdAZbvdyeUOqT5pigOeGDY+I6kUhKWprurakHSs5dJCA2vaAiuWLR2HMV8iT25k7gn2j4O+FjLu1rMCFIeukZrMiH1kmy9JRl87jzL0btYIwkCLWDn89z2Q/7+aJP/6wMB238j63d1oa5nwCUb//scdM3dTzG79XyTxA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777305295; c=relaxed/simple;
-	bh=23evcU1TdjFjzg2aQNROqzfbxAgSpKxe6AK/+hAaEV8=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=U6fJ3E+S1uImpn6Z2q+Pd7c/18k1hVlXECVJkgdU4pWj84TaNIcIpvSVGDkucXLLDP0PyWtgxvj1ElvsEdq3Um219V08H654TTN4p3UrJZe23XQDcMnG1yvHAUG3r/wHqZD0w3zf1WUjb14Me1XKC9aE6RAlI5pTeK1nmCer6SM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=X6IOcJGP; arc=none smtp.client-ip=209.85.216.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f43.google.com with SMTP id 98e67ed59e1d1-35fbca04006so5211329a91.1
-        for <linux-mips@vger.kernel.org>; Mon, 27 Apr 2026 08:54:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1777305294; x=1777910094; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Ir1hTXu7IWWfjs4gdRRexBIGEymH3qRIcAM1ZommSVw=;
-        b=X6IOcJGPD2bcJe/flgqGXtUVZCmpAaG5c+7EuQW0LV9sr+7stAJdZJ9iIa5OxsLsYE
-         0l3TIdnQ00O+h8FSIVkvc2sy3tSOgfVT9LPt8yZWEUnhPKbfGKcjTYMkNuAMAzpBYAxT
-         PU04/juUlm2wkUZaBZPguNj/LxSRDYyqObcQwDil2Xj9JENmiKJPEhzvRyYamUvZA7yf
-         A8q6iU90hI8Ri/DeTwMmoasxn7Bu0SWKONk8MY2sc7r4vh7iqAXzkLJoT51j8mJuDmWs
-         BAUc58A00jweuB+Tr/QTBSMvQ3MdPsDIKW9R9a12L+bXDKgNy7Uv0ZeCaFcO5oa6yPpw
-         nTew==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1777305294; x=1777910094;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=Ir1hTXu7IWWfjs4gdRRexBIGEymH3qRIcAM1ZommSVw=;
-        b=Kw9lX+MLfWujfrigWH0Rq3dfAfyRvYtTY/xgyxAfi7DWyoud/oHCWUQYuKmZan6KWe
-         qRy4jVLVFAl4/lb5ANID2fGroC+n7XWlX3Jd2pFoacFXAklCvdAvSxGZSvfMJWOmDa9g
-         bMFm2FSovfgZAAEKpU6G/9P+sTYkBCMRo9ff2VuU/o6KdnSZhgENjd4USyO8EUMM8uL7
-         JG1LOQhSn0bfYClDPmSyTNwlGYqrtq0xaxjFKyT7nce3et510nClcqxp5ms0zkfK5pK/
-         1Ns9k803HxG/Lpd98kmIXgZJHv4a0s7jge13FPtmmbw94xHg8p6haln0D8bBSH4zqE02
-         m4wA==
-X-Gm-Message-State: AOJu0YwEibFYuPM44sNJyT8SQOnINPtzADVNKjLHqAD0XaSJQqzqH8Lw
-	T3kUYxVpK5dh2kTwK0z/2OPtO/0rSwjsUsTcBJ54j26Bc53r4lDe5UV/
-X-Gm-Gg: AeBDietVoKtSe+fsggExlzfCPD3b0cNlrenSiDJoznm8J5+n7JUQ8i0UZZCgaQJ1Jyd
-	ekaUvVYyshVq7Ec6mxYCAQLeOwpGwaZKwg+ga/ntGnpA6RxZgIEPIu+msX+uLa+q+0SEJUmT3l+
-	dIVkIwrZSlal+Ebo7tB98WbqqEoMz95RrgHxjg1OYqfTMLLe4IU7nTDLjI2xD8oxi7w15ll5njn
-	EwZinjb4gja9QQaRZoPlfhf+tujRl+VhvHBvvhklgspPRHA/b4Ttfr20SO1X33bHoC9KeAU8Lm6
-	QX4AdBCaSrawsXbUJl3Oq/v+bAatL0Nql84DQY8NintB226CFlsec0EH2d4YUh2ZL/rNvSMn8Xk
-	aGAty4bJPr0ZNkfFw87XzmT/O03E7EznMCvd+iRe+lRdRSYwTKwZJFKcrz/ZzlrVfxC6rqaAb1l
-	rQ+WxnSJAcTb3yoMecCQepOXPiANZY3WaDTWr+gDbmXdpZ8Z496FI=
-X-Received: by 2002:a17:90b:3c0c:b0:35b:e690:c5ad with SMTP id 98e67ed59e1d1-361404a1ef6mr45500096a91.25.1777305293271;
-        Mon, 27 Apr 2026 08:54:53 -0700 (PDT)
-Received: from localhost (vps-e1cc9378.vps.ovh.us. [2604:2dc0:202:300::1365])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3614195a8f0sm31413787a91.12.2026.04.27.08.54.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Apr 2026 08:54:52 -0700 (PDT)
-From: Eric Wu <kunjinkao.jp@gmail.com>
-To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: linux-mips@vger.kernel.org,
-	linux-staging@lists.linux.dev,
-	linux-kernel@vger.kernel.org,
-	Eric Wu <kunjinkao.jp@gmail.com>
-Subject: [PATCH 7/7] staging: octeon: convert cvmx_pip_port_status_t from typedef to plain struct
-Date: Mon, 27 Apr 2026 23:54:27 +0800
-Message-ID: <20260427155427.668540-8-kunjinkao.jp@gmail.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20260427155427.668540-1-kunjinkao.jp@gmail.com>
-References: <20260427155427.668540-1-kunjinkao.jp@gmail.com>
+	s=arc-20240116; t=1777307533; c=relaxed/simple;
+	bh=FCXcldL8BJZ2nu5b8/5wwHZpdENBNK9CMwBqO6dqbCs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=jkgsKkgMldzv/+ECoSkY+eAFA+F2D744cJzigIBRIPydVgZsu9Mt/Ux6TnxFvR3Vt+uYm/PMjIL0Uaes8XGf8m6WnpdGQn32vPZAfD2rZ+wXnOvMazCkUUacjq5ySx/NGHcUKTvPqiKilssF9NRFqoXzvd7js2JwNkHfl3W9G/4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=FnKAsJfy; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 602FFC2BCB4;
+	Mon, 27 Apr 2026 16:32:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1777307532;
+	bh=FCXcldL8BJZ2nu5b8/5wwHZpdENBNK9CMwBqO6dqbCs=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=FnKAsJfyI5CUtP0gohxebhZbQMAJWQD7sxMm2Lvpf0GfIpEWzVj8aNNZmuX9WADkw
+	 /3JSuf6wzuw2ThMcUCQZOj5Tl8OPCjhk2JaF1NP5A0xOUlCQwmlwHunkXgcT3/Olnc
+	 NcaNpVfeMR1T8TQQiAPxQHeqSSL1rocFncP98rWk=
+Date: Mon, 27 Apr 2026 10:31:36 -0600
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: "Maciej W. Rozycki" <macro@orcam.me.uk>
+Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Jiri Slaby <jirislaby@kernel.org>,
+	Elena Reshetova <elena.reshetova@intel.com>,
+	David Windsor <dwindsor@gmail.com>, Kees Cook <kees@kernel.org>,
+	Hans Liljestrand <ishkamiel@gmail.com>, linux-mips@vger.kernel.org,
+	linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 4/4] Revert "drivers: convert sbd_duart.map_guard from
+ atomic_t to refcount_t"
+Message-ID: <2026042737-siamese-cod-84c5@gregkh>
+References: <alpine.DEB.2.21.2604130239560.29980@angie.orcam.me.uk>
+ <alpine.DEB.2.21.2604130416440.29980@angie.orcam.me.uk>
+ <2026042630-diaphragm-reactor-7cfe@gregkh>
+ <alpine.DEB.2.21.2604271435070.28583@angie.orcam.me.uk>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Rspamd-Queue-Id: 1ED7E4762AA
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <alpine.DEB.2.21.2604271435070.28583@angie.orcam.me.uk>
+X-Rspamd-Queue-Id: 662F54768F7
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.16 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+X-Spamd-Result: default: False [2.34 / 15.00];
+	MID_END_EQ_FROM_USER_PART(4.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_MISSING_CHARSET(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	DMARC_POLICY_ALLOW(-0.50)[linuxfoundation.org,none];
+	MID_RHS_NOT_FQDN(0.50)[];
+	R_DKIM_ALLOW(-0.20)[linuxfoundation.org:s=korg];
 	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
-	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	TO_DN_SOME(0.00)[];
-	FREEMAIL_FROM(0.00)[gmail.com];
-	TAGGED_FROM(0.00)[bounces-14343-lists,linux-mips=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-14344-lists,linux-mips=lfdr.de];
+	FREEMAIL_CC(0.00)[alpha.franken.de,kernel.org,intel.com,gmail.com,vger.kernel.org];
 	RCVD_TLS_LAST(0.00)[];
-	FREEMAIL_CC(0.00)[vger.kernel.org,lists.linux.dev,gmail.com];
-	MIME_TRACE(0.00)[0:+];
-	RECEIVED_HELO_LOCALHOST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
-	FROM_NEQ_ENVFROM(0.00)[kunjinkaojp@gmail.com,linux-mips@vger.kernel.org];
 	FROM_HAS_DN(0.00)[];
-	DKIM_TRACE(0.00)[gmail.com:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
+	MIME_TRACE(0.00)[0:+];
+	DKIM_TRACE(0.00)[linuxfoundation.org:+];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	MISSING_XM_UA(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
-	TAGGED_RCPT(0.00)[linux-mips];
-	MID_RHS_MATCH_FROM(0.00)[];
-	RCPT_COUNT_FIVE(0.00)[6];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[gregkh@linuxfoundation.org,linux-mips@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCPT_COUNT_SEVEN(0.00)[10];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+	TAGGED_RCPT(0.00)[linux-mips];
+	TO_DN_SOME(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,linuxfoundation.org:dkim]
 
-The Linux kernel coding style discourages the use of typedefs for
-structs. Convert cvmx_pip_port_status_t to a plain 'struct
-cvmx_pip_port_status' and update all users across the MIPS Octeon
-architecture code and the staging driver.
+On Mon, Apr 27, 2026 at 03:13:55PM +0100, Maciej W. Rozycki wrote:
+> On Sun, 26 Apr 2026, Greg Kroah-Hartman wrote:
+> 
+> > > Revert commit 22a33651a56f ("drivers: convert sbd_duart.map_guard from
+> > > atomic_t to refcount_t"), which broke perfectly valid code:
+> > > 
+> > >   ------------[ cut here ]------------
+> > >   WARNING: CPU: 1 PID: 1 at lib/refcount.c:114 sbd_request_port+0x54/0x140
+> > >   refcount_t: increment on 0; use-after-free.
+> > >   CPU: 1 PID: 1 Comm: swapper/0 Not tainted 4.11.0-rc2+ #34
+> > >   Stack : 0000000014001fe0 0000000000000000 ffffffff80830000 0000000000000000
+> > >           ffffffff8127bc7a ffffffff8016fe08 ffffffff808d0000 ffffffff808d0000
+> > >           ffffffff807aa828 ffffffff80822337 ffffffff808ce188 a8000001860b0000
+> > >           0000000000000001 0000000000000001 00000000000001c8 ffffffff808a3090
+> > >           00000000000000bb ffffffff801b09d4 a80000018609bb68 ffffffff801231cc
+> > >           ffffffff812a0000 ffffffff80171388 0000000000001000 ffffffff807aa828
+> > >           0000000000000001 0000000000000001 0000000000000000 0000000000000000
+> > >           0000000000000000 a80000018609bab0 0000000000000000 ffffffff803c47cc
+> > >           0000000000000000 0000000000000000 0000000000000000 0000000000000000
+> > >           ffffffff807cb648 ffffffff8010bff8 0000000014001fe1 ffffffff803c47cc
+> > >           ...
+> > >   Call Trace:
+> > >   [<ffffffff8010bff8>] show_stack+0x28/0x88
+> > >   [<ffffffff803c47cc>] dump_stack+0x8c/0xc0
+> > >   [<ffffffff801aff5c>] __warn+0xe0/0x114
+> > >   [<ffffffff801233f0>] warn_slowpath_fmt+0x40/0x50
+> > >   [<ffffffff80455bcc>] sbd_request_port+0x54/0x140
+> > >   [<ffffffff804563a4>] sbd_config_port+0x2c/0x68
+> > >   ---[ end trace f666d696412caa3e ]---
+> > > 
+> > > (report at the offending commit) -- sbd_request_port() is called twice
+> > > per DUART instance, to reserve a resource holding the control register
+> > > block shared between the two channels, so there's no slightest chance
+> > > for an overflow.  Also this doesn't stop the driver from working and
+> > > it's just the reservation that is missing as a result, i.e.:
+> > > 
+> > > 10060100-100601ff : sb1250-duart
+> > > 10060200-100602ff : sb1250-duart
+> > > 
+> > > as from the offending change, vs:
+> > > 
+> > > 10060100-100601ff : sb1250-duart
+> > > 10060200-100602ff : sb1250-duart
+> > > 10060300-100603ff : sb1250-duart
+> > > 
+> > > beforehand, which is surely why the breakage has gone so long unnoticed.
+> > > 
+> > > "If it ain't broke, don't fix it," so just revert the broken commit.
+> > 
+> > How about fix this up to work properly with a refcount?  having "open
+> > coded" atomic variables like this is ripe for problems, like it seems
+> > this driver is abusing.
+> 
+>  Clearly refcount has odd semantics for this use case, as the failed 
+> attempt to "fix" this code has shown.
+> 
+>  The natural values for `map_guard' are 0 and 1 (FALSE and TRUE), for the 
+> resource not taken and taken respectively, however refcount code complains 
+> about this arrangement as indicated by the report quoted.
+> 
+>  I suppose I can bend backwards and adopt other values, which I'll have to 
+> figure out from the API somehow, but it's not clear to me how it would 
+> cause less confusion than original straightforward code, the whole point 
+> of which is to prevent the resource from being requested again for the 
+> second port in a DUART.
+> 
+>  Or I could use an ordinary variable, possibly of the `bool' type, guarded 
+> by a spinlock, but that would be even more of an overkill IMO.
 
-No functional change.
+No, that would be best because using an atomic is the same end result,
+but it confuses us humans who are the ones responsible for maintaining
+the code over time.
 
-Signed-off-by: Eric Wu <kunjinkao.jp@gmail.com>
----
- arch/mips/include/asm/octeon/cvmx-pip.h | 6 +++---
- drivers/staging/octeon/ethernet.c       | 2 +-
- drivers/staging/octeon/octeon-stubs.h   | 6 +++---
- 3 files changed, 7 insertions(+), 7 deletions(-)
+So a bool would be great, thanks!
 
-diff --git a/arch/mips/include/asm/octeon/cvmx-pip.h b/arch/mips/include/asm/octeon/cvmx-pip.h
-index 01ca7267a2ba..911276ee90c2 100644
---- a/arch/mips/include/asm/octeon/cvmx-pip.h
-+++ b/arch/mips/include/asm/octeon/cvmx-pip.h
-@@ -180,7 +180,7 @@ typedef union {
- /**
-  * Status statistics for a port
-  */
--typedef struct {
-+struct cvmx_pip_port_status {
- 	/* Inbound octets marked to be dropped by the IPD */
- 	uint32_t dropped_octets;
- 	/* Inbound packets marked to be dropped by the IPD */
-@@ -236,7 +236,7 @@ typedef struct {
- 	uint64_t inb_octets;
- 	/* Number of packets with GMX/SPX/PCI errors received by PIP */
- 	uint16_t inb_errors;
--} cvmx_pip_port_status_t;
-+};
- 
- /**
-  * Definition of the PIP custom header that can be prepended
-@@ -365,7 +365,7 @@ static inline void cvmx_pip_config_diffserv_qos(uint64_t diffserv, uint64_t qos)
-  * @status:   Where to put the results.
-  */
- static inline void cvmx_pip_get_port_status(uint64_t port_num, uint64_t clear,
--					    cvmx_pip_port_status_t *status)
-+					    struct cvmx_pip_port_status *status)
- {
- 	union cvmx_pip_stat_ctl pip_stat_ctl;
- 	union cvmx_pip_stat0_prtx stat0;
-diff --git a/drivers/staging/octeon/ethernet.c b/drivers/staging/octeon/ethernet.c
-index 448a4ec42d0b..d85a9991faf6 100644
---- a/drivers/staging/octeon/ethernet.c
-+++ b/drivers/staging/octeon/ethernet.c
-@@ -201,7 +201,7 @@ EXPORT_SYMBOL(cvm_oct_free_work);
-  */
- static struct net_device_stats *cvm_oct_common_get_stats(struct net_device *dev)
- {
--	cvmx_pip_port_status_t rx_status;
-+	struct cvmx_pip_port_status rx_status;
- 	struct cvmx_pko_port_status tx_status;
- 	struct octeon_ethernet *priv = netdev_priv(dev);
- 
-diff --git a/drivers/staging/octeon/octeon-stubs.h b/drivers/staging/octeon/octeon-stubs.h
-index 7bb72e152f08..9c1968b7e2d1 100644
---- a/drivers/staging/octeon/octeon-stubs.h
-+++ b/drivers/staging/octeon/octeon-stubs.h
-@@ -386,7 +386,7 @@ union cvmx_ipd_sub_port_qos_cnt {
- 	} s;
- };
- 
--typedef struct {
-+struct cvmx_pip_port_status {
- 	u32 dropped_octets;
- 	u32 dropped_packets;
- 	u32 pci_raw_packets;
-@@ -409,7 +409,7 @@ typedef struct {
- 	u32 inb_packets;
- 	u64 inb_octets;
- 	u16 inb_errors;
--} cvmx_pip_port_status_t;
-+};
- 
- struct cvmx_pko_port_status {
- 	u32 packets;
-@@ -1260,7 +1260,7 @@ static inline int octeon_is_simulation(void)
- }
- 
- static inline void cvmx_pip_get_port_status(u64 port_num, u64 clear,
--					    cvmx_pip_port_status_t *status)
-+					    struct cvmx_pip_port_status *status)
- { }
- 
- static inline void cvmx_pko_get_port_status(u64 port_num, u64 clear,
--- 
-2.43.0
-
+greg k-h
 
