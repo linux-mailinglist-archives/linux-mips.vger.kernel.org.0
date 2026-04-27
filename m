@@ -1,154 +1,138 @@
-Return-Path: <linux-mips+bounces-14328-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-14322-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id IC5MEIne7ml7ywAAu9opvQ
-	(envelope-from <linux-mips+bounces-14328-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Mon, 27 Apr 2026 05:56:57 +0200
+	id cOulK9mv7mnxwgAAu9opvQ
+	(envelope-from <linux-mips+bounces-14322-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Mon, 27 Apr 2026 02:37:45 +0200
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3BF3E46CAF5
-	for <lists+linux-mips@lfdr.de>; Mon, 27 Apr 2026 05:56:55 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5CA6446BB61
+	for <lists+linux-mips@lfdr.de>; Mon, 27 Apr 2026 02:37:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id C9F99300D4FE
-	for <lists+linux-mips@lfdr.de>; Mon, 27 Apr 2026 03:52:59 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 8F7A4300BD84
+	for <lists+linux-mips@lfdr.de>; Mon, 27 Apr 2026 00:37:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D36AD3914FF;
-	Mon, 27 Apr 2026 03:51:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C037D221DAE;
+	Mon, 27 Apr 2026 00:37:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="Y2A1vmxH"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FJk7is+H"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF50D371049;
-	Mon, 27 Apr 2026 03:51:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98F3921257F;
+	Mon, 27 Apr 2026 00:37:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777261902; cv=none; b=Pn0y2CPo49QD+tIkN5OK7YekgVUhzD2y/1S+nkE+BqUWC1A1Hx5a2M7XGDo499AMLJwQWmYXePA1DXV4GMdsQj8+1o0TPJPnA1U69zPKQ+o7H01gRDDoKe/vrOvgbNa2Lb97qpt3mA0CaAukYkrF+iwlT5VxegUIZ9H/TmhsBXg=
+	t=1777250261; cv=none; b=XUgJT38dJJ+82r1goTF+4Xxq4frXyoXJSp3M4+OtR2Z0A9o4E4wWaqJVNrFDHKnphMKKeQ5cilRnErs/jSWF+a1l2c8uMi/Mkuh8di2KPxSeN8odLceST14Xk+aiX4QuTm+DM1Ps7tZaM2k5toVG1aiSRLfshSsiIobvyGsJ9Xk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777261902; c=relaxed/simple;
-	bh=qfOWciOdj+AxDU1vozH6V2JW/zfXtz0rerqMJUQ6QNo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=IF7S8u22R+PcN46iLwVR3b6qeqEbYD4Lvwnhu0BoGcy9vd6LPPs2orvI5lz7dXVutolkCE10qnsB7X/HfSR2/9Ofp1PwnrT70lMhymkj0PBEJ/FFa5SQh67Vz66PQsZ7GkFNwoyaevytprRBkLmrnoXYbIoyfhLYYUvu9fiGmPE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=Y2A1vmxH; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 55FAAC19425;
-	Mon, 27 Apr 2026 03:51:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1777261902;
-	bh=qfOWciOdj+AxDU1vozH6V2JW/zfXtz0rerqMJUQ6QNo=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Y2A1vmxHwpLDmtWzkIcHn4RL2q2l73mUiCLJFGlKnCmMkfihR7TpeoWwqqMqOrcMR
-	 P9neA699PPDHfJfCT/JvSxn+BH++su3d5omrSZHXs+pyGhuVwDDrIlRi60cMf0YNFu
-	 tAh7nu8zl/HUrV7KYg+8arKMphSSjHpqWbVPm6Rk=
-Date: Sun, 26 Apr 2026 22:45:06 +0200
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: "Maciej W. Rozycki" <macro@orcam.me.uk>
-Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	Jiri Slaby <jirislaby@kernel.org>,
-	Elena Reshetova <elena.reshetova@intel.com>,
-	David Windsor <dwindsor@gmail.com>, Kees Cook <kees@kernel.org>,
-	Hans Liljestrand <ishkamiel@gmail.com>, linux-mips@vger.kernel.org,
-	linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 4/4] Revert "drivers: convert sbd_duart.map_guard from
- atomic_t to refcount_t"
-Message-ID: <2026042630-diaphragm-reactor-7cfe@gregkh>
-References: <alpine.DEB.2.21.2604130239560.29980@angie.orcam.me.uk>
- <alpine.DEB.2.21.2604130416440.29980@angie.orcam.me.uk>
+	s=arc-20240116; t=1777250261; c=relaxed/simple;
+	bh=/KQyIIXxBANDbJVbULlbyLCLd8t/G3HnMy/6KaTpJyo=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=ewf2VnwWykc3txzGyP8C0gDbKJr89hQJzL+RvfTH6l/RDd1C3/WYTaAdJLm280RYLhiy/xF1NMNrQx50cOu62+6BX5cbks4uoFDUJGYXAezDR0lqLpoIHKYwN0YlbIXFrmwWYEEKo5hITnZlnlQG7KEb35JG1ylGUiwSEzzB/Wo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FJk7is+H; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 406E3C2BCAF;
+	Mon, 27 Apr 2026 00:37:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1777250261;
+	bh=/KQyIIXxBANDbJVbULlbyLCLd8t/G3HnMy/6KaTpJyo=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=FJk7is+Hy5OEaY3cjP+TfeQwamOc2VwogBDAIxZ6TLjWHWxV8gH6fwuHp/PoxRk2o
+	 oi2tIu9jDq9Jdq3ufB6mAx61Z8FkICyEXZ/lO31S38fUgQN4cbtQmLVhXhcaX6/iM+
+	 IYBbWSWoOUQtVg9Jg8Aa23MXfOA2RDhAPpnmY+A0J5lEZA9Fa+PDIM8n9pWiMEmO97
+	 BQzoIUM8aN6wXZCYhBaoRzEPVIccJ3G7xdcrdnN1dQplAFc7fYwz6i9ME2VIqvrtti
+	 V5DlYGI3OnZIrysDCAa8OJDUlXkLM/wE1BHbCnTf8MbKXVzq2Af3ntEnfcNWt3RRHD
+	 FZ55/2fAgDeug==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id BA06A38119E5;
+	Mon, 27 Apr 2026 00:37:00 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <alpine.DEB.2.21.2604130416440.29980@angie.orcam.me.uk>
-X-Rspamd-Queue-Id: 3BF3E46CAF5
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net-deletions v2] net: remove unused ATM protocols and
+ legacy
+ ATM device drivers
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <177725021958.2839245.12173011555079376914.git-patchwork-notify@kernel.org>
+Date: Mon, 27 Apr 2026 00:36:59 +0000
+References: <20260422041846.2035118-1-kuba@kernel.org>
+In-Reply-To: <20260422041846.2035118-1-kuba@kernel.org>
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: davem@davemloft.net, netdev@vger.kernel.org, edumazet@google.com,
+ pabeni@redhat.com, andrew+netdev@lunn.ch, horms@kernel.org, corbet@lwn.net,
+ skhan@linuxfoundation.org, linux@armlinux.org.uk, tsbogend@alpha.franken.de,
+ maddy@linux.ibm.com, mpe@ellerman.id.au, npiggin@gmail.com,
+ chleroy@kernel.org, 3chas3@gmail.com, razor@blackwall.org, idosch@nvidia.com,
+ jani.nikula@intel.com, mchehab+huawei@kernel.org, tytso@mit.edu,
+ herbert@gondor.apana.org.au, geert@linux-m68k.org, ebiggers@kernel.org,
+ johannes.berg@intel.com, jonathan.cameron@huawei.com, kees@kernel.org,
+ kuniyu@google.com, fourier.thomas@gmail.com, andriy.shevchenko@intel.com,
+ rdunlap@infradead.org, akpm@linux-foundation.org, linux-doc@vger.kernel.org,
+ linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+ bridge@lists.linux.dev, dwmw2@infradead.org
+X-Rspamd-Queue-Id: 5CA6446BB61
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [2.34 / 15.00];
-	MID_END_EQ_FROM_USER_PART(4.00)[];
+X-Spamd-Result: default: False [-0.66 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[linuxfoundation.org,none];
-	MID_RHS_NOT_FQDN(0.50)[];
-	R_DKIM_ALLOW(-0.20)[linuxfoundation.org:s=korg];
-	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-14328-lists,linux-mips=lfdr.de];
-	FREEMAIL_CC(0.00)[alpha.franken.de,kernel.org,intel.com,gmail.com,vger.kernel.org];
-	RCVD_TLS_LAST(0.00)[];
-	FROM_HAS_DN(0.00)[];
+	TAGGED_FROM(0.00)[bounces-14322-lists,linux-mips=lfdr.de,netdevbpf];
+	FREEMAIL_CC(0.00)[davemloft.net,vger.kernel.org,google.com,redhat.com,lunn.ch,kernel.org,lwn.net,linuxfoundation.org,armlinux.org.uk,alpha.franken.de,linux.ibm.com,ellerman.id.au,gmail.com,blackwall.org,nvidia.com,intel.com,mit.edu,gondor.apana.org.au,linux-m68k.org,huawei.com,infradead.org,linux-foundation.org,lists.ozlabs.org,lists.linux.dev];
+	FROM_NEQ_ENVFROM(0.00)[patchwork-bot@kernel.org,linux-mips@vger.kernel.org];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
+	RCVD_TLS_LAST(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[37];
 	MIME_TRACE(0.00)[0:+];
-	DKIM_TRACE(0.00)[linuxfoundation.org:+];
-	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
+	DKIM_TRACE(0.00)[kernel.org:+];
+	FROM_NO_DN(0.00)[];
 	MISSING_XM_UA(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
+	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[gregkh@linuxfoundation.org,linux-mips@vger.kernel.org];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCPT_COUNT_SEVEN(0.00)[10];
+	MID_RHS_MATCH_FROM(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[linux-mips];
+	TAGGED_RCPT(0.00)[linux-mips,netdev,huawei];
 	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,linuxfoundation.org:dkim]
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
 
-On Mon, Apr 13, 2026 at 04:28:53AM +0100, Maciej W. Rozycki wrote:
-> Revert commit 22a33651a56f ("drivers: convert sbd_duart.map_guard from
-> atomic_t to refcount_t"), which broke perfectly valid code:
-> 
->   ------------[ cut here ]------------
->   WARNING: CPU: 1 PID: 1 at lib/refcount.c:114 sbd_request_port+0x54/0x140
->   refcount_t: increment on 0; use-after-free.
->   CPU: 1 PID: 1 Comm: swapper/0 Not tainted 4.11.0-rc2+ #34
->   Stack : 0000000014001fe0 0000000000000000 ffffffff80830000 0000000000000000
->           ffffffff8127bc7a ffffffff8016fe08 ffffffff808d0000 ffffffff808d0000
->           ffffffff807aa828 ffffffff80822337 ffffffff808ce188 a8000001860b0000
->           0000000000000001 0000000000000001 00000000000001c8 ffffffff808a3090
->           00000000000000bb ffffffff801b09d4 a80000018609bb68 ffffffff801231cc
->           ffffffff812a0000 ffffffff80171388 0000000000001000 ffffffff807aa828
->           0000000000000001 0000000000000001 0000000000000000 0000000000000000
->           0000000000000000 a80000018609bab0 0000000000000000 ffffffff803c47cc
->           0000000000000000 0000000000000000 0000000000000000 0000000000000000
->           ffffffff807cb648 ffffffff8010bff8 0000000014001fe1 ffffffff803c47cc
->           ...
->   Call Trace:
->   [<ffffffff8010bff8>] show_stack+0x28/0x88
->   [<ffffffff803c47cc>] dump_stack+0x8c/0xc0
->   [<ffffffff801aff5c>] __warn+0xe0/0x114
->   [<ffffffff801233f0>] warn_slowpath_fmt+0x40/0x50
->   [<ffffffff80455bcc>] sbd_request_port+0x54/0x140
->   [<ffffffff804563a4>] sbd_config_port+0x2c/0x68
->   ---[ end trace f666d696412caa3e ]---
-> 
-> (report at the offending commit) -- sbd_request_port() is called twice
-> per DUART instance, to reserve a resource holding the control register
-> block shared between the two channels, so there's no slightest chance
-> for an overflow.  Also this doesn't stop the driver from working and
-> it's just the reservation that is missing as a result, i.e.:
-> 
-> 10060100-100601ff : sb1250-duart
-> 10060200-100602ff : sb1250-duart
-> 
-> as from the offending change, vs:
-> 
-> 10060100-100601ff : sb1250-duart
-> 10060200-100602ff : sb1250-duart
-> 10060300-100603ff : sb1250-duart
-> 
-> beforehand, which is surely why the breakage has gone so long unnoticed.
-> 
-> "If it ain't broke, don't fix it," so just revert the broken commit.
+Hello:
 
-How about fix this up to work properly with a refcount?  having "open
-coded" atomic variables like this is ripe for problems, like it seems
-this driver is abusing.
+This patch was applied to netdev/net.git (main)
+by Jakub Kicinski <kuba@kernel.org>:
 
-thanks,
+On Tue, 21 Apr 2026 21:18:44 -0700 you wrote:
+> Remove the ATM protocol modules and PCI/SBUS ATM device drivers
+> that are no longer in active use.
+> 
+> The ATM core protocol stack, PPPoATM, BR2684, and USB DSL modem
+> drivers (drivers/usb/atm/) are retained in-tree to maintain PPP
+> over ATM (PPPoA) and PPPoE-over-BR2684 support for DSL connections.
+> 
+> [...]
 
-greg k-h
+Here is the summary with links:
+  - [net-deletions,v2] net: remove unused ATM protocols and legacy ATM device drivers
+    https://git.kernel.org/netdev/net/c/6deb53595092
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
 
