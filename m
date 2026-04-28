@@ -1,127 +1,133 @@
-Return-Path: <linux-mips+bounces-14375-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-14376-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id IAaxI+Jk8GkRSwEAu9opvQ
-	(envelope-from <linux-mips+bounces-14375-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Tue, 28 Apr 2026 09:42:26 +0200
+	id AK4wCJFw8Gn9TQEAu9opvQ
+	(envelope-from <linux-mips+bounces-14376-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Tue, 28 Apr 2026 10:32:17 +0200
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5B66847F159
-	for <lists+linux-mips@lfdr.de>; Tue, 28 Apr 2026 09:42:25 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6A5FB48026F
+	for <lists+linux-mips@lfdr.de>; Tue, 28 Apr 2026 10:32:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 627F930275C2
-	for <lists+linux-mips@lfdr.de>; Tue, 28 Apr 2026 07:34:46 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 29ECB30DF20F
+	for <lists+linux-mips@lfdr.de>; Tue, 28 Apr 2026 08:26:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EAD583CD8C1;
-	Tue, 28 Apr 2026 07:33:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CD10E33263A;
+	Tue, 28 Apr 2026 08:26:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MpGy7DVF"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Ss5KZ1zG"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out-181.mta0.migadu.com (out-181.mta0.migadu.com [91.218.175.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C74223CCA12;
-	Tue, 28 Apr 2026 07:33:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D47E29B79B
+	for <linux-mips@vger.kernel.org>; Tue, 28 Apr 2026 08:26:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777361583; cv=none; b=aOe+oIQEi7Z1qsAQtgotPWGaAaFV3mDoK2tlLC8NcYBjQSYNRBQpcIw3h3JnwBOxRpMHMIzliIAuRyiqsLHmIJ7R2ogCBfR5OBYBOaH36nXE08qovUemdjRaK0gUzchCQyY8r63XsbgFA3p2P+tojY56A8cXFmFrffXwQDauEW8=
+	t=1777364778; cv=none; b=NE9dTTJT3dNmrR8p1+dUXD4LaWEA1FYe+7NBvaHUOEBd6jqWcFNCf/RVAOmFwzCo5wPYtgVOCOfsaCasUUvhDTnxzUdqBejgLZmgZvWBCJot0s1RKfBN2Z/xusjMkWCXZzwX4c0R4UOX4SzQQ6WgVB3OEVaqSEw8ZNX+0qrB7n0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777361583; c=relaxed/simple;
-	bh=6fTlJi+u/tA4P3ALw32S+WETC0LTfCt2D17LQA//3Lo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ceM9sYHhug0BEFIuuCyEa0vpucbsmLNqgt+Xt6ow0cjJoE2ptzL78MlHs9md1K4rKUgNJN2DU46tMosfEWJUC4aA/ipJOzwooTZ45kBzOEuzvgMcNaxW7waFkN457jzPs/Y4U63+z5D5PFqE02mONWqY6rP+q9u9LazjI1aN2XM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MpGy7DVF; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D1A9AC2BCB8;
-	Tue, 28 Apr 2026 07:33:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1777361583;
-	bh=6fTlJi+u/tA4P3ALw32S+WETC0LTfCt2D17LQA//3Lo=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=MpGy7DVFCqc2tz+PaWmZ2p7pRNgg8LFETk0UaUVr5ifYJTOWvPRBN+vpeP22WoWDq
-	 C56OEtBNx7Q1r3apdzOEvOAq1SMo8UctK/m1K2F1bGNwyIU+N1WEjfDXxisU1KM4xg
-	 BjlHJzkvzY3wzGUoPkAmSdvm5YxZgECJPhZ9OMPH6fdM+B+h4498MOM+78ScIjw5/u
-	 fB46I4mKXaiN4n4YiZgYyk58xm3XVdkWLXwNVlXTGehM53Xc9jRizBsA4LXTZxredB
-	 6a1BmClEmFGmfrQPJPr1IVj8i7gFV4T4F850Sg0qTXIIw8fAJLEPqQgHbD8Y9B80F1
-	 TCH5DwTMzfA1Q==
-Date: Tue, 28 Apr 2026 09:33:00 +0200
-From: Krzysztof Kozlowski <krzk@kernel.org>
-To: Rosen Penev <rosenp@gmail.com>
-Cc: devicetree@vger.kernel.org, Felix Fietkau <nbd@nbd.name>, 
-	Lorenzo Bianconi <lorenzo@kernel.org>, Ryder Lee <ryder.lee@mediatek.com>, 
-	Shayne Chen <shayne.chen@mediatek.com>, Sean Wang <sean.wang@mediatek.com>, 
-	Johannes Berg <johannes@sipsolutions.net>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Matthias Brugger <matthias.bgg@gmail.com>, 
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
-	"open list:MEDIATEK MT76 WIRELESS LAN DRIVER" <linux-wireless@vger.kernel.org>, 
-	"open list:ARM/Mediatek SoC support" <linux-kernel@vger.kernel.org>, 
-	"moderated list:ARM/Mediatek SoC support" <linux-arm-kernel@lists.infradead.org>, 
-	"moderated list:ARM/Mediatek SoC support" <linux-mediatek@lists.infradead.org>, "open list:MIPS" <linux-mips@vger.kernel.org>
-Subject: Re: [PATCH 2/3] dt-bindings: net: wireless: mt76: remove
- mediatek,mtd-eeprom
-Message-ID: <20260428-mustang-of-therapeutic-upgrade-a95f9a@quoll>
-References: <20260427034427.881389-1-rosenp@gmail.com>
- <20260427034427.881389-3-rosenp@gmail.com>
+	s=arc-20240116; t=1777364778; c=relaxed/simple;
+	bh=N5pnnNDxjYCpffJbmExg20y+5MX7MDoO5hWlmA/m6zw=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=YD9a9YyC8388OYJ63mBZXxpJ/Kru52bSlj/uQ8eFXEX/kB3zRkfBNFuVpZ5Ehkztz4u3VWaPWg9qQsx3Hqxw1WBVHIrxLdSnNB/EigZiZ7WV9trhf+ZhApUY3Bvgq1kFPaGWA0wIPSKnRCujMAgq7wg2xQZn51MsGn4gbdff3f8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Ss5KZ1zG; arc=none smtp.client-ip=91.218.175.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1777364765;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=11q5oz16touL9vV9JV8N3vUJRYbj1YLjofdcEYdHyuE=;
+	b=Ss5KZ1zGcXPnv6r5b4U7i7xPwWm6c53xFGyh/whfz/b34aXCJ62Fwb2AI3r7am8pGbI/k6
+	7FBgGNpmOfyDePqtbAnsgm+YW50mQfSnaKTrELinrFa7UvBhvlwHYzdFPOolX7GBI9P5jc
+	gjejC1f+yCHR4qwBC/rRl4Jpe+ZdD/g=
+From: Qingfang Deng <qingfang.deng@linux.dev>
+To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Qingfang Deng <qingfang.deng@linux.dev>,
+	linux-mips@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: Mieczyslaw Nalewaj <namiltd@yahoo.com>,
+	Felix Fietkau <nbd@nbd.name>,
+	Hauke Mehrtens <hauke@hauke-m.de>,
+	Aleksander Jan Bajkowski <olek2@wp.pl>,
+	Christian Marangi <ansuelsmth@gmail.com>,
+	Rosen Penev <rosenp@gmail.com>,
+	Nick Hainke <vincent@systemli.org>,
+	openwrt-devel@lists.openwrt.org
+Subject: [PATCH] MIPS: ralink: reduce ARCH_DMA_MINALIGN
+Date: Tue, 28 Apr 2026 16:25:40 +0800
+Message-ID: <20260428082543.95896-1-qingfang.deng@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20260427034427.881389-3-rosenp@gmail.com>
-X-Rspamd-Queue-Id: 5B66847F159
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
+X-Rspamd-Queue-Id: 6A5FB48026F
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.16 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+X-Spamd-Result: default: False [-0.66 / 15.00];
+	MID_CONTAINS_FROM(1.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	MID_RHS_NOT_FQDN(0.50)[];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
-	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
+	R_MISSING_CHARSET(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[linux.dev,none];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_DKIM_ALLOW(-0.20)[linux.dev:s=key1];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-14375-lists,linux-mips=lfdr.de];
-	RCPT_COUNT_TWELVE(0.00)[19];
+	FREEMAIL_CC(0.00)[yahoo.com,nbd.name,hauke-m.de,wp.pl,gmail.com,systemli.org,lists.openwrt.org];
 	MIME_TRACE(0.00)[0:+];
-	FREEMAIL_TO(0.00)[gmail.com];
-	RCVD_COUNT_THREE(0.00)[4];
-	FROM_HAS_DN(0.00)[];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	TO_DN_SOME(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[krzk@kernel.org,linux-mips@vger.kernel.org];
-	FREEMAIL_CC(0.00)[vger.kernel.org,nbd.name,kernel.org,mediatek.com,sipsolutions.net,gmail.com,collabora.com,alpha.franken.de,lists.infradead.org];
-	TAGGED_RCPT(0.00)[linux-mips,dt];
-	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TAGGED_FROM(0.00)[bounces-14376-lists,linux-mips=lfdr.de];
+	RCPT_COUNT_TWELVE(0.00)[12];
+	RCVD_TLS_LAST(0.00)[];
+	RCVD_COUNT_THREE(0.00)[3];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	TO_DN_SOME(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[qingfang.deng@linux.dev,linux-mips@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	DKIM_TRACE(0.00)[linux.dev:+];
+	NEURAL_HAM(-0.00)[-0.999];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	TAGGED_RCPT(0.00)[linux-mips];
 	MISSING_XM_UA(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[linux.dev:email,linux.dev:dkim,linux.dev:mid,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
 
-On Sun, Apr 26, 2026 at 08:44:26PM -0700, Rosen Penev wrote:
-> mediatek,mtd-eeprom is a widely unused binding that predates and has
+Currently, Ralink SoCs use the default ARCH_DMA_MINALIGN value of 128
+bytes defined in mach-generic. This is excessive for these platforms
+and leads to significant memory waste in kmalloc.
 
-I clearly see a user. Please use `git grep`.
- 
-> been replaced by NVMEM. As there are no users, remove it.
-> 
-> Signed-off-by: Rosen Penev <rosenp@gmail.com>
-> ---
->  .../bindings/net/wireless/mediatek,mt76.yaml  | 19 ++-----------------
->  1 file changed, 2 insertions(+), 17 deletions(-)
-> 
+Override ARCH_DMA_MINALIGN to use L1_CACHE_BYTES, which is 16 bytes for
+RT288X and 32 bytes for other Ralink SoCs.
 
-Wrong order of patches, you have undocumented ABI.
+Signed-off-by: Qingfang Deng <qingfang.deng@linux.dev>
+---
+ arch/mips/include/asm/mach-ralink/kmalloc.h | 9 +++++++++
+ 1 file changed, 9 insertions(+)
+ create mode 100644 arch/mips/include/asm/mach-ralink/kmalloc.h
 
-Best regards,
-Krzysztof
+diff --git a/arch/mips/include/asm/mach-ralink/kmalloc.h b/arch/mips/include/asm/mach-ralink/kmalloc.h
+new file mode 100644
+index 000000000000..1693209d3f37
+--- /dev/null
++++ b/arch/mips/include/asm/mach-ralink/kmalloc.h
+@@ -0,0 +1,9 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++#ifndef __ASM_MACH_RALINK_KMALLOC_H
++#define __ASM_MACH_RALINK_KMALLOC_H
++
++#ifdef CONFIG_DMA_NONCOHERENT
++#define ARCH_DMA_MINALIGN	L1_CACHE_BYTES
++#endif
++
++#endif /* __ASM_MACH_RALINK_KMALLOC_H */
+-- 
+2.43.0
 
 
