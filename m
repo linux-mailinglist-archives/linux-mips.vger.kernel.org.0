@@ -1,324 +1,187 @@
-Return-Path: <linux-mips+bounces-14383-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-14384-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 6GU3Aj7F8GloYQEAu9opvQ
-	(envelope-from <linux-mips+bounces-14383-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Tue, 28 Apr 2026 16:33:34 +0200
+	id EADTEiza8GkLaQEAu9opvQ
+	(envelope-from <linux-mips+bounces-14384-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Tue, 28 Apr 2026 18:02:52 +0200
 X-Original-To: lists+linux-mips@lfdr.de
 Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7460D48708B
-	for <lists+linux-mips@lfdr.de>; Tue, 28 Apr 2026 16:33:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 73B484886B7
+	for <lists+linux-mips@lfdr.de>; Tue, 28 Apr 2026 18:02:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 70C57317A61C
-	for <lists+linux-mips@lfdr.de>; Tue, 28 Apr 2026 14:12:18 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 10AD43076EC5
+	for <lists+linux-mips@lfdr.de>; Tue, 28 Apr 2026 15:56:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9D6F944105E;
-	Tue, 28 Apr 2026 14:12:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D0D2C3DA7CA;
+	Tue, 28 Apr 2026 15:56:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dqR1kfeJ"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from cstnet.cn (smtp81.cstnet.cn [159.226.251.81])
-	(using TLSv1.2 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F5593FD12B;
-	Tue, 28 Apr 2026 14:12:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.226.251.81
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC1143CA4A3;
+	Tue, 28 Apr 2026 15:56:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777385532; cv=none; b=EVysXyUHWcrnTPEw3kI8v7KBKNXtNRx98Cx+hOG87GVgz4fKmji2QcRv3n/DajaAhoFkxN3TwR+mLZjV6AGOA+fI6279Sq/AoBOt4lJneV81Cy1H7tmlQXVFP49CCFJ4XO3Yyg18n9DVDpF1scG3gGTh2r3/Wd/au+TPbpeGk4I=
+	t=1777391816; cv=none; b=Wgs8sJ2FJQv37GPgAIcihKV69E2YQOEYQnkGBLMGaxuAXRtE/98GszKIXryGx+CjT1UHpVbqR2d1vK6+++izNcOJD3v2UsOtEBIkqY9G8ZEt12PFS5XNgHDzr3H1T1EOFuIQbmaYu90nVgjiA6IQ4NeaYplWGea/NXXvc4Vw+2k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777385532; c=relaxed/simple;
-	bh=XwiqsOpR23ShlfylRkZ2Fb1ig1xeGogp5lQf7doEuds=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=AaW95xO8LLEmJTWiR4N3Qjsv6cpi7U6Pfz2f0Vj7KiLo4h5yvHQcw3eqIiNbyb+oKL30tuBU5iPOV8uXvpMSjNR5prYeN1ntPDIPdq0XSY3g2gTh5tLv2+3QhWek+OgYmb957o74k9n9R6X/PvRJ2ln6cyFeWRmYQC9VCMuu55I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn; spf=pass smtp.mailfrom=iscas.ac.cn; arc=none smtp.client-ip=159.226.251.81
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iscas.ac.cn
-Received: from edelgard.fodlan.icenowy.me (unknown [112.94.102.122])
-	by APP-03 (Coremail) with SMTP id rQCowADX79bQv_BpQaZ1Dw--.2120S2;
-	Tue, 28 Apr 2026 22:10:28 +0800 (CST)
-Message-ID: <7d9086ff60e5e98117aeeb40a085dcde2c29de65.camel@iscas.ac.cn>
-Subject: Re: [PATCH v2 00/41] drm/display: bridge-connector: attach encoder
- to the connector
-From: Icenowy Zheng <zhengxingda@iscas.ac.cn>
-To: Luca Ceresoli <luca.ceresoli@bootlin.com>, Dmitry Baryshkov	
- <dmitry.baryshkov@oss.qualcomm.com>, Andrzej Hajda
- <andrzej.hajda@intel.com>,  Neil Armstrong <neil.armstrong@linaro.org>,
- Robert Foss <rfoss@kernel.org>, Laurent Pinchart	
- <Laurent.pinchart@ideasonboard.com>, Jonas Karlman <jonas@kwiboo.se>,
- Jernej Skrabec <jernej.skrabec@gmail.com>, Maarten Lankhorst
- <maarten.lankhorst@linux.intel.com>,  Maxime Ripard <mripard@kernel.org>,
- Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>, 
- Simona Vetter <simona@ffwll.ch>, Sasha Finkelstein <fnkl.kernel@gmail.com>,
- Janne Grunau <j@jannau.net>, Liu Ying <victor.liu@nxp.com>, Douglas
- Anderson <dianders@chromium.org>, Laurentiu Palcu	
- <laurentiu.palcu@oss.nxp.com>, Lucas Stach <l.stach@pengutronix.de>, Frank
- Li	 <Frank.Li@nxp.com>, Sascha Hauer <s.hauer@pengutronix.de>, Pengutronix
- Kernel Team <kernel@pengutronix.de>, Fabio Estevam <festevam@gmail.com>,
- Philipp Zabel	 <p.zabel@pengutronix.de>, Paul Cercueil
- <paul@crapouillou.net>, Anitha Chrisanthus <anitha.chrisanthus@intel.com>,
- Chun-Kuang Hu <chunkuang.hu@kernel.org>, Matthias Brugger	
- <matthias.bgg@gmail.com>, AngeloGioacchino Del Regno	
- <angelogioacchino.delregno@collabora.com>, Kevin Hilman
- <khilman@baylibre.com>,  Jerome Brunet <jbrunet@baylibre.com>, Martin
- Blumenstingl <martin.blumenstingl@googlemail.com>, Rob Clark	
- <robin.clark@oss.qualcomm.com>, Dmitry Baryshkov <lumag@kernel.org>,
- Abhinav Kumar <abhinav.kumar@linux.dev>, Jessica Zhang
- <jesszhan0024@gmail.com>, Sean Paul	 <sean@poorly.run>, Marijn Suijten
- <marijn.suijten@somainline.org>, Tomi Valkeinen
- <tomi.valkeinen@ideasonboard.com>, Sandy Huang <hjc@rock-chips.com>, Heiko
- =?ISO-8859-1?Q?St=FCbner?=	 <heiko@sntech.de>, Andy Yan
- <andy.yan@rock-chips.com>, Thierry Reding	 <thierry.reding@gmail.com>,
- Mikko Perttunen <mperttunen@nvidia.com>,  Jonathan Hunter
- <jonathanh@nvidia.com>, Jingoo Han <jingoohan1@gmail.com>, Inki Dae
- <inki.dae@samsung.com>,  Seung-Woo Kim <sw0312.kim@samsung.com>, Kyungmin
- Park <kyungmin.park@samsung.com>, Krzysztof Kozlowski	 <krzk@kernel.org>,
- Alim Akhtar <alim.akhtar@samsung.com>, Laurent Pinchart	
- <laurent.pinchart+renesas@ideasonboard.com>, Tomi Valkeinen	
- <tomi.valkeinen+renesas@ideasonboard.com>, Kieran Bingham	
- <kieran.bingham+renesas@ideasonboard.com>, Geert Uytterhoeven	
- <geert+renesas@glider.be>, Magnus Damm <magnus.damm@gmail.com>, Biju Das	
- <biju.das.jz@bp.renesas.com>, Marek Vasut <marex@denx.de>, Stefan Agner	
- <stefan@agner.ch>, Jyri Sarha <jyri.sarha@iki.fi>, Michal Simek	
- <michal.simek@amd.com>
-Cc: Hui Pu <Hui.Pu@gehealthcare.com>, Ian Ray <ian.ray@gehealthcare.com>, 
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org, 
-	asahi@lists.linux.dev, imx@lists.linux.dev,
- linux-arm-kernel@lists.infradead.org, 	linux-mips@vger.kernel.org,
- linux-mediatek@lists.infradead.org, 	linux-amlogic@lists.infradead.org,
- linux-arm-msm@vger.kernel.org, 	freedreno@lists.freedesktop.org,
- linux-rockchip@lists.infradead.org, 	linux-tegra@vger.kernel.org,
- linux-samsung-soc@vger.kernel.org, 	linux-renesas-soc@vger.kernel.org
-Date: Tue, 28 Apr 2026 22:10:18 +0800
-In-Reply-To: <DI4TW9XECX53.17TEZPCSWTH1A@bootlin.com>
-References: 
-	<20260423-drm-bridge-connector-attach_encoder-v2-0-2ae6ca69b390@bootlin.com>
-	 <cf2c91396eb3017aa51dd9c840badffddca2f7ec.camel@iscas.ac.cn>
-	 <DI4TW9XECX53.17TEZPCSWTH1A@bootlin.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.58.3 
+	s=arc-20240116; t=1777391816; c=relaxed/simple;
+	bh=IbUu3EsP9Li+cuVWPlIVW0Aqv6ymhM5gFfl2nsie23c=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=c1vSBQKSpN8Dhf29OrF37dE8eFyt7njnY0+6qslTJBoFFygBFTCBkDakmI/HZ+tGzTXEGUOf3ZjgOXvs9gHKGru+E4g8fE43v9VE6tPW4+jEHeXQ5qVHMvjhQihozSt8/WON+Wez22pJRSlhK1OSDMGU/3ZNoROCgQZzOBaNAQg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dqR1kfeJ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 794C3C32782;
+	Tue, 28 Apr 2026 15:56:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1777391816;
+	bh=IbUu3EsP9Li+cuVWPlIVW0Aqv6ymhM5gFfl2nsie23c=;
+	h=From:To:Cc:Subject:Date:From;
+	b=dqR1kfeJNpBCfQ0FYEA8s+Ze3sNIJqXCLxVgGE/vFKZLtY+wFLzKgLXdzkHI5M0r2
+	 nrtJ1vqhoFbvhOvll64yQgwv83D3k84Ar2kRbL+JK8/Z0KD4FEi2S6MrT3q4E6tRTl
+	 QhTw1PKPsfdLh4uR0Qg2jvFpwikHkiONf6Ard2+4RWvoxrhxXKhSRAR7h4b4gU+k8d
+	 1bRPHUPzNTi1OAYboGQRmZkzyY0Ur7XjPNdufZgSWSeGsw5fg9HC4NRfXevrCDjQ8K
+	 VRW4vTfh667c1Pp1UlkpB2iN7j2ZFm1MQ8P9MBG0FwnDl8rciBnft26CDYM0P4Jh5f
+	 UtT5HSdXXI7SQ==
+From: Arnd Bergmann <arnd@kernel.org>
+To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Linus Walleij <linusw@kernel.org>,
+	Bartosz Golaszewski <brgl@kernel.org>
+Cc: Arnd Bergmann <arnd@arndb.de>,
+	Thomas Gleixner <tglx@kernel.org>,
+	linux-mips@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-gpio@vger.kernel.org
+Subject: [PATCH] mips: select legacy gpiolib interfaces where used
+Date: Tue, 28 Apr 2026 17:56:19 +0200
+Message-Id: <20260428155651.3252500-1-arnd@kernel.org>
+X-Mailer: git-send-email 2.39.5
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-CM-TRANSID:rQCowADX79bQv_BpQaZ1Dw--.2120S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxtw4DGF1UKFWUtry7tFWxCrg_yoW7WFWDpF
-	Wjga12kr4kXryrAws2vF15Za4FvrWDJr45Jr1qgw4SkaykuF18AFW7tFs8uasrAFWrW3Wj
-	qr4YqrWxuF15AaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUvGb7Iv0xC_Kw4lb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I2
-	0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
-	A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xII
-	jxv20xvEc7CjxVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I
-	8E87Iv6xkF7I0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI
-	64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8Jw
-	Am72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l
-	c7CjxVAaw2AFwI0_ZF0_GFyUMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r
-	4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF
-	67AKxVWrXVW8Jr1lIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6x
-	IIjxv20xvEc7CjxVAFwI0_Cr0_Gr1UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY
-	6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa
-	73UjIFyTuYvjxUyPr4UUUUU
-X-CM-SenderInfo: x2kh0wp0lqwv3d6l2u1dvotugofq/
-X-Rspamd-Queue-Id: 7460D48708B
+Content-Transfer-Encoding: 8bit
+X-Rspamd-Queue-Id: 73B484886B7
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [0.04 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+X-Spamd-Result: default: False [-0.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	MID_CONTAINS_FROM(1.00)[];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_MISSING_CHARSET(0.50)[];
 	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FROM_HAS_DN(0.00)[];
-	TAGGED_FROM(0.00)[bounces-14383-lists,linux-mips=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-14384-lists,linux-mips=lfdr.de];
 	RCVD_COUNT_THREE(0.00)[4];
-	FREEMAIL_TO(0.00)[bootlin.com,oss.qualcomm.com,intel.com,linaro.org,kernel.org,ideasonboard.com,kwiboo.se,gmail.com,linux.intel.com,suse.de,ffwll.ch,jannau.net,nxp.com,chromium.org,oss.nxp.com,pengutronix.de,crapouillou.net,collabora.com,baylibre.com,googlemail.com,linux.dev,poorly.run,somainline.org,rock-chips.com,sntech.de,nvidia.com,samsung.com,glider.be,bp.renesas.com,denx.de,agner.ch,iki.fi,amd.com];
-	DMARC_NA(0.00)[iscas.ac.cn];
-	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	FROM_NEQ_ENVFROM(0.00)[arnd@kernel.org,linux-mips@vger.kernel.org];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
-	TO_DN_SOME(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[zhengxingda@iscas.ac.cn,linux-mips@vger.kernel.org];
-	NEURAL_SPAM(0.00)[0.017];
-	RCPT_COUNT_GT_50(0.00)[78];
-	MID_RHS_MATCH_FROM(0.00)[];
-	R_DKIM_NA(0.00)[];
-	TAGGED_RCPT(0.00)[linux-mips,renesas];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,iscas.ac.cn:mid,bootlin.com:url]
+	RCPT_COUNT_SEVEN(0.00)[8];
+	NEURAL_HAM(-0.00)[-1.000];
+	DKIM_TRACE(0.00)[kernel.org:+];
+	TAGGED_RCPT(0.00)[linux-mips];
+	TO_DN_SOME(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,arndb.de:email]
 
-=E5=9C=A8 2026-04-28=E4=BA=8C=E7=9A=84 15:39 +0200=EF=BC=8CLuca Ceresoli=E5=
-=86=99=E9=81=93=EF=BC=9A
-> Hello Icenowy,
->=20
-> On Sat Apr 25, 2026 at 5:22 PM CEST, Icenowy Zheng wrote:
-> > =E5=9C=A8 2026-04-23=E5=9B=9B=E7=9A=84 11:16 +0200=EF=BC=8CLuca Ceresol=
-i=E5=86=99=E9=81=93=EF=BC=9A
-> > > This series simplifies using the bridge-connector by removing the
-> > > need to
-> > > attach the newly created connector to the encoder.
-> > >=20
-> > > =3D=3D Series description
-> > >=20
-> > > Currently all users of the bridge-connector must call
-> > > drm_connector_attach_encoder() immediately after a successful
-> > > drm_bridge_connector_init().
-> > >=20
-> > > This is an unnecessary burden for users. Move the call to the end
-> > > of
-> > > drm_bridge_connector_init() so all callers can be simplified.
-> > >=20
-> > > =C2=A0* Patch 1 adds a drm_connector_attach_encoder() call at the end
-> > > of
-> > > =C2=A0=C2=A0 drm_bridge_connector_init()
-> > > =C2=A0* The other patches remove drm_connector_attach_encoder() after
-> > > all
-> > > =C2=A0=C2=A0 drm_bridge_connector_init() calls, ordered from the simp=
-lest
-> > > ones
-> > > =C2=A0=C2=A0 (only the last one is somewhat non-obvious)
-> > >=20
-> > > The Cc list is huge due to the many drivers touched. I sent v1 to
-> > > a
-> > > reduced
-> > > Cc list to ensure there is an agreement about the overall idea.
-> > > That
-> > > seems
-> > > to be the case, so now it's time to copy all drivers maintainers.
-> > >=20
-> > > It would be nice to apply all of this series at once to avoid
-> > > duplicated
-> > > calls to drm_connector_attach_encoder() in the interim. That
-> > > would be
-> > > harmless beacuse drm_connector_attach_encoder() is idempotent,
-> > > but
-> > > unpleasant.
-> > >=20
-> > > =3D=3D Additional rationale (for the curious)
-> > >=20
-> > > Besides making the usage of the bridge-connector a bit simpler,
-> > > this
-> > > series
-> > > is in preparation for DRM bridge hotplug. Here's why, feel free
-> > > to
-> > > skip if
-> > > you don't care.
-> > >=20
-> > > The old bridge hotplug proposals I have sent in the past [1] were
-> > > based on
-> > > a hotplug-bridge driver to sit between the last fixed bridge and
-> > > the
-> > > first
-> > > hotplugged bridge. Discussion with the community led to the need
-> > > of
-> > > removing the hotplug-bridge and let common DRM code handle
-> > > hotplug.
-> > > The
-> > > common place of code that appears the most suitable for hotplug
-> > > handling is
-> > > the bridge-connector, which is by now the recommended way to
-> > > handle
-> > > connector instantiation after a bridge chain.
-> > >=20
-> > > So I'm in the process of extending the bridge-connector to be the
-> > > central
-> > > point to handle bridge hotplug. Turns out the need to call
-> > > drm_connector_attach_encoder() after drm_bridge_connector_init()
-> > > has
-> > > returned is adding big headaches to such work. So I'm send this
-> > > long
-> > > but
-> > > simple series to both simplify bridge-connector usage and remove
-> > > one
-> > > obstacle from the bridge hotplug work. This series is relevant by
-> > > itself
-> > > anyway.
-> > >=20
-> > > [1]
-> > > https://lore.kernel.org/lkml/20250206-hotplug-drm-bridge-v6-26-9d6f2c=
-9c3058@bootlin.com/
-> > >=20
-> > > =3D=3D Grand plan
-> > >=20
-> > > This is part of the work to support hotplug of DRM bridges. The
-> > > grand
-> > > plan
-> > > was discussed in [0].
-> >=20
-> > Just see the bridge hotplugging thing, is it possible for DRM
-> > drivers
-> > to declare bridges attached to themselves after this?
-> >=20
-> > Loongson 7A1000 PCH can only output DPI signals, so nearly all
-> > products
-> > with it are shipping with some kind of external bridges, but
-> > currently
-> > drm/loongson does not support them (all display connectors are now
-> > seen
-> > as DPI ones, and connectors behind non-transparent bridges won't
-> > work).
-> >=20
-> > The bridges are going to be accessed by the DDC I2C busses of
-> > 7A1000,
-> > and are not declared with device tree (systems with 7A1000 never
-> > ship
-> > with device trees, and Linux currently matches a built-in device
-> > tree).
-> > (Bridges being on the DDC I2C also introduces some dependency for
-> > them
-> > to depend on the drm/loongson driver.)
-> >=20
-> > Loongson have defined some kind of VBIOS declaring what bridge is
-> > behind, and their non-mainline driver just contains driver codes
-> > for
-> > all possible bridges. (Sui Jingfeng previously tried to mainline
-> > such
-> > practice, and of course it's rejected because of code duplicity.)
->=20
-> I'm afraid your question goes a bit beyond my knowledge, the hotplug
-> work
-> I'm carrying on is focuses on DT platforms.
->=20
-> My limited understading of non-DT platforms is that a card driver
-> must
-> instantiate all components and tie them together, which assumes it
-> has to
-> know them somehow (ACPI, hardcoded, whatever). Others can probably
-> comment
-> better about this.
+From: Arnd Bergmann <arnd@arndb.de>
 
-Yes, there's some proprietary way defined by Loongson to declare which
-device is attached.
+A few old machines have not been converted away from the old-style
+gpiolib interfaces. Make these select the new CONFIG_GPIOLIB_LEGACY
+symbol so the code still works where it is needed but can be left
+out otherwise.
 
-The problem here is just to instantiate the attached devices (although
-parsing of the Loongson VBIOS data is also a TODO now) and prevent
-dependency loop.
+This is the list of all gpio_request() calls in mips:
 
-Thanks,
-Icenowy
+  arch/mips/alchemy/devboards/db1000.c:           gpio_request(19, "sd0_cd");
+  arch/mips/alchemy/devboards/db1000.c:           gpio_request(20, "sd1_cd");
+  arch/mips/alchemy/devboards/db1200.c:   gpio_request(215, "otg-vbus");
+  arch/mips/bcm47xx/workarounds.c:        err = gpio_request_one(usb_power, GPIOF_OUT_INIT_HIGH, "usb_power");
+  arch/mips/bcm63xx/boards/board_bcm963xx.c:              gpio_request_one(board.ephy_reset_gpio,
+  arch/mips/txx9/rbtx4927/setup.c:        gpio_request(15, "sio-dtr");
 
->=20
-> As a general principle, when devices can be mixed and matched by the
-> board
-> designer, hardcoding them is a bad design choice. Think of bad old
-> board
-> files written in C, which were unmanageable and got replaced exactly
-> by
-> device tree. So my opinion is that DRM encoders and bridges should
-> know as
-> little as possible about the following bridge, connector or panel
-> that
-> follows them.
->=20
-> Luca
->=20
-> --
-> Luca Ceresoli, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
+Most of these should be easy enough to change to modern gpio descriptors
+or remove if they are no longer in use.
+
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+---
+ arch/mips/Kconfig         | 5 +++++
+ arch/mips/alchemy/Kconfig | 1 -
+ arch/mips/txx9/Kconfig    | 1 +
+ 3 files changed, 6 insertions(+), 1 deletion(-)
+
+diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
+index 4364f3dba688..b91e62d69a5d 100644
+--- a/arch/mips/Kconfig
++++ b/arch/mips/Kconfig
+@@ -206,6 +206,8 @@ config MIPS_ALCHEMY
+ 	select CSRC_R4K
+ 	select IRQ_MIPS_CPU
+ 	select DMA_NONCOHERENT		# Au1000,1500,1100 aren't, rest is
++	select GPIOLIB
++	select GPIOLIB_LEGACY
+ 	select MIPS_FIXUP_BIGPHYS_ADDR if PCI
+ 	select SYS_HAS_CPU_MIPS32_R1
+ 	select SYS_SUPPORTS_32BIT_KERNEL
+@@ -307,6 +309,7 @@ config BCM47XX
+ 	select SYS_HAS_EARLY_PRINTK
+ 	select USE_GENERIC_EARLY_PRINTK_8250
+ 	select GPIOLIB
++	select GPIOLIB_LEGACY
+ 	select LEDS_GPIO_REGISTER
+ 	select BCM47XX_NVRAM
+ 	select BCM47XX_SPROM
+@@ -330,6 +333,7 @@ config BCM63XX
+ 	select SYS_HAS_CPU_BMIPS4380
+ 	select SWAP_IO_SPACE
+ 	select GPIOLIB
++	select GPIOLIB_LEGACY
+ 	select MIPS_L1_CACHE_SHIFT_4
+ 	select HAVE_LEGACY_CLK
+ 	help
+@@ -999,6 +1003,7 @@ config MIKROTIK_RB532
+ 	select SWAP_IO_SPACE
+ 	select BOOT_RAW
+ 	select GPIOLIB
++	select GPIOLIB_LEGACY
+ 	select MIPS_L1_CACHE_SHIFT_4
+ 	help
+ 	  Support the Mikrotik(tm) RouterBoard 532 series,
+diff --git a/arch/mips/alchemy/Kconfig b/arch/mips/alchemy/Kconfig
+index 6ca81e1bd35c..cf5ad52c0a0f 100644
+--- a/arch/mips/alchemy/Kconfig
++++ b/arch/mips/alchemy/Kconfig
+@@ -12,7 +12,6 @@ config MIPS_MTX1
+ 
+ config MIPS_DB1XXX
+ 	bool "Alchemy DB1XXX / PB1XXX boards"
+-	select GPIOLIB
+ 	select HAVE_PCI
+ 	select HAVE_PATA_PLATFORM
+ 	select SYS_SUPPORTS_LITTLE_ENDIAN
+diff --git a/arch/mips/txx9/Kconfig b/arch/mips/txx9/Kconfig
+index 7335efa4d528..92b759a434c0 100644
+--- a/arch/mips/txx9/Kconfig
++++ b/arch/mips/txx9/Kconfig
+@@ -37,6 +37,7 @@ config SOC_TX4927
+ 	select IRQ_TXX9
+ 	select PCI_TX4927
+ 	select GPIO_TXX9
++	select GPIOLIB_LEGACY
+ 
+ config SOC_TX4938
+ 	bool
+-- 
+2.39.5
 
 
