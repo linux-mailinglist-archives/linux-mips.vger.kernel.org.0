@@ -1,130 +1,129 @@
-Return-Path: <linux-mips+bounces-14414-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-14415-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 75CPCY6r9GnWDQIAu9opvQ
-	(envelope-from <linux-mips+bounces-14414-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Fri, 01 May 2026 15:33:02 +0200
+	id EIWuEZA09Wm4JQIAu9opvQ
+	(envelope-from <linux-mips+bounces-14415-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Sat, 02 May 2026 01:17:36 +0200
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7E6394ACBE0
-	for <lists+linux-mips@lfdr.de>; Fri, 01 May 2026 15:33:01 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id A430C4B03C9
+	for <lists+linux-mips@lfdr.de>; Sat, 02 May 2026 01:17:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 1841A30146BE
-	for <lists+linux-mips@lfdr.de>; Fri,  1 May 2026 13:33:00 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 2E4E43013495
+	for <lists+linux-mips@lfdr.de>; Fri,  1 May 2026 23:14:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 61A6E3B0AD1;
-	Fri,  1 May 2026 13:32:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ilvokhin.com header.i=@ilvokhin.com header.b="jTKGB8Ia"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D7458323416;
+	Fri,  1 May 2026 23:14:30 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail.ilvokhin.com (mail.ilvokhin.com [178.62.254.231])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0BB7F191F94;
-	Fri,  1 May 2026 13:32:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.62.254.231
+Received: from angie.orcam.me.uk (angie.orcam.me.uk [78.133.224.34])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4FEEC3603FC;
+	Fri,  1 May 2026 23:14:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=78.133.224.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777642377; cv=none; b=fPVehykvpQ0rOL+U6il1S+IU7UbRzRfHmgyKXXTTBUU8ZnkxPXP82PmEWPiu51X5khr9gWoloQ3Cz2f3uBw2FTBCcxsB2LfHGnhXby7G1O3/nMFIdc1KYpo0DJ5ggp60064TfJEW1T6IMP67MM7O4vunnX2D3i3bFvo/aTEQP9Y=
+	t=1777677270; cv=none; b=BINWeJWwLeQ/DAvoqpfZI1Ma6SqhU0TO3zae4ZghRUUizE63/0VrGgfikD29I3rnZ7CVmY+vcJa7R/6rk67QLzVZF7f+Uy/3F1IBCZ8v2dZYFpm7NM2K2QZPqds/BfLtomTFXm9Y+OmZcf0T0BmtPRBODyIJHfTibisWxvpSe+s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777642377; c=relaxed/simple;
-	bh=AqyZXLeYzsJx+rZc7e1F5Sgu3BjZdoUpHMsJoKlvEcI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ZXfQFYjsBE7XZPVDCKILODpVPcgk1lOByqcXuqQat0yVnxS2zJ6GONer+jnmDFVChcMedml91e++Z7exXwGts5OXar5VaDa5MVIS3cbepNFkKr8pMaWlOGKGGGHHL0+k57HiTenX+oVgEY4o0yUKYdNfvFKGHXPtBPkWwcSQbAo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=ilvokhin.com; spf=pass smtp.mailfrom=ilvokhin.com; dkim=pass (1024-bit key) header.d=ilvokhin.com header.i=@ilvokhin.com header.b=jTKGB8Ia; arc=none smtp.client-ip=178.62.254.231
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=ilvokhin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ilvokhin.com
-Received: from shell.ilvokhin.com (shell.ilvokhin.com [138.68.190.75])
-	(Authenticated sender: d@ilvokhin.com)
-	by mail.ilvokhin.com (Postfix) with ESMTPSA id ABB84C7B79;
-	Fri, 01 May 2026 13:32:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ilvokhin.com;
-	s=mail; t=1777642368;
-	bh=IszU0JG/WWa2O3f5MsRNZrb+ulmlJxnxUGQwsmnwYmU=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=jTKGB8Ia7D3+Zec5q4aruW2aznDUx+x2QbIxrQuVAh+HqJGpjaqhURhOBdhrZQbag
-	 IWI5DhN3gDaOvxMrnc27MCpjJCByfrwPcadWoUrn575D9wcu8ZvKMjWZVZYlBfomtK
-	 3l6KDosr8VPVi27Gi5jVQsMZxMlTisX765e0Z9hk=
-Date: Fri, 1 May 2026 13:32:44 +0000
-From: Dmitry Ilvokhin <d@ilvokhin.com>
-To: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
-	Will Deacon <will@kernel.org>, Boqun Feng <boqun@kernel.org>,
-	Waiman Long <longman@redhat.com>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	Juergen Gross <jgross@suse.com>,
-	Ajay Kaher <ajay.kaher@broadcom.com>,
-	Alexey Makhalov <alexey.makhalov@broadcom.com>,
-	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
-	Thomas Gleixner <tglx@kernel.org>, Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>, Arnd Bergmann <arnd@arndb.de>,
-	Dennis Zhou <dennis@kernel.org>, Tejun Heo <tj@kernel.org>,
-	Christoph Lameter <cl@gentwo.org>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
-	virtualization@lists.linux.dev, linux-arch@vger.kernel.org,
-	linux-mm@kvack.org, linux-trace-kernel@vger.kernel.org,
-	kernel-team@meta.com, "Paul E. McKenney" <paulmck@kernel.org>
-Subject: Re: [PATCH v5 0/7] locking: contended_release tracepoint
- instrumentation
-Message-ID: <afSrfOyn90vGC6ER@shell.ilvokhin.com>
-References: <cover.1776350944.git.d@ilvokhin.com>
+	s=arc-20240116; t=1777677270; c=relaxed/simple;
+	bh=tCWOcQ533B7x5m/vluI5paFFtXWAJfoAerA609/jWnI=;
+	h=Date:From:To:cc:Subject:Message-ID:MIME-Version:Content-Type; b=ZI04DP+6/JYtVjh65vfOad45hj0BlgBc+DB9bV6jPtQ9fGDz0fLDoiN2uy6Fdo7Yo3hbV51jIdVPNuJvhCqoxWcwgXxKeuTKU1JHRQnNRN26mirpU731Q85+zZCpoSQWn2lRcYD30RyugA3NRuyA2IyLfOn2OwmayYBz73NDq4Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=orcam.me.uk; spf=none smtp.mailfrom=orcam.me.uk; arc=none smtp.client-ip=78.133.224.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=orcam.me.uk
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=orcam.me.uk
+Received: by angie.orcam.me.uk (Postfix, from userid 500)
+	id E83CA92009D; Sat,  2 May 2026 01:14:20 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+	by angie.orcam.me.uk (Postfix) with ESMTP id E511992009C;
+	Sat,  2 May 2026 00:14:20 +0100 (BST)
+Date: Sat, 2 May 2026 00:14:20 +0100 (BST)
+From: "Maciej W. Rozycki" <macro@orcam.me.uk>
+To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+cc: linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] MIPS: Fix big-endian stack argument fetching in o32
+ wrapper
+Message-ID: <alpine.DEB.2.21.2604302350440.38805@angie.orcam.me.uk>
+User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cover.1776350944.git.d@ilvokhin.com>
-X-Rspamd-Queue-Id: 7E6394ACBE0
+Content-Type: text/plain; charset=US-ASCII
+X-Rspamd-Queue-Id: A430C4B03C9
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-2.16 / 15.00];
+X-Spamd-Result: default: False [-1.46 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[ilvokhin.com,reject];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64];
-	R_DKIM_ALLOW(-0.20)[ilvokhin.com:s=mail];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-14414-lists,linux-mips=lfdr.de];
-	FROM_HAS_DN(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	MIME_TRACE(0.00)[0:+];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[30];
-	DKIM_TRACE(0.00)[ilvokhin.com:+];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
-	MISSING_XM_UA(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[d@ilvokhin.com,linux-mips@vger.kernel.org];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	MID_RHS_MATCH_FROMTLD(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DMARC_NA(0.00)[orcam.me.uk];
+	RCPT_COUNT_THREE(0.00)[3];
+	TAGGED_FROM(0.00)[bounces-14415-lists,linux-mips=lfdr.de];
+	RCVD_TLS_LAST(0.00)[];
+	RECEIVED_HELO_LOCALHOST(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	FROM_HAS_DN(0.00)[];
 	TAGGED_RCPT(0.00)[linux-mips];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[macro@orcam.me.uk,linux-mips@vger.kernel.org];
 	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,ilvokhin.com:dkim,shell.ilvokhin.com:mid]
+	RCVD_COUNT_FIVE(0.00)[5];
+	R_DKIM_NA(0.00)[];
+	NEURAL_HAM(-0.00)[-0.991];
+	MID_RHS_MATCH_FROMTLD(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,orcam.me.uk:email,angie.orcam.me.uk:mid]
 
-I plan to rebase this series on top of Linus' tree to pick up Vineeth's
-patch [1], and send an updated version next week.
+Fix an issue in call_o32() where the upper 32-bit half of incoming n64 
+stack arguments is fetched and used for outgoing o32 stack arguments on 
+big-endian platforms.
 
-In the meantime, I would appreciate feedback, especially on: 
+This code was adapted from arch/mips/dec/prom/call_o32.S which was meant 
+for a little-endian platform only and therefore using 32-bit loads from 
+64-bit stack slot locations holding incoming stack arguments resulted in 
+correct values being retrieved for data that is expected to be 32-bit.  
 
-- tracepoint semantics across different lock types
-- overhead concerns in hot paths (e.g. qspinlock)
+This works on little-endian platforms where the lower 32-bit half of the 
+64-bit value is located at every 64-bit stack slot location.  However on 
+big-endian platforms the lower 32-bit half is instead located at offset 
+4 from every 64-bit stack slot location.
 
-As a follow-up, I am also working on an RFC to extend perf lock
-contention to make use of the contended_release tracepoint, so feedback
-in that context would also be helpful.
+So to fix the issue the offset of 4 would have to be used on big-endian 
+platforms only, or alternatively a 64-bit load from the 64-bit stack 
+slot location can be used across the board, as the subsequent 32-bit 
+store to the corresponding outgoing stack argument slot will correctly 
+truncate the value and cause no unpredictable result.  We already take 
+advantage of this architectural feature for the incoming arguments held 
+in $a6 and $a7 registers, since the o32 wrapper does not know how many 
+incoming arguments there are and consequently propagates incoming data 
+which may not be 32-bit.
 
-Feedback from locking and tracing maintainers would be particularly
-appreciated before respinning.
+Since this code is generally supposed to be used with the stack located 
+in cached memory there is no extra overhead expected for 64-bit loads as 
+opposed to 32-bit ones, so pick this variant for code simplicity.
 
-[1]: https://lore.kernel.org/all/20260323160052.17528-1-vineeth@bitbyteword.org/
+Fixes: 231a35d37293 ("[MIPS] RM: Collected changes")
+Signed-off-by: Maciej W. Rozycki <macro@orcam.me.uk>
+---
+ arch/mips/fw/lib/call_o32.S |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+linux-mips-call-o32-endian.diff
+Index: linux-macro/arch/mips/fw/lib/call_o32.S
+===================================================================
+--- linux-macro.orig/arch/mips/fw/lib/call_o32.S
++++ linux-macro/arch/mips/fw/lib/call_o32.S
+@@ -74,7 +74,7 @@ NESTED(call_o32, O32_FRAMESZ, ra)
+ 		PTR_LA		t1,6*O32_SZREG(fp)
+ 		li		t2,O32_ARGC-6
+ 1:
+-		lw		t3,(t0)
++		ld		t3,(t0)
+ 		REG_ADDU	t0,SZREG
+ 		sw		t3,(t1)
+ 		REG_SUBU	t2,1
 
