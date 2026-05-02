@@ -1,175 +1,140 @@
-Return-Path: <linux-mips+bounces-14427-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-14428-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id WM4IEgAP9mkiSAIAu9opvQ
-	(envelope-from <linux-mips+bounces-14427-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Sat, 02 May 2026 16:49:36 +0200
+	id ODTOAcVy9ml0VAIAu9opvQ
+	(envelope-from <linux-mips+bounces-14428-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Sat, 02 May 2026 23:55:17 +0200
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id C2A944B28C3
-	for <lists+linux-mips@lfdr.de>; Sat, 02 May 2026 16:49:35 +0200 (CEST)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id AAEF24B38C9
+	for <lists+linux-mips@lfdr.de>; Sat, 02 May 2026 23:55:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 66E1C3014963
-	for <lists+linux-mips@lfdr.de>; Sat,  2 May 2026 14:49:07 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id CF0EF3003343
+	for <lists+linux-mips@lfdr.de>; Sat,  2 May 2026 21:54:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 74A993806C4;
-	Sat,  2 May 2026 14:49:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=goldelico.com header.i=@goldelico.com header.b="oF8wqdex";
-	dkim=permerror (0-bit key) header.d=goldelico.com header.i=@goldelico.com header.b="DsMG1es8"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4206833D6CA;
+	Sat,  2 May 2026 21:54:42 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [85.215.255.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9315C1D7E41;
-	Sat,  2 May 2026 14:49:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=85.215.255.50
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777733345; cv=pass; b=hItaSJctuLvg6hFrkJjAA6tVBj8aJwdOnRQYLTtZIkp+cvyZYVF01vy5V4ioQaHeTEt27hJwM/ykVDmAdCQg/uwQACZiSkVNBh4zxB/NT+LQOXJU81t4WeDEjDBb8F2mcpXP4BOa+9RK5AXRjrFakGac4ciNxBmjfmXCzKeCiak=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777733345; c=relaxed/simple;
-	bh=H1gP1uQxmN0GOvEug9MTUgTvKbWjePcwyXu0ijdfHlQ=;
-	h=Content-Type:Mime-Version:Subject:From:In-Reply-To:Date:Cc:
-	 Message-Id:References:To; b=OR9O6iOV1/M79gn863MFv4nWSfOkougsjoA0NOEK37MspGf4brh57KKetinnzQRZVdF0vc1vUsUaGF5P/bTdt4tWeJMZuQAlofr4K4yHOGGwbewHZJaREfofJhn2E/L+Ip7YeP8ymo+wUrN4xSu3ZJcnhL80FsxW2K/jeMysPeU=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=goldelico.com; spf=pass smtp.mailfrom=goldelico.com; dkim=pass (2048-bit key) header.d=goldelico.com header.i=@goldelico.com header.b=oF8wqdex; dkim=permerror (0-bit key) header.d=goldelico.com header.i=@goldelico.com header.b=DsMG1es8; arc=pass smtp.client-ip=85.215.255.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=goldelico.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goldelico.com
-ARC-Seal: i=1; a=rsa-sha256; t=1777733313; cv=none;
-    d=strato.com; s=strato-dkim-0002;
-    b=e6itlIHEut/CPuoZDesPd7jHWDdjrBNN76l2JwPCfyZ4Gw59aM1IPCoaaFA2EW0E1K
-    cCjOyklcepHi/5yYR7RjHKqn0GgwY1upw/fgQsd02P5TiBxcqWlwNWP9BTp9QgGGds5C
-    bypITQKtIRB+q9iFnKIxFDPCJMDdkKi1mBN3jExEb9vxAvprKAi8D7/47WHjcFot8m9i
-    hOC87SQiB54yVKdDMtjxFoXCjsen8R6TwlqCMlRP28sYpJd1Zig3o1JMzcRSXd/klQ5a
-    njJx27kenk6mXE88dPm5XRq/VJzjBflQ2f8YreCPJu9AaZ/kMACj5xD1ZxkFxsoFIOot
-    i2Tw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1777733313;
-    s=strato-dkim-0002; d=strato.com;
-    h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:Cc:Date:
-    From:Subject:Sender;
-    bh=U0F2bp1mazAkJtSUEyvJv/Ar4TEUHcrJS1Sxc7iPu/w=;
-    b=kkm/jEv8Q1coPGRqAgw00IKDsMPIwC51eh0QeESYrOJGLBR/kJwJVkAuiy84Du37o2
-    TIb69fK9uQNVslVWVvpSUF1d342IJk+vULHmaZdoukmmv/chYUHQmm/APYJBjnOTWDdf
-    aEneVBcGXA421puqzSae4jpRGgKshs18WOoCuJsl5W6H8jAHrTUH6oN/frmO7ZvhCfMH
-    BtgqkTLBLbGl46LiVZ78e06G12jk4G8AETfigVR5u8GnG7jq5LG1ws5h6Q1q1hR2Ssuz
-    IVJ0xfzQKVcyOsm4+NVxm7Uv9IHlhGjebxkC4RJB39ar/1mf21ebWkwTyM3Kdhs0Mj3l
-    4b5g==
-ARC-Authentication-Results: i=1; strato.com;
-    arc=none;
-    dkim=none
-X-RZG-CLASS-ID: mo01
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1777733313;
-    s=strato-dkim-0002; d=goldelico.com;
-    h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:Cc:Date:
-    From:Subject:Sender;
-    bh=U0F2bp1mazAkJtSUEyvJv/Ar4TEUHcrJS1Sxc7iPu/w=;
-    b=oF8wqdexWxrJxhDdkT9Mzf+qQGrDtLy4Pvg6y3lk49nJvo2rXASQaXUzKQRXM43ER0
-    QijNJo7tLfJuoxQdH+1gQa3HO5TugDLPTVXz/3kJehD9zagUXfPIptbMOa5LA9VO9F1h
-    UaZYgdebAB6jUMr6djVQthmAeMaX2VbyO0v945iIYrTEdbT/3cFKUi46/GMK/Hs7yvnI
-    +190gTdYAI5CtPtb6k2qyKxQ5D+g0XrgmyWEuINQYBbuXdO+9sFJcrGCj+eh+kca1bew
-    BD01Q3PWhg1o9IKe2wq5UkhWA+qsM9LUp58SqeVXnqf6NAXd0YnW1APBZJ8EYjEDRAeT
-    6wQg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1777733313;
-    s=strato-dkim-0003; d=goldelico.com;
-    h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:Cc:Date:
-    From:Subject:Sender;
-    bh=U0F2bp1mazAkJtSUEyvJv/Ar4TEUHcrJS1Sxc7iPu/w=;
-    b=DsMG1es88ao8/91HpH1qVJILUUqJnJWArDBTRTvoiAjIP1WkUgj1fMYXCdfVcIQ4/v
-    VusIXROai6OSAYusMbAw==
-X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMhflhwDubTJ9o12DNOsPj0lFzL1yfzkZ"
-Received: from smtpclient.apple
-    by smtp.strato.de (RZmta 55.0.1 DYNA|AUTH)
-    with ESMTPSA id Qcf97c242EmWZPM
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (curve X9_62_prime256v1 with 256 ECDH bits, eq. 3072 bits RSA))
-	(Client did not present a certificate);
-    Sat, 2 May 2026 16:48:32 +0200 (CEST)
-Content-Type: text/plain;
-	charset=us-ascii
+Received: from angie.orcam.me.uk (angie.orcam.me.uk [78.133.224.34])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 62BDA319847;
+	Sat,  2 May 2026 21:54:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=78.133.224.34
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1777758882; cv=none; b=f9L9hAy5Yu8FN/YQ7dyP/5br2S9sfuesWdSpVPsRAEVHRJETcjLyeW1FGkxtSYZnvISDThyG6CCWHvs/EhqBn6Uc+3SAACINLattDOQRyJ3wKq8d1cUGDdGqndYe6trxuCKTTzOHTme+ohk2ZMZ3HbCdNka1Z7LkZiilVJVzwtQ=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1777758882; c=relaxed/simple;
+	bh=tpnnFjisTahUM4MUYPoN0l/SLFoAL+pWtU6uPI3YPFU=;
+	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=jybJ5PaWoc7t92AqyxQZXvEbUdhXy/71JBeZ5sq5Nmvp24OhZXthTD7Z1azhZPPxMJTsxqh2QAsg/s56f1ZR96i8wI8malIr6q93pDn/JlfVrk6rfvoDn/zq3bKoBF1ruTz4Sk/EPJH9WvZOhpgIs2j/AKHgJpuwbrHrEJEd8q0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=orcam.me.uk; spf=none smtp.mailfrom=orcam.me.uk; arc=none smtp.client-ip=78.133.224.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=orcam.me.uk
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=orcam.me.uk
+Received: by angie.orcam.me.uk (Postfix, from userid 500)
+	id 632CD92009C; Sat,  2 May 2026 23:54:37 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+	by angie.orcam.me.uk (Postfix) with ESMTP id 5E56B92009B;
+	Sat,  2 May 2026 22:54:37 +0100 (BST)
+Date: Sat, 2 May 2026 22:54:37 +0100 (BST)
+From: "Maciej W. Rozycki" <macro@orcam.me.uk>
+To: Thomas Gleixner <tglx@kernel.org>
+cc: Caleb James DeLisle <cjd@cjdns.fr>, linux-mips@vger.kernel.org, 
+    robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org, 
+    linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH 2/2] irqchip/econet-en751221: Support MIPS 34Kc VEIC
+ mode
+In-Reply-To: <87tssuxmh8.ffs@tglx>
+Message-ID: <alpine.DEB.2.21.2605022158400.23161@angie.orcam.me.uk>
+References: <20260425123531.270548-1-cjd@cjdns.fr> <20260425123531.270548-3-cjd@cjdns.fr> <87tssuxmh8.ffs@tglx>
+User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3826.700.81.1.6\))
-Subject: Re: [PATCH 3/7] pinctrl: ingenic: Fix type in .pin_config_group_get()
- callback
-From: "H. Nikolaus Schaller" <hns@goldelico.com>
-In-Reply-To: <9f50c234c44af9075b5252ee7e59452ed2179b27.1777562725.git.geert+renesas@glider.be>
-Date: Sat, 2 May 2026 16:48:21 +0200
-Cc: Linus Walleij <linusw@kernel.org>,
- Lorenzo Bianconi <lorenzo@kernel.org>,
- Sean Wang <sean.wang@kernel.org>,
- Paul Cercueil <paul@crapouillou.net>,
- Tony Lindgren <tony@atomide.com>,
- Haojian Zhuang <haojian.zhuang@linaro.org>,
- Matthias Brugger <matthias.bgg@gmail.com>,
- AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
- Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
- linux-gpio@vger.kernel.org,
- linux-mediatek@lists.infradead.org,
- linux-kernel@vger.kernel.org,
- linux-mips@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org,
- linux-omap@vger.kernel.org,
- linux-renesas-soc@vger.kernel.org
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <98F0E379-88A0-414E-B24A-187374E5FCAD@goldelico.com>
-References: <cover.1777562725.git.geert+renesas@glider.be>
- <9f50c234c44af9075b5252ee7e59452ed2179b27.1777562725.git.geert+renesas@glider.be>
-To: Geert Uytterhoeven <geert+renesas@glider.be>
-X-Mailer: Apple Mail (2.3826.700.81.1.6)
-X-Rspamd-Queue-Id: C2A944B28C3
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+X-Rspamd-Queue-Id: AAEF24B38C9
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.16 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
-	MV_CASE(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[goldelico.com,quarantine];
-	R_DKIM_ALLOW(-0.20)[goldelico.com:s=strato-dkim-0002,goldelico.com:s=strato-dkim-0003];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64];
+X-Spamd-Result: default: False [-1.46 / 15.00];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-14427-lists,linux-mips=lfdr.de];
+	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
+	DMARC_NA(0.00)[orcam.me.uk];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-14428-lists,linux-mips=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
+	RECEIVED_HELO_LOCALHOST(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	FREEMAIL_CC(0.00)[kernel.org,crapouillou.net,atomide.com,linaro.org,gmail.com,collabora.com,bp.renesas.com,vger.kernel.org,lists.infradead.org];
-	RCPT_COUNT_TWELVE(0.00)[17];
 	MIME_TRACE(0.00)[0:+];
 	FROM_HAS_DN(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	MID_RHS_MATCH_FROM(0.00)[];
+	TAGGED_RCPT(0.00)[linux-mips,dt];
+	MID_RHS_MATCH_FROMTLD(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[hns@goldelico.com,linux-mips@vger.kernel.org];
-	DKIM_TRACE(0.00)[goldelico.com:+];
-	NEURAL_HAM(-0.00)[-1.000];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[linux-mips,renesas];
+	FROM_NEQ_ENVFROM(0.00)[macro@orcam.me.uk,linux-mips@vger.kernel.org];
 	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,glider.be:email,goldelico.com:dkim,goldelico.com:mid]
+	RCVD_COUNT_FIVE(0.00)[5];
+	R_DKIM_NA(0.00)[];
+	NEURAL_HAM(-0.00)[-0.993];
+	RCPT_COUNT_SEVEN(0.00)[8];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns]
 
+On Wed, 29 Apr 2026, Thomas Gleixner wrote:
 
+> Other than those nits, this look like a reasonable solution for a
+> completely unreasonable hardware design.
 
-> Am 30.04.2026 um 17:33 schrieb Geert Uytterhoeven =
-<geert+renesas@glider.be>:
->=20
-> On 64-bit platforms, "unsigned long" is 64-bit.  Hence checking if all
-> "unsigned long" configuration values are equal should be done using an
-> "unsigned long" temporary.
->=20
-> While Ingenic is a 32-bit platform, it is still better to use the
-> correct type, to serve as an example.
->=20
-> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+ Why do you think this design is unreasonable?
 
-tested to show no visible difference on Ingenic X1600 based board (Letux =
-X16) on top of v7.1-rc1.
+ How is that different, at the high level, from say the x86 APIC priority 
+resolver and vector generator, combined with the interrupt descriptor 
+table (except for additional optional GPR stack switching, which saves the 
+handler from the hassle and extra cycles needed for GPR preservation, 
+though I reckon with x86 you could use task gates in the IDT to yield a 
+similar effect although at much higher cost performance-wise as x86 does 
+not implement alternative GPR stacks)?
 
-BR and thanks,
-Nikolaus
+ Analogously to x86 in the MIPS VEIC mode the IRQ number is determined by 
+the vector rather than the somewhat arbitrarily numbered (particularly in 
+cascaded topologies) IRQ line and available to the handler in the 
+CP0.Cause.RIPL register field.
 
+ NB this arbitrary non-VEIC IRQ numbering is particularly obvious with 
+MIPS platforms featuring an x86-style PCI southbridge with an embedded 
+8259A interrupt controller pair, where for compatibility with our driver 
+code we give root MIPS CPU IRQ lines numbers 16-23 while 8259A IRQ lines 
+cascaded from one of the IRQ lines 18-23 are given numbers 0-15.
 
+ Example such an odd topology:
+
+           CPU0       
+  0:          0   XT-PIC   0  timer
+  1:          0   XT-PIC   1  i8042
+  2:          0   XT-PIC   2  cascade
+  3:          4   XT-PIC   3  ttyS1
+  4:         37   XT-PIC   4  ttyS0
+  6:          3   XT-PIC   6  floppy
+  7:      52456   XT-PIC   7  parport0
+  8:          0   XT-PIC   8  rtc0
+ 10:   99668740   XT-PIC  10  fddi0
+ 11:          0   XT-PIC  11  uhci_hcd:usb1
+ 12:          1   XT-PIC  12  i8042
+ 14:          0   XT-PIC  14  ata_piix
+ 15:         15   XT-PIC  15  ata_piix
+ 20:          0     MIPS   4  ttyS2
+ 21:          0     MIPS   5  CoreHi
+ 23:  803937130     MIPS   7  timer
+ERR:          1
+
+(where XT-PIC interrupts are cascaded from IRQ line 18/MIPS line 2, not 
+actually given stub registration).  At least the VEIC mode brings some 
+sanity here.
+
+ FWIW,
+
+  Maciej
 
