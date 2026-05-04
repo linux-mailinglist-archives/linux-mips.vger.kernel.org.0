@@ -1,72 +1,72 @@
-Return-Path: <linux-mips+bounces-14441-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-14442-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id mI5DMQMi+Wmz5wIAu9opvQ
-	(envelope-from <linux-mips+bounces-14441-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Tue, 05 May 2026 00:47:31 +0200
+	id yEIOGSYi+Wmz5wIAu9opvQ
+	(envelope-from <linux-mips+bounces-14442-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Tue, 05 May 2026 00:48:06 +0200
 X-Original-To: lists+linux-mips@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 26E924C48C8
-	for <lists+linux-mips@lfdr.de>; Tue, 05 May 2026 00:47:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id D74C44C48E6
+	for <lists+linux-mips@lfdr.de>; Tue, 05 May 2026 00:48:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 3EAF8308C29A
-	for <lists+linux-mips@lfdr.de>; Mon,  4 May 2026 22:42:52 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id F04663097F4F
+	for <lists+linux-mips@lfdr.de>; Mon,  4 May 2026 22:42:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B3EFA3890E0;
-	Mon,  4 May 2026 22:42:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D6E80389108;
+	Mon,  4 May 2026 22:42:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="vIb/YPc4"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="dGzB7Oyn"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-pl1-f201.google.com (mail-pl1-f201.google.com [209.85.214.201])
+Received: from mail-pf1-f202.google.com (mail-pf1-f202.google.com [209.85.210.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E0BF37FF6D
-	for <linux-mips@vger.kernel.org>; Mon,  4 May 2026 22:42:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E1F93876BE
+	for <linux-mips@vger.kernel.org>; Mon,  4 May 2026 22:42:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777934571; cv=none; b=W2nikjTfuDN/7wwnls4BzwaiLOJVm2tGjn6beuu7eyOPZmYxUtGozm100swDI5NuDWbMLyHIoTi77N2GD9DRW51z2okKaB7h+0zrOKh1OxAq9ltj/nMoS7NbYdEpaeoT6a+oUfKUxK42K1argJy87AsUrCk9ng7Fu5LVfA/W/YQ=
+	t=1777934576; cv=none; b=Ix75j4WPdBlq6YbGj7TDY+FGdAGVe/sFpvbZ3wV53GxesmMGfB67YCz0G2dnV+RxdnYDz15b7I/sP3OEKiOw+qJqj13NDqmE04Pz7TbXSDAtzlFoRJzolTlL0ZkF4Mp6/MpGkbSWgsHPv5R392vXlAqK904HMdD1rlTCl1s8WmY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777934571; c=relaxed/simple;
-	bh=InGnsmMXyUKk5UR+us+b7DjwbtH0DDKd3A8oEQN+NKI=;
+	s=arc-20240116; t=1777934576; c=relaxed/simple;
+	bh=0BD6mkbohgb2czORLGaMoEldssxteY6SP7hZbvfyuC4=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=kWsueYXgWR5sQT1SNQTavIUvbUewRPaq6Y5lkxffRTvn+obCSd5ttFKeJQdIRoFZFuxDuZ+5e/882Gd0oCgJ8eZuaHS4VRFmb4/uLuqYdQFse+YcXg7Sf8IwYBNl0h2utMYG8dzGLIlQF3+RcRW7MQ522t6fpV5McfKEgXhF798=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--jthoughton.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=vIb/YPc4; arc=none smtp.client-ip=209.85.214.201
+	 To:Cc:Content-Type; b=hauI1XkigMAlvKL+WJSJMjN5BIc0xJR9cCn67zpYR6kTwbV7pHYWayS0VjYoC2eHfB1ORKh2BwiFtKFmGvf/AqLzs1/3uFH3pGiM+QOeZ75MIZCn9l3JSVcDAfi+332Zf1Q5HY0MAUu2ZxrFBoZpd4ulUOZQ8DpZ+jgLSf8Nx4M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--jthoughton.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=dGzB7Oyn; arc=none smtp.client-ip=209.85.210.202
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--jthoughton.bounces.google.com
-Received: by mail-pl1-f201.google.com with SMTP id d9443c01a7336-2ba115ab6bbso15817095ad.3
-        for <linux-mips@vger.kernel.org>; Mon, 04 May 2026 15:42:49 -0700 (PDT)
+Received: by mail-pf1-f202.google.com with SMTP id d2e1a72fcca58-8353b042152so2149327b3a.3
+        for <linux-mips@vger.kernel.org>; Mon, 04 May 2026 15:42:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1777934569; x=1778539369; darn=vger.kernel.org;
+        d=google.com; s=20251104; t=1777934574; x=1778539374; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=vC+QCMBPXdQWF+dL8GXMYzl+k9Np64sK2GTCcOrjhPY=;
-        b=vIb/YPc4eQY1R+pTc4p70eHlPon7UkycR+sBD/1Q2Ite094bGPk1I+2seC9L6++opt
-         PZJO0MA916CAcPQ2PjbHgCz9VWeFAsHBw/itVy8JQkelSTcZBVg0W8j7q4JvVCVzCBQc
-         IZ+nevL4B8wX/dGI3A4PdW+Sd/e5eZGzr+M/IgO0cYuj1GysDg8GIY6dQkvEVZyF34aI
-         9XxIZ6D/oNRiX4zQ/LFUM8oGcRGdESwx7v8aSL2zoFNEsjPPtvfHUhnr543oFvT8nB5m
-         R2se9oC+VoaRmckyk6M+86xtJXoLyKwp9Gfwz6HmWcWJI27Ri6NCGg3F9mM9lAXg8vyV
-         m56A==
+        bh=ps0DFf8iRHwNv96IoiVMKA2BLuSI9Fl2G1MpiXXkiQc=;
+        b=dGzB7OyngLoY0ZulsSiumA4s7zhwDQti0VB3xFVn4ekbFmBydKXUygZ+gIJSL+XoCi
+         dSqINzfXsT6sko2A3SgCN4Q6ANypd4hhizXpBKQYgITlqRAz2woIQygUaXqnCiJc1iBc
+         tHo7mzBmZ5QHW0Xa8U8MD8+s1VkAtHF/0nQIqEV0yRP+UZMDGmi+1SdJyFDbC5+5qWPB
+         tLKj+7/gYL8RCpQW4i1H6Zmje1OObf0wfCUX8DqK+WxN+4hlqDmfli2ABk2l32s3p1c4
+         R/HLHNNX+teY7lN0MU9kL00UIzHgpMq9ikDKVnrxX/mIruJNUKCvhyf8M0ZaZTfyBhhr
+         TVNA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1777934569; x=1778539369;
+        d=1e100.net; s=20251104; t=1777934574; x=1778539374;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=vC+QCMBPXdQWF+dL8GXMYzl+k9Np64sK2GTCcOrjhPY=;
-        b=Rqbs7zWZf8Zn4c1+FoBlGP9X6BgRQhRPMCGiKk19Wny3cazZ6IsV6I9wPIX0vrSL51
-         Z1KEgWnlHZq9K8JRu9ePaeW1ElxrSq79eFfCUxlA4IzIzql3311xgKTn99MDG4hiWVrR
-         VkrJs0qR3rRXMmT6WKAr3UV/IWGFZD1Uygrf6irEjPEU/Evo207eGmXlTzA5z7SCrWYT
-         5x0Rq86b96H5wt52ISsWzt5XhSS4GGGBBJZ6BsDjwt8PMZ2zSEd3+4q9kpB+Js6wzNdV
-         KTHu+A6LW2gAgxUO8Tct6M94dNrRyH4s0eofqOKiEby+9kjZDzzbnEkXvQhLCrC2AzYq
-         gahA==
-X-Forwarded-Encrypted: i=1; AFNElJ88fXfAxrU9BCIxRy0tWciZCl77RjU/tRbfR9UkPXUfdUylHR6gq8jmgsoju0/uZq74cx1/X3gXJbAE@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw8dyGbMcaEb+H2YZ4jJXL1tqKKjIbKmBbKBIs8jcgdleQZZ6w+
-	/dTtmCDLNjSKvruTEfgSSW3eu+uEtpyFqNLZel7efSaDRCOXtIhUaMcrR4GwGISZ9wmT3DgxFEk
-	WchI0hYqqqK+NMmr2SeI22g==
-X-Received: from plmx11.prod.google.com ([2002:a17:902:fe8b:b0:2ae:3bca:37a5])
+        bh=ps0DFf8iRHwNv96IoiVMKA2BLuSI9Fl2G1MpiXXkiQc=;
+        b=c4Hu0F8rskjymBrpU7Ep8C04f+czckzeES6My0IUXbtcXYK9fMd0WtC49+iTA5nVJz
+         cFfYS9fJg8LcF2gxjMJciQRmf2qpbwcZvGKZbPHbbvQb9QYDtEJWk5KuSz9qPhRJ8rGF
+         aSOpEq6nekb27fFgTn0f4eF71kTImA+ZOtHgwKbp2WGgSNk4J0iycPiyPWF7xKZLhmVN
+         OknO0wl5bmU0o4DPQOPYlPhAH3JoXfNv44WGvTqxvfSOCv14U+GJ2r8LYr5qfZDk5D+U
+         Ir29sAzfI8+S3j1WBS2z0trj1gloYnFfYjX3wnl5H2kUa8oewerJ/ZrBwhIWTgYWPg3U
+         7vEA==
+X-Forwarded-Encrypted: i=1; AFNElJ8ZfE2Piae9m08QhVgLDj71MmoUe36rlRoaB+OMqjpq7HnoRhzT6HDMNK5mQLbVV1uSSNn4tSjJD3N1@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw1PsAzmJJvFIsyNa6dex5b7e51EKBoQFoLuH7fRa+Qq0yYd+r/
+	uwJAe5lErSYaNQg5jGsdEKKqTJFLKFyVhw2q7FHuR51U78E5yRsdTuxAv8D/hqYquds59a9MDy9
+	+f5qXFTV/6E80Y5AhpWPk1Q==
+X-Received: from pfbdo5.prod.google.com ([2002:a05:6a00:4a05:b0:835:4488:892b])
  (user=jthoughton job=prod-delivery.src-stubby-dispatcher) by
- 2002:a17:903:4b0d:b0:2b0:6d33:e7c0 with SMTP id d9443c01a7336-2ba535e2df5mr4309355ad.1.1777934568708;
- Mon, 04 May 2026 15:42:48 -0700 (PDT)
-Date: Mon,  4 May 2026 22:42:11 +0000
+ 2002:aa7:8044:0:b0:835:6173:dd2 with SMTP id d2e1a72fcca58-835617316f9mr5445427b3a.44.1777934574253;
+ Mon, 04 May 2026 15:42:54 -0700 (PDT)
+Date: Mon,  4 May 2026 22:42:12 +0000
 In-Reply-To: <20260504224213.1049426-1-jthoughton@google.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
@@ -76,8 +76,8 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20260504224213.1049426-1-jthoughton@google.com>
 X-Mailer: git-send-email 2.54.0.545.g6539524ca2-goog
-Message-ID: <20260504224213.1049426-5-jthoughton@google.com>
-Subject: [PATCH 4/5] KVM: Hold MMU lock exclusively when calling kvm_arch_flush_shadow_all()
+Message-ID: <20260504224213.1049426-6-jthoughton@google.com>
+Subject: [PATCH 5/5] DO NOT MERGE: KVM: selftests: Reproducer for arm64 double-free
 From: James Houghton <jthoughton@google.com>
 To: Paolo Bonzini <pbonzini@redhat.com>
 Cc: Marc Zyngier <maz@kernel.org>, Oliver Upton <oupton@kernel.org>, Joey Gouly <joey.gouly@arm.com>, 
@@ -90,7 +90,7 @@ Cc: Marc Zyngier <maz@kernel.org>, Oliver Upton <oupton@kernel.org>, Joey Gouly 
 	loongarch@lists.linux.dev, linux-mips@vger.kernel.org, kvm@vger.kernel.org, 
 	linux-kernel@vger.kernel.org, James Houghton <jthoughton@google.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Rspamd-Queue-Id: 26E924C48C8
+X-Rspamd-Queue-Id: D74C44C48E6
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-0.66 / 15.00];
@@ -110,7 +110,7 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	RCPT_COUNT_TWELVE(0.00)[21];
-	TAGGED_FROM(0.00)[bounces-14441-lists,linux-mips=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-14442-lists,linux-mips=lfdr.de];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	TO_DN_SOME(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
@@ -121,141 +121,219 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	TAGGED_RCPT(0.00)[linux-mips];
 	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
 
-All architectures that non-trivially implement this function grab the
-KVM MMU lock exclusively to prevent things like double-freeing of page
-table entries and caches. Do so generically to somewhat simplify the
-architecture-specific logic.
+Add a delay and a counter for the split_page_cache double-free to
+reliably demonstrate the race. Please see the cover letter and the arm64
+fix patch for more information.
 
-Without this change, it is possible for kvm_arch_flush_shadow_all() to
-be called on the same `kvm` at the same time: if the `kvm`'s mm is
-destroyed (exit_mm()) at the same time to the final reference to the
-`kvm` is dropped.
+The selftest is partially written by Gemini.
 
-Signed-off-by: James Houghton <jthoughton@google.com>
+Assisted-by: Gemini:gemini-3-flash-preview
+Not-signed-off-by: James Houghton <jthoughton@google.com>
 ---
- arch/arm64/kvm/nested.c  | 2 +-
- arch/loongarch/kvm/mmu.c | 4 +++-
- arch/mips/kvm/mips.c     | 2 +-
- arch/riscv/kvm/mmu.c     | 4 ++--
- arch/riscv/kvm/vm.c      | 2 ++
- arch/x86/kvm/mmu/mmu.c   | 4 +---
- virt/kvm/kvm_main.c      | 3 +++
- 7 files changed, 13 insertions(+), 8 deletions(-)
+ arch/arm64/include/asm/kvm_host.h             |   1 +
+ arch/arm64/kvm/mmu.c                          |  16 +++
+ tools/testing/selftests/kvm/Makefile.kvm      |   1 +
+ .../testing/selftests/kvm/transfer_fd_test.c  | 129 ++++++++++++++++++
+ 4 files changed, 147 insertions(+)
+ create mode 100644 tools/testing/selftests/kvm/transfer_fd_test.c
 
-diff --git a/arch/arm64/kvm/nested.c b/arch/arm64/kvm/nested.c
-index 977598bff5e6..ba2e6c98bd45 100644
---- a/arch/arm64/kvm/nested.c
-+++ b/arch/arm64/kvm/nested.c
-@@ -1190,7 +1190,7 @@ void kvm_arch_flush_shadow_all(struct kvm *kvm)
- {
- 	int i;
+diff --git a/arch/arm64/include/asm/kvm_host.h b/arch/arm64/include/asm/kvm_host.h
+index 65eead8362e0..5072fc2e2eb8 100644
+--- a/arch/arm64/include/asm/kvm_host.h
++++ b/arch/arm64/include/asm/kvm_host.h
+@@ -192,6 +192,7 @@ struct kvm_s2_mmu {
+ 	 * Protected by kvm->slots_lock.
+ 	 */
+ 	struct kvm_mmu_memory_cache split_page_cache;
++	int is_freeing;
+ 	uint64_t split_page_chunk_size;
  
--	guard(write_lock)(&kvm->mmu_lock);
-+	lockdep_assert_held_write(&kvm->mmu_lock);
+ 	struct kvm_arch *arch;
+diff --git a/arch/arm64/kvm/mmu.c b/arch/arm64/kvm/mmu.c
+index 4bab407d43bb..fa05900a5124 100644
+--- a/arch/arm64/kvm/mmu.c
++++ b/arch/arm64/kvm/mmu.c
+@@ -1004,6 +1004,8 @@ int kvm_init_stage2_mmu(struct kvm *kvm, struct kvm_s2_mmu *mmu, unsigned long t
+ 	mmu->split_page_chunk_size = KVM_ARM_EAGER_SPLIT_CHUNK_SIZE_DEFAULT;
+ 	mmu->split_page_cache.gfp_zero = __GFP_ZERO;
  
- 	for (i = 0; i < kvm->arch.nested_mmus_size; i++) {
- 		struct kvm_s2_mmu *mmu = &kvm->arch.nested_mmus[i];
-diff --git a/arch/loongarch/kvm/mmu.c b/arch/loongarch/kvm/mmu.c
-index 5dbce9b18e1c..120001da26e4 100644
---- a/arch/loongarch/kvm/mmu.c
-+++ b/arch/loongarch/kvm/mmu.c
-@@ -486,7 +486,9 @@ void kvm_arch_commit_memory_region(struct kvm *kvm,
- 
- void kvm_arch_flush_shadow_all(struct kvm *kvm)
- {
--	kvm_flush_range(kvm, 0, kvm->arch.gpa_size >> PAGE_SHIFT, 1);
-+	lockdep_assert_held(&kvm->mmu_lock);
++	mmu->is_freeing = 0;
 +
-+	kvm_flush_range(kvm, 0, kvm->arch.gpa_size >> PAGE_SHIFT, 0);
+ 	mmu->pgd_phys = __pa(pgt->pgd);
+ 
+ 	if (kvm_is_nested_s2_mmu(kvm, mmu))
+@@ -1021,10 +1023,24 @@ int kvm_init_stage2_mmu(struct kvm *kvm, struct kvm_s2_mmu *mmu, unsigned long t
+ 
+ void kvm_uninit_stage2_mmu(struct kvm *kvm)
+ {
++	int is_freeing;
++	ktime_t s;
++
+ 	lockdep_assert_held_write(&kvm->mmu_lock);
+ 
+ 	kvm_free_stage2_pgd_locked(&kvm->arch.mmu);
++
++	is_freeing = ++kvm->arch.mmu.is_freeing;
++	s = ktime_get();
++
++	/* Sleep for 10ms */
++	while (ktime_to_ns(ktime_get()) - ktime_to_ns(s) < 1E7) {}
++
++	WARN(is_freeing > 1, "detected double-free of split page cache");
++
+ 	kvm_mmu_free_memory_cache(&kvm->arch.mmu.split_page_cache);
++
++	kvm->arch.mmu.is_freeing--;
  }
  
- void kvm_arch_flush_shadow_memslot(struct kvm *kvm, struct kvm_memory_slot *slot)
-diff --git a/arch/mips/kvm/mips.c b/arch/mips/kvm/mips.c
-index 463b6c4aa62c..4ad9e21a3321 100644
---- a/arch/mips/kvm/mips.c
-+++ b/arch/mips/kvm/mips.c
-@@ -180,7 +180,7 @@ long kvm_arch_dev_ioctl(struct file *filp, unsigned int ioctl,
+ static void stage2_unmap_memslot(struct kvm *kvm,
+diff --git a/tools/testing/selftests/kvm/Makefile.kvm b/tools/testing/selftests/kvm/Makefile.kvm
+index 9118a5a51b89..53a1b9c7bff8 100644
+--- a/tools/testing/selftests/kvm/Makefile.kvm
++++ b/tools/testing/selftests/kvm/Makefile.kvm
+@@ -66,6 +66,7 @@ TEST_GEN_PROGS_COMMON += kvm_page_table_test
+ TEST_GEN_PROGS_COMMON += set_memory_region_test
+ TEST_GEN_PROGS_COMMON += memslot_modification_stress_test
+ TEST_GEN_PROGS_COMMON += memslot_perf_test
++TEST_GEN_PROGS_COMMON += transfer_fd_test
  
- void kvm_arch_flush_shadow_all(struct kvm *kvm)
- {
--	guard(spinlock)(&kvm->mmu_lock);
-+	lockdep_assert_held(&kvm->mmu_lock);
- 
- 	/* Flush whole GPA */
- 	kvm_mips_flush_gpa_pt(kvm, 0, ~0);
-diff --git a/arch/riscv/kvm/mmu.c b/arch/riscv/kvm/mmu.c
-index 2d3def024270..c1b9333f17eb 100644
---- a/arch/riscv/kvm/mmu.c
-+++ b/arch/riscv/kvm/mmu.c
-@@ -558,7 +558,8 @@ void kvm_riscv_mmu_free_pgd(struct kvm *kvm)
- 	struct kvm_gstage gstage;
- 	void *pgd = NULL;
- 
--	spin_lock(&kvm->mmu_lock);
-+	lockdep_assert_held(&kvm->mmu_lock);
+ # Compiled test targets
+ TEST_GEN_PROGS_x86 = $(TEST_GEN_PROGS_COMMON)
+diff --git a/tools/testing/selftests/kvm/transfer_fd_test.c b/tools/testing/selftests/kvm/transfer_fd_test.c
+new file mode 100644
+index 000000000000..ff2adff9954b
+--- /dev/null
++++ b/tools/testing/selftests/kvm/transfer_fd_test.c
+@@ -0,0 +1,129 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ * Test VM file descriptor transfer via Unix Domain Sockets.
++ */
++#include <sys/socket.h>
++#include <sys/un.h>
++#include <sys/wait.h>
++#include <unistd.h>
++#include <errno.h>
 +
- 	if (kvm->arch.pgd) {
- 		kvm_riscv_gstage_init(&gstage, kvm);
- 		kvm_riscv_gstage_unmap_range(&gstage, 0UL,
-@@ -568,7 +569,6 @@ void kvm_riscv_mmu_free_pgd(struct kvm *kvm)
- 		kvm->arch.pgd_phys = 0;
- 		kvm->arch.pgd_levels = 0;
- 	}
--	spin_unlock(&kvm->mmu_lock);
- 
- 	if (pgd)
- 		free_pages((unsigned long)pgd, get_order(kvm_riscv_gstage_pgd_size));
-diff --git a/arch/riscv/kvm/vm.c b/arch/riscv/kvm/vm.c
-index a9f083feeb76..f704a64bfc48 100644
---- a/arch/riscv/kvm/vm.c
-+++ b/arch/riscv/kvm/vm.c
-@@ -38,7 +38,9 @@ int kvm_arch_init_vm(struct kvm *kvm, unsigned long type)
- 
- 	r = kvm_riscv_gstage_vmid_init(kvm);
- 	if (r) {
-+		spin_lock(&kvm->mmu_lock);
- 		kvm_riscv_mmu_free_pgd(kvm);
-+		spin_unlock(&kvm->mmu_lock);
- 		return r;
- 	}
- 
-diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-index 892246204435..6e6f94046b3f 100644
---- a/arch/x86/kvm/mmu/mmu.c
-+++ b/arch/x86/kvm/mmu/mmu.c
-@@ -7352,7 +7352,7 @@ static void kvm_mmu_zap_all(struct kvm *kvm)
- 	LIST_HEAD(invalid_list);
- 	int ign;
- 
--	write_lock(&kvm->mmu_lock);
-+	lockdep_assert_held_write(&kvm->mmu_lock);
- restart:
- 	list_for_each_entry_safe(sp, node, &kvm->arch.active_mmu_pages, link) {
- 		if (WARN_ON_ONCE(sp->role.invalid))
-@@ -7367,8 +7367,6 @@ static void kvm_mmu_zap_all(struct kvm *kvm)
- 
- 	if (tdp_mmu_enabled)
- 		kvm_tdp_mmu_zap_all(kvm);
--
--	write_unlock(&kvm->mmu_lock);
- }
- 
- void kvm_arch_flush_shadow_all(struct kvm *kvm)
-diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
-index 89489996fbc1..f5affd3bfda8 100644
---- a/virt/kvm/kvm_main.c
-+++ b/virt/kvm/kvm_main.c
-@@ -340,7 +340,10 @@ void kvm_flush_remote_tlbs_memslot(struct kvm *kvm,
- 
- static void kvm_flush_shadow_all(struct kvm *kvm)
- {
-+	KVM_MMU_LOCK(kvm);
- 	kvm_arch_flush_shadow_all(kvm);
-+	KVM_MMU_UNLOCK(kvm);
++#include "test_util.h"
++#include "kvm_util.h"
 +
- 	kvm_arch_guest_memory_reclaimed(kvm);
- }
- 
++static void send_fd(int sock, int fd)
++{
++	struct msghdr msg = {0};
++	struct cmsghdr *cmsg;
++	char buf[CMSG_SPACE(sizeof(int))];
++	struct iovec io = {
++		.iov_base = "a",
++		.iov_len = 1,
++	};
++
++	msg.msg_iov = &io;
++	msg.msg_iovlen = 1;
++	msg.msg_control = buf;
++	msg.msg_controllen = sizeof(buf);
++
++	cmsg = CMSG_FIRSTHDR(&msg);
++	cmsg->cmsg_level = SOL_SOCKET;
++	cmsg->cmsg_type = SCM_RIGHTS;
++	cmsg->cmsg_len = CMSG_LEN(sizeof(int));
++
++	*((int *)CMSG_DATA(cmsg)) = fd;
++
++	TEST_ASSERT(sendmsg(sock, &msg, 0) == 1, "sendmsg failed, errno: %d", errno);
++}
++
++static int recv_fd(int sock)
++{
++	struct msghdr msg = {0};
++	struct cmsghdr *cmsg;
++	char buf[CMSG_SPACE(sizeof(int))];
++	char dummy;
++	struct iovec io = {
++		.iov_base = &dummy,
++		.iov_len = 1,
++	};
++	int fd;
++
++	msg.msg_iov = &io;
++	msg.msg_iovlen = 1;
++	msg.msg_control = buf;
++	msg.msg_controllen = sizeof(buf);
++
++	TEST_ASSERT(recvmsg(sock, &msg, 0) == 1, "recvmsg failed, errno: %d", errno);
++
++	cmsg = CMSG_FIRSTHDR(&msg);
++	TEST_ASSERT(cmsg && cmsg->cmsg_level == SOL_SOCKET &&
++		    cmsg->cmsg_type == SCM_RIGHTS, "No FD received");
++
++	fd = *((int *)CMSG_DATA(cmsg));
++	return fd;
++}
++
++int main(int argc, char **argv)
++{
++	pthread_barrierattr_t attr;
++	pthread_barrier_t *barrier;
++	int socks[2];
++	pid_t pid;
++	int ret;
++
++	barrier = mmap(NULL, sizeof(*barrier), PROT_READ | PROT_WRITE,
++		       MAP_SHARED | MAP_ANONYMOUS, -1, 0);
++	TEST_ASSERT(barrier != MAP_FAILED, "mmap failed, errno: %d", errno);
++
++	ret = pthread_barrierattr_init(&attr);
++	TEST_ASSERT(!ret, "pthread_barrierattr_init failed, ret: %d", ret);
++
++	ret = pthread_barrierattr_setpshared(&attr, PTHREAD_PROCESS_SHARED);
++	TEST_ASSERT(!ret, "pthread_barrierattr_setpshared failed, ret: %d", ret);
++
++	ret = pthread_barrier_init(barrier, &attr, 2);
++	TEST_ASSERT(!ret, "pthread_barrier_init failed, ret: %d", ret);
++
++	ret = socketpair(AF_UNIX, SOCK_STREAM, 0, socks);
++	TEST_ASSERT(ret == 0, "socketpair failed, errno: %d", errno);
++
++	pid = fork();
++	TEST_ASSERT(pid >= 0, "fork failed, errno: %d", errno);
++
++	if (pid > 0) {
++		struct kvm_vm *vm;
++
++		close(socks[1]);
++
++		vm = vm_create_barebones();
++
++		send_fd(socks[0], vm->fd);
++		close(socks[0]);
++
++		/* Drop *ALL* refs to this VM. */
++		close(vm->fd);
++		close(vm->kvm_fd);
++		if (vm->stats.fd >= 0)
++			close(vm->stats.fd);
++
++		pthread_barrier_wait(barrier);
++
++		/* Trigger the exit_mm() side of the race. */
++		_exit(0);
++	} else {
++		int vm_fd;
++
++		close(socks[0]);
++
++		vm_fd = recv_fd(socks[1]);
++		close(socks[1]);
++
++		pthread_barrier_wait(barrier);
++
++		/* Drop the final ref of the VM, triggering the kvm_destroy_vm()
++		 * side of the race. */
++		close(vm_fd);
++	}
++
++	return 0;
++}
 -- 
 2.54.0.545.g6539524ca2-goog
 
