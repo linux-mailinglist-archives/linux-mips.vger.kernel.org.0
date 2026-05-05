@@ -1,213 +1,238 @@
-Return-Path: <linux-mips+bounces-14462-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-14463-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id UIZ+Bewj+mnyKAMAu9opvQ
-	(envelope-from <linux-mips+bounces-14462-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Tue, 05 May 2026 19:07:56 +0200
+	id aM6tAoEk+mnyKAMAu9opvQ
+	(envelope-from <linux-mips+bounces-14463-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Tue, 05 May 2026 19:10:25 +0200
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3EB504D1C8B
-	for <lists+linux-mips@lfdr.de>; Tue, 05 May 2026 19:07:55 +0200 (CEST)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3E4EF4D1D46
+	for <lists+linux-mips@lfdr.de>; Tue, 05 May 2026 19:10:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id BF65B30356F7
-	for <lists+linux-mips@lfdr.de>; Tue,  5 May 2026 17:05:20 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 2F002301A91E
+	for <lists+linux-mips@lfdr.de>; Tue,  5 May 2026 17:10:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C99C0492515;
-	Tue,  5 May 2026 17:05:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E74694A2E27;
+	Tue,  5 May 2026 17:10:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="qjmwJmSW"
+	dkim=pass (1024-bit key) header.d=ilvokhin.com header.i=@ilvokhin.com header.b="OxH5iBec"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-pf1-f201.google.com (mail-pf1-f201.google.com [209.85.210.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.ilvokhin.com (mail.ilvokhin.com [178.62.254.231])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C5C0481248
-	for <linux-mips@vger.kernel.org>; Tue,  5 May 2026 17:05:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2834548B396;
+	Tue,  5 May 2026 17:10:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.62.254.231
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778000719; cv=none; b=dybHDkw5oMCNSl/0dN3ByR293DxAUwip4D22O7+4bNfDNERjLv73/UKu0A3dG17NCFim8pbRAKRRqOg+q8yF4aVNCzUGuXUxuk3AOJv+9VRPeiAGPWFFE7Y9dOUQApAeBzdVVJhFkxCv+YgHyv6wsVy582l6lenvZJtjDqVlsf4=
+	t=1778001001; cv=none; b=K2zNYkoQPux8/cIDvU0q8r20cCbbkw2yKHdUvr2Nhf4yvbvBWoMM+QeeL7LkrJTIlGUdolkKLnlYIrt7eAoYi2TbHwgHpG9lgEryYcEbAOBgypO2uuCGYs9CYbiU7QwHM6oStvE4Sd9fw6xUduZm+LS/iXu3jfgSQapNJ2uosEk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778000719; c=relaxed/simple;
-	bh=LlXGiT8km7O3+s8Me6WlqDhDtU9jqmDQ3ztOup/45zg=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=DFX9pr8g0d1kCpkE/bKqBeVzno3Xtojm0c13BX3lj60XhTWDS9MUPK/X3N1LUUk6S2A7MEhay60vuRpqsMXYrSgd/tafSRn39U/tnNE+6rOj0lX7+jhOGFYiS2itPYRBSw4Kpfup9vfREweMN7+WqDg0Vc9m77H2mZLjgk+/qZw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=qjmwJmSW; arc=none smtp.client-ip=209.85.210.201
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
-Received: by mail-pf1-f201.google.com with SMTP id d2e1a72fcca58-837cc5bc6deso1437558b3a.3
-        for <linux-mips@vger.kernel.org>; Tue, 05 May 2026 10:05:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1778000717; x=1778605517; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=m3ZWo/jJEgMHbppCM8fWNjqKfThN79PtinobDbAzSRU=;
-        b=qjmwJmSWmELI9sNlA3GoOQLvGyc/W/fZNgZh10tOAgN5BH/YQQDDg8y2B1IeT3Wu0l
-         0fxS3/Y7DPE0vlcHyPEvRzXY7WYFM7fyT4b9e0XI2l8MktAjpFFg4xDQ/iGENLbVxfCC
-         7c4bIW4m2KEL9WLEKZyydicr4iRQ5lozcInVJShbm8paXiGpG3R+SrioTgSk3yGRxnPC
-         S6ThrbKfV/xoL+PauQ/Kacxcw7EbcESLq9kAGsvUromk5fIbOBN4nQtv1xCOSiIqVx0O
-         VJqYNvB0szxgt3Eq2Q9cRE1nTJd5Ay5I9WJIxMXWqCRXZX1vZYMjv7T8EIV77qp+7TQM
-         sugg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778000717; x=1778605517;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=m3ZWo/jJEgMHbppCM8fWNjqKfThN79PtinobDbAzSRU=;
-        b=DycJJ8JEY0auWa9VrcSFVSRSkc9UhuJmt4vYRpEjgCaOj8YvhH03P7L8IDwtuCs9s3
-         RaUwbKSPaqPaw34blb6ArCcLhhxUF94NKRRLmBN1KGIW/HR5PWR5ocOUH4zmlAG9Qt1L
-         bt/E5K2QSThjuM4uFRN+b/oUyS4pvS4pfxXxeF0EHb8fwrQupO4jhfNLjnMOLSoniD6j
-         zX32euFCXlzNBdy9TSlvg/mYhDyaNj1xz9fES2T1+r3tyjszU3WIjXVKTTtR1cd68IYr
-         GSt0vebxsJdnA7YNu8lG0Cq1rfkTix0mXB72VN9VW9pMHFCmFLhQo0MejpZEAqYekmLL
-         t60A==
-X-Forwarded-Encrypted: i=1; AFNElJ/q52rig6HtAW3/XtbSmC1OTBEEiIpB6R7Q1ZY2c/xj4B5pmUj2VGG9gvDQQuq12abyGAR+dggm9Mk0@vger.kernel.org
-X-Gm-Message-State: AOJu0YydAjoa90h0whusquUD2ulhnGw+M4mbB6aFn+mW6T04FtsSMwxU
-	c2hFBvSKsz0LWrbk02I27WbBsb45iAnBJRGjGF7rjGJCBIY4FpGPEORXqWuL4aCIY74YSpbzh0W
-	u9GCCUQ==
-X-Received: from pfblm11.prod.google.com ([2002:a05:6a00:3c8b:b0:82c:e899:f089])
- (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a00:368c:b0:82c:e1a3:986f
- with SMTP id d2e1a72fcca58-839247bfb7bmr3652379b3a.43.1778000717292; Tue, 05
- May 2026 10:05:17 -0700 (PDT)
-Date: Tue, 5 May 2026 10:05:15 -0700
-In-Reply-To: <20260504231048.1184273-1-jthoughton@google.com>
+	s=arc-20240116; t=1778001001; c=relaxed/simple;
+	bh=x0CWLc22TFu5JAq6s3I2itdt4QuzU2QIk2yqIyaZMIM=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=G5C5zFRqtkeyrskXC3964POpHxiHgbpclMgYIBa2X7y6s4caLezQECUL4AvS6D2Y5ZG03l4jFbwGLlu3t+bkKlP9Jm3UNeLKDyRLYimfgk00oavJQALxWKlESGQAJzyXQBEXSFH4wPf70gJpWXqg+RmkpTFTTtqCB2eUR9zbCYA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=ilvokhin.com; spf=pass smtp.mailfrom=ilvokhin.com; dkim=pass (1024-bit key) header.d=ilvokhin.com header.i=@ilvokhin.com header.b=OxH5iBec; arc=none smtp.client-ip=178.62.254.231
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=ilvokhin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ilvokhin.com
+Received: from localhost.localdomain (shell.ilvokhin.com [138.68.190.75])
+	(Authenticated sender: d@ilvokhin.com)
+	by mail.ilvokhin.com (Postfix) with ESMTPSA id AA6A9CFFEE;
+	Tue, 05 May 2026 17:09:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ilvokhin.com;
+	s=mail; t=1778000993;
+	bh=JME30EqI9Oa5nd9X+jXdCtKM53zsahsE6SloH0sWIsQ=;
+	h=From:To:Cc:Subject:Date;
+	b=OxH5iBecNhNPv/fsyArIHSOs50UmZpgSC+Gr69EUqFDlcBykPD/TR+C3/purZaSyg
+	 DyeTgbtoe5JSD1gip7bC0O+QN9mZdGISQI/mqWYr4OJFxFTjF8TqbDTHeNRbpSi20k
+	 b7Gdk6ac14edfT+wR5kmclfbP2xsqCOdYlSD4dKQ=
+From: Dmitry Ilvokhin <d@ilvokhin.com>
+To: Peter Zijlstra <peterz@infradead.org>,
+	Ingo Molnar <mingo@redhat.com>,
+	Will Deacon <will@kernel.org>,
+	Boqun Feng <boqun@kernel.org>,
+	Waiman Long <longman@redhat.com>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Juergen Gross <jgross@suse.com>,
+	Ajay Kaher <ajay.kaher@broadcom.com>,
+	Alexey Makhalov <alexey.makhalov@broadcom.com>,
+	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
+	Thomas Gleixner <tglx@kernel.org>,
+	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	x86@kernel.org,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Dennis Zhou <dennis@kernel.org>,
+	Tejun Heo <tj@kernel.org>,
+	Christoph Lameter <cl@gentwo.org>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: linux-kernel@vger.kernel.org,
+	linux-mips@vger.kernel.org,
+	virtualization@lists.linux.dev,
+	linux-arch@vger.kernel.org,
+	linux-mm@kvack.org,
+	linux-trace-kernel@vger.kernel.org,
+	kernel-team@meta.com,
+	Dmitry Ilvokhin <d@ilvokhin.com>
+Subject: [PATCH v6 0/7] locking: contended_release tracepoint instrumentation
+Date: Tue,  5 May 2026 17:09:29 +0000
+Message-ID: <cover.1777999826.git.d@ilvokhin.com>
+X-Mailer: git-send-email 2.54.0
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20260504224213.1049426-2-jthoughton@google.com> <20260504231048.1184273-1-jthoughton@google.com>
-Message-ID: <afohshVlK9YcBk-f@google.com>
-Subject: Re: [PATCH 1/5] KVM: arm64: Grab KVM MMU write lock in kvm_arch_flush_shadow_all()
-From: Sean Christopherson <seanjc@google.com>
-To: James Houghton <jthoughton@google.com>
-Cc: chenhuacai@kernel.org, gshan@redhat.com, jhogan@kernel.org, 
-	joey.gouly@arm.com, kvm@vger.kernel.org, kvmarm@lists.linux.dev, 
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
-	linux-mips@vger.kernel.org, loongarch@lists.linux.dev, maobibo@loongson.cn, 
-	maz@kernel.org, oupton@kernel.org, pbonzini@redhat.com, ricarkol@google.com, 
-	shahuang@redhat.com, stable@vger.kernel.org, suzuki.poulose@arm.com, 
-	yuzenghui@huawei.com, zhaotianrui@loongson.cn
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
-X-Rspamd-Queue-Id: 3EB504D1C8B
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Rspamd-Queue-Id: 3E4EF4D1D46
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-1.66 / 15.00];
+X-Spamd-Result: default: False [-0.66 / 15.00];
+	MID_CONTAINS_FROM(1.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[google.com,reject];
-	MV_CASE(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
-	R_DKIM_ALLOW(-0.20)[google.com:s=20251104];
+	R_MISSING_CHARSET(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[ilvokhin.com,reject];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
+	R_DKIM_ALLOW(-0.20)[ilvokhin.com:s=mail];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-14462-lists,linux-mips=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
-	FROM_HAS_DN(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-14463-lists,linux-mips=lfdr.de];
 	MIME_TRACE(0.00)[0:+];
+	RCPT_COUNT_TWELVE(0.00)[30];
+	RCVD_TLS_LAST(0.00)[];
 	RCVD_COUNT_THREE(0.00)[4];
-	RCPT_COUNT_TWELVE(0.00)[21];
-	DKIM_TRACE(0.00)[google.com:+];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	MISSING_XM_UA(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[seanjc@google.com,linux-mips@vger.kernel.org];
+	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	MID_RHS_MATCH_FROM(0.00)[];
-	TAGGED_RCPT(0.00)[linux-mips];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[d@ilvokhin.com,linux-mips@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	DKIM_TRACE(0.00)[ilvokhin.com:+];
 	NEURAL_HAM(-0.00)[-1.000];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TAGGED_RCPT(0.00)[linux-mips];
 	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns]
 
-On Mon, May 04, 2026, James Houghton wrote:
-> On Mon, May 4, 2026 at 3:42=E2=80=AFPM James Houghton <jthoughton@google.=
-com> wrote:
-> >
-> > kvm_arch_flush_shadow_all() may sometimes be called on the same `kvm`
-> > concurrently in the event that the KVM's `mm` is __mmput() at the
-> > same time that last reference to the KVM is being dropped.
-> >
-> > T1              T2
-> > KVM_CREATE_VM
-> >                 Get VM file from T1
-> > close VM
-> > exit_mm()       close VM
-> >
-> > T1: exit_mm() -> kvm_mmu_notifier_release() -> kvm_flush_shadow_all(),
-> >     with only the KVM srcu read lock held.
-> >
-> > T2: kvm_vm_release() ---> mmu_notifier_unregister() ->
-> >     kvm_mmu_notifier_release() -> kvm_flush_shadow_all(),
-> >     again, with only the KVM srcu read lock held.
-> >
-> > This leads to a potential double-free of
-> > kvm->arch.kvm_mmu_free_memory_cache and now with NV
-> > kvm->arch.nested_mmus.
+The existing contention_begin/contention_end tracepoints fire on the
+waiter side. The lock holder's identity and stack can be captured at
+contention_begin time (e.g. perf lock contention --lock-owner), but
+this reflects the holder's state when a waiter arrives, not when the
+lock is actually released.
 
-...
+This series adds a contended_release tracepoint that fires on the
+holder side when a lock with waiters is released. This provides:
 
-> >  void kvm_uninit_stage2_mmu(struct kvm *kvm)
-> >  {
-> > -       kvm_free_stage2_pgd(&kvm->arch.mmu);
-> > +       lockdep_assert_held_write(&kvm->mmu_lock);
->=20
-> *facepalm*.... this doesn't account for the other callers of
-> kvm_uninit_stage2_mmu(). They will get lockdep warnings.
->=20
-> I've attached a diff to the bottom of this reply that *does* deal with th=
-em.
-> :( Sorry.
+- Hold time estimation: when the holder's own acquisition was
+  contended, its contention_end (acquisition) and contended_release
+  can be correlated to measure how long the lock was held under
+  contention.
 
-...
+- The holder's stack at release time, which may differ from what perf lock
+  contention --lock-owner captures if the holder does significant work between
+  the waiter's arrival and the unlock.
 
-> > diff --git a/arch/arm64/kvm/nested.c b/arch/arm64/kvm/nested.c
-> > index 883b6c1008fb..977598bff5e6 100644
-> > --- a/arch/arm64/kvm/nested.c
-> > +++ b/arch/arm64/kvm/nested.c
-> > @@ -1190,11 +1190,13 @@ void kvm_arch_flush_shadow_all(struct kvm *kvm)
-> >  {
-> >         int i;
-> >
-> > +       guard(write_lock)(&kvm->mmu_lock);
-> > +
-> >         for (i =3D 0; i < kvm->arch.nested_mmus_size; i++) {
-> >                 struct kvm_s2_mmu *mmu =3D &kvm->arch.nested_mmus[i];
-> >
-> >                 if (!WARN_ON(atomic_read(&mmu->refcnt)))
-> > -                       kvm_free_stage2_pgd(mmu);
-> > +                       kvm_free_stage2_pgd_locked(mmu);
-> >         }
-> >         kvfree(kvm->arch.nested_mmus);
-> >         kvm->arch.nested_mmus =3D NULL;
-> > --
-> > 2.54.0.545.g6539524ca2-goog
->=20
-> And here is the diff that should fix this patch. (Sorry!!)
+Note: for reader/writer locks, the tracepoint fires for every reader
+releasing while a writer is waiting, not only for the last reader.
 
-There are more issues.  kvm->arch.mmu.split_page_cache can be freed by
-kvm_arch_commit_memory_region(), which holds slots_lock and slots_arch_lock=
-,
-but not mmu_lock.
+v5 -> v6:
 
-IMO, the handling of kvm->arch.mmu.split_page_cache should be reworked.  I =
-don't
-entirely get the motivation for aggressively freeing the cache.  The cache =
-will
-only be filled if KVM actually does eager page splitting, so it's not like =
-KVM is
-burning pages for setups that will never use the cache.
+- Use trace_call__contended_release() instead of trace_contended_release(),
+  where appropriate to avoid a redundant static branch check when the caller
+  already guards with trace_contended_release_enabled().
+- Added acked-by from Paul.
+- Rebase on top of the fresh locking/core.
 
-Maybe I'm underestimating how many pages arm64 needs in the worst case scen=
-ario?
-(I can't follow the math, too many macros).  But if KVM is configuring the =
-cache
-with a capacity that's _so_ high that the "wasted" memory is problematic, t=
-hen we
-probably should we revisit the capacity and algorithm.  E.g. if KVM is spli=
-tting
-from 1GiB =3D> 4KiB in a single pass (I can't tell if KVM does this on arm6=
-4), then
-we could break that into a 1GiB =3D> 2MiB =3D> 4KiB sequence.
+v4 -> v5:
+
+- Split the combined spinning locks patch into separate qspinlock and
+  qrwlock patches (Paul E. McKenney).
+- Factor out __queued_read_unlock()/__queued_write_unlock() as a
+  separate preparatory commit, mirroring the queued_spin_release()
+  split (Paul E. McKenney).
+- Updated binary size numbers for qspinlock-only change.
+- Added Acked-by and Reviewed-by tags where appropriate.
+
+v3 -> v4:
+
+- Fix spurious events in __percpu_up_read(): guard with
+  rcuwait_active(&sem->writer) to avoid tracing during the RCU grace
+  period after a writer releases (Sashiko).
+- Fix possible use-after-free in semaphore up(): move
+  trace_contended_release() inside the sem->lock critical section
+  (Sashiko).
+- Fix build failure with CONFIG_PARAVIRT_SPINLOCKS=y: introduce
+  queued_spin_release() as the arch-overridable unlock primitive,
+  so queued_spin_unlock() can be a generic tracing wrapper. Convert
+  x86 (paravirt) and MIPS overrides (Sashiko).
+- Add EXPORT_TRACEPOINT_SYMBOL_GPL(contended_release) for module
+  support (Sashiko).
+- Split spinning locks patch: factor out queued_spin_release() as a
+  separate preparatory commit (Sashiko).
+- Make read unlock tracepoint behavior consistent across all
+  reader/writer lock types: fire for every reader releasing while
+  a writer is waiting (rwsem, rwbase_rt were previously last-reader
+  only).
+
+v2 -> v3:
+
+- Added new patch: extend contended_release tracepoint to queued spinlocks
+  and queued rwlocks (marked as RFC, requesting feedback). This is prompted by
+  Matthew Wilcox's suggestion to try to come up with generic instrumentation,
+  instead of instrumenting each "special" lock manually. See [1] for the
+  discussion.
+- Reworked tracepoint placement to fire before the lock is released and
+  before the waiter is woken where possible, for consistency with
+  spinning locks where there is no explicit wake (inspired by Usama Arif's
+  suggestion).
+- Remove unnecessary linux/sched.h include from trace/events/lock.h.
+
+RFC -> v2:
+
+- Add trace_contended_release_enabled() guard before waiter checks that
+  exist only for the tracepoint (Steven Rostedt).
+- Rename __percpu_up_read_slowpath() to __percpu_up_read() (Peter
+  Zijlstra).
+- Add extern for __percpu_up_read() (Peter Zijlstra).
+- Squashed tracepoint introduction and usage commits (Masami Hiramatsu).
+
+v5: https://lore.kernel.org/all/cover.1776350944.git.d@ilvokhin.com/
+v4: https://lore.kernel.org/all/cover.1774536681.git.d@ilvokhin.com/
+v3: https://lore.kernel.org/all/cover.1773858853.git.d@ilvokhin.com/
+v2: https://lore.kernel.org/all/cover.1773164180.git.d@ilvokhin.com/
+RFC: https://lore.kernel.org/all/cover.1772642407.git.d@ilvokhin.com/
+
+[1]: https://lore.kernel.org/all/aa7G1nD7Rd9F4eBH@casper.infradead.org/
+
+Dmitry Ilvokhin (7):
+  tracing/lock: Remove unnecessary linux/sched.h include
+  locking/percpu-rwsem: Extract __percpu_up_read()
+  locking: Add contended_release tracepoint to sleepable locks
+  locking: Factor out queued_spin_release()
+  locking: Add contended_release tracepoint to qspinlock
+  locking: Factor out __queued_read_unlock()/__queued_write_unlock()
+  locking: Add contended_release tracepoint to qrwlock
+
+ arch/mips/include/asm/spinlock.h         |  6 ++--
+ arch/x86/include/asm/paravirt-spinlock.h |  6 ++--
+ include/asm-generic/qrwlock.h            | 38 ++++++++++++++++++++++--
+ include/asm-generic/qspinlock.h          | 33 ++++++++++++++++++--
+ include/linux/percpu-rwsem.h             | 15 ++--------
+ include/trace/events/lock.h              | 18 ++++++++++-
+ kernel/locking/mutex.c                   |  4 +++
+ kernel/locking/percpu-rwsem.c            | 29 ++++++++++++++++++
+ kernel/locking/qrwlock.c                 | 16 ++++++++++
+ kernel/locking/qspinlock.c               |  8 +++++
+ kernel/locking/rtmutex.c                 |  1 +
+ kernel/locking/rwbase_rt.c               |  6 ++++
+ kernel/locking/rwsem.c                   | 10 +++++--
+ kernel/locking/semaphore.c               |  4 +++
+ 14 files changed, 167 insertions(+), 27 deletions(-)
+
+-- 
+2.52.0
+
 
