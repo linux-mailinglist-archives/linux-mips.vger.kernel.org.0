@@ -1,168 +1,123 @@
-Return-Path: <linux-mips+bounces-14459-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-14460-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id QMzSL1j0+WkOFgMAu9opvQ
-	(envelope-from <linux-mips+bounces-14459-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Tue, 05 May 2026 15:44:56 +0200
+	id qJ+bHCf4+WmNFgMAu9opvQ
+	(envelope-from <linux-mips+bounces-14460-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Tue, 05 May 2026 16:01:11 +0200
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id 034DE4CEBD4
-	for <lists+linux-mips@lfdr.de>; Tue, 05 May 2026 15:44:55 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2E6954CEF8E
+	for <lists+linux-mips@lfdr.de>; Tue, 05 May 2026 16:01:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id E86D93003BE9
-	for <lists+linux-mips@lfdr.de>; Tue,  5 May 2026 13:31:47 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 54EEE301F1B4
+	for <lists+linux-mips@lfdr.de>; Tue,  5 May 2026 14:01:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ED4B247CC71;
-	Tue,  5 May 2026 13:31:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XQsa9WyE"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 091D2340A7D;
+	Tue,  5 May 2026 14:01:02 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 744B847CC63
-	for <linux-mips@vger.kernel.org>; Tue,  5 May 2026 13:31:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.216.54
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777987905; cv=pass; b=q8NcoqXGzaZ1qsO4yU5YqEE+P9h51xppejVePUzaBq1d18Q//Nx6WrWrW3GQkvNjgNsxk5RShGDJ3GIPbi7JC6ApWKfiW6mg1ov+wfDIAhDQ70/cXZyeDBr523xQL0QTPZh8//JVc0x5Ci8DkzvAegzWauSX5D6c9Cg42pwv84Y=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777987905; c=relaxed/simple;
-	bh=8wyn0Ofwpqy6SU9O+WfUwbSmjX2YnG2tpyA8T4IqcZE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=pJcMmYhYtpqMeBtLRS9v6juLD3wOz/BwrGPsIPubJDcRgKKHw8iYp0f5BfS/LfrnBbzWUd5xSMl+dwTIOXGWrVHiQ15Jdjj/qGrLX5VskjS3sbDUNQAxXr2YpLRg0NF5qcPGK+ra/gNKW7orF00Zo0ftxFiifvXq03lUP35wkJw=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XQsa9WyE; arc=pass smtp.client-ip=209.85.216.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f54.google.com with SMTP id 98e67ed59e1d1-362bb3260f1so3862610a91.2
-        for <linux-mips@vger.kernel.org>; Tue, 05 May 2026 06:31:43 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1777987903; cv=none;
-        d=google.com; s=arc-20240605;
-        b=TxeFyPoYfZGsPhbhle/stsbOSr2oXdteVby5lL4z/mIIx622+LDYiR/DqGhg8STDyi
-         Svbv1Qdug65J8up/7Wphcp/leapSFlmOZIc2d2XER3f2pLOnYialoBcC5zjdr/gTf7x0
-         VkyGl9TuX9L+uHbHFtDAPZ+kwrvacW3+V46xoNh13VzahUuMRlJbq0Xupt4I85yMBTst
-         IAu72zr7jSw3C6vbne6ewu1wwQKSIObWiXKxQttvryY0MhTIn507YKva2jBJiaANmqKa
-         4Yeoz7emsFhhie7Z4qnM2icIEiBzsDZvU7c4PyYitiLGoVYwDpeHlLZ2icF/dQZ+c7wh
-         MIfA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=jjpUfORVM9bwi74VcEXUjDBp/dftjttC37XxZf40nUQ=;
-        fh=XeE9pDWSVzZM1o63qpibzVrKLGGJMxWM8r93CoPAdP4=;
-        b=FwpVporXi54rE7wH25odQus/b+tqs9kiCIKY15qx649u0ygbn+rybaV2gwbPbp+En4
-         mBwNjwJxZwzkk0vD6QOLe0ixeO/Cn8i95uFciOE5KHJwTxVmBEWlFpg6ZBKu+yA/HiL7
-         q+0CkSmgLcctF3f+XikBcGs0yFBV+wjBgr4ZgpmlOaSMUD3+vhZnardypnFHu8ns4d01
-         +JbmFswFDlEip8uIwv8RTlizELjw1y65a6Gs1RvDNvECdnvsE9834MaNG8POUXcszMRO
-         ++69OBWE3AkEkkIjUjaV3M5oqWcR99q2BOuYi59wb6CLAt+m/HRAiAbTA8t1f6prwbO1
-         ygIg==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1777987903; x=1778592703; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=jjpUfORVM9bwi74VcEXUjDBp/dftjttC37XxZf40nUQ=;
-        b=XQsa9WyEhBMgkkfroQFjaGbLsAJBUhH3Rr9sS+3sZXg8WQWVfSfIRe7Y8Rie682wAK
-         KABGjAepK80sTVaIfPMPVG3eXOff4o3Efp16iuhA6pMRE173o7gII+z7q/KpPjD0CtOd
-         v7pJVchYH4qe6N2YAe7uOSmlQVokbSUWrhjJKalciCvxf5VdeNuQKk5GFwA34/C8N+43
-         oQUkgCPoxb37R2VRN++Y1h114TKSpzRBkYfx49ON9WtYMWn4VNbWm/IWEiTHGsswSu9J
-         2q3kbNDJuqcRymLEkZCnFlXQJWK+LDCs6M7lTw6Gy9ViIyd/+EqsPw3Z89ZX80QBTO50
-         9Kbg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1777987903; x=1778592703;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=jjpUfORVM9bwi74VcEXUjDBp/dftjttC37XxZf40nUQ=;
-        b=O9U4Gjpc3Gpu4dTBQW6bitCQbM6OamoAE9JBlbLgk0dCp0FEkTXK6E6ZB9rjNhxhV4
-         ME7jJM2XbZYRFC3tMzyC+iCxBZ1G1bGE4xpyeJaWAIt6GEPYFjtwX8/1F0VE4Dn9Uank
-         sIii/FqwJSpsloN9Pe6qxhhm+FHh762pj8IATADxRRGhMu9fbnwU1gUdC8EGp7i0p8Ir
-         xsZmKgqZZAItWPB2nqnmKfVb+ZfiqKe6L6wMTg5Htpbpv7IpxW6983uwhZoZzmSZBC8e
-         UKThKaLsJF6FyPxt8wRO+ZAd/PAjQJQIxNrPGalubQj2UjAX+qQbfie/VbC8hUSTVXYR
-         SlTg==
-X-Forwarded-Encrypted: i=1; AFNElJ+tTYcdgMpfR7e7WsR1YmADiziCfuVSgBf+mLTi44/3MLUCnhM9Hg0idi1fT33i1eqqN9ueltzpGqP6@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx0eRw6sXp3S5vdJPsCo1ze08zYGy32jh/L3WQr4ybBOKsMT3U8
-	t5FtGBUdGuwv6Owpi47jL/A1FDdxTrcDsdn1S2wkUzEn1UfvscWdrhra8dKuhQqiMYl0LiQc8/6
-	YMwCIAAP978wZjsdX10DXnwsH3n9dH2s=
-X-Gm-Gg: AeBDies/pv1ny74Yr3uLLSh9o2Zk2ghhnjXlf4NzAH18wHykEYlZai+2iyO/BJaOF2j
-	bxTeBLca6rE9ouxQY4YKKhcdp4pf8F7uhBAKoBZX1TkmP9qzSvH1Jegyeo2D3zpJLc4lDm+eFtU
-	R3/m5C2GfQvVY3npHx1VlrIw3eWU7X9NL2yAOTZPFVDQKcwA1/msKUJl4ph/OTerCpsarPvVpEy
-	W2UZHrTtU2cLUwDwXaU2d05wXa4dWQuZvX0Hn8HVived67KJ4T5GpdRy/yPuA/yB0Fv6aRmprYM
-	uQ9a729oYLuecsOanyhO46e0ruhQD+OdDWR9VE5L/lYHUaC2TwYO
-X-Received: by 2002:a17:90b:57e6:b0:35f:c5cd:cc5 with SMTP id
- 98e67ed59e1d1-3650ceac42bmr13290094a91.24.1777987902669; Tue, 05 May 2026
- 06:31:42 -0700 (PDT)
+Received: from angie.orcam.me.uk (angie.orcam.me.uk [78.133.224.34])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F236C17A31E;
+	Tue,  5 May 2026 14:00:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=78.133.224.34
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1777989661; cv=none; b=WTcLgv4B7uDoGTcPIiy2/rdHcJc2hsv5qxcbEbGu0csZicvnwx6v9QGcSteQqb5UEcwSKn0aBW0Z8rw1ZEs96oh4WOYFC1/hm/zM+xZPJWIHq6aFq1VSv06/HJCc9PAZY6ROSIcx5DuTUAlb6aDf2mnC9ajXGtEv4iRyzzSDIvk=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1777989661; c=relaxed/simple;
+	bh=A99Lwb/EVkzUM3n7icopGBnxN59R2q53tEB1r7fxhkY=;
+	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=HqtFKKwbgO97NTrPMw58owOotGYNXykWOegsf1O+8eFXy+0YRRP9G+xYzLXFGpJnZUrvHEkuP3LwN2nFNP43t9ImDtNq+vJlSwX3Vufz4jmgDr0JVmxQT0P9dlsk0EIHR3QddDP/7weN/L8uwHe/YOUh6ieq6Un/3p2SJsU+lmg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=orcam.me.uk; spf=none smtp.mailfrom=orcam.me.uk; arc=none smtp.client-ip=78.133.224.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=orcam.me.uk
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=orcam.me.uk
+Received: by angie.orcam.me.uk (Postfix, from userid 500)
+	id 1B4DD92009C; Tue,  5 May 2026 16:00:57 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+	by angie.orcam.me.uk (Postfix) with ESMTP id 14B5092009B;
+	Tue,  5 May 2026 15:00:57 +0100 (BST)
+Date: Tue, 5 May 2026 15:00:56 +0100 (BST)
+From: "Maciej W. Rozycki" <macro@orcam.me.uk>
+To: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+cc: netdev@vger.kernel.org, linux-mips@vger.kernel.org, 
+    Jakub Kicinski <kuba@kernel.org>, Andrew Lunn <andrew+netdev@lunn.ch>, 
+    "David S. Miller" <davem@davemloft.net>, 
+    Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>
+Subject: Re: [PATCH net-next v2] declance: Remove IRQF_ONESHOT
+In-Reply-To: <20260505123203.jifiaxEL@linutronix.de>
+Message-ID: <alpine.DEB.2.21.2605051410280.46195@angie.orcam.me.uk>
+References: <20260127135334.qUEaYP9G@linutronix.de> <alpine.DEB.2.21.2601271508160.40317@angie.orcam.me.uk> <20260127165430.7ui_LGkg@linutronix.de> <alpine.DEB.2.21.2601271739250.40317@angie.orcam.me.uk> <alpine.DEB.2.21.2603292037020.60268@angie.orcam.me.uk>
+ <alpine.DEB.2.21.2605042332070.46195@angie.orcam.me.uk> <20260505072954.Ov2t-FGt@linutronix.de> <alpine.DEB.2.21.2605051233210.46195@angie.orcam.me.uk> <20260505123203.jifiaxEL@linutronix.de>
+User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260505-gpio-swnode-alchemy-v2-0-cb208afc5b56@oss.qualcomm.com>
-In-Reply-To: <20260505-gpio-swnode-alchemy-v2-0-cb208afc5b56@oss.qualcomm.com>
-From: Manuel Lauss <manuel.lauss@gmail.com>
-Date: Tue, 5 May 2026 15:31:06 +0200
-X-Gm-Features: AVHnY4II_1s890yTOuGHFMuESD1cokpVnHjPlv5ldMdFPLoza5WCBJYGhIVq2uA
-Message-ID: <CAOLZvyENGzU7NqedQCfT3dcchUJjxRr-WJWC4ubqViLD6yzTUg@mail.gmail.com>
-Subject: Re: [PATCH v2 0/6] MIPS: alchemy: attach software nodes to GPIO
- controllers and use properties
-To: Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>
-Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>, Dmitry Torokhov <dmitry.torokhov@gmail.com>, 
-	brgl@kernel.org, linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Rspamd-Queue-Id: 034DE4CEBD4
+Content-Type: text/plain; charset=US-ASCII
+X-Rspamd-Queue-Id: 2E6954CEF8E
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.66 / 15.00];
+X-Spamd-Result: default: False [0.04 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
-	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
-	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
-	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
+	TAGGED_FROM(0.00)[bounces-14460-lists,linux-mips=lfdr.de];
+	ASN_FAIL(0.00)[10.253.234.172.asn.rspamd.com:query timed out];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-14459-lists,linux-mips=lfdr.de];
-	FROM_HAS_DN(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
+	DMARC_NA(0.00)[orcam.me.uk];
+	RECEIVED_HELO_LOCALHOST(0.00)[];
 	MIME_TRACE(0.00)[0:+];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	FREEMAIL_FROM(0.00)[gmail.com];
-	TO_DN_SOME(0.00)[];
-	FREEMAIL_CC(0.00)[alpha.franken.de,gmail.com,kernel.org,vger.kernel.org];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCPT_COUNT_FIVE(0.00)[6];
-	NEURAL_HAM(-0.00)[-1.000];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	TAGGED_RCPT(0.00)[linux-mips,netdev];
+	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[manuellauss@gmail.com,linux-mips@vger.kernel.org];
-	DKIM_TRACE(0.00)[gmail.com:+];
+	FROM_NEQ_ENVFROM(0.00)[macro@orcam.me.uk,linux-mips@vger.kernel.org];
+	TO_DN_SOME(0.00)[];
+	NEURAL_HAM(-0.00)[-0.860];
+	RCPT_COUNT_SEVEN(0.00)[8];
+	R_DKIM_NA(0.00)[];
 	MID_RHS_MATCH_FROMTLD(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
-	TAGGED_RCPT(0.00)[linux-mips];
-	MISSING_XM_UA(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,mail.gmail.com:mid,qualcomm.com:email]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,angie.orcam.me.uk:mid]
 
-Hello Bartosz,
+On Tue, 5 May 2026, Sebastian Andrzej Siewior wrote:
 
-On Tue, May 5, 2026 at 11:09=E2=80=AFAM Bartosz Golaszewski
-<bartosz.golaszewski@oss.qualcomm.com> wrote:
->
-> This series of patches updates board previously converted to use static
-> device properties/software nodes to attach and use nodes attached to the
-> respective gpiochip devices rather than simply defining unattached
-> software nodes with matching name. This is a requirement of newer
-> gpiolib code. Note that there is currently a workaround preserving the
-> lookup based on the software node name, but it will be removed soon.
->
-> The additional 4 patches convert the remaining 2 boards to use software
-> nodes as well and fix some build warnings.
+> > > With force-threading enabled, the interrupt handler is masked in the
+> > > IRQ-chip until after the threaded-handler run. See the cond_unmask_irq()
+> > > in handle_level_irq() or the mask_irq() & cond_unmask_eoi_irq() in
+> > > handle_fasteoi_ack_irq(). That means the hw-IRQ is done, the thread is
+> > > running with interrupts enabled but the hw-IRQ will not trigger again.
+> > > The cited commit 5a4a4ad851dd8 ("MIPS: Mark cascade and low level
+> > > interrupts IRQF_NO_THREAD") is different as it acts on cascading
+> > > interrupts which is not what we have here.
+> > 
+> >  Not with the current handle_fasteoi_irq() handler.
+> 
+> Why? There is a mask_irq() in the ONESHOT case.
 
-I have run-tested this on the DB1300, without any issues.
-Tested-by: Manuel Lauss <manuel.lauss@gmail.com>
+ Yes, in that case there is.
 
-Thanks a lot!
-      Manuel
+> > > If you request a threaded interrupt you must either provide two handler
+> > > and the primary must mask the interrupt so it does not fire again or you
+> > > pass a flag such as IRQF_ONESHOT and which point the IRQ subsystem will
+> > > mask the IRQ within the irqchip so it does not fire again.
+> > 
+> >  Well, yes, but you've just removed the flag from this driver, so either 
+> > the flag has to reinstated or the driver adjusted differently for the 
+> > threaded case to be handled correctly.
+> 
+> But there is a plain request_irq() so the handler is invoked directly in
+> hardirq context with disabled interrupts. In forced-threaded context,
+> such as on PREEMPT_RT, the IRQF_ONESHOT is added.
+
+ Ah, I missed that IRQF_ONESHOT bit in irq_setup_forced_threading().  So 
+it seems like we're good.  I'll proceed with the original change then to 
+just amend IOASIC DMA IRQ documentation.  Thank you for patience again.
+
+  Maciej
 
