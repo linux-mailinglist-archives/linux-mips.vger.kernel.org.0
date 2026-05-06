@@ -1,130 +1,111 @@
-Return-Path: <linux-mips+bounces-14480-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-14481-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id CKmfLEkI+2mbVQMAu9opvQ
-	(envelope-from <linux-mips+bounces-14480-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Wed, 06 May 2026 11:22:17 +0200
+	id WLtCNvQI+2mbVQMAu9opvQ
+	(envelope-from <linux-mips+bounces-14481-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Wed, 06 May 2026 11:25:08 +0200
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id AA8814D88A5
-	for <lists+linux-mips@lfdr.de>; Wed, 06 May 2026 11:22:16 +0200 (CEST)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id 638E44D8916
+	for <lists+linux-mips@lfdr.de>; Wed, 06 May 2026 11:25:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 372853002506
-	for <lists+linux-mips@lfdr.de>; Wed,  6 May 2026 09:20:43 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id BC7F5301AEF8
+	for <lists+linux-mips@lfdr.de>; Wed,  6 May 2026 09:25:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EB84E3DE455;
-	Wed,  6 May 2026 09:20:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="I/u0lYev"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 12FB93E274C;
+	Wed,  6 May 2026 09:25:07 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BBAC13DFC89;
-	Wed,  6 May 2026 09:20:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
+Received: from angie.orcam.me.uk (angie.orcam.me.uk [78.133.224.34])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5C7183DDDC6;
+	Wed,  6 May 2026 09:25:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=78.133.224.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778059240; cv=none; b=speausJmQG8Zxrhe3iEc059YvK3pZLLHrw9Zs6WMmzxYIKJc7Md88g1o8ladEyBn2geseElPiuMyQtyGaekEoAbnAz+Cv+rucsdjv9GBDBWsmeeLK0povGhky6orbLgDNyeEGZNRaLSc70Xphp/01zZyRZCghvKkalNDQm5S7BU=
+	t=1778059507; cv=none; b=UefF9im65Ybr+tB9inR+Ju9Pa9LBlDJO2pKyaO2MqtMt9bVPe+fafuv3SbL/D0rUepdzQ12/vMWXq66MwNp1FG+GwhA9VHcWVHLWo/XL8WLC2lwTuBrTDH24HguMs4OFF2VHHN/x6vgiEqz2z5KZHtummuJOw3ROubD+E1SFJS0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778059240; c=relaxed/simple;
-	bh=2nmYkzEgFyquvOY/UOpIGlL98F95H2psHwqqIQ97t5k=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=iqy+WP8FUJVsqyYwkl3Z1oJB5tEiyN+bGR4a0YnKU/7iz3QGqoj8U/0aqUmBZPPUkfgvp3RTyIyrZuLlcOQ1zXpOZDCNwXrKnRO2B0/WuHoOK4cDz+EtZNwF0eBfvZ3X0gkscIVwTHtQEly2k4UN1acwB1agDGvAEuwo/2vSHd0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=I/u0lYev; arc=none smtp.client-ip=198.175.65.20
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1778059240; x=1809595240;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=2nmYkzEgFyquvOY/UOpIGlL98F95H2psHwqqIQ97t5k=;
-  b=I/u0lYevI+5J7b3KDggGemglohn+PalwlEPrAJxC1TgxFFUBoT22ZTLW
-   a9cSL+zn+T0HfNw7E/RG5OdEf2P/nbOLMnnnRVEY19FOwDPwjEStTo+xa
-   giXmnKb8xGWJSw2hfJZWulYYdBl5eRySroNh6htU7OtyByN2k9QLYJx7f
-   HPzM0iZ5Elwy59VE1FZHFcKHw8gjImWKJr4Qla4AhdnJDKs/2QqMIi4Pp
-   ozl3swpVY2SfIG+gfyemf8I/IXU9zy+spcsL9FheMe2U2pBUDeajq3CrJ
-   HkQgxUaJJYUD8Ae6cR7SMk6y5AlAIYWtjeJzcMSnJtieaFwaWur1kWuZ+
-   Q==;
-X-CSE-ConnectionGUID: VTGQQfsfTeGSewOy2/H+Ag==
-X-CSE-MsgGUID: Q8JRS0KtSYax3M8U7xCPfw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11777"; a="78698713"
-X-IronPort-AV: E=Sophos;i="6.23,219,1770624000"; 
-   d="scan'208";a="78698713"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 May 2026 02:20:32 -0700
-X-CSE-ConnectionGUID: jZl8wJHNQmOEETf/0QqN3g==
-X-CSE-MsgGUID: xagBFZ7kQsinAS8XrxaKNA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,219,1770624000"; 
-   d="scan'208";a="235079258"
-Received: from abityuts-desk.ger.corp.intel.com (HELO localhost) ([10.245.244.183])
-  by orviesa006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 May 2026 02:20:30 -0700
-Date: Wed, 6 May 2026 12:20:27 +0300
-From: Andy Shevchenko <andriy.shevchenko@intel.com>
-To: Felipe Ribeiro de Souza <felipers@ime.usp.br>
-Cc: andy@kernel.org, dlechner@baylibre.com, jic23@kernel.org,
-	nuno.sa@analog.com, paul@crapouillou.net, linux-iio@vger.kernel.org,
-	linux-mips@vger.kernel.org
-Subject: Re: [PATCH v5 0/3] iio: adc: ingenic-adc: use guard()() to handle
- synchronisation and refactor lock-held helpers
-Message-ID: <afsH24xuP1GF9jYz@ashevche-desk.local>
-References: <20260506022454.128169-1-felipers@ime.usp.br>
+	s=arc-20240116; t=1778059507; c=relaxed/simple;
+	bh=/35uEn+4XJDIaayoz6RO8yeaBNabBLVqE+DiS42ggA4=;
+	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=nCiXoSeU2IQQ4XjRkhH/fR1BxkywB7PIcEgbPrdpI2dtyxtgaVhLAWIzvVxwNNDV4HwyRApYEU64iYfhLuL/EWxD7qaaHu8mxTn3FMSib12OwG5y0Va5sA9A+i0GuZR1O0qiQiBAkD7GF0zAkcBweafJwMxx5Of68MIYQLSu9RY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=orcam.me.uk; spf=none smtp.mailfrom=orcam.me.uk; arc=none smtp.client-ip=78.133.224.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=orcam.me.uk
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=orcam.me.uk
+Received: by angie.orcam.me.uk (Postfix, from userid 500)
+	id 4F93092009C; Wed,  6 May 2026 11:25:02 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+	by angie.orcam.me.uk (Postfix) with ESMTP id 4CCF292009B;
+	Wed,  6 May 2026 10:25:02 +0100 (BST)
+Date: Wed, 6 May 2026 10:25:02 +0100 (BST)
+From: "Maciej W. Rozycki" <macro@orcam.me.uk>
+To: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+cc: netdev@vger.kernel.org, linux-mips@vger.kernel.org, 
+    Jakub Kicinski <kuba@kernel.org>, Andrew Lunn <andrew+netdev@lunn.ch>, 
+    "David S. Miller" <davem@davemloft.net>, 
+    Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>
+Subject: Re: [PATCH net-next v2] declance: Remove IRQF_ONESHOT
+In-Reply-To: <20260505152450.1KYVS2pr@linutronix.de>
+Message-ID: <alpine.DEB.2.21.2605060040230.46195@angie.orcam.me.uk>
+References: <20260127135334.qUEaYP9G@linutronix.de> <alpine.DEB.2.21.2601271508160.40317@angie.orcam.me.uk> <20260127165430.7ui_LGkg@linutronix.de> <alpine.DEB.2.21.2601271739250.40317@angie.orcam.me.uk> <alpine.DEB.2.21.2603292037020.60268@angie.orcam.me.uk>
+ <alpine.DEB.2.21.2605042332070.46195@angie.orcam.me.uk> <20260505072954.Ov2t-FGt@linutronix.de> <alpine.DEB.2.21.2605051233210.46195@angie.orcam.me.uk> <20260505123203.jifiaxEL@linutronix.de> <alpine.DEB.2.21.2605051410280.46195@angie.orcam.me.uk>
+ <20260505152450.1KYVS2pr@linutronix.de>
+User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260506022454.128169-1-felipers@ime.usp.br>
-Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6
- krs, Bertel Jungin Aukio 5, 02600 Espoo
-X-Rspamd-Queue-Id: AA8814D88A5
+Content-Type: text/plain; charset=US-ASCII
+X-Rspamd-Queue-Id: 638E44D8916
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-2.16 / 15.00];
+X-Spamd-Result: default: False [0.04 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
-	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
-	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
+	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-14480-lists,linux-mips=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	HAS_ORG_HEADER(0.00)[];
-	DKIM_TRACE(0.00)[intel.com:+];
-	TO_DN_SOME(0.00)[];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
+	TAGGED_FROM(0.00)[bounces-14481-lists,linux-mips=lfdr.de];
+	RCVD_TLS_LAST(0.00)[];
+	RECEIVED_HELO_LOCALHOST(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[andriy.shevchenko@intel.com,linux-mips@vger.kernel.org];
-	MISSING_XM_UA(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
+	DMARC_NA(0.00)[orcam.me.uk];
+	FROM_HAS_DN(0.00)[];
+	TAGGED_RCPT(0.00)[linux-mips,netdev];
 	RCVD_COUNT_FIVE(0.00)[5];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[macro@orcam.me.uk,linux-mips@vger.kernel.org];
+	TO_DN_SOME(0.00)[];
+	NEURAL_HAM(-0.00)[-0.992];
 	RCPT_COUNT_SEVEN(0.00)[8];
-	NEURAL_HAM(-0.00)[-1.000];
-	TAGGED_RCPT(0.00)[linux-mips];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[intel.com:dkim,intel.com:email,sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,ashevche-desk.local:mid]
+	R_DKIM_NA(0.00)[];
+	MID_RHS_MATCH_FROMTLD(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns]
 
-On Tue, May 05, 2026 at 11:24:27PM -0300, Felipe Ribeiro de Souza wrote:
-> In drivers/iio/adc/ingenic-adc.c:
-> - Refactor ingenic_adc_read_chan_info_raw() and ingenic_adc_enable_unlocked()
-> - Replace mutex_lock() and mutex_unlock() calls with guard()()
+On Tue, 5 May 2026, Sebastian Andrzej Siewior wrote:
 
-This version LGTM,
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@intel.com>
+> I'm not if sure if you may need to change the primary handler if the
+> interrupt flow is EOI and cascading based on what you wrote. If you have
+> access to the HW then you it should be easy to test given the
+> `threadirqs' argument should expose problems.
 
-In case you want to cook more cleanups, I provided a couple of side notes.
+ The interrupt is exceedingly rare, I've only seen it actually fire maybe 
+a dozen times across all my systems in 25+ years.  It happens when there 
+is a memory read error on DMA, such as an uncorrected ECC or parity error 
+(depending on the system variant), or a bus timeout.
 
--- 
-With Best Regards,
-Andy Shevchenko
+ It should be possible to orchestrate it, such as by making the LANCE DMA 
+pointer register refer an unpopulated location in the system address map; 
+memory ECC errors can be induced too by the DRAM controller's diagnostic 
+feature.  It seems enough hassle though I'd rather get things right by the 
+spec.
 
+ Thanks for the hint as to the `threadirqs' facility though, it may come 
+up helpful sometime.
 
+  Maciej
 
