@@ -1,53 +1,47 @@
-Return-Path: <linux-mips+bounces-14481-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-14482-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id WLtCNvQI+2mbVQMAu9opvQ
-	(envelope-from <linux-mips+bounces-14481-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Wed, 06 May 2026 11:25:08 +0200
+	id WOnnNdEi+2lvWwMAu9opvQ
+	(envelope-from <linux-mips+bounces-14482-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Wed, 06 May 2026 13:15:29 +0200
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id 638E44D8916
-	for <lists+linux-mips@lfdr.de>; Wed, 06 May 2026 11:25:08 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2F0674D9A51
+	for <lists+linux-mips@lfdr.de>; Wed, 06 May 2026 13:15:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id BC7F5301AEF8
-	for <lists+linux-mips@lfdr.de>; Wed,  6 May 2026 09:25:07 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id D1FF8301369E
+	for <lists+linux-mips@lfdr.de>; Wed,  6 May 2026 11:15:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 12FB93E274C;
-	Wed,  6 May 2026 09:25:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 09239317141;
+	Wed,  6 May 2026 11:15:27 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
 Received: from angie.orcam.me.uk (angie.orcam.me.uk [78.133.224.34])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5C7183DDDC6;
-	Wed,  6 May 2026 09:25:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 70F1C1DED5C;
+	Wed,  6 May 2026 11:15:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=78.133.224.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778059507; cv=none; b=UefF9im65Ybr+tB9inR+Ju9Pa9LBlDJO2pKyaO2MqtMt9bVPe+fafuv3SbL/D0rUepdzQ12/vMWXq66MwNp1FG+GwhA9VHcWVHLWo/XL8WLC2lwTuBrTDH24HguMs4OFF2VHHN/x6vgiEqz2z5KZHtummuJOw3ROubD+E1SFJS0=
+	t=1778066126; cv=none; b=p2TtvLSAZ7a0/HJ0n7OZeOPVDOkd3FPVHMv4U1sQkLpmcdW8H8cmgN+qVEYeHcX8Ap/u5mh8ml5DtmcgRptRz1aVJhvLCguJsAoKjDkIYS9+AAy1eBJ8xJ95ETw7rp5vyWYN7/Q2zrd5u7foGJoaVOEKGmc62oVw5VX9FhkehRw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778059507; c=relaxed/simple;
-	bh=/35uEn+4XJDIaayoz6RO8yeaBNabBLVqE+DiS42ggA4=;
-	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=nCiXoSeU2IQQ4XjRkhH/fR1BxkywB7PIcEgbPrdpI2dtyxtgaVhLAWIzvVxwNNDV4HwyRApYEU64iYfhLuL/EWxD7qaaHu8mxTn3FMSib12OwG5y0Va5sA9A+i0GuZR1O0qiQiBAkD7GF0zAkcBweafJwMxx5Of68MIYQLSu9RY=
+	s=arc-20240116; t=1778066126; c=relaxed/simple;
+	bh=v6VeViMA/SQM5sY8jpftJH3uArXwjYY0C3+i59VfwfM=;
+	h=Date:From:To:cc:Subject:Message-ID:MIME-Version:Content-Type; b=Fmo+rW9tqBTMUilodMhGIqOJD2s8TbIQlq1K3cwZDejiI7/r+ZFb3uDmj8SemNapxXrFFGv5NbNwRInzXA44kY6IIP3ReIqPbBl0uBk0Ki3HrDt7OKE7qKhE5PQR1tOkVzgsHlbYYUPe6EUD+miUSqwnKaYdzN7aTuDBeh1M6P8=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=orcam.me.uk; spf=none smtp.mailfrom=orcam.me.uk; arc=none smtp.client-ip=78.133.224.34
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=orcam.me.uk
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=orcam.me.uk
 Received: by angie.orcam.me.uk (Postfix, from userid 500)
-	id 4F93092009C; Wed,  6 May 2026 11:25:02 +0200 (CEST)
+	id 798A192009C; Wed,  6 May 2026 13:15:21 +0200 (CEST)
 Received: from localhost (localhost [127.0.0.1])
-	by angie.orcam.me.uk (Postfix) with ESMTP id 4CCF292009B;
-	Wed,  6 May 2026 10:25:02 +0100 (BST)
-Date: Wed, 6 May 2026 10:25:02 +0100 (BST)
+	by angie.orcam.me.uk (Postfix) with ESMTP id 7358092009B;
+	Wed,  6 May 2026 12:15:21 +0100 (BST)
+Date: Wed, 6 May 2026 12:15:21 +0100 (BST)
 From: "Maciej W. Rozycki" <macro@orcam.me.uk>
-To: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-cc: netdev@vger.kernel.org, linux-mips@vger.kernel.org, 
-    Jakub Kicinski <kuba@kernel.org>, Andrew Lunn <andrew+netdev@lunn.ch>, 
-    "David S. Miller" <davem@davemloft.net>, 
-    Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>
-Subject: Re: [PATCH net-next v2] declance: Remove IRQF_ONESHOT
-In-Reply-To: <20260505152450.1KYVS2pr@linutronix.de>
-Message-ID: <alpine.DEB.2.21.2605060040230.46195@angie.orcam.me.uk>
-References: <20260127135334.qUEaYP9G@linutronix.de> <alpine.DEB.2.21.2601271508160.40317@angie.orcam.me.uk> <20260127165430.7ui_LGkg@linutronix.de> <alpine.DEB.2.21.2601271739250.40317@angie.orcam.me.uk> <alpine.DEB.2.21.2603292037020.60268@angie.orcam.me.uk>
- <alpine.DEB.2.21.2605042332070.46195@angie.orcam.me.uk> <20260505072954.Ov2t-FGt@linutronix.de> <alpine.DEB.2.21.2605051233210.46195@angie.orcam.me.uk> <20260505123203.jifiaxEL@linutronix.de> <alpine.DEB.2.21.2605051410280.46195@angie.orcam.me.uk>
- <20260505152450.1KYVS2pr@linutronix.de>
+To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+cc: Sebastian Andrzej Siewior <bigeasy@linutronix.de>, 
+    linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] MIPS: DEC: Remove IRQF_ONESHOT reference for IOASIC DMA
+ error IRQs
+Message-ID: <alpine.DEB.2.21.2605061142040.46195@angie.orcam.me.uk>
 User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
@@ -56,56 +50,67 @@ List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
-X-Rspamd-Queue-Id: 638E44D8916
+X-Rspamd-Queue-Id: 2F0674D9A51
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [0.04 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+X-Spamd-Result: default: False [-1.46 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	MIME_TRACE(0.00)[0:+];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-14481-lists,linux-mips=lfdr.de];
+	DMARC_NA(0.00)[orcam.me.uk];
+	RCPT_COUNT_THREE(0.00)[4];
+	TAGGED_FROM(0.00)[bounces-14482-lists,linux-mips=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
 	RECEIVED_HELO_LOCALHOST(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
-	DMARC_NA(0.00)[orcam.me.uk];
+	MIME_TRACE(0.00)[0:+];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
 	FROM_HAS_DN(0.00)[];
-	TAGGED_RCPT(0.00)[linux-mips,netdev];
-	RCVD_COUNT_FIVE(0.00)[5];
+	TAGGED_RCPT(0.00)[linux-mips];
 	PRECEDENCE_BULK(0.00)[];
 	FROM_NEQ_ENVFROM(0.00)[macro@orcam.me.uk,linux-mips@vger.kernel.org];
 	TO_DN_SOME(0.00)[];
-	NEURAL_HAM(-0.00)[-0.992];
-	RCPT_COUNT_SEVEN(0.00)[8];
+	RCVD_COUNT_FIVE(0.00)[5];
 	R_DKIM_NA(0.00)[];
+	NEURAL_HAM(-0.00)[-0.999];
 	MID_RHS_MATCH_FROMTLD(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,angie.orcam.me.uk:mid,orcam.me.uk:email]
 
-On Tue, 5 May 2026, Sebastian Andrzej Siewior wrote:
+There is no need for IOASIC DMA error interrupts to use the IRQF_ONESHOT 
+flag, because while they do need to have the source cleared only at the 
+conclusion of handling, the action handler supplied is either run in the 
+hardirq context with interrupts disabled at the CPU level or, where IRQ 
+threading has been forced, the primary handler has the IRQF_ONESHOT flag 
+implicitly added and therefore the original action handler, now run as 
+the thread handler and with interrupts enabled in the CPU, is executed 
+with the originating interrupt line masked.  Therefore no interrupt will 
+retrigger regardless until the original request has been handled.
 
-> I'm not if sure if you may need to change the primary handler if the
-> interrupt flow is EOI and cascading based on what you wrote. If you have
-> access to the HW then you it should be easy to test given the
-> `threadirqs' argument should expose problems.
+Link: https://lore.kernel.org/r/20260127135334.qUEaYP9G@linutronix.de/
+Reported-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Signed-off-by: Maciej W. Rozycki <macro@orcam.me.uk>
+---
+ arch/mips/dec/ioasic-irq.c |    5 +----
+ 1 file changed, 1 insertion(+), 4 deletions(-)
 
- The interrupt is exceedingly rare, I've only seen it actually fire maybe 
-a dozen times across all my systems in 25+ years.  It happens when there 
-is a memory read error on DMA, such as an uncorrected ECC or parity error 
-(depending on the system variant), or a bus timeout.
-
- It should be possible to orchestrate it, such as by making the LANCE DMA 
-pointer register refer an unpopulated location in the system address map; 
-memory ECC errors can be induced too by the DRAM controller's diagnostic 
-feature.  It seems enough hassle though I'd rather get things right by the 
-spec.
-
- Thanks for the hint as to the `threadirqs' facility though, it may come 
-up helpful sometime.
-
-  Maciej
+linux-dec-ioasic-irq-irqf-oneshot.diff
+Index: linux-macro/arch/mips/dec/ioasic-irq.c
+===================================================================
+--- linux-macro.orig/arch/mips/dec/ioasic-irq.c
++++ linux-macro/arch/mips/dec/ioasic-irq.c
+@@ -78,10 +78,7 @@ static struct irq_chip ioasic_dma_irq_ty
+  * cleared.  This cannot be done until after a corrective action has been
+  * taken and this also means they will not retrigger.  Therefore they use
+  * the `handle_fasteoi_irq' handler that only clears the request on the
+- * way out.  Because MIPS processor interrupt inputs, one of which the I/O
+- * ASIC is cascaded to, are level-triggered it is recommended that error
+- * DMA interrupt action handlers are registered with the IRQF_ONESHOT flag
+- * set so that they are run with the interrupt line masked.
++ * way out.
+  *
+  * This mask has `1' bits in the positions of informational interrupts.
+  */
 
