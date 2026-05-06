@@ -1,49 +1,52 @@
-Return-Path: <linux-mips+bounces-14488-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-14490-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id GFW3IRHE+2keEgAAu9opvQ
-	(envelope-from <linux-mips+bounces-14488-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Thu, 07 May 2026 00:43:29 +0200
+	id eB6RHtzD+2kPEgAAu9opvQ
+	(envelope-from <linux-mips+bounces-14490-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Thu, 07 May 2026 00:42:36 +0200
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id F03D64E15AC
-	for <lists+linux-mips@lfdr.de>; Thu, 07 May 2026 00:43:28 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id B320C4E1509
+	for <lists+linux-mips@lfdr.de>; Thu, 07 May 2026 00:42:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 4BB043020FFB
-	for <lists+linux-mips@lfdr.de>; Wed,  6 May 2026 22:42:31 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 35908300914F
+	for <lists+linux-mips@lfdr.de>; Wed,  6 May 2026 22:42:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9EEDF37268C;
-	Wed,  6 May 2026 22:42:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9DAE9372B26;
+	Wed,  6 May 2026 22:42:33 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
 Received: from angie.orcam.me.uk (angie.orcam.me.uk [78.133.224.34])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 983AC370D75;
-	Wed,  6 May 2026 22:42:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BDFAD372B23;
+	Wed,  6 May 2026 22:42:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=78.133.224.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778107350; cv=none; b=E9eUm44ua6Jq+r5tR4NP7QAkoB4MAOYStA731Dz8cOnydKAi74gaeLjhEhaoJ/5CTatMgduGiioZ4Kfz6k2zAuUOwaKfeElTUbGw/p0rWjh63xPgEnxccbMv4irwS1b6xq3z/xRjWRy/oQzpZsP0SkI/kxy4RIVE6wOF9B+LtiE=
+	t=1778107353; cv=none; b=djt9DkXrJcDlVFST8Hro8FB3feitsd7yUiL5KfNO7S5u4zm40FQyaXTm1vm4uJ7n9dsb4IlvRNT79JoYJ1RBvNITEJlV5kNQxkloqT4O2BWSAnDADVPoX9AI2hbXGwVQrmBb9FpsZdRySGw7Gzphdwv2AsxoYEnq1HFSVGyjG0U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778107350; c=relaxed/simple;
-	bh=K/b5JlkplZquGEvTJp3gKlIadFD1bW/PIn35C6xs6iA=;
-	h=Date:From:To:cc:Subject:Message-ID:MIME-Version:Content-Type; b=Ap95W4i32vGeh9nCJd21QXPEcUqwkNlr7YZ8NIn1k8rn1UnjWHnsPA0Ebb/Cg7y79evgPXIiof+ihpSh/TgG2WaEflLwJLdGPL/o3CGOS1PpOj+YFGvt5mpA1Ia96MC9DAr28fhMCmd53zvCuG1PxKI9b05iSuQIM83ucEJnUPc=
+	s=arc-20240116; t=1778107353; c=relaxed/simple;
+	bh=8phs6SjJNrZL0aaH0XIS/m+gNso2G9ewsE1O2A7hQ4E=;
+	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=lls5L4WfINk4B8Zt61f8XfcX8XuoL71YC3H/NCzJ98tOnT8kPUCKiuO/et1nkWsaJ+pXa6unWjDmnH/uL1HBL7No1IpH+Cnf5dnoDlCaaQB6+kEacgc/VFeDrqu9b7M+lzG9Em4CiPgrqEmoQ99PjKRRdXbBp6CkYBPI96UMp9w=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=orcam.me.uk; spf=none smtp.mailfrom=orcam.me.uk; arc=none smtp.client-ip=78.133.224.34
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=orcam.me.uk
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=orcam.me.uk
 Received: by angie.orcam.me.uk (Postfix, from userid 500)
-	id 0219692009E; Thu,  7 May 2026 00:42:18 +0200 (CEST)
+	id E6C1892009D; Thu,  7 May 2026 00:42:23 +0200 (CEST)
 Received: from localhost (localhost [127.0.0.1])
-	by angie.orcam.me.uk (Postfix) with ESMTP id F048292009D;
-	Wed,  6 May 2026 23:42:18 +0100 (BST)
-Date: Wed, 6 May 2026 23:42:18 +0100 (BST)
+	by angie.orcam.me.uk (Postfix) with ESMTP id E0C0192009B;
+	Wed,  6 May 2026 23:42:23 +0100 (BST)
+Date: Wed, 6 May 2026 23:42:23 +0100 (BST)
 From: "Maciej W. Rozycki" <macro@orcam.me.uk>
 To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
     Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
     Jiri Slaby <jirislaby@kernel.org>
 cc: linux-mips@vger.kernel.org, linux-serial@vger.kernel.org, 
     linux-serial@vger.kernel.org
-Subject: [PATCH v3 00/10] MIPS: DEC: Fix serial device regressions + RTC
- cleanup
-Message-ID: <alpine.DEB.2.21.2605062240290.46195@angie.orcam.me.uk>
+Subject: [PATCH v3 01/10] MIPS: DEC: Ensure 32-bit stack location for o32
+ prom_printf()
+In-Reply-To: <alpine.DEB.2.21.2605062240290.46195@angie.orcam.me.uk>
+Message-ID: <alpine.DEB.2.21.2605062249160.46195@angie.orcam.me.uk>
+References: <alpine.DEB.2.21.2605062240290.46195@angie.orcam.me.uk>
 User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
@@ -52,23 +55,23 @@ List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
-X-Rspamd-Queue-Id: F03D64E15AC
+X-Rspamd-Queue-Id: B320C4E1509
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-1.46 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-14488-lists,linux-mips=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-14490-lists,linux-mips=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
 	RECEIVED_HELO_LOCALHOST(0.00)[];
 	DMARC_NA(0.00)[orcam.me.uk];
 	MIME_TRACE(0.00)[0:+];
 	TO_DN_SOME(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
 	FROM_HAS_DN(0.00)[];
 	TAGGED_RCPT(0.00)[linux-mips];
 	PRECEDENCE_BULK(0.00)[];
@@ -78,72 +81,129 @@ X-Spamd-Result: default: False [-1.46 / 15.00];
 	R_DKIM_NA(0.00)[];
 	NEURAL_HAM(-0.00)[-0.999];
 	MID_RHS_MATCH_FROMTLD(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[angie.orcam.me.uk:mid,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
 X-Rspamd-Action: no action
 
-Hi,
+In 64-bit configurations calling any firmware entry points from a kernel 
+thread other than the initial one will result in a situation where the 
+stack has been placed in the XKPHYS 64-bit memory segment.
 
- This is v3 of the series, addressing a compilation warning discovered in 
-the course of unrelated experimentation in 02/10 where a 64-bit->32-bit 
-cast was directly made from a pointer to integer and missed owing to 
-`-Wno-error' needed due to an unrelated issue, a fix for which has been 
-posted already.  No change to code produced.
+Consequently the stack pointer is no longer a 32-bit value and when the 
+32-bit firmware code called uses 32-bit ALU operations to manipulate the 
+stack pointer, the calculated result is incorrect (in fact in the 64-bit 
+MIPS ISA almost all 32-bit ALU operations will produce an unpredictable 
+result when executed on 64-bit data) and control goes astray.
 
- In v2 fallout for 64-bit configurations has been fixed where the initial 
-console output handler that uses calls into 32-bit firmware has to ensure 
-no register input including the stack pointer is outside the 32-bit range, 
-now that the handler is now also called from kernel threads other beyond 
-the initial one.
+This may happen when no final console driver has been enabled in the
+configuration and consequently the initial console continues being used
+late into bootstrap, or with an upcoming change that will switch the zs
+driver to use a platform device, which in turn will make the console
+handover happen only after other kernel threads have already been
+started, and the kernel will hang at:
 
- Two extra introductory changes, 01/10 and 02/10 have now been added to 
-platform code.  No modification has been made to original changes.  The 
-original description follows, updated for patch renumbering.
+  pid_max: default: 32768 minimum: 301
 
- Starting from commit 84a9582fd203 ("serial: core: Start managing serial 
-controllers to enable runtime PM") drivers for serial devices used with 
-the DEC platform have stopped working due to a null pointer dereference in 
-the serial core, which means a kernel crash at bootstrap if the relevant 
-driver has been enabled, as is usually the case for the system console.
+or somewhat later, but always before:
 
- This patch series addresses the issue by switching the drivers away from 
-legacy probing to using platform devices.  A notable consequence of this 
-is the serial console is only switched from the bootconsole handler that 
-uses firmware calls over to our serial driver at the time the driver is 
-being properly brought up.  This causes messages to be produced to the 
-console between the device reset and console setup, which in turn causes 
-the firmware still being called via the bootconsole handler to loop 
-forever owing to the transmitter having been disabled.
+  cblist_init_generic: Setting adjustable number of callback queues.
 
- Both drivers are affected and therefore introductory changes 04/10 and 
-05/10 are included to fix the issue by doing a rudimentary device setup 
-right after reset, using parameters compatible with those used by the 
-firmware (9600n8).  There are auxiliary changes 03/10 and 06/10 included 
-as well, that respectively prevent a message corruption regression from 
-happening at reset due to the change in timing of messages produced to the 
-console with the dz driver switch to the platform device, and simplify 
-reset handling in the zs driver by issuing a channel rather hardware 
-reset.  Then 07/10 and 08/10 actually switch the respective drivers to use 
-platform devices.
+has been printed.
 
- A tiny update follows, 09/10, that enables modular build for the dz 
-driver, not to be backported as not a bug fix.
+It seems that only the prom_printf() entry point is affected.  Of all 
+the other entry points wired only rex_slot_address() and rex_gettcinfo() 
+are called from a kernel thread other than the initial one, specifically 
+kernel_init(), and they are leaf functions that do no business with the 
+stack, having worked with no issue ever since 64-bit support was added 
+for the platform back in 2002.
 
- Finally 10/10 is a small cleanup for the existing RTC device, included in 
-the series and then last only, due to a mechanical dependency and neither 
-for backporting, as it only addresses a code quality issue for a failure 
-scenario that is not expected to trigger in reality.
+To address this issue then, arrange for the stack to be switched in the 
+o32 wrapper as required for prom_printf() only, by supplying call_o32() 
+with a pointer to a chunk of initdata space, which is placed in the 
+CKSEG0 32-bit compatibility segment, observing that prom_printf() is 
+only called from console output handler and therefore with the console 
+lock held, implying no need for this code to be reentrant.
 
- See individual change descriptions for details.  Verified with a 5000/200 
-machine for the dz driver, and with 5000/150 and 5000/260 systems for the 
-zs driver.
+Other firmware entry points may be called with interrupts enabled and no 
+lock held, and may therefore require that call_o32() be reentrant.  They 
+trigger no issue at this point and "if it ain't broke, don't fix it," so 
+just leave them alone.
 
- Please apply.
+Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
+Signed-off-by: Maciej W. Rozycki <macro@orcam.me.uk>
+Cc: stable@vger.kernel.org # v2.6.12+
+---
+No change from v2, 
+<https://lore.kernel.org/r/alpine.DEB.2.21.2605010132340.38805@angie.orcam.me.uk/>.
 
- Previous iterations:
+New change in v2.
+---
+ arch/mips/dec/prom/init.c        |    6 +++++-
+ arch/mips/include/asm/dec/prom.h |   15 +++++++++++++--
+ 2 files changed, 18 insertions(+), 3 deletions(-)
 
-- v2 at: <https://lore.kernel.org/r/alpine.DEB.2.21.2604302336260.38805@angie.orcam.me.uk/>,
-
-- v1 at: <https://lore.kernel.org/r/alpine.DEB.2.21.2604102250060.29980@angie.orcam.me.uk/>.
-
-  Maciej
+linux-mips-dec-call-o32-stack.diff
+Index: linux-macro/arch/mips/dec/prom/init.c
+===================================================================
+--- linux-macro.orig/arch/mips/dec/prom/init.c
++++ linux-macro/arch/mips/dec/prom/init.c
+@@ -3,7 +3,7 @@
+  * init.c: PROM library initialisation code.
+  *
+  * Copyright (C) 1998 Harald Koerfgen
+- * Copyright (C) 2002, 2004  Maciej W. Rozycki
++ * Copyright (C) 2002, 2004, 2026  Maciej W. Rozycki
+  */
+ #include <linux/init.h>
+ #include <linux/kernel.h>
+@@ -20,6 +20,10 @@
+ #include <asm/dec/prom.h>
+ 
+ 
++#ifdef CONFIG_64BIT
++unsigned long o32_stk[O32_STK_SIZE] __initdata = { 0 };
++#endif
++
+ int (*__rex_bootinit)(void);
+ int (*__rex_bootread)(void);
+ int (*__rex_getbitmap)(memmap *);
+Index: linux-macro/arch/mips/include/asm/dec/prom.h
+===================================================================
+--- linux-macro.orig/arch/mips/include/asm/dec/prom.h
++++ linux-macro/arch/mips/include/asm/dec/prom.h
+@@ -4,7 +4,7 @@
+  *
+  *	DECstation PROM interface.
+  *
+- *	Copyright (C) 2002  Maciej W. Rozycki
++ *	Copyright (C) 2002, 2026  Maciej W. Rozycki
+  *
+  *	Based on arch/mips/dec/prom/prom.h by the Anonymous.
+  */
+@@ -97,6 +97,17 @@ extern int (*__pmax_close)(int);
+ 
+ #ifdef CONFIG_64BIT
+ 
++#define O32_STK_SIZE 512
++extern unsigned long o32_stk[];
++
++/* Switch the stack if outside the 32-bit address space.  */
++static inline unsigned long *o32_get_stk(void)
++{
++	long fp = (long)__builtin_frame_address(0);
++
++	return fp != (int)fp ? o32_stk + O32_STK_SIZE : NULL;
++}
++
+ /*
+  * On MIPS64 we have to call PROM functions via a helper
+  * dispatcher to accommodate ABI incompatibilities.
+@@ -128,7 +139,7 @@ int __DEC_PROM_O32(_prom_printf, (int (*
+ 
+ #define prom_getchar()		_prom_getchar(__prom_getchar, NULL)
+ #define prom_getenv(x)		_prom_getenv(__prom_getenv, NULL, x)
+-#define prom_printf(x...)	_prom_printf(__prom_printf, NULL, x)
++#define prom_printf(x...)	_prom_printf(__prom_printf, o32_get_stk(), x)
+ 
+ #else /* !CONFIG_64BIT */
+ 
 
