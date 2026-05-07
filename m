@@ -1,114 +1,128 @@
-Return-Path: <linux-mips+bounces-14514-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-14515-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id QDllJi2E/GmOQwAAu9opvQ
-	(envelope-from <linux-mips+bounces-14514-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Thu, 07 May 2026 14:23:09 +0200
+	id gE9ZCcnY/GnxUQAAu9opvQ
+	(envelope-from <linux-mips+bounces-14515-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Thu, 07 May 2026 20:24:09 +0200
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id D688A4E8243
-	for <lists+linux-mips@lfdr.de>; Thu, 07 May 2026 14:23:08 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7C0034ED5FB
+	for <lists+linux-mips@lfdr.de>; Thu, 07 May 2026 20:24:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 3DA8B30066B1
-	for <lists+linux-mips@lfdr.de>; Thu,  7 May 2026 12:23:08 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 9BB34302593C
+	for <lists+linux-mips@lfdr.de>; Thu,  7 May 2026 18:23:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1AA632E7635;
-	Thu,  7 May 2026 12:23:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4FD334657CD;
+	Thu,  7 May 2026 18:23:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=proton.me header.i=@proton.me header.b="eE686EVL"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BpUo08Y4"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-08.mail-europe.com (mail-08.mail-europe.com [57.129.93.249])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B3422E7F25
-	for <linux-mips@vger.kernel.org>; Thu,  7 May 2026 12:23:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=57.129.93.249
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2BDD83F54D9;
+	Thu,  7 May 2026 18:23:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778156587; cv=none; b=N42zBSuzqhFL5fA8FzL6UxaVzr6mjQzPCRy8nvoym6CCxMPNsseU5W3ykd1LJV1UcrNRjuY6u9CgIM2n+ZEx2DoArh2lTz62jiW1KjpUwks/jddR28mf/LZKUy8yBppb5JsvXksJKIZavoossEbka9r4zIwv0/oMRL6qFpKHJpk=
+	t=1778178226; cv=none; b=eXwX8XwaFsuWEuuqKrj7zlEojhpe+p0eEYBFhMpdpnKEcpxBl5IgX+qPjWDhRCrlxmF6HuQuLpKCMsqE4+O+VnX2eoqcRhF5ZjADRHRQwxQLnVzJ/vH2hkJZYcrHjm1KY5Xs+wyT552Av95bv8XpYKV/p66A/jAN1kBUwKmUx4M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778156587; c=relaxed/simple;
-	bh=yXyy/1avikG//9PNJ0NYNRcQ/+6OhcdCpQSlhFY4bVQ=;
-	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=EzQtafX/MG5ntjsztMu61IA9DrMNm8Hx0gpKObT/PBuTjvRFRmKeV7Y+ruZGDm68ewMHZKuQKKUfEeP1j0cDnkGtgO874Yqm5Eo3hhCqv6/sUX8my/TslGgrrxXzZJZbjVUyLroUQWdCS+qTBSYWrcmiRnOhlM3q5Q0WdVE5S68=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=proton.me; spf=pass smtp.mailfrom=proton.me; dkim=pass (2048-bit key) header.d=proton.me header.i=@proton.me header.b=eE686EVL; arc=none smtp.client-ip=57.129.93.249
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=proton.me
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=proton.me
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=proton.me;
-	s=rf6dlxadgragpeknl2zvhwifqq.protonmail; t=1778156569; x=1778415769;
-	bh=yXyy/1avikG//9PNJ0NYNRcQ/+6OhcdCpQSlhFY4bVQ=;
-	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-	 Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
-	 Message-ID:BIMI-Selector;
-	b=eE686EVLPG9E3IvxDNMtZPAUgQnZvjYhBtGeYCeLsfCNrwyUOwDYNTExiom1wb1Vv
-	 qxf5nbN2AYwB+PjB6b4dqbRmwRB6HO9ooY5fYpYBLWpa0Jrj4sc5E1DnxJYfqEFebE
-	 pjq0qImRlNPXZuB/Kjwt4l0RDL2eqGnBDNaN2Fa6Zw9J60dvsjbk8K/SC9kyx70guD
-	 zRaMFJ8yT4aNrsf/KcU9MiDUzcCrQfOd+3neh79Rt+4WHcxEvs/Xro0+zBG7mfowTX
-	 HKw6d77yk6g1BGDajPKTBLEZHfo54YyENhNsf1cmjFijEBhEN7yZf+DNbhP37d96Ie
-	 XL4adMF90c2LQ==
-Date: Thu, 07 May 2026 12:22:42 +0000
-To: Thomas Zimmermann <tzimmermann@suse.de>
-From: Aditya Garg <gargaditya08@proton.me>
-Cc: mripard@kernel.org, maarten.lankhorst@linux.intel.com, airlied@redhat.com, airlied@gmail.com, simona@ffwll.ch, admin@kodeit.net, paul@crapouillou.net, zack.rusin@broadcom.com, bcm-kernel-feedback-list@broadcom.com, dri-devel@lists.freedesktop.org, linux-hyperv@vger.kernel.org, intel-gfx@lists.freedesktop.org, intel-xe@lists.freedesktop.org, linux-mips@vger.kernel.org, virtualization@lists.linux.dev
-Subject: Re: [PATCH 05/10] drm/appletbdrm: Allocate request/response buffers in begin_fb_access
-Message-ID: <G66ElwoYASE3O3RpWWuKm9V5LNUTUtjJ_lGUsDxN3EujU3wsp3vpT-KcXMsrFfYEZkBwq9TNaD3Pc2g4oaueu4B-JXN3PTCoNGY999s5WHU=@proton.me>
-In-Reply-To: <20260507075725.29738-6-tzimmermann@suse.de>
-References: <20260507075725.29738-1-tzimmermann@suse.de> <20260507075725.29738-6-tzimmermann@suse.de>
-Feedback-ID: 145777226:user:proton
-X-Pm-Message-ID: 809317f98a9202275d5c4ae88ce01ca05792218d
+	s=arc-20240116; t=1778178226; c=relaxed/simple;
+	bh=SNvRg5gDTkhbZ4MVjEvDT8o9L2gLvEkyba8SgNkqMSI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=f8gDTP0S14t0PaxY87xeI8OP+nHMU2qLm2iWwxWi1JbEJF9PUMtpbEzIaFjZmfBaWyXXwHtTG1cyZetD0i+YGHuDUwOkpEFj2LlmntRItaPHI/uuCRIgT2iHFvkGi1wHvrcXZNXvkeaq/QQBmyDkDgjVcQy1iIE/CpUYk1cmNWI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BpUo08Y4; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD19CC2BCB2;
+	Thu,  7 May 2026 18:23:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1778178225;
+	bh=SNvRg5gDTkhbZ4MVjEvDT8o9L2gLvEkyba8SgNkqMSI=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=BpUo08Y4PqA/WT5Q2wn2T/MJz2GNQWzhCiOQ9eoOGD5iWVgnC13v05fgh2JzD9w0x
+	 Djq3YHXNw2BZ8oaI9uhNUcwX60bQ51r4f2vZ1tnfW+5iUnna/B3urtCEl3yXJAohXD
+	 WvnTp8WLOK0ArE+euMcMG5jGlSiOODUaL2v+Ilp6AN6Mu3GgitV7CpJnru5qFfwbUi
+	 K5pqyjK9Xv+wzZvAzB8Y/61pJ3VyW3A0SZWW7lJ8SFE+mS6q6UmlhN5yg3lE6cEy5y
+	 HrWgrGSCrtiT5IVnLWFwGjdsHOB8BO0rqYHROvLwY/Lb3hTUm0c3lHnlwN/y0Bdkyi
+	 7I5nIR4L5LKBA==
+Date: Thu, 7 May 2026 13:23:43 -0500
+From: "Rob Herring (Arm)" <robh@kernel.org>
+To: Caleb James DeLisle <cjd@cjdns.fr>
+Cc: linux-kernel@vger.kernel.org, conor+dt@kernel.org, krzk+dt@kernel.org,
+	linux-mips@vger.kernel.org, devicetree@vger.kernel.org,
+	tglx@kernel.org
+Subject: Re: [PATCH v3 1/2] dt-bindings: interrupt-controller: econet: Add
+ CPU interrupt mapping
+Message-ID: <177817822302.2211615.7080073941717543508.robh@kernel.org>
+References: <20260430164157.6026-1-cjd@cjdns.fr>
+ <20260430164157.6026-2-cjd@cjdns.fr>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Rspamd-Queue-Id: D688A4E8243
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260430164157.6026-2-cjd@cjdns.fr>
+X-Rspamd-Queue-Id: 7C0034ED5FB
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-2.16 / 15.00];
+X-Spamd-Result: default: False [-1.16 / 15.00];
+	MID_CONTAINS_FROM(1.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[proton.me,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
-	R_DKIM_ALLOW(-0.20)[proton.me:s=rf6dlxadgragpeknl2zvhwifqq.protonmail];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-14514-lists,linux-mips=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[3];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	FREEMAIL_CC(0.00)[kernel.org,linux.intel.com,redhat.com,gmail.com,ffwll.ch,kodeit.net,crapouillou.net,broadcom.com,lists.freedesktop.org,vger.kernel.org,lists.linux.dev];
-	RCPT_COUNT_TWELVE(0.00)[16];
-	MIME_TRACE(0.00)[0:+];
+	TAGGED_FROM(0.00)[bounces-14515-lists,linux-mips=lfdr.de];
 	FROM_HAS_DN(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
+	RCVD_TLS_LAST(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	DKIM_TRACE(0.00)[kernel.org:+];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
 	MISSING_XM_UA(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[gargaditya08@proton.me,linux-mips@vger.kernel.org];
-	DKIM_TRACE(0.00)[proton.me:+];
-	MID_RHS_MATCH_FROM(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
-	TAGGED_RCPT(0.00)[linux-mips];
+	FROM_NEQ_ENVFROM(0.00)[robh@kernel.org,linux-mips@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCPT_COUNT_SEVEN(0.00)[7];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TAGGED_RCPT(0.00)[linux-mips,dt];
 	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,suse.de:email,proton.me:email,proton.me:mid,proton.me:dkim]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
 X-Rspamd-Action: no action
 
-On Thursday, May 7th, 2026 at 1:27 PM, Thomas Zimmermann <tzimmermann@suse.=
-de> wrote:
 
-> In atomic_check, damage handling is not fully evaluated. Another
-> atomic_check helper could trigger a full modeset and thus invalidate
-> damage clips.
->=20
-> Allocation of the request/response buffers in appletbdrm depends on
-> correct damage information. Otherwise it might allocate incorrectly
-> sized buffers. Allocate the buffers in the driver's begin_fb_access
-> helper. It runs early during the commit when damage clipping has been
-> fully evaluated.
->=20
-> Signed-off-by: Thomas Zimmermann <tzimmermann@suse.de>
+On Thu, 30 Apr 2026 16:41:56 +0000, Caleb James DeLisle wrote:
+> In MIPS VEIC mode (Vectored External Interrupt Controller), the
+> hardware stops directly dispatching CPU interrupts such as IPIs or CPU
+> performance counters, and instead it communicates them to the external
+> interrupt controller (the hardware described here) which prioritizes,
+> renumbers, and integrates them with its own hardware interrupt pins.
+> Interrupts from the external controller are then dispatched through a
+> different method via a dispatch table. In effect, the external
+> controller subsumes the CPU controller and becomes the root.
+> 
+> 34K Manual (MD00534) Section 6.3.1.3 rev 1.13 page 136
+> 
+> Since there are interrupts which ought to be controlled by the CPU
+> controller driver - particularly the IPI interrupts - we create a
+> reverse mapping where those interrupts may be sent back to the CPU
+> intc when they are received. This maintains the fiction that there is
+> still a hierarchy, and keeps the DT the same no matter whether the
+> processor is in VEIC mode or not. The econet,cpu-interrupt-map is
+> optional and if omitted, it's assumed that no interrupts need to be
+> mapped.
+> 
+> Signed-off-by: Caleb James DeLisle <cjd@cjdns.fr>
+> ---
+>  .../econet,en751221-intc.yaml                 | 20 +++++++++++++++++++
+>  1 file changed, 20 insertions(+)
+> 
 
-Acked-by: Aditya Garg <gargaditya08@proton.me>
+Reviewed-by: Rob Herring (Arm) <robh@kernel.org>
+
 
