@@ -1,171 +1,150 @@
-Return-Path: <linux-mips+bounces-14518-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-14519-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id TM8hHkaE/WmefQAAu9opvQ
-	(envelope-from <linux-mips+bounces-14518-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Fri, 08 May 2026 08:35:50 +0200
+	id 0KFtL0qQ/WnWfgAAu9opvQ
+	(envelope-from <linux-mips+bounces-14519-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Fri, 08 May 2026 09:27:06 +0200
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id C6AB14F2806
-	for <lists+linux-mips@lfdr.de>; Fri, 08 May 2026 08:35:49 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 27B274F2FD9
+	for <lists+linux-mips@lfdr.de>; Fri, 08 May 2026 09:27:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 73B16300F9C7
-	for <lists+linux-mips@lfdr.de>; Fri,  8 May 2026 06:35:48 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id E69A23040219
+	for <lists+linux-mips@lfdr.de>; Fri,  8 May 2026 07:24:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E89F0372EE9;
-	Fri,  8 May 2026 06:35:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Tj9suUbn"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 830F43630B7;
+	Fri,  8 May 2026 07:24:34 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-dl1-f42.google.com (mail-dl1-f42.google.com [74.125.82.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 19249372691
-	for <linux-mips@vger.kernel.org>; Fri,  8 May 2026 06:35:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.42
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778222144; cv=pass; b=PWBT298eMzv+qGgJ/064okxywDZNxN7cUvGvwAVj6zI0RccD7d05WLx4z04Ze5Z9dcMOQ7OipQdpt9EHbIhYNBCtOSS8CWasVccYZE9qjeqMH/NGjwL79XQp2XO9Cpvyh/0ugaDjadenXUcjbB4l6fLLK2Up134hLwABU611T2g=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778222144; c=relaxed/simple;
-	bh=GJquUn0sx8DOivO5g10iSPH8An/R1fqpr2sle04eAIM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=EZ1Y04RqNfwfkk3HevemK61+flIJJBH/wD4H9maEH2MXGOXXIVjJDizVBR//xfbJKNSnlGLtP/X3v4VTvXSaskj1owcnZDhRmOMvaZcROVHWwFWq9e54E5vFb5foEDl/valK4LYPwwUryWS54hIK6GaSgMUW8ArkjNmmhjH9c7E=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Tj9suUbn; arc=pass smtp.client-ip=74.125.82.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-dl1-f42.google.com with SMTP id a92af1059eb24-12dbd0f7ecaso3772645c88.0
-        for <linux-mips@vger.kernel.org>; Thu, 07 May 2026 23:35:39 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1778222138; cv=none;
-        d=google.com; s=arc-20240605;
-        b=BOzTMt50Vt+/AFhQAnjDoiloLY8mupnVW/KdHvB3s7V+zYEgirSsJH8XGjvFCxZ8zS
-         PSvre3DH1UYbCx2TloNNoUN6JHL6rmi+D1x4j90rgJ+zkLv4bHP7zNGCD/dQFKDW5uFu
-         qTEpyQp0dclZCo8XYAkfOWUc/BUS2pB54PN17FwMrwwoiLG10blReZ2CVdqJZW4w8PNa
-         VH/fGNV2ss9I2b8Vj1Fy3VgrQx5JnhXwPHdcMYfqBEJTiWQRyB7q3VwbCuWubZrsI5py
-         sMhPfLnPdLhB3/6OVDaVpjYURz9XErl1mNfkxbV3TY//nsv8ldr6DVgUXOxi7Cox0g2S
-         sshw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=j/4FF3lpn4U3kdZFpJQMnuM4WQSWu0axEirWM0lgLe8=;
-        fh=CXjdI4NJstFUaOFY4r0eJy+GHzOzv/d5tw2L2nFu7jk=;
-        b=TBtrjW6hr/IbHTvWPXxR/x5gJnmc/+bum3BKJzZx+2dz6Ewt6anKh5A6oiDUNW4bsz
-         5MHmDTnZOaVb1ZfbvvgtDCU5cupYAsFT/52HNFjrdCaRXk5PlQQ2YbIjdxMyoQcEsjk/
-         AqIrTHPa20OZEr2PHxoyOqwrlAZc8x5mKR5X7S91bC06a/GTCS9uaLrdDPKP1yxV0x1d
-         ZkfWptFwRF7+mGLrP9Jj10DVSnpF0Iq5+rkPwTg26LazqET998E7CTQfXe3oTFpdWblw
-         fGlM5y39WIodd34UR08jvWE+F3BiGhfNTp0Y+43Tvuh3+7yq6vmXZw/qb405A8fppjGh
-         Mb6Q==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1778222138; x=1778826938; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=j/4FF3lpn4U3kdZFpJQMnuM4WQSWu0axEirWM0lgLe8=;
-        b=Tj9suUbnsqV1D3ku5z7oY8fZPmBpmEcqGPY8RahLn8CAzx0+ZNZtjwjdMdMEFbofGK
-         JaYS59unjJzfrzWbMGCtyjeuJ4pymZ3HN2uTUbg1kmJdIzfNU6DbsMrRCex0o7PfZWO5
-         qe0kFG24x2K7pmFrGicUxVQ2rXDzFzAXxWZgXQdaUV2LPyARAI3c4iE4N9WFWDYHFH4w
-         lISVoe8zOAyKPRmucP4fYCIxnx/ftpWVQ6pEs+ehi6e9821w83ZwdVikO8ncRSVqT40O
-         r8OtPhRd2GKw5KEclolMNLrBqeS7ggFmbhAysK4C1XADNrw7iSTfvncsQAH/SIstEwjF
-         d0Mg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778222138; x=1778826938;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=j/4FF3lpn4U3kdZFpJQMnuM4WQSWu0axEirWM0lgLe8=;
-        b=k1t+sbAQslgzOgGmvL+itDdsI9V+rcP9fsrUVlt8B1U0DvBA/Hr+UJicKacutFMast
-         tElBcWj90wA+3C7bUGuCTaHaAVYsE40p1JFXePULsp91rMZlmEI6cGQrM8p4DoRSlYUB
-         wwZ3Tb6cgF4X620ORBmrLw488ypSjtnuT/YyYCp/CNq/lIw2fF3Qe8gIy1YfF9immcFU
-         Bpy6nIyoZQd/wsFeMw7iOalRgQu1F+MIJBC2/sDgK0/98bfepsuPfs3VZBaVqNch9VqO
-         i7VoAJhihdtBEjG5GpPJvnyCUsA9GQFGbOKFaqN8MgdTfrimbq36v2pXTn8RBE5YIOJl
-         mW5A==
-X-Gm-Message-State: AOJu0YyHJWQwTpceRFhJezPPp7W6nmzhopF8PH3K5i9TRwU1v9x4izmu
-	2UPERFmYR/f8SkUPtODsEf7mDvOmkw4zqlkJkltDtaFLt3yraSEvHRGvleRTisIxg0+wIv/o97d
-	Vz8QhAV8L2SBzX9H5S/YQCKXZ4S2AtoE=
-X-Gm-Gg: AeBDieuaGhBlacilaq6UqBvCIXJlbOHkNxrqJLskKM8YlhaeTJGBbnXSz6t3WK2njnm
-	mKSM32BXehEJDHnwe1izvfhGUtFqq5wgrbCJcVCCcx0ZK/J/sr9g2SKK//OUPfpz/nhAxh6/rFB
-	+B/k8IrVxrICjoAIn/sB/ZjvTsWMzjIbc+hqoTjCbOCf9EK43pJMXGYUdZL7fK3dL2+qLwkkQrs
-	/vKpBDNN1mjXwFBtT005VPEnWj9vO74hOOe8Pc2Q4NM19le5Vbdrm8NY2BccPSdhzBkyUWlac2P
-	6Nuz
-X-Received: by 2002:a05:7022:458c:b0:130:68a1:a235 with SMTP id
- a92af1059eb24-1319cd28b14mr5907466c88.27.1778222138006; Thu, 07 May 2026
- 23:35:38 -0700 (PDT)
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A615E1D5CFB;
+	Fri,  8 May 2026 07:24:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1778225074; cv=none; b=BiyhgJLCo4AaiABMGpapwoLwXsf4GBf9EQNfp+VsHWgXen510y906RwsXQtIxyHnVrrlN9lbF8OrfCUqCdZKQnd5HMQD84IgDTTuOx1aEH1dwANVqSlNEPjfDtXM1hrlS37gYEjFF6BNitzg867v4uSP3I2BiKzG4vfj3eKTTlg=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1778225074; c=relaxed/simple;
+	bh=TI90CHXwtptjDqV8T7my7F6jyD1/4mK2rWz8hwhRW3o=;
+	h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
+	 In-Reply-To:Content-Type; b=SZABRBiaID/6zmmSBVG3bwLK1urdEXlI1IeVGD5D9S8HTqvUFrYEsn5Ha+r6CFBq9iTqXKw4H2kX88Q0VBnCtjdxYAYufH4Yq4TpOEktoRr6xPgzmUmgRnqWih82ByIKriBuHHAttoF7K7g/vUL5So1jOopxxA8XJuIj6UNCfW8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
+Received: from loongson.cn (unknown [10.20.42.62])
+	by gateway (Coremail) with SMTP id _____8BxT+qpj_1pis4HAA--.24411S3;
+	Fri, 08 May 2026 15:24:25 +0800 (CST)
+Received: from [10.20.42.62] (unknown [10.20.42.62])
+	by front1 (Coremail) with SMTP id qMiowJDxTMKoj_1pUcZ8AA--.38271S3;
+	Fri, 08 May 2026 15:24:24 +0800 (CST)
+Subject: Re: [PATCH 2/5] KVM: loongarch: Grab MMU lock in
+ kvm_arch_flush_shadow_all()
+To: James Houghton <jthoughton@google.com>,
+ Paolo Bonzini <pbonzini@redhat.com>
+Cc: Marc Zyngier <maz@kernel.org>, Oliver Upton <oupton@kernel.org>,
+ Joey Gouly <joey.gouly@arm.com>, Suzuki K Poulose <suzuki.poulose@arm.com>,
+ Zenghui Yu <yuzenghui@huawei.com>, Sean Christopherson <seanjc@google.com>,
+ Gavin Shan <gshan@redhat.com>, Shaoqin Huang <shahuang@redhat.com>,
+ Ricardo Koller <ricarkol@google.com>, Tianrui Zhao
+ <zhaotianrui@loongson.cn>, Huacai Chen <chenhuacai@kernel.org>,
+ James Hogan <jhogan@kernel.org>, linux-arm-kernel@lists.infradead.org,
+ kvmarm@lists.linux.dev, loongarch@lists.linux.dev,
+ linux-mips@vger.kernel.org, kvm@vger.kernel.org,
+ linux-kernel@vger.kernel.org, stable@vger.kernel.org
+References: <20260504224213.1049426-1-jthoughton@google.com>
+ <20260504224213.1049426-3-jthoughton@google.com>
+From: Bibo Mao <maobibo@loongson.cn>
+Message-ID: <f47ec704-813e-e6a2-687b-7076be465a1b@loongson.cn>
+Date: Fri, 8 May 2026 15:21:28 +0800
+User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260508042724.1719688-1-rosenp@gmail.com>
-In-Reply-To: <20260508042724.1719688-1-rosenp@gmail.com>
-From: Sergio Paracuellos <sergio.paracuellos@gmail.com>
-Date: Fri, 8 May 2026 08:35:25 +0200
-X-Gm-Features: AVHnY4I2qz6ZfLEbNWMvqoeN4VgOUktVtsN6fAD2YG5vKdnwfzStpYrnkcS9vyI
-Message-ID: <CAMhs-H-mqXXjnj68gHU5uZheCq0u89awLY7gYK8t=c5KzPtzUg@mail.gmail.com>
-Subject: Re: [PATCH] mips: ralink: mt7621: add missing __iomem
-To: Rosen Penev <rosenp@gmail.com>
-Cc: linux-mips@vger.kernel.org, John Crispin <john@phrozen.org>, 
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, Matthias Brugger <matthias.bgg@gmail.com>, 
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
-	Chuanhong Guo <gch981213@gmail.com>, 
-	"open list:ARM/Mediatek SoC support" <linux-kernel@vger.kernel.org>, 
-	"moderated list:ARM/Mediatek SoC support" <linux-arm-kernel@lists.infradead.org>, 
-	"moderated list:ARM/Mediatek SoC support" <linux-mediatek@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Rspamd-Queue-Id: C6AB14F2806
+In-Reply-To: <20260504224213.1049426-3-jthoughton@google.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:qMiowJDxTMKoj_1pUcZ8AA--.38271S3
+X-CM-SenderInfo: xpdruxter6z05rqj20fqof0/
+X-Coremail-Antispam: 1Uk129KBj9xXoW7XFWrCw1UZrW7Kw4rAr13Awc_yoWkCrc_AF
+	12yw10grWxJa93X3Wkt3W3tF9Iyw1rCFsavrn7Xr97J3s8t3sakr4jgan3Cr90grWxWFW3
+	ArWDZrZ5Zr4avosvyTuYvTs0mTUanT9S1TB71UUUUjDqnTZGkaVYY2UrUUUUj1kv1TuYvT
+	s0mT0YCTnIWjqI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUI
+	cSsGvfJTRUUUbqkYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20x
+	vaj40_Wr0E3s1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
+	w2x7M28EF7xvwVC0I7IYx2IY67AKxVWUCVW8JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
+	W8JVWxJwA2z4x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v2
+	6r4UJVWxJr1ln4kS14v26r126r1DM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12
+	xvs2x26I8E6xACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r12
+	6r1DMcIj6I8E87Iv67AKxVW8JVWxJwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr4
+	1lc7I2V7IY0VAS07AlzVAYIcxG8wCY1x0262kKe7AKxVWUtVW8ZwCF04k20xvY0x0EwIxG
+	rwCFx2IqxVCFs4IE7xkEbVWUJVW8JwCFI7km07C267AKxVWUAVWUtwC20s026c02F40E14
+	v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_WrylIxkG
+	c2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUCVW8JwCI42IY6xIIjxv20xvEc7CjxVAFwI
+	0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r4j6F4U
+	MIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07joc_-UUU
+	UU=
+X-Rspamd-Queue-Id: 27B274F2FD9
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.66 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
-	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10];
-	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
+X-Spamd-Result: default: False [-1.46 / 15.00];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-14518-lists,linux-mips=lfdr.de];
-	RCVD_COUNT_THREE(0.00)[4];
-	FREEMAIL_TO(0.00)[gmail.com];
-	TO_DN_SOME(0.00)[];
-	FREEMAIL_CC(0.00)[vger.kernel.org,phrozen.org,alpha.franken.de,gmail.com,collabora.com,lists.infradead.org];
-	MIME_TRACE(0.00)[0:+];
+	NEURAL_HAM(-0.00)[-0.940];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	FROM_HAS_DN(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	FREEMAIL_FROM(0.00)[gmail.com];
-	NEURAL_HAM(-0.00)[-1.000];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[sergioparacuellos@gmail.com,linux-mips@vger.kernel.org];
-	DKIM_TRACE(0.00)[gmail.com:+];
-	MID_RHS_MATCH_FROMTLD(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	TO_DN_SOME(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[21];
 	TAGGED_RCPT(0.00)[linux-mips];
-	RCPT_COUNT_SEVEN(0.00)[10];
-	MISSING_XM_UA(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,intel.com:email,mail.gmail.com:mid]
+	MID_RHS_MATCH_FROM(0.00)[];
+	R_DKIM_NA(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[maobibo@loongson.cn,linux-mips@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[5];
+	RCVD_TLS_LAST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-14519-lists,linux-mips=lfdr.de];
+	DMARC_NA(0.00)[loongson.cn];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,loongson.cn:email,loongson.cn:mid]
 X-Rspamd-Action: no action
 
-On Fri, May 8, 2026 at 6:27=E2=80=AFAM Rosen Penev <rosenp@gmail.com> wrote=
-:
->
-> raw_readl and writel calls expect pointers annotated with __iomem.
->
-> Reported-by: kernel test robot <lkp@intel.com>
-> Closes: https://lore.kernel.org/oe-kbuild/202211060456.cnV6IK6G-lkp@intel=
-.com/
-> Fixes: cc19db8b312a ("MIPS: ralink: mt7621: do memory detection on KSEG1"=
-)
-> Signed-off-by: Rosen Penev <rosenp@gmail.com>
+
+
+On 2026/5/5 上午6:42, James Houghton wrote:
+> kvm_arch_flush_shadow_all() may be called concurrently on the same
+> `kvm`. This could at least result in accounting mistakes (e.g.
+> underflows on `kvm->stat.*pages`).
+> 
+> Cc: stable@vger.kernel.org
+> Fixes: 752e2cd7b4fb ("LoongArch: KVM: Implement kvm mmu operations")
+> Signed-off-by: James Houghton <jthoughton@google.com>
 > ---
->  arch/mips/ralink/mt7621.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> Note: This is compile-tested only!
+> 
+>   arch/loongarch/kvm/mmu.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/arch/loongarch/kvm/mmu.c b/arch/loongarch/kvm/mmu.c
+> index a7fa458e3360..5dbce9b18e1c 100644
+> --- a/arch/loongarch/kvm/mmu.c
+> +++ b/arch/loongarch/kvm/mmu.c
+> @@ -486,7 +486,7 @@ void kvm_arch_commit_memory_region(struct kvm *kvm,
+>   
+>   void kvm_arch_flush_shadow_all(struct kvm *kvm)
+>   {
+> -	kvm_flush_range(kvm, 0, kvm->arch.gpa_size >> PAGE_SHIFT, 0);
+> +	kvm_flush_range(kvm, 0, kvm->arch.gpa_size >> PAGE_SHIFT, 1);
+>   }
+>   
+>   void kvm_arch_flush_shadow_memslot(struct kvm *kvm, struct kvm_memory_slot *slot)
+> 
+Reviewed-by: Bibo Mao <maobibo@loongson.cn>
 
-Reviewed-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
-
-Thanks,
-    Sergio Paracuellos
 
