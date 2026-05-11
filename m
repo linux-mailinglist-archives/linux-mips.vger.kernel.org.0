@@ -1,162 +1,179 @@
-Return-Path: <linux-mips+bounces-14536-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-14537-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 8N/oFNJkAWodXwEAu9opvQ
-	(envelope-from <linux-mips+bounces-14536-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Mon, 11 May 2026 07:10:42 +0200
+	id 6L+XLnd6AWqMagEAu9opvQ
+	(envelope-from <linux-mips+bounces-14537-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Mon, 11 May 2026 08:43:03 +0200
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id ACADF507F8F
-	for <lists+linux-mips@lfdr.de>; Mon, 11 May 2026 07:10:41 +0200 (CEST)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id D6AFC508AC2
+	for <lists+linux-mips@lfdr.de>; Mon, 11 May 2026 08:43:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id A1A2F30179FD
-	for <lists+linux-mips@lfdr.de>; Mon, 11 May 2026 05:10:25 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 179803008444
+	for <lists+linux-mips@lfdr.de>; Mon, 11 May 2026 06:42:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7E2A62236E3;
-	Mon, 11 May 2026 05:10:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="dCRo5XzO"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 76623363C59;
+	Mon, 11 May 2026 06:42:30 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-vk1-f181.google.com (mail-vk1-f181.google.com [209.85.221.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0CE23659FD
-	for <linux-mips@vger.kernel.org>; Mon, 11 May 2026 05:10:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91A5A363083
+	for <linux-mips@vger.kernel.org>; Mon, 11 May 2026 06:42:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778476225; cv=none; b=nYeaMouW8T5afEk+DXZMVYX3tzwIw3a7l7i/MYs9QcCS83f4wiFZ2RlR+OkBa74y3uyd4d5+Gqp7ieaHkdRAXRXxbKC8EWIlgu9ISz7sDYS5K7/ab48lyZ9MQxmTMFtANlCiEpK9KBZjZ204rgxMV9U7zjvLspg6bvINJC6BaZk=
+	t=1778481750; cv=none; b=BzneN4PGzRn2ncv9xGrr0ENdJh5anqsBOGsVvILgkUaAqjiupe6B1Lfr95yTqbPJYG4OEP7eLtryTvCR8QnE91bxmEqcYX9QjhrG0ghULDstFiazuSk0cukfEG3/Zgr9O+VJkR2nftkIAzrnX0UIj4NF0+Tn7RXetDddz3UhdyM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778476225; c=relaxed/simple;
-	bh=9bPgUgowYtDZvwWDaDvH9GE08BbGRUl9XHTtvYleq54=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=RhsMOSGONqZuB8QvWZlhgiIqx5E4QbXltmm46oVuqn3qxznP01S7vQMPnBqZhEIvoksKAKu1+rDILMljNf+/i7Q0S2edL3L/H/XhtZyB4fuZQ/hU8QthAlw6tzDzzrUtwhzSu59qtq+l3LOsqSGA0HCR/JQbbETDrBwe7wA7mAE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=dCRo5XzO; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1778476222;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=3tz4VshiSjvGUhY3dhtN6lD+p4cKMAlBefoUW+XXMHE=;
-	b=dCRo5XzO9wyELR5/hRGRkIMTcRJz9nxW9lWQES3RZ51w4GKsZDY3LmKYtoovgj5mD1wHzt
-	gCtvfwWmLVLezUd4s+YdDhoiR15xXdKS+EqCg+WSh0ATG9jyOVn7A5k/HVh2rGBzooJoA1
-	FutTVQhRrqsCXHXakQlS3CGxVvdqur8=
-Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-422-w6iTBQSwOBK7DQjDiHYbAg-1; Mon,
- 11 May 2026 01:10:18 -0400
-X-MC-Unique: w6iTBQSwOBK7DQjDiHYbAg-1
-X-Mimecast-MFC-AGG-ID: w6iTBQSwOBK7DQjDiHYbAg_1778476215
-Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 51FEF19560B4;
-	Mon, 11 May 2026 05:10:13 +0000 (UTC)
-Received: from [10.2.16.21] (unknown [10.2.16.21])
-	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 3A09030001BE;
-	Mon, 11 May 2026 05:10:04 +0000 (UTC)
-Message-ID: <8aaa7dd9-2426-475c-af64-85ef5f2aa855@redhat.com>
-Date: Mon, 11 May 2026 01:10:02 -0400
+	s=arc-20240116; t=1778481750; c=relaxed/simple;
+	bh=ESqdwpO1PaZzMNYLF3fxyPf6qP7RM49WGjHDzTkKeUM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=LEaY3qDl/NYaASv+iD6jhmW4LTAir2EcEIAoPnoNfZQRXlAovJ9XDs2x9zWCdsqsN+NOAwnxyMtnmo6PMWQC/RgYjyhY9WBDF9YgYUVF2g8aB3vTaPPwR180YwLLM40rVEkZ16HbZJ0rqGatF3MYKcjPMpucAZKAY1rd3aZGBLs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.221.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-vk1-f181.google.com with SMTP id 71dfb90a1353d-56f70865797so2102479e0c.1
+        for <linux-mips@vger.kernel.org>; Sun, 10 May 2026 23:42:28 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1778481747; x=1779086547;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=nmM7uPcTxOtt/CXqxfbtSzgj1ys1bMpqCcKcPX8L8Aw=;
+        b=R1GB8ScTwU5Fpl+zwLRmeKMlNXKBEEQ3rqNuh0cX5E7Q9HOIjkpJ8qNxsmjTbbRC9p
+         LGaRa1EF1YcqnEqtL3TJhQ9v9Y6AiaPMBywzjASNApLPmYd4XrNvmNXEYXbMq/cUo+tD
+         VV7HlViHic7zIuwCnI5b0bgoMAP+ZbneSjMMN0jQNmo/Xv6SisxGe92fIsNy9hzafNiF
+         yc07yM92vSDZ9zpg9rwXgH0hyJ0pR5JJQ1vUOdRVEox3VODlvQeNnwz/CvQmVMMhmXv7
+         Eavy1Ed5kXIJ4eEFhdlgL99Znv2eRwH42wQpDOW5YMPRMFYTI393HZ/Gg6E3vUOmJsh+
+         VhzQ==
+X-Forwarded-Encrypted: i=1; AFNElJ+iW4OuskiHqJzRnRF3F84ic7SYZvoD3PLp5EIwyomEsniViUlQbZ4mIRR3JXBCAxUclyFlS/enef4H@vger.kernel.org
+X-Gm-Message-State: AOJu0YxfMAHyoHLuWJex+OrtZ7QYoXKBwD7KM1Rmfskq+sKIumbzyQ5d
+	0vLurIao5OFnsCtnyDB8oFjAwzC+Fk8LnKW+OEXAmez95RyAIPWTPQcfjVjftL2f
+X-Gm-Gg: Acq92OEBmqPP8134W4ZHvbW5HCcMk45Q5Mu2YLSy8IdiSwllQz5d8GERuVGBgXoOrh8
+	cuemq6D+IDOPJ4RZz3bEytGGDK31eCJQ9GA1aRmJcd3Ro6K4Q6o45nOVK+jaSFr3lQjrOO2Yi+/
+	pe/pGQg/Qp9JYWtgKGsnOxKxbQMA2nRzuDuggOIeFq6uFoRgxztoYf/bKdf+Abjf66ctXtLi2ER
+	oh1zF6C45Y3Ec5k4NsVWY/8/4TmY8Z30rXaFR7qvsnx7AY/CBlMaLdG70TBnRj36p47ceUfrwOz
+	0sGKiYXqdLyD/DRuB2iQ4xyn8/40JMBW0f2k2LPIn6KmU+uKES6cuOgjUfS3GoaeO7CrPKj74TC
+	KIQDYhjfAIYjCXrWuuKyttjXPutjl/xoAJk+HiCk/vYz6FeTuZMj7TJk8wQEMiXQMefVe+V3jiT
+	V7lqo6T4hdXwPqpZ/uxzG8HZTssNeOVJkNlwzZiKzY+oxE4M6bbWUOcgGMeDUj
+X-Received: by 2002:a05:6122:3d42:b0:56e:8afc:de8c with SMTP id 71dfb90a1353d-5755937cb24mr11664009e0c.3.1778481747507;
+        Sun, 10 May 2026 23:42:27 -0700 (PDT)
+Received: from mail-vs1-f48.google.com (mail-vs1-f48.google.com. [209.85.217.48])
+        by smtp.gmail.com with ESMTPSA id 71dfb90a1353d-57586996d3esm6215366e0c.6.2026.05.10.23.42.26
+        for <linux-mips@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 10 May 2026 23:42:27 -0700 (PDT)
+Received: by mail-vs1-f48.google.com with SMTP id ada2fe7eead31-6313b7e3d03so1824666137.3
+        for <linux-mips@vger.kernel.org>; Sun, 10 May 2026 23:42:26 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AFNElJ/H6MLzY+Apk3tA9z0jX5W9HsvwSdBybtBCbLfbsoCtYj0KnQZrkJn3MvHP8V/Xf0bmHJuYY/0vlcKv@vger.kernel.org
+X-Received: by 2002:a05:6102:2ac7:b0:633:c6c4:b32c with SMTP id
+ ada2fe7eead31-633c6c4b990mr1428757137.15.1778481746411; Sun, 10 May 2026
+ 23:42:26 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/3] cgroup/cpuset: Fix deadline bandwidth leak in
- cpuset_can_attach()
-To: Aaron Tomlin <atomlin@atomlin.com>, tsbogend@alpha.franken.de,
- paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com, mingo@redhat.com,
- peterz@infradead.org, juri.lelli@redhat.com, vincent.guittot@linaro.org,
- stephen.smalley.work@gmail.com, casey@schaufler-ca.com, tj@kernel.org,
- hannes@cmpxchg.org, mkoutny@suse.com
-Cc: chenridong@huaweicloud.com, dietmar.eggemann@arm.com,
- rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
- vschneid@redhat.com, kprateek.nayak@amd.com, omosnace@redhat.com,
- kees@kernel.org, neelx@suse.com, sean@ashe.io, chjohnst@gmail.com,
- steve@abita.co, mproche@gmail.com, nick.lange@gmail.com,
- cgroups@vger.kernel.org, linux-mips@vger.kernel.org,
- linux-fsdevel@vger.kernel.org, linux-security-module@vger.kernel.org,
- selinux@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20260509164847.939294-1-atomlin@atomlin.com>
- <20260509164847.939294-2-atomlin@atomlin.com>
-Content-Language: en-US
-From: Waiman Long <longman@redhat.com>
-In-Reply-To: <20260509164847.939294-2-atomlin@atomlin.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
-X-Rspamd-Queue-Id: ACADF507F8F
+References: <202605100125.l4JVHppO-lkp@intel.com>
+In-Reply-To: <202605100125.l4JVHppO-lkp@intel.com>
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+Date: Mon, 11 May 2026 08:42:13 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdXPeUnjN__PvY+HQg+cSxKe-RLnyT-A5KGe=4cmjnUNbg@mail.gmail.com>
+X-Gm-Features: AVHnY4LhC2w7Nls0eAOnAROXGmHfJhM8ihUdL8l1JwrVFRMxvNzDPSpVspNG9hQ
+Message-ID: <CAMuHMdXPeUnjN__PvY+HQg+cSxKe-RLnyT-A5KGe=4cmjnUNbg@mail.gmail.com>
+Subject: Re: crypto/ahash.c:1073:1: warning: the frame size of 1040 bytes is
+ larger than 1024 bytes
+To: kernel test robot <lkp@intel.com>
+Cc: Herbert Xu <herbert@gondor.apana.org.au>, oe-kbuild-all@lists.linux.dev, 
+	linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org, 
+	linuxppc-dev <linuxppc-dev@lists.ozlabs.org>, wireguard@lists.zx2c4.com
+Content-Type: text/plain; charset="UTF-8"
+X-Rspamd-Queue-Id: D6AFC508AC2
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.66 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+X-Spamd-Result: default: False [-1.46 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[redhat.com,quarantine];
-	R_DKIM_ALLOW(-0.20)[redhat.com:s=mimecast20190719];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-14536-lists,linux-mips=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
-	FREEMAIL_TO(0.00)[atomlin.com,alpha.franken.de,paul-moore.com,namei.org,hallyn.com,redhat.com,infradead.org,linaro.org,gmail.com,schaufler-ca.com,kernel.org,cmpxchg.org,suse.com];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	FREEMAIL_CC(0.00)[huaweicloud.com,arm.com,goodmis.org,google.com,suse.de,redhat.com,amd.com,kernel.org,suse.com,ashe.io,gmail.com,abita.co,vger.kernel.org];
-	RCPT_COUNT_TWELVE(0.00)[35];
-	MIME_TRACE(0.00)[0:+];
-	FROM_HAS_DN(0.00)[];
+	MISSING_XM_UA(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-14537-lists,linux-mips=lfdr.de];
+	RCVD_TLS_LAST(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
+	MIME_TRACE(0.00)[0:+];
+	DMARC_NA(0.00)[linux-m68k.org];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	FROM_HAS_DN(0.00)[];
 	TO_DN_SOME(0.00)[];
 	RCVD_COUNT_FIVE(0.00)[6];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[longman@redhat.com,linux-mips@vger.kernel.org];
-	DKIM_TRACE(0.00)[redhat.com:+];
-	NEURAL_HAM(-0.00)[-0.999];
+	FROM_NEQ_ENVFROM(0.00)[geert@linux-m68k.org,linux-mips@vger.kernel.org];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	NEURAL_HAM(-0.00)[-0.993];
+	RCPT_COUNT_SEVEN(0.00)[7];
+	R_DKIM_NA(0.00)[];
 	TAGGED_RCPT(0.00)[linux-mips];
-	MID_RHS_MATCH_FROM(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[mail.gmail.com:mid,sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,linux-m68k.org:email,intel.com:email,01.org:url]
 X-Rspamd-Action: no action
 
-
-On 5/9/26 12:48 PM, Aaron Tomlin wrote:
-> During a cgroup migration, cpuset_can_attach() iterates over the
-> provided taskset. If a task within the batch is a deadline (DL) task,
-> the destination cpuset's DL metrics (i.e., nr_migrate_dl_tasks and
-> sum_migrate_dl_bw) are appropriately incremented.
+On Sat, 9 May 2026 at 19:07, kernel test robot <lkp@intel.com> wrote:
+> FYI, the error/warning still remains.
 >
-> However, if a subsequent task in the same migration batch fails the
-> task_can_attach() check, the loop aborts and jumps directly to
-> out_unlock. Consequently, any DL metrics accumulated from previously
-> processed tasks in the batch remain permanently inflated in the
-> destination cpuset. Because the migration is subsequently aborted by the
-> cgroup core, cpuset_cancel_attach() is never invoked to unwind these
-> specific increments.
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+> head:   ec89572766744e844df24c27d31c97b4c00f4e07
+> commit: 9d9b193ed73a65ec47cf1fd39925b09da8216461 crypto: hash - Increase HASH_MAX_DESCSIZE for hmac(sha3-224-s390)
+> date:   9 months ago
+> config: mips-eyeq5_defconfig (https://download.01.org/0day-ci/archive/20260510/202605100125.l4JVHppO-lkp@intel.com/config)
+> compiler: mips64-linux-gcc (GCC) 15.2.0
+> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260510/202605100125.l4JVHppO-lkp@intel.com/reproduce)
 >
-> This behaviour results in a permanent leak of deadline bandwidth, which
-> incorrectly restricts the admission control capacity of the destination
-> cpuset.
+> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> the same patch/commit), kindly add following tags
+> | Fixes: 9d9b193ed73a ("crypto: hash - Increase HASH_MAX_DESCSIZE for hmac(sha3-224-s390)")
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202605100125.l4JVHppO-lkp@intel.com/
 >
-> To resolve this, introduce an out_unlock_reset failure path that
-> conditionally invokes reset_migrate_dl_data(). This guarantees that if a
-> batch migration is aborted for any reason, the pending DL metrics are
-> safely reset before returning the error.
+> All warnings (new ones prefixed by >>):
 >
-> Fixes: 0a67b847e1f06 ("cpuset: Allow setscheduler regardless of manipulated task")
+>    crypto/ahash.c: In function 'crypto_hash_digest':
+> >> crypto/ahash.c:1073:1: warning: the frame size of 1040 bytes is larger than 1024 bytes [-Wframe-larger-than=]
+>     1073 | }
+>          | ^
 
-That is not the commit that introduced the bug. Anyway, there is already 
-another patch sent recently to fix this bug. See
+This is one of the few defconfigs that still use CONFIG_FRAME_WARN=1024.
+The default value for 32-bit systems was lifted from 1024 to 1280 in
+commit 32115734c0ed8b46 ("Increase the default 32-bit build frame size
+warning limit to 1280 bytes") in v6.18, so perhaps the downgrade to
+1024 should be dropped from the following defconfigs:
 
-https://lore.kernel.org/lkml/20260509102031.97608-2-zhangguopeng@kylinos.cn/
+$ git grep CONFIG_FRAME_WARN=1024
+arch/mips/configs/eyeq5_defconfig:CONFIG_FRAME_WARN=1024
+arch/mips/configs/eyeq6_defconfig:CONFIG_FRAME_WARN=1024
+arch/mips/configs/eyeq6lplus_defconfig:CONFIG_FRAME_WARN=1024
+arch/mips/configs/lemote2f_defconfig:CONFIG_FRAME_WARN=1024
+arch/mips/configs/loongson2k_defconfig:CONFIG_FRAME_WARN=1024
+arch/powerpc/configs/fsl-emb-nonhw.config:CONFIG_FRAME_WARN=1024
+tools/testing/selftests/wireguard/qemu/arch/arm.config:CONFIG_FRAME_WARN=1024
+tools/testing/selftests/wireguard/qemu/arch/armeb.config:CONFIG_FRAME_WARN=1024
+tools/testing/selftests/wireguard/qemu/arch/i686.config:CONFIG_FRAME_WARN=1024
+tools/testing/selftests/wireguard/qemu/arch/m68k.config:CONFIG_FRAME_WARN=1024
+tools/testing/selftests/wireguard/qemu/arch/mips.config:CONFIG_FRAME_WARN=1024
+tools/testing/selftests/wireguard/qemu/arch/mipsel.config:CONFIG_FRAME_WARN=1024
+tools/testing/selftests/wireguard/qemu/arch/powerpc.config:CONFIG_FRAME_WARN=1024
 
-Cheers,
-Longman
+I am not sure about the wireguard selftests: they might use the lower
+value deliberately for testing?
 
+Gr{oetje,eeting}s,
 
+                        Geert
+
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
 
