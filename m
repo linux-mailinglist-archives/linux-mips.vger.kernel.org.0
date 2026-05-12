@@ -1,304 +1,237 @@
-Return-Path: <linux-mips+bounces-14555-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-14556-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id yEHQEWAVA2oj0QEAu9opvQ
-	(envelope-from <linux-mips+bounces-14555-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Tue, 12 May 2026 13:56:16 +0200
+	id 0MYGEpQyA2oA1gEAu9opvQ
+	(envelope-from <linux-mips+bounces-14556-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Tue, 12 May 2026 16:00:52 +0200
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id A5EF451FA0B
-	for <lists+linux-mips@lfdr.de>; Tue, 12 May 2026 13:56:15 +0200 (CEST)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 95B3F521D9C
+	for <lists+linux-mips@lfdr.de>; Tue, 12 May 2026 16:00:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 061FA30633E1
-	for <lists+linux-mips@lfdr.de>; Tue, 12 May 2026 11:55:28 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 91FFE303F5A3
+	for <lists+linux-mips@lfdr.de>; Tue, 12 May 2026 13:27:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 153173FB05B;
-	Tue, 12 May 2026 11:55:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 25322357CEC;
+	Tue, 12 May 2026 13:27:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dWGgkzKq"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="cXPzCeDY"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D010A396B8C;
-	Tue, 12 May 2026 11:55:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 062FA3E1731
+	for <linux-mips@vger.kernel.org>; Tue, 12 May 2026 13:27:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.171.202.116
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778586926; cv=none; b=rpyOSAAJ6UshktN3GYKovhbHH/sWp0HqkQSqv5RSjj95JLlNS0qPaN9rIeeySerQ4UczWx+6lNRfh5xxMkiQ7zZnn4gol2CnG2NuXfqU3DuA6v3zZTLKy0SvUEgf+8DnhRpAL4L5j0J5jvqfDbSjHwaI+gEv3bTYk0/lxJvadeE=
+	t=1778592459; cv=none; b=j8NnRIof5dfej/44GXH9T/DwVRM8A/TkprWCia7JfI7jUyJBI87qCvAmcB8Cv7Ir9J61QSEogpkD2cXbKsOnw6E09y2tRBHor0huBUB3p098tYrledeeREmHjQA06V6t4/cLASAdVfDmRl/Bms+iLoH1zUkZp3kmilAHuOtA80A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778586926; c=relaxed/simple;
-	bh=zgGM5XKZo0cNX0MEkNZl6YoD9uFB4lPKFTc1aQDdZbY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=R4DEcTGLa89poGhhkFf/P/0a2OqpY4I4nJn+D9na7MXRO+08HNqPE+YpR0wBriwAmnZfkCf8a2npHhAwd87zJkZWYJZ6roDhJhRBR3rZPbpUx3W91KHv6q1JmKD2z8KTRLd7XRayu78mSpoTDx10RjJGAZkM9RWZ2rofZnc6DPI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dWGgkzKq; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0DF4EC2BCB0;
-	Tue, 12 May 2026 11:55:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778586926;
-	bh=zgGM5XKZo0cNX0MEkNZl6YoD9uFB4lPKFTc1aQDdZbY=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=dWGgkzKqR2ykGBqb1lTM9qEf4mbkXXmEVIcqc+5TPsPsoDPwMW4ehXjAzs6KQErNX
-	 du0F+ZEl+iD3po+G+NoMnyBEhVWxye3X6U+umFrMkuhXhIDQzKh/mi44FBR615jRbR
-	 gb5mQ/A5SGrMnekY4tuTzd2Ni5PnrmViuBjjDesfdg5lIs6+7uSHAPfUEb3/Ebcka/
-	 7B6lTuJToS6mpU2NrCK3+8XRd5AWXqwhC7Rmb2GVSbeLx7n3S8szIFY2XNr0JnUH8o
-	 DdwN/R6N5U6KlLwMSoNrHIX5+1qMF1bwdo1rHr1fXcchPZZyUqTw3Rb0eKJEhZctO+
-	 PTZXIynRpkMTQ==
-Date: Tue, 12 May 2026 17:25:17 +0530
-From: Manivannan Sadhasivam <mani@kernel.org>
-To: Caleb James DeLisle <cjd@cjdns.fr>
-Cc: linux-pci@vger.kernel.org, linux-mips@vger.kernel.org, 
-	naseefkm@gmail.com, ryder.lee@mediatek.com, helgaas@kernel.org, 
-	lpieralisi@kernel.org, kwilczynski@kernel.org, robh@kernel.org, krzk+dt@kernel.org, 
-	conor+dt@kernel.org, matthias.bgg@gmail.com, angelogioacchino.delregno@collabora.com, 
-	ansuelsmth@gmail.com, linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 2/2] PCI: mediatek: Add support for EcoNet EN7528 SoC
-Message-ID: <duchbakmiuf4ffmhgkoioq3qpxaybcevtcdduwiv2gf56j5ncr@kszd5v54ph3q>
-References: <20260413140339.16238-1-cjd@cjdns.fr>
- <20260413140339.16238-3-cjd@cjdns.fr>
+	s=arc-20240116; t=1778592459; c=relaxed/simple;
+	bh=GOucduZf8AmFUdwTFZY5EAcAJajv7H8fkDYDb+9hqbY=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=hXwOzdGV7PJai/R6lJCjsImRfg2IbtoAzMqme+5dQpFmkNLGI+4SOn7dZc/xG0voDuKSf0TLNgPFZRd+HN0QSMp1AbIjJuQ7fbNGAqPxJ0DGUVoksC6C4B5LBv4eNlAxce45xwcvzg83wvmiIN6W86weihtm7eFy0HbsHWJD/WE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=cXPzCeDY; arc=none smtp.client-ip=185.171.202.116
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+	by smtpout-04.galae.net (Postfix) with ESMTPS id 844A6C5E17D;
+	Tue, 12 May 2026 13:28:25 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+	by smtpout-01.galae.net (Postfix) with ESMTPS id 7310860646;
+	Tue, 12 May 2026 13:27:35 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id B57EE11AF8CDC;
+	Tue, 12 May 2026 15:27:30 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
+	t=1778592454; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 content-transfer-encoding; bh=SVf9x1fU9es/DZnj3Ad/SGfYJ7Y6+3Fw0H1+dTnnGt8=;
+	b=cXPzCeDYR6Cr8oPnBasKrkABbUTHDVMPh75B0txHEZ5Sf1jES/3NTN/+gfbhvkocPdak8d
+	IETPrT8ht/eFeuMCIoY81Ld3AG9ggX7W0kcdTdjd/0umymF1/eeTy/MrPVvn5W14IbUsl8
+	aUqIVpj5mpIJ92p+3H4z2v6NUM5HyQWiaA9JG94TLA4HG4NZcaukNBeu6oxC/j3sFZDALq
+	zUfC8tVzOjmkKxXZ/PY1/AeBxrE5YELT/91+PnK/yAUOSNnjZ0YIlEDCGy0g4caNIDMq55
+	v+vJY0qvmGb3G5/5zDS1IyAdt4QNnBqDMMGv66QC4DGxhL4jgb/AjjLr4HYg9w==
+From: =?utf-8?q?Beno=C3=AEt_Monin?= <benoit.monin@bootlin.com>
+Subject: [PATCH v6 0/9] Add clock and reset support for Mobileye EyeQ7H
+Date: Tue, 12 May 2026 15:26:59 +0200
+Message-Id: <20260512-clk-eyeq7-v6-0-0540cce18fb2@bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20260413140339.16238-3-cjd@cjdns.fr>
-X-Rspamd-Queue-Id: A5EF451FA0B
+X-B4-Tracking: v=1; b=H4sIAKMqA2oC/2XRzW7DIAwH8FeJOI8KA4Gkp73HtAMfzorWJi3J0
+ Kqq7z6n1bZEORr79xeyb2zEnHBk++rGMpY0pqGnwrxULBxc/4E8RaqZFLIWjbA8HD85XvFiedc
+ Gg06rCKphNH/O2KXvR9bbO9WHNE5Dvj6iC8yvz5RWqEVKAS646mohta+jQfnqh2E6pn4XhhObc
+ 4r8syClXlpJtgGrdQTqxnZr1a81AmBl1WzRR++sF6DU1up/q8TKarJtND62kb6NYWvrhYXl1kp
+ N1nQmOieDVMau7f25yIyXL7rF9Nwm825ETv1TmvZVsTvgOSgavv8APYbh4MABAAA=
+X-Change-ID: 20250807-clk-eyeq7-f9c6ea43d138
+To: Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>, 
+ Gregory CLEMENT <gregory.clement@bootlin.com>, 
+ =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>, 
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, 
+ Michael Turquette <mturquette@baylibre.com>, 
+ Stephen Boyd <sboyd@kernel.org>, Brian Masney <bmasney@redhat.com>, 
+ Philipp Zabel <p.zabel@pengutronix.de>
+Cc: =?utf-8?q?Beno=C3=AEt_Monin?= <benoit.monin@bootlin.com>, 
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, linux-mips@vger.kernel.org, 
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-clk@vger.kernel.org, 
+ Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>, 
+ Sari Khoury <sari.khoury@mobileye.com>
+X-Mailer: b4 0.15.2
+X-Last-TLS-Session-Version: TLSv1.3
+X-Rspamd-Queue-Id: 95B3F521D9C
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.16 / 15.00];
+X-Spamd-Result: default: False [-0.66 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_RHS_NOT_FQDN(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+	DMARC_POLICY_ALLOW(-0.50)[bootlin.com,reject];
+	R_DKIM_ALLOW(-0.20)[bootlin.com:s=dkim];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-14555-lists,linux-mips=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-14556-lists,linux-mips=lfdr.de];
 	FROM_HAS_DN(0.00)[];
+	RECEIVED_HELO_LOCALHOST(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	RCPT_COUNT_TWELVE(0.00)[17];
+	RCVD_TLS_LAST(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[18];
 	MIME_TRACE(0.00)[0:+];
-	FREEMAIL_CC(0.00)[vger.kernel.org,gmail.com,mediatek.com,kernel.org,collabora.com,lists.infradead.org];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	TO_DN_SOME(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
+	DKIM_TRACE(0.00)[bootlin.com:+];
+	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
+	RSPAMD_EMAILBL_FAIL(0.00)[theo.lebrun.bootlin.com:query timed out,mturquette.baylibre.com:query timed out,vladimir.kondratiev.mobileye.com:query timed out,sboyd.kernel.org:query timed out];
+	RCVD_COUNT_FIVE(0.00)[6];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[mani@kernel.org,linux-mips@vger.kernel.org];
-	DKIM_TRACE(0.00)[kernel.org:+];
+	FROM_NEQ_ENVFROM(0.00)[benoit.monin@bootlin.com,linux-mips@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	NEURAL_HAM(-0.00)[-1.000];
 	TAGGED_RCPT(0.00)[linux-mips,dt];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	MID_RHS_MATCH_FROM(0.00)[];
+	TO_DN_SOME(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	MISSING_XM_UA(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,cjdns.fr:email,mediatek.com:email]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,pengutronix.de:email]
 X-Rspamd-Action: no action
 
-On Mon, Apr 13, 2026 at 02:03:39PM +0000, Caleb James DeLisle wrote:
-> Add support for the PCIe present on the EcoNet EN7528 (and EN751221) SoCs.
-> 
-> These SoCs have a mix of Gen1 and Gen2 capable ports, but the Gen2 ports
-> require re-training after startup.
-> 
-> Co-developed-by: Ahmed Naseef <naseefkm@gmail.com>
-> Signed-off-by: Ahmed Naseef <naseefkm@gmail.com>
-> Signed-off-by: Caleb James DeLisle <cjd@cjdns.fr>
-> ---
->  drivers/pci/controller/Kconfig         |   2 +-
->  drivers/pci/controller/pcie-mediatek.c | 133 +++++++++++++++++++++++++
->  2 files changed, 134 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/pci/controller/Kconfig b/drivers/pci/controller/Kconfig
-> index 686349e09cd3..5808d5e407fd 100644
-> --- a/drivers/pci/controller/Kconfig
-> +++ b/drivers/pci/controller/Kconfig
-> @@ -209,7 +209,7 @@ config PCI_MVEBU
->  
->  config PCIE_MEDIATEK
->  	tristate "MediaTek PCIe controller"
-> -	depends on ARCH_AIROHA || ARCH_MEDIATEK || COMPILE_TEST
-> +	depends on ARCH_AIROHA || ARCH_MEDIATEK || ECONET || COMPILE_TEST
->  	depends on OF
->  	depends on PCI_MSI
->  	select IRQ_MSI_LIB
-> diff --git a/drivers/pci/controller/pcie-mediatek.c b/drivers/pci/controller/pcie-mediatek.c
-> index 75722524fe74..915a35825ce1 100644
-> --- a/drivers/pci/controller/pcie-mediatek.c
-> +++ b/drivers/pci/controller/pcie-mediatek.c
-> @@ -7,6 +7,7 @@
->   *	   Honghui Zhang <honghui.zhang@mediatek.com>
->   */
->  
-> +#include <asm-generic/errno-base.h>
->  #include <linux/clk.h>
->  #include <linux/delay.h>
->  #include <linux/iopoll.h>
-> @@ -14,6 +15,7 @@
->  #include <linux/irqchip/chained_irq.h>
->  #include <linux/irqchip/irq-msi-lib.h>
->  #include <linux/irqdomain.h>
-> +#include <linux/kconfig.h>
->  #include <linux/kernel.h>
->  #include <linux/mfd/syscon.h>
->  #include <linux/msi.h>
-> @@ -77,6 +79,7 @@
->  
->  #define PCIE_CONF_VEND_ID	0x100
->  #define PCIE_CONF_DEVICE_ID	0x102
-> +#define PCIE_CONF_REV_CLASS	0x104
->  #define PCIE_CONF_CLASS_ID	0x106
->  
->  #define PCIE_INT_MASK		0x420
-> @@ -89,6 +92,11 @@
->  #define MSI_MASK		BIT(23)
->  #define MTK_MSI_IRQS_NUM	32
->  
-> +#define EN7528_HOST_MODE	0x00804201
-> +#define EN7528_LINKUP_REG	0x50
-> +#define EN7528_RC0_LINKUP	BIT(1)
-> +#define EN7528_RC1_LINKUP	BIT(2)
-> +
->  #define PCIE_AHB_TRANS_BASE0_L	0x438
->  #define PCIE_AHB_TRANS_BASE0_H	0x43c
->  #define AHB2PCIE_SIZE(x)	((x) & GENMASK(4, 0))
-> @@ -148,12 +156,15 @@ struct mtk_pcie_port;
->   * @MTK_PCIE_FIX_DEVICE_ID: host's device ID needed to be fixed
->   * @MTK_PCIE_NO_MSI: Bridge has no MSI support, and relies on an external block
->   * @MTK_PCIE_SKIP_RSTB: Skip calling RSTB bits on PCIe probe
-> + * @MTK_PCIE_RETRAIN: Re-train link to bridge after startup because some
-> + *                    Gen2-capable devices start as Gen1.
->   */
->  enum mtk_pcie_quirks {
->  	MTK_PCIE_FIX_CLASS_ID = BIT(0),
->  	MTK_PCIE_FIX_DEVICE_ID = BIT(1),
->  	MTK_PCIE_NO_MSI = BIT(2),
->  	MTK_PCIE_SKIP_RSTB = BIT(3),
-> +	MTK_PCIE_RETRAIN = BIT(4),
->  };
->  
->  /**
-> @@ -753,6 +764,80 @@ static int mtk_pcie_startup_port_v2(struct mtk_pcie_port *port)
->  	return 0;
->  }
->  
-> +static int mtk_pcie_startup_port_en7528(struct mtk_pcie_port *port)
-> +{
-> +	struct mtk_pcie *pcie = port->pcie;
-> +	struct pci_host_bridge *host = pci_host_bridge_from_priv(pcie);
-> +	struct resource *mem = NULL;
-> +	struct resource_entry *entry;
-> +	u32 val, link_mask;
-> +	int err;
-> +
-> +	entry = resource_list_first_type(&host->windows, IORESOURCE_MEM);
-> +	if (entry)
-> +		mem = entry->res;
-> +	if (!mem)
-> +		return -EINVAL;
-> +
-> +	if (!pcie->cfg) {
-> +		dev_err(pcie->dev, "EN7528: pciecfg syscon not available\n");
-> +		return -EINVAL;
-> +	}
-> +
-> +	/* Assert all reset signals */
-> +	writel(0, port->base + PCIE_RST_CTRL);
-> +
-> +	/*
-> +	 * Enable PCIe link down reset, if link status changed from link up to
-> +	 * link down, this will reset MAC control registers and configuration
-> +	 * space.
-> +	 */
-> +	writel(PCIE_LINKDOWN_RST_EN, port->base + PCIE_RST_CTRL);
-> +
-> +	msleep(PCIE_T_PVPERL_MS);
-> +
-> +	/* De-assert PHY, PE, PIPE, MAC and configuration reset */
-> +	val = readl(port->base + PCIE_RST_CTRL);
-> +	val |= PCIE_PHY_RSTB | PCIE_PERSTB | PCIE_PIPE_SRSTB |
-> +	       PCIE_MAC_SRSTB | PCIE_CRSTB;
-> +	writel(val, port->base + PCIE_RST_CTRL);
-> +
-> +	writel(PCIE_CLASS_CODE | PCIE_REVISION_ID,
-> +	       port->base + PCIE_CONF_REV_CLASS);
-> +	writel(EN7528_HOST_MODE, port->base);
-> +
-> +	link_mask = (port->slot == 0) ? EN7528_RC0_LINKUP : EN7528_RC1_LINKUP;
-> +
-> +	/* 100ms timeout value should be enough for Gen1/2 training */
-> +	err = regmap_read_poll_timeout(pcie->cfg, EN7528_LINKUP_REG, val,
-> +				       !!(val & link_mask), 20,
-> +				       PCI_PM_D3COLD_WAIT * USEC_PER_MSEC);
-> +	if (err) {
-> +		dev_err(pcie->dev, "EN7528: port%d link timeout\n", port->slot);
-> +		return -ETIMEDOUT;
-> +	}
-> +
-> +	/* Activate INTx interrupts */
-> +	val = readl(port->base + PCIE_INT_MASK);
-> +	val &= ~INTX_MASK;
-> +	writel(val, port->base + PCIE_INT_MASK);
-> +
-> +	if (IS_ENABLED(CONFIG_PCI_MSI))
-> +		mtk_pcie_enable_msi(port);
-> +
-> +	/* Set AHB to PCIe translation windows */
-> +	val = lower_32_bits(mem->start) |
-> +	      AHB2PCIE_SIZE(fls(resource_size(mem)));
-> +	writel(val, port->base + PCIE_AHB_TRANS_BASE0_L);
-> +
-> +	val = upper_32_bits(mem->start);
-> +	writel(val, port->base + PCIE_AHB_TRANS_BASE0_H);
-> +
-> +	writel(WIN_ENABLE, port->base + PCIE_AXI_WINDOW0);
-> +
-> +	return 0;
-> +}
-> +
->  static void __iomem *mtk_pcie_map_bus(struct pci_bus *bus,
->  				      unsigned int devfn, int where)
->  {
-> @@ -1149,6 +1234,46 @@ static int mtk_pcie_probe(struct platform_device *pdev)
->  	if (err)
->  		goto put_resources;
->  
-> +	/* EN7528 PCIe initially comes up as Gen1 even if Gen2 is supported.
-> +	 * The cannonical way to achieve Gen2 is to re-train the link
-> +	 * immediately after setup. However, to save a lot of duplicated code
-> +	 * we use pcie_retrain_link() which is usable once we have the pci_dev
-> +	 * struct for the bridge, i.e. after pci_host_probe(). */
+This patchset brings the support of the Other Logic Blocks (OLB)
+found in the first Mobileye SoC based on the RISC-V architecture, the
+EyeQ7H. Despite the change from MIPS to RISC-V, the Other Logic Blocks
+provide similar clock and reset functions to the controllers of the
+chip. This series introduces the device tree bindings of the SoC and
+the necessary changes to the clock and reset eyeq drivers.
 
-Use below style:
+Since this series affects drivers used on Mobileye MIPS SoCs, mainly
+clk-eyeq, I tested that it does not introduce regressions on EyeQ5,
+EyeQ6H, and EyeQ6Lplus evaluation boards.
+    
+In detail, the first patch adds the dt-bindings yaml and headers for
+the EyeQ7H OLB.
 
-	/*
-	 * ...
-	 */
+Patch 2 adds the compatible entries to the reset-eyeq driver, and the
+necessary changes for the reset domains found in the EyeQ7H OLB.
 
-> +	if (pcie->soc->quirks & MTK_PCIE_RETRAIN) {
-> +		int slot = of_get_pci_domain_nr(dev->of_node);
+Patches 3 and 4 rework the handling of parent clocks in
+__clk_hw_register_fixed_factor() to make it identical to other clock types
+like divider or gate. This allows simplifying the registration functions
+built on top of the now exported __clk_hw_register_fixed_factor(). A
+new clk_hw_register_fixed_factor_pdata() is added that will be used in
+clk-eyeq later in the series.
 
-The returned value is not the slot number, but domain number. Both are different
-numbering schemes.
+Patch 5 renames the defines and functions related to the PLL with the
+PLL type fracg, to make room for the other types of PLL found the in
+EyeQ7H OLB.
 
-> +		struct pci_dev *rc = NULL;
-> +		int ret = -ENOENT;
-> +
-> +		if (slot >= 0)
-> +			rc = pci_get_slot(host->bus, PCI_DEVFN(slot, 0));
+Patch 6 introduces a new generic type of clock structure that can
+represents all clocks found in OLB. Then patch 7 and 8 converts all
+clocks defined in the driver to the new struct eqc_clock and remove all
+the previous separate clocks structures.
 
-This looks wrong. If your intention is to find the Root Port of the hierarchy,
-then you should do:
+Patch 9 adds the list of clocks as match data for the 14 OLB present
+in the EyeQ7H SoC, and the functions needed to probe the two PLL types
+found in the chip.
 
-		pci_get_slot(host->bus, PCI_DEVFN(0, 0));
+This series is based on v7.1-rc3 as all the prerequisites have been
+merged. It also applies cleanly on the clk-next branch.
 
-- Mani
+Signed-off-by: Benoît Monin <benoit.monin@bootlin.com>
+---
+Changes in v6:
+- Rebased on v7.1-rc3.
+- Dropped the MAINTAINER update for now, this will go with the SoC series.
+- Link to v5: https://lore.kernel.org/r/20260317-clk-eyeq7-v5-0-6f6daa2c2367@bootlin.com
 
--- 
-மணிவண்ணன் சதாசிவம்
+Changes in v5:
+- Rebased in v7.0-rc1 + version 4 of eyeq6plus series.
+- Remove an superfluous whitespace and tidy up macros in clk-provider.h.
+- Link to v4: https://lore.kernel.org/r/20260304-clk-eyeq7-v4-0-9d6bd9d24bec@bootlin.com
+
+Changes in v4:
+- Rebased on v7.0-rc1 + version 3 of eyeq6plus series.
+- Link to v3: https://lore.kernel.org/r/20260114-clk-eyeq7-v3-0-8ebdba7b0133@bootlin.com
+
+Changes in v3:
+- Fix eyeq7h-olb DT bindings following Krzysztof review.
+- Link to v2: https://lore.kernel.org/r/20251224-clk-eyeq7-v2-0-81744d1025d9@bootlin.com
+
+Changes in v2:
+- Move the dt-bindings to their own files and sort the compatibles.
+- Reorder the changes in reset-eyeq and make the register access more
+  readable.
+- Drop the validity check on even divider. Unnecessary since it is
+  always called from a clock .set_rate().
+- Drop the parameters check on divider registration. Will be posted
+  separately.
+- Switch to a new generic struct for describing the clocks.
+- Add an entry to MAINTAINERS.
+- Link to v1: https://lore.kernel.org/r/20250903-clk-eyeq7-v1-0-3f5024b5d6e2@bootlin.com
+
+To: Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>
+To: Benoît Monin <benoit.monin@bootlin.com>
+To: Gregory CLEMENT <gregory.clement@bootlin.com>
+To: Théo Lebrun <theo.lebrun@bootlin.com>
+To: Rob Herring <robh@kernel.org>
+To: Krzysztof Kozlowski <krzk+dt@kernel.org>
+To: Conor Dooley <conor+dt@kernel.org>
+To: Michael Turquette <mturquette@baylibre.com>
+To: Stephen Boyd <sboyd@kernel.org>
+To: Brian Masney <bmasney@redhat.com>
+To: Philipp Zabel <p.zabel@pengutronix.de>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: linux-mips@vger.kernel.org
+Cc: devicetree@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Cc: linux-clk@vger.kernel.org
+
+---
+Benoît Monin (9):
+      dt-bindings: soc: mobileye: Add EyeQ7H OLB
+      reset: eyeq: Add EyeQ7H compatibles
+      clk: fixed-factor: Rework initialization with parent clocks
+      clk: fixed-factor: Export __clk_hw_register_fixed_factor()
+      clk: eyeq: Prefix the PLL registers with the PLL type
+      clk: eyeq: Introduce a generic clock type
+      clk: eyeq: Convert clocks declaration to eqc_clock
+      clk: eyeq: Drop PLL, dividers, and fixed factors structs
+      clk: eyeq: Add EyeQ7H compatibles
+
+ .../bindings/soc/mobileye/mobileye,eyeq7h-olb.yaml |  192 +++
+ drivers/clk/clk-eyeq.c                             | 1245 +++++++++++++-------
+ drivers/clk/clk-fixed-factor.c                     |   72 +-
+ drivers/reset/reset-eyeq.c                         |  268 ++++-
+ include/dt-bindings/clock/mobileye,eyeq7h-clk.h    |  119 ++
+ include/linux/clk-provider.h                       |   56 +-
+ 6 files changed, 1456 insertions(+), 496 deletions(-)
+---
+base-commit: bb1459368dd795c43380057523f571d5eb0ddded
+change-id: 20250807-clk-eyeq7-f9c6ea43d138
+
+Best regards,
+--  
+Benoît Monin, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
+
 
