@@ -1,60 +1,59 @@
-Return-Path: <linux-mips+bounces-14564-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-14565-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 0NJdGKotA2qN1QEAu9opvQ
-	(envelope-from <linux-mips+bounces-14564-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Tue, 12 May 2026 15:39:54 +0200
+	id CKaAEtEuA2qN1QEAu9opvQ
+	(envelope-from <linux-mips+bounces-14565-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Tue, 12 May 2026 15:44:49 +0200
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 48888521674
-	for <lists+linux-mips@lfdr.de>; Tue, 12 May 2026 15:39:54 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id EEBBF521864
+	for <lists+linux-mips@lfdr.de>; Tue, 12 May 2026 15:44:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 170CD3075E92
-	for <lists+linux-mips@lfdr.de>; Tue, 12 May 2026 13:29:02 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 78D7A312C1F6
+	for <lists+linux-mips@lfdr.de>; Tue, 12 May 2026 13:29:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6BB4D39A4BD;
-	Tue, 12 May 2026 13:27:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8933E39AD4B;
+	Tue, 12 May 2026 13:27:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="GdYTHS//"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="s8IFMmja"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7FC15399CFE;
-	Tue, 12 May 2026 13:27:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E11639A4B8
+	for <linux-mips@vger.kernel.org>; Tue, 12 May 2026 13:27:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.85.4
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778592475; cv=none; b=Lzr2RUfMx32p1hmaf3N3Vp8Pt6qoAbLSC8Wk5dEJn8jX1lmAoVfYjmJQ9bysAzCF3brFAKPceVUUaPU04LukHDYqigvGS8p1vx64YLi4iQfBtqDbhd8bxOFiHSyAqH8A1qB7z+TXPs+EqZ0GKOYckStUbs+NE8MDnjJxItXyggg=
+	t=1778592477; cv=none; b=fsNlpP+QWSIS4ZwClO6vZqpd1OxZpwIYeF5AeKUtLS3Tm8PUg0DwBjNkt8xkJT/sv9JXiJVc2eR/lhzdovY72LHM2Fj1wEbUOtYtwWtFCPx2UTxJo29K1hyOq8/q59jmnFqYpt+GnAqG6vLAODlP1eZW2W91m5AX09tG0OkKJj0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778592475; c=relaxed/simple;
-	bh=rJ8PRc5iEMvxQuATWrRN1STzRq7m3ft+nPZy04BAJps=;
+	s=arc-20240116; t=1778592477; c=relaxed/simple;
+	bh=FBCNk3mneGnOGAtdx64K8/uJ/AIeg0bQAW/YYJOOFqg=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=UnInGAXueSd8tTEhwXNdgz8YIIsfTxjs5rZyyY4e4CJXedMEOtac1yM5wVrB6Ix2WSYspZ1CFTMuPKhLxnK+usavEu6DlsXKK2I9EW38iK0bx08/L/nvBeIIIXipPJKXtMX7QVDhPdY1ZFdN756uzlRvvlSAmgX8yTPzRs71A8w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=GdYTHS//; arc=none smtp.client-ip=185.246.85.4
+	 In-Reply-To:To:Cc; b=lOKhghq9bRuNzMA+zrlS4RoRR8L5hbJaEJdHR4xgAcI6zhy0RGnSEZHoxi59u9HK3qWim27oj7GgPKFuQgwBsS45nUcGVa9ktM1WEAKp48GbW0qCL9u8XKdt7e9/sLz0d4jQzkyFPL2P/q8AX/ClqMksD9klWEE7kWQeK8134UA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=s8IFMmja; arc=none smtp.client-ip=185.246.85.4
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-03.galae.net (Postfix) with ESMTPS id 2BA894E42C8C;
-	Tue, 12 May 2026 13:27:52 +0000 (UTC)
+	by smtpout-03.galae.net (Postfix) with ESMTPS id CB1C64E42C90;
+	Tue, 12 May 2026 13:27:53 +0000 (UTC)
 Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id 0134A60646;
-	Tue, 12 May 2026 13:27:52 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 97C8211AF8CE8;
-	Tue, 12 May 2026 15:27:49 +0200 (CEST)
+	by smtpout-01.galae.net (Postfix) with ESMTPS id 9892860646;
+	Tue, 12 May 2026 13:27:53 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 5112311AF8CE9;
+	Tue, 12 May 2026 15:27:51 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1778592471; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	t=1778592472; h=from:subject:date:message-id:to:cc:mime-version:content-type:
 	 content-transfer-encoding:in-reply-to:references;
-	bh=nxE2mo/dG/Oh7DiyxHdmjOC+mpFjAGA0ajhZd+kWoy8=;
-	b=GdYTHS//z7UEhc8nXk5Fc4GnH3/FuVDgh8SX7P9pgh8+gwEuUdREklrUkbMnYv7kAJkI6Q
-	dentTtc0l8XgfgXL9YmIsE8yzMnLCss4vtDjwyKcM5UlVPj418+srXIfqg1EfByrq5w0dp
-	17O7GSY8D5mcy6VKFQKlZHJ2rRS0GlPa7rW9p98ICutBosF1FhLkqrXIDYfVocJ94RUVuu
-	9R6N0XjgEAlaHudN4t0xd3bQ4M3ndCmo4D23wfUroGbS9mHF/JoEBxB+JRC1fty8y9jJdg
-	ir1CjhrZDwChrw9k2xqosU8BGkX0lnms0p82q9/gTQUngJ4Wd+EfYAXrTLH8WA==
+	bh=/pmytPu3WKzVdAMxH0d+MSakPmRx+hUV6LRfPOPU3Os=;
+	b=s8IFMmjaHTt4d5J1Yxc09MgJn8EiVPCZnnn28XYNqnTGj/o9oPfZOqaW1hDlDwEstUUljz
+	vzugjWwvy+94AtoqaHrmNgInUVrTVA2o2gq6AUFKC3R8bDsRuxtZAfl5lqC0LuBBEAqO5r
+	mbBM2UpNsfMzRrGSVvQtEP3D4uKEqcyJIXmTt0tR0ljqr4O6ljKj1R+Ld7Zuv0Ad3PUn33
+	nnr1ydMai5op8sYFqcyi43Mz8PTE/RVQGM+ork9hh8GC6ntlr/GJlgOPv5vPLUPt2/E1Cm
+	V8Twk7SFY4OZhwKI/NZzBOpW5NVcU8lUk7CBmGnVWYrHTXSDi2gs48WAmZpfuw==
 From: =?utf-8?q?Beno=C3=AEt_Monin?= <benoit.monin@bootlin.com>
-Date: Tue, 12 May 2026 15:27:07 +0200
-Subject: [PATCH v6 8/9] clk: eyeq: Drop PLL, dividers, and fixed factors
- structs
+Date: Tue, 12 May 2026 15:27:08 +0200
+Subject: [PATCH v6 9/9] clk: eyeq: Add EyeQ7H compatibles
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -63,7 +62,7 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20260512-clk-eyeq7-v6-8-0540cce18fb2@bootlin.com>
+Message-Id: <20260512-clk-eyeq7-v6-9-0540cce18fb2@bootlin.com>
 References: <20260512-clk-eyeq7-v6-0-0540cce18fb2@bootlin.com>
 In-Reply-To: <20260512-clk-eyeq7-v6-0-0540cce18fb2@bootlin.com>
 To: Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>, 
@@ -80,18 +79,18 @@ Cc: =?utf-8?q?Beno=C3=AEt_Monin?= <benoit.monin@bootlin.com>,
  linux-clk@vger.kernel.org
 X-Mailer: b4 0.15.2
 X-Last-TLS-Session-Version: TLSv1.3
-X-Rspamd-Queue-Id: 48888521674
+X-Rspamd-Queue-Id: EEBBF521864
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-0.66 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[bootlin.com,reject];
 	R_DKIM_ALLOW(-0.20)[bootlin.com:s=dkim];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-14564-lists,linux-mips=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-14565-lists,linux-mips=lfdr.de];
 	FROM_HAS_DN(0.00)[];
 	RECEIVED_HELO_LOCALHOST(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
@@ -99,7 +98,7 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	RCPT_COUNT_TWELVE(0.00)[16];
 	MIME_TRACE(0.00)[0:+];
 	DKIM_TRACE(0.00)[bootlin.com:+];
-	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
 	TO_DN_SOME(0.00)[];
 	RCVD_COUNT_FIVE(0.00)[6];
 	PRECEDENCE_BULK(0.00)[];
@@ -109,280 +108,621 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	TAGGED_RCPT(0.00)[linux-mips,dt];
 	MID_RHS_MATCH_FROM(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,bootlin.com:email,bootlin.com:mid,bootlin.com:dkim]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,bootlin.com:email,bootlin.com:mid,bootlin.com:dkim]
 X-Rspamd-Action: no action
 
-Now that there are no users of the eqc_pll, eqc_div, and eqc_fixed_factor
-structures since they have been converted to eqc_clock, remove these
-structs and the code related to their parsing in probe and early
-initialization.
+Add the entries for the 14 Other Logic Blocks found in the EyeQ7H SoC. The
+clock tree is more complex than the previous generation of SoC, as some
+OLB depend on the clock output of other OLB instead of all referring to
+the main oscillator.
+
+The OLB south, east and west generate those reference clocks used by other
+blocks. They also use the reference clock internally. The reference clock
+provided by OLB south is named "ref_100p0", "ref_106p6_e" by OLB east and
+"ref_106p6_w" by OLB west.
+
+For the OLB with a single parent clock, We use the same logic as the
+blocks found in previous SoC and refer to it with the name "ref".
+
+The OLB with two parent clocks use the reference clock provided by the
+OLB south, east and west as "ref_100p0" and "ref_106p6" and the main
+oscillator as "ref".
+
+The reset controllers found is 11 of the OLB are declared as auxiliary
+device attached to the clock device.
+
+Also add the functions to parse the registers of the two types of PLL
+in the EyeQ7H OLB.
+
+The JFRACR PLL have similar properties as the FRACG PLL, but its
+configuration is spread on three registers instead of two. It also have
+a wider fractional part for the multiplier on 24 bits instead of 20.
+
+The AINTP PLL does not support spread spectrum and uses a single
+register. It is registered as a fixed factor without the flag
+CLK_FIXED_FACTOR_FIXED_ACCURACY and thus inherit the accuracy of its
+parent clock.
 
 Signed-off-by: Benoît Monin <benoit.monin@bootlin.com>
 ---
- drivers/clk/clk-eyeq.c | 192 +------------------------------------------------
- 1 file changed, 3 insertions(+), 189 deletions(-)
+ drivers/clk/clk-eyeq.c | 495 ++++++++++++++++++++++++++++++++++++++++++++++++-
+ 1 file changed, 494 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/clk/clk-eyeq.c b/drivers/clk/clk-eyeq.c
-index 7f9f4f68366e..83c6f5002451 100644
+index 83c6f5002451..c8c924d63bad 100644
 --- a/drivers/clk/clk-eyeq.c
 +++ b/drivers/clk/clk-eyeq.c
-@@ -78,33 +78,6 @@
- #define PARENT_BY_FWNAME			(-1)
- #define PARENT_BY_NAME				(-2)
+@@ -1,6 +1,6 @@
+ // SPDX-License-Identifier: GPL-2.0-only
+ /*
+- * PLL clock driver for the Mobileye EyeQ5, EyeQ6L and EyeQ6H platforms.
++ * PLL clock driver for the Mobileye EyeQ platforms.
+  *
+  * This controller handles:
+  *  - Read-only PLLs, all derived from the same main crystal clock.
+@@ -46,6 +46,7 @@
  
--struct eqc_pll {
--	unsigned int	index;
--	const char	*name;
--	unsigned int	reg64;
--};
--
--/*
-- * Divider clock. Divider is 2*(v+1), with v the register value.
-- * Min divider is 2, max is 2*(2^width).
-- */
--struct eqc_div {
--	unsigned int	index;
--	const char	*name;
--	unsigned int	parent;
--	unsigned int	reg;
--	u8		shift;
--	u8		width;
--};
--
--struct eqc_fixed_factor {
--	unsigned int	index;
--	const char	*name;
--	unsigned int	mult;
--	unsigned int	div;
--	unsigned int	parent;
--};
--
- struct eqc_clock {
- 	int		index;
- 	int		parent_idx;
-@@ -132,15 +105,6 @@ struct eqc_clock {
- };
+ #include <dt-bindings/clock/mobileye,eyeq5-clk.h>
+ #include <dt-bindings/clock/mobileye,eyeq6lplus-clk.h>
++#include <dt-bindings/clock/mobileye,eyeq7h-clk.h>
  
- struct eqc_match_data {
--	unsigned int		pll_count;
--	const struct eqc_pll	*plls;
--
--	unsigned int		div_count;
--	const struct eqc_div	*divs;
--
--	unsigned int			fixed_factor_count;
--	const struct eqc_fixed_factor	*fixed_factors;
--
- 	unsigned int		clk_count;
- 	const struct eqc_clock	*clks;
+ /* In frac mode, it enables fractional noise canceling DAC. Else, no function. */
+ #define FRACG_PCSR0_DAC_EN			BIT(0)
+@@ -71,6 +72,41 @@
+ #define FRACG_PCSR1_DOWN_SPREAD			BIT(11)
+ #define FRACG_PCSR1_FRAC_IN			GENMASK(31, 12)
  
-@@ -152,12 +116,6 @@ struct eqc_match_data {
- };
++#define JFRACR_PCSR0_BYPASS			BIT(0)
++#define JFRACR_PCSR0_PLL_EN			BIT(1)
++#define JFRACR_PCSR0_FOUTVCO_EN			BIT(2)
++#define JFRACR_PCSR0_FOUTPOSTDIV_EN		BIT(3)
++#define JFRACR_PCSR0_POST_DIV1			GENMASK(6, 4)
++#define JFRACR_PCSR0_POST_DIV2			GENMASK(9, 7)
++#define JFRACR_PCSR0_REF_DIV			GENMASK(15, 10)
++#define JFRACR_PCSR0_FB_DIV			GENMASK(27, 16)
++#define JFRACR_PCSR0_VCO_SEL			GENMASK(29, 28)
++#define JFRACR_PCSR0_PLL_LOCKED			GENMASK(31, 30)
++
++#define JFRACR_PCSR1_FRAC_IN			GENMASK(23, 0)
++#define JFRACR_PCSR1_FOUT4PHASE_EN		BIT(24)
++#define JFRACR_PCSR1_DAC_EN			BIT(25)
++#define JFRACR_PCSR1_DSM_EN			BIT(26)
++/* Bits 31..27 are reserved */
++#define JFRACR_PCSR2_RESET			BIT(0)
++#define JFRACR_PCSR2_DIS_SSCG			BIT(1)
++#define JFRACR_PCSR2_DOWN_SPREAD		BIT(2)
++#define JFRACR_PCSR2_SSGC_DIV			GENMASK(7, 4)
++#define JFRACR_PCSR2_SPREAD			GENMASK(12, 8)
++/* Bits 31..13 are reserved */
++
++#define AINTP_PCSR_BYPASS			BIT(0)
++#define AINTP_PCSR_PLL_EN			BIT(1)
++#define AINTP_PCSR_FOUTVCO_EN			BIT(2)
++#define AINTP_PCSR_FOUTPOSTDIV_EN		BIT(3)
++#define AINTP_PCSR_POST_DIV1			GENMASK(6, 4)
++#define AINTP_PCSR_POST_DIV2			GENMASK(9, 7)
++#define AINTP_PCSR_REF_DIV			GENMASK(15, 10)
++#define AINTP_PCSR_FB_DIV			GENMASK(27, 16)
++#define AINTP_PCSR_VCO_SEL			GENMASK(29, 28)
++/* bit 30 is reserved */
++#define AINTP_PCSR_PLL_LOCKED			BIT(31)
++
+ /*
+  * Special index values to lookup a parent clock by its name
+  * from the device tree or by its globally unique name.
+@@ -159,6 +195,29 @@ static void eqc_pll_downshift_factors(unsigned long *mult, unsigned long *div)
+ 	*div >>= shift;
+ }
  
- struct eqc_early_match_data {
--	unsigned int		early_pll_count;
--	const struct eqc_pll	*early_plls;
--
--	unsigned int			early_fixed_factor_count;
--	const struct eqc_fixed_factor	*early_fixed_factors;
--
- 	unsigned int		early_clk_count;
- 	const struct eqc_clock	*early_clks;
- 
-@@ -270,97 +228,6 @@ static int eqc_pll_parse_fracg(void __iomem *base, unsigned long *mult,
++static int eqc_pll_parse_aintp(void __iomem *base, unsigned long *mult, unsigned long *div)
++{
++	u32 r0;
++
++	r0 = readl(base);
++	if (r0 & AINTP_PCSR_BYPASS) {
++		*mult = 1;
++		*div = 1;
++		return 0;
++	}
++
++	if (!(r0 & AINTP_PCSR_PLL_LOCKED))
++		return -EINVAL;
++
++	*mult = FIELD_GET(AINTP_PCSR_FB_DIV, r0);
++	*div = FIELD_GET(AINTP_PCSR_REF_DIV, r0);
++
++	if (!*mult || !*div)
++		return -EINVAL;
++
++	return 0;
++}
++
+ static int eqc_pll_parse_fracg(void __iomem *base, unsigned long *mult,
+ 			       unsigned long *div, unsigned long *acc)
+ {
+@@ -228,6 +287,60 @@ static int eqc_pll_parse_fracg(void __iomem *base, unsigned long *mult,
  	return 0;
  }
  
--static void eqc_probe_init_plls(struct device *dev, const struct eqc_match_data *data,
--				void __iomem *base, struct clk_hw_onecell_data *cells)
--{
--	unsigned long mult, div, acc;
--	const struct eqc_pll *pll;
--	struct clk_hw *hw;
--	unsigned int i;
--	int ret;
--
--	for (i = 0; i < data->pll_count; i++) {
--		pll = &data->plls[i];
--
--		ret = eqc_pll_parse_fracg(base + pll->reg64, &mult, &div, &acc);
--		if (ret) {
--			dev_warn(dev, "failed parsing state of %s\n", pll->name);
--			cells->hws[pll->index] = ERR_PTR(ret);
--			continue;
--		}
--
--		hw = clk_hw_register_fixed_factor_with_accuracy_fwname(dev,
--				dev->of_node, pll->name, "ref", 0, mult, div, acc);
--		cells->hws[pll->index] = hw;
--		if (IS_ERR(hw))
--			dev_warn(dev, "failed registering %s: %pe\n", pll->name, hw);
--	}
--}
--
--static void eqc_probe_init_divs(struct device *dev, const struct eqc_match_data *data,
--				void __iomem *base, struct clk_hw_onecell_data *cells)
--{
--	struct clk_parent_data parent_data = { };
--	const struct eqc_div *div;
--	struct clk_hw *parent;
--	void __iomem *reg;
--	struct clk_hw *hw;
--	unsigned int i;
--
--	for (i = 0; i < data->div_count; i++) {
--		div = &data->divs[i];
--		reg = base + div->reg;
--		parent = cells->hws[div->parent];
--
--		if (IS_ERR(parent)) {
--			/* Parent is in early clk provider. */
--			parent_data.index = div->parent;
--			parent_data.hw = NULL;
--		} else {
--			/* Avoid clock lookup when we already have the hw reference. */
--			parent_data.index = 0;
--			parent_data.hw = parent;
--		}
--
--		hw = clk_hw_register_divider_table_parent_data(dev, div->name,
--				&parent_data, 0, reg, div->shift, div->width,
--				CLK_DIVIDER_EVEN_INTEGERS, NULL, NULL);
--		cells->hws[div->index] = hw;
--		if (IS_ERR(hw))
--			dev_warn(dev, "failed registering %s: %pe\n",
--				 div->name, hw);
--	}
--}
--
--static void eqc_probe_init_fixed_factors(struct device *dev,
--					 const struct eqc_match_data *data,
--					 struct clk_hw_onecell_data *cells)
--{
--	const struct eqc_fixed_factor *ff;
--	struct clk_hw *hw, *parent_hw;
--	unsigned int i;
--
--	for (i = 0; i < data->fixed_factor_count; i++) {
--		ff = &data->fixed_factors[i];
--		parent_hw = cells->hws[ff->parent];
--
--		if (IS_ERR(parent_hw)) {
--			/* Parent is in early clk provider. */
--			hw = clk_hw_register_fixed_factor_index(dev, ff->name,
--					ff->parent, 0, ff->mult, ff->div);
--		} else {
--			/* Avoid clock lookup when we already have the hw reference. */
--			hw = clk_hw_register_fixed_factor_parent_hw(dev, ff->name,
--					parent_hw, 0, ff->mult, ff->div);
--		}
--
--		cells->hws[ff->index] = hw;
--		if (IS_ERR(hw))
--			dev_warn(dev, "failed registering %s: %pe\n",
--				 ff->name, hw);
--	}
--}
--
++static int eqc_pll_parse_jfracr(void __iomem *base, unsigned long *mult,
++				unsigned long *div, unsigned long *acc)
++{
++	unsigned long spread;
++	u32 r0, r1, r2;
++	u64 val;
++
++	val = readq(base);
++	r0 = val;
++	r1 = val >> 32;
++	r2 = readl(base + 8);
++
++	if (r0 & JFRACR_PCSR0_BYPASS) {
++		*mult = 1;
++		*div = 1;
++		*acc = 0;
++		return 0;
++	}
++
++	if (!(r0 & JFRACR_PCSR0_PLL_LOCKED))
++		return -EINVAL;
++
++	*mult = FIELD_GET(JFRACR_PCSR0_FB_DIV, r0);
++	*div = FIELD_GET(JFRACR_PCSR0_REF_DIV, r0);
++
++	/* fractional part on 24 bits */
++	if (r1 & JFRACR_PCSR1_DSM_EN) {
++		*div *= (1ULL << 24);
++		*mult = *mult * (1ULL << 24) + FIELD_GET(JFRACR_PCSR1_FRAC_IN, r1);
++	}
++
++	if (!*mult || !*div)
++		return -EINVAL;
++
++	if (r2 & (JFRACR_PCSR2_RESET | JFRACR_PCSR2_DIS_SSCG)) {
++		*acc = 0;
++		return 0;
++	}
++
++	/* spread spectrum is identical to FRACG PLL */
++	spread = FIELD_GET(JFRACR_PCSR2_SPREAD, r2);
++	*acc = DIV_ROUND_CLOSEST(spread * 1000000000, 1024 * 2);
++
++	if (r2 & JFRACR_PCSR2_DOWN_SPREAD) {
++		*mult *= 2048 - spread;
++		*div *= 2048;
++	}
++
++	/* make sure mult and div fit in 32 bits */
++	eqc_pll_downshift_factors(mult, div);
++
++	return 0;
++}
++
  static void eqc_auxdev_create_optional(struct device *dev, void __iomem *base,
  				       const char *name)
  {
-@@ -498,12 +365,10 @@ static int eqc_probe(struct platform_device *pdev)
- 	eqc_auxdev_create_optional(dev, base, data->pinctrl_auxdev_name);
- 	eqc_auxdev_create_optional(dev, base, data->eth_phy_auxdev_name);
+@@ -311,6 +424,33 @@ static int eqc_probe_fixed_factor(struct device *dev, struct device_node *np,
+ 	return 0;
+ }
  
--	if (data->pll_count + data->div_count + data->fixed_factor_count + data->clk_count == 0)
-+	if (data->clk_count == 0)
- 		return 0; /* Zero clocks, we are done. */
++static int eqc_probe_pll_aintp(struct device *dev, struct device_node *np,
++			       const struct eqc_clock *clk, void __iomem *base,
++			       struct clk_hw_onecell_data *cells)
++{
++	struct clk_parent_data parent_data = { };
++	unsigned long mult, div;
++	struct clk_hw *hw;
++	int ret;
++
++	ret = eqc_pll_parse_aintp(base + clk->pll.reg, &mult, &div);
++	if (ret)
++		return ret;
++
++	ret = eqc_fill_parent_data(clk, cells, &parent_data);
++	if (ret)
++		return ret;
++
++	hw = clk_hw_register_fixed_factor_pdata(dev, np, clk->name, &parent_data,
++						0, mult, div, 0, 0);
++
++	if (IS_ERR(hw))
++		return IS_ERR(hw);
++
++	cells->hws[clk->index] = hw;
++	return 0;
++}
++
+ static int eqc_probe_pll_fracg(struct device *dev, struct device_node *np,
+ 			       const struct eqc_clock *clk, void __iomem *base,
+ 			       struct clk_hw_onecell_data *cells)
+@@ -337,6 +477,32 @@ static int eqc_probe_pll_fracg(struct device *dev, struct device_node *np,
+ 	return 0;
+ }
  
--	clk_count = data->pll_count + data->div_count +
--		    data->fixed_factor_count + data->clk_count +
--		    data->early_clk_count;
-+	clk_count = data->clk_count + data->early_clk_count;
- 	cells = kzalloc_flex(*cells, hws, clk_count);
- 	if (!cells)
- 		return -ENOMEM;
-@@ -514,12 +379,6 @@ static int eqc_probe(struct platform_device *pdev)
- 	for (i = 0; i < clk_count; i++)
- 		cells->hws[i] = ERR_PTR(-EINVAL);
- 
--	eqc_probe_init_plls(dev, data, base, cells);
--
--	eqc_probe_init_divs(dev, data, base, cells);
--
--	eqc_probe_init_fixed_factors(dev, data, cells);
--
- 	for (i = 0; i < data->clk_count; i++) {
- 		const struct eqc_clock *clk = &data->clks[i];
- 
-@@ -869,8 +728,7 @@ static void __init eqc_early_init(struct device_node *np,
- 	void __iomem *base;
- 	int ret;
- 
--	clk_count = early_data->early_pll_count + early_data->early_fixed_factor_count +
--		    early_data->early_clk_count + early_data->late_clk_count;
-+	clk_count = early_data->early_clk_count + early_data->late_clk_count;
- 	cells = kzalloc_flex(*cells, hws, clk_count);
- 	if (!cells) {
- 		ret = -ENOMEM;
-@@ -896,42 +754,6 @@ static void __init eqc_early_init(struct device_node *np,
- 		goto err;
++static int eqc_probe_pll_jfracr(struct device *dev, struct device_node *np,
++				const struct eqc_clock *clk, void __iomem *base,
++				struct clk_hw_onecell_data *cells)
++{
++	struct clk_parent_data parent_data = { };
++	unsigned long mult, div, acc;
++	struct clk_hw *hw;
++	int ret;
++
++	ret = eqc_pll_parse_jfracr(base + clk->pll.reg, &mult, &div, &acc);
++	if (ret)
++		return ret;
++
++	ret = eqc_fill_parent_data(clk, cells, &parent_data);
++	if (ret)
++		return ret;
++
++	hw = clk_hw_register_fixed_factor_pdata(dev, np, clk->name, &parent_data, 0, mult,
++						div, acc, CLK_FIXED_FACTOR_FIXED_ACCURACY);
++	if (IS_ERR(hw))
++		return IS_ERR(hw);
++
++	cells->hws[clk->index] = hw;
++	return 0;
++}
++
+ static int eqc_probe(struct platform_device *pdev)
+ {
+ 	struct device *dev = &pdev->dev;
+@@ -420,6 +586,17 @@ static int eqc_probe(struct platform_device *pdev)
+ 		.ff.div = _div,						\
  	}
  
--	for (i = 0; i < early_data->early_pll_count; i++) {
--		const struct eqc_pll *pll = &early_data->early_plls[i];
--		unsigned long mult, div, acc;
--		struct clk_hw *hw;
--
--		ret = eqc_pll_parse_fracg(base + pll->reg64, &mult, &div, &acc);
--		if (ret) {
--			pr_err("failed parsing state of %s\n", pll->name);
--			goto err;
--		}
--
--		hw = clk_hw_register_fixed_factor_with_accuracy_fwname(NULL,
--				np, pll->name, "ref", 0, mult, div, acc);
--		cells->hws[pll->index] = hw;
--		if (IS_ERR(hw)) {
--			pr_err("failed registering %s: %pe\n", pll->name, hw);
--			ret = PTR_ERR(hw);
--			goto err;
--		}
--	}
--
--	for (i = 0; i < early_data->early_fixed_factor_count; i++) {
--		const struct eqc_fixed_factor *ff = &early_data->early_fixed_factors[i];
--		struct clk_hw *parent_hw = cells->hws[ff->parent];
--		struct clk_hw *hw;
--
--		hw = clk_hw_register_fixed_factor_parent_hw(NULL, ff->name,
--				parent_hw, 0, ff->mult, ff->div);
--		cells->hws[ff->index] = hw;
--		if (IS_ERR(hw)) {
--			pr_err("failed registering %s: %pe\n", ff->name, hw);
--			ret = PTR_ERR(hw);
--			goto err;
--		}
--	}
--
- 	for (i = 0; i < early_data->early_clk_count; i++) {
- 		const struct eqc_clock *clk = &early_data->early_clks[i];
++#define PLL_AINTP(_index, _parent_idx, _name, _parent_name, _reg)	\
++	{								\
++		.index = _index,					\
++		.parent_idx = _parent_idx,				\
++		.name = _name,						\
++		.parent_name = _parent_name,				\
++		.probe = eqc_probe_pll_aintp,				\
++		.unregister = clk_hw_unregister_fixed_factor,		\
++		.pll.reg = _reg,					\
++	}
++
+ #define PLL_FRACG(_index, _parent_idx, _name, _parent_name, _reg)	\
+ 	{								\
+ 		.index = _index,					\
+@@ -431,6 +608,17 @@ static int eqc_probe(struct platform_device *pdev)
+ 		.pll.reg = _reg,					\
+ 	}
  
-@@ -966,14 +788,6 @@ static void __init eqc_early_init(struct device_node *np,
- 	if (cells) {
- 		of_clk_del_provider(np);
++#define PLL_JFRACR(_index, _parent_idx, _name, _parent_name, _reg)	\
++	{								\
++		.index = _index,					\
++		.parent_idx = _parent_idx,				\
++		.name = _name,						\
++		.parent_name = _parent_name,				\
++		.probe = eqc_probe_pll_jfracr,				\
++		.unregister = clk_hw_unregister_fixed_factor,		\
++		.pll.reg = _reg,					\
++	}
++
+ enum {
+ 	/*
+ 	 * EQ5C_PLL_CPU children.
+@@ -672,6 +860,295 @@ static const struct eqc_match_data eqc_eyeq6h_acc_match_data = {
+ 	.reset_auxdev_name = "reset_acc",
+ };
  
--		for (i = 0; i < early_data->early_pll_count; i++) {
--			const struct eqc_pll *pll = &early_data->early_plls[i];
--			struct clk_hw *hw = cells->hws[pll->index];
--
--			if (!IS_ERR_OR_NULL(hw))
--				clk_hw_unregister_fixed_factor(hw);
--		}
--
- 		for (i = 0; i < early_data->early_clk_count; i++) {
- 			const struct eqc_clock *clk = &early_data->early_clks[i];
- 			struct clk_hw *hw = cells->hws[clk->index];
++static const struct eqc_clock eqc_eyeq7h_acc0_clks[] = {
++	PLL_AINTP(EQ7HC_ACC_PLL_VMP, PARENT_BY_FWNAME, "pll-acc0-vmp", "ref_100p0", 0x400),
++	PLL_AINTP(EQ7HC_ACC_PLL_MPC, PARENT_BY_FWNAME, "pll-acc0-mpc", "ref_100p0", 0x404),
++	PLL_AINTP(EQ7HC_ACC_PLL_PMA, PARENT_BY_FWNAME, "pll-acc0-pma", "ref_100p0", 0x408),
++	PLL_AINTP(EQ7HC_ACC_PLL_NOC, PARENT_BY_FWNAME, "pll-acc0-noc-acc", "ref_106p6", 0x40c),
++
++	FF(EQ7HC_ACC_DIV_PMA, EQ7HC_ACC_PLL_PMA, "acc0_pma", NULL, 1, 2),
++	FF(EQ7HC_ACC_DIV_NCORE, EQ7HC_ACC_PLL_NOC, "acc0_ncore", NULL, 1, 2),
++	FF(EQ7HC_ACC_DIV_CFG, EQ7HC_ACC_PLL_NOC, "acc0_cfg", NULL, 1, 8),
++};
++
++static const struct eqc_match_data eqc_eyeq7h_acc0_match_data = {
++	.clk_count	= ARRAY_SIZE(eqc_eyeq7h_acc0_clks),
++	.clks		= eqc_eyeq7h_acc0_clks,
++
++	.reset_auxdev_name = "reset_acc0",
++};
++
++static const struct eqc_clock eqc_eyeq7h_acc1_clks[] = {
++	PLL_AINTP(EQ7HC_ACC_PLL_VMP, PARENT_BY_FWNAME, "pll-acc1-vmp", "ref_100p0", 0x400),
++	PLL_AINTP(EQ7HC_ACC_PLL_MPC, PARENT_BY_FWNAME, "pll-acc1-mpc", "ref_100p0", 0x404),
++	PLL_AINTP(EQ7HC_ACC_PLL_PMA, PARENT_BY_FWNAME, "pll-acc1-pma", "ref_100p0", 0x408),
++	PLL_AINTP(EQ7HC_ACC_PLL_NOC, PARENT_BY_FWNAME, "pll-acc1-noc-acc", "ref_106p6", 0x40c),
++};
++
++static const struct eqc_match_data eqc_eyeq7h_acc1_match_data = {
++	.clk_count	= ARRAY_SIZE(eqc_eyeq7h_acc1_clks),
++	.clks		= eqc_eyeq7h_acc1_clks,
++
++	.reset_auxdev_name = "reset_acc1",
++};
++
++static const struct clk_div_table eqc_eyeq7h_ddr_apb_div_table[] = {
++	{ .val = 0, .div = 8 },
++	{ .val = 1, .div = 128 },
++	{ .val = 0, .div = 0 },
++};
++
++static const struct clk_div_table eqc_eyeq7h_ddr_ref_div_table[] = {
++	{ .val = 0, .div = 2 },
++	{ .val = 1, .div = 8 },
++	{ .val = 0, .div = 0 },
++};
++
++static const struct clk_div_table eqc_eyeq7h_ddr_dfi_div_table[] = {
++	{ .val = 0, .div = 2 },
++	{ .val = 1, .div = 32 },
++	{ .val = 0, .div = 0 },
++};
++
++static const struct eqc_clock eqc_eyeq7h_ddr0_clks[] = {
++	PLL_AINTP(EQ7HC_DDR_PLL, PARENT_BY_FWNAME, "pll-ddr0", "ref", 0x0),
++
++	DIV(EQ7HC_DDR_DIV_APB, EQ7HC_DDR_PLL, "div-ddr0_apb", NULL,
++	    0x08, 10, 1, eqc_eyeq7h_ddr_apb_div_table),
++	DIV(EQ7HC_DDR_DIV_PLLREF, EQ7HC_DDR_PLL, "div-ddr0_pllref", NULL,
++	    0x08, 10, 1, eqc_eyeq7h_ddr_ref_div_table),
++	DIV(EQ7HC_DDR_DIV_DFI, EQ7HC_DDR_PLL, "div-ddr0-dfi", NULL,
++	    0x08, 10, 1, eqc_eyeq7h_ddr_dfi_div_table),
++};
++
++static const struct eqc_match_data eqc_eyeq7h_ddr0_match_data = {
++	.clk_count	= ARRAY_SIZE(eqc_eyeq7h_ddr0_clks),
++	.clks		= eqc_eyeq7h_ddr0_clks,
++
++	.reset_auxdev_name = "reset_ddr0",
++};
++
++static const struct eqc_clock eqc_eyeq7h_ddr1_clks[] = {
++	PLL_AINTP(EQ7HC_DDR_PLL, PARENT_BY_FWNAME, "pll-ddr1", "ref", 0x0),
++
++	DIV(EQ7HC_DDR_DIV_APB, EQ7HC_DDR_PLL, "div-ddr1_apb", NULL,
++	    0x08, 10, 1, eqc_eyeq7h_ddr_apb_div_table),
++	DIV(EQ7HC_DDR_DIV_PLLREF, EQ7HC_DDR_PLL, "div-ddr1_pllref", NULL,
++	    0x08, 10, 1, eqc_eyeq7h_ddr_ref_div_table),
++	DIV(EQ7HC_DDR_DIV_DFI, EQ7HC_DDR_PLL, "div-ddr1-dfi", NULL,
++	    0x08, 10, 1, eqc_eyeq7h_ddr_dfi_div_table),
++};
++
++static const struct eqc_match_data eqc_eyeq7h_ddr1_match_data = {
++	.clk_count	= ARRAY_SIZE(eqc_eyeq7h_ddr1_clks),
++	.clks		= eqc_eyeq7h_ddr1_clks,
++
++	.reset_auxdev_name = "reset_ddr1",
++};
++
++static const struct eqc_clock eqc_eyeq7h_east_clocks[] = {
++	PLL_JFRACR(EQ7HC_EAST_PLL_106P6, PARENT_BY_FWNAME, "pll-106p6-e", "ref", 0x00),
++
++	FF(EQ7HC_EAST_DIV_REF_106P6, EQ7HC_EAST_PLL_106P6, "ref_106p6_e", NULL, 1, 40),
++
++	PLL_AINTP(EQ7HC_EAST_PLL_NOC, EQ7HC_EAST_DIV_REF_106P6, "pll-noc-e", NULL, 0x30),
++	PLL_AINTP(EQ7HC_EAST_PLL_ISP, PARENT_BY_FWNAME, "pll-isp", "ref_100p0", 0x38),
++	PLL_AINTP(EQ7HC_EAST_PLL_VEU, PARENT_BY_FWNAME, "pll-veu", "ref_100p0", 0x40),
++
++	FF(EQ7HC_EAST_DIV_REF_DDR_PHY, EQ7HC_EAST_PLL_106P6, "ref_ddr_phy_e", NULL, 1, 2),
++
++	FF(EQ7HC_EAST_DIV_CORE, EQ7HC_EAST_PLL_NOC, "core_e", NULL, 1, 2),
++	FF(EQ7HC_EAST_DIV_CORE_MBIST, EQ7HC_EAST_PLL_NOC, "core_mbist_e", NULL, 1, 2),
++	FF(EQ7HC_EAST_DIV_ISRAM_MBIST, EQ7HC_EAST_PLL_NOC, "isram_mbist_e", NULL, 1, 2),
++	FF(EQ7HC_EAST_DIV_CFG, EQ7HC_EAST_PLL_NOC, "cfg_e", NULL, 1, 4),
++
++	FF(EQ7HC_EAST_DIV_VEU_CORE, EQ7HC_EAST_PLL_VEU, "veu_core", NULL, 1, 4),
++	FF(EQ7HC_EAST_DIV_VEU_MBIST, EQ7HC_EAST_PLL_VEU, "veu_mbist", NULL, 1, 4),
++	FF(EQ7HC_EAST_DIV_VEU_OCP, EQ7HC_EAST_PLL_VEU, "veu_ocp", NULL, 1, 16),
++
++	FF(EQ7HC_EAST_DIV_LBITS, EQ7HC_EAST_PLL_ISP, "lbits_e", NULL, 1, 48),
++	FF(EQ7HC_EAST_DIV_ISP0_CORE, EQ7HC_EAST_PLL_ISP, "isp0_core", NULL, 1, 2),
++};
++
++static const struct eqc_match_data eqc_eyeq7h_east_match_data = {
++	.clk_count = ARRAY_SIZE(eqc_eyeq7h_east_clocks),
++	.clks = eqc_eyeq7h_east_clocks,
++
++	.reset_auxdev_name = "reset_east",
++};
++
++static const struct eqc_clock eqc_eyeq7h_mips0_clks[] = {
++	PLL_AINTP(EQ7HC_MIPS_PLL_CPU, PARENT_BY_FWNAME, "pll-cpu0", "ref", 0x0),
++
++	FF(EQ7HC_MIPS_DIV_CM, EQ7HC_MIPS_PLL_CPU, "mips0_cm", NULL, 1, 2),
++};
++
++static const struct eqc_match_data eqc_eyeq7h_mips0_match_data = {
++	.clk_count	= ARRAY_SIZE(eqc_eyeq7h_mips0_clks),
++	.clks		= eqc_eyeq7h_mips0_clks,
++};
++
++static const struct eqc_clock eqc_eyeq7h_mips1_clks[] = {
++	PLL_AINTP(EQ7HC_MIPS_PLL_CPU, PARENT_BY_FWNAME, "pll-cpu1", "ref", 0x0),
++
++	FF(EQ7HC_MIPS_DIV_CM, EQ7HC_MIPS_PLL_CPU, "mips1_cm", NULL, 1, 2),
++};
++
++static const struct eqc_match_data eqc_eyeq7h_mips1_match_data = {
++	.clk_count	= ARRAY_SIZE(eqc_eyeq7h_mips1_clks),
++	.clks		= eqc_eyeq7h_mips1_clks,
++};
++
++static const struct eqc_clock eqc_eyeq7h_mips2_clks[] = {
++	PLL_AINTP(EQ7HC_MIPS_PLL_CPU, PARENT_BY_FWNAME, "pll-cpu2", "ref", 0x0),
++
++	FF(EQ7HC_MIPS_DIV_CM, EQ7HC_MIPS_PLL_CPU, "mips2_cm", NULL, 1, 2),
++};
++
++static const struct eqc_match_data eqc_eyeq7h_mips2_match_data = {
++	.clk_count	= ARRAY_SIZE(eqc_eyeq7h_mips2_clks),
++	.clks		= eqc_eyeq7h_mips2_clks,
++};
++
++static const struct eqc_clock eqc_eyeq7h_periph_east_clks[] = {
++	PLL_AINTP(EQ7HC_PERIPH_EAST_PLL_PER, PARENT_BY_FWNAME, "pll-periph_east_per", "ref", 0x0),
++
++	FF(EQ7HC_PERIPH_EAST_DIV_PER, EQ7HC_PERIPH_EAST_PLL_PER, "periph_e", NULL, 1, 10),
++};
++
++static const struct eqc_match_data eqc_eyeq7h_periph_east_match_data = {
++	.clk_count	= ARRAY_SIZE(eqc_eyeq7h_periph_east_clks),
++	.clks		= eqc_eyeq7h_periph_east_clks,
++
++	.reset_auxdev_name = "reset_periph_east",
++};
++
++static const struct eqc_clock eqc_eyeq7h_periph_west_clks[] = {
++	PLL_AINTP(EQ7HC_PERIPH_WEST_PLL_PER, PARENT_BY_FWNAME,
++		  "pll-periph_west_per", "ref_100p0", 0x0),
++	PLL_AINTP(EQ7HC_PERIPH_WEST_PLL_I2S, PARENT_BY_FWNAME,
++		  "pll-periph_west_i2s", "ref_106p6", 0x4),
++
++	FF(EQ7HC_PERIPH_WEST_DIV_PER, EQ7HC_PERIPH_WEST_PLL_PER, "periph_w", NULL, 1, 10),
++	FF(EQ7HC_PERIPH_WEST_DIV_I2S, EQ7HC_PERIPH_WEST_PLL_I2S, "periph_i2s_ser_w", NULL, 1, 100),
++};
++
++static const struct eqc_match_data eqc_eyeq7h_periph_west_match_data = {
++	.clk_count	= ARRAY_SIZE(eqc_eyeq7h_periph_west_clks),
++	.clks		= eqc_eyeq7h_periph_west_clks,
++
++	.reset_auxdev_name = "reset_periph_west",
++};
++
++static const struct eqc_clock eqc_eyeq7h_south_clks[] = {
++	PLL_JFRACR(EQ7HC_SOUTH_PLL_100P0, PARENT_BY_FWNAME, "pll-100p0", "ref", 0x40),
++
++	FF(EQ7HC_SOUTH_DIV_REF_100P0, EQ7HC_SOUTH_PLL_100P0, "ref_100p0", NULL, 1, 48),
++
++	PLL_AINTP(EQ7HC_SOUTH_PLL_XSPI, EQ7HC_SOUTH_DIV_REF_100P0, "pll-xspi", NULL, 0x10),
++	PLL_AINTP(EQ7HC_SOUTH_PLL_VDIO, EQ7HC_SOUTH_DIV_REF_100P0, "pll-vdio", NULL, 0x18),
++	PLL_AINTP(EQ7HC_SOUTH_PLL_PER, EQ7HC_SOUTH_DIV_REF_100P0, "pll-per-s", NULL, 0x20),
++
++	FF(EQ7HC_SOUTH_DIV_VDO_DSI_SYS, EQ7HC_SOUTH_PLL_100P0, "vdo_dsi_sys", NULL, 1, 9),
++	FF(EQ7HC_SOUTH_DIV_PMA_CMN_REF, EQ7HC_SOUTH_PLL_100P0, "pma_cmn_ref", NULL, 1, 48),
++	FF(EQ7HC_SOUTH_DIV_REF_UFS, EQ7HC_SOUTH_PLL_100P0, "ref_ufs", NULL, 1, 250),
++	FF(EQ7HC_SOUTH_DIV_XSPI_SYS, EQ7HC_SOUTH_PLL_XSPI, "xspi_sys", NULL, 1, 8),
++	FF(EQ7HC_SOUTH_DIV_XSPI_MBIST, EQ7HC_SOUTH_PLL_XSPI, "xspi_mbist", NULL, 1, 8),
++	FF(EQ7HC_SOUTH_DIV_NOC_S, EQ7HC_SOUTH_PLL_PER, "noc_s", NULL, 1, 2),
++	FF(EQ7HC_SOUTH_DIV_PCIE_SYS, EQ7HC_SOUTH_PLL_PER, "pcie_sys", NULL, 1, 4),
++	FF(EQ7HC_SOUTH_DIV_PCIE_SYS_MBIST, EQ7HC_SOUTH_PLL_PER, "pcie_sys_mbist", NULL, 1, 4),
++	FF(EQ7HC_SOUTH_DIV_PCIE_GBE_PHY, EQ7HC_SOUTH_PLL_PER, "pcie_gbe_phy_apb", NULL, 1, 16),
++	FF(EQ7HC_SOUTH_DIV_UFS_CORE, EQ7HC_SOUTH_PLL_PER, "ufs_core", NULL, 1, 8),
++	FF(EQ7HC_SOUTH_DIV_UFS_SMS, EQ7HC_SOUTH_PLL_PER, "ufs_sms", NULL, 1, 5),
++	FF(EQ7HC_SOUTH_DIV_UFS_ROM_SMS, EQ7HC_SOUTH_PLL_PER, "ufs_rom_sms", NULL, 1, 5),
++	FF(EQ7HC_SOUTH_DIV_ETH_SYS, EQ7HC_SOUTH_PLL_PER, "eth_sys", NULL, 1, 8),
++	FF(EQ7HC_SOUTH_DIV_ETH_MBIST, EQ7HC_SOUTH_PLL_PER, "eth_mbist", NULL, 1, 8),
++	FF(EQ7HC_SOUTH_DIV_CFG_S, EQ7HC_SOUTH_PLL_PER, "cfg_s", NULL, 1, 8),
++	FF(EQ7HC_SOUTH_DIV_TSU, EQ7HC_SOUTH_PLL_PER, "tsu", NULL, 1, 64),
++	FF(EQ7HC_SOUTH_DIV_VDIO, EQ7HC_SOUTH_PLL_VDIO, "vdio", NULL, 1, 4),
++	FF(EQ7HC_SOUTH_DIV_VDIO_CORE, EQ7HC_SOUTH_PLL_VDIO, "vdio_core", NULL, 1, 4),
++	FF(EQ7HC_SOUTH_DIV_VDIO_CORE_MBIST, EQ7HC_SOUTH_PLL_VDIO, "vdio_core_mbist", NULL, 1, 4),
++	FF(EQ7HC_SOUTH_DIV_VDO_CORE_MBIST, EQ7HC_SOUTH_PLL_VDIO, "vdo_core_mbist", NULL, 1, 4),
++	FF(EQ7HC_SOUTH_DIV_VDO_P, EQ7HC_SOUTH_PLL_VDIO, "vdo_p", NULL, 1, 40),
++	FF(EQ7HC_SOUTH_DIV_VDIO_CFG, EQ7HC_SOUTH_PLL_VDIO, "vdio_cfg", NULL, 1, 150),
++	FF(EQ7HC_SOUTH_DIV_VDIO_TXCLKESC, EQ7HC_SOUTH_PLL_VDIO, "vdio_txclkesc", NULL, 1, 8),
++};
++
++static const struct eqc_match_data eqc_eyeq7h_south_match_data = {
++	.clk_count	= ARRAY_SIZE(eqc_eyeq7h_south_clks),
++	.clks		= eqc_eyeq7h_south_clks,
++
++	.reset_auxdev_name = "reset_south",
++};
++
++static const struct eqc_clock eqc_eyeq7h_west_clks[] = {
++	PLL_JFRACR(EQ7HC_WEST_PLL_106P6, PARENT_BY_FWNAME, "pll-106p6-w", "ref", 0x0),
++
++	FF(EQ7HC_WEST_DIV_REF_106P6, EQ7HC_WEST_PLL_106P6, "ref_106p6_w", NULL, 1, 40),
++
++	PLL_AINTP(EQ7HC_WEST_PLL_NOC, EQ7HC_WEST_DIV_REF_106P6, "pll-noc-w", NULL, 0x30),
++	PLL_AINTP(EQ7HC_WEST_PLL_GPU, PARENT_BY_FWNAME, "pll-gpu", "ref_100p0", 0x38),
++	PLL_AINTP(EQ7HC_WEST_PLL_SSI, PARENT_BY_FWNAME, "pll-ssi", "ref_100p0", 0x40),
++
++	FF(EQ7HC_WEST_DIV_GPU, EQ7HC_WEST_PLL_GPU, "gpu", NULL, 1, 2),
++	FF(EQ7HC_WEST_DIV_GPU_MBIST, EQ7HC_WEST_PLL_GPU, "gpu_mbist", NULL, 1, 2),
++	FF(EQ7HC_WEST_DIV_LBITS, EQ7HC_WEST_PLL_GPU, "lbits_w", NULL, 1, 40),
++	FF(EQ7HC_WEST_DIV_MIPS_TIMER, EQ7HC_WEST_PLL_SSI, "mips_timer", NULL, 1, 24),
++	FF(EQ7HC_WEST_DIV_SSI_CORE, EQ7HC_WEST_PLL_SSI, "ssi_core", NULL, 1, 2),
++	FF(EQ7HC_WEST_DIV_SSI_CORE_MBIST, EQ7HC_WEST_PLL_SSI, "ssi_core_mbist", NULL, 1, 2),
++	FF(EQ7HC_WEST_DIV_SSI_ROM, EQ7HC_WEST_PLL_SSI, "ssi_rom", NULL, 1, 8),
++	FF(EQ7HC_WEST_DIV_SSI_ROM_MBIST, EQ7HC_WEST_PLL_SSI, "ssi_rom_mbist", NULL, 1, 8),
++	FF(EQ7HC_WEST_DIV_REF_DDR_PHY, EQ7HC_WEST_PLL_106P6, "ref_ddr_phy_w", NULL, 1, 2),
++	FF(EQ7HC_WEST_DIV_CORE, EQ7HC_WEST_PLL_NOC, "core_w", NULL, 1, 2),
++	FF(EQ7HC_WEST_DIV_CORE_MBIST, EQ7HC_WEST_PLL_NOC, "core_mbist_w", NULL, 1, 2),
++	FF(EQ7HC_WEST_DIV_CFG, EQ7HC_WEST_PLL_NOC, "cfg_w", NULL, 1, 4),
++	FF(EQ7HC_WEST_DIV_CAU, EQ7HC_WEST_PLL_NOC, "cau_w", NULL, 1, 8),
++	FF(EQ7HC_WEST_DIV_CAU_MBIST, EQ7HC_WEST_PLL_NOC, "cau_mbist_w", NULL, 1, 8),
++};
++
++static const struct eqc_match_data eqc_eyeq7h_west_match_data = {
++	.clk_count	= ARRAY_SIZE(eqc_eyeq7h_west_clks),
++	.clks		= eqc_eyeq7h_west_clks,
++
++	.reset_auxdev_name = "reset_west",
++};
++
++static const struct eqc_clock eqc_eyeq7h_xnn0_clks[] = {
++	PLL_AINTP(EQ7HC_XNN_PLL_XNN0, PARENT_BY_FWNAME, "pll-xnn0-0", "ref_100p0", 0x400),
++	PLL_AINTP(EQ7HC_XNN_PLL_XNN1, PARENT_BY_FWNAME, "pll-xnn0-1", "ref_100p0", 0x404),
++	PLL_AINTP(EQ7HC_XNN_PLL_XNN2, PARENT_BY_FWNAME, "pll-xnn0-2", "ref_100p0", 0x408),
++	PLL_AINTP(EQ7HC_XNN_PLL_CLSTR, PARENT_BY_FWNAME, "pll-xnn0-clstr", "ref_106p6", 0x410),
++
++	FF(EQ7HC_XNN_DIV_XNN0, EQ7HC_XNN_PLL_XNN0, "xnn0", NULL, 1, 2),
++	FF(EQ7HC_XNN_DIV_XNN1, EQ7HC_XNN_PLL_XNN1, "xnn1", NULL, 1, 2),
++	FF(EQ7HC_XNN_DIV_XNN2, EQ7HC_XNN_PLL_XNN2, "xnn2", NULL, 1, 2),
++	FF(EQ7HC_XNN_DIV_CLSTR, EQ7HC_XNN_PLL_CLSTR, "xnn0_clstr", NULL, 1, 2),
++	FF(EQ7HC_XNN_DIV_I2, EQ7HC_XNN_PLL_CLSTR, "xnn0_i2", NULL, 1, 4),
++	FF(EQ7HC_XNN_DIV_I2_SMS, EQ7HC_XNN_PLL_CLSTR, "xnn0_i2_sms", NULL, 1, 4),
++	FF(EQ7HC_XNN_DIV_CFG, EQ7HC_XNN_PLL_CLSTR, "xnn0_cfg", NULL, 1, 8),
++};
++
++static const struct eqc_match_data eqc_eyeq7h_xnn0_match_data = {
++	.clk_count	= ARRAY_SIZE(eqc_eyeq7h_xnn0_clks),
++	.clks		= eqc_eyeq7h_xnn0_clks,
++
++	.reset_auxdev_name = "reset_xnn0",
++};
++
++static const struct eqc_clock eqc_eyeq7h_xnn1_clks[] = {
++	PLL_AINTP(EQ7HC_XNN_PLL_XNN0, PARENT_BY_FWNAME, "pll-xnn1-0", "ref_100p0", 0x400),
++	PLL_AINTP(EQ7HC_XNN_PLL_XNN1, PARENT_BY_FWNAME, "pll-xnn1-1", "ref_100p0", 0x404),
++	PLL_AINTP(EQ7HC_XNN_PLL_XNN2, PARENT_BY_FWNAME, "pll-xnn1-2", "ref_100p0", 0x408),
++	PLL_AINTP(EQ7HC_XNN_PLL_CLSTR, PARENT_BY_FWNAME, "pll-xnn1-clstr", "ref_106p6", 0x410),
++};
++
++static const struct eqc_match_data eqc_eyeq7h_xnn1_match_data = {
++	.clk_count	= ARRAY_SIZE(eqc_eyeq7h_xnn1_clks),
++	.clks		= eqc_eyeq7h_xnn1_clks,
++
++	.reset_auxdev_name = "reset_xnn1",
++};
++
+ static const struct of_device_id eqc_match_table[] = {
+ 	{ .compatible = "mobileye,eyeq5-olb", .data = &eqc_eyeq5_match_data },
+ 	{ .compatible = "mobileye,eyeq6l-olb", .data = &eqc_eyeq6l_match_data },
+@@ -682,6 +1159,22 @@ static const struct of_device_id eqc_match_table[] = {
+ 	{ .compatible = "mobileye,eyeq6h-ddr0-olb", .data = &eqc_eyeq6h_ddr0_match_data },
+ 	{ .compatible = "mobileye,eyeq6h-ddr1-olb", .data = &eqc_eyeq6h_ddr1_match_data },
+ 	{ .compatible = "mobileye,eyeq6h-acc-olb", .data = &eqc_eyeq6h_acc_match_data },
++	{ .compatible = "mobileye,eyeq7h-acc0-olb", .data = &eqc_eyeq7h_acc0_match_data },
++	{ .compatible = "mobileye,eyeq7h-acc1-olb", .data = &eqc_eyeq7h_acc1_match_data },
++	{ .compatible = "mobileye,eyeq7h-ddr0-olb", .data = &eqc_eyeq7h_ddr0_match_data },
++	{ .compatible = "mobileye,eyeq7h-ddr1-olb", .data = &eqc_eyeq7h_ddr1_match_data },
++	{ .compatible = "mobileye,eyeq7h-east-olb", .data = &eqc_eyeq7h_east_match_data },
++	{ .compatible = "mobileye,eyeq7h-mips0-olb", .data = &eqc_eyeq7h_mips0_match_data },
++	{ .compatible = "mobileye,eyeq7h-mips1-olb", .data = &eqc_eyeq7h_mips1_match_data },
++	{ .compatible = "mobileye,eyeq7h-mips2-olb", .data = &eqc_eyeq7h_mips2_match_data },
++	{ .compatible = "mobileye,eyeq7h-periph-east-olb",
++	  .data = &eqc_eyeq7h_periph_east_match_data },
++	{ .compatible = "mobileye,eyeq7h-periph-west-olb",
++	  .data = &eqc_eyeq7h_periph_west_match_data },
++	{ .compatible = "mobileye,eyeq7h-south-olb", .data = &eqc_eyeq7h_south_match_data },
++	{ .compatible = "mobileye,eyeq7h-west-olb", .data = &eqc_eyeq7h_west_match_data },
++	{ .compatible = "mobileye,eyeq7h-xnn0-olb", .data = &eqc_eyeq7h_xnn0_match_data },
++	{ .compatible = "mobileye,eyeq7h-xnn1-olb", .data = &eqc_eyeq7h_xnn1_match_data },
+ 	{}
+ };
+ 
 
 -- 
 2.54.0
