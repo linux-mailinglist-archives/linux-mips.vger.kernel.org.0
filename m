@@ -1,50 +1,50 @@
-Return-Path: <linux-mips+bounces-14605-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-14607-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id APIdLD+3CGp42QMAu9opvQ
-	(envelope-from <linux-mips+bounces-14605-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Sat, 16 May 2026 20:28:15 +0200
+	id iLySHmK3CGqr2QMAu9opvQ
+	(envelope-from <linux-mips+bounces-14607-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Sat, 16 May 2026 20:28:50 +0200
 X-Original-To: lists+linux-mips@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1D14D55D1E4
-	for <lists+linux-mips@lfdr.de>; Sat, 16 May 2026 20:28:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id CF48455D20B
+	for <lists+linux-mips@lfdr.de>; Sat, 16 May 2026 20:28:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 08BB93010C19
-	for <lists+linux-mips@lfdr.de>; Sat, 16 May 2026 18:27:06 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 17C67302D11C
+	for <lists+linux-mips@lfdr.de>; Sat, 16 May 2026 18:27:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C044F3264EC;
-	Sat, 16 May 2026 18:27:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 18FE532C94A;
+	Sat, 16 May 2026 18:27:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cjdns.fr header.i=@cjdns.fr header.b="BKRgYy5q"
+	dkim=pass (2048-bit key) header.d=cjdns.fr header.i=@cjdns.fr header.b="RCt5sJWL"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from mail.cjdns.fr (mail.cjdns.fr [5.135.140.105])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44D3332939C;
-	Sat, 16 May 2026 18:27:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D62F328631;
+	Sat, 16 May 2026 18:27:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=5.135.140.105
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778956025; cv=none; b=bMRbONAhqScrQyvCTIayP4nzXw2cpbc3WobH0PEIQAXFv57HRBWaJV2d03q05kERkkdUfLqkiZKAsubR/6EyaJGO08XCUtvj/jkipL/ae/ASAKuBL0NdeRSWAhQrZ44al6PkcfqNpfMO/lktdsTLWeDv2sDmzB+CymZ/unMXCTw=
+	t=1778956027; cv=none; b=dsUGVlrE/t5ulGtSMfq1GvkqhL1m9A0CsX7AfOWWWW6VnAMagOVnx4g6MjYov3fYTkT7POm2YY+qJMS5oMuw9lPL4R0uD8YkZrAA+zj2u++Q+sF5kWuEsS45liyDMF75HE4scrdrNwnZgS3XHKH3ratKeyWkgVrqly3NAk1OY2A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778956025; c=relaxed/simple;
-	bh=7wxpOJISV76f+OA+eUJDFOYKOmSTMyJ0sT0aUgy6Jx0=;
+	s=arc-20240116; t=1778956027; c=relaxed/simple;
+	bh=gBGMI6S3o4+n+8pLpjBQ+nXTfkXL9j4qXfNkTwzvv5Y=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=PxqDIk0YzIvxNgekzlL+GlEfW9ctRaNDJsu3i6y4ucLRNAC6Uw5tVqdx7tEOysA8Kw3Fzol6g0n9dE41xyn/PaWLNAq6SEsgLN3yk9fphjTVWk+BNrCHX4Y9fr8nr2fwI/d65Lk0yH02CncJv3haMrls2vnvDJdQNUt0WK1eg6A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=cjdns.fr; spf=none smtp.mailfrom=cjdns.fr; dkim=pass (2048-bit key) header.d=cjdns.fr header.i=@cjdns.fr header.b=BKRgYy5q; arc=none smtp.client-ip=5.135.140.105
+	 MIME-Version; b=Csrig9weEV+DfSlfHwOHLoXo0dF6EBQnpATH9THHgVcXVti6sBuQBlIhYjBZ8dsTxPR/rRsySFW3CUCpGr61XTYRVco5xS5NyCq9aVt507FZ9qxFNV9ciMB3XsMA4j914GjBEvWtx5D40DUyC9tnCYx83jfUg9lnZ7JVUsB0ucs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=cjdns.fr; spf=none smtp.mailfrom=cjdns.fr; dkim=pass (2048-bit key) header.d=cjdns.fr header.i=@cjdns.fr header.b=RCt5sJWL; arc=none smtp.client-ip=5.135.140.105
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=cjdns.fr
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=cjdns.fr
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 257C73F5CBB;
-	Sat, 16 May 2026 20:26:55 +0200 (CEST)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 8790E3F738F;
+	Sat, 16 May 2026 20:26:56 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cjdns.fr; s=dkim;
-	t=1778956016; h=from:subject:date:message-id:to:cc:mime-version:
+	t=1778956017; h=from:subject:date:message-id:to:cc:mime-version:
 	 content-transfer-encoding:in-reply-to:references;
-	bh=Q0h8RiPN75sqVf0my0iCAciaGj/g/mvtHx8ng9fbWfM=;
-	b=BKRgYy5qkVTuAnSQPFkcZ6HDWc7havkRwRNuSp7fPCCnadn4MEQPBqrK8aeJfKyaIZE/8u
-	fz1KY4OqvAjXOFmk9bgB38K98duAiQnNRnn2HyMGt9lBzfctjzirSg05F0R1UZ77CAgsXY
-	+8+FKtzxQDlg9JHnRrkB0eWC50y1tdjbXdi01D/XhY/cv75BVYCvLw7HD/DQOgw4Yyl7BU
-	b2Vr9fjER8LTI3UvWemUjjV2gS0vNwqI7x0mMRZd4EMK+567JUsL2c32pj/BraR3QY+2AN
-	4i5Te+o8yeXnseHcQ0EphrKB5oDbP4vNrTkSHjEKS4M9jY6a7yFucGWDrIZ1ig==
+	bh=m+6v+hjQch8RJ+bE8KqFuX68S8nN6mY6vSXBtyBFUJQ=;
+	b=RCt5sJWLKHhMe6N5KcbmNv1JAThwTBq8QcrA/jqviI8f9YEw3m+2tbgkn43lQjMUMXPHjV
+	P0k/FVWKMRssCu74g10i7oDmzrNmOB+nZfhlvijF3ufrbQWS28tfhmY3aiOwLhYvSET6nR
+	p2tSGQRBB9Vl1EfHooKnUR3PKDRJI5qZFfs99q/gGEaLC+wvdjrlUbRgH3kIdmGu+iClf5
+	pTXiY7zmerm1ZREzuNCMMTh9Satgl2Awq62S1eSwh2emZmSg3erUzkPbCsf1LBrkoXMY7m
+	9JZfm8EPriVxvaCWUInKYdW18s0bsx80i3CBIcanJpjsmp6ATM3eO7itSmYoYA==
 From: Caleb James DeLisle <cjd@cjdns.fr>
 To: linux-mips@vger.kernel.org
 Cc: conor+dt@kernel.org,
@@ -56,9 +56,9 @@ Cc: conor+dt@kernel.org,
 	robh@kernel.org,
 	tglx@kernel.org,
 	Caleb James DeLisle <cjd@cjdns.fr>
-Subject: [PATCH v3 2/4] clocksource/timer-econet-en751221: Init teardown on error if possible
-Date: Sat, 16 May 2026 18:26:46 +0000
-Message-Id: <20260516182648.3987792-3-cjd@cjdns.fr>
+Subject: [PATCH v3 3/4] clocksource/timer-econet-en751221: Disable IRQ until cevt registered
+Date: Sat, 16 May 2026 18:26:47 +0000
+Message-Id: <20260516182648.3987792-4-cjd@cjdns.fr>
 In-Reply-To: <20260516182648.3987792-1-cjd@cjdns.fr>
 References: <20260516182648.3987792-1-cjd@cjdns.fr>
 Precedence: bulk
@@ -69,7 +69,7 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Last-TLS-Session-Version: TLSv1.3
-X-Rspamd-Queue-Id: 1D14D55D1E4
+X-Rspamd-Queue-Id: CF48455D20B
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [0.84 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
@@ -85,7 +85,7 @@ X-Spamd-Result: default: False [0.84 / 15.00];
 	MIME_TRACE(0.00)[0:+];
 	FREEMAIL_CC(0.00)[kernel.org,vger.kernel.org,gmail.com,cjdns.fr];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-14605-lists,linux-mips=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-14607-lists,linux-mips=lfdr.de];
 	RECEIVED_HELO_LOCALHOST(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
 	RCVD_COUNT_THREE(0.00)[4];
@@ -104,157 +104,43 @@ X-Spamd-Result: default: False [0.84 / 15.00];
 	DBL_BLOCKED_OPENRESOLVER(0.00)[cjdns.fr:email,cjdns.fr:mid,cjdns.fr:dkim,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
 X-Rspamd-Action: no action
 
-As a clocksource, much of the initialization process is irreversible
-and the impact of a failure to initialize is a failure to boot.
-That said, good practice is to attempt a clean exit if probing fails,
-and supporting this pattern will reduce the likelihood that future
-contributions introduce a bug by trying to teardown after it is no
-longer possible to do so.
-
-Convert the init process into two clearly delineated phases, one
-which is reverted in case of error, and the other which can't be.
-Move all IRQ and address resource mapping before that point, and add
-teardown logic in case of error before the point of no return.
+Eliminate a race condition where cevt_interrupt may trigger before
+clockevents_config_and_register has been called, and dev->event_handler
+is at that point NULL.
 
 Signed-off-by: Caleb James DeLisle <cjd@cjdns.fr>
 ---
- drivers/clocksource/timer-econet-en751221.c | 82 ++++++++++++---------
- 1 file changed, 48 insertions(+), 34 deletions(-)
+ drivers/clocksource/timer-econet-en751221.c | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
 diff --git a/drivers/clocksource/timer-econet-en751221.c b/drivers/clocksource/timer-econet-en751221.c
-index 4008076b1a21..155471f68e6f 100644
+index 155471f68e6f..ed750e39cc4f 100644
 --- a/drivers/clocksource/timer-econet-en751221.c
 +++ b/drivers/clocksource/timer-econet-en751221.c
-@@ -24,6 +24,7 @@
+@@ -104,12 +104,11 @@ static int cevt_init_cpu(uint cpu)
+ 	reg = ioread32(reg_ctl(cpu)) | ctl_bit_enabled(cpu);
+ 	iowrite32(reg, reg_ctl(cpu));
  
- static struct {
- 	void __iomem	*membase[ECONET_NUM_BLOCKS];
-+	int		irq;
- 	u32		freq_hz;
- } econet_timer __ro_after_init;
- 
-@@ -126,22 +127,9 @@ static void __init cevt_dev_init(uint cpu)
- 	iowrite32(U32_MAX, reg_compare(cpu));
- }
- 
--static int __init cevt_init(struct device_node *np)
-+static void __init cevt_init(struct device_node *np)
- {
--	int i, irq, ret;
+-	enable_percpu_irq(cd->irq, IRQ_TYPE_NONE);
 -
--	irq = irq_of_parse_and_map(np, 0);
--	if (irq <= 0) {
--		pr_err("%pOFn: irq_of_parse_and_map failed", np);
--		return -EINVAL;
--	}
--
--	ret = request_percpu_irq(irq, cevt_interrupt, np->name, &econet_timer_pcpu);
--
--	if (ret < 0) {
--		pr_err("%pOFn: IRQ %d setup failed (%d)\n", np, irq, ret);
--		goto err_unmap_irq;
--	}
-+	int i;
+-	/* Do this last because it synchronously configures the timer */
+ 	clockevents_config_and_register(cd, econet_timer.freq_hz,
+ 					ECONET_MIN_DELTA, ECONET_MAX_DELTA);
  
- 	for_each_possible_cpu(i) {
- 		struct clock_event_device *cd = &per_cpu(econet_timer_pcpu, i);
-@@ -151,21 +139,12 @@ static int __init cevt_init(struct device_node *np)
- 					  CLOCK_EVT_FEAT_C3STOP |
- 					  CLOCK_EVT_FEAT_PERCPU;
- 		cd->set_next_event	= cevt_set_next_event;
--		cd->irq			= irq;
-+		cd->irq			= econet_timer.irq;
- 		cd->cpumask		= cpumask_of(i);
- 		cd->name		= np->name;
- 
- 		cevt_dev_init(i);
- 	}
--
--	cpuhp_setup_state(CPUHP_AP_ONLINE_DYN,
--			  "clockevents/econet/timer:starting",
--			  cevt_init_cpu, NULL);
--	return 0;
--
--err_unmap_irq:
--	irq_dispose_mapping(irq);
--	return ret;
- }
- 
- static int __init timer_init(struct device_node *np)
-@@ -186,22 +165,45 @@ static int __init timer_init(struct device_node *np)
- 		econet_timer.membase[i] = of_iomap(np, i);
- 		if (!econet_timer.membase[i]) {
- 			pr_err("%pOFn: failed to map register [%d]\n", np, i);
--			return -ENXIO;
-+			ret = -ENXIO;
-+			goto out_membase;
- 		}
- 	}
- 
-+	econet_timer.irq = irq_of_parse_and_map(np, 0);
-+	if (econet_timer.irq <= 0) {
-+		pr_err("%pOFn: irq_of_parse_and_map failed\n", np);
-+		ret = -EINVAL;
-+		goto out_membase;
-+	}
++	enable_percpu_irq(cd->irq, IRQ_TYPE_NONE);
 +
-+	ret = request_percpu_irq(econet_timer.irq, cevt_interrupt, np->name,
-+				 &econet_timer_pcpu);
-+
-+	if (ret < 0) {
-+		pr_err("%pOFn: IRQ %d setup failed (%d)\n", np,
-+		       econet_timer.irq, ret);
-+		goto out_irq_mapping;
-+	}
-+
-+	cevt_init(np);
-+
-+	ret = cpuhp_setup_state(CPUHP_AP_ONLINE_DYN,
-+				"clockevents/econet/timer:starting",
-+				cevt_init_cpu, NULL);
-+	if (ret < 0) {
-+		pr_err("%pOFn: cpuhp setup failed (%d)\n", np, ret);
-+		goto out_irq_free;
-+	}
-+
-+	/* Point of no return, do not attempt to tear down after this. */
-+
- 	/* For clocksource purposes always read clock zero, whatever the CPU */
- 	ret = clocksource_mmio_init(reg_count(0), np->name,
- 				    econet_timer.freq_hz, 301, ECONET_BITS,
- 				    clocksource_mmio_readl_up);
--	if (ret) {
--		pr_err("%pOFn: clocksource_mmio_init failed: %d", np, ret);
--		return ret;
--	}
--
--	ret = cevt_init(np);
--	if (ret < 0)
--		return ret;
-+	if (ret)
-+		pr_err("%pOFn: clocksource_mmio_init failed: %d\n", np, ret);
- 
- 	sched_clock_register(sched_clock_read, ECONET_BITS,
- 			     econet_timer.freq_hz);
-@@ -211,6 +213,18 @@ static int __init timer_init(struct device_node *np)
- 		(econet_timer.freq_hz / 1000) % 1000);
- 
  	return 0;
-+
-+out_irq_free:
-+	free_percpu_irq(econet_timer.irq, &econet_timer_pcpu);
-+out_irq_mapping:
-+	irq_dispose_mapping(econet_timer.irq);
-+out_membase:
-+	for (int i = 0; i < ARRAY_SIZE(econet_timer.membase); i++) {
-+		if (econet_timer.membase[i])
-+			iounmap(econet_timer.membase[i]);
-+	}
-+
-+	return ret;
  }
  
- TIMER_OF_DECLARE(econet_timer_hpt, "econet,en751221-timer", timer_init);
+@@ -177,6 +176,8 @@ static int __init timer_init(struct device_node *np)
+ 		goto out_membase;
+ 	}
+ 
++	irq_set_status_flags(econet_timer.irq, IRQ_NOAUTOEN);
++
+ 	ret = request_percpu_irq(econet_timer.irq, cevt_interrupt, np->name,
+ 				 &econet_timer_pcpu);
+ 
 -- 
 2.39.5
 
