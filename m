@@ -1,153 +1,199 @@
-Return-Path: <linux-mips+bounces-14627-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-14628-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id UPEiADu1Cmpp6AQAu9opvQ
-	(envelope-from <linux-mips+bounces-14627-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Mon, 18 May 2026 08:44:11 +0200
+	id CIU1FYv6Cmpd+wQAu9opvQ
+	(envelope-from <linux-mips+bounces-14628-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Mon, 18 May 2026 13:39:55 +0200
 X-Original-To: lists+linux-mips@lfdr.de
 Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2B044566E14
-	for <lists+linux-mips@lfdr.de>; Mon, 18 May 2026 08:44:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 3523D56BB94
+	for <lists+linux-mips@lfdr.de>; Mon, 18 May 2026 13:39:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 8A0EE300492C
-	for <lists+linux-mips@lfdr.de>; Mon, 18 May 2026 06:44:09 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 9FB1A3010BF9
+	for <lists+linux-mips@lfdr.de>; Mon, 18 May 2026 11:38:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 044E63DDDAB;
-	Mon, 18 May 2026 06:44:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C5F063F660D;
+	Mon, 18 May 2026 11:38:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=a16n.net header.i=@a16n.net header.b="ktXWhlxy"
+	dkim=pass (2048-bit key) header.d=mythread.it header.i=@mythread.it header.b="neqiViK/"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from server.a16n.net (server.a16n.net [82.67.174.37])
+Received: from smtpdh16-2.aruba.it (smtpdh16-2.aruba.it [62.149.155.101])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E22C43DCD8D
-	for <linux-mips@vger.kernel.org>; Mon, 18 May 2026 06:43:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=82.67.174.37
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2FF0B3F4112
+	for <linux-mips@vger.kernel.org>; Mon, 18 May 2026 11:38:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.149.155.101
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779086645; cv=none; b=YZ4FJeLSiSy+Sjxk3JG3Rw9hKly069RCNmciOcMbHYl1bbkjEFcpYSGMRAAz0r+u6WQzMqrVnO1Rf/Ro6hF7pMBOAQhPElyO7WI1aqtGWKlqNKRTtkFQMBAxDpi1W+leoLLBC7IbhWlvaWaggsj6l3WYOjOEnJ2fimjhLXsQLCs=
+	t=1779104330; cv=none; b=Q72dWUfFmS6UBPCKS+Qb2euSJspzUqt126g4VhEaN38EZ6RREKSvRJqdQfH7h0YWSOlDrjt6ZfU5O7ixuu5EaPNt3padcUGa3jl3Loy6eS5GIMtPKtj8v8UT9fNaNmmeDe1zZz7ZoTEAm+qiCwrqXVxRBWSpYSk/MeHZlNGSJqc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779086645; c=relaxed/simple;
-	bh=0fhhiRjxw6BO4mIJMn0IwGlTSU3mV0D0QcyUyCZAJ84=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=AGkO/Ll3jnO6mD7wjg8Iwl0KuIZsMkNCGCBbVP2pjTKgKqYjtcrXOttKC7Xg1VWMtERixaq5Vb0CiR5wFDcQvG0i9AxDG4bmRByxPmH4OsG4uvjanu50PnqjfdXh7xxAOo0EGzeQ3YUEmy40XgV3U/moazzCZpvgS4rt5GUXCdA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=a16n.net; spf=pass smtp.mailfrom=a16n.net; dkim=pass (2048-bit key) header.d=a16n.net header.i=@a16n.net header.b=ktXWhlxy; arc=none smtp.client-ip=82.67.174.37
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=a16n.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=a16n.net
-Received: from ws.localdomain (21.197.30.93.rev.sfr.net [93.30.197.21])
-	by server.a16n.net (Postfix) with ESMTPSA id 84DE364065A;
-	Mon, 18 May 2026 08:43:46 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=a16n.net; s=a16n;
-	t=1779086626; bh=n+jfizWghm70l2OQoO1HV2gfAdPqrNniaYgETb7MIXE=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date;
-	b=ktXWhlxyfcvl5ICyyAk4pUpZHAwry0q1YXQoK50QVRmDhcL7wYcwkXxf/rxDHRni6
-	 gIobkQjrpICtCiy8rPYLDT+oh3Op/BFwNa00adtmMHhZmlSiAZ6639eEDKC8xva/tC
-	 vR5vgjJ//PpIr/GVL8QRHdI7Hbg+lpjyeQEU6VirBDZWbIHtBDklFzwlKhaMszbaCM
-	 Q9CL/8ZB/dSHiTwNkdZ2r2BrsL5ZJhnGac/DvAHO0C1xbJ3DNt/+udpBoXe5AFOdkB
-	 H52M4MHdaKbNzt91uAjplaT0N6N3RpOW9sjeIyHIBImv5b+CqDgnXb12tZD3C4xpkZ
-	 ZP+YVPBkkPAzg==
-Received: by ws.localdomain (Postfix, from userid 1000)
-	id 8995D306CBF; Mon, 18 May 2026 08:43:45 +0200 (CEST)
-From: =?utf-8?Q?Peter_M=C3=BCnster?= <pm@a16n.net>
-To: linux-mips@vger.kernel.org
-Cc: Waldemar Brodkorb <wbx@openadk.org>
-Subject: Re: Asus WL500g Premium (BCM47XX) problem
-In-Reply-To: <agqWtz_66N5KkBv7@waldemar-brodkorb.de>
-References: <aZ3NVrKLKgsflL1H@waldemar-brodkorb.de>
-	<aZ-Ldi2U-51z3tF5@waldemar-brodkorb.de> <87y0hhgbip.fsf@a16n.net>
-	<agoFSZ8pdS_bt3C-@waldemar-brodkorb.de> <87cxytg5n7.fsf@a16n.net>
-	<agqWtz_66N5KkBv7@waldemar-brodkorb.de>
-Date: Mon, 18 May 2026 08:43:45 +0200
-Message-ID: <87wlx1cj4u.fsf@a16n.net>
-User-Agent: Gnus/5.13 (Gnus v5.13)
+	s=arc-20240116; t=1779104330; c=relaxed/simple;
+	bh=UzMjGgTLP3VkpTJJAKFMLOoiMzIHogWPPkCKM6ObdI8=;
+	h=Message-ID:Date:MIME-Version:To:Cc:From:Subject:Content-Type; b=Agk++URtHWCT/8AqTgFTjwf8UdVaTV+zAf1OF0RhAxLLUBKms/2LDqsIldxMKXB8/WlzHXYX3cMMql5trOtjRwmY5+6TxkB5zw7b+kcmIHDSvFAw+KRPSHEvQAgQHynzlEyBRoCDPMIUmJdz8Cy8xNFwMVZFjNu3TNar05txGQA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=mythread.it; spf=pass smtp.mailfrom=mythread.it; dkim=pass (2048-bit key) header.d=mythread.it header.i=@mythread.it header.b=neqiViK/; arc=none smtp.client-ip=62.149.155.101
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=mythread.it
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mythread.it
+Received: from [192.168.1.83] ([79.20.159.46])
+	by Aruba SMTP with ESMTPSA
+	id OwFxwicFb0dL0OwFxwoONl; Mon, 18 May 2026 13:35:33 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mythread.it; s=a1;
+	t=1779104133; bh=UzMjGgTLP3VkpTJJAKFMLOoiMzIHogWPPkCKM6ObdI8=;
+	h=Date:MIME-Version:To:From:Subject:Content-Type;
+	b=neqiViK/Eq42zl4ABKS0BgLXLTqT6LeT/j/dE+ozv9V4ILMf3oP0+b3axOW29JBYM
+	 n3Fc8QGTkBLiXH5XMIAmXHUOb8+mTJfZ4FY0yR919eTBNM4KJc4LiLpZP8JvXwMjnn
+	 D7mq0RqM/umlmGFO0TCaEXmy2l2z5KKk95H+XcqL8uaTFCqJEMEpFObApDzT5iZ1oE
+	 PUR0pTT6AV6Ng2mK+hfK0RlSZu3puaHvMff7AAlHstfKj4iodlkkKQQLNfsey4bcd4
+	 RPcym7F8b0B1zzBI3Kd1G5SE7LeVSK+kAPrTOTZ3QO55elA75RZ3UZr1/2w+XSjXrw
+	 fg4ONlRzCMe2Q==
+Message-ID: <3e236bf0-5269-4631-8e56-1bc199c2f643@mythread.it>
+Date: Mon, 18 May 2026 13:35:33 +0200
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="=-=-=";
-	micalg=pgp-sha1; protocol="application/pgp-signature"
-X-Rspamd-Queue-Id: 2B044566E14
+User-Agent: Mozilla Thunderbird
+Content-Language: it
+To: =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>
+Cc: linux-wireless@vger.kernel.org, linux-mips@vger.kernel.org
+From: Alessio Ferri <alessio.ferri@mythread.it>
+Subject: [PATCH RFC 0/2] bcma: support for SHIM-attached SoC backplane
+ (BCM6362)
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-CMAE-Envelope: MS4xfOmHSt0svW0gf3BTzzog3i0iry0KL4XHFW5gSrtpbA0otzY8kqGxGD+eK1mLzqWPT6eydVDrpnpkVB/8guTzVpenZWXE29m3WDdtcJ+5RDCTBn9NvOhw
+ u4suoppnO3QW0vqcLqFcyLHjy1hUnGN6T8iqMuWAKt797aKsfyGgC5JXnGw47K8Ej026aLST/kglpkx1AkOskE2abDI2/x5bk0+hAN8uayTsuNyH6Vu3JR2n
+ HZCovsNCHENqOnPJ/F5sJWe+HeELVjll8cOL+h5ygXg=
+X-Rspamd-Queue-Id: 3523D56BB94
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-3.20 / 15.00];
-	SIGNED_PGP(-2.00)[];
+X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_MIXED_CHARSET(0.56)[subject];
-	R_MISSING_CHARSET(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[a16n.net,none];
-	R_DKIM_ALLOW(-0.20)[a16n.net:s=a16n];
-	MIME_GOOD(-0.20)[multipart/signed,text/plain];
+	DMARC_POLICY_ALLOW(-0.50)[mythread.it,none];
 	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
+	R_DKIM_ALLOW(-0.20)[mythread.it:s=a1];
 	MAILLIST(-0.15)[generic];
+	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
+	TAGGED_FROM(0.00)[bounces-14628-lists,linux-mips=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-14627-lists,linux-mips=lfdr.de];
-	FROM_HAS_DN(0.00)[];
-	RCPT_COUNT_TWO(0.00)[2];
+	RCVD_COUNT_THREE(0.00)[4];
+	FREEMAIL_TO(0.00)[gmail.com];
+	DKIM_TRACE(0.00)[mythread.it:+];
+	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[pm@a16n.net,linux-mips@vger.kernel.org];
-	MIME_TRACE(0.00)[0:+,1:+,2:~];
-	DKIM_TRACE(0.00)[a16n.net:+];
+	FROM_HAS_DN(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
-	MID_RHS_MATCH_FROM(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
-	PRECEDENCE_BULK(0.00)[];
-	TAGGED_RCPT(0.00)[linux-mips];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TO_DN_SOME(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns]
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[alessio.ferri@mythread.it,linux-mips@vger.kernel.org];
+	RCPT_COUNT_THREE(0.00)[3];
+	NEURAL_HAM(-0.00)[-1.000];
+	TAGGED_RCPT(0.00)[linux-mips];
+	MID_RHS_MATCH_FROM(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[mythread.it:mid,mythread.it:dkim,sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns]
 X-Rspamd-Action: no action
 
---=-=-=
-Content-Type: text/plain
-Content-Transfer-Encoding: quoted-printable
+This RFC introduces the minimal infrastructure in bcma to support
+SoCs that publish a SHIM-style mini-EROM: a backplane on a big-
+endian peripheral bus where ChipCommon, the IEEE 802.11 core and
+BCMA_CORE_SHIM all report NMW=NSW=0 because clock and reset
+gating happens in the SHIM's per-core Control register rather
+than in per-core DMP wrappers.
 
-On Mon, May 18 2026, Waldemar Brodkorb wrote:
+The two patches:
 
-> What device do you have?
+  1/2  bcma: host_soc: support big-endian SoC backplane with
+       wrapper-less core synthesis
+  2/2  bcma: scan: allow SHIM-style mini-EROM wrapper-less cores
 
-Hi Waldemar,
+These two are infrastructure-only and don't interfare with
+existing SoC: the default brcm,bus-axi compatible
+keeps the existing behaviour, and the new code paths gate on 
+bus->big_endian and bus->shim_attached, both populated only 
+when DT compatible is one of the new SHIM-quirks ones 
+(brcm,bcm6362-bus-axi, brcm,bcm63268-bus-axi). I didn't
+include the DT bindings YAML for those new compatibles 
+from this RFC - the binding design depends on the feedback.
 
-The WL500g-P.
+Context: this builds on an earlier design question to the list
+that did not draw a response:
 
+  https://lore.kernel.org/linux-wireless/CAHDv23WJLBEp3ETscVT4Z6E5PQfzTDcofxbZ6jAezZNYde7C0w@mail.gmail.com/
 
-> Can you test the patch,
+The companion b43 series for the same hardware (BCM6362 single-
+die N-PHY rev 8 + radio 2057 rev 8) is in review here:
 
-Yes, perhaps in 1-2 weeks.
+  https://lore.kernel.org/linux-wireless/4581a48e-a6e4-46b1-853f-16db445d6890@mythread.it/
 
+That b43 series stands on its own (b43 dispatcher gaps for a
+PHY+radio combination already partially supported in tree). 
+This bcma series creates the conditions for b43 to
+bind to a BCM6362 d11 core, but does not change anything for any
+other b43 user.
 
-> maybe I can resend it.
+Open design questions:
 
-That would be nice. Here is the guide:
-https://docs.kernel.org/process/submitting-patches.html
-You should include "[PATCH]" in the subject.
+  1. DT bindings for the new compatible strings. I added
+     "brcm,bcm6362-bus-axi" and "brcm,bcm63268-bus-axi" as new
+     compatibles alongside the existing "brcm,bus-axi", each with
+     its own quirks data block. Is it ok?
 
+  2. SHIM peephole base address. The brcm-shim quirks block
+     hard-codes shim_base = 0x10007000, which is the address
+     used by both BCM6362 and BCM63268 per the OEM SoC map
+     headers. I left the hard-coded value in place for the
+     RFC since i think it is fixed, but i'm ok to move it 
+     to DT if asked.
 
-> Last time I got no response,
+  3. Accessor set duplication. The BE variants in patch 1/2
+     (read16_be / read32_be / write16_be / write32_be /
+     aread32_be / awrite32_be) are direct duplicates of the
+     existing helpers with the underlying ioread/iowrite calls
+     swapped.
 
-I guess because of the missing "[PATCH]".
+  4. The allow-list extension in patch 2/2 (CHIPCOMMON, 80211,
+     SHIM) is gated on bus->shim_attached at the point of the
+     check.
 
+If this design is acceptable in principle, the follow-up work
+that depends on it is:
 
-> You can always clone my repo of FreeWRT to get the patch:
+  - DT bindings YAML for the new compatibles;
+  - A SoC-side wlan-shim platform driver to take the BCM6362
+    SHIM out of reset before bcma scans it (currently handled by
+    an out-of-tree driver during my bring-up; will upstream);
+  - A SPROM fallback driver that registers via
+    bcma_arch_register_fallback_sprom(), BCM6362 is spromless
+  - DT nodes for BCM6362 and BCM63268-class boards under
+    arch/mips/boot/dts/brcm/.
 
-Thanks!
+Tested on a D-Link DSL-3580L (BCM6362 SoC, single-die N-PHY rev
+8 + radio 2057 rev 8). With patches 1-2 applied plus the
+out-of-tree wlan-shim driver and SPROM fallback, bcma scan
+enumerates the three SHIM-attached cores, b43 binds to the
+802.11 core, and the d11 reaches firmware load and PSM run-up.
+If asked, i can provide the full dmesg to verify working status.
 
-Kind regards,
-=2D-=20
-           Peter
+I also own a NetGear D4220 and some other broadcom routers 
+that i plan to bring up after the BCM6362, they are BCM63168 
+and BCM63268. 
+The shim_base in quirks block already covers BCM63268 per the
+OEM SoC map headers, and i expect the same SHIM-attached 
+backplane shape for the BCM63168. 
+I plan to reuse this infrastructure for their bring up.
 
---=-=-=
-Content-Type: application/pgp-signature; name="signature.asc"
+Alessio Ferri (2):
+  bcma: host_soc: support big-endian SoC backplane with wrapper-less
+    core synthesis
+  bcma: scan: allow SHIM-style mini-EROM wrapper-less cores
 
------BEGIN PGP SIGNATURE-----
+ drivers/bcma/host_soc.c   | 243 +++++++++++++++++++++++++++++++++++++-
+ drivers/bcma/scan.c       |  19 ++-
+ include/linux/bcma/bcma.h |  10 ++
+ 3 files changed, 269 insertions(+), 3 deletions(-)
 
-iGoEARECACoWIQS/5hHRBUjla4uZVXU6jitvQ7HLaAUCagq1IQwccG1AYTE2bi5u
-ZXQACgkQOo4rb0Oxy2hXSQCgg8rUEO1Mdus+HRWPnCOm9WtUUXsAnjkBHxwZP4kp
-Wqaca71G+xjJ/h62
-=W0xU
------END PGP SIGNATURE-----
---=-=-=--
+-- 
+2.43.0
 
