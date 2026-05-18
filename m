@@ -1,126 +1,153 @@
-Return-Path: <linux-mips+bounces-14626-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-14627-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 2HhKGdOWCmry3wQAu9opvQ
-	(envelope-from <linux-mips+bounces-14626-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Mon, 18 May 2026 06:34:27 +0200
+	id UPEiADu1Cmpp6AQAu9opvQ
+	(envelope-from <linux-mips+bounces-14627-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Mon, 18 May 2026 08:44:11 +0200
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id D03C4565B05
-	for <lists+linux-mips@lfdr.de>; Mon, 18 May 2026 06:34:26 +0200 (CEST)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2B044566E14
+	for <lists+linux-mips@lfdr.de>; Mon, 18 May 2026 08:44:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 77FD83006B4E
-	for <lists+linux-mips@lfdr.de>; Mon, 18 May 2026 04:34:06 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 8A0EE300492C
+	for <lists+linux-mips@lfdr.de>; Mon, 18 May 2026 06:44:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 84B5D38239E;
-	Mon, 18 May 2026 04:34:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 044E63DDDAB;
+	Mon, 18 May 2026 06:44:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="key not found in DNS" (0-bit key) header.d=openadk.org header.i=@openadk.org header.b="VmntXl6X"
+	dkim=pass (2048-bit key) header.d=a16n.net header.i=@a16n.net header.b="ktXWhlxy"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from helium.openadk.org (helium.openadk.org [89.238.66.15])
+Received: from server.a16n.net (server.a16n.net [82.67.174.37])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A56A382296
-	for <linux-mips@vger.kernel.org>; Mon, 18 May 2026 04:34:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=89.238.66.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E22C43DCD8D
+	for <linux-mips@vger.kernel.org>; Mon, 18 May 2026 06:43:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=82.67.174.37
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779078845; cv=none; b=cgghIUvEHaGk01cw0e1Y9e3xzXAwD+uIvk5lVGAR4kL7H3ciPD1ru2LTL9A0MuksKM0Rp67U7OtqBiaXB1quN9fK9d1Xzrcr69S0+BFT9wf5kVOcA0kf+4lfJfUbF5p0TIXYcNwZYTAIpRI6Zqo0EcX9ZTxmwJ7OFdF/DS1EGQ8=
+	t=1779086645; cv=none; b=YZ4FJeLSiSy+Sjxk3JG3Rw9hKly069RCNmciOcMbHYl1bbkjEFcpYSGMRAAz0r+u6WQzMqrVnO1Rf/Ro6hF7pMBOAQhPElyO7WI1aqtGWKlqNKRTtkFQMBAxDpi1W+leoLLBC7IbhWlvaWaggsj6l3WYOjOEnJ2fimjhLXsQLCs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779078845; c=relaxed/simple;
-	bh=9bWBVkGCRf0NhP3vwPVHi1/1YGyiF6b6QotAuU/9I8k=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ZqnZilfeXCvwV6SGh/OE+7DOhXtG7EetcPwJPnJpGhnAaisx7+5QhW/rr7KeKg6kO387LtkVQtByoklkYusceSIPy6QQUUIE0cNHhyiU9CzL9TVpQrHlF9e7CKnhAoIijyK6DMMVoRqYFgiU6HLTffnlPdzP0+8MDm9ar1QkaOw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=openadk.org; spf=pass smtp.mailfrom=openadk.org; dkim=fail (0-bit key) header.d=openadk.org header.i=@openadk.org header.b=VmntXl6X reason="key not found in DNS"; arc=none smtp.client-ip=89.238.66.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=openadk.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=openadk.org
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=openadk.org; s=2022;
-	t=1779078839; bh=9bWBVkGCRf0NhP3vwPVHi1/1YGyiF6b6QotAuU/9I8k=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=VmntXl6Xe34W0pyEirAderURkLRvOCzMrcEFj7nZ7RvS97ZKHi5HSg6uO1dTH9ulp
-	 XXebmgIY1k04IVUnX3eZ+vmlhfSeVfmb250A70ofn17xuKzg+/JlutrRr89tb3UFiN
-	 CmQGHo2EWmdRee65N5tMymj3AEk/2yiJBD+ozfplBH4GbFWYRiLMb1h+Q8VO1u++XV
-	 7/SnZER8Dm/tGIEZvaDPV0PQyTWISU4kzi7jIQae9SCOL6COVb/43GexrN0ddwHcGc
-	 14bxDZDUpZ7HWSrPwgCPI62Mc2Dv/uXDf9JHc0xbgSjuc82OnGogoR5ekZZDu2kwe7
-	 R7uTi555cPi5w==
-Received: by helium.openadk.org (Postfix, from userid 1000)
-	id 5F6BD31E0C80; Mon, 18 May 2026 06:33:59 +0200 (CEST)
-Date: Mon, 18 May 2026 06:33:59 +0200
-From: Waldemar Brodkorb <wbx@openadk.org>
-To: Peter =?utf-8?Q?M=C3=BCnster?= <pm@a16n.net>
-Cc: linux-mips@vger.kernel.org, Waldemar Brodkorb <wbx@openadk.org>
+	s=arc-20240116; t=1779086645; c=relaxed/simple;
+	bh=0fhhiRjxw6BO4mIJMn0IwGlTSU3mV0D0QcyUyCZAJ84=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=AGkO/Ll3jnO6mD7wjg8Iwl0KuIZsMkNCGCBbVP2pjTKgKqYjtcrXOttKC7Xg1VWMtERixaq5Vb0CiR5wFDcQvG0i9AxDG4bmRByxPmH4OsG4uvjanu50PnqjfdXh7xxAOo0EGzeQ3YUEmy40XgV3U/moazzCZpvgS4rt5GUXCdA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=a16n.net; spf=pass smtp.mailfrom=a16n.net; dkim=pass (2048-bit key) header.d=a16n.net header.i=@a16n.net header.b=ktXWhlxy; arc=none smtp.client-ip=82.67.174.37
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=a16n.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=a16n.net
+Received: from ws.localdomain (21.197.30.93.rev.sfr.net [93.30.197.21])
+	by server.a16n.net (Postfix) with ESMTPSA id 84DE364065A;
+	Mon, 18 May 2026 08:43:46 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=a16n.net; s=a16n;
+	t=1779086626; bh=n+jfizWghm70l2OQoO1HV2gfAdPqrNniaYgETb7MIXE=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date;
+	b=ktXWhlxyfcvl5ICyyAk4pUpZHAwry0q1YXQoK50QVRmDhcL7wYcwkXxf/rxDHRni6
+	 gIobkQjrpICtCiy8rPYLDT+oh3Op/BFwNa00adtmMHhZmlSiAZ6639eEDKC8xva/tC
+	 vR5vgjJ//PpIr/GVL8QRHdI7Hbg+lpjyeQEU6VirBDZWbIHtBDklFzwlKhaMszbaCM
+	 Q9CL/8ZB/dSHiTwNkdZ2r2BrsL5ZJhnGac/DvAHO0C1xbJ3DNt/+udpBoXe5AFOdkB
+	 H52M4MHdaKbNzt91uAjplaT0N6N3RpOW9sjeIyHIBImv5b+CqDgnXb12tZD3C4xpkZ
+	 ZP+YVPBkkPAzg==
+Received: by ws.localdomain (Postfix, from userid 1000)
+	id 8995D306CBF; Mon, 18 May 2026 08:43:45 +0200 (CEST)
+From: =?utf-8?Q?Peter_M=C3=BCnster?= <pm@a16n.net>
+To: linux-mips@vger.kernel.org
+Cc: Waldemar Brodkorb <wbx@openadk.org>
 Subject: Re: Asus WL500g Premium (BCM47XX) problem
-Message-ID: <agqWtz_66N5KkBv7@waldemar-brodkorb.de>
-Mail-Followup-To: Peter =?utf-8?Q?M=C3=BCnster?= <pm@a16n.net>,
-	linux-mips@vger.kernel.org, Waldemar Brodkorb <wbx@openadk.org>
+In-Reply-To: <agqWtz_66N5KkBv7@waldemar-brodkorb.de>
 References: <aZ3NVrKLKgsflL1H@waldemar-brodkorb.de>
- <aZ-Ldi2U-51z3tF5@waldemar-brodkorb.de>
- <87y0hhgbip.fsf@a16n.net>
- <agoFSZ8pdS_bt3C-@waldemar-brodkorb.de>
- <87cxytg5n7.fsf@a16n.net>
+	<aZ-Ldi2U-51z3tF5@waldemar-brodkorb.de> <87y0hhgbip.fsf@a16n.net>
+	<agoFSZ8pdS_bt3C-@waldemar-brodkorb.de> <87cxytg5n7.fsf@a16n.net>
+	<agqWtz_66N5KkBv7@waldemar-brodkorb.de>
+Date: Mon, 18 May 2026 08:43:45 +0200
+Message-ID: <87wlx1cj4u.fsf@a16n.net>
+User-Agent: Gnus/5.13 (Gnus v5.13)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <87cxytg5n7.fsf@a16n.net>
-X-Operating-System: Linux 6.12.85+deb13-amd64 x86_64
-X-Rspamd-Queue-Id: D03C4565B05
+Content-Type: multipart/signed; boundary="=-=-=";
+	micalg=pgp-sha1; protocol="application/pgp-signature"
+X-Rspamd-Queue-Id: 2B044566E14
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-1.46 / 15.00];
+X-Spamd-Result: default: False [-3.20 / 15.00];
+	SIGNED_PGP(-2.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_MIXED_CHARSET(0.56)[subject];
+	R_MISSING_CHARSET(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[a16n.net,none];
+	R_DKIM_ALLOW(-0.20)[a16n.net:s=a16n];
+	MIME_GOOD(-0.20)[multipart/signed,text/plain];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
 	MAILLIST(-0.15)[generic];
-	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	RCVD_TLS_LAST(0.00)[];
-	DMARC_NA(0.00)[openadk.org];
+	TAGGED_FROM(0.00)[bounces-14627-lists,linux-mips=lfdr.de];
 	FROM_HAS_DN(0.00)[];
+	RCPT_COUNT_TWO(0.00)[2];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-14626-lists,linux-mips=lfdr.de];
-	RCVD_COUNT_THREE(0.00)[4];
-	TO_DN_SOME(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	DKIM_TRACE(0.00)[openadk.org:~];
-	MISSING_XM_UA(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[pm@a16n.net,linux-mips@vger.kernel.org];
+	MIME_TRACE(0.00)[0:+,1:+,2:~];
+	DKIM_TRACE(0.00)[a16n.net:+];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
+	MID_RHS_MATCH_FROM(0.00)[];
+	NEURAL_HAM(-0.00)[-1.000];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[wbx@openadk.org,linux-mips@vger.kernel.org];
-	RCPT_COUNT_THREE(0.00)[3];
-	NEURAL_HAM(-0.00)[-0.335];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
 	TAGGED_RCPT(0.00)[linux-mips];
-	R_DKIM_PERMFAIL(0.00)[openadk.org:s=2022];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,waldemar-brodkorb.de:mid]
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TO_DN_SOME(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[5];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns]
 X-Rspamd-Action: no action
 
-Hi Peter,
-Peter Münster wrote,
+--=-=-=
+Content-Type: text/plain
+Content-Transfer-Encoding: quoted-printable
 
-> On Sun, May 17 2026, Waldemar Brodkorb wrote:
-> 
-> > It is not integrated.
-> 
-> Is it planned? If not, what could I do please, to make it happen?
+On Mon, May 18 2026, Waldemar Brodkorb wrote:
 
-What device do you have?
-Can you test the patch, maybe I can resend it. Last time
-I got no response, so I thought nobody is interested in it.
- 
-> > You can find the patch which applies on latest 6.18 kernel here:
-> 
-> I get "Error: Forbidden"...
+> What device do you have?
 
-Ah, I forgot that I had disabled the Sourcebrowser for
-unauthenticated users because of massive AI crawler attacks.
+Hi Waldemar,
 
-You can always clone my repo of FreeWRT to get the patch:
-git clone https://git.freewrt.de/git/freewrt
+The WL500g-P.
 
-best regards
- Waldemar
+
+> Can you test the patch,
+
+Yes, perhaps in 1-2 weeks.
+
+
+> maybe I can resend it.
+
+That would be nice. Here is the guide:
+https://docs.kernel.org/process/submitting-patches.html
+You should include "[PATCH]" in the subject.
+
+
+> Last time I got no response,
+
+I guess because of the missing "[PATCH]".
+
+
+> You can always clone my repo of FreeWRT to get the patch:
+
+Thanks!
+
+Kind regards,
+=2D-=20
+           Peter
+
+--=-=-=
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iGoEARECACoWIQS/5hHRBUjla4uZVXU6jitvQ7HLaAUCagq1IQwccG1AYTE2bi5u
+ZXQACgkQOo4rb0Oxy2hXSQCgg8rUEO1Mdus+HRWPnCOm9WtUUXsAnjkBHxwZP4kp
+Wqaca71G+xjJ/h62
+=W0xU
+-----END PGP SIGNATURE-----
+--=-=-=--
 
