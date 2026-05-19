@@ -1,68 +1,133 @@
-Return-Path: <linux-mips+bounces-14633-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-14634-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id oCZQNM8eC2q8DgUAu9opvQ
-	(envelope-from <linux-mips+bounces-14633-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Mon, 18 May 2026 16:14:39 +0200
+	id yJDeCci6C2q3LgUAu9opvQ
+	(envelope-from <linux-mips+bounces-14634-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Tue, 19 May 2026 03:20:08 +0200
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7832856E7DA
-	for <lists+linux-mips@lfdr.de>; Mon, 18 May 2026 16:14:38 +0200 (CEST)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 21168575FDE
+	for <lists+linux-mips@lfdr.de>; Tue, 19 May 2026 03:20:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 049BE30391F1
-	for <lists+linux-mips@lfdr.de>; Mon, 18 May 2026 14:14:10 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 27066301096D
+	for <lists+linux-mips@lfdr.de>; Tue, 19 May 2026 01:20:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2DCF648AE3A;
-	Mon, 18 May 2026 14:14:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 58488257855;
+	Tue, 19 May 2026 01:20:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cjdns.fr header.i=@cjdns.fr header.b="nK1eBKvG"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Gnq9KH6L"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail.cjdns.fr (mail.cjdns.fr [5.135.140.105])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dy1-f194.google.com (mail-dy1-f194.google.com [74.125.82.194])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B70881FBEA8;
-	Mon, 18 May 2026 14:14:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=5.135.140.105
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 447F7DDC5
+	for <linux-mips@vger.kernel.org>; Tue, 19 May 2026 01:19:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779113644; cv=none; b=gF6cvE4QlN283k4o8uncSAOndPoZoxREsPzKRpKoEcu8eYvS/Rq1G2tTGZVEyeOpU3bn5iAoALDepGgBUKJnENOl+zIsaOBI9jEJpWqE+vdlgnVnksRIp3Dg6WygX/cbNpd/y4KbGilR0xEenaPAqxuUKlbGrcxFw/oGxv5nIno=
+	t=1779153601; cv=none; b=qv/sC3fyYj8L9REDz+DMuPjjy2bNV52v/BgCMLUA92Dghs1P7zRTxqoHX5J2XUEC3Yjlp/OlDeav2stjThskbN7/9pokA1MxvZQJs3xxbGr/hn7ET49nPmwYjYHS+ZxxH5w5D2UwVzaL0wwj1OfUlidvhxJHObVe4E5TO1E+c6s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779113644; c=relaxed/simple;
-	bh=rIDD9sMu6vrXcKb5GILbk/xMXs2Brt+Psz3lT+sR0eA=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=rSyc9H/p5yLiK04MONn4MY9hiSMy9kJ3EVB4vSUuJqnoaWD3TkjucaH1epfrweWOgo8aigmK7/GSIlAUhlrD02aon49oCXVZpkyPr3tIDh9XKfCF2T1yYC7KEcuIVc0Y9DUMPAenv3KlhJnCF4Zdq6V9dftKd1zG/ybJdx9c/c4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=cjdns.fr; spf=none smtp.mailfrom=cjdns.fr; dkim=pass (2048-bit key) header.d=cjdns.fr header.i=@cjdns.fr header.b=nK1eBKvG; arc=none smtp.client-ip=5.135.140.105
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=cjdns.fr
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=cjdns.fr
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 1AB40412F6F;
-	Mon, 18 May 2026 16:13:54 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cjdns.fr; s=dkim;
-	t=1779113639; h=from:subject:date:message-id:to:cc:mime-version:
-	 content-transfer-encoding:in-reply-to:references;
-	bh=lAEtOVhxL47rMN5ASFOhDrgx469XHP0gDm2RAGJXgfk=;
-	b=nK1eBKvG67x9FORzjAScRey6wqy1UaB5UQwALVwW//Mc6jruZG4ViW5yfTQLIcm034IZ05
-	JXGK9jYCP+blAfc1tmSbvXLfRdJH1wwEW0M09IxxtWwmIAEH3XZYwsiym5wooecsF0DL45
-	7ZUvujwDP1IPBZ/94WZ0OERU2po4jvzRr4xhj7xX5rM21uCmO73zMI+05GhPdJvSy3okEu
-	nykDxsZI8IFTmZxVg5xi6s9yysSWypjbCIc/c575tViB8JXR89Dno0xyIN2iAv620VWN3u
-	ZojGybARc6E8nKYplSBkdtii+0ksimJWLhif7IP2zc2iSAkJPDafdxbP7azHIQ==
-From: Caleb James DeLisle <cjd@cjdns.fr>
-To: linux-mips@vger.kernel.org
-Cc: vkoul@kernel.org,
-	neil.armstrong@linaro.org,
-	robh@kernel.org,
-	krzk+dt@kernel.org,
-	conor+dt@kernel.org,
-	linux-phy@lists.infradead.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Caleb James DeLisle <cjd@cjdns.fr>,
-	Benjamin Larsson <benjamin.larsson@genexis.eu>,
-	Ahmed Naseef <naseefkm@gmail.com>
-Subject: [PATCH 2/2] phy: econet: Add EcoNet USB PHY
-Date: Mon, 18 May 2026 14:13:43 +0000
-Message-Id: <20260518141343.401555-3-cjd@cjdns.fr>
-In-Reply-To: <20260518141343.401555-1-cjd@cjdns.fr>
-References: <20260518141343.401555-1-cjd@cjdns.fr>
+	s=arc-20240116; t=1779153601; c=relaxed/simple;
+	bh=uC/YTHZQN/5OVj8zrqwkRVYTiYsHlJGxeqoHIVP2gds=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=os0mqWc+aZNC5+bPNivVy7O1TP1a0qW+NVdtxNfcBIuKNh3x2br5HZKPma8g2eJmmCZK/nDtNc7qgi47vfBAtmwbJskdM3hvSEOjzZGwUcL1RnS6F5jC9W4n09jyGSUba/o90p1fyIdeeJjguP7j9318cS4s904fFKeKc4elcm8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Gnq9KH6L; arc=none smtp.client-ip=74.125.82.194
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-dy1-f194.google.com with SMTP id 5a478bee46e88-2ee1054627bso2621717eec.1
+        for <linux-mips@vger.kernel.org>; Mon, 18 May 2026 18:19:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1779153598; x=1779758398; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=61IH/1X9bdUpbndRHMPT6pWv81GYEfTAPjpqMU4gh2E=;
+        b=Gnq9KH6LWICcWk7JWuKm/yO7WrEL8YdF16tJOwwX6ldJtlzHzg3BPOJ5xEFqBZtB+Y
+         tRPoXh2UKPZykIPBQ1B2NCVcMrXZd4p2O71mHDrUTiQ+Mu9SheWOXy+e0EKwgA1J5sn+
+         kJLd+JOHTDf3Ubb8ibtuh5QOvXaRY74iKP49OIXMtqOTVTBJmIx97QXFq072WIaI7g9/
+         EqFGjQzC2UkprAahERIuFlfyxObO3ZWMcnoqPZl/kh6sFUXla246l8PpDSAmOSh/7Pc7
+         r98KsIGUv5IXvdjaAonGlfTxKVzsGZJB0DFMy0ttEpIU4Sly8j8QLk36NAPTHdOAAe2N
+         AkdQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1779153598; x=1779758398;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=61IH/1X9bdUpbndRHMPT6pWv81GYEfTAPjpqMU4gh2E=;
+        b=TTGxdltS3hlWny8FXN0i1stDBxCjqsRaDK8s8GG4Ea99E7KXKqQTaPa0PmPJ5PCL5O
+         AXVauy2szjejhnLbHMCjKirjwbLKaakphSulV7AG0EgigWgUg1iKpDAC5jltqfJhL5MV
+         q8+pdCBN7w5Dt+mAwaFUjjsEpN/clpS8cEH7wEtVv7Fl6xeqdWAJ5QqTGEazJeeULYYZ
+         Fozu5CYgmgw+9XyzMgaL4lNwsLsEPwrWS42OZiZI5LK80KFr99QAvU5rG6hD7XUnxowW
+         FudL0D6GvzpLIaoEodDqxhfI/rI6PxxeoUp+LkhVao1td9UbkCWroujMz89dyMikaHt4
+         TSuA==
+X-Forwarded-Encrypted: i=1; AFNElJ/R2OaGrAkh6ex99Lhxf5rej+3xoxRBB4zKQQ776fHil71LV6hDBPze8GUqTMPDywRn8iN35qW/2XIf@vger.kernel.org
+X-Gm-Message-State: AOJu0YyA8K3H77Pb8QyRbWlnjQwvZPyThMBybUVAz04B65kEyqpg+AVp
+	CO/ccgOKqcJzJbZRAl2owLoztxphVkYHWSqsCT6E6oVxeV5qVuoJTv+h
+X-Gm-Gg: Acq92OGzZZbKnWeH52uYsghy+Zb52GjDdfnu3ac/3OJT3TXD/DAQhSVPOM6AR+sv7/6
+	+TM7psoD+kXPeq0BfGK+BW6SFytpbyVr7G53/26+ZLYH0V90oo7TKC0BXAx9rwSBcQVQAwwh9/1
+	+VuxYO55r4h2aAA8fDD4X8nsse3BXedQvWv3nMlnOH8U6p/ao6xzTs3k/YjL8zlvzmyjK1ppl2e
+	lgK493VN8vgMaPvM8cm8b3auJD/wIwnkB8hyc9jEUunqEksicKyMg7ufociXvQ4ZPYQBvmfS0gk
+	Qnuc+x47ZBACdzdgcXKtlTcr4sEk3QXiAlS2GdyPKg4jsh/fB88rD/+HqajIJ9B0EmWxi1jVKkj
+	8D/EKm4pbaUy+jWCtl6CSjrxCkofH9zeqXFkv9Ac8+oxIisT9SYMSOAl0/jnbz6q6VSTo8nCfhP
+	gaySf/35FdLn3kCgKsEkvLmOidfW5s1yBn8A/qZgXiD0TuWYg9owyZ6+gt0rQRClNvOJUdWHeJJ
+	Oyxx81gb0nXjS5+ZwUW0Wddi3gRYEUbKaJkzTqshlBREj2JZvPpdwXLOlOObUCImlnbSfoaSMMi
+	g++U+cu59Ajk87kKEw==
+X-Received: by 2002:a05:7300:ec07:b0:302:b44b:b64a with SMTP id 5a478bee46e88-3039785c81fmr7064800eec.1.1779153598298;
+        Mon, 18 May 2026 18:19:58 -0700 (PDT)
+Received: from ethan-latitude5420.. (host-127-24.cafrjco.fresno.ca.us.clients.pavlovmedia.net. [68.180.127.24])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-30296dcb6adsm17034305eec.15.2026.05.18.18.19.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 18 May 2026 18:19:57 -0700 (PDT)
+From: Ethan Nelson-Moore <enelsonmoore@gmail.com>
+To: linux-kernel@vger.kernel.org,
+	linux-hexagon@vger.kernel.org,
+	linux-mips@vger.kernel.org,
+	linux-openrisc@vger.kernel.org,
+	linux-parisc@vger.kernel.org,
+	linux-sh@vger.kernel.org,
+	sparclinux@vger.kernel.org,
+	linux-arch@vger.kernel.org
+Cc: Ethan Nelson-Moore <enelsonmoore@gmail.com>,
+	Vineet Gupta <vgupta@kernel.org>,
+	Russell King <linux@armlinux.org.uk>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>,
+	Brian Cain <bcain@kernel.org>,
+	Huacai Chen <chenhuacai@kernel.org>,
+	WANG Xuerui <kernel@xen0n.name>,
+	Geert Uytterhoeven <geert@linux-m68k.org>,
+	Michal Simek <monstr@monstr.eu>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Dinh Nguyen <dinguyen@kernel.org>,
+	Jonas Bonn <jonas@southpole.se>,
+	Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
+	Stafford Horne <shorne@gmail.com>,
+	"James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+	Helge Deller <deller@gmx.de>,
+	Madhavan Srinivasan <maddy@linux.ibm.com>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Nicholas Piggin <npiggin@gmail.com>,
+	"Christophe Leroy (CS GROUP)" <chleroy@kernel.org>,
+	Paul Walmsley <pjw@kernel.org>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Alexandre Ghiti <alex@ghiti.fr>,
+	Yoshinori Sato <ysato@users.sourceforge.jp>,
+	Rich Felker <dalias@libc.org>,
+	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+	"David S. Miller" <davem@davemloft.net>,
+	Andreas Larsson <andreas@gaisler.com>,
+	Thomas Gleixner <tglx@kernel.org>,
+	Ingo Molnar <mingo@redhat.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	x86@kernel.org,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	Chris Zankel <chris@zankel.net>,
+	Max Filippov <jcmvbkbc@gmail.com>,
+	Arnd Bergmann <arnd@arndb.de>
+Subject: [PATCH] Generate <asm/asm-offsets.h> and remove identical copies in all architectures
+Date: Mon, 18 May 2026 18:18:41 -0700
+Message-ID: <20260519011928.78398-1-enelsonmoore@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -70,683 +135,233 @@ List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Last-TLS-Session-Version: TLSv1.3
-X-Spamd-Result: default: False [0.84 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+X-Spamd-Result: default: False [-0.66 / 15.00];
 	MID_CONTAINS_FROM(1.00)[];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	R_MISSING_CHARSET(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[cjdns.fr,none];
-	R_DKIM_ALLOW(-0.20)[cjdns.fr:s=dkim];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
+	TAGGED_FROM(0.00)[bounces-14634-lists,linux-mips=lfdr.de];
+	FREEMAIL_CC(0.00)[gmail.com,kernel.org,armlinux.org.uk,arm.com,xen0n.name,linux-m68k.org,monstr.eu,alpha.franken.de,southpole.se,saunalahti.fi,HansenPartnership.com,gmx.de,linux.ibm.com,ellerman.id.au,dabbelt.com,eecs.berkeley.edu,ghiti.fr,users.sourceforge.jp,libc.org,physik.fu-berlin.de,davemloft.net,gaisler.com,redhat.com,alien8.de,linux.intel.com,zytor.com,zankel.net,arndb.de];
+	RCPT_COUNT_TWELVE(0.00)[47];
+	FREEMAIL_FROM(0.00)[gmail.com];
 	MIME_TRACE(0.00)[0:+];
-	RECEIVED_HELO_LOCALHOST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[12];
-	TAGGED_FROM(0.00)[bounces-14633-lists,linux-mips=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	FREEMAIL_CC(0.00)[kernel.org,linaro.org,lists.infradead.org,vger.kernel.org,cjdns.fr,genexis.eu,gmail.com];
-	DKIM_TRACE(0.00)[cjdns.fr:+];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[cjd@cjdns.fr,linux-mips@vger.kernel.org];
-	FROM_HAS_DN(0.00)[];
 	TO_DN_SOME(0.00)[];
-	TAGGED_RCPT(0.00)[linux-mips,dt];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[enelsonmoore@gmail.com,linux-mips@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	DKIM_TRACE(0.00)[gmail.com:+];
+	RCVD_COUNT_FIVE(0.00)[5];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	MISSING_XM_UA(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[cjdns.fr:email,cjdns.fr:mid,cjdns.fr:dkim,tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo]
-X-Rspamd-Queue-Id: 7832856E7DA
+	TAGGED_RCPT(0.00)[linux-mips];
+	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:rdns,sin.lore.kernel.org:helo,wytron.com.tw:email]
+X-Rspamd-Queue-Id: 21168575FDE
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-Add support for USB PHY found on EcoNet EN751221, EN751627, and
-EN7528 based SoCs. This PHY is somewhat similar to Mediatek tphy-v1,
-but in terms of setup ritual it has essentially nothing in common.
+Every architecture supported by the kernel has a functionally identical
+copy of <asm/asm-offsets.h> which simply includes
+<generated/asm-offsets.h>, even though it is also present in
+asm-generic. Eliminate this unnecessary complexity by adding
+<asm/asm-offsets.h> to the list of mandatory asm headers, which causes
+a copy of it that includes <asm-generic/asm-offsets.h> to be generated
+automatically.
 
-Based on work originally by Benjamin Larsson with bug fixes and
-added support for EN751627 and EN7528.
-
-Tested on:
-* EN7526G (SmartFiber XP8421-B) USB 2.0
-* EN7526F (ChinaMobile GS3101) USB 2.0
-* EN7516 (Zyxel EX3301-T0) USB 2.0
-
-Tested by Ahmed Naseef on EN7528 (Dasan H660GM) USB 2.0
-
-Tested by Benjamin Larsson on unreleased EN751221 board with USB 3.0
-
-Originally-by: Benjamin Larsson <benjamin.larsson@genexis.eu>
-Signed-off-by: Caleb James DeLisle <cjd@cjdns.fr>
-Tested-by: Ahmed Naseef <naseefkm@gmail.com>
-Tested-by: Benjamin Larsson <benjamin.larsson@genexis.eu>
-Link: https://github.com/openwrt/openwrt/pull/23264#issuecomment-4415906568
+Signed-off-by: Ethan Nelson-Moore <enelsonmoore@gmail.com>
 ---
- MAINTAINERS                  |   1 +
- drivers/phy/Kconfig          |  13 +
- drivers/phy/Makefile         |   1 +
- drivers/phy/phy-econet-usb.c | 558 +++++++++++++++++++++++++++++++++++
- 4 files changed, 573 insertions(+)
- create mode 100644 drivers/phy/phy-econet-usb.c
+ arch/arc/include/asm/asm-offsets.h        | 6 ------
+ arch/arm/include/asm/asm-offsets.h        | 1 -
+ arch/arm64/include/asm/asm-offsets.h      | 1 -
+ arch/hexagon/include/asm/asm-offsets.h    | 1 -
+ arch/loongarch/include/asm/asm-offsets.h  | 5 -----
+ arch/m68k/include/asm/asm-offsets.h       | 1 -
+ arch/microblaze/include/asm/asm-offsets.h | 1 -
+ arch/mips/include/asm/asm-offsets.h       | 1 -
+ arch/nios2/include/asm/asm-offsets.h      | 7 -------
+ arch/openrisc/include/asm/asm-offsets.h   | 1 -
+ arch/parisc/include/asm/asm-offsets.h     | 1 -
+ arch/powerpc/include/asm/asm-offsets.h    | 1 -
+ arch/riscv/include/asm/asm-offsets.h      | 1 -
+ arch/sh/include/asm/asm-offsets.h         | 2 --
+ arch/sparc/include/asm/asm-offsets.h      | 1 -
+ arch/x86/include/asm/asm-offsets.h        | 1 -
+ arch/xtensa/include/asm/asm-offsets.h     | 1 -
+ include/asm-generic/Kbuild                | 1 +
+ 18 files changed, 1 insertion(+), 33 deletions(-)
+ delete mode 100644 arch/arc/include/asm/asm-offsets.h
+ delete mode 100644 arch/arm/include/asm/asm-offsets.h
+ delete mode 100644 arch/arm64/include/asm/asm-offsets.h
+ delete mode 100644 arch/hexagon/include/asm/asm-offsets.h
+ delete mode 100644 arch/loongarch/include/asm/asm-offsets.h
+ delete mode 100644 arch/m68k/include/asm/asm-offsets.h
+ delete mode 100644 arch/microblaze/include/asm/asm-offsets.h
+ delete mode 100644 arch/mips/include/asm/asm-offsets.h
+ delete mode 100644 arch/nios2/include/asm/asm-offsets.h
+ delete mode 100644 arch/openrisc/include/asm/asm-offsets.h
+ delete mode 100644 arch/parisc/include/asm/asm-offsets.h
+ delete mode 100644 arch/powerpc/include/asm/asm-offsets.h
+ delete mode 100644 arch/riscv/include/asm/asm-offsets.h
+ delete mode 100644 arch/sh/include/asm/asm-offsets.h
+ delete mode 100644 arch/sparc/include/asm/asm-offsets.h
+ delete mode 100644 arch/x86/include/asm/asm-offsets.h
+ delete mode 100644 arch/xtensa/include/asm/asm-offsets.h
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 1a90a1736294..74cf07bbc49f 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -9209,6 +9209,7 @@ M:	Caleb James DeLisle <cjd@cjdns.fr>
- L:	linux-mips@vger.kernel.org
- S:	Maintained
- F:	Documentation/devicetree/bindings/phy/econet,en751221-usb-phy.yaml
-+F:	drivers/phy/phy-econet-usb.c
+diff --git a/arch/arc/include/asm/asm-offsets.h b/arch/arc/include/asm/asm-offsets.h
+deleted file mode 100644
+index 32a1d3d518dc..000000000000
+--- a/arch/arc/include/asm/asm-offsets.h
++++ /dev/null
+@@ -1,6 +0,0 @@
+-/* SPDX-License-Identifier: GPL-2.0-only */
+-/*
+- * Copyright (C) 2004, 2007-2010, 2011-2012 Synopsys, Inc. (www.synopsys.com)
+- */
+-
+-#include <generated/asm-offsets.h>
+diff --git a/arch/arm/include/asm/asm-offsets.h b/arch/arm/include/asm/asm-offsets.h
+deleted file mode 100644
+index d370ee36a182..000000000000
+--- a/arch/arm/include/asm/asm-offsets.h
++++ /dev/null
+@@ -1 +0,0 @@
+-#include <generated/asm-offsets.h>
+diff --git a/arch/arm64/include/asm/asm-offsets.h b/arch/arm64/include/asm/asm-offsets.h
+deleted file mode 100644
+index d370ee36a182..000000000000
+--- a/arch/arm64/include/asm/asm-offsets.h
++++ /dev/null
+@@ -1 +0,0 @@
+-#include <generated/asm-offsets.h>
+diff --git a/arch/hexagon/include/asm/asm-offsets.h b/arch/hexagon/include/asm/asm-offsets.h
+deleted file mode 100644
+index d370ee36a182..000000000000
+--- a/arch/hexagon/include/asm/asm-offsets.h
++++ /dev/null
+@@ -1 +0,0 @@
+-#include <generated/asm-offsets.h>
+diff --git a/arch/loongarch/include/asm/asm-offsets.h b/arch/loongarch/include/asm/asm-offsets.h
+deleted file mode 100644
+index d9ad88d293e7..000000000000
+--- a/arch/loongarch/include/asm/asm-offsets.h
++++ /dev/null
+@@ -1,5 +0,0 @@
+-/* SPDX-License-Identifier: GPL-2.0 */
+-/*
+- * Copyright (C) 2020-2022 Loongson Technology Corporation Limited
+- */
+-#include <generated/asm-offsets.h>
+diff --git a/arch/m68k/include/asm/asm-offsets.h b/arch/m68k/include/asm/asm-offsets.h
+deleted file mode 100644
+index d370ee36a182..000000000000
+--- a/arch/m68k/include/asm/asm-offsets.h
++++ /dev/null
+@@ -1 +0,0 @@
+-#include <generated/asm-offsets.h>
+diff --git a/arch/microblaze/include/asm/asm-offsets.h b/arch/microblaze/include/asm/asm-offsets.h
+deleted file mode 100644
+index d370ee36a182..000000000000
+--- a/arch/microblaze/include/asm/asm-offsets.h
++++ /dev/null
+@@ -1 +0,0 @@
+-#include <generated/asm-offsets.h>
+diff --git a/arch/mips/include/asm/asm-offsets.h b/arch/mips/include/asm/asm-offsets.h
+deleted file mode 100644
+index d370ee36a182..000000000000
+--- a/arch/mips/include/asm/asm-offsets.h
++++ /dev/null
+@@ -1 +0,0 @@
+-#include <generated/asm-offsets.h>
+diff --git a/arch/nios2/include/asm/asm-offsets.h b/arch/nios2/include/asm/asm-offsets.h
+deleted file mode 100644
+index e51465213b53..000000000000
+--- a/arch/nios2/include/asm/asm-offsets.h
++++ /dev/null
+@@ -1,7 +0,0 @@
+-/* SPDX-License-Identifier: GPL-2.0-or-later */
+-/*
+- *  Copyright (C) 2010 Tobias Klauser <tklauser@distanz.ch>
+- *  Copyright (C) 2009 Thomas Chou <thomas@wytron.com.tw>
+- */
+-
+-#include <generated/asm-offsets.h>
+diff --git a/arch/openrisc/include/asm/asm-offsets.h b/arch/openrisc/include/asm/asm-offsets.h
+deleted file mode 100644
+index d370ee36a182..000000000000
+--- a/arch/openrisc/include/asm/asm-offsets.h
++++ /dev/null
+@@ -1 +0,0 @@
+-#include <generated/asm-offsets.h>
+diff --git a/arch/parisc/include/asm/asm-offsets.h b/arch/parisc/include/asm/asm-offsets.h
+deleted file mode 100644
+index d370ee36a182..000000000000
+--- a/arch/parisc/include/asm/asm-offsets.h
++++ /dev/null
+@@ -1 +0,0 @@
+-#include <generated/asm-offsets.h>
+diff --git a/arch/powerpc/include/asm/asm-offsets.h b/arch/powerpc/include/asm/asm-offsets.h
+deleted file mode 100644
+index d370ee36a182..000000000000
+--- a/arch/powerpc/include/asm/asm-offsets.h
++++ /dev/null
+@@ -1 +0,0 @@
+-#include <generated/asm-offsets.h>
+diff --git a/arch/riscv/include/asm/asm-offsets.h b/arch/riscv/include/asm/asm-offsets.h
+deleted file mode 100644
+index d370ee36a182..000000000000
+--- a/arch/riscv/include/asm/asm-offsets.h
++++ /dev/null
+@@ -1 +0,0 @@
+-#include <generated/asm-offsets.h>
+diff --git a/arch/sh/include/asm/asm-offsets.h b/arch/sh/include/asm/asm-offsets.h
+deleted file mode 100644
+index 9f8535716392..000000000000
+--- a/arch/sh/include/asm/asm-offsets.h
++++ /dev/null
+@@ -1,2 +0,0 @@
+-/* SPDX-License-Identifier: GPL-2.0 */
+-#include <generated/asm-offsets.h>
+diff --git a/arch/sparc/include/asm/asm-offsets.h b/arch/sparc/include/asm/asm-offsets.h
+deleted file mode 100644
+index d370ee36a182..000000000000
+--- a/arch/sparc/include/asm/asm-offsets.h
++++ /dev/null
+@@ -1 +0,0 @@
+-#include <generated/asm-offsets.h>
+diff --git a/arch/x86/include/asm/asm-offsets.h b/arch/x86/include/asm/asm-offsets.h
+deleted file mode 100644
+index d370ee36a182..000000000000
+--- a/arch/x86/include/asm/asm-offsets.h
++++ /dev/null
+@@ -1 +0,0 @@
+-#include <generated/asm-offsets.h>
+diff --git a/arch/xtensa/include/asm/asm-offsets.h b/arch/xtensa/include/asm/asm-offsets.h
+deleted file mode 100644
+index d370ee36a182..000000000000
+--- a/arch/xtensa/include/asm/asm-offsets.h
++++ /dev/null
+@@ -1 +0,0 @@
+-#include <generated/asm-offsets.h>
+diff --git a/include/asm-generic/Kbuild b/include/asm-generic/Kbuild
+index 2c53a1e0b760..9879bba63a38 100644
+--- a/include/asm-generic/Kbuild
++++ b/include/asm-generic/Kbuild
+@@ -6,6 +6,7 @@
  
- ECRYPT FILE SYSTEM
- M:	Tyler Hicks <code@tyhicks.com>
-diff --git a/drivers/phy/Kconfig b/drivers/phy/Kconfig
-index 227b9a4c612e..0a3bec9af93e 100644
---- a/drivers/phy/Kconfig
-+++ b/drivers/phy/Kconfig
-@@ -66,6 +66,19 @@ config PHY_CAN_TRANSCEIVER
- 	  functional modes using gpios and sets the attribute max link
- 	  rate, for CAN drivers.
- 
-+config PHY_ECONET_USB
-+	tristate "EcoNet USB PHY driver"
-+	depends on ECONET || COMPILE_TEST
-+	depends on OF
-+	select GENERIC_PHY
-+	select REGMAP_MMIO
-+	help
-+	  Enable support for the USB PHY on EcoNet EN751221, EN751627, and
-+	  EN7528 SoCs. These PHYs support USB 2.0 and USB 3.0. SoCs typically
-+	  have two ports, one supporting USB 2.0 only and the other supporting
-+	  USB 3.0. Though some chip configurations have only the 2.0 capable
-+	  port and some only have the 3.0 capable port.
-+
- config PHY_GOOGLE_USB
- 	tristate "Google Tensor SoC USB PHY driver"
- 	select GENERIC_PHY
-diff --git a/drivers/phy/Makefile b/drivers/phy/Makefile
-index f49d83f00a3d..8a58bb151198 100644
---- a/drivers/phy/Makefile
-+++ b/drivers/phy/Makefile
-@@ -9,6 +9,7 @@ obj-$(CONFIG_GENERIC_PHY)		+= phy-core.o
- obj-$(CONFIG_GENERIC_PHY_MIPI_DPHY)	+= phy-core-mipi-dphy.o
- obj-$(CONFIG_PHY_AIROHA_PCIE)		+= phy-airoha-pcie.o
- obj-$(CONFIG_PHY_CAN_TRANSCEIVER)	+= phy-can-transceiver.o
-+obj-$(CONFIG_PHY_ECONET_USB)		+= phy-econet-usb.o
- obj-$(CONFIG_PHY_GOOGLE_USB)		+= phy-google-usb.o
- obj-$(CONFIG_USB_LGM_PHY)		+= phy-lgm-usb.o
- obj-$(CONFIG_PHY_LPC18XX_USB_OTG)	+= phy-lpc18xx-usb-otg.o
-diff --git a/drivers/phy/phy-econet-usb.c b/drivers/phy/phy-econet-usb.c
-new file mode 100644
-index 000000000000..e8fa2e80eb13
---- /dev/null
-+++ b/drivers/phy/phy-econet-usb.c
-@@ -0,0 +1,558 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Author: Benjamin Larsson <benjamin.larsson@genexis.eu>
-+ * Author: Caleb James DeLisle <cjd@cjdns.fr>
-+ */
-+
-+#include <dt-bindings/phy/phy.h>
-+#include <linux/bitfield.h>
-+#include <linux/clk.h>
-+#include <linux/math.h>
-+#include <linux/module.h>
-+#include <linux/of.h>
-+#include <linux/of_address.h>
-+#include <linux/phy/phy.h>
-+#include <linux/platform_device.h>
-+#include <linux/regmap.h>
-+
-+/* SSUSB SIFSLV SPLLC (0x0) */
-+#define SPLLC					0x00
-+
-+/* SSUSB SIFSLV FMREG (0x100) offset based on SSUSB SIFSLV SPLLC */
-+#define FMREG					0x100
-+#define   FMCR0					0x00
-+#define     RG_MONCLK_SEL			GENMASK(27, 26)
-+#define     RG_FREQDET_EN			BIT(24)
-+#define     RG_CYCLECNT				GENMASK(23, 0)
-+#define   FMMONR0				0x0c
-+#define     RG_FM_OUT				GENMASK(31, 0)
-+#define   FMMONR1				0x10
-+#define     RG_FM_VALID				BIT(0)
-+#define     RG_FRCK_EN				BIT(8)
-+
-+/* SSUSB SIFSLV U2PHY COM (0x800, 0x1000) */
-+#define U2PHY_COM				0x00
-+#define   USBPHYACR0				0x10
-+#define     RG_HSTX_SRCAL_EN			BIT(23)
-+#define     RG_HSTX_SRCTRL			GENMASK(18, 16)
-+#define   USBPHYACR3				0x1C
-+#define     RG_PUPD				GENMASK(12, 8)
-+#define       RG_PUPD_EN			BIT(12)
-+#define       RG_PUPD_PD_DM			BIT(10)
-+#define       RG_PUPD_PD_DP			BIT(8)
-+#define     RG_REV				GENMASK(7, 0)
-+#define       REVISION_P0			FIELD_PREP(RG_REV, 0x08)
-+#define       REVISION_P0_DOWN			FIELD_PREP(RG_REV, 0x80)
-+#define       REVISION_P1			FIELD_PREP(RG_REV, 0x00)
-+#define   U2PHYDCR1				0x64
-+#define     RG_USB20_SW_PLLMODE			GENMASK(19, 18)
-+
-+/* SSUSB SIFSLV U3PHYD (0x900) */
-+#define U3PHYD					0x00
-+#define   LFPS1					0x0c
-+#define     RG_SSUSB_FWAKE_TH			GENMASK(21, 16)
-+
-+/* SSUSB SIFSLV U3PHYD BANK2 (0xA00) offset based on SSUSB SIFSLV U3PHYD */
-+#define U3PHYD_BANK2				0x100
-+#define   B2_PHYD_RXDET1			0x028
-+#define     RG_SSUSB_RXDET_STB2_SET		GENMASK(17, 9)
-+#define   B2_PHYD_RXDET2			0x02C
-+#define     RG_SSUSB_RXDET_STB2_SET_P3		GENMASK(8, 0)
-+
-+/* SSUSB SIFSLV U3PHYA (0xB00) offset based on SSUSB SIFSLV U3PHYD */
-+#define U3PHYA					0x200
-+#define   U3PHYA_REG2				0x008
-+#define     RG_SSUSB_SYSPLL_LF			BIT(31)
-+#define     RG_SSUSB_SYSPLL_FBDIV		GENMASK(30, 24)
-+#define     RG_SSUSB_SYSPLL_POSDIV		GENMASK(23, 22)
-+#define     RG_SSUSB_SYSPLL_VCO_DIV_SEL		BIT(21)
-+#define     RG_SSUSB_SYSPLL_BLP			BIT(20)
-+#define     RG_SSUSB_SYSPLL_BP			BIT(19)
-+#define     RG_SSUSB_SYSPLL_BR			BIT(18)
-+#define     RG_SSUSB_SYSPLL_BC			BIT(17)
-+#define     RG_SSUSB_SYSPLL_DIVEN		GENMASK(16, 14)
-+#define     RG_SSUSB_SYSPLL_FPEN		BIT(13)
-+#define     RG_SSUSB_SYSPLL_MONCK_EN		BIT(12)
-+#define     RG_SSUSB_SYSPLL_MONVC_EN		BIT(11)
-+#define     RG_SSUSB_SYSPLL_MONREF_EN		BIT(10)
-+#define     RG_SSUSB_SYSPLL_VOD_EN		BIT(9)
-+#define     RG_SSUSB_SYSPLL_CK_SEL		BIT(8)
-+#define   U3PHYA_REG4				0x010
-+#define     RG_SSUSB_SYSPLL_PCW_NCPO		GENMASK(31, 1)
-+#define   U3PHYA_REG9				0x024
-+#define     RG_SSUSB_PLL_DDS_DMY		GENMASK(31, 16)
-+#define     RG_SSUSB_PLL_SSC_PRD		GENMASK(15, 0)
-+#define   U3PHYA_REGB				0x02c
-+#define     RG_SSUSB_RX_50_TAR			GENMASK(13, 12)
-+
-+/* SSUSB SIFSLV U3PHYA DA (0xC00) offset based on SSUSB SIFSLV U3PHYD */
-+#define U3PHYA_DA				0x300
-+#define   U3PHYA_DA_REG9			0x01C
-+#define     RG_SSUSB_PLL_FBKDIV_PE2H		GENMASK(30, 24)
-+#define     RG_SSUSB_PLL_FBKDIV_PE1D		GENMASK(22, 16)
-+#define     RG_SSUSB_PLL_FBKDIV_PE1H		GENMASK(14, 8)
-+#define     RG_SSUSB_PLL_FBKDIV_U3		GENMASK(6, 0)
-+#define   U3PHYA_DA_REG12			0x024
-+#define     RG_SSUSB_PLL_PCW_NCPO_U3		GENMASK(30, 0)
-+#define   U3PHYA_DA_REG13			0x028
-+#define     RG_SSUSB_PLL_PCW_NCPO_PE1H		GENMASK(30, 0)
-+#define   U3PHYA_DA_REG14			0x02C
-+#define     RG_SSUSB_PLL_PCW_NCPO_PE1D		GENMASK(30, 0)
-+#define   U3PHYA_DA_REG15			0x030
-+#define     RG_SSUSB_PLL_PCW_NCPO_PE2H		GENMASK(30, 0)
-+#define   U3PHYA_DA_REG19			0x038
-+#define     RG_SSUSB_PLL_SSC_DELTA1_PE1H	GENMASK(31, 16)
-+#define     RG_SSUSB_PLL_SSC_DELTA1_U3		GENMASK(15, 0)
-+#define   U3PHYA_DA_REG20			0x03C
-+#define     RG_SSUSB_PLL_SSC_DELTA1_PE2H	GENMASK(31, 16)
-+#define     RG_SSUSB_PLL_SSC_DELTA1_PE1D	GENMASK(15, 0)
-+#define   U3PHYA_DA_REG21			0x040
-+#define     RG_SSUSB_PLL_SSC_DELTA_U3		GENMASK(31, 16)
-+#define     RG_SSUSB_PLL_SSC_DELTA1_PE2D	GENMASK(15, 0)
-+#define   U3PHYA_DA_REG23			0x044
-+#define     RG_SSUSB_PLL_SSC_DELTA_PE1D		GENMASK(31, 16)
-+#define     RG_SSUSB_PLL_SSC_DELTA_PE1H		GENMASK(15, 0)
-+#define   U3PHYA_DA_REG25			0x048
-+#define     RG_SSUSB_PLL_SSC_DELTA_PE2D		GENMASK(31, 16)
-+#define     RG_SSUSB_PLL_SSC_DELTA_PE2H		GENMASK(15, 0)
-+
-+#define ECONET_USB_PHY_U2_FM_DET_CYCLE_CNT	1024
-+#define ECONET_USB_PHY_REF_CK			20
-+#define ECONET_USB_PHY_U2_SR_COEF		28
-+#define ECONET_USB_PHY_U2_SR_COEF_DIVISOR	1000
-+#define ECONET_USB_PHY_U2_SR_DEFAULT		0x4
-+
-+#define ECONET_USB_PHY_FREQDET_SLEEP		1000 /* 1ms */
-+#define ECONET_USB_PHY_FREQDET_TIMEOUT		(ECONET_USB_PHY_FREQDET_SLEEP * 10)
-+
-+#define ECONET_USB_PHY_MAX_INSTANCE		3
-+
-+#define ECONET_PORT_ID_FIELD			"econet,usb-port-id"
-+
-+enum econet_phy_soc {
-+	SOC_EN751221 = 1,
-+	SOC_EN751627,
-+	SOC_EN7528,
-+};
-+
-+/**
-+ * econet_phy_instance - the individual PHY block
-+ * @phy: The phy object
-+ * @regmap: A regmap for the phy block, per DT subnode reg field
-+ * @type: PHY_TYPE_USB2 / PHY_TYPE_USB3 depending on PHY block
-+ * @port_id: Number of the physical port [0,1]
-+ *
-+ * There are typically 3 PHY blocks, 2x USB 2.0 blocks, and 1x USB 3.0. The USB
-+ * 3.0 PHY is piggybacked on top of one of the USB2 ports and activates when
-+ * the connected device negotiates a USB 3.0 link. Main actions like powering
-+ * on the port are governed in the USB 2.0 block.
-+ */
-+struct econet_phy_instance {
-+	struct phy	*phy;
-+	struct regmap	*regmap;
-+	int		type;
-+	int		port_id;
-+};
-+
-+/**
-+ * econet_usb_phy_priv the main PHY driver structure
-+ * @dev: The root device
-+ * @regmap: A regmap of registers that are shared between the PHY blocks
-+ * @clk: The system Xtal clock, if 25Mhz then we need additional configuration
-+ * @phys: The individual PHY blocks, normally there are three: Two USB 2.0 and
-+ *        one USB 3.0 which is shared on the same port at one of the USB 2.0.
-+ * @soc: The ID of the device, which is relevant to some of the tuning ritual.
-+ */
-+struct econet_usb_phy_priv {
-+	struct device			*dev;
-+	struct regmap			*regmap;
-+	struct clk			*clk;
-+	struct econet_phy_instance	phys[ECONET_USB_PHY_MAX_INSTANCE];
-+	enum econet_phy_soc		soc;
-+};
-+
-+static void u2_slew_rate_calibration(struct econet_usb_phy_priv *priv,
-+				     struct econet_phy_instance *instance)
-+{
-+	struct regmap *com = instance->regmap;
-+	struct regmap *regmap = priv->regmap;
-+	int fm_out = 0;
-+	u32 srctrl;
-+
-+	/* Enable HS TX SR calibration */
-+	regmap_set_bits(com, U2PHY_COM + USBPHYACR0, RG_HSTX_SRCAL_EN);
-+
-+	usleep_range(1000, 1500);
-+
-+	/* Enable Free run clock */
-+	regmap_set_bits(regmap, FMREG + FMMONR1, RG_FRCK_EN);
-+
-+	/* Select Monitor Clock */
-+	regmap_update_bits(regmap, FMREG + FMCR0, RG_MONCLK_SEL,
-+			   FIELD_PREP(RG_MONCLK_SEL, instance->port_id));
-+
-+	/* Set cyclecnt */
-+	regmap_update_bits(regmap, FMREG + FMCR0, RG_CYCLECNT,
-+			   FIELD_PREP_CONST(RG_CYCLECNT,
-+					    ECONET_USB_PHY_U2_FM_DET_CYCLE_CNT));
-+
-+	/* Enable Frequency meter */
-+	regmap_set_bits(regmap, FMREG + FMCR0, RG_FREQDET_EN);
-+
-+	/* Timeout can happen and we will apply workaround at the end */
-+	regmap_read_poll_timeout(regmap, FMREG + FMMONR0, fm_out,
-+				 fm_out, ECONET_USB_PHY_FREQDET_SLEEP,
-+				 ECONET_USB_PHY_FREQDET_TIMEOUT);
-+
-+	/* Disable Frequency meter */
-+	regmap_clear_bits(regmap, FMREG + FMCR0, RG_FREQDET_EN);
-+
-+	/* Disable Free run clock */
-+	regmap_clear_bits(regmap, FMREG + FMMONR1, RG_FRCK_EN);
-+
-+	/* Disable HS TX SR calibration */
-+	regmap_clear_bits(com, U2PHY_COM + USBPHYACR0, RG_HSTX_SRCAL_EN);
-+
-+	usleep_range(1000, 1500);
-+
-+	if (!fm_out) {
-+		srctrl = ECONET_USB_PHY_U2_SR_DEFAULT;
-+		dev_warn(&instance->phy->dev,
-+			 "frequency detection failed, using default slew rate 0x%x\n",
-+			 srctrl);
-+	} else {
-+		/* (1024 / FM_OUT) * REF_CK * U2_SR_COEF (round to nearest) */
-+		srctrl = ECONET_USB_PHY_REF_CK * ECONET_USB_PHY_U2_SR_COEF;
-+		srctrl = (srctrl * ECONET_USB_PHY_U2_FM_DET_CYCLE_CNT) / fm_out;
-+		srctrl = DIV_ROUND_CLOSEST(srctrl,
-+					   ECONET_USB_PHY_U2_SR_COEF_DIVISOR);
-+		dev_info(&instance->phy->dev,
-+			 "frequency meter result 0x%x, set slew rate 0x%x\n",
-+			 fm_out, srctrl);
-+	}
-+
-+	/* Set slew rate */
-+	regmap_update_bits(com, U2PHY_COM + USBPHYACR0, RG_HSTX_SRCTRL,
-+			   FIELD_PREP(RG_HSTX_SRCTRL, srctrl));
-+}
-+
-+static int econet_usb_phy_u2_init(struct econet_usb_phy_priv *priv,
-+				  struct econet_phy_instance *instance)
-+{
-+	struct regmap *com = instance->regmap;
-+
-+	regmap_update_bits(com, U2PHY_COM + USBPHYACR3, RG_PUPD | RG_REV,
-+			   instance->port_id == 0 ? REVISION_P0 : REVISION_P1);
-+
-+	/* set SW PLL Stable mode to 1 for U2 LPM device remote wakeup */
-+	if (priv->soc != SOC_EN7528)
-+		regmap_update_bits(com, U2PHY_COM + U2PHYDCR1,
-+				   RG_USB20_SW_PLLMODE,
-+				   FIELD_PREP(RG_USB20_SW_PLLMODE, 0x1));
-+
-+	u2_slew_rate_calibration(priv, instance);
-+
-+	usleep_range(1000, 1500);
-+
-+	return 0;
-+}
-+
-+static int u3_setup_25mhz_xtal(struct econet_usb_phy_priv *priv,
-+			       struct econet_phy_instance *instance)
-+{
-+	struct regmap *u3phyd = instance->regmap;
-+
-+	/* Setup 25MHz XTAL */
-+	regmap_update_bits(u3phyd, U3PHYA_DA + U3PHYA_DA_REG9,
-+			   RG_SSUSB_PLL_FBKDIV_U3,
-+			   FIELD_PREP(RG_SSUSB_PLL_FBKDIV_U3, 0x18));
-+	regmap_update_bits(u3phyd, U3PHYA_DA + U3PHYA_DA_REG9,
-+			   RG_SSUSB_PLL_FBKDIV_PE1H,
-+			   FIELD_PREP(RG_SSUSB_PLL_FBKDIV_PE1H, 0x18));
-+	regmap_update_bits(u3phyd, U3PHYA_DA + U3PHYA_DA_REG9,
-+			   RG_SSUSB_PLL_FBKDIV_PE2H,
-+			   FIELD_PREP(RG_SSUSB_PLL_FBKDIV_PE2H, 0x18));
-+
-+	regmap_update_bits(u3phyd, U3PHYA_DA + U3PHYA_DA_REG12,
-+			   RG_SSUSB_PLL_PCW_NCPO_U3,
-+			   FIELD_PREP(RG_SSUSB_PLL_PCW_NCPO_U3, 0x18000000));
-+
-+	regmap_update_bits(u3phyd, U3PHYA_DA + U3PHYA_DA_REG13,
-+			   RG_SSUSB_PLL_PCW_NCPO_PE1H,
-+			   FIELD_PREP(RG_SSUSB_PLL_PCW_NCPO_PE1H, 0x18000000));
-+
-+	regmap_update_bits(u3phyd, U3PHYA_DA + U3PHYA_DA_REG15,
-+			   RG_SSUSB_PLL_PCW_NCPO_PE2H,
-+			   FIELD_PREP(RG_SSUSB_PLL_PCW_NCPO_PE2H, 0x18000000));
-+
-+	regmap_update_bits(u3phyd, U3PHYA_DA + U3PHYA_DA_REG19,
-+			   RG_SSUSB_PLL_SSC_DELTA1_PE1H,
-+			   FIELD_PREP(RG_SSUSB_PLL_SSC_DELTA1_PE1H, 0x4a));
-+	regmap_update_bits(u3phyd, U3PHYA_DA + U3PHYA_DA_REG19,
-+			   RG_SSUSB_PLL_SSC_DELTA1_U3,
-+			   FIELD_PREP(RG_SSUSB_PLL_SSC_DELTA1_U3, 0x4a));
-+
-+	regmap_update_bits(u3phyd, U3PHYA_DA + U3PHYA_DA_REG20,
-+			   RG_SSUSB_PLL_SSC_DELTA1_PE2H,
-+			   FIELD_PREP(RG_SSUSB_PLL_SSC_DELTA1_PE2H, 0x4a));
-+
-+	regmap_update_bits(u3phyd, U3PHYA_DA + U3PHYA_DA_REG21,
-+			   RG_SSUSB_PLL_SSC_DELTA_U3,
-+			   FIELD_PREP(RG_SSUSB_PLL_SSC_DELTA_U3, 0x48));
-+
-+	regmap_update_bits(u3phyd, U3PHYA_DA + U3PHYA_DA_REG23,
-+			   RG_SSUSB_PLL_SSC_DELTA_PE1H,
-+			   FIELD_PREP(RG_SSUSB_PLL_SSC_DELTA_PE1H, 0x48));
-+
-+	regmap_update_bits(u3phyd, U3PHYA_DA + U3PHYA_DA_REG25,
-+			   RG_SSUSB_PLL_SSC_DELTA_PE2H,
-+			   FIELD_PREP(RG_SSUSB_PLL_SSC_DELTA_PE2H, 0x48));
-+
-+	regmap_update_bits(u3phyd, U3PHYA + U3PHYA_REG9,
-+			   RG_SSUSB_PLL_SSC_PRD,
-+			   FIELD_PREP(RG_SSUSB_PLL_SSC_PRD, 0x190));
-+	regmap_update_bits(u3phyd, U3PHYA + U3PHYA_REG4,
-+			   RG_SSUSB_SYSPLL_PCW_NCPO,
-+			   FIELD_PREP(RG_SSUSB_SYSPLL_PCW_NCPO, 0xe000000));
-+	regmap_update_bits(u3phyd, U3PHYA + U3PHYA_REG2,
-+			   RG_SSUSB_SYSPLL_FBDIV,
-+			   FIELD_PREP(RG_SSUSB_SYSPLL_FBDIV, 0xe));
-+	return 0;
-+}
-+
-+static int econet_usb_phy_u3_init(struct econet_usb_phy_priv *priv,
-+				  struct econet_phy_instance *instance)
-+{
-+	struct regmap *u3phyd = instance->regmap;
-+
-+	if (priv->soc == SOC_EN751221) {
-+		/* Patch TxDetRx Timing for E1 */
-+		regmap_update_bits(u3phyd, U3PHYD_BANK2 + B2_PHYD_RXDET1,
-+				   RG_SSUSB_RXDET_STB2_SET,
-+				   FIELD_PREP(RG_SSUSB_RXDET_STB2_SET, 0x10));
-+
-+		regmap_update_bits(u3phyd, U3PHYD_BANK2 + B2_PHYD_RXDET2,
-+				   RG_SSUSB_RXDET_STB2_SET_P3,
-+				   FIELD_PREP(RG_SSUSB_RXDET_STB2_SET_P3, 0x10));
-+
-+		/* Patch LFPS Filter Threshold for E1 */
-+		regmap_update_bits(u3phyd, U3PHYD + LFPS1, RG_SSUSB_FWAKE_TH,
-+				   FIELD_PREP(RG_SSUSB_FWAKE_TH, 0x34));
-+
-+	} else if (priv->soc == SOC_EN7528) {
-+		/* combo phy Rx R FT mean value too high, target R -5 Ohm */
-+		regmap_update_bits(u3phyd, U3PHYA + U3PHYA_REGB,
-+				   RG_SSUSB_RX_50_TAR,
-+				   FIELD_PREP(RG_SSUSB_RX_50_TAR, 0x01));
-+	}
-+
-+	if (clk_get_rate(priv->clk) == 25 * 1000 * 1000)
-+		u3_setup_25mhz_xtal(priv, instance);
-+
-+	return 0;
-+}
-+
-+static int econet_usb_phy_init(struct phy *phy)
-+{
-+	struct econet_phy_instance *instance = phy_get_drvdata(phy);
-+	struct econet_usb_phy_priv *priv = dev_get_drvdata(phy->dev.parent);
-+
-+	if (instance->type == PHY_TYPE_USB2)
-+		return econet_usb_phy_u2_init(priv, instance);
-+	else if (instance->type == PHY_TYPE_USB3)
-+		return econet_usb_phy_u3_init(priv, instance);
-+
-+	return -EINVAL;
-+}
-+
-+static int econet_usb_phy_exit(struct phy *phy)
-+{
-+	struct econet_phy_instance *instance = phy_get_drvdata(phy);
-+
-+	/*
-+	 * Disable the port by setting PHY revision to REVISION_P0_DOWN and
-+	 * enabling pulldown resistors on D+ and D- lines. The USB 3.0 PHY
-+	 * piggybacks on top of the USB 2.0 for the same port and does not
-+	 * have any such switch.
-+	 */
-+	if (instance->type == PHY_TYPE_USB2)
-+		return regmap_update_bits(instance->regmap,
-+					  U2PHY_COM + USBPHYACR3,
-+					  RG_PUPD | RG_REV,
-+					  RG_PUPD_EN | RG_PUPD_PD_DM |
-+					  RG_PUPD_PD_DP | REVISION_P0_DOWN);
-+
-+	return 0;
-+}
-+
-+static struct phy *econet_usb_phy_xlate(struct device *dev,
-+					const struct of_phandle_args *args)
-+{
-+	struct econet_usb_phy_priv *priv = dev_get_drvdata(dev);
-+	struct device_node *phy_np = args->np;
-+	int index;
-+
-+	if (!of_device_is_available(phy_np)) {
-+		dev_err(dev, "can't use disabled phy\n");
-+		return ERR_PTR(-EINVAL);
-+	}
-+
-+	for (index = 0; index < ARRAY_SIZE(priv->phys); index++) {
-+		/* Empty slots if the DT doesn't specify all subnodes */
-+		if (!priv->phys[index].phy)
-+			continue;
-+
-+		if (phy_np != priv->phys[index].phy->dev.of_node)
-+			continue;
-+
-+		return priv->phys[index].phy;
-+	}
-+
-+	dev_err(dev, "failed to find phy\n");
-+	return ERR_PTR(-EINVAL);
-+}
-+
-+static const struct phy_ops econet_phy = {
-+	.init		= econet_usb_phy_init,
-+	.exit		= econet_usb_phy_exit,
-+	.owner		= THIS_MODULE,
-+};
-+
-+static const struct regmap_config econet_usb_phy_regmap_config = {
-+	.reg_bits	= 32,
-+	.val_bits	= 32,
-+	.reg_stride	= 4,
-+};
-+
-+static const struct of_device_id econet_phy_id_table[] = {
-+	{ .compatible = "econet,en751221-usb-phy", .data = (void *) SOC_EN751221 },
-+	{ .compatible = "econet,en751627-usb-phy", .data = (void *) SOC_EN751627 },
-+	{ .compatible = "econet,en7528-usb-phy", .data = (void *) SOC_EN7528 },
-+	{ },
-+};
-+MODULE_DEVICE_TABLE(of, econet_phy_id_table);
-+
-+static int econet_usb_phy_probe(struct platform_device *pdev)
-+{
-+	struct device *dev = &pdev->dev;
-+	struct device_node *np = dev->of_node;
-+	struct econet_usb_phy_priv *priv;
-+	const struct of_device_id *match;
-+	struct phy_provider *provider;
-+	void *base;
-+	int phy_n;
-+
-+	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
-+	if (!priv)
-+		return -ENOMEM;
-+
-+	priv->dev = dev;
-+
-+	base = devm_platform_ioremap_resource(pdev, 0);
-+	if (IS_ERR(base))
-+		return dev_err_probe(dev, PTR_ERR(base), "getting reg\n");
-+
-+	platform_set_drvdata(pdev, priv);
-+	priv->regmap = devm_regmap_init_mmio(dev, base, &econet_usb_phy_regmap_config);
-+	if (IS_ERR(priv->regmap))
-+		return PTR_ERR(priv->regmap);
-+
-+	priv->clk = devm_clk_get(dev, NULL);
-+	if (IS_ERR(priv->clk))
-+		return dev_err_probe(dev, PTR_ERR(priv->clk), "getting clk\n");
-+
-+	match = of_match_node(econet_phy_id_table, np);
-+	if (!match || !match->data)
-+		return dev_err_probe(dev, -EINVAL, "no OF match data\n");
-+
-+	priv->soc = (enum econet_phy_soc)(uintptr_t)match->data;
-+
-+	phy_n = 0;
-+	for_each_child_of_node_scoped(np, child_np) {
-+		struct econet_phy_instance *instance;
-+		void __iomem *phy_base;
-+		struct device *subdev;
-+		struct resource res;
-+		int retval;
-+
-+		if (phy_n >= ARRAY_SIZE(priv->phys))
-+			return dev_err_probe(dev, -EINVAL,
-+					     "too many PHY subnodes\n");
-+
-+		instance = &priv->phys[phy_n];
-+
-+		if (of_device_is_compatible(child_np, "econet,usb2-phy"))
-+			instance->type = PHY_TYPE_USB2;
-+		else if (of_device_is_compatible(child_np, "econet,usb3-phy"))
-+			instance->type = PHY_TYPE_USB3;
-+		else
-+			return dev_err_probe(dev, -EINVAL,
-+					     "phy %d unknown type\n", phy_n);
-+
-+		instance->phy = devm_phy_create(dev, child_np, &econet_phy);
-+		if (IS_ERR(instance->phy))
-+			return dev_err_probe(dev, PTR_ERR(instance->phy),
-+					     "failed to create phy\n");
-+
-+		subdev = &instance->phy->dev;
-+		retval = of_address_to_resource(child_np, 0, &res);
-+		if (retval)
-+			return dev_err_probe(subdev, retval,
-+					     "getting reg for phy %d\n",
-+					     phy_n);
-+
-+		phy_base = devm_ioremap_resource(subdev, &res);
-+		if (IS_ERR(phy_base))
-+			return dev_err_probe(subdev, PTR_ERR(phy_base),
-+					     "remapping reg for phy %d\n",
-+					     phy_n);
-+
-+		instance->regmap =
-+			devm_regmap_init_mmio(subdev, phy_base,
-+					      &econet_usb_phy_regmap_config);
-+		if (IS_ERR(instance->regmap))
-+			return dev_err_probe(subdev, PTR_ERR(instance->regmap),
-+					     "making regmap for phy %d\n",
-+					     phy_n);
-+
-+		retval = device_property_read_u32(subdev, ECONET_PORT_ID_FIELD,
-+						  &instance->port_id);
-+		if (retval)
-+			return dev_err_probe(subdev, retval,
-+					     "getting %s for phy %d\n",
-+					     ECONET_PORT_ID_FIELD, phy_n);
-+
-+		phy_set_drvdata(instance->phy, instance);
-+
-+		/*
-+		 * Initial setup ritual disables both ports. On QFP silicon,
-+		 * only one port is wired (port1) but port0 still has a PHY
-+		 * present which is still disabled in setup.
-+		 */
-+		retval = econet_usb_phy_exit(instance->phy);
-+		if (retval)
-+			dev_warn(subdev, "stopping phy %d: %pe\n", phy_n,
-+				 ERR_PTR(retval));
-+
-+		phy_n++;
-+	}
-+
-+	provider = devm_of_phy_provider_register(dev, econet_usb_phy_xlate);
-+
-+	return PTR_ERR_OR_ZERO(provider);
-+}
-+
-+static struct platform_driver econet_usb_phy_driver = {
-+	.probe		= econet_usb_phy_probe,
-+	.driver		= {
-+		.name	= "econet-usb-phy",
-+		.of_match_table = econet_phy_id_table,
-+	},
-+};
-+
-+module_platform_driver(econet_usb_phy_driver);
-+
-+MODULE_AUTHOR("Benjamin Larsson <benjamin.larsson@genexis.eu>");
-+MODULE_AUTHOR("Caleb James DeLisle <cjd@cjdns.fr>");
-+MODULE_LICENSE("GPL");
-+MODULE_DESCRIPTION("Econet USB PHY driver");
+ mandatory-y += atomic.h
+ mandatory-y += archrandom.h
++mandatory-y += asm-offsets.h
+ mandatory-y += barrier.h
+ mandatory-y += bitops.h
+ mandatory-y += bug.h
 -- 
-2.39.5
+2.43.0
 
 
