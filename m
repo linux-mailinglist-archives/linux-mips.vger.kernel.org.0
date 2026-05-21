@@ -1,163 +1,157 @@
-Return-Path: <linux-mips+bounces-14662-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-14666-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id ED8HE0isDmr6AwYAu9opvQ
-	(envelope-from <linux-mips+bounces-14662-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Thu, 21 May 2026 08:55:04 +0200
+	id WOswDhusDmr6AwYAu9opvQ
+	(envelope-from <linux-mips+bounces-14666-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Thu, 21 May 2026 08:54:19 +0200
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id C024B59FBE6
-	for <lists+linux-mips@lfdr.de>; Thu, 21 May 2026 08:55:03 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9043059FB99
+	for <lists+linux-mips@lfdr.de>; Thu, 21 May 2026 08:54:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 9B0F8311277F
-	for <lists+linux-mips@lfdr.de>; Thu, 21 May 2026 06:49:38 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 4D190304A85F
+	for <lists+linux-mips@lfdr.de>; Thu, 21 May 2026 06:53:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D4E44394463;
-	Thu, 21 May 2026 06:49:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C3EC8395AE5;
+	Thu, 21 May 2026 06:53:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=fu-berlin.de header.i=@fu-berlin.de header.b="Rk9e6jYn"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="fboL8oE6";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="L5KQBoR7"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from outpost1.zedat.fu-berlin.de (outpost1.zedat.fu-berlin.de [130.133.4.66])
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4DEA292B4B;
-	Thu, 21 May 2026 06:49:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=130.133.4.66
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D55D2BE034;
+	Thu, 21 May 2026 06:53:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779346158; cv=none; b=E9ycAWgGPqIDIBTLocXOmcaKhrG5SDafdzt2nw4nSws+wImg3vefSUDn7xBnoWoynE2OcMpgJ0OKm9H60E0L7oeJ0jxc/06sxWDrpoM54/8s+edrR8xLjHtB9CaySNi5brsoiBd++6HwI+b3B4ixoEwlg8nQYK2OltOTBV/iato=
+	t=1779346403; cv=none; b=JBQL4rM7UBGwyE4jzIbL8iRvcUZXI6no0S86xjv8LHF3AYK9ccWSWrRsQzuoE7WxOIsTWsYwhws1reGQdGLZ70pqpLzzl7IjtHaY44dS4EcfKq7f42o+3t7xFdiN1pHebzM6cuMzpPBlhSed893vMVouz40Z2NuvQooCjl1sWbM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779346158; c=relaxed/simple;
-	bh=DmSirS6VO/RgKJ87630yqWZwCs/jhbQcnVbeTbuGYPc=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=iAO3aUQp6bbsnRA6eItjLJ+Yz9SErV7LnDZ78bvBkI75ETm1cw0iQX2sFdSSGPpJgtHk4yIeK8Li/R3s9bplo/1nTLgxWIsDu+GXYGf1W1vTTcyllU44uKNDxmNXe5eI1B7qfI0YzqgFlARC5ax8XIR5Kh/oF0N04qKy7t0gku8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=physik.fu-berlin.de; spf=pass smtp.mailfrom=zedat.fu-berlin.de; dkim=pass (2048-bit key) header.d=fu-berlin.de header.i=@fu-berlin.de header.b=Rk9e6jYn; arc=none smtp.client-ip=130.133.4.66
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=physik.fu-berlin.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zedat.fu-berlin.de
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=fu-berlin.de; s=fub01; h=MIME-Version:Content-Transfer-Encoding:
-	Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:From:
-	Reply-To:Subject:Date:Message-ID:To:Cc:MIME-Version:Content-Type:
-	Content-Transfer-Encoding:Content-ID:Content-Description:In-Reply-To:
-	References; bh=q39DiklZvSpNFdVrcrO1V6lBShlkhniXqdocnefU7Hw=; t=1779346155;
-	x=1779950955; b=Rk9e6jYnKXZk8W6zgFqBjAelbxasC7RO8zrwuOjrqGj1jl02EugN4+jsVfhNA
-	biHC9Q6F3ngnN0KQPOFE3F/iCbDPqb1rwDHAIgsJ7H7ZZfF1OHPbOoqIHthbdFgLGQ6q7w8mENwNE
-	7RnlPptoTl8JoXG3w+qEzO7rHSztIEOVYbVhROlIZqwHKkzpsu7MO6odwPCu4cWKAIMiooIquIIzg
-	4AC+53EwrUU2/a2UAvbTJYsGdfg+8/micFUX1i3N2/M4HcNE1f01vhoo9o85EeVTNLoEDpkB+8oxl
-	m2DKKxfbGvzB714CGAFT5Muv4siMmMzE4W2YQjn3NOOVvISGSw==;
-Received: from inpost2.zedat.fu-berlin.de ([130.133.4.69])
-          by outpost.zedat.fu-berlin.de (Exim 4.99)
-          with esmtps (TLS1.3)
-          tls TLS_AES_256_GCM_SHA384
-          (envelope-from <glaubitz@zedat.fu-berlin.de>)
-          id 1wPxDK-00000002vgw-3F6M; Thu, 21 May 2026 08:49:02 +0200
-Received: from p5b13a134.dip0.t-ipconnect.de ([91.19.161.52] helo=suse-laptop.fritz.box)
-          by inpost2.zedat.fu-berlin.de (Exim 4.99)
-          with esmtpsa (TLS1.3)
-          tls TLS_AES_256_GCM_SHA384
-          (envelope-from <glaubitz@physik.fu-berlin.de>)
-          id 1wPxDK-00000000p6R-1lXr; Thu, 21 May 2026 08:49:02 +0200
-Message-ID: <8f918549adce2bbb68fdf3754793b3305f994c23.camel@physik.fu-berlin.de>
-Subject: Re: [PATCH 04/10] [v2] sh: select legacy gpiolib interface
-From: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-To: Arnd Bergmann <arnd@kernel.org>, linux-gpio@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>, Christian
- Lamparter <chunkeey@googlemail.com>, Johannes Berg
- <johannes@sipsolutions.net>, Aaro Koskinen	 <aaro.koskinen@iki.fi>, Andreas
- Kemnade <andreas@kemnade.info>, Kevin Hilman	 <khilman@baylibre.com>, Roger
- Quadros <rogerq@kernel.org>, Tony Lindgren	 <tony@atomide.com>, Thomas
- Bogendoerfer <tsbogend@alpha.franken.de>, Thomas Gleixner
- <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov
- <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
- "H. Peter Anvin" <hpa@zytor.com>, Linus Walleij <linusw@kernel.org>,
- Bartosz Golaszewski <brgl@kernel.org>, Dmitry Torokhov	
- <dmitry.torokhov@gmail.com>, Lee Jones <lee@kernel.org>, Pavel Machek	
- <pavel@kernel.org>, Matti Vaittinen <mazziesaccount@gmail.com>, Florian
- Fainelli <florian.fainelli@broadcom.com>, Jonas Gorski
- <jonas.gorski@gmail.com>, Andrew Lunn	 <andrew@lunn.ch>, Vladimir Oltean
- <olteanv@gmail.com>, "David S. Miller"	 <davem@davemloft.net>, Eric Dumazet
- <edumazet@google.com>, Jakub Kicinski	 <kuba@kernel.org>, Paolo Abeni
- <pabeni@redhat.com>, 	linux-wireless@vger.kernel.org,
- linux-omap@vger.kernel.org, 	linux-arm-kernel@lists.infradead.org,
- linux-mips@vger.kernel.org, 	linux-sh@vger.kernel.org,
- linux-input@vger.kernel.org, 	linux-leds@vger.kernel.org,
- netdev@vger.kernel.org
-Date: Thu, 21 May 2026 08:49:00 +0200
-In-Reply-To: <20260520183815.2510387-5-arnd@kernel.org>
-References: <20260520183815.2510387-1-arnd@kernel.org>
-	 <20260520183815.2510387-5-arnd@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.60.1 
+	s=arc-20240116; t=1779346403; c=relaxed/simple;
+	bh=yTmG4kpTX3BSV2NvGKW4yDvxCLXU/0LeZ6467ssf/sI=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=qLj5P/q3WUYzKI0lwOdTDwtQ3qWho45d/GCGaic4+j4u0QCbLmhpfU5XxuGhCQrN25wKWA+4mseZ3ofONxXOYdHHpgFI5jVYCYNehennnnqNgX0pW+CrEi2fQOVNUyDhRi2YzBlWDQ82i4/G1HrXfSg+C9nxXRZe4RdfvDAhg1Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=fboL8oE6; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=L5KQBoR7; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1779346399;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=5JphOcis7jLuwvBLQATLEreR0iKin89W8Yeqx09Ok2A=;
+	b=fboL8oE64RQ/AwEQ11s/m3R7y9BAb2ntRhL1YAhNGbq/Ctl3F+i6SU7ODMB+W/K0QEDnQ1
+	OAK54O+6qIxkY8aMfSnhNdaNW2e/litgZK0arbTz0b4NB0Ym7Xr7O8h3A3kaXhXfh7va+O
+	+Z1k73NvtRJsh+2xgHGmTS9UAhTEBLMw/dmfGBj/8hYpqxPm9kJe1HNSM3DC/aDyR0OyzK
+	GBgR4o0cDvXYVkvmGxbMK8R9GWQWde/V4JO7Zk33oxdIwNmdXRubgzSNzJOTOsPjr0vsiB
+	AdlHKLlavDjllw05/5BJWLULlxQuLPEavLJFXfahM0bCCWVwUkoK11a5oXzYeA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1779346399;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=5JphOcis7jLuwvBLQATLEreR0iKin89W8Yeqx09Ok2A=;
+	b=L5KQBoR7uFhTyGCHus/UlGnYpUPoAPNVoanUcfMpsRDwlaoUG1sUOduWKkitCvB8O3C9FC
+	jLYHcTQlDEsPqYCg==
+Subject: [PATCH 0/9] MIPS: VDSO: Clean up vDSO Kconfig
+Date: Thu, 21 May 2026 08:53:14 +0200
+Message-Id: <20260521-vdso-mips-kconfig-v1-0-2f79dcd6c78f@linutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Original-Sender: glaubitz@physik.fu-berlin.de
-X-ZEDAT-Hint: PO
-X-Spamd-Result: default: False [-0.66 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/x3MSwqAMAwA0atI1gbqpyJeRVyoSTWIrTRQBPHuF
+ pdvMfOAchRWGIoHIidRCT6jKgtY99lvjELZUJu6M7bqMZEGPOVSPNbgnWxIRK3tm8W6hiF3V2Q
+ n9/8cp/f9ALCxeQVjAAAA
+X-Change-ID: 20260518-vdso-mips-kconfig-ddd4583b5f3e
+To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
+ Daniel Lezcano <daniel.lezcano@kernel.org>, 
+ Thomas Gleixner <tglx@kernel.org>, Andy Lutomirski <luto@kernel.org>, 
+ Vincenzo Frascino <vincenzo.frascino@arm.com>
+Cc: Arnd Bergmann <arnd@arndb.de>, linux-mips@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, 
+ =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1779346397; l=1924;
+ i=thomas.weissschuh@linutronix.de; s=20240209; h=from:subject:message-id;
+ bh=yTmG4kpTX3BSV2NvGKW4yDvxCLXU/0LeZ6467ssf/sI=;
+ b=whDHl+wJiIEtykUeJITL8YWlssS5m7LcTZmT47Z6ARs/ZTFOtMG0iX7VnzQWiN4+r2PddoQCb
+ Vd4KteNiTT6DnMajLb3fj6niolJEYx8nu5O50Qv+H5HcJAn67UV7P8N
+X-Developer-Key: i=thomas.weissschuh@linutronix.de; a=ed25519;
+ pk=pfvxvpFUDJV2h2nY0FidLUml22uGLSjByFbM6aqQQws=
+X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[fu-berlin.de,none];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
-	R_DKIM_ALLOW(-0.20)[fu-berlin.de:s=fub01];
+	DMARC_POLICY_ALLOW(-0.50)[linutronix.de,none];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_DKIM_ALLOW(-0.20)[linutronix.de:s=2020,linutronix.de:s=2020e];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FREEMAIL_CC(0.00)[vger.kernel.org,arndb.de,googlemail.com,sipsolutions.net,iki.fi,kemnade.info,baylibre.com,kernel.org,atomide.com,alpha.franken.de,redhat.com,alien8.de,linux.intel.com,zytor.com,gmail.com,broadcom.com,lunn.ch,davemloft.net,google.com,lists.infradead.org];
-	TAGGED_FROM(0.00)[bounces-14662-lists,linux-mips=lfdr.de];
-	FROM_HAS_DN(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-14666-lists,linux-mips=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[40];
+	FROM_HAS_DN(0.00)[];
+	RCVD_COUNT_THREE(0.00)[3];
+	DKIM_TRACE(0.00)[linutronix.de:+];
 	MIME_TRACE(0.00)[0:+];
-	DKIM_TRACE(0.00)[fu-berlin.de:+];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
-	TO_DN_SOME(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[glaubitz@physik.fu-berlin.de,linux-mips@vger.kernel.org];
+	FORGED_SENDER_MAILLIST(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	TO_DN_SOME(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[thomas.weissschuh@linutronix.de,linux-mips@vger.kernel.org];
+	MISSING_XM_UA(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
-	TAGGED_RCPT(0.00)[linux-mips];
+	RCPT_COUNT_SEVEN(0.00)[9];
 	MID_RHS_MATCH_FROM(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo,fu-berlin.de:email,fu-berlin.de:dkim,physik.fu-berlin.de:mid,arndb.de:email]
-X-Rspamd-Queue-Id: C024B59FBE6
+	TAGGED_RCPT(0.00)[linux-mips];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,linutronix.de:email,linutronix.de:mid,linutronix.de:dkim]
+X-Rspamd-Queue-Id: 9043059FB99
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-Hi Arnd,
+MIPS contains multiple different, incomplete methods to disable the
+time-related vDSO bits. Unify them and make them work correctly.
 
-On Wed, 2026-05-20 at 20:38 +0200, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
->=20
-> Many board files on sh reference the legacy gpiolib interfaces that
-> are becoming optional. To ensure the boards can keep building, select
-> CONFIG_GPIOLIB_LEGACY on each of the boards that have one of the
-> hardcoded calls.
->=20
-> Cc: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> ---
-> v2: no changes. Adrian said he'll pick it up for 7.2, but so
->     far the patch is not in linux-next yet, so I'm including it
->     for completeness here.
+This can go through either the vDSO or MIPS tree.
+There will be a conflict with one of my other serieses [0].
+It is trivial to resolve, remove all instances of GENERIC_TIME_VSYSCALL.
 
-Sorry, I hadn't gotten around to pick the changes for v7.2 yet. I can
-pick it up this weekend as I was planning to review and merge some
-patches this weekend.
+[0] https://lore.kernel.org/lkml/20260519-vdso-generic_time_vsyscal-v1-0-5c2a5905d5f5@linutronix.de/
 
-I have received quite a lot of patches for SH recently, so it will take
-some time to dig myself through the queue.
+Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
+---
+Thomas Weißschuh (9):
+      MAINTAINERS: Add include/linux/vdso_datastore.h to vDSO block
+      vdso/datastore: Always provide symbol declarations
+      MIPS: Introduce Kconfig MIPS_GENERIC_GETTIMEOFDAY
+      MIPS: VDSO: Only map the data pages when the vDSO is used
+      MIPS: csrc-r4k: Only use VDSO_CLOCKMODE_R4K when it is a available
+      clocksource/drivers/mips-gic-timer: Only use VDSO_CLOCKMODE_GIC when it is a available
+      MIPS: VDSO: Fold MIPS_DISABLE_VDSO into MIPS_GENERIC_GETTIMEOFDAY
+      MIPS: VDSO: Gate microMIPS restriction on GCC version
+      MIPS: VDSO: Fold MIPS_CLOCK_VSYSCALL into MIPS_GENERIC_GETTIMEOFDAY
 
-Adrian
+ MAINTAINERS                          |  1 +
+ arch/mips/Kconfig                    | 19 +++++++++++--------
+ arch/mips/kernel/csrc-r4k.c          |  5 ++++-
+ arch/mips/kernel/vdso.c              | 12 +++++++-----
+ arch/mips/vdso/Kconfig               |  6 ------
+ arch/mips/vdso/Makefile              |  7 ++-----
+ arch/mips/vdso/vdso.lds.S            |  4 +---
+ arch/mips/vdso/vgettimeofday.c       | 20 --------------------
+ drivers/clocksource/mips-gic-timer.c |  2 ++
+ include/linux/vdso_datastore.h       |  2 +-
+ 10 files changed, 29 insertions(+), 49 deletions(-)
+---
+base-commit: 254f49634ee16a731174d2ae34bc50bd5f45e731
+change-id: 20260518-vdso-mips-kconfig-ddd4583b5f3e
 
---=20
- .''`.  John Paul Adrian Glaubitz
-: :' :  Debian Developer
-`. `'   Physicist
-  `-    GPG: 62FF 8A75 84E0 2956 9546  0006 7426 3B37 F5B5 F913
+Best regards,
+--  
+Thomas Weißschuh <thomas.weissschuh@linutronix.de>
+
 
