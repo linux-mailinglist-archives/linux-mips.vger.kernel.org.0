@@ -1,38 +1,38 @@
-Return-Path: <linux-mips+bounces-14667-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-14670-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id mAsJJiqsDmr6AwYAu9opvQ
-	(envelope-from <linux-mips+bounces-14667-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Thu, 21 May 2026 08:54:34 +0200
+	id UNvoLJSsDmqqBAYAu9opvQ
+	(envelope-from <linux-mips+bounces-14670-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Thu, 21 May 2026 08:56:20 +0200
 X-Original-To: lists+linux-mips@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id F21A959FBB7
-	for <lists+linux-mips@lfdr.de>; Thu, 21 May 2026 08:54:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 32F4759FC24
+	for <lists+linux-mips@lfdr.de>; Thu, 21 May 2026 08:56:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 7E23E304DC91
-	for <lists+linux-mips@lfdr.de>; Thu, 21 May 2026 06:53:26 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 4F1AE3072D4C
+	for <lists+linux-mips@lfdr.de>; Thu, 21 May 2026 06:53:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 06BA8395AF3;
-	Thu, 21 May 2026 06:53:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3476C384CF6;
+	Thu, 21 May 2026 06:53:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="NnfNQBML";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="4i/rYZkS"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="05dZLUbX";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="2FeQHdOE"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7177F386C12;
-	Thu, 21 May 2026 06:53:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDA13395AEA;
+	Thu, 21 May 2026 06:53:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779346403; cv=none; b=FCMr/D8pY+eqUJnyQwIodnmVD5FqLZ13Bk7xZmoSDz1Xz+Eqv4JwYv6R+zxizgLZmRfbAf6EYGlm4w8PaFajN1xEeDenawUhLAKlw2vs3ipA+jJ4Mgw2c1EnxXviFQwcBLX3at0nZwBkLnRapkuLD08Dw/OCjwZlbQp2DR7EzFQ=
+	t=1779346406; cv=none; b=GT7gdk4HLLU18k7b5YlUC6Md1VQf0Jns/qo83P0JcI71RBWUezIGJGbUVeGdEtF0MBPR9nUXvkeG+k+oRrk9G6/g8QFzbEJREN603f3loWdd0a6hWew5naO6QNyNx+HbUxCEwWU8VlOy52tvV/xcT+sNN/6I8JiSrLCsDVZcJMo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779346403; c=relaxed/simple;
-	bh=PyMNV1JJg8wjJfWAFS5o3wUdk0QWKNX1OKuKircEbYQ=;
+	s=arc-20240116; t=1779346406; c=relaxed/simple;
+	bh=k5y6mhg47PkKW3NG3mli/fa0fpt+8vCI0NkWxuFN+Jc=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=aptlAU1nC4ncYdNyu9MVelKD5cljvAmaA6P9XsSsbPpXVvd7r9yMTu0qfurYibMM9DKXzxSefv+gTaEjvJmMMBzOhQG3KRKSTVFMGCdNU6Z6nKT+okk226kObLMLGCJS4F+/g7t3osTmXNHIAU4n7ZqK2lYLUBrun+hoyELXCCE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=NnfNQBML; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=4i/rYZkS; arc=none smtp.client-ip=193.142.43.55
+	 In-Reply-To:To:Cc; b=fIWF7drxu/m+1NhY4dioO3X0HToi4ajYnCIZewOYRdDG9cUAIR+k6jAmIOrBAL+ibu9iFk8grpJ7TvXipFoj6gIuW3fAXkH+AoXVePGzWv7vDEMPl/g7F7C3GniKQBpUad9XNI1WLxHcQWD+N9psoShlOSs1MBzU26DGulLfMaw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=05dZLUbX; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=2FeQHdOE; arc=none smtp.client-ip=193.142.43.55
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
 From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
@@ -42,24 +42,24 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=GFRGrKy4q9od/mzOS61iRuF0vEFrRaRT+0Nme72HCCw=;
-	b=NnfNQBMLxl7iNBztMqBOas+EqlReOQP+VWBpiRRqXdtxd5+yrjT8OAijRifCsW9BXFOe7Z
-	Lx3bn0b7Su231LrxhditNssUF/Zprmpx2OuIsbCvGtxHdhcvkf92Y5zoKS2ee5oAZtjG9M
-	oDIKyGA8q8MHSjXzBiOJy5VU8gBGWTCOM0bq4X2uQhdqqURIk2DvfS9WbgA4PbiQ8dtjJc
-	+NXAAaXgHVKmWh9pPf/RyF8/47R2T4EfkFObt8OUmtcrvMDGkD4KJpOH/slEOfERr427x7
-	7Cm+ZwCeRUWJoao1jnHUpYnAUh8u0XUo1v+VjxIoUv0MLRJFsn1EM80yzvoEAA==
+	bh=Nf18gitBVQzFrXc+yGpE5m2ORwt5+KE3lHgDXrZnDvI=;
+	b=05dZLUbXDfNjQcb58/z04BHAZ35W6uScmEeHXYKYo3TpdBdbEQv6iUOUock338mKpul+MD
+	BlN10Q9dNXC5B8Z8z3NWpVvMKtk4InI2nkgiHeDbc0CJX6tjN7oONqXe5r6iRYSqPb/0TW
+	6SGkHW5YjFi2f2kHtB653oyNm4eHBa1zKSJUtEowdW4Eaz4EvJjWQA4k3+4L6fkaNea9l2
+	rdj8Xon/64XL4LQOBjXw3Dz+Q4taou5f6+DCT7Mh2y/sB0oOCVgzZJ9CsI+H6bc/LL0gIi
+	PfezzylK/eXmrqooxHtCG82doi2cFGC9MM/Kjtss7NTH5MP6u6hdYz0f3Huwjw==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
 	s=2020e; t=1779346401;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=GFRGrKy4q9od/mzOS61iRuF0vEFrRaRT+0Nme72HCCw=;
-	b=4i/rYZkS38crrexDMA7C4xJV/FwShmGCmmw9VlyKhWIZlifwhJ1Cpgq99amnApdZ0xDLG7
-	jLxdnlMbHxdhPyBg==
-Date: Thu, 21 May 2026 08:53:18 +0200
-Subject: [PATCH 4/9] MIPS: VDSO: Only map the data pages when the vDSO is
- used
+	bh=Nf18gitBVQzFrXc+yGpE5m2ORwt5+KE3lHgDXrZnDvI=;
+	b=2FeQHdOENNmtaPGpadOc6UG6KKuHGecy2zGtY0MspZTkPf8Gv0rwrqMtCfOrp7g4bFedCk
+	OBEKWsT7IpN68cAw==
+Date: Thu, 21 May 2026 08:53:19 +0200
+Subject: [PATCH 5/9] MIPS: csrc-r4k: Only use VDSO_CLOCKMODE_R4K when it is
+ a available
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -68,7 +68,7 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20260521-vdso-mips-kconfig-v1-4-2f79dcd6c78f@linutronix.de>
+Message-Id: <20260521-vdso-mips-kconfig-v1-5-2f79dcd6c78f@linutronix.de>
 References: <20260521-vdso-mips-kconfig-v1-0-2f79dcd6c78f@linutronix.de>
 In-Reply-To: <20260521-vdso-mips-kconfig-v1-0-2f79dcd6c78f@linutronix.de>
 To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
@@ -78,11 +78,11 @@ To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
 Cc: Arnd Bergmann <arnd@arndb.de>, linux-mips@vger.kernel.org, 
  linux-kernel@vger.kernel.org, 
  =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1779346397; l=2082;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1779346397; l=1064;
  i=thomas.weissschuh@linutronix.de; s=20240209; h=from:subject:message-id;
- bh=PyMNV1JJg8wjJfWAFS5o3wUdk0QWKNX1OKuKircEbYQ=;
- b=PC3u2A1gmunF8ye85WjeePaYwopQIj+YsBZjg49P12WoxtH3XGyMmSHVeCp5DLhxdX8tYYPYK
- w3b17YdvrCpBylNLYFu9kiOeTSIuMKijXkwb3Sk+PKx1e5gtzlB0P6l
+ bh=k5y6mhg47PkKW3NG3mli/fa0fpt+8vCI0NkWxuFN+Jc=;
+ b=oLxSimcsSXVDwxxn3b/5fZ5B4bE8sgVcmfO8KAYDVqabYPzVWDCJ6VqZhsl2uON4MlXqrWsqS
+ luZJ+NBOAetC8PTu0cF7DbLKZVgI8Ih6OhutRvOR9pfdc/64bAHilwM
 X-Developer-Key: i=thomas.weissschuh@linutronix.de; a=ed25519;
  pk=pfvxvpFUDJV2h2nY0FidLUml22uGLSjByFbM6aqQQws=
 X-Spamd-Result: default: False [-2.16 / 15.00];
@@ -93,7 +93,7 @@ X-Spamd-Result: default: False [-2.16 / 15.00];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-14667-lists,linux-mips=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-14670-lists,linux-mips=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
 	FROM_HAS_DN(0.00)[];
 	RCVD_COUNT_THREE(0.00)[3];
@@ -111,69 +111,37 @@ X-Spamd-Result: default: False [-2.16 / 15.00];
 	MID_RHS_MATCH_FROM(0.00)[];
 	TAGGED_RCPT(0.00)[linux-mips];
 	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,linutronix.de:email,linutronix.de:mid,linutronix.de:dkim]
-X-Rspamd-Queue-Id: F21A959FBB7
+X-Rspamd-Queue-Id: 32F4759FC24
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-A future change will make it possible to disable the time-related vDSO.
-In that case there is no point in calling into the datastore.
+VDSO_CLOCKMODE_R4K is only defined if CONFIG_GENERIC_GETTIMEOFDAY is
+enabled. Right now this is always the case, but it will change soon.
+
+Prepare for the potential unavailability of VDSO_CLOCKMODE_R4K.
 
 Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
 ---
- arch/mips/Kconfig       |  2 +-
- arch/mips/kernel/vdso.c | 12 +++++++-----
- 2 files changed, 8 insertions(+), 6 deletions(-)
+ arch/mips/kernel/csrc-r4k.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
-index af610af7ed08..3a01cc85bd6a 100644
---- a/arch/mips/Kconfig
-+++ b/arch/mips/Kconfig
-@@ -74,7 +74,6 @@ config MIPS
- 	select HAVE_FUNCTION_GRAPH_TRACER
- 	select HAVE_FUNCTION_TRACER
- 	select HAVE_GCC_PLUGINS
--	select HAVE_GENERIC_VDSO
- 	select HAVE_IOREMAP_PROT
- 	select HAVE_IRQ_EXIT_ON_IRQ_STACK
- 	select HAVE_IRQ_TIME_ACCOUNTING
-@@ -3172,6 +3171,7 @@ config MIPS_GENERIC_GETTIMEOFDAY
- 	def_bool y
- 	select GENERIC_GETTIMEOFDAY
- 	select GENERIC_TIME_VSYSCALL
-+	select HAVE_GENERIC_VDSO
- 
- menu "CPU Power Management"
- 
-diff --git a/arch/mips/kernel/vdso.c b/arch/mips/kernel/vdso.c
-index 2fa4df3e46e4..bd1fc17d3975 100644
---- a/arch/mips/kernel/vdso.c
-+++ b/arch/mips/kernel/vdso.c
-@@ -129,7 +129,7 @@ int arch_setup_additional_pages(struct linux_binprm *bprm, int uses_interp)
- 	 * This ensures that when the kernel updates the VDSO data userland
- 	 * will observe it without requiring cache invalidations.
+diff --git a/arch/mips/kernel/csrc-r4k.c b/arch/mips/kernel/csrc-r4k.c
+index 59eca397f297..7c431119bb14 100644
+--- a/arch/mips/kernel/csrc-r4k.c
++++ b/arch/mips/kernel/csrc-r4k.c
+@@ -130,8 +130,11 @@ int __init init_r4k_clocksource(void)
+ 	 * R2 onwards makes the count accessible to user mode so it can be used
+ 	 * by the VDSO (HWREna is configured by configure_hwrena()).
  	 */
--	if (cpu_has_dc_aliases) {
-+	if (cpu_has_dc_aliases && IS_ENABLED(CONFIG_HAVE_GENERIC_VDSO)) {
- 		base = __ALIGN_MASK(base, shm_align_mask);
- 		base += ((unsigned long)vdso_k_time_data - gic_size) & shm_align_mask;
- 	}
-@@ -137,10 +137,12 @@ int arch_setup_additional_pages(struct linux_binprm *bprm, int uses_interp)
- 	data_addr = base + gic_size;
- 	vdso_addr = data_addr + VDSO_NR_PAGES * PAGE_SIZE;
+-	if (cpu_has_mips_r2_r6 && rdhwr_count_usable())
++	if (cpu_has_mips_r2_r6 && rdhwr_count_usable()) {
++#ifdef CONFIG_GENERIC_GETTIMEOFDAY
+ 		clocksource_mips.vdso_clock_mode = VDSO_CLOCKMODE_R4K;
++#endif
++	}
  
--	vma = vdso_install_vvar_mapping(mm, data_addr);
--	if (IS_ERR(vma)) {
--		ret = PTR_ERR(vma);
--		goto out;
-+	if (IS_ENABLED(CONFIG_HAVE_GENERIC_VDSO)) {
-+		vma = vdso_install_vvar_mapping(mm, data_addr);
-+		if (IS_ERR(vma)) {
-+			ret = PTR_ERR(vma);
-+			goto out;
-+		}
- 	}
+ 	clocksource_register_hz(&clocksource_mips, mips_hpt_frequency);
  
- 	/* Map GIC user page. */
 
 -- 
 2.54.0
