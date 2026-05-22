@@ -1,380 +1,203 @@
-Return-Path: <linux-mips+bounces-14704-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-14705-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id oCENJ1ZHD2ptIgYAu9opvQ
-	(envelope-from <linux-mips+bounces-14704-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Thu, 21 May 2026 19:56:38 +0200
+	id eBkAHkzjD2rGRAYAu9opvQ
+	(envelope-from <linux-mips+bounces-14705-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Fri, 22 May 2026 07:02:04 +0200
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 066DB5AAA7D
-	for <lists+linux-mips@lfdr.de>; Thu, 21 May 2026 19:56:37 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 087155AEDB0
+	for <lists+linux-mips@lfdr.de>; Fri, 22 May 2026 07:02:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 2E0BB31B66E3
-	for <lists+linux-mips@lfdr.de>; Thu, 21 May 2026 17:20:48 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id DEC873019F19
+	for <lists+linux-mips@lfdr.de>; Fri, 22 May 2026 04:55:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1256A3D45F3;
-	Thu, 21 May 2026 17:20:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 50018360ED8;
+	Fri, 22 May 2026 04:55:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cjdns.fr header.i=@cjdns.fr header.b="ebSW39Np"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GbeIv5MT"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail.cjdns.fr (mail.cjdns.fr [5.135.140.105])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f50.google.com (mail-lf1-f50.google.com [209.85.167.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D91273CF688;
-	Thu, 21 May 2026 17:20:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=5.135.140.105
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5EA80357CF7
+	for <linux-mips@vger.kernel.org>; Fri, 22 May 2026 04:55:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779384023; cv=none; b=dn6ZxnI/ZNmoN+tRk+eWWWM56MLwG31BMW3KCfZzsNo49kWkEunXpXkFf0lODyTlBLksp4GQCpKOJ6I/Iw5KiW9K/qUaHkXmZZ06KSnGOvVJTeCBv7wgpc6h2lGTCfuGeTOVuiFc1XNJ0NAc4sYOxk/dgKff8f9S+lDJ58h/no4=
+	t=1779425727; cv=none; b=rMBzIDXUDBd+dZpr12hERPYxZ6rUMZ7X705vrEKuDpWD1tk2WtVuTiNJTY63oKzPJCcdcyMuv6TtkQ2t2YyCiPF3BdwmkoyMcAUbjGz02EYJBqRgpAMICdOkTHiORVMrDeI8OTzSpt+xgj3TGZLx6KotdULOio1jW6bgD2BBedo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779384023; c=relaxed/simple;
-	bh=Zpp99Z68sOqqNkagYFnSK3SwYaSouUvMOi+id13evQs=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=eicMljQkREmV8RpZR7qiH1PUOo/ZpkEZCKbCD0f/vb60rlPeCblaJ7bfZEgFcUvOMjypPSATXLoLPKDSyBbarSGXRbnvtho0rCPFW13yWKIWOiVm+3eDjL7BFmuslgwR7HnuEoU7J2SotJHc4ZYoyiPpQjt1afPDwGVwobfqHlw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=cjdns.fr; spf=pass smtp.mailfrom=cjdns.fr; dkim=pass (2048-bit key) header.d=cjdns.fr header.i=@cjdns.fr header.b=ebSW39Np; arc=none smtp.client-ip=5.135.140.105
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=cjdns.fr
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cjdns.fr
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id C8ED4458368;
-	Thu, 21 May 2026 19:20:13 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cjdns.fr; s=dkim;
-	t=1779384017; h=from:subject:date:message-id:to:cc:mime-version:
-	 content-transfer-encoding:in-reply-to:references;
-	bh=Nk41EPd/Ib+G6D2lYq67O+mXoP6n66SY3fZXjZ/8q2k=;
-	b=ebSW39NphmyfTe+ihe975eQOentMYCLOjEJktdREV8HeE4uUxOesAqnYAxbFaLnNOD9Ce2
-	mztTFxLOOpVAnJk3iqmHGsc5oI/G0X04OVShpIk9gOHqyDNrMzWHw6qxy9mUMkL8O8SAGm
-	RK3iGugGKvShSxnVoFE8K+Uk9eEfWxxfBMK0r3hYXSAPKZPzGEgUrbmgDlIY1OtU5Q5dwx
-	OvfL9I8Yc/4lHSaXneYKG2YW8LOs3DkBGY+5TLlgcbzuje1VeTJd2LQXw3kjwzIyEhzdWB
-	tmYIPLownKLVR5pzaWaORMTiHzjE8WtEhvip4xYtSXXUVHLmE1EhlgZHpwUwfg==
-From: Caleb James DeLisle <cjd@cjdns.fr>
-To: linux-pci@vger.kernel.org
-Cc: linux-mips@vger.kernel.org,
-	naseefkm@gmail.com,
-	ryder.lee@mediatek.com,
-	helgaas@kernel.org,
-	lpieralisi@kernel.org,
-	kwilczynski@kernel.org,
-	mani@kernel.org,
-	robh@kernel.org,
-	krzk+dt@kernel.org,
-	conor+dt@kernel.org,
-	matthias.bgg@gmail.com,
-	angelogioacchino.delregno@collabora.com,
-	ansuelsmth@gmail.com,
-	linux-mediatek@lists.infradead.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Caleb James DeLisle <cjd@cjdns.fr>
-Subject: [PATCH v9 3/3] PCI: mediatek: Add support for EcoNet EN7528 SoC
-Date: Thu, 21 May 2026 17:19:51 +0000
-Message-Id: <20260521171951.1495781-4-cjd@cjdns.fr>
-In-Reply-To: <20260521171951.1495781-1-cjd@cjdns.fr>
-References: <20260521171951.1495781-1-cjd@cjdns.fr>
+	s=arc-20240116; t=1779425727; c=relaxed/simple;
+	bh=B9CAhNAdGTp5Zt5LCmbUDLKXezoz9dQvKZMGvVbfxrs=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=V9+gCVj4IoPXGGKmhNTXcSI9mQSHhoVm54Rd4TQuHpE2sT+01IouSh4gDBjXkET8B4afYhAs2jlOEXHxazUf3yxdclCc7kraeRGUOuykgP0sCYNfFnfa7ViXsP9C3PvuctTBtacOyC/bvLa7GDWc77AmlMdLplIUYRL/Lyh+oQg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GbeIv5MT; arc=none smtp.client-ip=209.85.167.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lf1-f50.google.com with SMTP id 2adb3069b0e04-5a8891febd2so9480498e87.1
+        for <linux-mips@vger.kernel.org>; Thu, 21 May 2026 21:55:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1779425724; x=1780030524; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=2uaBSQpnXDZ0Lr2vqL2X8w5SaBUCpNSkuNqugybr2/A=;
+        b=GbeIv5MTw2u/PaO2jrKBK2QR0+f6vbEfqatUpYeF/bCRKRhpq6G8Yn6bHVqyKbI1nO
+         6aflGJoaJ4FzfLZN2vCoCXevRZkYXwZ0ohRvtIJXvxt2FB4+k9M4FpvxB9W3y197bLcX
+         jzZOqcdFQ6HV/axNzl0q6d65TSOGZM1FYwEzSzmHuAQfon6HxozChLLd9/L69PZ6wO+o
+         BkUjjOuiW5GpBTuadz6fKqNuP3bZ2aGwkn2/iHq1LfFsfqp/JKOnGWjKayLekJ9Bk1L2
+         iKO/ICx3ULCTvLSVIqiJXbMEUeDgTJ6tlBe24etov6zbxICSiBCXgQ+LB7PjnK3fwgt5
+         V9lQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1779425724; x=1780030524;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=2uaBSQpnXDZ0Lr2vqL2X8w5SaBUCpNSkuNqugybr2/A=;
+        b=tY44GwF+VaPUHx9YR1D8gkeyFoX27QcPFEf8u2jj1cyZDVogQj+Jmto82SEcCm8S0S
+         wI5xY3X0En4YnD+e7XCoD6cdTDuR3wSgaotPZcKFjTWraj6T8+a13l76FOZ4hInbb6JR
+         h7cPAQG1ih0MLIR+tKHczkRkcY0Vzvukisas2JCkGDLMLtxwe5qEnfBaujcU2oL5QKzc
+         ZWO7jgBK0QYQPKPFpBUsQHp6Ziz9e1u/I0HUZNdWtyxMfYS2Kgz86G5NLZ3mkW7HLW+T
+         yDztOw5JHGI5Io4BJ/yb7QMiGyiTuF19nqVrkknV9YObrDIdJ8aPyPzYm7n/a2ofBoSN
+         ZVoQ==
+X-Forwarded-Encrypted: i=1; AFNElJ+KXCcg55Y4X0+b6WPC++GMkDeSUtCUG42lFPLeAtrvdHPVFKYwljKyQm/G0ILQRG4qzl5WvXJ/na06@vger.kernel.org
+X-Gm-Message-State: AOJu0YxnY7rnmFrkiPvJxNzmvjU/JfmXXPUuIAPQ5gV4cc8qhs3D31sj
+	U7g9qjfXWKq0T6h1me2CgRYezkVhEYr/M4gF/YzTHWT9cm05g3gLN3co
+X-Gm-Gg: Acq92OFcyQRrufQ/LmaXtqnGPyeV/79up0wlLlhyrAYksJeetwbAM/bX2E+f6woOmPy
+	fwavc3P1uX6aFD5cLQnu7mbdERLQSzLgQTilgeVI/tKbQ8SB7MD07xl/9BH69f0ebmDeV7d4znV
+	LpiXj165N8RTpXV3oF8JA+N23MUH0c4I+TnFB+PvgzmTBoZOIjL2PJ6kJftXQepm7z+tWeEki1T
+	RzIMIskCjzr71jAvI3tEOMz+0nv+YDZIyQ/mgnjFPRBnnwGgra7MRVmvpKPjZH+FyqPezsl5N3F
+	vzu//pCYI1PqKZDTJiBvpuX8Lpj4mn5NwWnvrpTDYH/C9GC8vy2WHd2PN6pILflJyH1fcZT4e3Z
+	oHy0PcZp4fgw2lr8EVQJ5O4GX2ztaHA9LioFklCwA32blK+uadYs0ivGfaDj9xvQYRfGbjQ9AyO
+	RoC0qJyJQwGcDtPTRegoIABVQXFuwrjBzY3Kge5deb85hlt0rRs56Y0OEij8nfRc+lRkddBuQU1
+	VxQUvwX2SlaVnSWJkE=
+X-Received: by 2002:a05:6512:2552:b0:5a8:9988:f1d5 with SMTP id 2adb3069b0e04-5aa323bc03emr387730e87.24.1779425723236;
+        Thu, 21 May 2026 21:55:23 -0700 (PDT)
+Received: from ?IPV6:2a10:a5c0:800d:dd00:8fdf:935a:2c85:d703? ([2a10:a5c0:800d:dd00:8fdf:935a:2c85:d703])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5aa32cb36d2sm144533e87.13.2026.05.21.21.55.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 21 May 2026 21:55:22 -0700 (PDT)
+Message-ID: <b79d8ad9-f36e-4769-9dc2-58baefe23000@gmail.com>
+Date: Fri, 22 May 2026 07:55:19 +0300
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Last-TLS-Session-Version: TLSv1.3
-X-Spamd-Result: default: False [0.84 / 15.00];
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 02/10] [v3] input: gpio-keys: make legacy gpiolib optional
+To: Arnd Bergmann <arnd@kernel.org>, linux-gpio@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
+ Christian Lamparter <chunkeey@googlemail.com>,
+ Johannes Berg <johannes@sipsolutions.net>,
+ Aaro Koskinen <aaro.koskinen@iki.fi>, Andreas Kemnade
+ <andreas@kemnade.info>, Kevin Hilman <khilman@baylibre.com>,
+ Roger Quadros <rogerq@kernel.org>, Tony Lindgren <tony@atomide.com>,
+ Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+ John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+ Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+ Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
+ x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+ Linus Walleij <linusw@kernel.org>, Bartosz Golaszewski <brgl@kernel.org>,
+ Dmitry Torokhov <dmitry.torokhov@gmail.com>, Lee Jones <lee@kernel.org>,
+ Pavel Machek <pavel@kernel.org>,
+ Florian Fainelli <florian.fainelli@broadcom.com>,
+ Jonas Gorski <jonas.gorski@gmail.com>, Andrew Lunn <andrew@lunn.ch>,
+ Vladimir Oltean <olteanv@gmail.com>, "David S. Miller"
+ <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+ linux-wireless@vger.kernel.org, linux-omap@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
+ linux-sh@vger.kernel.org, linux-input@vger.kernel.org,
+ linux-leds@vger.kernel.org, netdev@vger.kernel.org
+References: <20260520183815.2510387-1-arnd@kernel.org>
+ <20260520183815.2510387-3-arnd@kernel.org>
+Content-Language: en-US, en-AU, en-GB, en-BW
+From: Matti Vaittinen <mazziesaccount@gmail.com>
+In-Reply-To: <20260520183815.2510387-3-arnd@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spamd-Result: default: False [-0.66 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_CONTAINS_FROM(1.00)[];
-	DMARC_POLICY_ALLOW(-0.50)[cjdns.fr,none];
-	R_MISSING_CHARSET(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
-	R_DKIM_ALLOW(-0.20)[cjdns.fr:s=dkim];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCPT_COUNT_TWELVE(0.00)[18];
-	FREEMAIL_CC(0.00)[vger.kernel.org,gmail.com,mediatek.com,kernel.org,collabora.com,lists.infradead.org,cjdns.fr];
-	TAGGED_FROM(0.00)[bounces-14704-lists,linux-mips=lfdr.de];
-	MIME_TRACE(0.00)[0:+];
-	FORGED_SENDER_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-14705-lists,linux-mips=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	RECEIVED_HELO_LOCALHOST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	TO_DN_SOME(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[cjd@cjdns.fr,linux-mips@vger.kernel.org];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	FREEMAIL_CC(0.00)[vger.kernel.org,arndb.de,googlemail.com,sipsolutions.net,iki.fi,kemnade.info,baylibre.com,kernel.org,atomide.com,alpha.franken.de,physik.fu-berlin.de,redhat.com,alien8.de,linux.intel.com,zytor.com,gmail.com,broadcom.com,lunn.ch,davemloft.net,google.com,lists.infradead.org];
+	FREEMAIL_FROM(0.00)[gmail.com];
+	RCPT_COUNT_TWELVE(0.00)[40];
 	FROM_HAS_DN(0.00)[];
-	DKIM_TRACE(0.00)[cjdns.fr:+];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[5];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[mazziesaccount@gmail.com,linux-mips@vger.kernel.org];
+	DKIM_TRACE(0.00)[gmail.com:+];
 	NEURAL_HAM(-0.00)[-1.000];
+	TAGGED_RCPT(0.00)[linux-mips];
+	MID_RHS_MATCH_FROM(0.00)[];
+	TO_DN_SOME(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[linux-mips,dt];
-	MISSING_XM_UA(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo,cjdns.fr:email,cjdns.fr:mid,cjdns.fr:dkim]
-X-Rspamd-Queue-Id: 066DB5AAA7D
+	DBL_BLOCKED_OPENRESOLVER(0.00)[arndb.de:email,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo]
+X-Rspamd-Queue-Id: 087155AEDB0
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-Add support for the PCIe present on the EcoNet EN7528 (and EN751221) SoCs.
+On 20/05/2026 21:38, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
+> 
+> Most users of gpio-keys and gpio-keys-polled use modern gpiolib
+> interfaces, but there are still number of ancient sh, arm32 and x86
+> machines that have never been converted.
+> 
+> Add an #ifdef block for the parts of the driver that are only used on
+> those legacy machines.
+> 
+> The two Rohm PMIC drivers use a gpio-keys device without an actual GPIO,
+> passing an IRQ number instead. In order to keep this working both with
+> and with CONFIG_GPIOLIB_LEGACY, change the gpio-keys driver to ignore
+> the gpio number if an IRQ is passed.
+> 
+> Link: https://lore.kernel.org/all/b3c94552-c104-42e3-be15-7e8362e8039e@gmail.com/
+> Link: https://lore.kernel.org/all/afJXG4_rtaj3l2Dk@google.com/
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> ---
+> v3: resend
+> v2: skip the fake GPIO number passing from mfd
+> 
+> The removal of the arm platforms using this is not yet going to happen
+> for 7.2, and Dmitry's changes for the Rohm drivers have not yet
+> made it into linux-next as of 2026-05-20, so for the moment I
+> would still like to see this patch get merged, even if we are
+> closing in on completely removing the legacy gpio support in
+> the gpio_keys driver, so we can make CONFIG_GPIOLIB_LEGACY
+> default-disabled sooner.
 
-These SoCs have a mix of Gen1 and Gen2 capable ports, but the Gen2 ports
-require re-training after startup.
+I am (still) all fine with this, even though I like Dmitry's set. I 
+suppose you already have a plan for merging this, but I still have to 
+ask - why the MFD changes aren't in own patch? I feel it would have 
+simplified merging, backporting, reviewing and reverting if needed.
 
-Co-developed-by: Ahmed Naseef <naseefkm@gmail.com>
-Signed-off-by: Ahmed Naseef <naseefkm@gmail.com>
-Signed-off-by: Caleb James DeLisle <cjd@cjdns.fr>
+Well, other than that:
+
+Reviewed-by: Matti Vaittinen <mazziesaccount@gmail.com>
+
+Yours,
+	-- Matti
+
 ---
-Before sending v9 I did some investigation to see if
-pcie_failed_link_retrain() in quirks.c could be a suitable replacement
-for mtk_pcie_retrain().
+Matti Vaittinen
+Linux kernel developer at ROHM Semiconductors
+Oulu Finland
 
-I discovered that it exits early on this hardware because the hardware
-does not set PCI_EXP_LNKCAP_DLLLARC, and link_active_reporting is
-tested.
-
-The hardware has a register bit which claims to enable Data Link Layer
-active reporting, but setting it during init does not cause
-link_active_reporting to become true. Furthermore, skipping the check
-in pcie_failed_link_retrain() makes the function run, but the port does
-not upgrade to Gen2. Therefore I determined that it is most prudent to
-keep with the mtk_pcie_retrain() logic which follows behavior of
-reference code and is shown to work.
----
- drivers/pci/controller/Kconfig         |   2 +-
- drivers/pci/controller/pcie-mediatek.c | 154 +++++++++++++++++++++++++
- 2 files changed, 155 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/pci/controller/Kconfig b/drivers/pci/controller/Kconfig
-index 2247709ef6d6..8a3a31b2bc12 100644
---- a/drivers/pci/controller/Kconfig
-+++ b/drivers/pci/controller/Kconfig
-@@ -209,7 +209,7 @@ config PCI_MVEBU
- 
- config PCIE_MEDIATEK
- 	tristate "MediaTek PCIe controller"
--	depends on ARCH_AIROHA || ARCH_MEDIATEK || COMPILE_TEST
-+	depends on ARCH_AIROHA || ARCH_MEDIATEK || ECONET || COMPILE_TEST
- 	depends on OF
- 	depends on PCI_MSI
- 	select IRQ_MSI_LIB
-diff --git a/drivers/pci/controller/pcie-mediatek.c b/drivers/pci/controller/pcie-mediatek.c
-index c503fbd774d0..30f8070967b8 100644
---- a/drivers/pci/controller/pcie-mediatek.c
-+++ b/drivers/pci/controller/pcie-mediatek.c
-@@ -9,11 +9,13 @@
- 
- #include <linux/clk.h>
- #include <linux/delay.h>
-+#include <linux/errno.h>
- #include <linux/iopoll.h>
- #include <linux/irq.h>
- #include <linux/irqchip/chained_irq.h>
- #include <linux/irqchip/irq-msi-lib.h>
- #include <linux/irqdomain.h>
-+#include <linux/kconfig.h>
- #include <linux/kernel.h>
- #include <linux/mfd/syscon.h>
- #include <linux/msi.h>
-@@ -77,6 +79,7 @@
- 
- #define PCIE_CONF_VEND_ID	0x100
- #define PCIE_CONF_DEVICE_ID	0x102
-+#define PCIE_CONF_REV_CLASS	0x104
- #define PCIE_CONF_CLASS_ID	0x106
- 
- #define PCIE_INT_MASK		0x420
-@@ -89,6 +92,11 @@
- #define MSI_MASK		BIT(23)
- #define MTK_MSI_IRQS_NUM	32
- 
-+#define EN7528_HOST_MODE	0x00804201
-+#define EN7528_LINKUP_REG	0x50
-+#define EN7528_RC0_LINKUP	BIT(1)
-+#define EN7528_RC1_LINKUP	BIT(2)
-+
- #define PCIE_AHB_TRANS_BASE0_L	0x438
- #define PCIE_AHB_TRANS_BASE0_H	0x43c
- #define AHB2PCIE_SIZE(x)	((x) & GENMASK(4, 0))
-@@ -148,12 +156,15 @@ struct mtk_pcie_port;
-  * @MTK_PCIE_FIX_DEVICE_ID: host's device ID needed to be fixed
-  * @MTK_PCIE_NO_MSI: Bridge has no MSI support, and relies on an external block
-  * @MTK_PCIE_SKIP_RSTB: Skip calling RSTB bits on PCIe probe
-+ * @MTK_PCIE_RETRAIN: Retrain link to bridge after startup because some
-+ *                    Gen2-capable devices start as Gen1.
-  */
- enum mtk_pcie_quirks {
- 	MTK_PCIE_FIX_CLASS_ID = BIT(0),
- 	MTK_PCIE_FIX_DEVICE_ID = BIT(1),
- 	MTK_PCIE_NO_MSI = BIT(2),
- 	MTK_PCIE_SKIP_RSTB = BIT(3),
-+	MTK_PCIE_RETRAIN = BIT(4),
- };
- 
- /**
-@@ -755,6 +766,134 @@ static int mtk_pcie_startup_port_v2(struct mtk_pcie_port *port)
- 	return 0;
- }
- 
-+static int mtk_pcie_startup_port_en7528(struct mtk_pcie_port *port)
-+{
-+	struct mtk_pcie *pcie = port->pcie;
-+	struct pci_host_bridge *host = pci_host_bridge_from_priv(pcie);
-+	struct resource *mem = NULL;
-+	struct resource_entry *entry;
-+	u32 val, link_mask;
-+	int err;
-+
-+	entry = resource_list_first_type(&host->windows, IORESOURCE_MEM);
-+	if (entry)
-+		mem = entry->res;
-+	if (!mem)
-+		return -EINVAL;
-+
-+	if (!pcie->cfg) {
-+		dev_err(pcie->dev, "EN7528: pciecfg syscon not available\n");
-+		return -EINVAL;
-+	}
-+
-+	/* Assert all reset signals */
-+	writel(0, port->base + PCIE_RST_CTRL);
-+
-+	/*
-+	 * Enable PCIe link down reset, if link status changed from link up to
-+	 * link down, this will reset MAC control registers and configuration
-+	 * space.
-+	 */
-+	writel(PCIE_LINKDOWN_RST_EN, port->base + PCIE_RST_CTRL);
-+
-+	msleep(PCIE_T_PVPERL_MS);
-+
-+	/* De-assert PHY, PE, PIPE, MAC and configuration reset */
-+	val = readl(port->base + PCIE_RST_CTRL);
-+	val |= PCIE_PHY_RSTB | PCIE_PERSTB | PCIE_PIPE_SRSTB |
-+	       PCIE_MAC_SRSTB | PCIE_CRSTB;
-+	writel(val, port->base + PCIE_RST_CTRL);
-+
-+	writel(PCIE_CLASS_CODE | PCIE_REVISION_ID,
-+	       port->base + PCIE_CONF_REV_CLASS);
-+	writel(EN7528_HOST_MODE, port->base);
-+
-+	link_mask = (port->slot == 0) ? EN7528_RC0_LINKUP : EN7528_RC1_LINKUP;
-+
-+	/* 100ms timeout value should be enough for Gen1/2 training */
-+	err = regmap_read_poll_timeout(pcie->cfg, EN7528_LINKUP_REG, val,
-+				       !!(val & link_mask), 20,
-+				       PCI_PM_D3COLD_WAIT * USEC_PER_MSEC);
-+	if (err) {
-+		dev_err(pcie->dev, "EN7528: port%d link timeout\n", port->slot);
-+		return -ETIMEDOUT;
-+	}
-+
-+	/* Activate INTx interrupts */
-+	val = readl(port->base + PCIE_INT_MASK);
-+	val &= ~INTX_MASK;
-+	writel(val, port->base + PCIE_INT_MASK);
-+
-+	if (IS_ENABLED(CONFIG_PCI_MSI))
-+		mtk_pcie_enable_msi(port);
-+
-+	/* Set AHB to PCIe translation windows */
-+	val = lower_32_bits(mem->start) |
-+	      AHB2PCIE_SIZE(fls(resource_size(mem)));
-+	writel(val, port->base + PCIE_AHB_TRANS_BASE0_L);
-+
-+	val = upper_32_bits(mem->start);
-+	writel(val, port->base + PCIE_AHB_TRANS_BASE0_H);
-+
-+	writel(WIN_ENABLE, port->base + PCIE_AXI_WINDOW0);
-+
-+	if (!IS_BUILTIN(CONFIG_PCIE_MEDIATEK))
-+		dev_info(pcie->dev,
-+			 "module not built-in, Gen2 unavailable even if supported\n");
-+
-+	return 0;
-+}
-+
-+/**
-+ * mtk_pcie_retrain - retrain the root bridge link if needed
-+ * @dev: The device, for use in logging
-+ * @host: The host bridge which contains the link
-+ *
-+ * Due to what is likely a hardware bug, some devices (notably EcoNet) start up
-+ * as Gen1, and must be retrained once after initial configuration in order to
-+ * reach Gen2.
-+ *
-+ * These devices always self-identify as Gen2 capable, but sometimes the PHY is
-+ * only capable of Gen1 operation, and sometimes the PCIe card (e.g. wifi) is
-+ * only Gen1 capable. Therefore it is most convenient to retrain every port
-+ * after startup.
-+ */
-+static int mtk_pcie_retrain(struct device *dev, struct pci_host_bridge *host)
-+{
-+	struct pci_dev *rp;
-+	int ret = -ENOENT;
-+	u16 lnksta = 0;
-+	u32 speed;
-+
-+	/* Should already have been warned about during startup_port */
-+	if (!IS_BUILTIN(CONFIG_PCIE_MEDIATEK))
-+		return 0;
-+
-+	guard(rwsem_read)(&pci_bus_sem);
-+
-+	for_each_pci_bridge(rp, host->bus) {
-+		if (pci_pcie_type(rp) != PCI_EXP_TYPE_ROOT_PORT)
-+			continue;
-+
-+#if IS_BUILTIN(CONFIG_PCIE_MEDIATEK)
-+		ret = pcie_retrain_link(rp, true);
-+#endif
-+
-+		if (ret)
-+			return dev_err_probe(&rp->dev, ret,
-+					     "failed to retrain port\n");
-+
-+		pcie_capability_read_word(rp, PCI_EXP_LNKSTA, &lnksta);
-+		speed = lnksta & PCI_EXP_LNKSTA_CLS;
-+
-+		pci_info(rp, "link retrained, speed %s\n",
-+			 pci_speed_string(pcie_link_speed[speed]));
-+
-+	}
-+
-+	return 0;
-+}
-+
- static void __iomem *mtk_pcie_map_bus(struct pci_bus *bus,
- 				      unsigned int devfn, int where)
- {
-@@ -1159,6 +1298,13 @@ static int mtk_pcie_probe(struct platform_device *pdev)
- 	if (err)
- 		goto put_resources;
- 
-+	/*
-+	 * Ignore error because pci_host_probe() was already called, and in any
-+	 * case it is possible that the port will still work as Gen1.
-+	 */
-+	if (pcie->soc->quirks & MTK_PCIE_RETRAIN)
-+		mtk_pcie_retrain(dev, host);
-+
- 	return 0;
- 
- put_resources:
-@@ -1274,8 +1420,16 @@ static const struct mtk_pcie_soc mtk_pcie_soc_mt7629 = {
- 	.quirks = MTK_PCIE_FIX_CLASS_ID | MTK_PCIE_FIX_DEVICE_ID,
- };
- 
-+static const struct mtk_pcie_soc mtk_pcie_soc_en7528 = {
-+	.ops = &mtk_pcie_ops_v2,
-+	.startup = mtk_pcie_startup_port_en7528,
-+	.setup_irq = mtk_pcie_setup_irq,
-+	.quirks = MTK_PCIE_RETRAIN,
-+};
-+
- static const struct of_device_id mtk_pcie_ids[] = {
- 	{ .compatible = "airoha,an7583-pcie", .data = &mtk_pcie_soc_an7583 },
-+	{ .compatible = "econet,en7528-pcie", .data = &mtk_pcie_soc_en7528 },
- 	{ .compatible = "mediatek,mt2701-pcie", .data = &mtk_pcie_soc_v1 },
- 	{ .compatible = "mediatek,mt7623-pcie", .data = &mtk_pcie_soc_v1 },
- 	{ .compatible = "mediatek,mt2712-pcie", .data = &mtk_pcie_soc_mt2712 },
--- 
-2.39.5
-
+~~ When things go utterly wrong vim users can always type :help! ~~
 
