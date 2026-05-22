@@ -1,200 +1,248 @@
-Return-Path: <linux-mips+bounces-14706-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-14708-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id gMKgNUAUEGryTAYAu9opvQ
-	(envelope-from <linux-mips+bounces-14706-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Fri, 22 May 2026 10:30:56 +0200
+	id eOWXFC1WEGraWQYAu9opvQ
+	(envelope-from <linux-mips+bounces-14708-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Fri, 22 May 2026 15:12:13 +0200
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7BDD55B09A0
-	for <lists+linux-mips@lfdr.de>; Fri, 22 May 2026 10:30:56 +0200 (CEST)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6D5755B4DDF
+	for <lists+linux-mips@lfdr.de>; Fri, 22 May 2026 15:12:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id BE4EB301AD11
-	for <lists+linux-mips@lfdr.de>; Fri, 22 May 2026 08:29:27 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id B841630BAB30
+	for <lists+linux-mips@lfdr.de>; Fri, 22 May 2026 12:34:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D310537C916;
-	Fri, 22 May 2026 08:29:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 845583A48E8;
+	Fri, 22 May 2026 12:31:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="mVwc49J1";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="EUpK2Ma9"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="kEGX4X+d"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from flow-b4-smtp.messagingengine.com (flow-b4-smtp.messagingengine.com [202.12.124.139])
+Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD3163A782E;
-	Fri, 22 May 2026 08:29:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.139
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 551AB3A1A42;
+	Fri, 22 May 2026 12:31:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.171.202.116
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779438566; cv=none; b=XMVDNsOFWMNGK/U+dUZbXzWLKM5NReDiqfpyl9jAuvDXeTQxquSeZvdz2y831CC6Rba8lH8NR73vJzcNk00sg72K8z90OFZN/vF4yNnkZZc1//zF2tq9pbqfa0ZOuUzyYakyC9XjwQpryvyzHUVrJ+x9fidYDw9thSjhJR9ry/I=
+	t=1779453100; cv=none; b=hqX57Tpv/YQmHq+StB3xhneKAszV4UE4wkNB7pSrQ3TKGS7NvPAt2R6wGEQQpGMdeGr/STcuy5xJo56xbftqU2ed4Acd2eff824IVTkF1PIQoKDJyTD0xG2ZV9WcYvrOBzRMLhCoyagCth2uVn4sA+9zHJib0+TcwI2ogP4zLpM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779438566; c=relaxed/simple;
-	bh=S/W1IYFida+NA2QNwOCu8W2HVuY1ZiNPLNAJKV7ynfc=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=T8Ot1vGhQAXfuorkXLJ2Q07UZtq8oW+Zohhuw9QhOFbrYENlbc6pjOok5Ydgev/uT834dJilujrHukQYkYI/ghvLTz9+OafjLk3bWWtFajMXgRDsKvxOVnoPIpA5piA7ScOVV4GgC5LqCJ+S8UmF9RnWFpIqKuwOvj/UzZUfahE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=mVwc49J1; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=EUpK2Ma9; arc=none smtp.client-ip=202.12.124.139
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
-Received: from phl-compute-04.internal (phl-compute-04.internal [10.202.2.44])
-	by mailflow.stl.internal (Postfix) with ESMTP id A289D1300C0A;
-	Fri, 22 May 2026 04:29:21 -0400 (EDT)
-Received: from phl-imap-05 ([10.202.2.95])
-  by phl-compute-04.internal (MEProxy); Fri, 22 May 2026 04:29:23 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm2; t=1779438561;
-	 x=1779445761; bh=K5cjv15MjjTF6ypOnMSrJMsfRdW4W+PPYBrqMoqvt/A=; b=
-	mVwc49J1HBgWVrb4a/RQur0w8olfdgWprB68y5AQaHQKBXoXAw3WMCwEvlADbMZa
-	woiU2CWyZVzvL2un+K4ZfXUVGVBgKvyaQ0waPfX2dovAGmipmnmch7wjsSyi/ggj
-	ohAEcrvXX5Z0ybA87lR6nVxg8FUHxwcTSyOhBGWli/U5ZI3FFQHzJPoeA18Pj7tw
-	WAaIfYhDuniH4wQYakbqBIqXipGGe7Q6iA/y8AH/jRUUp9jaJyz83OGlqauvsNRl
-	rpMGWRSLrUqU7/F+jxwMoRP5CzwzEnViHkJJseLL5Q1bw4WbZj2UZdUWAHb3lRyb
-	eisQnAsYJ9pqbcu6duBM7A==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1779438561; x=
-	1779445761; bh=K5cjv15MjjTF6ypOnMSrJMsfRdW4W+PPYBrqMoqvt/A=; b=E
-	UpK2Ma9OrlBOcJrfk89xSalmv14z71Y742I7yR9JDliM14zAQQ2D0cod6aACcGDv
-	or6qSJ5INamWzeACSQjuA5hI6ZLYdQEYo8D90K9A9ckq1h7ucOe4khbynAMoJmoU
-	2jZlm1NbFEdfiEHDaHOQ9dyPCyfontUTL2xT5bKY2J3W3JULBFjZyHFEzd8Ffd/x
-	r2c+GRqVhLktgnWrOX0BdRygD96QKeVSyX+h3cT02YUnqR8yUGFgvP2rhzjiicPB
-	iFTzxEAz1miglA2jKtOukdD4J0Ev0bzzJWVVWN0LXq2Bzp53I6Bdp/yeUz4MI2RH
-	/uj8Y5FZdiY/g20nRwOZA==
-X-ME-Sender: <xms:3xMQahOCKCWvL9cv3XYQbv-EJY-5JR2Ia3Z8PelDswJneSd0az0qXQ>
-    <xme:3xMQauxHL3Ysx8fPaX7uC9mP24hgJ3O2F6ot0-P89fFwGJCA-Pi66GK3iqAML5BWX
-    DXESTg8zojzG3LmMWF90NYfAhSsRpPntHRCHDoS9Nqa7p6e3dONFos>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefhedrtddtgddugeelkeegucetufdoteggodetrf
-    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
-    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
-    gurhepofggfffhvfevkfgjfhfutgfgsehtjeertdertddtnecuhfhrohhmpedftehrnhgu
-    uceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrthhtvg
-    hrnhephfdthfdvtdefhedukeetgefggffhjeeggeetfefggfevudegudevledvkefhvdei
-    necuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprghrnh
-    gusegrrhhnuggsrdguvgdpnhgspghrtghpthhtohepgedtpdhmohguvgepshhmthhpohhu
-    thdprhgtphhtthhopegsphesrghlihgvnhekrdguvgdprhgtphhtthhopehtshgsohhgvg
-    hnugesrghlphhhrgdrfhhrrghnkhgvnhdruggvpdhrtghpthhtohepthhonhihsegrthho
-    mhhiuggvrdgtohhmpdhrtghpthhtohepkhhhihhlmhgrnhessggrhihlihgsrhgvrdgtoh
-    hmpdhrtghpthhtohepfhhlohhrihgrnhdrfhgrihhnvghllhhisegsrhhorggutghomhdr
-    tghomhdprhgtphhtthhopegurghvvghmsegurghvvghmlhhofhhtrdhnvghtpdhrtghpth
-    htohepughmihhtrhihrdhtohhrohhkhhhovhesghhmrghilhdrtghomhdprhgtphhtthho
-    pehjohhnrghsrdhgohhrshhkihesghhmrghilhdrtghomhdprhgtphhtthhopehmrgiiii
-    hivghsrggttghouhhnthesghhmrghilhdrtghomh
-X-ME-Proxy: <xmx:3xMQajUbzWzIk3zJRKelcJqH9lLTGk9j2eynxhQmHiq1OWCr-y2h7Q>
-    <xmx:3xMQagPV0Bm4Ic_tW8YWwZ4nVopqiUkfLtl5ahxzvvDHs8X1byqK1A>
-    <xmx:3xMQanj7n1H0NO7fxP9CXn6-QWSG6sJlhU37QwHWB4VHx5UbVNaABA>
-    <xmx:3xMQaofwiLNKXI5cNztemqeU__Yl9-r92W2KmBm3ZqqMImvXPQDa6A>
-    <xmx:4RMQahUK73IMw50Jbey2YC6mFhyLbz4f8YjWlvxlDLB-FK75_RuEeQg8>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id 708B7182007A; Fri, 22 May 2026 04:29:19 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
+	s=arc-20240116; t=1779453100; c=relaxed/simple;
+	bh=ZdyanZvPjMCYLyOa13F62WT/ughxibJfWVnKWzxAX4U=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=IHTE9XDFr6IKgjqDXfc0Y6yRhD0pZmc6woRE3ja5soqasNHEnwvW5bRXytNfKh/4qLAqjPsgm+l0z2WpYZe5rT8MRUdnKpo92GytypG/wvAri32m0Gwzl2MogsnrknFkO0lDDW3S2a04ViTQOFUrZHj6kvsrv79snfSsujodRTY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=kEGX4X+d; arc=none smtp.client-ip=185.171.202.116
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+	by smtpout-04.galae.net (Postfix) with ESMTPS id 4D5D1C2C655;
+	Fri, 22 May 2026 12:32:25 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+	by smtpout-01.galae.net (Postfix) with ESMTPS id 953346003C;
+	Fri, 22 May 2026 12:31:30 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 28CB310811314;
+	Fri, 22 May 2026 14:31:25 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
+	t=1779453089; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 content-transfer-encoding; bh=90TuC17oPDZ9l6OZNDbUQZQWto0TVENgMFWVHEcFwkU=;
+	b=kEGX4X+dyKsfqiTEZpcsxc3yNBjbV6ylo5h0U3LdVG+73oKOc/dM1N4ww45HUBRk7N6h5F
+	vARW09+Floh1+UApGt23Dizt459jpFhkaSi7ILqQuPg8xt9r6w/UpzQeP1U++Aj6WBP/Z5
+	MCl/MgNcvE5Bpf3dkDhZ9um+hwUeffW0hgbDj1a0cXAKAfp4Lq8MK3LzapA9Ipsci2YS8Z
+	WcorHMZKHQOAUIwXxixHQ95GjDj6GuWoGKC5G5ht6PN1yiCJIws6EPuITlFDPrKUhgsgte
+	r4gkFjgyRd7JSpX1IwqnPTPNgICl4g7rNj5upvnvkDsyGU+Xk+tctP7LQKkTAA==
+From: =?utf-8?q?Beno=C3=AEt_Monin?= <benoit.monin@bootlin.com>
+Subject: [PATCH v7 0/9] Add clock and reset support for Mobileye EyeQ7H
+Date: Fri, 22 May 2026 14:31:09 +0200
+Message-Id: <20260522-clk-eyeq7-v7-0-14ad6c2c5213@bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-ThreadId: ArrYli9DFPON
-Date: Fri, 22 May 2026 10:28:59 +0200
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Matti Vaittinen" <mazziesaccount@gmail.com>,
- "Arnd Bergmann" <arnd@kernel.org>,
- "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>
-Cc: linux-kernel@vger.kernel.org,
- "Christian Lamparter" <chunkeey@googlemail.com>,
- "Johannes Berg" <johannes@sipsolutions.net>,
- "Aaro Koskinen" <aaro.koskinen@iki.fi>,
- "Andreas Kemnade" <andreas@kemnade.info>,
- "Kevin Hilman" <khilman@baylibre.com>,
- "Roger Quadros" <rogerq@kernel.org>, "Tony Lindgren" <tony@atomide.com>,
- "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
- "John Paul Adrian Glaubitz" <glaubitz@physik.fu-berlin.de>,
- "Thomas Gleixner" <tglx@kernel.org>, "Ingo Molnar" <mingo@redhat.com>,
- "Borislav Petkov" <bp@alien8.de>,
- "Dave Hansen" <dave.hansen@linux.intel.com>, x86@kernel.org,
- "H. Peter Anvin" <hpa@zytor.com>, "Linus Walleij" <linusw@kernel.org>,
- "Bartosz Golaszewski" <brgl@kernel.org>,
- "Dmitry Torokhov" <dmitry.torokhov@gmail.com>,
- "Lee Jones" <lee@kernel.org>, "Pavel Machek" <pavel@kernel.org>,
- "Florian Fainelli" <florian.fainelli@broadcom.com>,
- "Jonas Gorski" <jonas.gorski@gmail.com>, "Andrew Lunn" <andrew@lunn.ch>,
- "Vladimir Oltean" <olteanv@gmail.com>,
- "David S . Miller" <davem@davemloft.net>,
- "Eric Dumazet" <edumazet@google.com>, "Jakub Kicinski" <kuba@kernel.org>,
- "Paolo Abeni" <pabeni@redhat.com>, linux-wireless@vger.kernel.org,
- Linux-OMAP <linux-omap@vger.kernel.org>,
- linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
- linux-sh@vger.kernel.org, linux-input@vger.kernel.org,
- linux-leds@vger.kernel.org, Netdev <netdev@vger.kernel.org>
-Message-Id: <681f328c-bc8a-4410-b876-f8c5f116325d@app.fastmail.com>
-In-Reply-To: <b79d8ad9-f36e-4769-9dc2-58baefe23000@gmail.com>
-References: <20260520183815.2510387-1-arnd@kernel.org>
- <20260520183815.2510387-3-arnd@kernel.org>
- <b79d8ad9-f36e-4769-9dc2-58baefe23000@gmail.com>
-Subject: Re: [PATCH 02/10] [v3] input: gpio-keys: make legacy gpiolib optional
-Content-Type: text/plain
-Content-Transfer-Encoding: 7bit
-X-Spamd-Result: default: False [-0.65 / 15.00];
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIAI1MEGoC/2XRS27CMBAG4Ksgr2vk8TNh1XtUXfgxKVYhASeNi
+ hB374SoJTTLsef7Zc9cWY8lY892mysrOOY+dy0V7mXD4t63H8hzoppJIY2ohOPx8MnxgmfHmzp
+ a9FolUBWj/lPBJn/fs97eqd7nfujK5R49wnQ6p9RCLVJG4IKrxgipg0kW5WvouuGQ223sjmzKG
+ eWfBSn10kqyFTitE9BtqtdW/VorAJ6smiyGFLwLApRaW/2wSjxZTbZONqQ60bMxrq1ZWFhObTR
+ kbWOT9zJKZd3a2oelHy+tJSuMFjEiVE34N6vbvISC5y/a4zBvggXfI6f7Yx52m9FtgZeoqPn2A
+ 2nuxbD8AQAA
+X-Change-ID: 20250807-clk-eyeq7-f9c6ea43d138
+To: Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>, 
+ Gregory CLEMENT <gregory.clement@bootlin.com>, 
+ =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>, 
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, 
+ Michael Turquette <mturquette@baylibre.com>, 
+ Stephen Boyd <sboyd@kernel.org>, Brian Masney <bmasney@redhat.com>, 
+ Philipp Zabel <p.zabel@pengutronix.de>
+Cc: =?utf-8?q?Beno=C3=AEt_Monin?= <benoit.monin@bootlin.com>, 
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, linux-mips@vger.kernel.org, 
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-clk@vger.kernel.org, 
+ Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>, 
+ Sari Khoury <sari.khoury@mobileye.com>
+X-Mailer: b4 0.15.2
+X-Last-TLS-Session-Version: TLSv1.3
+X-Spamd-Result: default: False [-0.66 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[arndb.de,none];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
-	R_DKIM_ALLOW(-0.20)[arndb.de:s=fm2,messagingengine.com:s=fm3];
+	DMARC_POLICY_ALLOW(-0.50)[bootlin.com,reject];
+	R_DKIM_ALLOW(-0.20)[bootlin.com:s=dkim];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	XM_UA_NO_VERSION(0.01)[];
-	TAGGED_FROM(0.00)[bounces-14706-lists,linux-mips=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
-	FREEMAIL_TO(0.00)[gmail.com,kernel.org,vger.kernel.org];
-	MIME_TRACE(0.00)[0:+];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[40];
+	TAGGED_FROM(0.00)[bounces-14708-lists,linux-mips=lfdr.de];
 	FROM_HAS_DN(0.00)[];
-	DKIM_TRACE(0.00)[arndb.de:+,messagingengine.com:+];
+	RECEIVED_HELO_LOCALHOST(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[18];
+	MIME_TRACE(0.00)[0:+];
+	DKIM_TRACE(0.00)[bootlin.com:+];
+	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
 	TO_DN_SOME(0.00)[];
 	RCVD_COUNT_FIVE(0.00)[6];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[arnd@arndb.de,linux-mips@vger.kernel.org];
-	FREEMAIL_CC(0.00)[vger.kernel.org,googlemail.com,sipsolutions.net,iki.fi,kemnade.info,baylibre.com,kernel.org,atomide.com,alpha.franken.de,physik.fu-berlin.de,redhat.com,alien8.de,linux.intel.com,zytor.com,gmail.com,broadcom.com,lunn.ch,davemloft.net,google.com,lists.infradead.org];
-	NEURAL_HAM(-0.00)[-0.988];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	TAGGED_RCPT(0.00)[linux-mips];
+	FROM_NEQ_ENVFROM(0.00)[benoit.monin@bootlin.com,linux-mips@vger.kernel.org];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[app.fastmail.com:mid,messagingengine.com:dkim,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,arndb.de:email,arndb.de:dkim]
-X-Rspamd-Queue-Id: 7BDD55B09A0
+	NEURAL_HAM(-0.00)[-0.996];
+	TAGGED_RCPT(0.00)[linux-mips,dt];
+	MID_RHS_MATCH_FROM(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:rdns,sin.lore.kernel.org:helo]
+X-Rspamd-Queue-Id: 6D5755B4DDF
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On Fri, May 22, 2026, at 06:55, Matti Vaittinen wrote:
-> On 20/05/2026 21:38, Arnd Bergmann wrote:
->> From: Arnd Bergmann <arnd@arndb.de>
->>
->> The two Rohm PMIC drivers use a gpio-keys device without an actual GPIO,
->> passing an IRQ number instead. In order to keep this working both with
->> and with CONFIG_GPIOLIB_LEGACY, change the gpio-keys driver to ignore
->> the gpio number if an IRQ is passed.
->> 
->
-> I am (still) all fine with this, even though I like Dmitry's set. I 
-> suppose you already have a plan for merging this, but I still have to 
-> ask - why the MFD changes aren't in own patch? I feel it would have 
-> simplified merging, backporting, reviewing and reverting if needed.
+This patchset brings the support of the Other Logic Blocks (OLB)
+found in the first Mobileye SoC based on the RISC-V architecture, the
+EyeQ7H. Despite the change from MIPS to RISC-V, the Other Logic Blocks
+provide similar clock and reset functions to the controllers of the
+chip. This series introduces the device tree bindings of the SoC and
+the necessary changes to the clock and reset eyeq drivers.
 
-Splitting it out would break bisection: The gpio-leds change without
-the mfd change causes a build failure when assigning the .gpio
-field, and the reverse causes a runtime failure when .gpio=0 is
-a valid line.
+Since this series affects drivers used on Mobileye MIPS SoCs, mainly
+clk-eyeq, I tested that it does not introduce regressions on EyeQ5,
+EyeQ6H, and EyeQ6Lplus evaluation boards.
+    
+In detail, the first patch adds the dt-bindings yaml and headers for
+the EyeQ7H OLB.
 
-It would be possible to only do the gpio-led driver patch without
-the header file change first. This would let us apply the last
-patch in the series without regression, but it would risk having
-not catching other drivers that incorrectly set the .gpio field
-while CONFIG_GPIOLIB_LEGACY is disabled.
+Patch 2 adds the compatible entries to the reset-eyeq driver, and the
+necessary changes for the reset domains found in the EyeQ7H OLB.
 
-      Arnd
+Patches 3 and 4 rework the handling of parent clocks in
+__clk_hw_register_fixed_factor() to make it identical to other clock types
+like divider or gate. This allows simplifying the registration functions
+built on top of the now exported __clk_hw_register_fixed_factor(). A
+new clk_hw_register_fixed_factor_pdata() is added that will be used in
+clk-eyeq later in the series.
+
+Patch 5 renames the defines and functions related to the PLL with the
+PLL type fracg, to make room for the other types of PLL found the in
+EyeQ7H OLB.
+
+Patch 6 introduces a new generic type of clock structure that can
+represents all clocks found in OLB. Then patch 7 and 8 converts all
+clocks defined in the driver to the new struct eqc_clock and remove all
+the previous separate clocks structures.
+
+Patch 9 adds the list of clocks as match data for the 14 OLB present
+in the EyeQ7H SoC, and the functions needed to probe the two PLL types
+found in the chip.
+
+This series is based on v7.1-rc3 as all the prerequisites have been
+merged. It also applies cleanly on the clk-next branch.
+
+Signed-off-by: Benoît Monin <benoit.monin@bootlin.com>
+---
+Changes in v7:
+- Fixed DDR OLB reset controller type (the comment and sashiko were right)
+  and the comment for the reset offsets for west OLB in reset-eyeq.
+- Made sure the parent clock is valid before accessing it
+  in clk_factor_determine_rate().
+- Fixed error paths mistakenly returning IS_ERR(ret) instead of PTR_ERR(ret)
+  in clk-eyeq.
+- Declared the DDR OLB dividers as read-only.
+- Ensured that the mult and div computed in eqc_pll_parse_fracg() fit in 32 bits.
+- Link to v6: https://patch.msgid.link/20260512-clk-eyeq7-v6-0-0540cce18fb2@bootlin.com
+
+Changes in v6:
+- Rebased on v7.1-rc3.
+- Dropped the MAINTAINER update for now, this will go with the SoC series.
+- Link to v5: https://lore.kernel.org/r/20260317-clk-eyeq7-v5-0-6f6daa2c2367@bootlin.com
+
+Changes in v5:
+- Rebased in v7.0-rc1 + version 4 of eyeq6plus series.
+- Remove an superfluous whitespace and tidy up macros in clk-provider.h.
+- Link to v4: https://lore.kernel.org/r/20260304-clk-eyeq7-v4-0-9d6bd9d24bec@bootlin.com
+
+Changes in v4:
+- Rebased on v7.0-rc1 + version 3 of eyeq6plus series.
+- Link to v3: https://lore.kernel.org/r/20260114-clk-eyeq7-v3-0-8ebdba7b0133@bootlin.com
+
+Changes in v3:
+- Fix eyeq7h-olb DT bindings following Krzysztof review.
+- Link to v2: https://lore.kernel.org/r/20251224-clk-eyeq7-v2-0-81744d1025d9@bootlin.com
+
+Changes in v2:
+- Move the dt-bindings to their own files and sort the compatibles.
+- Reorder the changes in reset-eyeq and make the register access more
+  readable.
+- Drop the validity check on even divider. Unnecessary since it is
+  always called from a clock .set_rate().
+- Drop the parameters check on divider registration. Will be posted
+  separately.
+- Switch to a new generic struct for describing the clocks.
+- Add an entry to MAINTAINERS.
+- Link to v1: https://lore.kernel.org/r/20250903-clk-eyeq7-v1-0-3f5024b5d6e2@bootlin.com
+
+To: Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>
+To: Benoît Monin <benoit.monin@bootlin.com>
+To: Gregory CLEMENT <gregory.clement@bootlin.com>
+To: Théo Lebrun <theo.lebrun@bootlin.com>
+To: Rob Herring <robh@kernel.org>
+To: Krzysztof Kozlowski <krzk+dt@kernel.org>
+To: Conor Dooley <conor+dt@kernel.org>
+To: Michael Turquette <mturquette@baylibre.com>
+To: Stephen Boyd <sboyd@kernel.org>
+To: Brian Masney <bmasney@redhat.com>
+To: Philipp Zabel <p.zabel@pengutronix.de>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: linux-mips@vger.kernel.org
+Cc: devicetree@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Cc: linux-clk@vger.kernel.org
+
+---
+Benoît Monin (9):
+      dt-bindings: soc: mobileye: Add EyeQ7H OLB
+      reset: eyeq: Add EyeQ7H compatibles
+      clk: fixed-factor: Rework initialization with parent clocks
+      clk: fixed-factor: Export __clk_hw_register_fixed_factor()
+      clk: eyeq: Prefix the PLL registers with the PLL type
+      clk: eyeq: Introduce a generic clock type
+      clk: eyeq: Convert clocks declaration to eqc_clock
+      clk: eyeq: Drop PLL, dividers, and fixed factors structs
+      clk: eyeq: Add EyeQ7H compatibles
+
+ .../bindings/soc/mobileye/mobileye,eyeq7h-olb.yaml |  192 +++
+ drivers/clk/clk-eyeq.c                             | 1262 +++++++++++++-------
+ drivers/clk/clk-fixed-factor.c                     |   78 +-
+ drivers/reset/reset-eyeq.c                         |  268 ++++-
+ include/dt-bindings/clock/mobileye,eyeq7h-clk.h    |  119 ++
+ include/linux/clk-provider.h                       |   56 +-
+ 6 files changed, 1480 insertions(+), 495 deletions(-)
+---
+base-commit: bb1459368dd795c43380057523f571d5eb0ddded
+change-id: 20250807-clk-eyeq7-f9c6ea43d138
+
+Best regards,
+--  
+Benoît Monin, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
+
 
