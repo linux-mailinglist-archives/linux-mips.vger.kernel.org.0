@@ -1,52 +1,49 @@
-Return-Path: <linux-mips+bounces-14772-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-14765-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id SCNlG/CzFWpVYQcAu9opvQ
-	(envelope-from <linux-mips+bounces-14772-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Tue, 26 May 2026 16:53:36 +0200
+	id 8AJXGoSzFWpxYAcAu9opvQ
+	(envelope-from <linux-mips+bounces-14765-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Tue, 26 May 2026 16:51:48 +0200
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id 182305D802C
-	for <lists+linux-mips@lfdr.de>; Tue, 26 May 2026 16:53:35 +0200 (CEST)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 30C1C5D7F69
+	for <lists+linux-mips@lfdr.de>; Tue, 26 May 2026 16:51:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 5D758303053B
-	for <lists+linux-mips@lfdr.de>; Tue, 26 May 2026 14:52:06 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 5AACB30144FE
+	for <lists+linux-mips@lfdr.de>; Tue, 26 May 2026 14:51:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7FC5E4048A7;
-	Tue, 26 May 2026 14:51:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E028D40149E;
+	Tue, 26 May 2026 14:51:11 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
 Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F07273FF88A;
-	Tue, 26 May 2026 14:51:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DC2C8400E04;
+	Tue, 26 May 2026 14:51:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.175.24.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779807074; cv=none; b=d8PGEdPvKIETUAsltmzQPkZV+xecA42lNkMe4ydXvL2vV4HHgMiX58Sp6dSJfqWZsUhGsmjv6G2xtyNHlzs7DAB1NuJQ9A8TCf8SnhH83bohbnK/Jt2BtPBT1DlcQ1fJA1UnyRQ1c9PfG52kphJhVF1D7utR+Nxlqn9UhsR3eWE=
+	t=1779807071; cv=none; b=dUUola8paYi+bJJyyAgTDbdzcYbFUV7Ua12MUwigw4/EX3yzLaNieH1E4czLxYf0N7DBnb1FQ/M7becx9XTokBpEs97ChlJ9MlEjtH69XvKH2L/Kp9LFqDPXvKuKTo5yI6eBUCPWmiERL14Gei0VVga9qxaVSQvBlxZTln7SD5M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779807074; c=relaxed/simple;
-	bh=NMdeeyE/bKkXz2gAan02F24Low4Q5zyVPiysCb61mUs=;
+	s=arc-20240116; t=1779807071; c=relaxed/simple;
+	bh=5Zv1nv4v2mucxPM+Ait+cYaNpxCt/1/kYQ1ebH4yO9c=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=khmdUH2lzWip4++bvn38gnnNac00GACc7m9HGQKAeqPoolreY+mstPTnTGKzBz0pcouDW1YzmzFO7m7VAYrN3bfAQzqL3fTwHb5uOd5mr5v2yaUAWDO+6U+WziIOXQuCGlEbtM6YOe7WaF/4FLXFiFPl22Zr8Nit/GcHGFhU88s=
+	 Content-Type:Content-Disposition:In-Reply-To; b=Sps94ca7dUo73JyASH98KFkgPxwQl4BMZ4Em7pQMrLE9j+AyzjillNcn3Puw9Dnp4cqx50GbJkK4eyVCRidCaf0GFlMn+4MOLyywiJrS4ZVNVqfvieGCBm0T99FMFGwd3MCEKSs2pujuIOdsAtCV090eCwBMTLZ4MZQTSAvtZgo=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de; spf=pass smtp.mailfrom=alpha.franken.de; arc=none smtp.client-ip=193.175.24.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alpha.franken.de
 Received: from uucp by elvis.franken.de with local-rmail (Exim 3.36 #1)
-	id 1wRt7c-00015F-00; Tue, 26 May 2026 16:51:08 +0200
+	id 1wRt7c-00015H-00; Tue, 26 May 2026 16:51:08 +0200
 Received: by alpha.franken.de (Postfix, from userid 1000)
-	id B109DC0522; Tue, 26 May 2026 16:42:49 +0200 (CEST)
-Date: Tue, 26 May 2026 16:42:49 +0200
+	id 17C34C0637; Tue, 26 May 2026 16:43:34 +0200 (CEST)
+Date: Tue, 26 May 2026 16:43:34 +0200
 From: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To: Qingfang Deng <qingfang.deng@linux.dev>
-Cc: linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Mieczyslaw Nalewaj <namiltd@yahoo.com>,
-	Felix Fietkau <nbd@nbd.name>, Hauke Mehrtens <hauke@hauke-m.de>,
-	Aleksander Jan Bajkowski <olek2@wp.pl>,
-	Christian Marangi <ansuelsmth@gmail.com>,
-	Rosen Penev <rosenp@gmail.com>, Nick Hainke <vincent@systemli.org>,
-	openwrt-devel@lists.openwrt.org
-Subject: Re: [PATCH] MIPS: ralink: reduce ARCH_DMA_MINALIGN
-Message-ID: <ahWxaT2josfOnKNa@alpha.franken.de>
-References: <20260428082543.95896-1-qingfang.deng@linux.dev>
+To: Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>
+Cc: Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+	Linus Walleij <linusw@kernel.org>, brgl@kernel.org,
+	linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] MIPS: RB532: attach the software node to its target GPIO
+ controller
+Message-ID: <ahWxlprtWVgS3Q9A@alpha.franken.de>
+References: <20260430-mips-rb532-gpio-v1-1-845a0c6206a5@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -55,49 +52,56 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260428082543.95896-1-qingfang.deng@linux.dev>
+In-Reply-To: <20260430-mips-rb532-gpio-v1-1-845a0c6206a5@oss.qualcomm.com>
 X-Spamd-Result: default: False [-1.46 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
-	RCVD_TLS_LAST(0.00)[];
 	MISSING_XM_UA(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	FREEMAIL_CC(0.00)[vger.kernel.org,yahoo.com,nbd.name,hauke-m.de,wp.pl,gmail.com,systemli.org,lists.openwrt.org];
-	TAGGED_FROM(0.00)[bounces-14772-lists,linux-mips=lfdr.de];
 	DMARC_NA(0.00)[franken.de];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	FREEMAIL_CC(0.00)[gmail.com,kernel.org,vger.kernel.org];
+	TAGGED_FROM(0.00)[bounces-14765-lists,linux-mips=lfdr.de];
+	RCVD_TLS_LAST(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
 	FROM_HAS_DN(0.00)[];
 	TAGGED_RCPT(0.00)[linux-mips];
-	MID_RHS_MATCH_FROM(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
 	FROM_NEQ_ENVFROM(0.00)[tsbogend@alpha.franken.de,linux-mips@vger.kernel.org];
-	MIME_TRACE(0.00)[0:+];
+	TO_DN_SOME(0.00)[];
 	RCVD_COUNT_FIVE(0.00)[5];
 	R_DKIM_NA(0.00)[];
 	NEURAL_HAM(-0.00)[-0.996];
-	RCPT_COUNT_SEVEN(0.00)[11];
-	TO_DN_SOME(0.00)[]
-X-Rspamd-Queue-Id: 182305D802C
+	MID_RHS_MATCH_FROM(0.00)[];
+	RCPT_COUNT_FIVE(0.00)[6]
+X-Rspamd-Queue-Id: 30C1C5D7F69
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On Tue, Apr 28, 2026 at 04:25:40PM +0800, Qingfang Deng wrote:
-> Currently, Ralink SoCs use the default ARCH_DMA_MINALIGN value of 128
-> bytes defined in mach-generic. This is excessive for these platforms
-> and leads to significant memory waste in kmalloc.
+On Thu, Apr 30, 2026 at 01:23:13PM +0200, Bartosz Golaszewski wrote:
+> GPIOLIB wants to remove the software node's name matching against GPIO
+> controller's label that is going on behind the scenes in software node
+> lookup. To that end, we need to convert all existing users to using
+> software nodes actually attached to the GPIO devices they represent.
 > 
-> Override ARCH_DMA_MINALIGN to use L1_CACHE_BYTES, which is 16 bytes for
-> RT288X and 32 bytes for other Ralink SoCs.
+> In order to use an attached software node with the GPIO controller on
+> rb532: convert the GPIO module into a real platform device, provide
+> platform device info for it in device.c and assign the software node
+> using its swnode field.
 > 
-> Signed-off-by: Qingfang Deng <qingfang.deng@linux.dev>
+> The software node will get inherited by the GPIO chip from the parent
+> platform device in devm_gpiochip_add_data() as we don't set the fwnode
+> using any other of the mechanisms.
+> 
+> Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>
 > ---
->  arch/mips/include/asm/mach-ralink/kmalloc.h | 9 +++++++++
->  1 file changed, 9 insertions(+)
->  create mode 100644 arch/mips/include/asm/mach-ralink/kmalloc.h
+>  arch/mips/rb532/devices.c | 32 ++++++++++++++++++++++++++------
+>  arch/mips/rb532/gpio.c    | 41 +++++++++++++++++++++--------------------
+>  2 files changed, 47 insertions(+), 26 deletions(-)
 
 applied to mips-next
 
