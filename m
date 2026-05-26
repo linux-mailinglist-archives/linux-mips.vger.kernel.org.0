@@ -1,47 +1,47 @@
-Return-Path: <linux-mips+bounces-14769-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-14763-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id IIwBDLizFWpCYQcAu9opvQ
-	(envelope-from <linux-mips+bounces-14769-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Tue, 26 May 2026 16:52:40 +0200
+	id 2E+uBoKzFWpxYAcAu9opvQ
+	(envelope-from <linux-mips+bounces-14763-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Tue, 26 May 2026 16:51:46 +0200
 X-Original-To: lists+linux-mips@lfdr.de
 Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id D32865D7FCB
-	for <lists+linux-mips@lfdr.de>; Tue, 26 May 2026 16:52:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id AF09C5D7F61
+	for <lists+linux-mips@lfdr.de>; Tue, 26 May 2026 16:51:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 1C2113017E4C
-	for <lists+linux-mips@lfdr.de>; Tue, 26 May 2026 14:51:42 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id C2605301889D
+	for <lists+linux-mips@lfdr.de>; Tue, 26 May 2026 14:51:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 17EF73FFAD1;
-	Tue, 26 May 2026 14:51:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D668B3FFAD6;
+	Tue, 26 May 2026 14:51:11 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
 Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A52D33FFAC9;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8D3623FFABF;
 	Tue, 26 May 2026 14:51:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.175.24.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779807073; cv=none; b=cm9YNnyZFBVst48hkehHlZGGd+mw9909//YRq6sNrnDMLTilHWArvjQoV9Z8i7peTna0N/37cge+zsALosWXaT5UJzgeqFiN0t/KHCcpZmDVYOArDqJX0cxM3eTojpm/5SYk9MBxwyJISGkMcR9paVqoMv1Wll6PghdfTd60RAM=
+	t=1779807071; cv=none; b=ptf9OoyFMq6UBISoW+CKjA8dycq9hrDQShgxXQZDF0tdT82R+Tpp2eoQAaMpbxoNghVQtyHxsOrsm/qIZpbMYmUPdsVNzTKN1YKnqxzrE9ZcoIgQSFxWUl1KWdAStVuYFZxYXHodeiK2cmvZzsrmqTl1O8PLUVyEIvQkO8bGDWw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779807073; c=relaxed/simple;
-	bh=BnM24aUmG4hUkWM1tGDWc1bPkuyqU4HNs4flfH0eTCk=;
+	s=arc-20240116; t=1779807071; c=relaxed/simple;
+	bh=cWenXFLMKmeC3y25U4Fhwh7pccjCy2v6ru88HiYYOrg=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=UDhtjQXZqW5L18ly+7cHrLVLpLRequL6ZzjAhidgAb/y5HDTOhubJR+AwFk6n7Sy2fAwS/xv9ki7cAEuhDjzmc4n+wQde/AuiDt4o/BgxUtUm7qHwxw3mxnIjTFBBDj2Ax9HFhp2juYL83vBSAgEorg7qtGTl3T06Cp9X+fFnIE=
+	 Content-Type:Content-Disposition:In-Reply-To; b=hOx7W5R79xETaHZfYL7eZOUyACAaONaOmh2a8qq7H6P6tVaX1wm65B1YJL8QrT9mt80opRgo3oCa1N/waKv++6lEPp+mPtGpxadsdNU+z8dGnZzm6h254LcpEFZYggunfXwvCDVN5YL78hzZmw6WTF/CeLksfqKPZwvTFBN1wKM=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de; spf=pass smtp.mailfrom=alpha.franken.de; arc=none smtp.client-ip=193.175.24.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alpha.franken.de
 Received: from uucp by elvis.franken.de with local-rmail (Exim 3.36 #1)
-	id 1wRt7c-00015J-00; Tue, 26 May 2026 16:51:08 +0200
+	id 1wRt7c-00015T-00; Tue, 26 May 2026 16:51:08 +0200
 Received: by alpha.franken.de (Postfix, from userid 1000)
-	id 9F760C064C; Tue, 26 May 2026 16:43:47 +0200 (CEST)
-Date: Tue, 26 May 2026 16:43:47 +0200
+	id 7E58EC06AC; Tue, 26 May 2026 16:44:14 +0200 (CEST)
+Date: Tue, 26 May 2026 16:44:14 +0200
 From: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To: Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>
-Cc: brgl@kernel.org, linux-mips@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] MIPS: RB532: serial: statify setup_serial_port()
-Message-ID: <ahWxo4OPnCtG970H@alpha.franken.de>
-References: <20260430112410.65986-1-bartosz.golaszewski@oss.qualcomm.com>
+To: "Maciej W. Rozycki" <macro@orcam.me.uk>
+Cc: linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] MIPS: Fix big-endian stack argument fetching in o32
+ wrapper
+Message-ID: <ahWxvsiqlhwYFrkw@alpha.franken.de>
+References: <alpine.DEB.2.21.2604302350440.38805@angie.orcam.me.uk>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -50,7 +50,7 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260430112410.65986-1-bartosz.golaszewski@oss.qualcomm.com>
+In-Reply-To: <alpine.DEB.2.21.2604302350440.38805@angie.orcam.me.uk>
 X-Spamd-Result: default: False [-1.46 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
@@ -59,7 +59,7 @@ X-Spamd-Result: default: False [-1.46 / 15.00];
 	HAS_LIST_UNSUB(-0.01)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	TAGGED_RCPT(0.00)[linux-mips];
-	NEURAL_HAM(-0.00)[-0.989];
+	NEURAL_HAM(-0.00)[-0.988];
 	MISSING_XM_UA(0.00)[];
 	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
 	TO_DN_SOME(0.00)[];
@@ -69,40 +69,50 @@ X-Spamd-Result: default: False [-1.46 / 15.00];
 	DMARC_NA(0.00)[franken.de];
 	FROM_NEQ_ENVFROM(0.00)[tsbogend@alpha.franken.de,linux-mips@vger.kernel.org];
 	FROM_HAS_DN(0.00)[];
-	RCPT_COUNT_THREE(0.00)[4];
+	RCPT_COUNT_THREE(0.00)[3];
 	PRECEDENCE_BULK(0.00)[];
-	TAGGED_FROM(0.00)[bounces-14769-lists,linux-mips=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-14763-lists,linux-mips=lfdr.de];
 	RCVD_COUNT_FIVE(0.00)[5];
 	RCVD_TLS_LAST(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[]
-X-Rspamd-Queue-Id: D32865D7FCB
+X-Rspamd-Queue-Id: AF09C5D7F61
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On Thu, Apr 30, 2026 at 01:24:10PM +0200, Bartosz Golaszewski wrote:
-> This function is not used outside of this compilation unit so make it
-> static.
+On Sat, May 02, 2026 at 12:14:20AM +0100, Maciej W. Rozycki wrote:
+> Fix an issue in call_o32() where the upper 32-bit half of incoming n64 
+> stack arguments is fetched and used for outgoing o32 stack arguments on 
+> big-endian platforms.
 > 
-> Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>
+> This code was adapted from arch/mips/dec/prom/call_o32.S which was meant 
+> for a little-endian platform only and therefore using 32-bit loads from 
+> 64-bit stack slot locations holding incoming stack arguments resulted in 
+> correct values being retrieved for data that is expected to be 32-bit.  
+> 
+> This works on little-endian platforms where the lower 32-bit half of the 
+> 64-bit value is located at every 64-bit stack slot location.  However on 
+> big-endian platforms the lower 32-bit half is instead located at offset 
+> 4 from every 64-bit stack slot location.
+> 
+> So to fix the issue the offset of 4 would have to be used on big-endian 
+> platforms only, or alternatively a 64-bit load from the 64-bit stack 
+> slot location can be used across the board, as the subsequent 32-bit 
+> store to the corresponding outgoing stack argument slot will correctly 
+> truncate the value and cause no unpredictable result.  We already take 
+> advantage of this architectural feature for the incoming arguments held 
+> in $a6 and $a7 registers, since the o32 wrapper does not know how many 
+> incoming arguments there are and consequently propagates incoming data 
+> which may not be 32-bit.
+> 
+> Since this code is generally supposed to be used with the stack located 
+> in cached memory there is no extra overhead expected for 64-bit loads as 
+> opposed to 32-bit ones, so pick this variant for code simplicity.
+> 
+> Fixes: 231a35d37293 ("[MIPS] RM: Collected changes")
+> Signed-off-by: Maciej W. Rozycki <macro@orcam.me.uk>
 > ---
->  arch/mips/rb532/serial.c | 2 +-
+>  arch/mips/fw/lib/call_o32.S |    2 +-
 >  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/arch/mips/rb532/serial.c b/arch/mips/rb532/serial.c
-> index 70482540b3dbc..228eff07e5e85 100644
-> --- a/arch/mips/rb532/serial.c
-> +++ b/arch/mips/rb532/serial.c
-> @@ -45,7 +45,7 @@ static struct uart_port rb532_uart = {
->  	.regshift = 2
->  };
->  
-> -int __init setup_serial_port(void)
-> +static int __init setup_serial_port(void)
->  {
->  	rb532_uart.uartclk = idt_cpu_freq;
->  
-> -- 
-> 2.47.3
 
 applied to mips-next
 
