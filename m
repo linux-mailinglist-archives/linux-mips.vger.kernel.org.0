@@ -1,157 +1,211 @@
-Return-Path: <linux-mips+bounces-14804-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-14805-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id aFg8JlYRF2o12wcAu9opvQ
-	(envelope-from <linux-mips+bounces-14804-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Wed, 27 May 2026 17:44:22 +0200
+	id iPmWLdgTF2pf3QcAu9opvQ
+	(envelope-from <linux-mips+bounces-14805-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Wed, 27 May 2026 17:55:04 +0200
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id E90095E7149
-	for <lists+linux-mips@lfdr.de>; Wed, 27 May 2026 17:44:21 +0200 (CEST)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5B3F05E73F4
+	for <lists+linux-mips@lfdr.de>; Wed, 27 May 2026 17:55:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 61AAC30932A7
-	for <lists+linux-mips@lfdr.de>; Wed, 27 May 2026 15:37:25 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 9F1A130336DA
+	for <lists+linux-mips@lfdr.de>; Wed, 27 May 2026 15:54:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 56E9C438FF3;
-	Wed, 27 May 2026 15:36:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DD9E037FF5A;
+	Wed, 27 May 2026 15:54:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CO7NzX0a"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="MOZLMcq8"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 292623D1AB5;
-	Wed, 27 May 2026 15:36:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7B493803D1;
+	Wed, 27 May 2026 15:54:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779896174; cv=none; b=j9XX/fvTI0gX1PzuGDBXPmh7aV0ahfxW0UB6Mmgl6NM+ksAqcrbY6xZA0lQ8hUt7V8BYnrRjJmXITegYBSbA8hCOdKYoPbLtSpbIDU0Qi4sQC3JV3TFyITH7K8ERl8ONDwgRhJo5xueMEW/C6/mVVKZTG9Qgfbuy9mgMgcGQbPw=
+	t=1779897296; cv=none; b=rnUbkCZ4TE74LFuHZz9HBoUGSclbIPr1UsYQ6d5PEDH1BMd2H4FXxik6LnamcUER7/+5fSMxleWyd03b8pSaRiiPys9LoOhCiDQpMfeZf5HVs8Dd2d3TYqk11QEj8OfTkgA5IrvA3vmO1SbXJ557wxKrHt3gpmL11lS/DnVPV0k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779896174; c=relaxed/simple;
-	bh=Ovp+K4FnIuO8i9CGXqYhA/YWXaEutFtXl4uEiD4jDVo=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=Ue8iK9Zzh52GhsOl0J+eHlvIY2lY4jPck17H65GG6vVxTgNlwbFpLaYJV6GWjWvMT8lAelD99yPrz4XEQiv+ernDbcJeq4NWxxCZI1KUPoDF7gSdldJEOXlScvKPqsFZvCx8nWegkd61b+G7dqhkrm+01dvEqOGVEknnZneW878=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CO7NzX0a; arc=none smtp.client-ip=100.103.45.18
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 142B81F000E9;
-	Wed, 27 May 2026 15:36:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1779896172;
-	bh=tyMTaumHRjBinJdhP3tD87rZtnu90BQDmn//aI/sKmo=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Date;
-	b=CO7NzX0aE0E+SHj+82S+F/U8cAQzuwA8hkUPUNhJLQ2phlY3RB4OcpfkpOC+dW4us
-	 qjbQuYT4T45deTaGv3FFA8SHPEUNFhx94kaWnwwyDuaie2bUyyAN0N5GPX9GmjjbT8
-	 yx2NyadlN03P0nR703Zi77z6eXdY9EVjHiC85zMb1twHn3rLnsS+bt/vbWFG2XZ5J/
-	 7fNu4YopxFJ1v2ZqzTS3CpuuX1QzQ6zn1hKuaz5vYmfBQaCyMiCiE685vOoS+B+oKi
-	 t8mW6mahwlddIi1E01MbB0ycvEVyQW350njEZzE+LYQZHRbCx9c6rKFsuimdasqz1e
-	 VM+dsl4Rrhleg==
-From: Lee Jones <lee@kernel.org>
-To: Lee Jones <lee@kernel.org>, 
- Mark Brown <broonie@opensource.wolfsonmicro.com>, 
- Thierry Reding <thierry.reding@avionic-design.de>, 
- Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>, 
- Andrew Lunn <andrew+netdev@lunn.ch>, 
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
- Srinivas Kandagatla <srini@kernel.org>, 
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
- Vinod Koul <vkoul@kernel.org>, "Rafael J. Wysocki" <rafael@kernel.org>, 
- Danilo Krummrich <dakr@kernel.org>, Rob Herring <robh@kernel.org>, 
- Saravana Kannan <saravanak@kernel.org>, 
- Madhavan Srinivasan <maddy@linux.ibm.com>, 
- Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>, 
- "Christophe Leroy (CS GROUP)" <chleroy@kernel.org>, 
- Andi Shyti <andi.shyti@kernel.org>, 
- Andy Shevchenko <andriy.shevchenko@linux.intel.com>, 
- Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>, 
- Robin Murphy <robin.murphy@arm.com>, Doug Berger <opendmb@gmail.com>, 
- Florian Fainelli <florian.fainelli@broadcom.com>, 
- Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>, 
- Ulf Hansson <ulfh@kernel.org>, Frank Li <Frank.Li@nxp.com>, 
- Sascha Hauer <s.hauer@pengutronix.de>, 
- Pengutronix Kernel Team <kernel@pengutronix.de>, 
- Fabio Estevam <festevam@gmail.com>, Matthew Brost <matthew.brost@intel.com>, 
- =?utf-8?q?Thomas_Hellstr=C3=B6m?= <thomas.hellstrom@linux.intel.com>, 
- Rodrigo Vivi <rodrigo.vivi@intel.com>, David Airlie <airlied@gmail.com>, 
- Simona Vetter <simona@ffwll.ch>, Peter Chen <peter.chen@kernel.org>, 
- Paul Cercueil <paul@crapouillou.net>, Bin Liu <b-liu@ti.com>, 
- Philipp Zabel <p.zabel@pengutronix.de>, 
- Maximilian Luz <luzmaximilian@gmail.com>, Hans de Goede <hansg@kernel.org>, 
- =?utf-8?q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>, 
- Krzysztof Kozlowski <krzk@kernel.org>, 
- Benjamin Herrenschmidt <benh@kernel.crashing.org>, 
- Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>
-Cc: brgl@kernel.org, linux-kernel@vger.kernel.org, netdev@vger.kernel.org, 
- linux-arm-msm@vger.kernel.org, linux-sound@vger.kernel.org, 
- driver-core@lists.linux.dev, devicetree@vger.kernel.org, 
- linuxppc-dev@lists.ozlabs.org, linux-i2c@vger.kernel.org, 
- iommu@lists.linux.dev, linux-pm@vger.kernel.org, imx@lists.linux.dev, 
- linux-arm-kernel@lists.infradead.org, intel-xe@lists.freedesktop.org, 
- dri-devel@lists.freedesktop.org, linux-usb@vger.kernel.org, 
- linux-mips@vger.kernel.org, platform-driver-x86@vger.kernel.org, 
- stable@vger.kernel.org
-In-Reply-To: <20260521-pdev-fwnode-ref-v1-1-88c324a1b8d2@oss.qualcomm.com>
-References: <20260521-pdev-fwnode-ref-v1-1-88c324a1b8d2@oss.qualcomm.com>
-Subject: Re: (subset) [PATCH 01/23] mfd: tps6586x: fix OF node refcount
-Message-Id: <177989616081.737612.15563215651036638106.b4-ty@b4>
-Date: Wed, 27 May 2026 16:36:00 +0100
+	s=arc-20240116; t=1779897296; c=relaxed/simple;
+	bh=4rxWlRhuXflcFfsFtKVEugiUA30HpjLBuNuDdkZPplk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=LNXY11uGiyRF8IiFbewDkIxFCFlnsfAbGtiOFdCST3rDwMMLxgNWKQlTCyu+3orjqWctgEJ+cjEwr/5BckUZivPqGB0yOc1eQ35EhGQorRgvOBU0f+B6q6NVDBxNVLEMjc8N+mK/kaAjfC7YNZVZlz8TaPGaTMavcnyhBHM29LY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=MOZLMcq8; arc=none smtp.client-ip=90.155.92.199
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=4rxWlRhuXflcFfsFtKVEugiUA30HpjLBuNuDdkZPplk=; b=MOZLMcq8DX7B31KbNM36uzJzmA
+	4QcW9ClstTXLuYRBVgyGxZf1kqD6OkVcuwTRaaA8ham35soKrM6viojqCgIZtW08cx1nsqgBvINUg
+	HpGernC7vyt2EtMxDWUo97v8IwYRoy/gKbEH33XBSYZnw1YsSk2SyAywEdWmF/Qy80COv90tie95v
+	z/gMxNJ1nQVYxqlszwF4ioEGSjhT8woJTVCuWXKblLFSGoOGSH9eGjK/kNmFUdREPARzD1h8cPGhm
+	MUYVNs+tNyckmTKaP2qf59AHlC+DO1cO7D4F7gLDNs8QG4nKes0eq90w265ON9L/cMd/VgDJlPj7T
+	srIYCZag==;
+Received: from 2001-1c00-8d85-4b00-266e-96ff-fe07-7dcc.cable.dynamic.v6.ziggo.nl ([2001:1c00:8d85:4b00:266e:96ff:fe07:7dcc] helo=noisy.programming.kicks-ass.net)
+	by desiato.infradead.org with esmtpsa (Exim 4.99.1 #2 (Red Hat Linux))
+	id 1wSGa5-0000000EPMa-0BdH;
+	Wed, 27 May 2026 15:54:05 +0000
+Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
+	id 1F686300385; Wed, 27 May 2026 17:54:04 +0200 (CEST)
+Date: Wed, 27 May 2026 17:54:04 +0200
+From: Peter Zijlstra <peterz@infradead.org>
+To: Aaron Tomlin <atomlin@atomlin.com>
+Cc: tsbogend@alpha.franken.de, paul@paul-moore.com, jmorris@namei.org,
+	serge@hallyn.com, mingo@redhat.com, juri.lelli@redhat.com,
+	vincent.guittot@linaro.org, stephen.smalley.work@gmail.com,
+	casey@schaufler-ca.com, longman@redhat.com, tj@kernel.org,
+	hannes@cmpxchg.org, mkoutny@suse.com, chenridong@huaweicloud.com,
+	dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+	mgorman@suse.de, vschneid@redhat.com, kprateek.nayak@amd.com,
+	omosnace@redhat.com, kees@kernel.org, neelx@suse.com, sean@ashe.io,
+	chjohnst@gmail.com, steve@abita.co, mproche@gmail.com,
+	nick.lange@gmail.com, cgroups@vger.kernel.org,
+	linux-mips@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+	linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3] security: Expand task_setscheduler LSM hook to
+ include CPU affinity mask
+Message-ID: <20260527155404.GV3126523@noisy.programming.kicks-ass.net>
+References: <20260526142838.774711-1-atomlin@atomlin.com>
+ <20260527085221.GQ3126523@noisy.programming.kicks-ass.net>
+ <bgjagepcfb7gz6jawatu6kpfmecw46gwg5cvb6r7dl3dn7bt4l@rtymdaslx7ef>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Mailer: b4 0.16-dev-ad80c
-X-Spamd-Result: default: False [-0.16 / 15.00];
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="tm1INNgsBeticMLK"
+Content-Disposition: inline
+In-Reply-To: <bgjagepcfb7gz6jawatu6kpfmecw46gwg5cvb6r7dl3dn7bt4l@rtymdaslx7ef>
+X-Spamd-Result: default: False [-2.76 / 15.00];
+	SIGNED_PGP(-2.00)[];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	MID_RHS_NOT_FQDN(0.50)[];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20260515];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	DMARC_POLICY_ALLOW(-0.50)[infradead.org,none];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
+	R_DKIM_ALLOW(-0.20)[infradead.org:s=desiato.20200630];
+	MIME_GOOD(-0.20)[multipart/signed,text/plain];
 	MAILLIST(-0.15)[generic];
-	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-14804-lists,linux-mips=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	FREEMAIL_TO(0.00)[kernel.org,opensource.wolfsonmicro.com,avionic-design.de,gmail.com,lunn.ch,davemloft.net,google.com,redhat.com,linuxfoundation.org,linux.ibm.com,ellerman.id.au,linux.intel.com,8bytes.org,arm.com,broadcom.com,nxp.com,pengutronix.de,intel.com,ffwll.ch,crapouillou.net,ti.com,kernel.crashing.org,oss.qualcomm.com];
-	MIME_TRACE(0.00)[0:+];
+	FREEMAIL_CC(0.00)[alpha.franken.de,paul-moore.com,namei.org,hallyn.com,redhat.com,linaro.org,gmail.com,schaufler-ca.com,kernel.org,cmpxchg.org,suse.com,huaweicloud.com,arm.com,goodmis.org,google.com,suse.de,amd.com,ashe.io,abita.co,vger.kernel.org];
 	FROM_HAS_DN(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	TO_DN_SOME(0.00)[];
-	RCPT_COUNT_GT_50(0.00)[67];
+	RCVD_TLS_LAST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-14805-lists,linux-mips=lfdr.de];
+	MIME_TRACE(0.00)[0:+,1:+,2:~];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	DKIM_TRACE(0.00)[infradead.org:+];
+	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
+	MISSING_XM_UA(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[lee@kernel.org,linux-mips@vger.kernel.org];
-	DKIM_TRACE(0.00)[kernel.org:+];
+	FROM_NEQ_ENVFROM(0.00)[peterz@infradead.org,linux-mips@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[linux-mips,netdev];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo]
-X-Rspamd-Queue-Id: E90095E7149
+	TAGGED_RCPT(0.00)[linux-mips];
+	RCPT_COUNT_TWELVE(0.00)[35];
+	TO_DN_SOME(0.00)[]
+X-Rspamd-Queue-Id: 5B3F05E73F4
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On Thu, 21 May 2026 10:36:24 +0200, Bartosz Golaszewski wrote:
-> Platform devices created with platform_device_alloc() call
-> platform_device_release() when the last reference to the device's
-> kobject is dropped. This function calls of_node_put() unconditionally.
-> This works fine for devices created with platform_device_register_full()
-> but users of the split approach (platform_device_alloc() +
-> platform_device_add()) must bump the reference of the of_node they
-> assign manually. Add the missing call to of_node_get().
-> 
-> [...]
 
-Applied, thanks!
+--tm1INNgsBeticMLK
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-[01/23] mfd: tps6586x: fix OF node refcount
-        commit: 60a28e85ba5c0707b743857a3304107f2f9d0482
+On Wed, May 27, 2026 at 11:05:17AM -0400, Aaron Tomlin wrote:
+> On Wed, May 27, 2026 at 10:52:21AM +0200, Peter Zijlstra wrote:
+> > I'm not sure I really buy the Real-Time argument here; that really feels
+> > like a straw man. Real-Time will need to account for the shared resource
+> > usage inherent in using a single kernel image across the CPUs, affinity
+> > alone does not Real-Time make in any way shape or form.
+> >=20
+> > And the compromised task vs crypto thing feels like it wants sandboxing,
+> > but wasn't that what seccomp is for, rather than lsm?
+> >=20
+> > So while I don't think I object very much to the patch, I do find the
+> > whole Changelog to be utterly questionable. Which makes me very
+> > suspicious as to wtf this is actually for.
+>=20
+> Hi Peter,
+>=20
+> Thank you for the blunt and honest feedback.
+>=20
+> You are completely right to call out the changelog. It obscured the actual
+> practical use case. I will rewrite the commit message to drop those
+> statements.
+>=20
+> To answer your question regarding seccomp: seccomp-bpf is strictly limited
+> to inspecting syscall arguments by value at the syscall entry boundary. F=
+or
+> sched_setaffinity(), the mask is passed as a "__user" pointer. Seccomp
+> cannot safely dereference this pointer to inspect the requested CPU bits.
 
---
-Lee Jones [李琼斯]
+There has been work to allow tracepoints, specifically syscall
+tracepoints, to access the syscall arguments and to do exactly this
+(deref user pointers). I *think* most of that work landed, but I might
+be mistaken.
 
+Would this then not also allow seccomp-bpf to access these?
+
+(while writing this, I wonder if that would then not be subject to
+TOCTOU)
+
+> To actually evaluate which CPUs a task is trying to pin to, we must
+> evaluate the mask after copy_from_user() has safely brought it into kernel
+> memory.
+
+Right this.
+
+> The LSM hook is currently the only infrastructure positioned to do
+> this safely for eBPF-driven security policies.
+
+But is that correct use of LSM? Or is that working around short comings
+elsewhere?
+
+I realize that bpf people rarely care about things like this, they just
+want to hack their thing and will take any hook they can get. But I feel
+people *should* care.
+
+> The actual use case here is multi-tenant workload isolation and visibilit=
+y.
+> Passing the evaluated cpumask to the BPF LSM allows operators to write a
+> simple eBPF program to detect spatial boundary overlaps (e.g., logging an
+> event if a requested mask intersects with platform-reserved cores).
+>=20
+> If this justification makes more sense, I will focus strictly on the
+> seccomp pointer limitations and multi-tenant workload isolation.
+
+I suppose it does, my only remaining question is if that is indeed
+proper use of LSM -- I really don't know much about that.
+
+
+--tm1INNgsBeticMLK
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEv3OU3/byMaA0LqWJdkfhpEvA5LoFAmoXE5QACgkQdkfhpEvA
+5LoeHQ/+MTZkJvg0y4B5A5uc2/yn7DCD8uHFDSQg2GviwzzreXPFiUJ7xsMl27aC
+gWvHrYtdt30AYrYApmdtWiFttFG3KbX0ytIZZt7GKRCBq2tQCcoz+w+iR1/HvkPy
+zetCM7hsvlUoB0niBn+09pgk1Qv8yPDUJDenIdNgj/7IduX8T+3vmcWDftKBgudt
+0u+ZgolTrYqWXAkewJF+1wLanXq8M+dIshqiBn3U2LCI2B+B4StlNtxnbjjo/mu0
+EOb73x4pKGxlvrVfA1LkmslD2tTkvdVdIYGccTSwN/EtvwUY8DAL8BXn3c63A9R0
+PHR18s9SOpTRyija7ekEyE5EAZhoGUDz+px6mF963+PhQKrnoEeik+HP/m/DFxjk
+0hE3Dc9oP5LrfkWDLo9u7TV9ygBLBTgGPVw2fNHrE2ojQap0gvGgzO9I78Ro5pkQ
+h2X9BYIz/aOpi4XaIakO/ZBYyg/7K0ENMzaUqXCun64aqnu5jNW4AKYrQC2iGRPs
+W97qhxhChQhGmToFNoxy8/MTUdycr/Oa8qEypTjRoz93Px+d2BlrtVR05ySG+3Q8
+ex0CgPIm9xh+AbJoMUUA04mQNV4hDH6QwFb1UMBnuORHXF/u1EofINy/qGcBxUmf
+uzHZNo7skAzJnjxUh0uE3ZkVpWrMPopndllixneoonkHIzdIGZg=
+=GtEU
+-----END PGP SIGNATURE-----
+
+--tm1INNgsBeticMLK--
 
