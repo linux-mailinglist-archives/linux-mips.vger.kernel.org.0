@@ -1,206 +1,153 @@
-Return-Path: <linux-mips+bounces-14807-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-14808-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id yEEpGEhNF2r7AAgAu9opvQ
-	(envelope-from <linux-mips+bounces-14807-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Wed, 27 May 2026 22:00:08 +0200
+	id GCOFCFZvF2pDFAgAu9opvQ
+	(envelope-from <linux-mips+bounces-14808-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Thu, 28 May 2026 00:25:26 +0200
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id 531B75E9D64
-	for <lists+linux-mips@lfdr.de>; Wed, 27 May 2026 22:00:06 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 916745EAA75
+	for <lists+linux-mips@lfdr.de>; Thu, 28 May 2026 00:25:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id D09B53023C06
-	for <lists+linux-mips@lfdr.de>; Wed, 27 May 2026 19:59:33 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 844BA3019451
+	for <lists+linux-mips@lfdr.de>; Wed, 27 May 2026 22:25:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 85BA93B19B4;
-	Wed, 27 May 2026 19:59:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EAEFA3C1F37;
+	Wed, 27 May 2026 22:25:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="ELTN3QR6"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CgB4luU9"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f178.google.com (mail-pg1-f178.google.com [209.85.215.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4183E2F3C26;
-	Wed, 27 May 2026 19:59:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADCE134F474
+	for <linux-mips@vger.kernel.org>; Wed, 27 May 2026 22:25:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779911972; cv=none; b=dHKixEKKKrHCZDAR/a0LUKXrI9REBrkX9nbyC3YUnmEXke6ab/pLHDq9ZAvhm8Clcz3WZJtMGZ2aEK1bySiLbuXEVLeisLhF4hoinaM9kYqF7OMxsvxTQTdeDBHF8IdASh7M2ze/IQQqQTS8Icq3OZTh/9coY2etJ0GOntDvuwE=
+	t=1779920723; cv=none; b=PbQElco4qX2nbe6V7Nu+gjbAqOJXNs6gprRsOW6/WAc9rYReLmhaJ/7Ca+BiQpZIW2wUwTjsSbxhby+Cf3rUrIfKhL3+FCVA6xn2T++5+LfobPmLKdLv0f9pSo4YXun5gpFz6tGFAOVniwnuiekI7aHSXd9Vy9tw17zOf+VdolQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779911972; c=relaxed/simple;
-	bh=dGLzAB7+QWK1Gwqw39KPEq+ogXaxGhIVT7a7pkAe2yE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=nS4p6eq1l4xNNY+JFbkNDNQMpjNpNgPJ+zujRRbpIzHJG+qoMlVWwOFEMwoWV3BbpQBnd+UEgUt7yh0WHXkTfbMwIBGYqNY5r9vhE682Yl+ybPCzzogoMfiUBQE3mZoE3MaDFk4qLdGs4ByTgK588xPaO0hwq0Bv42OfbxUwQKM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=ELTN3QR6; arc=none smtp.client-ip=90.155.92.199
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=dGLzAB7+QWK1Gwqw39KPEq+ogXaxGhIVT7a7pkAe2yE=; b=ELTN3QR6sMG44bP9QyVSBeLylu
-	8lRV9ni3yRDtklEwyJmFsAeypKQNkkXvFE7GlkSBXjY8sF/U8CFy1tQ0mpAusLZpZTEKzCjOAHypl
-	GjVqkLWx5uykPyxnm3NfS31r4/wADnQww1ntE/gYwJhlEmn9nu9cFgs9yZxE/VFUBQbYqHo0LjUNs
-	8sqjWNdLqqRvj8nf9ADfisaUJnTzne+bIbnMIP9byI2TAhGaMOlwKcruGBWP9liQQtllCFNevGLBn
-	Cp5biHaoWTFBUbgy3liMkWfM1OVjdTb4G7f5ExW9ApcDzqwlUmizXFDn1xd9nD+nSf5R8DJYOZB/J
-	4aRGLMyg==;
-Received: from 2001-1c00-8d85-4b00-266e-96ff-fe07-7dcc.cable.dynamic.v6.ziggo.nl ([2001:1c00:8d85:4b00:266e:96ff:fe07:7dcc] helo=noisy.programming.kicks-ass.net)
-	by desiato.infradead.org with esmtpsa (Exim 4.99.1 #2 (Red Hat Linux))
-	id 1wSKP6-0000000ErAf-0irf;
-	Wed, 27 May 2026 19:59:00 +0000
-Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
-	id D3CC6300CB5; Wed, 27 May 2026 21:58:58 +0200 (CEST)
-Date: Wed, 27 May 2026 21:58:58 +0200
-From: Peter Zijlstra <peterz@infradead.org>
-To: Aaron Tomlin <atomlin@atomlin.com>
-Cc: tsbogend@alpha.franken.de, paul@paul-moore.com, jmorris@namei.org,
-	serge@hallyn.com, mingo@redhat.com, juri.lelli@redhat.com,
-	vincent.guittot@linaro.org, stephen.smalley.work@gmail.com,
-	casey@schaufler-ca.com, longman@redhat.com, tj@kernel.org,
-	hannes@cmpxchg.org, mkoutny@suse.com, chenridong@huaweicloud.com,
-	dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-	mgorman@suse.de, vschneid@redhat.com, kprateek.nayak@amd.com,
-	omosnace@redhat.com, kees@kernel.org, neelx@suse.com, sean@ashe.io,
-	chjohnst@gmail.com, steve@abita.co, mproche@gmail.com,
-	nick.lange@gmail.com, cgroups@vger.kernel.org,
-	linux-mips@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-	linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] security: Expand task_setscheduler LSM hook to
- include CPU affinity mask
-Message-ID: <20260527195858.GC3493090@noisy.programming.kicks-ass.net>
-References: <20260526142838.774711-1-atomlin@atomlin.com>
- <20260527085221.GQ3126523@noisy.programming.kicks-ass.net>
- <bgjagepcfb7gz6jawatu6kpfmecw46gwg5cvb6r7dl3dn7bt4l@rtymdaslx7ef>
- <20260527155404.GV3126523@noisy.programming.kicks-ass.net>
- <ov33cu2wosubbfufcmfyoinfatecskjgmkvqyit33komlcla2d@2qgj45724bql>
+	s=arc-20240116; t=1779920723; c=relaxed/simple;
+	bh=8Oui1g/t3CEcwouE9CYohY0ZFQnGESUjzQFNTcFUoII=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=MO3lo/+gdyMBBDt9/LFqS6dT3Trpe/XctA0Znl00XQSzrKdGbucyNhaoGa/r8el22KC9gZHOvNOhD7bNHfBu4okU71xMX6sW0F1z6EfcH3NOwdCW+ixQdClZPVqobmitDHef6fk5UKM5QvMZ5Ig2/Xx8xLs+aFeu9iUFAkxYMBk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CgB4luU9; arc=none smtp.client-ip=209.85.215.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pg1-f178.google.com with SMTP id 41be03b00d2f7-c802803ac17so5071214a12.1
+        for <linux-mips@vger.kernel.org>; Wed, 27 May 2026 15:25:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1779920722; x=1780525522; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=LkkSrN05A0yihgCNeGvH3o3kC9AabElowNNwozsOF+w=;
+        b=CgB4luU9piCAjy67jteaC1GDYKG7JKuViSTPLSpG/s88tc8EuPX4ZUzdTytQAPDtdK
+         6i+Rc58tgG/aa8zQQU0P2i+1phQxIbRIlIlQvChpa7THrVt3+Y7xzWHisLo+zOpABA94
+         xYWO4PbFqK/tcX/35FZK5qdqNBPYO+2bL69nCGvG4G2Pg9INL+srlz7AFQS3qnaFmnrK
+         YND6FzXz8boBqitE7fkuBQ4ZdYMHTwZcs2ElqUfaGiTBnzrQGuyP9oVmyIsKkz8m6rnI
+         ekEFp4UX4LnIxiF3wAdbln7Temh7DnjWpVuKvweDy/p0XaFgoPg9WrS8NdYL6KENWWeE
+         7s5w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1779920722; x=1780525522;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=LkkSrN05A0yihgCNeGvH3o3kC9AabElowNNwozsOF+w=;
+        b=P2BkSpRH2bzbVPSxyNdM2IEAGBDk/d2mSZFBim5oCDFmPh/4aI8jx2XQS0ashe8oHb
+         oZ0JQMNzCL3PoDymh99ZD6RpGkBojYvuXPAWELQrlKtXenRWyJcEPmtxSWuCK5hlWN1e
+         RC8S494Wm06vwzXZ80G9f1PkzYenoPtFaUfJFeN5zzF7Li9SRuv2/YOqlnZEMw6SoK7Z
+         nSr7BNM/8yiKEyF/tjMBSTKvUBiUoprkqLoy9AokzOo/NqC0YOf0s0AIrY6o5GUwRziE
+         6WcXuj6SzXkQZa5Mbo8DCE2tth5IzkvDvKRZswfTbDCxpQUXCxqKEizeSXrIEmvbJ6d3
+         /aLg==
+X-Gm-Message-State: AOJu0Yw41k0+FLqimBVEzHkOe8gjyE37Tg55Ctyb5fSr+wAaz09/OtRf
+	5ra9OuIlukZpLn4AZHRtJQXwN1nt/ktPBlTLeZ1X932wdmw1GHNXjQWuzMq0bw==
+X-Gm-Gg: Acq92OEdVUqmea/j5XNuAZIctjhwd4unpRa+W5006X0JIpMH0WNzy4I56K2R7j4fRe1
+	sWC1DuYBUA4ObVC5FwLngVtvFsZ4Vd5X9MYc3vJsHjDO3f8snWVucfi+MmKEaYd6BfcX5OhgO6/
+	EBevzvTvBdoW1RNgawNs6wIZQDe671pk4BxJv7iFK/m+aFSFD8JfKFL3zuJDrOrUZ4KqSz2sUJp
+	UdeGD7El3zua18yFAfGaKxsIfogwl+DBQqJki8FdZdslKjN2o2cf1A6v6GamO1Uj1it3Q4lTHZ3
+	3xW9ybzFdiXghMTzimh2c+uD95PEr6oVimJlgfO/7fe+56gMDvu9ziNrZvLuCmLon3ZyVsQKoOU
+	qc9UdjizgAOmJizFg0dENNsJGjzdgmvjMwnM3xMX7z9QkbnUBNnRHm6TFpYEkn9v9AWJY6OsmZw
+	fwft2rkoQ4eU6osAlo0TTT8Fi9BQgWSUmRy4RejWDjr5gIh5IIfuxtvN8IW2c5+FNIQunCVyrKw
+	RLf8m1zgUqj49OyW8gKUgkLpIukkJvRMhFaUPYum1whHw==
+X-Received: by 2002:a05:6a00:8c10:b0:81f:9b4c:81c0 with SMTP id d2e1a72fcca58-8415f58d727mr23120877b3a.41.1779920722005;
+        Wed, 27 May 2026 15:25:22 -0700 (PDT)
+Received: from ryzen ([2601:644:8000:5b5d:7285:c2ff:fe45:8a32])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-841d71f37bcsm3096240b3a.50.2026.05.27.15.25.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 27 May 2026 15:25:21 -0700 (PDT)
+From: Rosen Penev <rosenp@gmail.com>
+To: linux-mips@vger.kernel.org
+Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH] MIPS: ath79: reduce ARCH_DMA_MINALIGN
+Date: Wed, 27 May 2026 15:25:04 -0700
+Message-ID: <20260527222504.17381-1-rosenp@gmail.com>
+X-Mailer: git-send-email 2.54.0
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="o0gcLVW1g+NX126n"
-Content-Disposition: inline
-In-Reply-To: <ov33cu2wosubbfufcmfyoinfatecskjgmkvqyit33komlcla2d@2qgj45724bql>
-X-Spamd-Result: default: False [-2.76 / 15.00];
-	SIGNED_PGP(-2.00)[];
-	SUSPICIOUS_RECIPS(1.50)[];
+Content-Transfer-Encoding: 8bit
+X-Spamd-Result: default: False [-0.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[infradead.org,none];
-	MIME_GOOD(-0.20)[multipart/signed,text/plain];
-	R_DKIM_ALLOW(-0.20)[infradead.org:s=desiato.20200630];
-	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
+	MID_CONTAINS_FROM(1.00)[];
+	R_MISSING_CHARSET(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
 	MAILLIST(-0.15)[generic];
+	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-14807-lists,linux-mips=lfdr.de];
-	FREEMAIL_CC(0.00)[alpha.franken.de,paul-moore.com,namei.org,hallyn.com,redhat.com,linaro.org,gmail.com,schaufler-ca.com,kernel.org,cmpxchg.org,suse.com,huaweicloud.com,arm.com,goodmis.org,google.com,suse.de,amd.com,ashe.io,abita.co,vger.kernel.org];
-	FROM_HAS_DN(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	TO_DN_SOME(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-14808-lists,linux-mips=lfdr.de];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[35];
-	MIME_TRACE(0.00)[0:+,1:+,2:~];
-	DKIM_TRACE(0.00)[infradead.org:+];
-	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
-	MISSING_XM_UA(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
+	DKIM_TRACE(0.00)[gmail.com:+];
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	FREEMAIL_FROM(0.00)[gmail.com];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[peterz@infradead.org,linux-mips@vger.kernel.org];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[rosenp@gmail.com,linux-mips@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	RCPT_COUNT_THREE(0.00)[3];
+	RCVD_COUNT_FIVE(0.00)[5];
+	TAGGED_RCPT(0.00)[linux-mips];
 	NEURAL_HAM(-0.00)[-1.000];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[linux-mips];
-	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:rdns,sin.lore.kernel.org:helo,infradead.org:dkim,noisy.programming.kicks-ass.net:mid]
-X-Rspamd-Queue-Id: 531B75E9D64
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo]
+X-Rspamd-Queue-Id: 916745EAA75
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
+Currently, ath79 SoCs use the default ARCH_DMA_MINALIGN value of 128
+bytes defined in mach-generic. This is excessive for these platforms
+and leads to significant memory waste in kmalloc.
 
---o0gcLVW1g+NX126n
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Override ARCH_DMA_MINALIGN to use L1_CACHE_BYTES, which is 32 bytes for
+ath79 SoCs.
 
-On Wed, May 27, 2026 at 01:41:52PM -0400, Aaron Tomlin wrote:
+Signed-off-by: Rosen Penev <rosenp@gmail.com>
+---
+ arch/mips/include/asm/mach-ath79/kmalloc.h | 7 +++++++
+ 1 file changed, 7 insertions(+)
+ create mode 100644 arch/mips/include/asm/mach-ath79/kmalloc.h
 
-> > > The actual use case here is multi-tenant workload isolation and visib=
-ility.
-> > > Passing the evaluated cpumask to the BPF LSM allows operators to writ=
-e a
-> > > simple eBPF program to detect spatial boundary overlaps (e.g., loggin=
-g an
-> > > event if a requested mask intersects with platform-reserved cores).
+diff --git a/arch/mips/include/asm/mach-ath79/kmalloc.h b/arch/mips/include/asm/mach-ath79/kmalloc.h
+new file mode 100644
+index 000000000000..954f5d6e0dd0
+--- /dev/null
++++ b/arch/mips/include/asm/mach-ath79/kmalloc.h
+@@ -0,0 +1,7 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++#ifndef __ASM_MACH_ATH79_KMALLOC_H
++#define __ASM_MACH_ATH79_KMALLOC_H
++
++#define ARCH_DMA_MINALIGN	L1_CACHE_BYTES
++
++#endif /* __ASM_MACH_ATH79_KMALLOC_H */
+-- 
+2.54.0
 
-Why isn't cgroups good enough to enforce this? If you create a cgroup
-hierarchy per tenant, and constrain them using the cpuset controller,
-they should not be able to escape, rendering this event impossible.
-
-> > > If this justification makes more sense, I will focus strictly on the
-> > > seccomp pointer limitations and multi-tenant workload isolation.
-> >=20
-> > I suppose it does, my only remaining question is if that is indeed
-> > proper use of LSM -- I really don't know much about that.
-> >=20
->=20
-> We are not creating a bespoke BPF hook here; rather, we are rectifying a
-> historical blind spot within the API. The existing LSM hook is invoked
-> during sched_setaffinity(), yet it presently receives only the task_struct
-> pointer. Consequently, the security module is essentially asked, "Should
-> Process A be permitted to alter Process B's affinity?" without being
-> informed of the proposed affinity itself. Providing in_mask simply
-> furnishes the existing hook with the requisite payload to make an informed
-> decision.
-
-It occurs to me that this same argument would require to also pass in
-the new sched_attr, no? That way the LSM can inspect the new policy
-before it becomes effective.
-
-> Were the objective solely one of observability, a tracepoint would indeed
-> be the most suitable mechanism. However, if the aim within multi-tenant
-> environments is active enforcement (namely, safely returning -EPERM to de=
-ny
-> the pinning request before the scheduler applies it), the LSM layer remai=
-ns
-> the standard, architecturally supported gateway for returning syscall
-> errors in accordance with administrative policy.
-
-Indeed; but being constrained in a cpuset cgroup would result in the
-same, no?
-
-> I shall defer to Paul Moore and the LSM maintainers for their final
-> blessing on the LSM API semantics.
-
-Yes, I think that this is an interesting test-case of the LSM purpose.
-
-You seem to be mostly aiming at resource control, something that is
-traditionally done elsewhere.
-
-> Thank you once again for the thorough review and for keeping the
-> architectural boundaries honest.
-
-No problem, just trying to understand myself ;-)
-
---o0gcLVW1g+NX126n
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEv3OU3/byMaA0LqWJdkfhpEvA5LoFAmoXTP0ACgkQdkfhpEvA
-5LoosQ//XlaEdrjiSG7UqRemo3EjCKgYC4JnDuk0gK8Jjj7CT4JOA1uvnNt84hC9
-JUsAkRQ984DrAwXrsIkJuPu3D9NziW+8W7Z9vYczAtTVgptyNIkGP15S6cXFX4yC
-0Qd9bBNG0EhB31fLvONobc8iMpCT1zvCtUYJeq+TYvqKAwitQD8smMUpk1PKgZcf
-Ij5E7jrX4WpvD1GsLZn7vd/vGhGvUXz2WABj1urHNyMK3F6itWDpei8uODKK9cJz
-Ea6GUDNenHPMZbXCCRCDJUVfAPQHeeL+zWF8SYyt6+nruQNW561/UjVOD0+bEW5F
-tLLcgYYblXI/BNdVPfs7O8Cu99644DSJxvd2smVS5od0IwZTMe7bqAZ747a7drNu
-B9RwbYTb46/nHRNe1ad1KUpLDSkMOQm2PRjkdpA2OL3HhDdE49KutblbSI1kvLh1
-sOJdZIGIcPvkrNosZTXu/tc2AOfc90Zp/WcaLjfqc+5LY5o8jnHBksn36SohPBqf
-MM8FGqbBrq5DfyVrE/59aCPEJyTYQz25JBT+2NbELDVCFI1sinCA1qIKWBB5iIOK
-Tq5G37nzhDw2WAp/e9BCnF+3adNqUuUbldIL4PsuobrPlIQHgIq6I9rKul3OkhYw
-5L4lfLU/lFF/HfpMY5xlWEHzEO47vS4dG7DpHHlUynEmoLTSu88=
-=rSBb
------END PGP SIGNATURE-----
-
---o0gcLVW1g+NX126n--
 
