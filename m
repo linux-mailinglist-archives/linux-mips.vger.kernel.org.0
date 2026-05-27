@@ -1,251 +1,294 @@
-Return-Path: <linux-mips+bounces-14801-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-14802-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id uH04Mr4KF2pB2AcAu9opvQ
-	(envelope-from <linux-mips+bounces-14801-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Wed, 27 May 2026 17:16:14 +0200
+	id aAMSHh8MF2oR2gcAu9opvQ
+	(envelope-from <linux-mips+bounces-14802-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Wed, 27 May 2026 17:22:07 +0200
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id C4D515E6B03
-	for <lists+linux-mips@lfdr.de>; Wed, 27 May 2026 17:16:13 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1CA425E6CAC
+	for <lists+linux-mips@lfdr.de>; Wed, 27 May 2026 17:22:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 02A333043784
-	for <lists+linux-mips@lfdr.de>; Wed, 27 May 2026 15:05:37 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 9AD0530492A0
+	for <lists+linux-mips@lfdr.de>; Wed, 27 May 2026 15:17:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1F32C42847C;
-	Wed, 27 May 2026 15:05:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 18640332906;
+	Wed, 27 May 2026 15:17:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="Zd4OU75J";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="hflNZb+8";
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="Zd4OU75J";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="hflNZb+8"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from LO2P265CU024.outbound.protection.outlook.com (mail-uksouthazon11021139.outbound.protection.outlook.com [52.101.95.139])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E896426EDA;
-	Wed, 27 May 2026 15:05:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.95.139
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779894334; cv=fail; b=J9DfnWL9tHdYxxp16il5Df9q+6P4gvbFKHEwivC0OjKxNThOo7ZGF36bc6jciMbNFZX/LUVIY4iBNg8wCQnq7No97pT+b5N7t838QiQGA6Xc7MhjiscyAo5jhOtfXYW+O8JSK03fE8ilBpSH5jBopOuNks+CsumFvwjRr4+1dqs=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779894334; c=relaxed/simple;
-	bh=h8AzLWDmOj8KTftvlNvWLXvDLiNKzZ4oiYB+wpJONsA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=tJAMK7MjivgyGwl6qStbIShWq1IVnj6T0F89133acHUe4o5k4fHg6nax9k9fGFsn4pFnUop/56u6Gf2Pv7HIVnIql05iPuqSZcD6YlW+WDfykzPbjsJAGcpjTuULoRii7sLs+BJCEo5Co9Vjb1sSp2g4bbdZVYRhvfBAxFyva/0=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=atomlin.com; spf=pass smtp.mailfrom=atomlin.com; arc=fail smtp.client-ip=52.101.95.139
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=atomlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=atomlin.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=EGi+bB7abXN6Wd1nkFew8rets1uNLrQW0404HF6DJB/8sW3NSzmNPYocgAlj5N3iy8aNyGoq2FwD1i16/Mk98Nr8iSo/brG4QrHLjJGCq3sQx0vEfsccuQiGXooP54hZlFh87PzozSDgSNxNSTG/MbcA5HMdpFJwZaR+wm2B4LRso2f5eBdm0M1X4WCro0QC3yW9rcb7rhbo2k59//XrLxu8jcvjMqsU1WNk7/CH0gNOb21rEZQuVfbtJ6TwOJMOaNSCwT1sHBexPj90fH/WHadXKKV9zW6FJlj2d6TtFmGquhoRic6ck11h7tTn+IdqlHvDlla5ChEyJ17Sfoughg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001; h=From:Date:Subject:Message-ID:MIME-Version;
- bh=h8AzLWDmOj8KTftvlNvWLXvDLiNKzZ4oiYB+wpJONsA=;
- b=PhQEPWYFcJy6MTwe1D4PsGY0nZXmyy5bjOpFXxtt3XS43bRjwezk1lGmjgeaa7MH258nI+P9yOcgWdyUg4eYqwKZUckXUGLCP/0sm2CIs3wWihpFGo58Mfbx6oS4EEzpyyfVTEiOpnybQptmHWF4mXI9ez/P+1BD5Nu8b37IWL+0QPLHFdUNhOQviNC+16JwrBrxEM7AEExtooVCPzEVy0y77GA2M8LrgdnhMubdQEfiuPLaSQpEXYlf4AktSLcU2sd/xZYt+DaepGEd1vf8bkOep5bXW4LMJDyWNNLGeJK7J/rz5r6sWYsr6W1qhIw4Ap9qkMohvmOvOF+ItKUBtg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=atomlin.com; dmarc=pass action=none header.from=atomlin.com;
- dkim=pass header.d=atomlin.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=atomlin.com;
-Received: from CWLP123MB6607.GBRP123.PROD.OUTLOOK.COM (2603:10a6:400:183::5)
- by LO0P123MB6303.GBRP123.PROD.OUTLOOK.COM (2603:10a6:600:28a::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.71.13; Wed, 27 May
- 2026 15:05:21 +0000
-Received: from CWLP123MB6607.GBRP123.PROD.OUTLOOK.COM
- ([fe80::cec4:77ab:262e:d230]) by CWLP123MB6607.GBRP123.PROD.OUTLOOK.COM
- ([fe80::cec4:77ab:262e:d230%4]) with mapi id 15.21.0071.011; Wed, 27 May 2026
- 15:05:21 +0000
-Date: Wed, 27 May 2026 11:05:17 -0400
-From: Aaron Tomlin <atomlin@atomlin.com>
-To: Peter Zijlstra <peterz@infradead.org>
-Cc: tsbogend@alpha.franken.de, paul@paul-moore.com, jmorris@namei.org, 
-	serge@hallyn.com, mingo@redhat.com, juri.lelli@redhat.com, 
-	vincent.guittot@linaro.org, stephen.smalley.work@gmail.com, casey@schaufler-ca.com, 
-	longman@redhat.com, tj@kernel.org, hannes@cmpxchg.org, mkoutny@suse.com, 
-	chenridong@huaweicloud.com, dietmar.eggemann@arm.com, rostedt@goodmis.org, 
-	bsegall@google.com, mgorman@suse.de, vschneid@redhat.com, kprateek.nayak@amd.com, 
-	omosnace@redhat.com, kees@kernel.org, neelx@suse.com, sean@ashe.io, 
-	chjohnst@gmail.com, steve@abita.co, mproche@gmail.com, nick.lange@gmail.com, 
-	cgroups@vger.kernel.org, linux-mips@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
-	linux-security-module@vger.kernel.org, selinux@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] security: Expand task_setscheduler LSM hook to
- include CPU affinity mask
-Message-ID: <bgjagepcfb7gz6jawatu6kpfmecw46gwg5cvb6r7dl3dn7bt4l@rtymdaslx7ef>
-References: <20260526142838.774711-1-atomlin@atomlin.com>
- <20260527085221.GQ3126523@noisy.programming.kicks-ass.net>
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="wx5nuid6cri5pbzd"
-Content-Disposition: inline
-In-Reply-To: <20260527085221.GQ3126523@noisy.programming.kicks-ass.net>
-X-ClientProxiedBy: MN2PR01CA0060.prod.exchangelabs.com (2603:10b6:208:23f::29)
- To CWLP123MB6607.GBRP123.PROD.OUTLOOK.COM (2603:10a6:400:183::5)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83A931E9919
+	for <linux-mips@vger.kernel.org>; Wed, 27 May 2026 15:17:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1779895051; cv=none; b=gdFP7BcGg1mnTJT+X1QIU2kMcZ9NNUDX5G7S1EEmuP19kCKcO3sHysJtM8O9BFER4EESuWpy5RHAikoIr3+PVMl85djxKozVoUaybOmKzRCG7B0UPB1E1sbBn9fIWAkgxPlEIaZFkzlpQy3p+tKZMLe2CWGxuXNj+atXZ5J8mAE=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1779895051; c=relaxed/simple;
+	bh=OoMgu8lc4ZCQhTa+NKdwxlwIbrqthTdX7mEVcaRKtLA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Ajvxh4+J0rTrgLbC228E0T28A2VZACfcZ1yB/VfFNwuw4dXVhtSINwTvbZetDVfsRunLZlonQZPh1yDbENul8qvqVCsqm+DkkuXiwm0SAMzm7UDsTPMjSmfUFVPumTrpzQNzSvYx1btcBLRPFaaAsaQH8MP2u4ZcTgD/dj71Axk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=Zd4OU75J; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=hflNZb+8; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=Zd4OU75J; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=hflNZb+8; arc=none smtp.client-ip=195.135.223.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
+Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id 053AB6AA37;
+	Wed, 27 May 2026 15:17:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1779895048; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=GpmrI14U1zRKg9Ft8HCdKifIOo3atbqffDM/wjrE0sE=;
+	b=Zd4OU75JnmqVM0QH1YVMAYVh2GO3JhgIo2g5fzm5k8Yy9+AGyj0XfK3nr/B69yzYq/YFXm
+	t4Cw/q9r27+oXrEK2AfPuY77Eq/wfHyNjPqBrIIIE+pS7B1IsnZl+mSWQ7uXT4GhwWSJXI
+	IAjKhNkm8jQ4HFYexUNiZ3u4Gn0U3UA=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1779895048;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=GpmrI14U1zRKg9Ft8HCdKifIOo3atbqffDM/wjrE0sE=;
+	b=hflNZb+8oVB2a+7/Iz3RBlSMhoxMfTaSZ13xqcKmRCZMT30z3xcle53Dk+i3EUsTjraod+
+	m8MtH/jWlalsJgCw==
+Authentication-Results: smtp-out1.suse.de;
+	none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1779895048; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=GpmrI14U1zRKg9Ft8HCdKifIOo3atbqffDM/wjrE0sE=;
+	b=Zd4OU75JnmqVM0QH1YVMAYVh2GO3JhgIo2g5fzm5k8Yy9+AGyj0XfK3nr/B69yzYq/YFXm
+	t4Cw/q9r27+oXrEK2AfPuY77Eq/wfHyNjPqBrIIIE+pS7B1IsnZl+mSWQ7uXT4GhwWSJXI
+	IAjKhNkm8jQ4HFYexUNiZ3u4Gn0U3UA=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1779895048;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=GpmrI14U1zRKg9Ft8HCdKifIOo3atbqffDM/wjrE0sE=;
+	b=hflNZb+8oVB2a+7/Iz3RBlSMhoxMfTaSZ13xqcKmRCZMT30z3xcle53Dk+i3EUsTjraod+
+	m8MtH/jWlalsJgCw==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 7B0845A8C2;
+	Wed, 27 May 2026 15:17:27 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id dT6MHAcLF2qmFgAAD6G6ig
+	(envelope-from <tzimmermann@suse.de>); Wed, 27 May 2026 15:17:27 +0000
+Message-ID: <ed56eba9-8a34-4f17-b400-0ebf538ebcb4@suse.de>
+Date: Wed, 27 May 2026 17:17:27 +0200
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CWLP123MB6607:EE_|LO0P123MB6303:EE_
-X-MS-Office365-Filtering-Correlation-Id: 9e52063b-d14e-4a2c-0860-08debc015f3b
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|376014|7416014|366016|1800799024|4143699003|56012099006|6133799003|22082099003|18002099003;
-X-Microsoft-Antispam-Message-Info:
-	6QDHvmBQiQdTYziyfhNyw3VhN41o+czne3s5IJmed6Vw/+w8DghUX95bQeXcvGKldidijpsnsnmUpVbiIBs1q09l3ugYbJnPUihOwX6jdFi0A6SwPB4CtRrO4HPWc4Q8ZUlmEJtUfOVT3NijQTGJdYjpJZBVBm8FicJLcx2Xdtf57JsmDmcvKYsTuHvU+coYNkp5aIG9Q41n6PXg4ueG5dGB2d9CPORXecMR1s5UrfKCUoxI/JAqEPFHJkojnevUPmItJXKMvONY1GlazoYYCKaoCny4z7LSQu/dLyZBVqViYEBU12J+j4EABtj6wm8egiPwJ8TerpbRoyaEeMJ5xTKFQOSeNN86mOASF1Fj0uBmNWymHFFWGvnPL8Ksk1gBNSdELYWAS+iARa6/MwGqWw9f6E9r7mLptWtkRNbS3vyDyswe9ecBo8K0vs3SzZJh/7lCJUEwbRyb6XZEWI7wDBff7YTgkCqHuBCs1mcCnupIZabnDp3JIUq2oHi79qPbs04nyJjoIYy2Oj5Vv+8XaUuBrdep9NzVmCgERGrY2x523lK8/CDvqSpKSmbNcO9PV271AphJjxs7P5vkAxaUbprqJs+kE00dKH40czfH/jg3qjO8y2rhBpQoZkPPO5U6jw6dXkSfcwhpBhFaRKoamxkNWJjq2Mm8CgvzNuQ62KihQ4mjFy3w4R0mtNZ4p9yG
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CWLP123MB6607.GBRP123.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(376014)(7416014)(366016)(1800799024)(4143699003)(56012099006)(6133799003)(22082099003)(18002099003);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?TnZjSWRXQ0ZnSG94bk9TZythejhFTlp2RjZMSGR5R29FTlRuaXBjTHBuRzhX?=
- =?utf-8?B?OE81a3l0VjFlTWhuZ3RmNmJ0MDdFR0hGcnFOOFZHUnJ4S3pKRUwxc3BhcWJN?=
- =?utf-8?B?Zk9PblRSeDQ5WFMyNUhTalY0WFdaa0IrQjdidzVLNmRQUmhqQUt4VHJTcUtl?=
- =?utf-8?B?TmZ2d1BHd3lDNnhuNGNmb0dDcGdNMUVrR1dMYWF5WmJxcHRVZTdrZ0lMbXJZ?=
- =?utf-8?B?ZkxpZ1NhS0RWVGtVQS8yd2MvMnRKQ1lodDlpUmRwdWZwUkVsRzFkcTVBQk9D?=
- =?utf-8?B?bUM5S0pWRndNdktmVHp6UjhzTURnWTg1UkdGWkluRTM0MHVlZU9FSXVVV2NG?=
- =?utf-8?B?RzMxZVAvU0dDTFByVGlWbHFDdWJ1UjNyQWdLVHhhYlJSUDR6Rk9ScU11T2di?=
- =?utf-8?B?bXE3TEcrcFVXUlJ1SlNUTTFwUWJQSzl5UkxzVDZFM1RQZjZCN2t3djNjZXRk?=
- =?utf-8?B?bS9HY3kwUkwvd1V2eURDaE1zZk9heG5tckF5aXF4bktGV0U5dU0yc3VXUSs1?=
- =?utf-8?B?aVFyVXNhNmsyTStCbXB0cit3bktZc0lBMXhyMVB3RkcrM3FTU2s5aHBHT0JW?=
- =?utf-8?B?WDdXYTZEbnAvaFlGc0hjMjVGUXF1dEt3U1RlTDR2a0VhVk9jK0dFdGM0S2hq?=
- =?utf-8?B?UDVoRHpJeWMrb3p3MUhEL3J6WVV0RVRpRTlxNjA3QzVXd21xcllLMHZqZith?=
- =?utf-8?B?akxTZ3VTamlJOC8xSkJmSGxuMzdIai9jOEFzdStKeER1c3RkZzRJczNoblNh?=
- =?utf-8?B?eVFRRndRWjEvUVdSa2tRakUwMDNnTS9veGtYRFpmMFcydVBuRmF0NXBMNERi?=
- =?utf-8?B?MXBGWGthVHEzV0hDWXBaTWltSzF0WUNsM01qaHJDOGRDNUxLOGU3dXRrL0ZQ?=
- =?utf-8?B?ZWRFMWoyTVJnblhTU2hGaEFabUxKS1JCeTE4eEtvYkx4Q2Nkak80eDZnY3dC?=
- =?utf-8?B?UWk3MVU1cDdnN3RXZ3dkVXdkUVRwYmdoZzIrczJUNVVNaGI3UkR3SlV3WlRH?=
- =?utf-8?B?WW0xOXNKeGFIWU9PWWJWc0ZOWkIxUzc3YndpMnptT05lejdTUWcxSndQM0RG?=
- =?utf-8?B?bCtqaitLME15SWNMRXVkTlVLZ3o4MmZZY1lCYmsrWEF1ZnZJZzF5WVFSNW9r?=
- =?utf-8?B?SXBCY2JmNkVySFNkclJ6RXM5aDJ5U1lVMzdkenRYRUV4Z3N0TFREREFkdkk3?=
- =?utf-8?B?bGFxcFhBczlKU3pXRUtNMVVNUkNwNTRlSC9XQkk5S2VEcS92eXdpd1VlV3p2?=
- =?utf-8?B?NFRaRlg0cUFmVUYySjcyQWpuZHhYa1lXWmpzRnpNRnQ1OEZzZGFzclpZU1Bn?=
- =?utf-8?B?OHlLeEN6R2xCZHpmd1I4aE5uSGRINExucTRPYTN6R1RMOUFhNnA5M3lDRE0y?=
- =?utf-8?B?NHM1aXRRN1lNUWJJUFAwdm1Rd0ovQy9xZTJEQm1IRmR2ZDdUckxzUit0RHhZ?=
- =?utf-8?B?eFlhdnZiNjMzMGVRMmMvVDMvc0kxbW5CUFJwR0dMdk9ranRmQU1tVXFNY092?=
- =?utf-8?B?eklVNmwyb3R1YThJU2YvZ2ZxUW04RkVidGFwb0o2QUNycFFPN21mUk1kVTU4?=
- =?utf-8?B?VWdzdHVib2sxNWN5aDlMOWhISnh4SGhsYkVScGZPSjltTXRuem42dEJuZENK?=
- =?utf-8?B?Wis2M3A2UFB6UC9CY0puQzZGR1V4SjJBZWNKMkV1ZkxBT2Mrck1vMnE3VXl6?=
- =?utf-8?B?Z2hrd2ptR1dtcXBmWUkyNk1ESnhXSW5ORHRpb2xVbFBnOVAydFYydmNMMGtr?=
- =?utf-8?B?YnhsYnh5cFBObEZ0S3F0SE5VVUNKT1BFcUhTdldpSWdQQnB0S1Q1dVZ6ZkZS?=
- =?utf-8?B?WEFKNTFPUFoxbldsNXp2VTRrRXRTZExxSjI0UEVRa2dNaUNNYWYwWGhtNUlU?=
- =?utf-8?B?TDRXRVhxRmlURllrMS9nbjJncWVscE85TVVrazMvNWE1RzAyNzJyWWdSRFNU?=
- =?utf-8?B?dmNCY2xBbFdlUmo0cm5GQ1UwaWRxZ1JoUDdzZFZTZHFEKyt6WTRqcWxpOEQv?=
- =?utf-8?B?Mjd3bFFGNDJzL0p0NmxVTzVjeitZWnRHUXFVbFRURkFtNTFzc1Q3OEJySXl4?=
- =?utf-8?B?ZFNwV0tINjdmcldLYjNNUXp0cUIyKzlteWd0Z2pGWUdXMitEWEhxTlVJb0NL?=
- =?utf-8?B?VXkvNkZtNERvN0V2NVd1YS9oVWtUamJ0S1l3S25mNEs1TWZiMkxiMWkyVTF0?=
- =?utf-8?B?MDU1YlVZTi9TZEN1YTQzWG1JQUYxd2Erc1Z4REM0ZXpEUTZwSmFpWGd5aUMy?=
- =?utf-8?B?Lys3WjYrUVk5Q0swcXo1aVN6b2xoc3U1OE1wRGVKTnJCbTRLazk5VVBoZkw4?=
- =?utf-8?B?WDNrNGF1OTV0cG1pcklLeG94cGU4emNqZ2MzNnlhR29obUZaTkQxUT09?=
-X-OriginatorOrg: atomlin.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9e52063b-d14e-4a2c-0860-08debc015f3b
-X-MS-Exchange-CrossTenant-AuthSource: CWLP123MB6607.GBRP123.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 May 2026 15:05:21.4784
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: e6a32402-7d7b-4830-9a2b-76945bbbcb57
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: FyMSaAlA9Mvxeql5KEzmNprc7/CPaDw8tbC7PR8Ib/YF1nkcEgqQkI9CUY+fYtcCWYyPcEixINQ0vZd8qSv41w==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: LO0P123MB6303
-X-Spamd-Result: default: False [0.44 / 15.00];
-	SIGNED_PGP(-2.00)[];
-	SUSPICIOUS_RECIPS(1.50)[];
-	ARC_REJECT(1.00)[cv is fail on i=2];
-	MID_RHS_NOT_FQDN(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
-	MIME_GOOD(-0.20)[multipart/signed,text/plain];
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 00/10] drm: Improve logic behind damage handling
+To: mripard@kernel.org, maarten.lankhorst@linux.intel.com,
+ airlied@redhat.com, airlied@gmail.com, simona@ffwll.ch, admin@kodeit.net,
+ gargaditya08@proton.me, paul@crapouillou.net, jani.nikula@linux.intel.com,
+ mhklinux@outlook.com, zack.rusin@broadcom.com,
+ bcm-kernel-feedback-list@broadcom.com
+Cc: dri-devel@lists.freedesktop.org, linux-hyperv@vger.kernel.org,
+ intel-gfx@lists.freedesktop.org, intel-xe@lists.freedesktop.org,
+ linux-mips@vger.kernel.org, virtualization@lists.linux.dev
+References: <20260527145113.241595-1-tzimmermann@suse.de>
+Content-Language: en-US
+From: Thomas Zimmermann <tzimmermann@suse.de>
+Autocrypt: addr=tzimmermann@suse.de; keydata=
+ xsBNBFs50uABCADEHPidWt974CaxBVbrIBwqcq/WURinJ3+2WlIrKWspiP83vfZKaXhFYsdg
+ XH47fDVbPPj+d6tQrw5lPQCyqjwrCPYnq3WlIBnGPJ4/jreTL6V+qfKRDlGLWFjZcsrPJGE0
+ BeB5BbqP5erN1qylK9i3gPoQjXGhpBpQYwRrEyQyjuvk+Ev0K1Jc5tVDeJAuau3TGNgah4Yc
+ hdHm3bkPjz9EErV85RwvImQ1dptvx6s7xzwXTgGAsaYZsL8WCwDaTuqFa1d1jjlaxg6+tZsB
+ 9GluwvIhSezPgnEmimZDkGnZRRSFiGP8yjqTjjWuf0bSj5rUnTGiyLyRZRNGcXmu6hjlABEB
+ AAHNJ1Rob21hcyBaaW1tZXJtYW5uIDx0emltbWVybWFubkBzdXNlLmRlPsLAjgQTAQgAOAIb
+ AwULCQgHAgYVCgkICwIEFgIDAQIeAQIXgBYhBHIX+6yM6c9jRKFo5WgNwR1TC3ojBQJftODH
+ AAoJEGgNwR1TC3ojx1wH/0hKGWugiqDgLNXLRD/4TfHBEKmxIrmfu9Z5t7vwUKfwhFL6hqvo
+ lXPJJKQpQ2z8+X2vZm/slsLn7J1yjrOsoJhKABDi+3QWWSGkaGwRJAdPVVyJMfJRNNNIKwVb
+ U6B1BkX2XDKDGffF4TxlOpSQzdtNI/9gleOoUA8+jy8knnDYzjBNOZqLG2FuTdicBXblz0Mf
+ vg41gd9kCwYXDnD91rJU8tzylXv03E75NCaTxTM+FBXPmsAVYQ4GYhhgFt8S2UWMoaaABLDe
+ 7l5FdnLdDEcbmd8uLU2CaG4W2cLrUaI4jz2XbkcPQkqTQ3EB67hYkjiEE6Zy3ggOitiQGcqp
+ j//OwE0EWznS4AEIAMYmP4M/V+T5RY5at/g7rUdNsLhWv1APYrh9RQefODYHrNRHUE9eosYb
+ T6XMryR9hT8XlGOYRwKWwiQBoWSDiTMo/Xi29jUnn4BXfI2px2DTXwc22LKtLAgTRjP+qbU6
+ 3Y0xnQN29UGDbYgyyK51DW3H0If2a3JNsheAAK+Xc9baj0LGIc8T9uiEWHBnCH+RdhgATnWW
+ GKdDegUR5BkDfDg5O/FISymJBHx2Dyoklv5g4BzkgqTqwmaYzsl8UxZKvbaxq0zbehDda8lv
+ hFXodNFMAgTLJlLuDYOGLK2AwbrS3Sp0AEbkpdJBb44qVlGm5bApZouHeJ/+n+7r12+lqdsA
+ EQEAAcLAdgQYAQgAIAIbDBYhBHIX+6yM6c9jRKFo5WgNwR1TC3ojBQJftOH6AAoJEGgNwR1T
+ C3ojVSkIALpAPkIJPQoURPb1VWjh34l0HlglmYHvZszJWTXYwavHR8+k6Baa6H7ufXNQtThR
+ yIxJrQLW6rV5lm7TjhffEhxVCn37+cg0zZ3j7zIsSS0rx/aMwi6VhFJA5hfn3T0TtrijKP4A
+ SAQO9xD1Zk9/61JWk8OysuIh7MXkl0fxbRKWE93XeQBhIJHQfnc+YBLprdnxR446Sh8Wn/2D
+ Ya8cavuWf2zrB6cZurs048xe0UbSW5AOSo4V9M0jzYI4nZqTmPxYyXbm30Kvmz0rYVRaitYJ
+ 4kyYYMhuULvrJDMjZRvaNe52tkKAvMevcGdt38H4KSVXAylqyQOW5zvPc4/sq9c=
+In-Reply-To: <20260527145113.241595-1-tzimmermann@suse.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Flag: NO
+X-Spam-Score: -4.30
+X-Spam-Level: 
+X-Spamd-Result: default: False [-2.16 / 15.00];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	DMARC_POLICY_ALLOW(-0.50)[suse.de,none];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_DKIM_ALLOW(-0.20)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
 	MAILLIST(-0.15)[generic];
+	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-14801-lists,linux-mips=lfdr.de];
-	FROM_HAS_DN(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	DMARC_NA(0.00)[atomlin.com];
-	RCPT_COUNT_TWELVE(0.00)[35];
-	MIME_TRACE(0.00)[0:+,1:+,2:~];
-	FREEMAIL_CC(0.00)[alpha.franken.de,paul-moore.com,namei.org,hallyn.com,redhat.com,linaro.org,gmail.com,schaufler-ca.com,kernel.org,cmpxchg.org,suse.com,huaweicloud.com,arm.com,goodmis.org,google.com,suse.de,amd.com,ashe.io,abita.co,vger.kernel.org];
-	MISSING_XM_UA(0.00)[];
-	TO_DN_SOME(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[atomlin@atomlin.com,linux-mips@vger.kernel.org];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	NEURAL_HAM(-0.00)[-0.995];
+	DKIM_TRACE(0.00)[suse.de:+];
+	FROM_HAS_DN(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-14802-lists,linux-mips=lfdr.de];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	FREEMAIL_TO(0.00)[kernel.org,linux.intel.com,redhat.com,gmail.com,ffwll.ch,kodeit.net,proton.me,crapouillou.net,outlook.com,broadcom.com];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-mips];
-	R_DKIM_NA(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:rdns,sin.lore.kernel.org:helo]
-X-Rspamd-Queue-Id: C4D515E6B03
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[tzimmermann@suse.de,linux-mips@vger.kernel.org];
+	MIME_TRACE(0.00)[0:+];
+	RCVD_COUNT_FIVE(0.00)[6];
+	NEURAL_HAM(-0.00)[-1.000];
+	TO_DN_NONE(0.00)[];
+	MID_RHS_MATCH_FROM(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[18]
+X-Rspamd-Queue-Id: 1CA425E6CAC
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
---wx5nuid6cri5pbzd
-Content-Type: text/plain; protected-headers=v1; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH v3] security: Expand task_setscheduler LSM hook to
- include CPU affinity mask
-MIME-Version: 1.0
 
-On Wed, May 27, 2026 at 10:52:21AM +0200, Peter Zijlstra wrote:
-> I'm not sure I really buy the Real-Time argument here; that really feels
-> like a straw man. Real-Time will need to account for the shared resource
-> usage inherent in using a single kernel image across the CPUs, affinity
-> alone does not Real-Time make in any way shape or form.
->=20
-> And the compromised task vs crypto thing feels like it wants sandboxing,
-> but wasn't that what seccomp is for, rather than lsm?
->=20
-> So while I don't think I object very much to the patch, I do find the
-> whole Changelog to be utterly questionable. Which makes me very
-> suspicious as to wtf this is actually for.
 
-Hi Peter,
+Am 27.05.26 um 16:46 schrieb Thomas Zimmermann:
+> DRM clients can supply information on framebuffer areas to update as
+> part of each page flip, called damage clipping rectangles. But DRM's
+> processing of this information is inconsistent and prone to errors.
+>
+> - There are multiple fields and tests that decide if damage clips
+> should be taken or ignored.
+>
+> - Sometimes damage clips are removed behind the back of the DRM client.
+>
+> - Atomic helpers evaluate damage clipping in the middle of the atomic
+> check: after connectors and encoders, but before planes and CRTCs. Hence
+> pipeline stages have an inconsistent view.
+>
+> - Which leads to drivers (ingenic) doing a re-evaluation if necessary.
+>
+> - Tests of plane source coordinates only happen during commits. At this
+> point, the driver should already know if damage clips are to be taken or
+> not. Because of this, some drivers (appletbdrm) might operate on incorrect
+> damage information for their internal workings. This also leads to excessive
+> use of the old plane state.
+>
+> Therefore go through DRM helpers and drivers and fix the logic.
+>
+> - Run all of the atomic checks with the damage information supplied by
+> DRM clients. Afterwards evaluate plane and CRTC states on whether to
+> take or ignore damage clips. Do all related tests in a single atomic
+> helper.
+>
+> - Do not discard damage clips. Set ignore_damage_clips in struct
+> drm_plane_state instead. This includes changes to plane source-coordinates.
+> The damage iterator now only has to look at this flag to detect if it
+> should use the damage clips.
+>
+> - Go over drivers and fix the damage handling in the plane's
+> atomic_update helpers. Most drivers no longer need the old plane state
+> in their update.
+>
+> - The appletbdrm driver requires a fix in how it uses damage information.
+> Ingenic and vmwgfx can be simplified. These changes improve the drivers'
+> code organization.
+>
+> - Kunit tests require some changes. Drop some obsolete tests and add a new
+> one for ignore_damage_flags.
+>
+> Tested with bochs, mgag200, Kunit tests.
+>
+> v3:
+> - fix error path in appletbdrm
+> v2:
+> - rebase on latest upstream
+>
+> Thomas Zimmermann (10):
+>    drm/damage-helper: Do not alter damage clips on modeset, but ignore
+>      them
+>    drm/atomic-helpers: Evaluate plane damage after atomic_check
+>    drm/ingenic: Remove calls to drm_atomic_helper_check_plane_damage()
+>    drm/damage-helper: Test src coord in
+>      drm_atomic_helper_check_plane_damage()
+>    drm/appletbdrm: Allocate request/response buffers in begin_fb_access
+>    drm/damage-helper: Remove old state from
+>      drm_atomic_helper_damage_iter_init()
+>    drm/damage-helper: Remove old state from
+>      drm_atomic_helper_damage_merged()
+>    drm/atomic_helper: Do not evaluate plane damage before atomic_check
+>    drm/damage-helper: Rename state parameters in damage helpers
+>    drm/vmwgfx: Remove unused field struct
+>      vmwgfx_du_update_plane.old_state
+>
+>   drivers/gpu/drm/ast/ast_cursor.c              |   3 +-
+>   drivers/gpu/drm/ast/ast_mode.c                |   2 +-
+>   drivers/gpu/drm/drm_atomic_helper.c           |   6 +-
+>   drivers/gpu/drm/drm_atomic_state_helper.c     |   1 +
+>   drivers/gpu/drm/drm_damage_helper.c           |  44 ++--
+>   drivers/gpu/drm/drm_fb_dma_helper.c           |   2 +-
+>   drivers/gpu/drm/drm_mipi_dbi.c                |   3 +-
+>   drivers/gpu/drm/gud/gud_pipe.c                |   3 +-
+>   drivers/gpu/drm/hyperv/hyperv_drm_modeset.c   |   3 +-
+>   drivers/gpu/drm/i915/display/intel_plane.c    |  11 +-
+>   drivers/gpu/drm/i915/display/intel_psr.c      |   3 +-
+>   drivers/gpu/drm/ingenic/ingenic-drm-drv.c     |   3 -
+>   drivers/gpu/drm/ingenic/ingenic-ipu.c         |   8 +-
+>   drivers/gpu/drm/mgag200/mgag200_mode.c        |   3 +-
+>   drivers/gpu/drm/sitronix/st7571.c             |   3 +-
+>   drivers/gpu/drm/sitronix/st7586.c             |   3 +-
+>   drivers/gpu/drm/sitronix/st7920.c             |   3 +-
+>   drivers/gpu/drm/solomon/ssd130x.c             |   9 +-
+>   drivers/gpu/drm/sysfb/drm_sysfb_modeset.c     |   3 +-
+>   .../gpu/drm/tests/drm_damage_helper_test.c    | 200 +++---------------
+>   drivers/gpu/drm/tiny/appletbdrm.c             |  59 +++---
+>   drivers/gpu/drm/tiny/bochs.c                  |   3 +-
+>   drivers/gpu/drm/tiny/cirrus-qemu.c            |   2 +-
+>   drivers/gpu/drm/tiny/gm12u320.c               |   2 +-
+>   drivers/gpu/drm/tiny/ili9225.c                |   3 +-
+>   drivers/gpu/drm/tiny/repaper.c                |   2 +-
+>   drivers/gpu/drm/tiny/sharp-memory.c           |   3 +-
+>   drivers/gpu/drm/udl/udl_modeset.c             |   3 +-
+>   drivers/gpu/drm/virtio/virtgpu_plane.c        |   2 +-
+>   drivers/gpu/drm/vmwgfx/vmwgfx_kms.c           |   5 +-
+>   drivers/gpu/drm/vmwgfx/vmwgfx_kms.h           |   2 -
+>   drivers/gpu/drm/vmwgfx/vmwgfx_scrn.c          |  12 +-
+>   drivers/gpu/drm/vmwgfx/vmwgfx_stdu.c          |  15 +-
+>   include/drm/drm_damage_helper.h               |   9 +-
+>   34 files changed, 123 insertions(+), 315 deletions(-)
+>
+>
+> base-commit: 5fb5a9a63cf5ece68e0eeb6fa397da27712bccf0
 
-Thank you for the blunt and honest feedback.
+-- 
+--
+Thomas Zimmermann
+Graphics Driver Developer
+SUSE Software Solutions Germany GmbH
+Frankenstr. 146, 90461 Nürnberg, Germany, www.suse.com
+GF: Jochen Jaser, Andrew McDonald, Werner Knoblich, (HRB 36809, AG Nürnberg)
 
-You are completely right to call out the changelog. It obscured the actual
-practical use case. I will rewrite the commit message to drop those
-statements.
 
-To answer your question regarding seccomp: seccomp-bpf is strictly limited
-to inspecting syscall arguments by value at the syscall entry boundary. For
-sched_setaffinity(), the mask is passed as a "__user" pointer. Seccomp
-cannot safely dereference this pointer to inspect the requested CPU bits.
-To actually evaluate which CPUs a task is trying to pin to, we must
-evaluate the mask after copy_from_user() has safely brought it into kernel
-memory. The LSM hook is currently the only infrastructure positioned to do
-this safely for eBPF-driven security policies.
-
-The actual use case here is multi-tenant workload isolation and visibility.
-Passing the evaluated cpumask to the BPF LSM allows operators to write a
-simple eBPF program to detect spatial boundary overlaps (e.g., logging an
-event if a requested mask intersects with platform-reserved cores).
-
-If this justification makes more sense, I will focus strictly on the
-seccomp pointer limitations and multi-tenant workload isolation.
-
-Kind regards,
---=20
-Aaron Tomlin
-
---wx5nuid6cri5pbzd
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCgAdFiEEeQaE6/qKljiNHm6b4t6WWBnMd9YFAmoXCCgACgkQ4t6WWBnM
-d9Y4MhAAornb7ubJ8KDR3tNH2l1S6EU7tVaxicXH2UVND6BNnfc5ergnVZK3XxiD
-39/wnFqJdQ6RvSg7FSb075RPeVJ0uq9BTJrwqWU/bwa8mvdNNle3wbu5bldHw0NF
-L4rmiYJmqgpJAtG5fhcVb1ScvtgUBOVwRtkewEy1XeVtew4JnVAKmV27gwUPZT4R
-1FLoE1syKRgYc4pE9nPfYS+gl1OqRwdUTIDiKeOR4wNYhJ8orKPMZH6DIVSRVvx6
-/YHSry1CfOcotUE3nracgybjH+AG354I5qBv28b5jEPpNDG3Db/wb0WyfzVxu20X
-ngScXLn6/NP+l2sVgGGgWDCEbSvtSCOPUz7tq97iRZLzzbgDUDVLBJ4ovwaRYdZE
-zCmQudnNfaKkrh3PgnyB9kIekF4403TUnkBkEuMveQstZawjjPsMnVN6nsY6iuyD
-aDqYJShCM0t923piAW60x2lSCN/vCyI5AM4aDyEcwns3lu4rr/fgvQkeODvsSHME
-AdW7hUt5CfFhS3LowDBELEDTYctz7zdVDkKd7y5tLfD98ZPhkt8Z1PAQ4p/QWVmO
-Yn0uzwQXD20djvkuGKQyui9QHoij/wnDVdQwMtt+kQFg9ZTvtW2D7pkDWgwhn5R+
-zCTGPUGznVEd962exI3t4sYOytem9hGWPEOKzkDdPVq75qyS8fg=
-=vQEN
------END PGP SIGNATURE-----
-
---wx5nuid6cri5pbzd--
 
