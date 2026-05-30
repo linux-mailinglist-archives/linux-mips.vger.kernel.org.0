@@ -1,148 +1,261 @@
-Return-Path: <linux-mips+bounces-14827-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-14829-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 0IwDIv7tGmqD9wgAu9opvQ
-	(envelope-from <linux-mips+bounces-14827-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Sat, 30 May 2026 16:02:38 +0200
+	id CDOiE4w0G2qqAAkAu9opvQ
+	(envelope-from <linux-mips+bounces-14829-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Sat, 30 May 2026 21:03:40 +0200
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id F050260D33D
-	for <lists+linux-mips@lfdr.de>; Sat, 30 May 2026 16:02:37 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id E9DFF612F2B
+	for <lists+linux-mips@lfdr.de>; Sat, 30 May 2026 21:03:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 1006E300A4F0
-	for <lists+linux-mips@lfdr.de>; Sat, 30 May 2026 14:02:01 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 9E0F9301016B
+	for <lists+linux-mips@lfdr.de>; Sat, 30 May 2026 18:57:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5865C3C2D;
-	Sat, 30 May 2026 14:02:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 69A1E1A5B9D;
+	Sat, 30 May 2026 18:57:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eMuGFhgE"
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="mMbvILl7";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="BIBtAzoH";
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="B5bn68P+";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="F3lXYpv8"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50F421D435F
-	for <linux-mips@vger.kernel.org>; Sat, 30 May 2026 14:01:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0926825B0B0
+	for <linux-mips@vger.kernel.org>; Sat, 30 May 2026 18:57:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780149720; cv=none; b=FxVrFAWWuGl3igdjIDkUTeYzX7x4UTZp+GshWUKwiq2b2iUi5Wbfu1hMho3q9IB+K7e9SomsxfdisX1GDNFzvwKNXTWRbXnceB70CsUtG5v0itkUTKwhDxdEjxUXwQ1df4ueb6LYwUDbYOmj7Ga2AkrMdOAPT8jb+4SGlJUUMPA=
+	t=1780167448; cv=none; b=HxXBh/HNrbq0zMCEqUG8ggCCHSpGz/3F6ZvhAVf56ABAyJBa2VHUMLh//5RAgjnyNKMNTujsUiS5ijAqZc1KC4SNd9sRAzFZ7vwcuigJnZFNxlWlZnU1UCDERooxK0/4VrZeaqqY2Itkk0bmB4tORdWyENyJyRo/Y8nyO/9GQQI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780149720; c=relaxed/simple;
-	bh=I20Q//RFK7ao359GomgqHXMDHn8VA8hI476OwudF+zM=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=gnIenYSY2bUADrvbllZPTBZ7U0gyJ8pya5eJOk211RUwlVFIEvCUUwoqXyzY0sLTt92Q69f782S3DvNXdO609kDRnJIJd1ui+vts8bccrCMbZlNbtlQ1Oufy6VcCyZqSy4WkO8C3520Wq1V3RAK18MBDLYsv07frGq+jWZ9SmwM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eMuGFhgE; arc=none smtp.client-ip=100.103.45.18
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 636541F00893;
-	Sat, 30 May 2026 14:01:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780149718;
-	bh=86RQseK1x3RYpcqAxhfX0PcWRDq0d0elpvrh0WS+2CQ=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc;
-	b=eMuGFhgEhHn+uJz393LklEZg8Fbpbaesaox8eGpCPFva4RB6U7/x3WKrIehKSc4mL
-	 3otSip6BL2t7Eq+ASRw2tGcqYE/aqZro5/3RukuMaDtzHu0Za5SHRVjpWSIBpMcNvs
-	 9GtpM2km4KLSi+/RhFUuES/suyFuDNz2/25EkMKnY+3t88QNdG/QDKI50VZT5MZPCz
-	 IDKn5+AVfs24p/StnVFS8aq+23UtRF+iGhsfSUvPvKhbSiOgZXb2C7GSkUYJjo5qD7
-	 83qAAIVY67S5jM//CovKtdV51y0EpGpGpLGhWpXk6mzqmXElo4mB++3HGZDoWQc1WZ
-	 5p/81GKwy2c0A==
-From: Maxime Ripard <mripard@kernel.org>
-Date: Sat, 30 May 2026 15:59:51 +0200
-Subject: [PATCH 46/76] drm/ingenic: Switch to atomic_create_state
+	s=arc-20240116; t=1780167448; c=relaxed/simple;
+	bh=wZQIH3V6aNZCz0Gg2id2VU0dvaPXyAMdBSCzF2wkh0w=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=nthSg9qAmwZGDvEWIoHv3xwGNG0LaqlESF3a7VDb80bN1nzDB70CYJBQbCwKhLHsXifKsiBd/gU5jqx+vB2CFPhX4Z882A/EHh0QC2/6FUqnh5fYrCvq01DaH57rX4TMFPznh5E4+OP3LPIfMNLq6WulR3EdslLnL6RCUluXL2c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=mMbvILl7; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=BIBtAzoH; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=B5bn68P+; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=F3lXYpv8; arc=none smtp.client-ip=195.135.223.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
+Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id 7C9AF6B467;
+	Sat, 30 May 2026 18:57:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1780167439; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+	bh=fpIJ7b15qfrv7HCvzjlzXStzKWZFT9IFpRQ+wzCwFWA=;
+	b=mMbvILl7plI9m+qFLMGXcZ/FCO7nKPBEnyNmodR+TnO0GtPINr5U8AQMZpD3IX/Vkpq0qg
+	Z5CfX/msmXpPJE40DjcByVU65Qk0mx4BVig81GSt8FHPeBp94m9yWRuK8hI+cSHTywibVd
+	E8zWLOrzkToaakXiB0KBdme8hgmeiBA=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1780167439;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+	bh=fpIJ7b15qfrv7HCvzjlzXStzKWZFT9IFpRQ+wzCwFWA=;
+	b=BIBtAzoH6Xzf1mGoqYmQitsO4yvGsn4eiPyqEnjkQsCK3W41YxZCAh5j5ZitCfrbXOmrNe
+	H020IPXtx+1jxYDw==
+Authentication-Results: smtp-out1.suse.de;
+	none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1780167438; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+	bh=fpIJ7b15qfrv7HCvzjlzXStzKWZFT9IFpRQ+wzCwFWA=;
+	b=B5bn68P+U+LQQU+DthoUCgQ+V/mHH6HmF21wYRatRKhPUCI1KLNnjtyBIRuyoqPTFNB+dY
+	QYIUmOyhJ9CO8Xc6UZ3CxHwEbly5XYhMKFw0iXW21AMCsOKFNSnr9ISB1kqGKox/z3+eea
+	MSkKLMm2AGZGWpCQt5ZXZc7tf61viMY=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1780167438;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+	bh=fpIJ7b15qfrv7HCvzjlzXStzKWZFT9IFpRQ+wzCwFWA=;
+	b=F3lXYpv8SU5ITN0sBPWAPUJJWZp2+Zx5VOR3ZGWgbVF72JAwnZPNeJ8ERnMzL7QgdRz/W4
+	m0DYaekgwiadR+Aw==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id EE875779A7;
+	Sat, 30 May 2026 18:57:17 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id wfxCOA0zG2rXUwAAD6G6ig
+	(envelope-from <tzimmermann@suse.de>); Sat, 30 May 2026 18:57:17 +0000
+From: Thomas Zimmermann <tzimmermann@suse.de>
+To: mripard@kernel.org,
+	maarten.lankhorst@linux.intel.com,
+	airlied@redhat.com,
+	airlied@gmail.com,
+	simona@ffwll.ch,
+	admin@kodeit.net,
+	gargaditya08@proton.me,
+	paul@crapouillou.net,
+	jani.nikula@linux.intel.com,
+	mhklinux@outlook.com,
+	zack.rusin@broadcom.com,
+	bcm-kernel-feedback-list@broadcom.com
+Cc: dri-devel@lists.freedesktop.org,
+	linux-hyperv@vger.kernel.org,
+	intel-gfx@lists.freedesktop.org,
+	intel-xe@lists.freedesktop.org,
+	linux-mips@vger.kernel.org,
+	virtualization@lists.linux.dev,
+	Thomas Zimmermann <tzimmermann@suse.de>
+Subject: [PATCH v4 00/10] drm: Improve logic behind damage handling
+Date: Sat, 30 May 2026 20:53:13 +0200
+Message-ID: <20260530185716.65688-1-tzimmermann@suse.de>
+X-Mailer: git-send-email 2.54.0
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260530-drm-no-more-bridge-reset-v1-46-875d828d31bc@kernel.org>
-References: <20260530-drm-no-more-bridge-reset-v1-0-875d828d31bc@kernel.org>
-In-Reply-To: <20260530-drm-no-more-bridge-reset-v1-0-875d828d31bc@kernel.org>
-To: Andrzej Hajda <andrzej.hajda@intel.com>, 
- Neil Armstrong <neil.armstrong@linaro.org>, Robert Foss <rfoss@kernel.org>, 
- Laurent Pinchart <Laurent.pinchart@ideasonboard.com>, 
- Jonas Karlman <jonas@kwiboo.se>, Jernej Skrabec <jernej.skrabec@gmail.com>, 
- Luca Ceresoli <luca.ceresoli@bootlin.com>, 
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
- Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>, 
- Simona Vetter <simona@ffwll.ch>
-Cc: Dmitry Baryshkov <lumag@kernel.org>, dri-devel@lists.freedesktop.org, 
- Maxime Ripard <mripard@kernel.org>, Paul Cercueil <paul@crapouillou.net>, 
- linux-mips@vger.kernel.org
-X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1433; i=mripard@kernel.org;
- h=from:subject:message-id; bh=I20Q//RFK7ao359GomgqHXMDHn8VA8hI476OwudF+zM=;
- b=owGbwMvMwCmsHn9OcpHtvjLG02pJDFlSbz0ZF9wNvjZR8/NzrdZIngcRwjM8jnTmhAtxls84r
- 3uJ6eDtjqksDMKcDLJiiixPZMJOL29fXOVgv/IHzBxWJpAhDFycAjCRaV8Zq1l7BfYnS+x7rauW
- 8O3BqevHq0os3/ozvPz4IF5jzbbm9OTl7BtUKtXYGectt/sXtMvpF2PD+mXTK3ocFv74+Jrljli
- 38r3eWh6nZ0yWUW9X236eXWy78GLhn/+euk18Erc7cj4pLrcDAA==
-X-Developer-Key: i=mripard@kernel.org; a=openpgp;
- fpr=BE5675C37E818C8B5764241C254BCFC56BF6CE8D
+Content-Transfer-Encoding: 8bit
+X-Spam-Flag: NO
+X-Spam-Score: -2.79
+X-Spam-Level: 
 X-Spamd-Result: default: False [-0.66 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20260515];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+	MID_CONTAINS_FROM(1.00)[];
+	R_MISSING_CHARSET(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[suse.de,none];
+	R_DKIM_ALLOW(-0.20)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-14827-lists,linux-mips=lfdr.de];
-	FREEMAIL_TO(0.00)[intel.com,linaro.org,kernel.org,ideasonboard.com,kwiboo.se,gmail.com,bootlin.com,linux.intel.com,suse.de,ffwll.ch];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	RCPT_COUNT_TWELVE(0.00)[16];
 	MIME_TRACE(0.00)[0:+];
+	RCPT_COUNT_TWELVE(0.00)[19];
+	TAGGED_FROM(0.00)[bounces-14829-lists,linux-mips=lfdr.de];
+	RCVD_TLS_LAST(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	FREEMAIL_TO(0.00)[kernel.org,linux.intel.com,redhat.com,gmail.com,ffwll.ch,kodeit.net,proton.me,crapouillou.net,outlook.com,broadcom.com];
+	DKIM_TRACE(0.00)[suse.de:+];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	TO_DN_SOME(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[tzimmermann@suse.de,linux-mips@vger.kernel.org];
 	FROM_HAS_DN(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	TO_DN_SOME(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[mripard@kernel.org,linux-mips@vger.kernel.org];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	MID_RHS_MATCH_FROM(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[6];
 	TAGGED_RCPT(0.00)[linux-mips];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[crapouillou.net:email,tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo]
-X-Rspamd-Queue-Id: F050260D33D
+	NEURAL_HAM(-0.00)[-1.000];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.de:mid,suse.de:dkim,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo]
+X-Rspamd-Queue-Id: E9DFF612F2B
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-The drm_bridge_funcs.atomic_reset callback and its
-drm_atomic_helper_bridge_reset() helper are deprecated.
+DRM clients can supply information on framebuffer areas to update as
+part of each page flip, called damage clipping rectangles. But DRM's
+processing of this information is inconsistent and prone to errors.
 
-Switch to the atomic_create_state callback and its
-drm_atomic_helper_bridge_create_state() counterpart.
+- There are multiple fields and tests that decide if damage clips
+should be taken or ignored.
 
-Signed-off-by: Maxime Ripard <mripard@kernel.org>
+- Sometimes damage clips are removed behind the back of the DRM client.
 
----
-To: Paul Cercueil <paul@crapouillou.net>
-Cc: linux-mips@vger.kernel.org
----
- drivers/gpu/drm/ingenic/ingenic-drm-drv.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+- Atomic helpers evaluate damage clipping in the middle of the atomic
+check: after connectors and encoders, but before planes and CRTCs. Hence
+pipeline stages have an inconsistent view.
 
-diff --git a/drivers/gpu/drm/ingenic/ingenic-drm-drv.c b/drivers/gpu/drm/ingenic/ingenic-drm-drv.c
-index 42c86f195c66..7e569af22391 100644
---- a/drivers/gpu/drm/ingenic/ingenic-drm-drv.c
-+++ b/drivers/gpu/drm/ingenic/ingenic-drm-drv.c
-@@ -1029,11 +1029,11 @@ static const struct drm_encoder_helper_funcs ingenic_drm_encoder_helper_funcs =
- static const struct drm_bridge_funcs ingenic_drm_bridge_funcs = {
- 	.attach			= ingenic_drm_bridge_attach,
- 	.atomic_enable		= ingenic_drm_bridge_atomic_enable,
- 	.atomic_disable		= ingenic_drm_bridge_atomic_disable,
- 	.atomic_check		= ingenic_drm_bridge_atomic_check,
--	.atomic_reset		= drm_atomic_helper_bridge_reset,
-+	.atomic_create_state		= drm_atomic_helper_bridge_create_state,
- 	.atomic_duplicate_state	= drm_atomic_helper_bridge_duplicate_state,
- 	.atomic_destroy_state	= drm_atomic_helper_bridge_destroy_state,
- 	.atomic_get_input_bus_fmts = ingenic_drm_bridge_atomic_get_input_bus_fmts,
- };
- 
+- Which leads to drivers (ingenic) doing a re-evaluation if necessary.
 
+- Tests of plane source coordinates only happen during commits. At this
+point, the driver should already know if damage clips are to be taken or
+not. Because of this, some drivers (appletbdrm) might operate on incorrect
+damage information for their internal workings. This also leads to excessive
+use of the old plane state.
+
+Therefore go through DRM helpers and drivers and fix the logic.
+
+- Run all of the atomic checks with the damage information supplied by
+DRM clients. Afterwards evaluate plane and CRTC states on whether to
+take or ignore damage clips. Do all related tests in a single atomic
+helper.
+
+- Do not discard damage clips. Set ignore_damage_clips in struct
+drm_plane_state instead. This includes changes to plane source-coordinates.
+The damage iterator now only has to look at this flag to detect if it
+should use the damage clips. 
+
+- Go over drivers and fix the damage handling in the plane's
+atomic_update helpers. Most drivers no longer need the old plane state
+in their update.
+
+- The appletbdrm driver requires a fix in how it uses damage information.
+Ingenic and vmwgfx can be simplified. These changes improve the drivers'
+code organization.
+
+- Kunit tests require some changes. Drop some obsolete tests and add a new
+one for ignore_damage_flags.
+
+Tested with bochs, mgag200, Kunit tests.
+
+v4:
+- reorder patches to avoid error-prone intermediate state
+v3:
+- fix error path in appletbdrm
+v2:
+- rebase on latest upstream
+
+Thomas Zimmermann (10):
+  drm/damage-helper: Do not alter damage clips on modeset, but ignore
+    them
+  drm/atomic-helpers: Evaluate plane damage after atomic_check
+  drm/ingenic: Remove calls to drm_atomic_helper_check_plane_damage()
+  drm/appletbdrm: Allocate request/response buffers in begin_fb_access
+  drm/atomic_helper: Do not evaluate plane damage before atomic_check
+  drm/damage-helper: Test src coord in
+    drm_atomic_helper_check_plane_damage()
+  drm/damage-helper: Remove old state from
+    drm_atomic_helper_damage_iter_init()
+  drm/damage-helper: Remove old state from
+    drm_atomic_helper_damage_merged()
+  drm/damage-helper: Rename state parameters in damage helpers
+  drm/vmwgfx: Remove unused field struct
+    vmwgfx_du_update_plane.old_state
+
+ drivers/gpu/drm/ast/ast_cursor.c              |   3 +-
+ drivers/gpu/drm/ast/ast_mode.c                |   2 +-
+ drivers/gpu/drm/drm_atomic_helper.c           |   6 +-
+ drivers/gpu/drm/drm_atomic_state_helper.c     |   1 +
+ drivers/gpu/drm/drm_damage_helper.c           |  44 ++--
+ drivers/gpu/drm/drm_fb_dma_helper.c           |   2 +-
+ drivers/gpu/drm/drm_mipi_dbi.c                |   3 +-
+ drivers/gpu/drm/gud/gud_pipe.c                |   3 +-
+ drivers/gpu/drm/hyperv/hyperv_drm_modeset.c   |   3 +-
+ drivers/gpu/drm/i915/display/intel_plane.c    |  11 +-
+ drivers/gpu/drm/i915/display/intel_psr.c      |   3 +-
+ drivers/gpu/drm/ingenic/ingenic-drm-drv.c     |   3 -
+ drivers/gpu/drm/ingenic/ingenic-ipu.c         |   8 +-
+ drivers/gpu/drm/mgag200/mgag200_mode.c        |   3 +-
+ drivers/gpu/drm/sitronix/st7571.c             |   3 +-
+ drivers/gpu/drm/sitronix/st7586.c             |   3 +-
+ drivers/gpu/drm/sitronix/st7920.c             |   3 +-
+ drivers/gpu/drm/solomon/ssd130x.c             |   9 +-
+ drivers/gpu/drm/sysfb/drm_sysfb_modeset.c     |   3 +-
+ .../gpu/drm/tests/drm_damage_helper_test.c    | 200 +++---------------
+ drivers/gpu/drm/tiny/appletbdrm.c             |  59 +++---
+ drivers/gpu/drm/tiny/bochs.c                  |   3 +-
+ drivers/gpu/drm/tiny/cirrus-qemu.c            |   2 +-
+ drivers/gpu/drm/tiny/gm12u320.c               |   2 +-
+ drivers/gpu/drm/tiny/ili9225.c                |   3 +-
+ drivers/gpu/drm/tiny/repaper.c                |   2 +-
+ drivers/gpu/drm/tiny/sharp-memory.c           |   3 +-
+ drivers/gpu/drm/udl/udl_modeset.c             |   3 +-
+ drivers/gpu/drm/virtio/virtgpu_plane.c        |   2 +-
+ drivers/gpu/drm/vmwgfx/vmwgfx_kms.c           |   5 +-
+ drivers/gpu/drm/vmwgfx/vmwgfx_kms.h           |   2 -
+ drivers/gpu/drm/vmwgfx/vmwgfx_scrn.c          |  12 +-
+ drivers/gpu/drm/vmwgfx/vmwgfx_stdu.c          |  15 +-
+ include/drm/drm_damage_helper.h               |   9 +-
+ 34 files changed, 123 insertions(+), 315 deletions(-)
+
+
+base-commit: 4f554688dffcacf48630c14f9fb77a9f60394c1c
 -- 
 2.54.0
 
