@@ -1,60 +1,106 @@
-Return-Path: <linux-mips+bounces-14850-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-14851-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id cF+IEdYOHmocgwkAu9opvQ
-	(envelope-from <linux-mips+bounces-14850-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Tue, 02 Jun 2026 00:59:34 +0200
+	id 2M3wNl4XHmr2hAkAu9opvQ
+	(envelope-from <linux-mips+bounces-14851-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Tue, 02 Jun 2026 01:35:58 +0200
 X-Original-To: lists+linux-mips@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 95E24626261
-	for <lists+linux-mips@lfdr.de>; Tue, 02 Jun 2026 00:59:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 6A30E6265AF
+	for <lists+linux-mips@lfdr.de>; Tue, 02 Jun 2026 01:35:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 81CFE3007F43
-	for <lists+linux-mips@lfdr.de>; Mon,  1 Jun 2026 22:58:09 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 1D95C302A509
+	for <lists+linux-mips@lfdr.de>; Mon,  1 Jun 2026 23:35:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 11AF9361DAE;
-	Mon,  1 Jun 2026 22:58:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1E14437756E;
+	Mon,  1 Jun 2026 23:35:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PsSONfve"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bwFeM+dK"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E932F2E0901;
-	Mon,  1 Jun 2026 22:58:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F31C33F590;
+	Mon,  1 Jun 2026 23:35:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780354687; cv=none; b=f/89ngvusGqN7Jb36YUKh17LfWRnxqKEVhnMzFV7dvuklnHZK+CY7S7RpoUbtcRXRIgd31XU5YvvDxc+5VIhVcCgnyPdl/vYs2ShbLGduxNA4nG09ydCM73+SCPK4DkeQrlHViZ1h62gG9qmlUUcLMfCaqWeFkTJAPqPtG0W+lg=
+	t=1780356951; cv=none; b=ZkvjnJeSxJPFANgsg4qd1alWkl94UWguwjfQfucig68WnQr2aJ5sSMPJCeaP+2z9LjX/HH3bonVkGYhh/YY5Ho4WawMR9yFSxNaDB/Bfp5LPMmyOr6FGQLpc3aSedoLjc4GW/ljlZsZ8glZRIsMcM53n1VzTSkiBfoaHkSp4zh8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780354687; c=relaxed/simple;
-	bh=uQy4LbDTBv+X0zGUTvg2hyGGkVlOpzztYoA7miqd+po=;
+	s=arc-20240116; t=1780356951; c=relaxed/simple;
+	bh=mu+k5t+nIMpSdNoVyH2bpssgMm+HGMnEOEsZeveBT8Q=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ZOfmIHLA83aekSWrI+FT3pMuWQEKDo8fzjxiOdSzGY3/ED5+X9VKMBcHaRDVix8xF7S+v49QAYG4DVnwcI4HPtcdcIzwDt1vmjrQSTKxMOHrAUWH5n4+37+8g/q13rxIjttQzrzPHwQx60uU7vRAIY7jKzd3KvmRXbjQ9tf7lmU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PsSONfve; arc=none smtp.client-ip=100.103.45.18
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 571081F00893;
-	Mon,  1 Jun 2026 22:58:06 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=dZ7+2Sy49W8OkBelKwRKgbivpVg6LIkE+Lk3X4mQwcCRghJyNGESIHbVWI3g84vHJPoGO633N/P4K8q/zKhBDtwDfgRvrtB+C6RQ2UZ0nzxBP1zfkOh4elUJPq6EWWIChIftFy1iR8Alxvp+Pd4WNi2UaNt093uHf7SWMhQQ+Mc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bwFeM+dK; arc=none smtp.client-ip=100.103.45.18
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5639F1F00893;
+	Mon,  1 Jun 2026 23:35:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780354686;
-	bh=MzlIrZ2xitOElGGvcFl7v9dFMNgCf3mriv86YlPvr/U=;
+	s=k20260515; t=1780356949;
+	bh=BsNyXchE0cQ+WrTEzbPCgdBZhaTxYz8ZYh6ODfO6Thc=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=PsSONfve6OOJYc+tFMyWBx8YeL/z8+OtDwdrC2ic3L9RzBOfRQJYP5R2EU7cQkTvU
-	 hcTSdNRgJWGay4ighXmn52Jv3RUOnifIMCvXDROjbR3eHmnCQpTDcuurLP3ARPN1Ft
-	 p4jPWvakR1AVlNhZ1IkZyg/wj1JPf9Xe23A5piS8pgg5bQXeIyVH+Q7IOY6os+aw/y
-	 I8MTU0bKrUXu+xGf3NiSSanr0vfgnWcGxOqAukOqpGDmquKLvXk35EBRZY85xcBJnV
-	 teMxLYCmGKhC/uoA2j7M9TGW8xaXRMSCqtaX/YCWIyZqYvpvSG6jUBj9kwuZPKnH/i
-	 tR14u2DAzwWCA==
-Date: Mon, 1 Jun 2026 17:58:05 -0500
-From: Rob Herring <robh@kernel.org>
-To: Caleb James DeLisle <cjd@cjdns.fr>
-Cc: linux-mips@vger.kernel.org, vkoul@kernel.org, neil.armstrong@linaro.org,
-	krzk+dt@kernel.org, conor+dt@kernel.org,
-	linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] dt-bindings: phy: econet: Document EN751221 USB PHY
-Message-ID: <20260601225805.GA129257-robh@kernel.org>
-References: <20260518141343.401555-1-cjd@cjdns.fr>
- <20260518141343.401555-2-cjd@cjdns.fr>
+	b=bwFeM+dKJids5MGHkWeT2lqLmOE+Z22fpYZVG8IarCaPIkYd1ClJLTF0P+KK4TZC1
+	 t1HfBIbIgLm2lF9d6SD2H1GRY5GUIy6SJwL9v8EZ3L20jIK/NaVXSt1XPTueO0oIGy
+	 y19iXABriAlFUODdDTo2f2+FK6UaosZlP/s7kW+eWFj9kPjNXvxZUpQLix9fiYAVMs
+	 qutOmIhrfL9fMTHLsw3ErfIZs150qZpCJg1stHoIzdshVCQp8iYW9sI4ko81gCNtbL
+	 eRcz3oBpBUe09WQM6FxiPQKCgb0o3dANEdBD5y5Egf4yKaQOgk8QwaFZYGWRDLloCl
+	 38TEpySFeTuzg==
+Date: Mon, 1 Jun 2026 18:35:48 -0500
+From: "Rob Herring (Arm)" <robh@kernel.org>
+To: Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>
+Cc: Lee Jones <lee@kernel.org>,
+	Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+	Doug Berger <opendmb@gmail.com>,
+	Madhavan Srinivasan <maddy@linux.ibm.com>, Bin Liu <b-liu@ti.com>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
+	Thierry Reding <thierry.reding@avionic-design.de>,
+	Nicholas Piggin <npiggin@gmail.com>,
+	Simona Vetter <simona@ffwll.ch>, brgl@kernel.org,
+	Eric Dumazet <edumazet@google.com>,
+	Fabio Estevam <festevam@gmail.com>,
+	David Airlie <airlied@gmail.com>, linux-arm-msm@vger.kernel.org,
+	Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+	Will Deacon <will@kernel.org>, iommu@lists.linux.dev,
+	Ulf Hansson <ulfh@kernel.org>,
+	Matthew Brost <matthew.brost@intel.com>,
+	Florian Fainelli <florian.fainelli@broadcom.com>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	Thomas =?iso-8859-1?Q?Hellstr=F6m?= <thomas.hellstrom@linux.intel.com>,
+	Philipp Zabel <p.zabel@pengutronix.de>,
+	linux-arm-kernel@lists.infradead.org,
+	"David S. Miller" <davem@davemloft.net>,
+	intel-xe@lists.freedesktop.org, Andi Shyti <andi.shyti@kernel.org>,
+	linux-kernel@vger.kernel.org,
+	"Rafael J. Wysocki" <rafael@kernel.org>, netdev@vger.kernel.org,
+	linux-sound@vger.kernel.org, Srinivas Kandagatla <srini@kernel.org>,
+	linux-mips@vger.kernel.org,
+	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
+	driver-core@lists.linux.dev,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+	imx@lists.linux.dev, Vinod Koul <vkoul@kernel.org>,
+	Peter Chen <peter.chen@kernel.org>, linux-usb@vger.kernel.org,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Paul Cercueil <paul@crapouillou.net>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Joerg Roedel <joro@8bytes.org>,
+	"Christophe Leroy (CS GROUP)" <chleroy@kernel.org>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Danilo Krummrich <dakr@kernel.org>,
+	Mark Brown <broonie@opensource.wolfsonmicro.com>,
+	Robin Murphy <robin.murphy@arm.com>, Frank Li <Frank.Li@nxp.com>,
+	devicetree@vger.kernel.org, linux-i2c@vger.kernel.org,
+	Rodrigo Vivi <rodrigo.vivi@intel.com>,
+	linuxppc-dev@lists.ozlabs.org,
+	Saravana Kannan <saravanak@kernel.org>,
+	Maximilian Luz <luzmaximilian@gmail.com>, linux-pm@vger.kernel.org,
+	Hans de Goede <hansg@kernel.org>, dri-devel@lists.freedesktop.org,
+	platform-driver-x86@vger.kernel.org
+Subject: Re: [PATCH 09/23] of: platform: use platform_device_set_of_node()
+Message-ID: <178035694685.195552.1114165096275774254.robh@kernel.org>
+References: <20260521-pdev-fwnode-ref-v1-0-88c324a1b8d2@oss.qualcomm.com>
+ <20260521-pdev-fwnode-ref-v1-9-88c324a1b8d2@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -63,7 +109,7 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260518141343.401555-2-cjd@cjdns.fr>
+In-Reply-To: <20260521-pdev-fwnode-ref-v1-9-88c324a1b8d2@oss.qualcomm.com>
 X-Spamd-Result: default: False [0.34 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	MID_CONTAINS_FROM(1.00)[];
@@ -74,121 +120,40 @@ X-Spamd-Result: default: False [0.34 / 15.00];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-14850-lists,linux-mips=lfdr.de];
+	FREEMAIL_CC(0.00)[kernel.org,gmail.com,linux.ibm.com,ti.com,lunn.ch,pengutronix.de,avionic-design.de,ffwll.ch,google.com,vger.kernel.org,kernel.crashing.org,lists.linux.dev,intel.com,broadcom.com,linux.intel.com,lists.infradead.org,davemloft.net,lists.freedesktop.org,ellerman.id.au,crapouillou.net,linuxfoundation.org,8bytes.org,redhat.com,opensource.wolfsonmicro.com,arm.com,nxp.com,lists.ozlabs.org];
 	FROM_HAS_DN(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
 	RCVD_TLS_LAST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
+	RCVD_COUNT_THREE(0.00)[4];
+	TAGGED_FROM(0.00)[bounces-14851-lists,linux-mips=lfdr.de];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	DKIM_TRACE(0.00)[kernel.org:+];
 	MISSING_XM_UA(0.00)[];
-	TO_DN_SOME(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
+	MIME_TRACE(0.00)[0:+];
+	RCPT_COUNT_GT_50(0.00)[65];
 	PRECEDENCE_BULK(0.00)[];
 	FROM_NEQ_ENVFROM(0.00)[robh@kernel.org,linux-mips@vger.kernel.org];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCPT_COUNT_SEVEN(0.00)[9];
+	NEURAL_HAM(-0.00)[-1.000];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[linux-mips,dt];
+	TAGGED_RCPT(0.00)[linux-mips,netdev];
 	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,cjdns.fr:email,devicetree.org:url]
-X-Rspamd-Queue-Id: 95E24626261
+	TO_DN_SOME(0.00)[]
+X-Rspamd-Queue-Id: 6A30E6265AF
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On Mon, May 18, 2026 at 02:13:42PM +0000, Caleb James DeLisle wrote:
-> Document the USB PHY devices which appear in EcoNet EN751221, EN751627,
-> and EN7528 based SoCs.
+
+On Thu, 21 May 2026 10:36:32 +0200, Bartosz Golaszewski wrote:
+> Ahead of reworking the reference counting logic for platform devices,
+> encapsulate the assignment of the OF node for dynamically allocated
+> platform devices with the provided helper.
 > 
-> Signed-off-by: Caleb James DeLisle <cjd@cjdns.fr>
+> Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>
 > ---
->  .../bindings/phy/econet,en751221-usb-phy.yaml | 128 ++++++++++++++++++
->  MAINTAINERS                                   |   6 +
->  2 files changed, 134 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/phy/econet,en751221-usb-phy.yaml
+>  drivers/of/platform.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/Documentation/devicetree/bindings/phy/econet,en751221-usb-phy.yaml b/Documentation/devicetree/bindings/phy/econet,en751221-usb-phy.yaml
-> new file mode 100644
-> index 000000000000..a44f59601747
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/phy/econet,en751221-usb-phy.yaml
-> @@ -0,0 +1,128 @@
-> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-> +# Copyright (C) 2024 EcoNet
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/phy/econet,en751221-usb-phy.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: EcoNet EN751221 USB PHY
-> +
-> +maintainers:
-> +  - Caleb James DeLisle <cjd@cjdns.fr>
-> +
-> +description: |
 
-Don't need '|' unless there is formatting to preserve.
+Acked-by: Rob Herring (Arm) <robh@kernel.org>
 
-> +  USB PHY controller found on EcoNet EN751221 SoCs as well as on EN751627 and
-> +  EN7528. These devices generally have two ports, one of which is a USB 3.0,
-> +  and the other is USB 2.0. The USB 3.0 port is driven by one of two PHY
-> +  blocks, depending on whether the connected device has negotiated USB 3.0 or
-> +  2.0. These PHYs are also used on other EcoNet silicon in varying
-> +  configurations, such as only port 0 (the USB 3.0 port), or only port 1 (the
-> +  USB 2.0 port).
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - econet,en751221-usb-phy
-> +      - econet,en751627-usb-phy
-> +      - econet,en7528-usb-phy
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  "#address-cells": true
-> +  "#size-cells": true
-> +  ranges: true
-> +
-> +  clocks:
-> +    maxItems: 1
-> +    description: |
-> +      Crystal oscillator clock source. EcoNet devices run at either 20Mhz or
-> +      25Mhz. 25Mhz devices require additional tuning in the USB 3.0 PHY.
-> +
-> +  clock-names:
-> +    items:
-> +      - const: xtal
-> +
-> +patternProperties:
-> +  "^usb-phy@[0-9a-f]+$":
-> +    type: object
-> +    description: USB 2.0 or 3.0 PHY sub-node.
-> +
-> +    properties:
-> +      compatible:
-> +        enum:
-> +          - econet,usb2-phy
-> +          - econet,usb3-phy
-> +
-> +      reg:
-> +        maxItems: 1
-> +
-> +      resets:
-> +        maxItems: 1
-> +
-> +      econet,usb-port-id:
-> +        $ref: /schemas/types.yaml#/definitions/uint32
-> +        enum: [0, 1]
-> +        description: |
-> +          Physical port number. Since USB 3.0 requires a second PHY for the 2.0
-> +          fallback, multiple PHYs can map to the same physical port.
-
-What is special about this platform needing this property. Lots of 
-platforms have 2 phys for USB 2.0 and 3.0 yet don't need a property 
-like this. Can't you figure out which phys are the same USB port by the 
-USB controller 'phys' property which would define that?
-
-Rob
 
