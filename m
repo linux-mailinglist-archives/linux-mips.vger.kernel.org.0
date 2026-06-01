@@ -1,270 +1,238 @@
-Return-Path: <linux-mips+bounces-14838-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-14839-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id UKHVFas0G2qqAAkAu9opvQ
-	(envelope-from <linux-mips+bounces-14838-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Sat, 30 May 2026 21:04:11 +0200
+	id CJpTBfFbHWoBZwkAu9opvQ
+	(envelope-from <linux-mips+bounces-14839-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Mon, 01 Jun 2026 12:16:17 +0200
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id B8FAD612F8D
-	for <lists+linux-mips@lfdr.de>; Sat, 30 May 2026 21:04:10 +0200 (CEST)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2AE3F61D2E7
+	for <lists+linux-mips@lfdr.de>; Mon, 01 Jun 2026 12:16:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 7027E3035B7D
-	for <lists+linux-mips@lfdr.de>; Sat, 30 May 2026 18:58:08 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 2F1BD3007AFF
+	for <lists+linux-mips@lfdr.de>; Mon,  1 Jun 2026 10:16:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 329B015687D;
-	Sat, 30 May 2026 18:58:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 983343921E6;
+	Mon,  1 Jun 2026 10:16:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="gfbU4dVM";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="qYqFzf19"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BEB4F1A5B9D
-	for <linux-mips@vger.kernel.org>; Sat, 30 May 2026 18:58:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11EDF38AC61
+	for <linux-mips@vger.kernel.org>; Mon,  1 Jun 2026 10:16:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780167487; cv=none; b=UsLDWt0T8BMGIrMqiiarkHWAVjYGqrWl3Wc9cO15r07SpCiCsi4CU7kT1/4jKR13bzP6DmTk+Gcr2+OcZNXsZgyUEMZIpkFs1dvxp9yrQs+hlW91QMKZb3oXG98jl4Rw1TBfud0VGLnoArWcebtChF0cPC/jkBagbdFSSWHRK38=
+	t=1780308972; cv=none; b=Y7pPfPcZ1OVCHjl7eKLqw+X+8oFpoRyzUj4ofwg0gN/EtRL8h2yUYEJGcksUo+cwQoK33dxecIkYfYCy6zykZEa46GubPppgQDpkipF9wzCTwOqXy6u041FkOfl/B5Kuprg3+VOdZVm0m2pPu/TRBiBG5Ii2tDdg9pj+jssRee0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780167487; c=relaxed/simple;
-	bh=pqjedD3POHIFXVABSCbeZ0DjTL0alwngfAqvdTOj55w=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=H2oJIlS040Xr7STYcTEWf6pIo6+xth+2QIb4Mdnhv4Xj5p6VdYvDusMfwon7/WpDlDBpPu5+MYUuNy/9EOaNyODEm1wB0vpqUcGPr+am2mRtZwDh6a3JuTgBmhxOnN/pYFgRQ5voaExXPjPCw6Jo+iaewPzVU0NN/AQXp6uQF+E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; arc=none smtp.client-ip=195.135.223.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
-Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id BD08B67B2E;
-	Sat, 30 May 2026 18:57:23 +0000 (UTC)
-Authentication-Results: smtp-out2.suse.de;
-	none
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 466B9779A7;
-	Sat, 30 May 2026 18:57:23 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id aOQCEBMzG2rXUwAAD6G6ig
-	(envelope-from <tzimmermann@suse.de>); Sat, 30 May 2026 18:57:23 +0000
-From: Thomas Zimmermann <tzimmermann@suse.de>
-To: mripard@kernel.org,
-	maarten.lankhorst@linux.intel.com,
-	airlied@redhat.com,
-	airlied@gmail.com,
-	simona@ffwll.ch,
-	admin@kodeit.net,
-	gargaditya08@proton.me,
-	paul@crapouillou.net,
-	jani.nikula@linux.intel.com,
-	mhklinux@outlook.com,
-	zack.rusin@broadcom.com,
-	bcm-kernel-feedback-list@broadcom.com
-Cc: dri-devel@lists.freedesktop.org,
-	linux-hyperv@vger.kernel.org,
-	intel-gfx@lists.freedesktop.org,
-	intel-xe@lists.freedesktop.org,
-	linux-mips@vger.kernel.org,
-	virtualization@lists.linux.dev,
-	Thomas Zimmermann <tzimmermann@suse.de>
-Subject: [PATCH v4 10/10] drm/vmwgfx: Remove unused field struct vmwgfx_du_update_plane.old_state
-Date: Sat, 30 May 2026 20:53:23 +0200
-Message-ID: <20260530185716.65688-11-tzimmermann@suse.de>
-X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20260530185716.65688-1-tzimmermann@suse.de>
+	s=arc-20240116; t=1780308972; c=relaxed/simple;
+	bh=//fpv6KtnZGPacElQOdywvJfvUtWfzycEBrOQGiMPzk=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=WYraR6Sp05TlVT69yWfr/GYYptX76bDNlJk5T9ODuehIr5zZVM/Ki6IyyrYcnF7V2IarNuOlSFJdrtBpxsFhvs99/skChU5z3x3tD5q8om8rwA1xnfY/jTcFEotWtibfU9VeqVliKqyPZQjJmukn1zCAlRoCOHTwxUN4Mb+lWnQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=gfbU4dVM; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=qYqFzf19; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1780308966;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Ec/J4tNvrAMdwkOq5RTOf80WrT+IRWDMG7cFT7/0gaw=;
+	b=gfbU4dVMY/wH4c/7itvNad/Ic1zKdnn38GuaLQZFUumSCV2pFHlOB7Nw6wjEGSW4ZpK9m3
+	viIPYyifpvhzOFK+YlWcEkALX4178HepizE86qMu9JxHsE2QSuluj2gK0fB3xaTjgHtyYT
+	K3Xm3lmHoa0WYReKDXDXJmQ2Te+0xnE=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-131-s9rytaNhPaOYk97ipg1XHA-1; Mon, 01 Jun 2026 06:16:03 -0400
+X-MC-Unique: s9rytaNhPaOYk97ipg1XHA-1
+X-Mimecast-MFC-AGG-ID: s9rytaNhPaOYk97ipg1XHA_1780308962
+Received: by mail-wm1-f69.google.com with SMTP id 5b1f17b1804b1-490a763180bso11035995e9.0
+        for <linux-mips@vger.kernel.org>; Mon, 01 Jun 2026 03:16:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=redhat.com; s=google; t=1780308962; x=1780913762; darn=vger.kernel.org;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Ec/J4tNvrAMdwkOq5RTOf80WrT+IRWDMG7cFT7/0gaw=;
+        b=qYqFzf198t5SPjnGYTxm2tKTCvzMBJI2CCWRPxD/dU3kRMjYnN/ed9VLpQGypAl5Ho
+         i4eXAZE4oKfy/iOKRi8EoCjlTsPIDbf5+pOdP20Y5kgylUZBD40govnhIm5EQ6N4NrRa
+         Wb7OYlj/DVytwIL5+uMkcU53JMnU4adtZ0FoZdDJUaBdJbrmIVU88xJOFhtNky9FwnXK
+         /gvlEUJD4nRuaNkhon5QjDtGDIt0eitUjXr+cL51lm7cO8v0wjNLpwj3Fo6kW3mVzKcs
+         +clN1HG6CImY9UL1mRmZsfVXzWrMXt88sCM0SE1UvBMbKKGn66gbqD1R7hVWmCBSRn4t
+         Pm6w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1780308962; x=1780913762;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Ec/J4tNvrAMdwkOq5RTOf80WrT+IRWDMG7cFT7/0gaw=;
+        b=YqJd9bV2pjikteoL0kLJMb8QzqkuKi+kMdzyGhTm1ZTu/iKzZqeHZCtEc44HyVLIjT
+         vDTGgiQtRA0fA7eQ0IVom/tbgIKkM4d1cLGd3b2uw2mJtI6MLwSOW+18glwVnzn6ZKZj
+         EWr3q5ahusO6kLTipgykcvJgd5rsZ3xgm6Zzgc5G+dRPg0JZ68AKc1IdvScu+QtrTSQX
+         K+HF51C5CiVNuBrWWE4ZCwhN/qLOhdwwPR4GFT9BvuQLoi1z+RhO2Phy98ufQSCQrbkR
+         Nr2gfpjqMadfYk9JXGsHecEIFrgJkd3QLS4wjqZnAkbvLfgNXTH+Uclr0clAI5HeQXRb
+         xo+A==
+X-Forwarded-Encrypted: i=1; AFNElJ8hn/geIzFZU8Qj3kGLFl3x76e6syOn31gtOMpU39mQjiwA/WRq9B+lQTLLV0iMToTXOgymWKtHuxyH@vger.kernel.org
+X-Gm-Message-State: AOJu0YzSpiCbtFW/OJMhIUVmglG30k3fSIOuqllM2T3n+O1sFi4+N5XZ
+	QKJCaFt1qyiQPBTtPG+SpTdo2GzIjwfIzMg/fYkO9/hsEJGKz1leeuy1aPVsGHfkijLDWMwhNbt
+	8e2+TjaGfJys4B2Xqy18qphHQ3GShaFDwPWnzDvieCpyjuYsNbS1h1ob5Yztr8yQ=
+X-Gm-Gg: Acq92OHdHpdawM47Dg9ZfXW69c3IS9vv9t0lE1+6ZokgglKAC9tsBZhtuZ+B8fLBGf9
+	0acjfMJnY9zA1s35ytAjvjO/8BrsEKzdsO/MyKKz6DkYhOwpAKXE2hpusGxLQCscKqd/2a9idEp
+	bsc2GrS7tx+JH2j3C8qfDopXMeila9r389LBaoT5Sz7VpvmxHgKbEPUr1kkg+l9nbMLsmqc6KhL
+	3cyD17gYNXTA+roLXAWAhD4FwskL7kj44oBZrWa1UF6fy4l2+l5Svs6eaz8L1w1BGSKunh87OEn
+	wRZ4LrQ70PRJUY+kFkmat6slZ9Upa1kOERZdUjZe10sROh4bcPUucBqPHLOnPw97pfPDo2NDHdb
+	q5SsuBKNU32/l+OhH1gnaHb4nKBWnQo1pBEh3tvhuHu5MrQ6j8R/QmOu1Iz06MRR6jbjytPC/5O
+	kSfN12HafPmxzXLJ4=
+X-Received: by 2002:a05:600c:1c06:b0:490:a298:3859 with SMTP id 5b1f17b1804b1-490a29838b6mr211911645e9.24.1780308962222;
+        Mon, 01 Jun 2026 03:16:02 -0700 (PDT)
+X-Received: by 2002:a05:600c:1c06:b0:490:a298:3859 with SMTP id 5b1f17b1804b1-490a29838b6mr211910935e9.24.1780308961705;
+        Mon, 01 Jun 2026 03:16:01 -0700 (PDT)
+Received: from localhost (62-151-111-63.jazzfree.ya.com. [62.151.111.63])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-45ef32fabcasm23621879f8f.0.2026.06.01.03.16.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 01 Jun 2026 03:16:01 -0700 (PDT)
+From: Javier Martinez Canillas <javierm@redhat.com>
+To: Thomas Zimmermann <tzimmermann@suse.de>, mripard@kernel.org,
+ maarten.lankhorst@linux.intel.com, airlied@redhat.com, airlied@gmail.com,
+ simona@ffwll.ch, admin@kodeit.net, gargaditya08@proton.me,
+ paul@crapouillou.net, jani.nikula@linux.intel.com, mhklinux@outlook.com,
+ zack.rusin@broadcom.com, bcm-kernel-feedback-list@broadcom.com
+Cc: dri-devel@lists.freedesktop.org, linux-hyperv@vger.kernel.org,
+ intel-gfx@lists.freedesktop.org, intel-xe@lists.freedesktop.org,
+ linux-mips@vger.kernel.org, virtualization@lists.linux.dev, Thomas
+ Zimmermann <tzimmermann@suse.de>, stable@vger.kernel.org
+Subject: Re: [PATCH v4 01/10] drm/damage-helper: Do not alter damage clips
+ on modeset, but ignore them
+In-Reply-To: <20260530185716.65688-2-tzimmermann@suse.de>
 References: <20260530185716.65688-1-tzimmermann@suse.de>
+ <20260530185716.65688-2-tzimmermann@suse.de>
+Date: Mon, 01 Jun 2026 12:16:00 +0200
+Message-ID: <87y0gylg67.fsf@ocarina.mail-host-address-is-not-set>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Rspamd-Pre-Result: action=no action;
-	module=replies;
-	Message is reply to one we originated
-X-Rspamd-Pre-Result: action=no action;
-	module=replies;
-	Message is reply to one we originated
-X-Spam-Flag: NO
-X-Spam-Level: 
-X-Spam-Score: -4.00
-X-Spamd-Result: default: False [0.14 / 15.00];
+Content-Type: text/plain
+X-Spamd-Result: default: False [-1.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_CONTAINS_FROM(1.00)[];
 	R_MISSING_CHARSET(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	DMARC_POLICY_ALLOW(-0.50)[redhat.com,quarantine];
+	R_DKIM_ALLOW(-0.20)[redhat.com:s=mimecast20190719,redhat.com:s=google];
+	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
 	MAILLIST(-0.15)[generic];
-	DMARC_POLICY_SOFTFAIL(0.10)[suse.de : SPF not aligned (relaxed), No valid DKIM,none];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCPT_COUNT_TWELVE(0.00)[19];
-	MIME_TRACE(0.00)[0:+];
-	TAGGED_FROM(0.00)[bounces-14838-lists,linux-mips=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-14839-lists,linux-mips=lfdr.de];
+	RCPT_COUNT_TWELVE(0.00)[21];
+	MIME_TRACE(0.00)[0:+];
+	RECEIVED_HELO_LOCALHOST(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	FREEMAIL_TO(0.00)[kernel.org,linux.intel.com,redhat.com,gmail.com,ffwll.ch,kodeit.net,proton.me,crapouillou.net,outlook.com,broadcom.com];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TO_DN_SOME(0.00)[];
+	FREEMAIL_TO(0.00)[suse.de,kernel.org,linux.intel.com,redhat.com,gmail.com,ffwll.ch,kodeit.net,proton.me,crapouillou.net,outlook.com,broadcom.com];
+	DKIM_TRACE(0.00)[redhat.com:+];
+	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
+	MISSING_XM_UA(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[tzimmermann@suse.de,linux-mips@vger.kernel.org];
+	FROM_NEQ_ENVFROM(0.00)[javierm@redhat.com,linux-mips@vger.kernel.org];
 	FROM_HAS_DN(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	RCVD_COUNT_FIVE(0.00)[6];
-	R_DKIM_NA(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
 	TAGGED_RCPT(0.00)[linux-mips];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.de:mid,suse.de:email,broadcom.com:email,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo]
-X-Rspamd-Queue-Id: B8FAD612F8D
+	NEURAL_HAM(-0.00)[-1.000];
+	TO_DN_SOME(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:rdns,sin.lore.kernel.org:helo,ocarina.mail-host-address-is-not-set:mid]
+X-Rspamd-Queue-Id: 2AE3F61D2E7
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-Plane updates no longer require the old plane state. Remove the field
-from struct vmwgfx_du_update_plane and fix all callers.
+Thomas Zimmermann <tzimmermann@suse.de> writes:
 
-Signed-off-by: Thomas Zimmermann <tzimmermann@suse.de>
-Reviewed-by: Zack Rusin <zack.rusin@broadcom.com>
----
- drivers/gpu/drm/vmwgfx/vmwgfx_kms.h  |  2 --
- drivers/gpu/drm/vmwgfx/vmwgfx_scrn.c | 12 ++----------
- drivers/gpu/drm/vmwgfx/vmwgfx_stdu.c | 11 ++---------
- 3 files changed, 4 insertions(+), 21 deletions(-)
+Hello Thomas,
 
-diff --git a/drivers/gpu/drm/vmwgfx/vmwgfx_kms.h b/drivers/gpu/drm/vmwgfx/vmwgfx_kms.h
-index 2224d7d91d1b..8c2072b82062 100644
---- a/drivers/gpu/drm/vmwgfx/vmwgfx_kms.h
-+++ b/drivers/gpu/drm/vmwgfx/vmwgfx_kms.h
-@@ -19,7 +19,6 @@
- /**
-  * struct vmw_du_update_plane - Closure structure for vmw_du_helper_plane_update
-  * @plane: Plane which is being updated.
-- * @old_state: Old state of plane.
-  * @dev_priv: Device private.
-  * @du: Display unit on which to update the plane.
-  * @vfb: Framebuffer which is blitted to display unit.
-@@ -102,7 +101,6 @@ struct vmw_du_update_plane {
- 				    struct drm_rect *bb);
- 
- 	struct drm_plane *plane;
--	struct drm_plane_state *old_state;
- 	struct vmw_private *dev_priv;
- 	struct vmw_display_unit *du;
- 	struct vmw_framebuffer *vfb;
-diff --git a/drivers/gpu/drm/vmwgfx/vmwgfx_scrn.c b/drivers/gpu/drm/vmwgfx/vmwgfx_scrn.c
-index c83061cf7455..fa84bc7ab5bb 100644
---- a/drivers/gpu/drm/vmwgfx/vmwgfx_scrn.c
-+++ b/drivers/gpu/drm/vmwgfx/vmwgfx_scrn.c
-@@ -530,7 +530,6 @@ static uint32_t vmw_stud_bo_post_clip(struct vmw_du_update_plane  *update,
-  */
- static int vmw_sou_plane_update_bo(struct vmw_private *dev_priv,
- 				   struct drm_plane *plane,
--				   struct drm_plane_state *old_state,
- 				   struct vmw_framebuffer *vfb,
- 				   struct vmw_fence_obj **out_fence)
- {
-@@ -538,7 +537,6 @@ static int vmw_sou_plane_update_bo(struct vmw_private *dev_priv,
- 
- 	memset(&bo_update, 0, sizeof(struct vmw_du_update_plane_buffer));
- 	bo_update.base.plane = plane;
--	bo_update.base.old_state = old_state;
- 	bo_update.base.dev_priv = dev_priv;
- 	bo_update.base.du = vmw_crtc_to_du(plane->state->crtc);
- 	bo_update.base.vfb = vfb;
-@@ -692,7 +690,6 @@ static uint32_t vmw_sou_surface_post_clip(struct vmw_du_update_plane *update,
-  */
- static int vmw_sou_plane_update_surface(struct vmw_private *dev_priv,
- 					struct drm_plane *plane,
--					struct drm_plane_state *old_state,
- 					struct vmw_framebuffer *vfb,
- 					struct vmw_fence_obj **out_fence)
- {
-@@ -700,7 +697,6 @@ static int vmw_sou_plane_update_surface(struct vmw_private *dev_priv,
- 
- 	memset(&srf_update, 0, sizeof(struct vmw_du_update_plane_surface));
- 	srf_update.base.plane = plane;
--	srf_update.base.old_state = old_state;
- 	srf_update.base.dev_priv = dev_priv;
- 	srf_update.base.du = vmw_crtc_to_du(plane->state->crtc);
- 	srf_update.base.vfb = vfb;
-@@ -721,7 +717,6 @@ static void
- vmw_sou_primary_plane_atomic_update(struct drm_plane *plane,
- 				    struct drm_atomic_commit *state)
- {
--	struct drm_plane_state *old_state = drm_atomic_get_old_plane_state(state, plane);
- 	struct drm_plane_state *new_state = drm_atomic_get_new_plane_state(state, plane);
- 	struct drm_crtc *crtc = new_state->crtc;
- 	struct vmw_fence_obj *fence = NULL;
-@@ -734,12 +729,9 @@ vmw_sou_primary_plane_atomic_update(struct drm_plane *plane,
- 			vmw_framebuffer_to_vfb(new_state->fb);
- 
- 		if (vfb->bo)
--			ret = vmw_sou_plane_update_bo(dev_priv, plane,
--						      old_state, vfb, &fence);
-+			ret = vmw_sou_plane_update_bo(dev_priv, plane, vfb, &fence);
- 		else
--			ret = vmw_sou_plane_update_surface(dev_priv, plane,
--							   old_state, vfb,
--							   &fence);
-+			ret = vmw_sou_plane_update_surface(dev_priv, plane, vfb, &fence);
- 		if (ret != 0)
- 			DRM_ERROR("Failed to update screen.\n");
- 	} else {
-diff --git a/drivers/gpu/drm/vmwgfx/vmwgfx_stdu.c b/drivers/gpu/drm/vmwgfx/vmwgfx_stdu.c
-index f0df2b1c8465..474e3badb80f 100644
---- a/drivers/gpu/drm/vmwgfx/vmwgfx_stdu.c
-+++ b/drivers/gpu/drm/vmwgfx/vmwgfx_stdu.c
-@@ -1240,7 +1240,6 @@ vmw_stdu_bo_populate_update_cpu(struct vmw_du_update_plane  *update, void *cmd,
-  */
- static int vmw_stdu_plane_update_bo(struct vmw_private *dev_priv,
- 				    struct drm_plane *plane,
--				    struct drm_plane_state *old_state,
- 				    struct vmw_framebuffer *vfb,
- 				    struct vmw_fence_obj **out_fence)
- {
-@@ -1248,7 +1247,6 @@ static int vmw_stdu_plane_update_bo(struct vmw_private *dev_priv,
- 
- 	memset(&bo_update, 0, sizeof(struct vmw_du_update_plane_buffer));
- 	bo_update.base.plane = plane;
--	bo_update.base.old_state = old_state;
- 	bo_update.base.dev_priv = dev_priv;
- 	bo_update.base.du = vmw_crtc_to_du(plane->state->crtc);
- 	bo_update.base.vfb = vfb;
-@@ -1350,7 +1348,6 @@ vmw_stdu_surface_populate_update(struct vmw_du_update_plane  *update, void *cmd,
-  */
- static int vmw_stdu_plane_update_surface(struct vmw_private *dev_priv,
- 					 struct drm_plane *plane,
--					 struct drm_plane_state *old_state,
- 					 struct vmw_framebuffer *vfb,
- 					 struct vmw_fence_obj **out_fence)
- {
-@@ -1363,7 +1360,6 @@ static int vmw_stdu_plane_update_surface(struct vmw_private *dev_priv,
- 
- 	memset(&srf_update, 0, sizeof(struct vmw_du_update_plane));
- 	srf_update.plane = plane;
--	srf_update.old_state = old_state;
- 	srf_update.dev_priv = dev_priv;
- 	srf_update.du = vmw_crtc_to_du(plane->state->crtc);
- 	srf_update.vfb = vfb;
-@@ -1424,12 +1420,9 @@ vmw_stdu_primary_plane_atomic_update(struct drm_plane *plane,
- 			DRM_ERROR("Failed to bind surface to STDU.\n");
- 
- 		if (vfb->bo)
--			ret = vmw_stdu_plane_update_bo(dev_priv, plane,
--						       old_state, vfb, &fence);
-+			ret = vmw_stdu_plane_update_bo(dev_priv, plane, vfb, &fence);
- 		else
--			ret = vmw_stdu_plane_update_surface(dev_priv, plane,
--							    old_state, vfb,
--							    &fence);
-+			ret = vmw_stdu_plane_update_surface(dev_priv, plane, vfb, &fence);
- 		if (ret)
- 			DRM_ERROR("Failed to update STDU.\n");
- 	} else {
+> User space supplies rectangles for damage clipping in a plane property.
+> For full mode sets, drivers still require a full plane update. In this
+> case, leave the information as-is and set the ignore_damage_clips flag
+> instead. The damage iterator will later ignore any damage information.
+>
+> Also fixes a bug where ignore_damage_clips was not cleared across plane-
+> state duplications.
+>
+> Leaving the damage information as-is might be helpful to drivers that
+> benefit from this information even on full modesets (e.g., for cache
+> management). It will also help with consolidating the damage-handling
+> logic.
+>
+> Also add a new unit test that evaluates the ignore_damage_clips flag. It
+> sets two damage clips plus the flag and tests if the reported damage
+> covers the entire framebuffer.
+>
+> v4:
+> - slightly reword the commit description
+>
+> Signed-off-by: Thomas Zimmermann <tzimmermann@suse.de>
+> Fixes: 35ed38d58257 ("drm: Allow drivers to indicate the damage helpers to ignore damage clips")
+> Acked-by: Zack Rusin <zack.rusin@broadcom.com>
+> Cc: dri-devel@lists.freedesktop.org
+> Cc: <stable@vger.kernel.org> # v6.10+
+> ---
+>  drivers/gpu/drm/drm_atomic_state_helper.c     |  1 +
+>  drivers/gpu/drm/drm_damage_helper.c           |  6 ++--
+>  .../gpu/drm/tests/drm_damage_helper_test.c    | 28 +++++++++++++++++++
+>  3 files changed, 31 insertions(+), 4 deletions(-)
+>
+> diff --git a/drivers/gpu/drm/drm_atomic_state_helper.c b/drivers/gpu/drm/drm_atomic_state_helper.c
+> index cc70508d4fdb..84d5231ccac1 100644
+> --- a/drivers/gpu/drm/drm_atomic_state_helper.c
+> +++ b/drivers/gpu/drm/drm_atomic_state_helper.c
+> @@ -359,6 +359,7 @@ void __drm_atomic_helper_plane_duplicate_state(struct drm_plane *plane,
+>  	state->fence = NULL;
+>  	state->commit = NULL;
+>  	state->fb_damage_clips = NULL;
+> +	state->ignore_damage_clips = false;
+>  	state->color_mgmt_changed = false;
+>  }
+
+I would split this as a separate patch since is the bug you are fixing for
+commit 35ed38d58257 ("drm: Allow drivers to indicate the damage helpers to
+ignore damage clips").
+
+>  EXPORT_SYMBOL(__drm_atomic_helper_plane_duplicate_state);
+> diff --git a/drivers/gpu/drm/drm_damage_helper.c b/drivers/gpu/drm/drm_damage_helper.c
+> index 74a7f4252ecf..945fac8dc27b 100644
+> --- a/drivers/gpu/drm/drm_damage_helper.c
+> +++ b/drivers/gpu/drm/drm_damage_helper.c
+> @@ -78,10 +78,8 @@ void drm_atomic_helper_check_plane_damage(struct drm_atomic_commit *state,
+>  		if (WARN_ON(!crtc_state))
+>  			return;
+>  
+> -		if (drm_atomic_crtc_needs_modeset(crtc_state)) {
+> -			drm_property_blob_put(plane_state->fb_damage_clips);
+> -			plane_state->fb_damage_clips = NULL;
+> -		}
+> +		if (drm_atomic_crtc_needs_modeset(crtc_state))
+> +			plane_state->ignore_damage_clips = true;
+>  	}
+>  }
+
+This makes sense to me as well and I agree that re-using the flag for this
+is better than making plane_state->fb_damage_clips == NULL the condition.
+
+As mentioned though, I would make it a separate patch. Both changes look
+good to me:
+
+Reviewed-by: Javier Martinez Canillas <javierm@redhat.com>
+
 -- 
-2.54.0
+Best regards,
+
+Javier Martinez Canillas
+Core Platforms
+Red Hat
 
 
