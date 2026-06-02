@@ -1,67 +1,67 @@
-Return-Path: <linux-mips+bounces-14855-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-14856-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id xdpTCzROH2rNjwAAu9opvQ
-	(envelope-from <linux-mips+bounces-14855-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Tue, 02 Jun 2026 23:42:12 +0200
+	id 0pq2N+lOH2oXkAAAu9opvQ
+	(envelope-from <linux-mips+bounces-14856-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Tue, 02 Jun 2026 23:45:13 +0200
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id B7DA4632239
-	for <lists+linux-mips@lfdr.de>; Tue, 02 Jun 2026 23:42:11 +0200 (CEST)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id 55D466322C4
+	for <lists+linux-mips@lfdr.de>; Tue, 02 Jun 2026 23:45:13 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=intel.com header.s=Intel header.b=Ays48kj7;
-	spf=pass (mail.lfdr.de: domain of "linux-mips+bounces-14855-lists+linux-mips=lfdr.de@vger.kernel.org" designates 2600:3c09:e001:a7::12fc:5321 as permitted sender) smtp.mailfrom="linux-mips+bounces-14855-lists+linux-mips=lfdr.de@vger.kernel.org";
+	dkim=pass header.d=intel.com header.s=Intel header.b=VaH44L8M;
+	spf=pass (mail.lfdr.de: domain of "linux-mips+bounces-14856-lists+linux-mips=lfdr.de@vger.kernel.org" designates 172.232.135.74 as permitted sender) smtp.mailfrom="linux-mips+bounces-14856-lists+linux-mips=lfdr.de@vger.kernel.org";
 	dmarc=pass (policy=none) header.from=intel.com;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 3B7553012544
-	for <lists+linux-mips@lfdr.de>; Tue,  2 Jun 2026 21:42:11 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id CD9BD3022934
+	for <lists+linux-mips@lfdr.de>; Tue,  2 Jun 2026 21:45:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 21B293AA1A7;
-	Tue,  2 Jun 2026 21:42:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 134E03A63EC;
+	Tue,  2 Jun 2026 21:45:12 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EAA3B367B66;
-	Tue,  2 Jun 2026 21:42:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDB4927603C;
+	Tue,  2 Jun 2026 21:45:10 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780436530; cv=none; b=nDJewXyysYxfL6W2W/gLN99wcn3myy2eqgMLjB7IJBwJBYIhyRt1A52XPAdZTRKnz8HzcnFAB8dgVs5/dpghwMBktcXWHCKvWT5Yf8HVsWsQrTnfBrr+tP9L+GiWqD3sGbnOSZEK5V2zAgro3zveQgtd12hanlOCPMjsuIeY+2I=
+	t=1780436712; cv=none; b=EITuYY/4EdCmvf3UPcIonYa0Yqq3lAYAqKIYlBy6kOPI3HIyPRlVnEygfgy+lovQLu25aUxLs5AXC878wE+fjcNZM4QYkLR2g73RrTYtr3vQ6mXJXgUEIr7WyKRMutXmeH/bQ+sSH/7T/6gP0Bv+wOZU1bMdxdcQ1oyPXmh7zIU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780436530; c=relaxed/simple;
-	bh=y1ADfjlXNms8ZBUMtHS+kHppk6E04WG2MGtxZDw5VPQ=;
+	s=arc-20240116; t=1780436712; c=relaxed/simple;
+	bh=9mAoO9H8Y2BWm5p5K9c3oIGIMMxULY9BhMvq3EtYzfM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=UaFRBgi4D8aS9/lVYG3x68rs+2uK6zIA0ul+2scX6D6/TVVV9w3MKqizwKEoHwWvy6Nj8W6h1lidNg1j2UgPQCZMvSU9L+z0h29n/w3c+45nqiGOSJVld97NfGnLmZecL+IFqQAs7bcHSjrn2V7j74UvcexL5fLvyjwe4LR9dUM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Ays48kj7; arc=none smtp.client-ip=198.175.65.11
+	 Content-Type:Content-Disposition:In-Reply-To; b=SEUcttufK/O+c9MBObBIMisJ62RaXYfX5CT8ITIcUgNjE5htLGn2IeZ4P0Sc/BsqjbhEWDGu9z1CsyRZA/cgRattwUWVcS6v68HYkUxXMwLuA79FuUiOJmrem/ZJH805Xci0/Ar9m4u9U1zWWHYLNARJ6zM9WemQ06/6RrDu6XE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=VaH44L8M; arc=none smtp.client-ip=198.175.65.19
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1780436529; x=1811972529;
+  t=1780436711; x=1811972711;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=y1ADfjlXNms8ZBUMtHS+kHppk6E04WG2MGtxZDw5VPQ=;
-  b=Ays48kj7lZCaRXhxGIt9pgHjLSiSEy21HIc6u0dXimntKLB8q653XIit
-   airOIkPCnPJ0G9QvvgId5C7LrAV8foLX+PiOnDO9pgrxOSayNcYcgXMTu
-   5ivOSAcCftpHRDIPa3WaHuGvVW5Nd+85Vi8xr5L25IDrtnowjebFBEL2F
-   j6C8pg+8npnTzwaJu/r3DfW2yB1DfF1YNyrFql8ZT6tywrqKX92oIOMM5
-   DESttfdbdPlLO96IUmG0jieSl514gMyUG+TfeOukPwA3Kf0KwC+6VfwDs
-   3VQsaqdPIYwj8vpT36MzPFFmeSCYFNVdeQCm81XFmXX9+njMLr9Qpyuil
-   g==;
-X-CSE-ConnectionGUID: Jlwe5SkGQxyTCIe/1S/B2w==
-X-CSE-MsgGUID: P3LQd/JcS+29POOmwX1CpQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11805"; a="91546432"
+  bh=9mAoO9H8Y2BWm5p5K9c3oIGIMMxULY9BhMvq3EtYzfM=;
+  b=VaH44L8MNVumZXyEXRK8AfdaQNRXXVbJOIqxBpfPga+NfruxtYz4WPWv
+   iFbOmuZwzUO0a+RHjpn0HZWq3fKiP8CgXIQyMECDulHQqlcn8F4orXntH
+   MCXcwudjW7kQIASkMedK3qtQRGfdtxuoF3HDavTP82HF13Hz+e2UP8DrG
+   xcvomKiruDpx02hN08hls/QIQbNMXX7GJhL8n6FQz+mFkv7C+8wvs3YSk
+   e3ybOfGgXyjEvanK+lFrEq7C0I1qXuKgvRWJi8PN1jnxgLAPA0XTbftLB
+   14VNu04wwUABisJbvro324yTUitnZNnkYKHZ5OAtRfcKG5kH5TjXjrMyx
+   w==;
+X-CSE-ConnectionGUID: 2vpw5QWaQzWX2q5jXLwKKw==
+X-CSE-MsgGUID: WGE6paOaTgOJTRVuq1HpUA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11805"; a="81209909"
 X-IronPort-AV: E=Sophos;i="6.24,183,1774335600"; 
-   d="scan'208";a="91546432"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jun 2026 14:42:08 -0700
-X-CSE-ConnectionGUID: tgIXYpSsR9qp+knkNCaUJg==
-X-CSE-MsgGUID: nLO3XIOVTTyZUZFp+zTfGQ==
+   d="scan'208";a="81209909"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jun 2026 14:45:10 -0700
+X-CSE-ConnectionGUID: UvnADU78SIC781mCxKiYQg==
+X-CSE-MsgGUID: DRVbexEBQcalNu55EQ4gaw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.24,183,1774335600"; 
-   d="scan'208";a="241042785"
+   d="scan'208";a="237669752"
 Received: from pgcooper-mobl3.ger.corp.intel.com (HELO localhost) ([10.245.244.116])
-  by fmviesa007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jun 2026 14:41:55 -0700
-Date: Wed, 3 Jun 2026 00:41:53 +0300
+  by fmviesa009-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jun 2026 14:44:57 -0700
+Date: Wed, 3 Jun 2026 00:44:55 +0300
 From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 To: Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>
 Cc: Lee Jones <lee@kernel.org>,
@@ -112,11 +112,11 @@ Cc: Lee Jones <lee@kernel.org>,
 	intel-xe@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
 	linux-usb@vger.kernel.org, linux-mips@vger.kernel.org,
 	platform-driver-x86@vger.kernel.org
-Subject: Re: [PATCH 07/23] driver core: platform: provide
- platform_device_set_fwnode()
-Message-ID: <ah9OIVyrHEhcMHzN@ashevche-desk.local>
+Subject: Re: [PATCH 08/23] driver core: platform: provide
+ platform_device_set_of_node_from_dev()
+Message-ID: <ah9O15bMlAYgSlHx@ashevche-desk.local>
 References: <20260521-pdev-fwnode-ref-v1-0-88c324a1b8d2@oss.qualcomm.com>
- <20260521-pdev-fwnode-ref-v1-7-88c324a1b8d2@oss.qualcomm.com>
+ <20260521-pdev-fwnode-ref-v1-8-88c324a1b8d2@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -125,7 +125,7 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260521-pdev-fwnode-ref-v1-7-88c324a1b8d2@oss.qualcomm.com>
+In-Reply-To: <20260521-pdev-fwnode-ref-v1-8-88c324a1b8d2@oss.qualcomm.com>
 Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6
  krs, Bertel Jungin Aukio 5, 02600 Espoo
 X-Rspamd-Action: no action
@@ -134,12 +134,12 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
 	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-14855-lists,linux-mips=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-14856-lists,linux-mips=lfdr.de];
 	FORGED_RECIPIENTS(0.00)[m:bartosz.golaszewski@oss.qualcomm.com,m:lee@kernel.org,m:broonie@opensource.wolfsonmicro.com,m:thierry.reding@avionic-design.de,m:sebastian.hesselbarth@gmail.com,m:andrew+netdev@lunn.ch,m:davem@davemloft.net,m:edumazet@google.com,m:kuba@kernel.org,m:pabeni@redhat.com,m:srini@kernel.org,m:gregkh@linuxfoundation.org,m:vkoul@kernel.org,m:rafael@kernel.org,m:dakr@kernel.org,m:robh@kernel.org,m:saravanak@kernel.org,m:maddy@linux.ibm.com,m:mpe@ellerman.id.au,m:npiggin@gmail.com,m:chleroy@kernel.org,m:andi.shyti@kernel.org,m:joro@8bytes.org,m:will@kernel.org,m:robin.murphy@arm.com,m:opendmb@gmail.com,m:florian.fainelli@broadcom.com,m:bcm-kernel-feedback-list@broadcom.com,m:ulfh@kernel.org,m:Frank.Li@nxp.com,m:s.hauer@pengutronix.de,m:kernel@pengutronix.de,m:festevam@gmail.com,m:matthew.brost@intel.com,m:thomas.hellstrom@linux.intel.com,m:rodrigo.vivi@intel.com,m:airlied@gmail.com,m:simona@ffwll.ch,m:peter.chen@kernel.org,m:paul@crapouillou.net,m:b-liu@ti.com,m:p.za
  bel@pengutronix.de,m:luzmaximilian@gmail.com,m:hansg@kernel.org,m:ilpo.jarvinen@linux.intel.com,m:krzk@kernel.org,m:benh@kernel.crashing.org,m:brgl@kernel.org,m:linux-kernel@vger.kernel.org,m:netdev@vger.kernel.org,m:linux-arm-msm@vger.kernel.org,m:linux-sound@vger.kernel.org,m:driver-core@lists.linux.dev,m:devicetree@vger.kernel.org,m:linuxppc-dev@lists.ozlabs.org,m:linux-i2c@vger.kernel.org,m:iommu@lists.linux.dev,m:linux-pm@vger.kernel.org,m:imx@lists.linux.dev,m:linux-arm-kernel@lists.infradead.org,m:intel-xe@lists.freedesktop.org,m:dri-devel@lists.freedesktop.org,m:linux-usb@vger.kernel.org,m:linux-mips@vger.kernel.org,m:platform-driver-x86@vger.kernel.org,m:sebastianhesselbarth@gmail.com,m:andrew@lunn.ch,s:lists@lfdr.de];
 	FORGED_SENDER(0.00)[andriy.shevchenko@linux.intel.com,linux-mips@vger.kernel.org];
@@ -160,21 +160,20 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	ALIAS_RESOLVED(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
+	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
 	TAGGED_RCPT(0.00)[linux-mips,netdev];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[ashevche-desk.local:mid,intel.com:dkim,linux.intel.com:from_mime,vger.kernel.org:from_smtp,sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,ashevche-desk.local:mid,linux.intel.com:from_mime,vger.kernel.org:from_smtp,intel.com:dkim]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: B7DA4632239
+X-Rspamd-Queue-Id: 55D466322C4
 
-On Thu, May 21, 2026 at 10:36:30AM +0200, Bartosz Golaszewski wrote:
-> Provide a helper function encapsulating the logic of assigning firmware
-> nodes to platform devices created with platform_device_alloc(). Make the
-> kerneldoc state that this is the proper interface for assigning firmware
-> nodes to dynamically allocated platform devices. This will allow us to
-> switch to counting the references of the device's firmware nodes in the
-> future, not only the OF nodes.
+On Thu, May 21, 2026 at 10:36:31AM +0200, Bartosz Golaszewski wrote:
+> Provide a platform-specific variant of device_set_of_node_from_dev(). In
+> addition to bumping the reference count of the OF node being assigned,
+> it also assigns the fwnode of the platform device.
 
-But why different for of_node and fwnode to begin with?!
+Can we rather investigate the way how to make that of node reuse thingy
+(which is used solely by pin control) differently and then drop this confusing
+device_set_of_node_from_dev() call altogether?
 
 -- 
 With Best Regards,
