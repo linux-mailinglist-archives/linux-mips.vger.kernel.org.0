@@ -1,159 +1,169 @@
-Return-Path: <linux-mips+bounces-14851-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-14852-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 2M3wNl4XHmr2hAkAu9opvQ
-	(envelope-from <linux-mips+bounces-14851-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Tue, 02 Jun 2026 01:35:58 +0200
+	id yD7lGGOVHmrPlAkAu9opvQ
+	(envelope-from <linux-mips+bounces-14852-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Tue, 02 Jun 2026 10:33:39 +0200
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6A30E6265AF
-	for <lists+linux-mips@lfdr.de>; Tue, 02 Jun 2026 01:35:58 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id DA83F62A9B5
+	for <lists+linux-mips@lfdr.de>; Tue, 02 Jun 2026 10:33:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 1D95C302A509
-	for <lists+linux-mips@lfdr.de>; Mon,  1 Jun 2026 23:35:52 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id EEDE23053B34
+	for <lists+linux-mips@lfdr.de>; Tue,  2 Jun 2026 08:26:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1E14437756E;
-	Mon,  1 Jun 2026 23:35:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bwFeM+dK"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DF14870808;
+	Tue,  2 Jun 2026 08:26:13 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F31C33F590;
-	Mon,  1 Jun 2026 23:35:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70FA83BF66B
+	for <linux-mips@vger.kernel.org>; Tue,  2 Jun 2026 08:26:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780356951; cv=none; b=ZkvjnJeSxJPFANgsg4qd1alWkl94UWguwjfQfucig68WnQr2aJ5sSMPJCeaP+2z9LjX/HH3bonVkGYhh/YY5Ho4WawMR9yFSxNaDB/Bfp5LPMmyOr6FGQLpc3aSedoLjc4GW/ljlZsZ8glZRIsMcM53n1VzTSkiBfoaHkSp4zh8=
+	t=1780388773; cv=none; b=GTo3pA/kR/fLdqKJ3xMNrvS8PlJ+gy1xQTjS0cO+ljrIUCYpB0IMEBQjkw0chvzV4vtIpw3sd3T6HBpFLEcSPeZlgVJMtbJX30N9yn1FXYDR4L5seHNY3BEY77LwVwI0C8T5FqG06N6xim+lZV0l1mHXwL0GbaNpJHFYKueIChU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780356951; c=relaxed/simple;
-	bh=mu+k5t+nIMpSdNoVyH2bpssgMm+HGMnEOEsZeveBT8Q=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=dZ7+2Sy49W8OkBelKwRKgbivpVg6LIkE+Lk3X4mQwcCRghJyNGESIHbVWI3g84vHJPoGO633N/P4K8q/zKhBDtwDfgRvrtB+C6RQ2UZ0nzxBP1zfkOh4elUJPq6EWWIChIftFy1iR8Alxvp+Pd4WNi2UaNt093uHf7SWMhQQ+Mc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bwFeM+dK; arc=none smtp.client-ip=100.103.45.18
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5639F1F00893;
-	Mon,  1 Jun 2026 23:35:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780356949;
-	bh=BsNyXchE0cQ+WrTEzbPCgdBZhaTxYz8ZYh6ODfO6Thc=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=bwFeM+dKJids5MGHkWeT2lqLmOE+Z22fpYZVG8IarCaPIkYd1ClJLTF0P+KK4TZC1
-	 t1HfBIbIgLm2lF9d6SD2H1GRY5GUIy6SJwL9v8EZ3L20jIK/NaVXSt1XPTueO0oIGy
-	 y19iXABriAlFUODdDTo2f2+FK6UaosZlP/s7kW+eWFj9kPjNXvxZUpQLix9fiYAVMs
-	 qutOmIhrfL9fMTHLsw3ErfIZs150qZpCJg1stHoIzdshVCQp8iYW9sI4ko81gCNtbL
-	 eRcz3oBpBUe09WQM6FxiPQKCgb0o3dANEdBD5y5Egf4yKaQOgk8QwaFZYGWRDLloCl
-	 38TEpySFeTuzg==
-Date: Mon, 1 Jun 2026 18:35:48 -0500
-From: "Rob Herring (Arm)" <robh@kernel.org>
-To: Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>
-Cc: Lee Jones <lee@kernel.org>,
-	Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-	Doug Berger <opendmb@gmail.com>,
-	Madhavan Srinivasan <maddy@linux.ibm.com>, Bin Liu <b-liu@ti.com>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	Pengutronix Kernel Team <kernel@pengutronix.de>,
-	Thierry Reding <thierry.reding@avionic-design.de>,
-	Nicholas Piggin <npiggin@gmail.com>,
-	Simona Vetter <simona@ffwll.ch>, brgl@kernel.org,
-	Eric Dumazet <edumazet@google.com>,
-	Fabio Estevam <festevam@gmail.com>,
-	David Airlie <airlied@gmail.com>, linux-arm-msm@vger.kernel.org,
-	Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-	Will Deacon <will@kernel.org>, iommu@lists.linux.dev,
-	Ulf Hansson <ulfh@kernel.org>,
-	Matthew Brost <matthew.brost@intel.com>,
-	Florian Fainelli <florian.fainelli@broadcom.com>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Sascha Hauer <s.hauer@pengutronix.de>,
-	Thomas =?iso-8859-1?Q?Hellstr=F6m?= <thomas.hellstrom@linux.intel.com>,
-	Philipp Zabel <p.zabel@pengutronix.de>,
-	linux-arm-kernel@lists.infradead.org,
-	"David S. Miller" <davem@davemloft.net>,
-	intel-xe@lists.freedesktop.org, Andi Shyti <andi.shyti@kernel.org>,
-	linux-kernel@vger.kernel.org,
-	"Rafael J. Wysocki" <rafael@kernel.org>, netdev@vger.kernel.org,
-	linux-sound@vger.kernel.org, Srinivas Kandagatla <srini@kernel.org>,
-	linux-mips@vger.kernel.org,
-	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
-	driver-core@lists.linux.dev,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-	imx@lists.linux.dev, Vinod Koul <vkoul@kernel.org>,
-	Peter Chen <peter.chen@kernel.org>, linux-usb@vger.kernel.org,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Paul Cercueil <paul@crapouillou.net>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Joerg Roedel <joro@8bytes.org>,
-	"Christophe Leroy (CS GROUP)" <chleroy@kernel.org>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Danilo Krummrich <dakr@kernel.org>,
-	Mark Brown <broonie@opensource.wolfsonmicro.com>,
-	Robin Murphy <robin.murphy@arm.com>, Frank Li <Frank.Li@nxp.com>,
-	devicetree@vger.kernel.org, linux-i2c@vger.kernel.org,
-	Rodrigo Vivi <rodrigo.vivi@intel.com>,
-	linuxppc-dev@lists.ozlabs.org,
-	Saravana Kannan <saravanak@kernel.org>,
-	Maximilian Luz <luzmaximilian@gmail.com>, linux-pm@vger.kernel.org,
-	Hans de Goede <hansg@kernel.org>, dri-devel@lists.freedesktop.org,
-	platform-driver-x86@vger.kernel.org
-Subject: Re: [PATCH 09/23] of: platform: use platform_device_set_of_node()
-Message-ID: <178035694685.195552.1114165096275774254.robh@kernel.org>
+	s=arc-20240116; t=1780388773; c=relaxed/simple;
+	bh=ZQkpBhdyPFX8K1AgwsbSqD6e4PBbKm/F+6uEvcBzPyk=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=boXevAFx/W4IUNfcdqE1J1o0xHUJV69kt6F0FX5dWyMr92AlaIe8Uxlcw3zIM/iDWFGbZKV0AIj/9YhlAOpMoUF2S9opOUM5/6DmXHu6hwasf7x7vLUD6xXVXuwyUcWZI78Dp4d+EiIKEoGV6loNSMYmYs3xoa84L7qnDsK5+DQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtp (Exim 4.92)
+	(envelope-from <p.zabel@pengutronix.de>)
+	id 1wUKQZ-0001Gf-0T; Tue, 02 Jun 2026 10:24:47 +0200
+Received: from lupine.office.stw.pengutronix.de ([2a0a:edc0:0:900:1d::4e] helo=lupine)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <p.zabel@pengutronix.de>)
+	id 1wUKQT-000iZa-13;
+	Tue, 02 Jun 2026 10:24:41 +0200
+Received: from pza by lupine with local (Exim 4.98.2)
+	(envelope-from <p.zabel@pengutronix.de>)
+	id 1wUKQT-000000003ba-0TqR;
+	Tue, 02 Jun 2026 10:24:41 +0200
+Message-ID: <6af284545729f03a60d06479339862a2f08c6b7e.camel@pengutronix.de>
+Subject: Re: [PATCH 22/23] reset: rzg2l: use
+ platform_device_set_of_node_from_dev()
+From: Philipp Zabel <p.zabel@pengutronix.de>
+To: Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>, Lee Jones	
+ <lee@kernel.org>, Mark Brown <broonie@opensource.wolfsonmicro.com>, Thierry
+ Reding <thierry.reding@avionic-design.de>, Sebastian Hesselbarth	
+ <sebastian.hesselbarth@gmail.com>, Andrew Lunn <andrew+netdev@lunn.ch>, 
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet
+ <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni
+ <pabeni@redhat.com>, Srinivas Kandagatla <srini@kernel.org>, Greg
+ Kroah-Hartman	 <gregkh@linuxfoundation.org>, Vinod Koul <vkoul@kernel.org>,
+ "Rafael J. Wysocki" <rafael@kernel.org>, Danilo Krummrich
+ <dakr@kernel.org>, Rob Herring <robh@kernel.org>,  Saravana Kannan
+ <saravanak@kernel.org>, Madhavan Srinivasan <maddy@linux.ibm.com>, Michael
+ Ellerman	 <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>,
+ "Christophe Leroy (CS GROUP)" <chleroy@kernel.org>, Andi Shyti
+ <andi.shyti@kernel.org>, Andy Shevchenko	
+ <andriy.shevchenko@linux.intel.com>, Joerg Roedel <joro@8bytes.org>, Will
+ Deacon <will@kernel.org>, Robin Murphy <robin.murphy@arm.com>, Doug Berger
+ <opendmb@gmail.com>,  Florian Fainelli <florian.fainelli@broadcom.com>,
+ Broadcom internal kernel review list	
+ <bcm-kernel-feedback-list@broadcom.com>, Ulf Hansson <ulfh@kernel.org>, 
+ Frank Li <Frank.Li@nxp.com>, Sascha Hauer <s.hauer@pengutronix.de>,
+ Pengutronix Kernel Team	 <kernel@pengutronix.de>, Fabio Estevam
+ <festevam@gmail.com>, Matthew Brost	 <matthew.brost@intel.com>, Thomas
+ =?ISO-8859-1?Q?Hellstr=F6m?=	 <thomas.hellstrom@linux.intel.com>, Rodrigo
+ Vivi <rodrigo.vivi@intel.com>,  David Airlie <airlied@gmail.com>, Simona
+ Vetter <simona@ffwll.ch>, Peter Chen <peter.chen@kernel.org>,  Paul
+ Cercueil <paul@crapouillou.net>, Bin Liu <b-liu@ti.com>, Maximilian Luz
+ <luzmaximilian@gmail.com>, Hans de Goede <hansg@kernel.org>, Ilpo
+ =?ISO-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,  Krzysztof
+ Kozlowski	 <krzk@kernel.org>, Benjamin Herrenschmidt
+ <benh@kernel.crashing.org>
+Cc: brgl@kernel.org, linux-kernel@vger.kernel.org, netdev@vger.kernel.org, 
+	linux-arm-msm@vger.kernel.org, linux-sound@vger.kernel.org, 
+	driver-core@lists.linux.dev, devicetree@vger.kernel.org, 
+	linuxppc-dev@lists.ozlabs.org, linux-i2c@vger.kernel.org,
+ iommu@lists.linux.dev, 	linux-pm@vger.kernel.org, imx@lists.linux.dev, 
+	linux-arm-kernel@lists.infradead.org, intel-xe@lists.freedesktop.org, 
+	dri-devel@lists.freedesktop.org, linux-usb@vger.kernel.org, 
+	linux-mips@vger.kernel.org, platform-driver-x86@vger.kernel.org
+Date: Tue, 02 Jun 2026 10:24:41 +0200
+In-Reply-To: <20260521-pdev-fwnode-ref-v1-22-88c324a1b8d2@oss.qualcomm.com>
 References: <20260521-pdev-fwnode-ref-v1-0-88c324a1b8d2@oss.qualcomm.com>
- <20260521-pdev-fwnode-ref-v1-9-88c324a1b8d2@oss.qualcomm.com>
+	 <20260521-pdev-fwnode-ref-v1-22-88c324a1b8d2@oss.qualcomm.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.56.2-0+deb13u1 
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260521-pdev-fwnode-ref-v1-9-88c324a1b8d2@oss.qualcomm.com>
-X-Spamd-Result: default: False [0.34 / 15.00];
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: p.zabel@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-mips@vger.kernel.org
+X-Spamd-Result: default: False [0.04 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
-	MID_CONTAINS_FROM(1.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20260515];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FREEMAIL_CC(0.00)[kernel.org,gmail.com,linux.ibm.com,ti.com,lunn.ch,pengutronix.de,avionic-design.de,ffwll.ch,google.com,vger.kernel.org,kernel.crashing.org,lists.linux.dev,intel.com,broadcom.com,linux.intel.com,lists.infradead.org,davemloft.net,lists.freedesktop.org,ellerman.id.au,crapouillou.net,linuxfoundation.org,8bytes.org,redhat.com,opensource.wolfsonmicro.com,arm.com,nxp.com,lists.ozlabs.org];
-	FROM_HAS_DN(0.00)[];
-	RCVD_TLS_LAST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	TAGGED_FROM(0.00)[bounces-14851-lists,linux-mips=lfdr.de];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	MISSING_XM_UA(0.00)[];
 	MIME_TRACE(0.00)[0:+];
-	RCPT_COUNT_GT_50(0.00)[65];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[robh@kernel.org,linux-mips@vger.kernel.org];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TAGGED_FROM(0.00)[bounces-14852-lists,linux-mips=lfdr.de];
+	RCVD_TLS_LAST(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	DMARC_NA(0.00)[pengutronix.de];
+	FREEMAIL_TO(0.00)[oss.qualcomm.com,kernel.org,opensource.wolfsonmicro.com,avionic-design.de,gmail.com,lunn.ch,davemloft.net,google.com,redhat.com,linuxfoundation.org,linux.ibm.com,ellerman.id.au,linux.intel.com,8bytes.org,arm.com,broadcom.com,nxp.com,pengutronix.de,intel.com,ffwll.ch,crapouillou.net,ti.com,kernel.crashing.org];
+	FROM_HAS_DN(0.00)[];
 	TAGGED_RCPT(0.00)[linux-mips,netdev];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	TO_DN_SOME(0.00)[]
-X-Rspamd-Queue-Id: 6A30E6265AF
+	RCVD_COUNT_FIVE(0.00)[6];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[p.zabel@pengutronix.de,linux-mips@vger.kernel.org];
+	TO_DN_SOME(0.00)[];
+	RCPT_COUNT_GT_50(0.00)[65];
+	R_DKIM_NA(0.00)[];
+	NEURAL_HAM(-0.00)[-1.000];
+	MID_RHS_MATCH_FROM(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[qualcomm.com:email,tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo,pengutronix.de:mid,pengutronix.de:email]
+X-Rspamd-Queue-Id: DA83F62A9B5
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-
-On Thu, 21 May 2026 10:36:32 +0200, Bartosz Golaszewski wrote:
+On Do, 2026-05-21 at 10:36 +0200, Bartosz Golaszewski wrote:
 > Ahead of reworking the reference counting logic for platform devices,
-> encapsulate the assignment of the OF node for dynamically allocated
-> platform devices with the provided helper.
-> 
+> encapsulate the assignment of the OF node from another device for
+> dynamically allocated platform devices with the provided helper.
+>=20
 > Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>
 > ---
->  drivers/of/platform.c | 2 +-
+>  drivers/reset/reset-rzg2l-usbphy-ctrl.c | 2 +-
 >  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
+>=20
+> diff --git a/drivers/reset/reset-rzg2l-usbphy-ctrl.c b/drivers/reset/rese=
+t-rzg2l-usbphy-ctrl.c
+> index fd75d9601a3bfde7b7e3f6db287ec8c5c45a20ab..f003b360629c90bb37ed0ade7=
+a675b5b0f28fa7e 100644
+> --- a/drivers/reset/reset-rzg2l-usbphy-ctrl.c
+> +++ b/drivers/reset/reset-rzg2l-usbphy-ctrl.c
+> @@ -249,7 +249,7 @@ static int rzg2l_usbphy_ctrl_probe(struct platform_de=
+vice *pdev)
+>  	vdev->dev.parent =3D dev;
+>  	priv->vdev =3D vdev;
+> =20
+> -	device_set_of_node_from_dev(&vdev->dev, dev);
+> +	platform_device_set_of_node_from_dev(vdev, dev);
+>  	error =3D platform_device_add(vdev);
+>  	if (error)
+>  		goto err_device_put;
 
-Acked-by: Rob Herring (Arm) <robh@kernel.org>
+Acked-by: Philipp Zabel <p.zabel@pengutronix.de>
 
+regards
+Philipp
 
