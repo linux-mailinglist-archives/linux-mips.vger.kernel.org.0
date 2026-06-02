@@ -1,67 +1,67 @@
-Return-Path: <linux-mips+bounces-14857-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-14858-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id L3R1CFFRH2rnkAAAu9opvQ
-	(envelope-from <linux-mips+bounces-14857-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Tue, 02 Jun 2026 23:55:29 +0200
+	id 4PHBK1dQH2qGkAAAu9opvQ
+	(envelope-from <linux-mips+bounces-14858-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Tue, 02 Jun 2026 23:51:19 +0200
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8204C6323B3
-	for <lists+linux-mips@lfdr.de>; Tue, 02 Jun 2026 23:55:28 +0200 (CEST)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7864A63234F
+	for <lists+linux-mips@lfdr.de>; Tue, 02 Jun 2026 23:51:19 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=intel.com header.s=Intel header.b=A98gT+Fd;
-	spf=pass (mail.lfdr.de: domain of "linux-mips+bounces-14857-lists+linux-mips=lfdr.de@vger.kernel.org" designates 2600:3c0a:e001:db::12fc:5321 as permitted sender) smtp.mailfrom="linux-mips+bounces-14857-lists+linux-mips=lfdr.de@vger.kernel.org";
+	dkim=pass header.d=intel.com header.s=Intel header.b="VGK/1y3H";
+	spf=pass (mail.lfdr.de: domain of "linux-mips+bounces-14858-lists+linux-mips=lfdr.de@vger.kernel.org" designates 2600:3c09:e001:a7::12fc:5321 as permitted sender) smtp.mailfrom="linux-mips+bounces-14858-lists+linux-mips=lfdr.de@vger.kernel.org";
 	dmarc=pass (policy=none) header.from=intel.com;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id D40EE302B399
-	for <lists+linux-mips@lfdr.de>; Tue,  2 Jun 2026 21:49:51 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id E7C0E30394CE
+	for <lists+linux-mips@lfdr.de>; Tue,  2 Jun 2026 21:51:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 894493537FE;
-	Tue,  2 Jun 2026 21:49:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0CE753806C4;
+	Tue,  2 Jun 2026 21:51:14 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31CEE27603C;
-	Tue,  2 Jun 2026 21:49:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9442D325701;
+	Tue,  2 Jun 2026 21:51:12 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780436989; cv=none; b=Wc7NUO0v1ql2CHp6WRn1UXyMBI0knretti15vxtYB6Srj+uIpVOVq7cUG4KXaOXg8LlRA7hChBYdPw6Qw0uxMx8h2HMa6AWemuDI53WTVdXvzqwd0ZsWc+mKwwTGQXpIdAmSgiPGSWZxh471OdMhg/AKHxSdRPVjuFhJbyV/Y/A=
+	t=1780437073; cv=none; b=LWQiYJb0Xu17EHs8ukLpYrCBfVCHMQcY2WjfNVXMOQkc2oIseJ79CBxknjTB9YBGZNd5g7T2Qd/EBHfkNzYi0Mc8l5o+5o/9ybhR2pW+j3XdR0E4KfGSSXr5sZtGCVO5MtpghWqoiKep85Q8YMCsFt5yYCZfC9CLj7vy9/oMqEE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780436989; c=relaxed/simple;
-	bh=DboyAh7hWgXk9QBiKXaDmMfe0ehQqRfCBx9xSYKHzj0=;
+	s=arc-20240116; t=1780437073; c=relaxed/simple;
+	bh=EMtJZdqo1l7PuMgqUpWruKxuLAbCNmct3ry5I+xdaqs=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mu46Dmj/lYbE6ySm+jf9Py8Lr7XoWGka05MA2pFJsuGHP1H7QO7xASzMcS+zeeb/GxsljKVKJoTqm7ZYT56De9gz0wfT5bRGeDDAJOX8h6e1WZ4ECd1r/DG2+n1M7dK94RxDaG0rAMHHEbHAEbajQhlL9UgtuDTQv37UabTUgEw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=A98gT+Fd; arc=none smtp.client-ip=192.198.163.9
+	 Content-Type:Content-Disposition:In-Reply-To; b=ItBYAH9R+lHTv2T8MozZEuRuEXj0K8cP9jZb29JNikvO8gsXJ6oBqUBVVBE+iSKFRdTRLw98r9dQLEKigXu5QPKcs3bfWQb5JXD+uS0ztfRynvAItUvzOriOrMqc03cTrM1D9d/M9W8L+lMr1uWTcn9hQtDK9YuBxQwoVLdtc7Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=VGK/1y3H; arc=none smtp.client-ip=192.198.163.13
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1780436988; x=1811972988;
+  t=1780437073; x=1811973073;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=DboyAh7hWgXk9QBiKXaDmMfe0ehQqRfCBx9xSYKHzj0=;
-  b=A98gT+FdgcsxWc+7VOB1eDCYA37wBgSJe9naVIVUAnt6+qA8qsvuSdV2
-   hTC9cadVypa8t44i+jxn7MSs9mveCeplHv7RaM4SXM9cEqpDsdTbheczi
-   S83yudQDKcUOn7YTYCHjARNq7f/UzZI7ltHeMnnoAJOwuoJuWpXsEKoUc
-   bTqAyiFFHwCDGKYvKcywtk6rjfFaEpgYfsV8pl5pVUU21DlLqRVh3vbI9
-   6luDduZ5OBI9QfDI908wUeemHyD8we4g0SbE44M6HCRjCPZeUwbXCW2zQ
-   wRid3gohApeNegQJHSL83v6Ro49757tEwf/cYNdq/YDNna+dRVF5ellq7
+  bh=EMtJZdqo1l7PuMgqUpWruKxuLAbCNmct3ry5I+xdaqs=;
+  b=VGK/1y3HDuw8FbWh548ZdgILPo1RK2aoltg4Fwfm+iGxUrZoOsnqceNS
+   9+/Nan20YDBvymbt0gbthNQ/iF2AT2AIelJKDoFB6mkbd74g9GFp6EwOE
+   SigxgTFHYHPX/qn4+Yt825Q2yotn1zG1qwIch2kvcxKt1YuAXBqBIPWI7
+   ghbfLykes9utJJKzJN5TpTD+sqgNF/sPRX/VIOs9u9NKURisuJmzFrnE/
+   tOeK217rO4E9gTRUH6xJ5YssVgfA4Wsm5LFPC2VpnJQMdqzY1DE98vpKH
+   BuCampqd07VYc/Du+4eyEF9ao2eOQHaoJyxPF6yEYElkj+twuL0Q7kwiv
    A==;
-X-CSE-ConnectionGUID: Ko/zvC6oSSKsn4Tvlly9+A==
-X-CSE-MsgGUID: rFccy8SuTJmll6SpK2sOHA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11805"; a="91920913"
+X-CSE-ConnectionGUID: xrC9QMGRT4ucfmX0A7Ff2g==
+X-CSE-MsgGUID: IMuthH3FSjyzgWm2oIzXQw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11805"; a="83817703"
 X-IronPort-AV: E=Sophos;i="6.24,183,1774335600"; 
-   d="scan'208";a="91920913"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jun 2026 14:49:47 -0700
-X-CSE-ConnectionGUID: Y7ZlRnYdR3W1ACBKWyPdDA==
-X-CSE-MsgGUID: FAoy/eX/QYGVu9RU3sO6Mw==
+   d="scan'208";a="83817703"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jun 2026 14:51:12 -0700
+X-CSE-ConnectionGUID: FxauZrTcR3yWYpT8wIOh2g==
+X-CSE-MsgGUID: NogLWkvFSvK+PRofa+0loQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.24,183,1774335600"; 
-   d="scan'208";a="248950576"
+   d="scan'208";a="247977591"
 Received: from pgcooper-mobl3.ger.corp.intel.com (HELO localhost) ([10.245.244.116])
-  by orviesa005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jun 2026 14:49:33 -0700
-Date: Wed, 3 Jun 2026 00:49:29 +0300
+  by ORVIESA003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jun 2026 14:50:56 -0700
+Date: Wed, 3 Jun 2026 00:50:54 +0300
 From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 To: Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>
 Cc: Lee Jones <lee@kernel.org>,
@@ -112,11 +112,11 @@ Cc: Lee Jones <lee@kernel.org>,
 	intel-xe@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
 	linux-usb@vger.kernel.org, linux-mips@vger.kernel.org,
 	platform-driver-x86@vger.kernel.org
-Subject: Re: [PATCH 20/23] usb: chipidea: use
+Subject: Re: [PATCH 21/23] usb: musb: use
  platform_device_set_of_node_from_dev()
-Message-ID: <ah9P6Xt9SyKgc2oJ@ashevche-desk.local>
+Message-ID: <ah9QPgco9BxEix7T@ashevche-desk.local>
 References: <20260521-pdev-fwnode-ref-v1-0-88c324a1b8d2@oss.qualcomm.com>
- <20260521-pdev-fwnode-ref-v1-20-88c324a1b8d2@oss.qualcomm.com>
+ <20260521-pdev-fwnode-ref-v1-21-88c324a1b8d2@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -125,7 +125,7 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260521-pdev-fwnode-ref-v1-20-88c324a1b8d2@oss.qualcomm.com>
+In-Reply-To: <20260521-pdev-fwnode-ref-v1-21-88c324a1b8d2@oss.qualcomm.com>
 Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6
  krs, Bertel Jungin Aukio 5, 02600 Espoo
 X-Rspamd-Action: no action
@@ -134,12 +134,12 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
 	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-14857-lists,linux-mips=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-14858-lists,linux-mips=lfdr.de];
 	FORGED_RECIPIENTS(0.00)[m:bartosz.golaszewski@oss.qualcomm.com,m:lee@kernel.org,m:broonie@opensource.wolfsonmicro.com,m:thierry.reding@avionic-design.de,m:sebastian.hesselbarth@gmail.com,m:andrew+netdev@lunn.ch,m:davem@davemloft.net,m:edumazet@google.com,m:kuba@kernel.org,m:pabeni@redhat.com,m:srini@kernel.org,m:gregkh@linuxfoundation.org,m:vkoul@kernel.org,m:rafael@kernel.org,m:dakr@kernel.org,m:robh@kernel.org,m:saravanak@kernel.org,m:maddy@linux.ibm.com,m:mpe@ellerman.id.au,m:npiggin@gmail.com,m:chleroy@kernel.org,m:andi.shyti@kernel.org,m:joro@8bytes.org,m:will@kernel.org,m:robin.murphy@arm.com,m:opendmb@gmail.com,m:florian.fainelli@broadcom.com,m:bcm-kernel-feedback-list@broadcom.com,m:ulfh@kernel.org,m:Frank.Li@nxp.com,m:s.hauer@pengutronix.de,m:kernel@pengutronix.de,m:festevam@gmail.com,m:matthew.brost@intel.com,m:thomas.hellstrom@linux.intel.com,m:rodrigo.vivi@intel.com,m:airlied@gmail.com,m:simona@ffwll.ch,m:peter.chen@kernel.org,m:paul@crapouillou.net,m:b-liu@ti.com,m:p.za
  bel@pengutronix.de,m:luzmaximilian@gmail.com,m:hansg@kernel.org,m:ilpo.jarvinen@linux.intel.com,m:krzk@kernel.org,m:benh@kernel.crashing.org,m:brgl@kernel.org,m:linux-kernel@vger.kernel.org,m:netdev@vger.kernel.org,m:linux-arm-msm@vger.kernel.org,m:linux-sound@vger.kernel.org,m:driver-core@lists.linux.dev,m:devicetree@vger.kernel.org,m:linuxppc-dev@lists.ozlabs.org,m:linux-i2c@vger.kernel.org,m:iommu@lists.linux.dev,m:linux-pm@vger.kernel.org,m:imx@lists.linux.dev,m:linux-arm-kernel@lists.infradead.org,m:intel-xe@lists.freedesktop.org,m:dri-devel@lists.freedesktop.org,m:linux-usb@vger.kernel.org,m:linux-mips@vger.kernel.org,m:platform-driver-x86@vger.kernel.org,m:sebastianhesselbarth@gmail.com,m:andrew@lunn.ch,s:lists@lfdr.de];
 	FORGED_SENDER(0.00)[andriy.shevchenko@linux.intel.com,linux-mips@vger.kernel.org];
@@ -160,24 +160,20 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	ALIAS_RESOLVED(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
 	TAGGED_RCPT(0.00)[linux-mips,netdev];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[linux.intel.com:from_mime,ashevche-desk.local:mid,intel.com:dkim,vger.kernel.org:from_smtp,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,linux.intel.com:from_mime,intel.com:dkim,ashevche-desk.local:mid]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 8204C6323B3
+X-Rspamd-Queue-Id: 7864A63234F
 
-On Thu, May 21, 2026 at 10:36:43AM +0200, Bartosz Golaszewski wrote:
+On Thu, May 21, 2026 at 10:36:44AM +0200, Bartosz Golaszewski wrote:
 > Ahead of reworking the reference counting logic for platform devices,
 > encapsulate the assignment of the OF node from another device for
 > dynamically allocated platform devices with the provided helper.
 
-...
+Same Q as per chipidea. Do they provide a pin control facility at the same time?
 
->  	pdev->dev.parent = dev;
-> -	device_set_of_node_from_dev(&pdev->dev, dev);
-> +	platform_device_set_of_node_from_dev(pdev, dev);
-
-Why do they even do that? Do they have a USB connected pin control?
+Otherwise simple device_set_node() or whatever platform analogue should suffice.
 
 -- 
 With Best Regards,
