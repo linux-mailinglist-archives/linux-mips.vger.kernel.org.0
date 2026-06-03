@@ -1,57 +1,57 @@
-Return-Path: <linux-mips+bounces-14864-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-14865-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id v20iCAgfIGq8wAAAu9opvQ
-	(envelope-from <linux-mips+bounces-14864-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Wed, 03 Jun 2026 14:33:12 +0200
+	id 8Vy8Ek4gIGr4wAAAu9opvQ
+	(envelope-from <linux-mips+bounces-14865-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Wed, 03 Jun 2026 14:38:38 +0200
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 65DD06378B7
-	for <lists+linux-mips@lfdr.de>; Wed, 03 Jun 2026 14:33:11 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id D49B0637935
+	for <lists+linux-mips@lfdr.de>; Wed, 03 Jun 2026 14:38:37 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=bootlin.com header.s=dkim header.b=WqS1SiX8;
-	spf=pass (mail.lfdr.de: domain of "linux-mips+bounces-14864-lists+linux-mips=lfdr.de@vger.kernel.org" designates 2600:3c0a:e001:db::12fc:5321 as permitted sender) smtp.mailfrom="linux-mips+bounces-14864-lists+linux-mips=lfdr.de@vger.kernel.org";
+	dkim=pass header.d=bootlin.com header.s=dkim header.b=oDjwgWv0;
+	spf=pass (mail.lfdr.de: domain of "linux-mips+bounces-14865-lists+linux-mips=lfdr.de@vger.kernel.org" designates 172.234.253.10 as permitted sender) smtp.mailfrom="linux-mips+bounces-14865-lists+linux-mips=lfdr.de@vger.kernel.org";
 	dmarc=pass (policy=reject) header.from=bootlin.com;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id A03613007F4D
-	for <lists+linux-mips@lfdr.de>; Wed,  3 Jun 2026 12:12:31 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 6DEDF3052E75
+	for <lists+linux-mips@lfdr.de>; Wed,  3 Jun 2026 12:18:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4E2CE44A725;
-	Wed,  3 Jun 2026 12:12:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 39225367B90;
+	Wed,  3 Jun 2026 12:18:50 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
 Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E66A47884E;
-	Wed,  3 Jun 2026 12:12:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D8562264A7
+	for <linux-mips@vger.kernel.org>; Wed,  3 Jun 2026 12:18:47 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780488751; cv=none; b=hmTHCKl+1h+iZ+ZmdoblfGPfGwTOJ9mlm3+x+VrjuoxhBUbsfioI+oRJtYjkESR1rlejTMyfrPyBYsT5NX2Iob/CQKzZs4+pPY9+LRq2X4869dmuwlssvt0ETBC00/g2qRarp5kxGr7Pr53ZXyAw1y7afKosmzowhJANoh/bzM0=
+	t=1780489130; cv=none; b=ZMg0J1GMxMk2NlRBUA8BdARt8mCd1zaCu5m5QcOP/QdAqAblgQ1byTF6UvS7JB3V7ZyrY5frxz2eW0Guw11//G9jjYCL02IYEM7u0vYwnw4mF9eOlL6eN6YpxuC42/9HX2QQtbwdM6bsVQ+t9G/Oa+xw96o76sHZgujNUwUXEu4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780488751; c=relaxed/simple;
-	bh=d3EykXjPdTOzofqzcPyCOaTQ0ATiB33JeyMELyx3OOM=;
+	s=arc-20240116; t=1780489130; c=relaxed/simple;
+	bh=cVsIIY8CxED8IOMY5ucOvvvxSDQam/aTs0S98YZ83H4=;
 	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=fZSLXiLP5VCE1TuBKvtSbDFNk2QKzyAAixmx4s2dVko77z/njNpyLxZ08yByhFyKtyK0aIttg0NM2Tm0+OIfNJIvg+XcdQ/D/9S0+Wwa4VlG9EeMGViThLGHu0Db1WDyBL4KjySzIjVH0k1A/hsIZQ1dQldZ4L4vp+HCm7DJrOY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=WqS1SiX8; arc=none smtp.client-ip=185.246.84.56
+	 MIME-Version:Content-Type; b=YfNttlq6MLlFzeIE7JCE3j/Es60aP9M/kopfyeMkhkRRrTZcH4FByd+jtx+MS0RzcsjofGYQqpQlm9za4OSAlXGwsTHgXVHyxQ3xvul7sjRHH8ibcGtG8/lTGGwfF0iL9spmEqik2cKnXbTbADHD5ZERKhIRysYW3E13dTOpSFQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=oDjwgWv0; arc=none smtp.client-ip=185.246.84.56
 Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-02.galae.net (Postfix) with ESMTPS id 195381A0108;
-	Wed,  3 Jun 2026 12:12:28 +0000 (UTC)
+	by smtpout-02.galae.net (Postfix) with ESMTPS id C5A6B1A010B;
+	Wed,  3 Jun 2026 12:18:45 +0000 (UTC)
 Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id DFA0C6073E;
-	Wed,  3 Jun 2026 12:12:27 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 48FB510888413;
-	Wed,  3 Jun 2026 14:11:48 +0200 (CEST)
+	by smtpout-01.galae.net (Postfix) with ESMTPS id 8A67C6073E;
+	Wed,  3 Jun 2026 12:18:45 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id AA06610888413;
+	Wed,  3 Jun 2026 14:17:58 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1780488742; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	t=1780489120; h=from:subject:date:message-id:to:cc:mime-version:content-type:
 	 content-transfer-encoding:in-reply-to:references;
-	bh=48ypl4N/Z9PEOrZi5s882vnkw+L0W6ufixnULaCX8wY=;
-	b=WqS1SiX8JxgfCWjKbfGrN6L6Q3QYEVKtX9eatJz9iVzPqdb59EF2wfORgl6E1oiCCYOL6h
-	61ETQH6hQR3Buc4PxFXV8xJT2J5xNuIRWeEXwCZRhaxs5XLVqNUthCgehn5gJAgDWr5D+V
-	EDn8WSCnJ0fr/3eDUJx++tiwrZ5WSI35nVYVUdYn3doe/iUdJ7p9DoQU59Ef1MvT6hoBjc
-	7jEjYscg5qvEtTKsFwWeeKNcZMVVM6zgOvZnXTK6b1ZDBo1eLL0VN631t+RjK9av9NXAVA
-	YYmM055EJj11NnypQXGQ/iJgKGei6RU0g5MfNttmfc+5/XNEQ2JJEvOyMVoU4Q==
-Date: Wed, 3 Jun 2026 14:11:47 +0200
+	bh=zFi/fGH5JDn5JO2RB9yxgU6c2Ow81xQ2uZUvm6i/E1g=;
+	b=oDjwgWv0v2GgyX3pUULcD12EPMMUfgyJz9dBcXuV+rHROoWzoTs8xUfKvHan7sDmS4CabP
+	L+IrQHrvnK0vVMlJcr6wVI29ruHN0LlRTpSAbksHJDQU4x6/AUscYD365MmPH4Ai9RHUD3
+	INZ8kgugtku7ob0NW+Ab7SNI9LVONJhSV2/Jk11qsbj+crVHJ9NJj1exILul60PuVPHkKS
+	HfTz8P9kfZEod84fwQjR8JESyd/TGvwRHW/nVKN9n20yx7yviIrbsYx2VG2qWDRMnUj3ZS
+	NEQxmhhJHdJjDyxCCsVL18Z9rUUNa16rIZrNpUha+f5Agkx9HJ0YQZpZ489vRg==
+Date: Wed, 3 Jun 2026 14:17:57 +0200
 From: Herve Codina <herve.codina@bootlin.com>
 To: Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
 Cc: "Alvin =?UTF-8?B?xaBpcHJhZ2E=?=" <alsi@bang-olufsen.dk>, "J.M.B.
@@ -121,12 +121,12 @@ Cc: "Alvin =?UTF-8?B?xaBpcHJhZ2E=?=" <alsi@bang-olufsen.dk>, "J.M.B.
  linux-mips@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
  linux-riscv@lists.infradead.org, linux-sound@vger.kernel.org,
  spacemit@lists.linux.dev
-Subject: Re: [PATCH 03/83] ASoC: codecs: idt821034: don't use array if
- single pattarn
-Message-ID: <20260603141147.61943cf0@bootlin.com>
-In-Reply-To: <87y0h7hqxo.wl-kuninori.morimoto.gx@renesas.com>
+Subject: Re: [PATCH 04/83] ASoC: codecs: peb2466: don't use array if single
+ pattarn
+Message-ID: <20260603141757.451cad7b@bootlin.com>
+In-Reply-To: <87wlwrhqxf.wl-kuninori.morimoto.gx@renesas.com>
 References: <8733zfj5jj.wl-kuninori.morimoto.gx@renesas.com>
-	<87y0h7hqxo.wl-kuninori.morimoto.gx@renesas.com>
+	<87wlwrhqxf.wl-kuninori.morimoto.gx@renesas.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.4.0 (GTK 3.24.52; x86_64-redhat-linux-gnu)
 Precedence: bulk
@@ -143,12 +143,12 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[bootlin.com,reject];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	R_DKIM_ALLOW(-0.20)[bootlin.com:s=dkim];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-14864-lists,linux-mips=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-14865-lists,linux-mips=lfdr.de];
 	FORWARDED(0.00)[lists@lfdr.de];
 	MIME_TRACE(0.00)[0:+];
 	TO_DN_SOME(0.00)[];
@@ -161,7 +161,7 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
  @pengutronix.de,m:sbranden@broadcom.com,m:sen@ti.com,m:sharq0406@gmail.com,m:shenghao-ding@ti.com,m:shengjiu.wang@gmail.com,m:steven.eckhoff.opensource@gmail.com,m:support.opensource@diasemi.com,m:s.nawrocki@samsung.com,m:tiwai@suse.com,m:thierry.reding@kernel.org,m:tim.bird@sony.com,m:troy.mitchell@linux.spacemit.com,m:tzungbi@kernel.org,m:venkataprasad.potturu@amd.com,m:Vijendar.Mukunda@amd.com,m:vishwas.a.deshpande@ti.com,m:vz@mleia.com,m:Xiubo.Lee@gmail.com,m:dlan@kernel.org,m:zhangyi@everest-semi.com,m:chrome-platform@lists.linux.dev,m:imx@lists.linux.dev,m:linux-arm-kernel@lists.infradead.org,s:lists@lfdr.de];
 	FREEMAIL_CC(0.00)[bang-olufsen.dk,nautel.com,cutebit.org,analog.com,baylibre.com,bootlin.com,foss.st.com,collabora.com,ti.com,kernel.org,cirrus.com,chromium.org,bp.renesas.com,loongson.cn,openpixelsystems.org,opensource.cirrus.com,tuxon.dev,zonque.org,amarulasolutions.com,gmail.com,broadcom.com,nxp.com,glider.be,canonical.com,sntech.de,bitmer.com,perex.cz,nvidia.com,irondevice.com,socionext.com,metafoo.de,googlemail.com,linaro.org,microchip.com,realtek.com,crapouillou.net,lysator.liu.se,timesys.com,vivo.com,free.fr,sholland.org,pengutronix.de,diasemi.com,samsung.com,suse.com,sony.com,linux.spacemit.com,amd.com,mleia.com,everest-semi.com,lists.linux.dev,lists.infradead.org,vger.kernel.org];
 	FROM_HAS_DN(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	RCVD_COUNT_FIVE(0.00)[6];
 	RCPT_COUNT_GT_50(0.00)[104];
@@ -175,13 +175,13 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	MID_RHS_MATCH_FROM(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-mips,lin,renesas];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[vger.kernel.org:from_smtp,bootlin.com:mid,bootlin.com:dkim,bootlin.com:from_mime,bootlin.com:email,renesas.com:email,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[bootlin.com:mid,bootlin.com:dkim,bootlin.com:from_mime,bootlin.com:email,renesas.com:email,vger.kernel.org:from_smtp,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 65DD06378B7
+X-Rspamd-Queue-Id: D49B0637935
 
 Hi Kuninori,
 
-On Tue, 26 May 2026 01:58:59 +0000
+On Tue, 26 May 2026 01:59:08 +0000
 Kuninori Morimoto <kuninori.morimoto.gx@renesas.com> wrote:
 
 > Because it is confusable during debugging ASoC FW update, tidyup
@@ -189,36 +189,9 @@ Kuninori Morimoto <kuninori.morimoto.gx@renesas.com> wrote:
 > 
 > Signed-off-by: Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
 > ---
->  sound/soc/codecs/idt821034.c | 9 ++++-----
+>  sound/soc/codecs/peb2466.c | 9 ++++-----
 >  1 file changed, 4 insertions(+), 5 deletions(-)
 > 
-> diff --git a/sound/soc/codecs/idt821034.c b/sound/soc/codecs/idt821034.c
-> index 39bafefa6a186..084090ccef77a 100644
-> --- a/sound/soc/codecs/idt821034.c
-> +++ b/sound/soc/codecs/idt821034.c
-> @@ -860,18 +860,17 @@ static int idt821034_dai_startup(struct snd_pcm_substream *substream,
->  	return 0;
->  }
->  
-> -static const u64 idt821034_dai_formats[] = {
-> +static const u64 idt821034_dai_formats =
->  	SND_SOC_POSSIBLE_DAIFMT_DSP_A	|
-> -	SND_SOC_POSSIBLE_DAIFMT_DSP_B,
-> -};
-> +	SND_SOC_POSSIBLE_DAIFMT_DSP_B;
->  
->  static const struct snd_soc_dai_ops idt821034_dai_ops = {
->  	.startup      = idt821034_dai_startup,
->  	.hw_params    = idt821034_dai_hw_params,
->  	.set_tdm_slot = idt821034_dai_set_tdm_slot,
->  	.set_fmt      = idt821034_dai_set_fmt,
-> -	.auto_selectable_formats     = idt821034_dai_formats,
-> -	.num_auto_selectable_formats = ARRAY_SIZE(idt821034_dai_formats),
-> +	.auto_selectable_formats     = &idt821034_dai_formats,
-> +	.num_auto_selectable_formats = 1,
->  };
->  
->  static struct snd_soc_dai_driver idt821034_dai_driver = {
 
 Same typo in the commit title as in patch 2:
 s/pattarn/pattern/
