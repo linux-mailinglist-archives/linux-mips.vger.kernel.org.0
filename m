@@ -1,340 +1,393 @@
-Return-Path: <linux-mips+bounces-14861-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-14862-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id 7QFlOcIWIGqcvgAAu9opvQ
-	(envelope-from <linux-mips+bounces-14861-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Wed, 03 Jun 2026 13:57:54 +0200
+	id mTL1MuYdIGpywAAAu9opvQ
+	(envelope-from <linux-mips+bounces-14862-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Wed, 03 Jun 2026 14:28:22 +0200
 X-Original-To: lists+linux-mips@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4345163740F
-	for <lists+linux-mips@lfdr.de>; Wed, 03 Jun 2026 13:57:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 1D7726377FD
+	for <lists+linux-mips@lfdr.de>; Wed, 03 Jun 2026 14:28:22 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=amd.com header.s=selector1 header.b=sc8kp9co;
-	spf=pass (mail.lfdr.de: domain of "linux-mips+bounces-14861-lists+linux-mips=lfdr.de@vger.kernel.org" designates 172.234.253.10 as permitted sender) smtp.mailfrom="linux-mips+bounces-14861-lists+linux-mips=lfdr.de@vger.kernel.org";
-	dmarc=pass (policy=quarantine) header.from=amd.com;
-	arc=reject ("cv is fail on i=2")
+	dkim=pass header.d=infradead.org header.s=desiato.20200630 header.b=d5SmmfEf;
+	spf=pass (mail.lfdr.de: domain of "linux-mips+bounces-14862-lists+linux-mips=lfdr.de@vger.kernel.org" designates 172.234.253.10 as permitted sender) smtp.mailfrom="linux-mips+bounces-14862-lists+linux-mips=lfdr.de@vger.kernel.org";
+	dmarc=pass (policy=none) header.from=infradead.org;
+	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 05928301467E
-	for <lists+linux-mips@lfdr.de>; Wed,  3 Jun 2026 11:48:43 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id E1BA2308E06E
+	for <lists+linux-mips@lfdr.de>; Wed,  3 Jun 2026 12:08:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D14133D0C04;
-	Wed,  3 Jun 2026 11:48:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A0B6C46AF08;
+	Wed,  3 Jun 2026 12:08:28 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
-Received: from BL0PR03CU003.outbound.protection.outlook.com (mail-eastusazon11012006.outbound.protection.outlook.com [52.101.53.6])
+Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49478225397;
-	Wed,  3 Jun 2026 11:48:41 +0000 (UTC)
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780487322; cv=fail; b=cb3GclCfUesJfemhHU74n6zs4yEAxRbvw6OO8WKDE/gRW6W8gHIQezbQue7DtFQ+aTMCIP580MQIQ0zYjjnJA5r6eFAWFDqPKUXcAfl/+fNaLL+ek4J3wSIeMrgH6IXewi5Q0No1vJidxGtlK1ztgjLNEas1qXLfy4ouvpazHPA=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780487322; c=relaxed/simple;
-	bh=73IK15AgIz7wrWvmFWIAZJnt/Egt7ilBwzpkBZY+ops=;
-	h=Message-ID:Date:Subject:To:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=TeQgvqRgP0/cgPHooa+Jw/OvNblt2gLoxY1jCovgUaB8W4LUlx0I3zipxIr3CPNL0zWRiJE1U5Mh5y5B4FGZhheBPuh2XBf7u2NmPQGgnZR9F3znW2gBrgcCFZA8zIVCKNXMiXQPaoXxTIZIurAoQRVbOFiLDpzHIWV/qUME42U=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=sc8kp9co; arc=fail smtp.client-ip=52.101.53.6
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=h7OBMz9X8NwLtBUwb3rUtV0vbgMdbdse5Y9XUdYRSwnAflGV81bNkg+detjHCnLbG/5lpcFoKaDQXEq6ODYuAh4aTbuOpll7jHJmo5u075L81QAhhlgi88kzWx2eT3sIk3QVXsyXB2Rpz/wJenKkp9swXlrgWYAMQWtk32+ON3BR+2N61H4WVmah6nn0WtUVMlrHquwC36Kp6KeSTPALY0cY7nArpxRzxOPyxCYfagNQDWehhWMjXmgUhHw1ngtQwx2hDJIAoOpTgrL5vNALxKmJfTd71COeWYj618oxL+KfBsKBYEa9V6oqs1r+nXpT9cFqRrppRnxiEnADH0Og3Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=BwuAPWToelaOXq0IYGSV/6UlpSwjlYYLs0WXbfz+zcI=;
- b=O75FjxG3FJDS1a8j81fnl19oiwVrV9HZz5eYs/9FzAMY+DIMVj3XsfdCAnXSsncPamHcwqndxRq2ZtXNQIPPwqvorl/2tcaWhtP7cLkU7PyAf+XvxVSJpmb3YJSpd2CWGtNYtb+dMB2HJj14//5c+b1UcAFHnK5nohogJtR1yPOr1jWVNwRW809RgNeUu4BKD16uxSysx1IXYg30WD9rUOojizfdJMwPqXkUmF9mTDkoN3IyCMvRDSZ+KJpI3pkYLrjHB6GZ+t0u/AZ4/EpuF7jmP1yCsfHeaHxUuCTg64VzZr1Fc8IaxE5Ob586rCM+Ceajtc/BcWLC54AVaOA7pw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=BwuAPWToelaOXq0IYGSV/6UlpSwjlYYLs0WXbfz+zcI=;
- b=sc8kp9coCWHQYKhkrvvoQxI64nBgxHwPeNIJvZfnPkgQ5qI6jVReMSuXYiYeSmreB+mtG6enkPAeozhDZm5TlFc6u/57ZzoZXofY73GPKlXjqbNEk5PNRliC7POpK5gP3NChxz++oalIGNFMy0Hm4MZj+pc+NIDsOpDL8euKncc=
-Received: from DS2PR12MB9567.namprd12.prod.outlook.com (2603:10b6:8:27c::8) by
- PH7PR12MB5596.namprd12.prod.outlook.com (2603:10b6:510:136::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.71.16; Wed, 3 Jun 2026
- 11:48:33 +0000
-Received: from DS2PR12MB9567.namprd12.prod.outlook.com
- ([fe80::636:1b52:24ca:d7e5]) by DS2PR12MB9567.namprd12.prod.outlook.com
- ([fe80::636:1b52:24ca:d7e5%2]) with mapi id 15.21.0092.006; Wed, 3 Jun 2026
- 11:48:33 +0000
-Message-ID: <a997db8a-b018-467f-a4ef-87a108817b1e@amd.com>
-Date: Wed, 3 Jun 2026 17:17:59 +0530
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 10/83] ASoC: amd: use .auto_selectable_formats
-To: Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>,
- =?UTF-8?Q?Alvin_=C5=A0ipraga?= <alsi@bang-olufsen.dk>,
- "J.M.B. Downing" <jonathan.downing@nautel.com>,
- =?UTF-8?Q?Martin_Povi=C5=A1er?= <povik+lin@cutebit.org>,
- =?UTF-8?Q?Nuno_S=C3=A1?= <nuno.sa@analog.com>,
- =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig_=28The_Capable_Hub=29?=
- <u.kleine-koenig@baylibre.com>,
- Alexandre Belloni <alexandre.belloni@bootlin.com>,
- Alexandre Torgue <alexandre.torgue@foss.st.com>,
- AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
- Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>, Baojun Xu
- <baojun.xu@ti.com>, Bartosz Golaszewski <brgl@kernel.org>,
- Ben Bright <ben.bright@cirrus.com>, Benson Leung <bleung@chromium.org>,
- Biju Das <biju.das.jz@bp.renesas.com>, Binbin Zhou <zhoubinbin@loongson.cn>,
- Bram Vlerick <bram.vlerick@openpixelsystems.org>,
- Charles Keepax <ckeepax@opensource.cirrus.com>,
- Chen-Yu Tsai <wens@kernel.org>, Cheng-Yi Chiang <cychiang@chromium.org>,
- Claudiu Beznea <claudiu.beznea@tuxon.dev>,
- Cristian Ciocaltea <cristian.ciocaltea@collabora.com>,
- Daniel Mack <daniel@zonque.org>,
- Dario Binacchi <dario.binacchi@amarulasolutions.com>,
- David Rhodes <david.rhodes@cirrus.com>, Fabio Estevam <festevam@gmail.com>,
- Florian Fainelli <florian.fainelli@broadcom.com>, Frank Li
- <Frank.Li@nxp.com>, Fred Treven <fred.treven@cirrus.com>,
- Geert Uytterhoeven <geert+renesas@glider.be>,
- Guenter Roeck <groeck@chromium.org>,
- Guoqing Jiang <guoqing.jiang@canonical.com>,
- Haojian Zhuang <haojian.zhuang@gmail.com>,
- HariKrishna Sagala <hariconscious@gmail.com>,
- Heiko Stuebner <heiko@sntech.de>, Herve Codina <herve.codina@bootlin.com>,
- Hsieh Hung-En <hungen3108@gmail.com>,
- James Ogletree <jogletre@opensource.cirrus.com>,
- Jarkko Nikula <jarkko.nikula@bitmer.com>, Jaroslav Kysela <perex@perex.cz>,
- Jernej Skrabec <jernej.skrabec@gmail.com>,
- Jerome Brunet <jbrunet@baylibre.com>,
- Jihed Chaibi <jihed.chaibi.dev@gmail.com>,
- Jonathan Hunter <jonathanh@nvidia.com>,
- Kevin Cernekee <cernekee@chromium.org>, Kevin Hilman <khilman@baylibre.com>,
- Kevin Lu <kevin-lu@ti.com>, Kirill Marinushkin <k.marinushkin@gmail.com>,
- Kiseok Jo <kiseok.jo@irondevice.com>, Krzysztof Kozlowski <krzk@kernel.org>,
- Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
- Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
- Lars-Peter Clausen <lars@metafoo.de>, Liam Girdwood <lgirdwood@gmail.com>,
- Luca Ceresoli <luca.ceresoli@bootlin.com>,
- M R Swami Reddy <mr.swami.reddy@ti.com>, Mark Brown <broonie@kernel.org>,
- Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
- Masami Hiramatsu <mhiramat@kernel.org>,
- Matthias Brugger <matthias.bgg@gmail.com>, Max Filippov
- <jcmvbkbc@gmail.com>, Maxime Coquelin <mcoquelin.stm32@gmail.com>,
- Neil Armstrong <neil.armstrong@linaro.org>,
- Nicolas Ferre <nicolas.ferre@microchip.com>,
- Nicolas Frattaroli <frattaroli.nicolas@gmail.com>,
- Nicolin Chen <nicoleotsuka@gmail.com>, Oder Chiou <oder_chiou@realtek.com>,
- Olivier Moysan <olivier.moysan@foss.st.com>,
- Paul Cercueil <paul@crapouillou.net>, Peter Rosin <peda@lysator.liu.se>,
- Piotr Wojtaszczyk <piotr.wojtaszczyk@timesys.com>,
- Qianfeng Rong <rongqianfeng@vivo.com>, Ray Jui <rjui@broadcom.com>,
- Richard Fitzgerald <rf@opensource.cirrus.com>,
- Robert Jarzmik <robert.jarzmik@free.fr>, Samuel Holland
- <samuel@sholland.org>, Sascha Hauer <s.hauer@pengutronix.de>,
- Scott Branden <sbranden@broadcom.com>, Sen Wang <sen@ti.com>,
- Sharique Mohammad <sharq0406@gmail.com>, Shenghao Ding
- <shenghao-ding@ti.com>, Shengjiu Wang <shengjiu.wang@gmail.com>,
- Steven Eckhoff <steven.eckhoff.opensource@gmail.com>,
- Support Opensource <support.opensource@diasemi.com>,
- Sylwester Nawrocki <s.nawrocki@samsung.com>, Takashi Iwai <tiwai@suse.com>,
- Thierry Reding <thierry.reding@kernel.org>, Tim Bird <tim.bird@sony.com>,
- Troy Mitchell <troy.mitchell@linux.spacemit.com>,
- Tzung-Bi Shih <tzungbi@kernel.org>,
- Venkata Prasad Potturu <venkataprasad.potturu@amd.com>,
- Vishwas A Deshpande <vishwas.a.deshpande@ti.com>,
- Vladimir Zapolskiy <vz@mleia.com>, Xiubo Li <Xiubo.Lee@gmail.com>,
- Yixun Lan <dlan@kernel.org>, Zhang Yi <zhangyi@everest-semi.com>,
- chrome-platform@lists.linux.dev, imx@lists.linux.dev,
- linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
- linux-renesas-soc@vger.kernel.org, linux-riscv@lists.infradead.org,
- linux-sound@vger.kernel.org, spacemit@lists.linux.dev
-References: <8733zfj5jj.wl-kuninori.morimoto.gx@renesas.com>
- <87o6i3hqs7.wl-kuninori.morimoto.gx@renesas.com>
-Content-Language: en-US
-From: "Mukunda,Vijendar" <vijendar.mukunda@amd.com>
-In-Reply-To: <87o6i3hqs7.wl-kuninori.morimoto.gx@renesas.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: PN4PR01CA0069.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:c01:26c::8) To DS2PR12MB9567.namprd12.prod.outlook.com
- (2603:10b6:8:27c::8)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C232346AF20;
+	Wed,  3 Jun 2026 12:08:25 +0000 (UTC)
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1780488508; cv=none; b=svQ17K1kNmXcpvyUNLoD/b27ibhRVqkihb3HuMSPuqoDZUE7bTkylyQI1IkHN/AFiUQaCsXdu9yLUPr1EhZyasHihjy/L4RZ1ZN9qIPXRIgg21piXZbf8FF3lSDH1QVci9DkR0oZQplaindwjF52O8OMXa1wpt0ieHrUTBJ9qic=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1780488508; c=relaxed/simple;
+	bh=husHsBXts++6xfeVS4vQrdtk6eNs1v5BuuRy3CU7I4g=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=pfN/7gJRSODtsjrOHO7WN7R/jqnzHogS7rDqGGyZIzdXtUEuR8H88BQImzXu7Qn/t8H7CT48QNm4VMmPmHiEbJR90HpLMJe9uzYUKHIbbKbHklipczYYgA7aXdAOBranA8W4RAd+IZYnR2VHXyU3PrC/kd0w5U/7hmKZS+mXvXc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=pass smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=d5SmmfEf; arc=none smtp.client-ip=90.155.92.199
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=BjZzErQAmk+oO+4E0XcjmiW9hmCrWCk9t8jkFgLyPC4=; b=d5SmmfEf7raSFzg4vFDuRz3coH
+	z+67jG4KbJDEQovNpX0QBLbtbh5tdhne1+qs53r3XBtvymPRPtmo6uHSxh9oTTahgs8dAc3hjubVH
+	TjxIyF2tByPYK1SNwdAus4bunqc+oiQhx3KaDikJD7OR0bH0zHwcXCFc9PxzwQo2USWMY6gaz+gax
+	psOIEAn7ENGHGHDIPOHAfDrAgVYPG6MBJtugLGYM7rNY0SHSlYJY1ZLW248a62PrBMjvpfpPST3Ww
+	bn+ca1kNG1zCTGcCom57PuIUIbLXrVuU18Xy917FFvYAMb+dhQxvJQYnGRos24DqYx2XD0xeX8VK0
+	H/LTg4FA==;
+Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
+	by desiato.infradead.org with esmtpsa (Exim 4.99.2 #2 (Red Hat Linux))
+	id 1wUkOK-0000000C4nY-1pBX;
+	Wed, 03 Jun 2026 12:08:12 +0000
+Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
+	id 7A6863007A4; Wed, 03 Jun 2026 14:08:11 +0200 (CEST)
+Date: Wed, 3 Jun 2026 14:08:11 +0200
+From: Peter Zijlstra <peterz@infradead.org>
+To: Dmitry Ilvokhin <d@ilvokhin.com>
+Cc: Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+	Boqun Feng <boqun@kernel.org>, Waiman Long <longman@redhat.com>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Juergen Gross <jgross@suse.com>,
+	Ajay Kaher <ajay.kaher@broadcom.com>,
+	Alexey Makhalov <alexey.makhalov@broadcom.com>,
+	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
+	Thomas Gleixner <tglx@kernel.org>, Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+	"H. Peter Anvin" <hpa@zytor.com>, Arnd Bergmann <arnd@arndb.de>,
+	Dennis Zhou <dennis@kernel.org>, Tejun Heo <tj@kernel.org>,
+	Christoph Lameter <cl@gentwo.org>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
+	virtualization@lists.linux.dev, linux-arch@vger.kernel.org,
+	linux-mm@kvack.org, linux-trace-kernel@vger.kernel.org,
+	kernel-team@meta.com, "Paul E. McKenney" <paulmck@kernel.org>
+Subject: Re: [PATCH v6 5/7] locking: Add contended_release tracepoint to
+ qspinlock
+Message-ID: <20260603120811.GW3493090@noisy.programming.kicks-ass.net>
+References: <cover.1777999826.git.d@ilvokhin.com>
+ <5d7ea75ffe74a785e6b234ada9f23c6373d4b4c1.1777999826.git.d@ilvokhin.com>
+ <20260513193342.GB2545104@noisy.programming.kicks-ass.net>
+ <agXBb0ga_6HJrrnm@shell.ilvokhin.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS2PR12MB9567:EE_|PH7PR12MB5596:EE_
-X-MS-Office365-Filtering-Correlation-Id: 9a32328a-8c79-4641-da3e-08dec16609e5
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|1800799024|376014|7416014|366016|6133799003|22082099003|18002099003|4143699003|11063799006|56012099006|921020|41080700001;
-X-Microsoft-Antispam-Message-Info:
-	plrdrnTKnoq/Umvw8e7UAY0T4yXzW05RciYvda1CO+KpwCR+EhDZyeuvzxpcrxUUfUyIe79smRoJ4VFFcPLjQk5m0wN89MdzGLXHVK7SjAYChNORL/CGv9kDeZpgPjxUCam3o5xE/TR+TYNwgDqtMIcQBVXLMEN9aAokBhzvLhBuQDCuIRQTRH2jFQZVOpLPWOf3bv/J7leSO5tBwjC56iyJtAusX79TJHO8z8s3L97TN2bGGfhqW2FDlrwJIqb8TImbPcnAJ3+kRf+9MVqQKKydz4AKCIhv/7y4gUkIJ8gHd6SqaRlYu2E7ofyeu46qb4aOJWo3Qocw2iRbHKdoCSJ1MwfoNtMU5usm1ogTTkM/70G5QBTUY50expJwKLfY4W1ZpXXBrQmscMcXaDOzZKY6KkwWHmo/UQ9AdhiIeqRTqm8ZCHu4xf0V290UEnBQvHzym3UmeQ7QgVPh0m2GC5Gb4yuvo3RrS+fRbQtody+f3gHXg8H1BpAl/JctZzfIUndZRhXf4RvlUfHpXGu+p70OgzLGmMLQvWcn+MkybNHEUuCFLr1gntCfhVtP2bW5uO6RhXDrQdLvR2fT3tllJ+KVc21GQe0oyAc085k+EUsXI7Bks43D6dMLwpGc2nE7JhHMwdi0yPvLrlcJyf34fIK1JNfMbWFfhK2tJPft9mAT0xllckwoGY04V6vOmcVjaABEMIcwnQR/VbX8h/t8Rn2RoQyWCEjhnQLPutY4mLZ21Yrhjki0B6BZa+CGpQi6h9oF2W91Qu6yEKaD2eauPA==
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS2PR12MB9567.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(376014)(7416014)(366016)(6133799003)(22082099003)(18002099003)(4143699003)(11063799006)(56012099006)(921020)(41080700001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?ZGNSTWFHOHJyMyt1anNPYVZ3V3lHblhKNGJ6cEY0d2poUEVZVzl1T3ZSdXhZ?=
- =?utf-8?B?cGpSQXdXY21qa0lFV2xKdlc3VlBpVEhkU3dUZGhLMWVLbnB1VlZFbzA5L2dQ?=
- =?utf-8?B?QTJ3WWNHOTh4RlZwQ2FPYUlMZURLTkovUlk4emc1ODdiZlZRVU91eUU4T1Na?=
- =?utf-8?B?a3BTYitXd1M4V2lDa0RlMTBHYnhSd21RWjRTZGo2SkF6a2tBTDkxaUQyTlZO?=
- =?utf-8?B?QWZkTm40THo2SWdOTG5MY3U5OW1rdDlpVzdDWERVVlVuelBQUVgwMlNabldN?=
- =?utf-8?B?dnJsdHNXZk1kREZXQ1ZuR0VUMGQrc2I5TEVjbkN2RGdLNXNTaDgvelZrNms0?=
- =?utf-8?B?SEFlQzBHdXJrL2ZOVG9OUDVMZzhBelZJR0xmZktvSERNTUN6eldDckUrK1Jq?=
- =?utf-8?B?WHQ4ejh6SVJxSDFESGY1RWszdDNmcXp3R1o2WkpwUVRMVVUyZ01lMnB1QkNE?=
- =?utf-8?B?RzNNUi9LVENZSGhtTWlIL3h3OXVVUzNWWTNGNVdIQkxnN05ieXhUVWNRQWxH?=
- =?utf-8?B?M3R4cmJMc3ZpaXE2QzlJN1UyeTFzQzBVRDdXSTU5eVp5ejAxVHJqZkdVcVRI?=
- =?utf-8?B?ZjF3QnNTbWFOQWNURHE4M3YreUlWNVdjZko4THFFNFdvallIOVh6UnRmZUZK?=
- =?utf-8?B?aWxMNlhrWS93TXdEOTZEMFFsMDBnRThrR2w5Sk9PYURLT0FXMlN1ZllpNnl6?=
- =?utf-8?B?Sy9VV0VZVitoQ2RJTnE3dytONW92ZXJXNjJPTWNPYXk2dWlLdUlNM1ZBVWFr?=
- =?utf-8?B?N29JMGJOK1FtSEFpZWdUWkFib0lhZDNwM2dKVGJVbFVqbHRtSmY5QnpydCs5?=
- =?utf-8?B?Z1lIR3VYYUtaQWpHSGE0NVN3cG55L2lDZU1TTExIUmFTVllzZmZYbWptL2h0?=
- =?utf-8?B?djQ3UHJ3c25NYU9lN2hVWWNHUFRrM1d0My9rVThtTFIwQ2xESlN5R3RERDhk?=
- =?utf-8?B?VWl5cGVQU2F1cUhQN2JFdVNvcnRuUUpldTZpU2lTTUdRaHBUR2tIR1J2V2dv?=
- =?utf-8?B?MUNFODAzSzM2clE1L2habWFFMENnTGJjdU0yWkJETmZzbjBlMGljMTdaVWZl?=
- =?utf-8?B?Y2M3UWh0cUpFTTcrdmpvTEw3RzBYTHdNakVVRWI4SlpITkxvN2tBZzFXNk82?=
- =?utf-8?B?SnN5SnNZOEx4cjNXYXNnenRUcm1KUnhwTkIvVHpPa1V1alVZdy9lWG5IRXJk?=
- =?utf-8?B?VS9xOVRmdWxnYm51MTNaOXFEOGhTdVJDVW1nVGVnQ2lCV2RSTWVZckErcUsy?=
- =?utf-8?B?Tm4xYTRhTU9CdkxUUCtRLzVud0wvdEFLeDA5QWZHUC9vNU12WGtramw0ZUlj?=
- =?utf-8?B?bVR6d2cwKzJlWWNIQm94ODdVTlpSRlEydXFsSzczNGpYdHMzWjE1ck9ib0wr?=
- =?utf-8?B?dndiSHNMUEpXTnlnbHg5amUvc2xrTXlzcXVaWGV0ZVpQeEJ6cWpIVUVsdTZi?=
- =?utf-8?B?ZnVENVBUUWxqa2UxSzRNKzl0WnVsYmlKVjN1bkNPby90RmxWN2NzT2dvKzRG?=
- =?utf-8?B?Tm8reC9qeWlmSnpZQlF4bnFiUzgvQUNnQnlGRUdaY3k2Z2lRbmZVdFltMndQ?=
- =?utf-8?B?OVgvTnFpdUorSHFzK0liVkhySjRyWXhIb0JMdVFIcGJXajI1WlU4TDI1dERB?=
- =?utf-8?B?SlQrMWNncVVCNTNNdGxBdlVsaDRSSHlMbG94MWY0N2M0NFJFOEtwaFhVNC91?=
- =?utf-8?B?TVJRbS9lSGMwd3VCNWtCc2VNY21ENFFkVWZva3lLallGelFycGRrVDQ4bkJu?=
- =?utf-8?B?RGZMdFAwNWlpMnFwVy93WkF2WXYyTEw3Z2hJQ0N6MzlZcjhpTlduSkxWODlN?=
- =?utf-8?B?YnNyN0lQdlpOalZzWWxITE5lbVg1V1JEY1kyUUFONEtYSUdOR2tiQTh1WVhx?=
- =?utf-8?B?d3pjcEN4Z2ZxWXloVG1BbXlzNXdibm5nbE1VK0ZTQnFsTU9NYzZHd1ZqMHo2?=
- =?utf-8?B?SGR1V0wrQkhlNC9oa2FNQXJvT240NklCSjlEQTZNZTlQN1N2SmJ4RHhCdlZw?=
- =?utf-8?B?ODZkajZIU1FLUGdNWjdGR3ZJQ0w4Z3Z4d0ZJaWZEcU9TMzZDckhzNm84N0xP?=
- =?utf-8?B?b29QWVZRZEk4d0pZK1pnZnBhL3ptbCtHRmc0MU9xd2d2cWJnMDh6WFVNSUkz?=
- =?utf-8?B?V0EvM1VaUVBvWHFNbEc2c2pPVnBsczhleE4zc1FuY2hyWWh6NE1tVGpkYU9O?=
- =?utf-8?B?QW1IbzdNYnBXRml3VmZGcUhrZjFvRTE1d3dUU2pSNXEwZExsRlEyUE9NRW1q?=
- =?utf-8?B?cGxwTVNTZW1GRVlTMFdKampCQnNJTyt0UkdTMkFoeUhwOFFsa1I1TzA1L0pw?=
- =?utf-8?B?SkRVZkI2N0ZMcW82SzE0K3NGSFYxcnNEN2dkZTVRVVoxcXJHd1NYUT09?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9a32328a-8c79-4641-da3e-08dec16609e5
-X-MS-Exchange-CrossTenant-AuthSource: DS2PR12MB9567.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Jun 2026 11:48:33.1249
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: XYxJgQh1DCtEC5w93zorPl1Ryr3GpinnzrTccGIprrdhUb6PA2z0tGOG3bEqzrriKi+QdRtKefaenK1ow0r5UA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB5596
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <agXBb0ga_6HJrrnm@shell.ilvokhin.com>
 X-Rspamd-Action: no action
-X-Spamd-Result: default: False [1.34 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
-	ARC_REJECT(1.00)[cv is fail on i=2];
-	DMARC_POLICY_ALLOW(-0.50)[amd.com,quarantine];
-	R_DKIM_ALLOW(-0.20)[amd.com:s=selector1];
+X-Spamd-Result: default: False [-2.16 / 15.00];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	DMARC_POLICY_ALLOW(-0.50)[infradead.org,none];
+	R_DKIM_ALLOW(-0.20)[infradead.org:s=desiato.20200630];
 	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-14861-lists,linux-mips=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	FORGED_RECIPIENTS(0.00)[m:kuninori.morimoto.gx@renesas.com,m:alsi@bang-olufsen.dk,m:jonathan.downing@nautel.com,m:povik+lin@cutebit.org,m:nuno.sa@analog.com,m:u.kleine-koenig@baylibre.com,m:alexandre.belloni@bootlin.com,m:alexandre.torgue@foss.st.com,m:angelogioacchino.delregno@collabora.com,m:arnaud.pouliquen@foss.st.com,m:baojun.xu@ti.com,m:brgl@kernel.org,m:ben.bright@cirrus.com,m:bleung@chromium.org,m:biju.das.jz@bp.renesas.com,m:zhoubinbin@loongson.cn,m:bram.vlerick@openpixelsystems.org,m:ckeepax@opensource.cirrus.com,m:wens@kernel.org,m:cychiang@chromium.org,m:claudiu.beznea@tuxon.dev,m:cristian.ciocaltea@collabora.com,m:daniel@zonque.org,m:dario.binacchi@amarulasolutions.com,m:david.rhodes@cirrus.com,m:festevam@gmail.com,m:florian.fainelli@broadcom.com,m:Frank.Li@nxp.com,m:fred.treven@cirrus.com,m:geert+renesas@glider.be,m:groeck@chromium.org,m:guoqing.jiang@canonical.com,m:haojian.zhuang@gmail.com,m:hariconscious@gmail.com,m:heiko@sntech.de,m:herve.codina@bootlin.com,m:hunge
- n3108@gmail.com,m:jogletre@opensource.cirrus.com,m:jarkko.nikula@bitmer.com,m:perex@perex.cz,m:jernej.skrabec@gmail.com,m:jbrunet@baylibre.com,m:jihed.chaibi.dev@gmail.com,m:jonathanh@nvidia.com,m:cernekee@chromium.org,m:khilman@baylibre.com,m:kevin-lu@ti.com,m:k.marinushkin@gmail.com,m:kiseok.jo@irondevice.com,m:krzk@kernel.org,m:hayashi.kunihiko@socionext.com,m:prabhakar.mahadev-lad.rj@bp.renesas.com,m:lars@metafoo.de,m:lgirdwood@gmail.com,m:luca.ceresoli@bootlin.com,m:mr.swami.reddy@ti.com,m:broonie@kernel.org,m:martin.blumenstingl@googlemail.com,m:mhiramat@kernel.org,m:matthias.bgg@gmail.com,m:jcmvbkbc@gmail.com,m:mcoquelin.stm32@gmail.com,m:neil.armstrong@linaro.org,m:nicolas.ferre@microchip.com,m:frattaroli.nicolas@gmail.com,m:nicoleotsuka@gmail.com,m:oder_chiou@realtek.com,m:olivier.moysan@foss.st.com,m:paul@crapouillou.net,m:peda@lysator.liu.se,m:piotr.wojtaszczyk@timesys.com,m:rongqianfeng@vivo.com,m:rjui@broadcom.com,m:rf@opensource.cirrus.com,m:robert.jarzmik@free.fr,m:sa
- muel@sholland.org,m:s.hauer@pengutronix.de,m:sbranden@broadcom.com,m:sen@ti.com,m:sharq0406@gmail.com,m:shenghao-ding@ti.com,m:shengjiu.wang@gmail.com,m:steven.eckhoff.opensource@gmail.com,m:support.opensource@diasemi.com,m:s.nawrocki@samsung.com,m:tiwai@suse.com,m:thierry.reding@kernel.org,m:tim.bird@sony.com,m:troy.mitchell@linux.spacemit.com,m:tzungbi@kernel.org,m:venkataprasad.potturu@amd.com,m:vishwas.a.deshpande@ti.com,m:vz@mleia.com,m:Xiubo.Lee@gmail.com,m:dlan@kernel.org,m:zhangyi@everest-semi.com,m:chrome-platform@lists.linux.dev,m:imx@lists.linux.dev,m:linux-arm-kernel@lists.infradead.org,s:lists@lfdr.de];
-	FORGED_SENDER(0.00)[vijendar.mukunda@amd.com,linux-mips@vger.kernel.org];
-	MIME_TRACE(0.00)[0:+];
-	FREEMAIL_TO(0.00)[renesas.com,bang-olufsen.dk,nautel.com,cutebit.org,analog.com,baylibre.com,bootlin.com,foss.st.com,collabora.com,ti.com,kernel.org,cirrus.com,chromium.org,bp.renesas.com,loongson.cn,openpixelsystems.org,opensource.cirrus.com,tuxon.dev,zonque.org,amarulasolutions.com,gmail.com,broadcom.com,nxp.com,glider.be,canonical.com,sntech.de,bitmer.com,perex.cz,nvidia.com,irondevice.com,socionext.com,metafoo.de,googlemail.com,linaro.org,microchip.com,realtek.com,crapouillou.net,lysator.liu.se,timesys.com,vivo.com,free.fr,sholland.org,pengutronix.de,diasemi.com,samsung.com,suse.com,sony.com,linux.spacemit.com,amd.com,mleia.com,everest-semi.com,lists.linux.dev,lists.infradead.org,vger.kernel.org];
-	FORWARDED(0.00)[lists@lfdr.de];
-	FORGED_SENDER_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-14862-lists,linux-mips=lfdr.de];
+	FORGED_RECIPIENTS(0.00)[m:d@ilvokhin.com,m:mingo@redhat.com,m:will@kernel.org,m:boqun@kernel.org,m:longman@redhat.com,m:tsbogend@alpha.franken.de,m:jgross@suse.com,m:ajay.kaher@broadcom.com,m:alexey.makhalov@broadcom.com,m:bcm-kernel-feedback-list@broadcom.com,m:tglx@kernel.org,m:bp@alien8.de,m:dave.hansen@linux.intel.com,m:x86@kernel.org,m:hpa@zytor.com,m:arnd@arndb.de,m:dennis@kernel.org,m:tj@kernel.org,m:cl@gentwo.org,m:rostedt@goodmis.org,m:mhiramat@kernel.org,m:mathieu.desnoyers@efficios.com,m:linux-kernel@vger.kernel.org,m:linux-mips@vger.kernel.org,m:virtualization@lists.linux.dev,m:linux-arch@vger.kernel.org,m:linux-mm@kvack.org,m:linux-trace-kernel@vger.kernel.org,m:kernel-team@meta.com,m:paulmck@kernel.org,s:lists@lfdr.de];
 	FROM_HAS_DN(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	TO_DN_SOME(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[30];
+	FORGED_SENDER(0.00)[peterz@infradead.org,linux-mips@vger.kernel.org];
+	MIME_TRACE(0.00)[0:+];
+	FORWARDED(0.00)[lists@lfdr.de];
+	DKIM_TRACE(0.00)[infradead.org:+];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	MISSING_XM_UA(0.00)[];
 	FORGED_SENDER_FORWARDING(0.00)[];
 	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[vijendar.mukunda@amd.com,linux-mips@vger.kernel.org];
-	DKIM_TRACE(0.00)[amd.com:+];
-	RCPT_COUNT_GT_50(0.00)[104];
-	MID_RHS_MATCH_FROM(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	FROM_NEQ_ENVFROM(0.00)[peterz@infradead.org,linux-mips@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	ALIAS_RESOLVED(0.00)[];
-	TAGGED_RCPT(0.00)[linux-mips,lin,renesas];
+	TAGGED_RCPT(0.00)[linux-mips];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[vger.kernel.org:from_smtp,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+	TO_DN_SOME(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[vger.kernel.org:from_smtp,infradead.org:from_mime,infradead.org:dkim,noisy.programming.kicks-ass.net:mid,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 4345163740F
+X-Rspamd-Queue-Id: 1D7726377FD
+
+On Thu, May 14, 2026 at 12:34:55PM +0000, Dmitry Ilvokhin wrote:
+
+> Baseline, in best case scenario of least number of executed
+> instructions.
+> 
+>     3e0:  endbr64                          ; 4 bytes (always executed)
+>     3e4:  movb $0x0,(%rdi)                 ; 3 bytes (unlock,
+>                                            ; always executed)
+>     3e7:  decl %gs:__preempt_count         ; 7 bytes (always executed)
+>     3ee:  je   3f5                         ; 2 bytes (always executed)
+>     3f0:  jmp  __x86_return_thunk          ; 5 bytes (executed if above
+>                                            ; je is not taken)
+>                                            ; rest is not executed
+>     3f5:  call __SCT__preempt_schedule     ; 5 bytes
+>     3fa:  jmp  __x86_return_thunk          ; 5 bytes
+> 
+> Tracepoint (again same case of least number of executed instructions).
+> 
+>     bc0:  endbr64                          ; 4 bytes (always executed)
+>     bc4:  xchg %ax,%ax                     ; 2 bytes (always executed, this is an
+>                                            ; only addition on the execution path).
+>     bc6:  movb $0x0,(%rdi)                 ; 3 bytes (unlock, always executed)
+>     bc9:  decl %gs:__preempt_count         ; 7 bytes (always executed)
+>     bd0:  je   bde                         ; 2 bytes (always executed)
+>     bd2:  jmp  __x86_return_thunk          ; 5 bytes (executed if above
+>                                            ; je is not taken)
+>                                            ; rest is not executed
+>     bd7:  call queued_spin_release_traced  ; 5 bytes
+>     bdc:  jmp  bc9                         ; 2 bytes
+>     bde:  call __SCT__preempt_schedule     ; 5 bytes
+>     be3:  jmp  __x86_return_thunk          ; 5 bytes
+> 
+
+So I've been playing with this a bit, and it is all really sad.
+
+Now, since pretty much everybody+dog will have PARAVIRT_SPINLOCK=y, the
+'best' solution would be changing that paravirt call with a
+static_call(), that actually shrinks the code by 1 byte.
+
+And then this tracepoint nonsense can simply use a different unlock
+function, just like paravirt.
+
+0000 00000000000001d0 <_raw_spin_unlock>:
+0000  1d0:	f3 0f 1e fa          	endbr64
+0004  1d4:	ff 15 00 00 00 00    	call   *0x0(%rip)        # 1da <_raw_spin_unlock+0xa>	1d6: R_X86_64_PC32	pv_ops_lock+0x4
+000a  1da:	65 ff 0d 00 00 00 00 	decl   %gs:0x0(%rip)        # 1e1 <_raw_spin_unlock+0x11>	1dd: R_X86_64_PC32	__preempt_count-0x4
+0011  1e1:	74 06                	je     1e9 <_raw_spin_unlock+0x19>
+0013  1e3:	2e e9 00 00 00 00    	cs jmp 1e9 <_raw_spin_unlock+0x19>	1e5: R_X86_64_PLT32	__x86_return_thunk-0x4
+0019  1e9:	e8 00 00 00 00       	call   1ee <_raw_spin_unlock+0x1e>	1ea: R_X86_64_PLT32	__SCT__preempt_schedule-0x4
+001e  1ee:	2e e9 00 00 00 00    	cs jmp 1f4 <_raw_spin_unlock+0x24>	1f0: R_X86_64_PLT32	__x86_return_thunk-0x4
 
 
+0000 00000000000001d0 <_raw_spin_unlock>:
+0000  1d0:	f3 0f 1e fa          	endbr64
+0004  1d4:	e8 00 00 00 00       	call   1d9 <_raw_spin_unlock+0x9>	1d5: R_X86_64_PLT32	__SCT__queued_spin_unlock-0x4
+0009  1d9:	65 ff 0d 00 00 00 00 	decl   %gs:0x0(%rip)        # 1e0 <_raw_spin_unlock+0x10>	1dc: R_X86_64_PC32	__preempt_count-0x4
+0010  1e0:	74 06                	je     1e8 <_raw_spin_unlock+0x18>
+0012  1e2:	2e e9 00 00 00 00    	cs jmp 1e8 <_raw_spin_unlock+0x18>	1e4: R_X86_64_PLT32	__x86_return_thunk-0x4
+0018  1e8:	e8 00 00 00 00       	call   1ed <_raw_spin_unlock+0x1d>	1e9: R_X86_64_PLT32	__SCT__preempt_schedule-0x4
+001d  1ed:	2e e9 00 00 00 00    	cs jmp 1f3 <_raw_spin_unlock+0x23>	1ef: R_X86_64_PLT32	__x86_return_thunk-0x4
 
-On 5/26/26 07:32, Kuninori Morimoto wrote:
-> We can use .auto_selectable_formats. Let's adds it.
->
-> Signed-off-by: Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
-Reviewed-by: Vijendar Mukunda <Vijendar.Mukunda@amd.com>
-> ---
->   sound/soc/amd/acp/acp-i2s.c       | 6 ++++++
->   sound/soc/amd/raven/acp3x-i2s.c   | 6 ++++++
->   sound/soc/amd/vangogh/acp5x-i2s.c | 6 ++++++
->   3 files changed, 18 insertions(+)
->
-> diff --git a/sound/soc/amd/acp/acp-i2s.c b/sound/soc/amd/acp/acp-i2s.c
-> index 283a674c7e2c3..bb58a9d34993b 100644
-> --- a/sound/soc/amd/acp/acp-i2s.c
-> +++ b/sound/soc/amd/acp/acp-i2s.c
-> @@ -686,6 +686,10 @@ static int acp_i2s_startup(struct snd_pcm_substream *substream, struct snd_soc_d
->   	return 0;
->   }
->   
-> +static const u64 acp_i2s_selectable_formats =
-> +	SND_SOC_POSSIBLE_DAIFMT_I2S	|
-> +	SND_SOC_POSSIBLE_DAIFMT_DSP_A;
-> +
->   const struct snd_soc_dai_ops asoc_acp_cpu_dai_ops = {
->   	.startup	= acp_i2s_startup,
->   	.hw_params	= acp_i2s_hwparams,
-> @@ -693,6 +697,8 @@ const struct snd_soc_dai_ops asoc_acp_cpu_dai_ops = {
->   	.trigger	= acp_i2s_trigger,
->   	.set_fmt	= acp_i2s_set_fmt,
->   	.set_tdm_slot	= acp_i2s_set_tdm_slot,
-> +	.auto_selectable_formats	= &acp_i2s_selectable_formats,
-> +	.num_auto_selectable_formats	= 1,
->   };
->   EXPORT_SYMBOL_NS_GPL(asoc_acp_cpu_dai_ops, "SND_SOC_ACP_COMMON");
->   
-> diff --git a/sound/soc/amd/raven/acp3x-i2s.c b/sound/soc/amd/raven/acp3x-i2s.c
-> index 352485dd98b14..b0147e88ba54c 100644
-> --- a/sound/soc/amd/raven/acp3x-i2s.c
-> +++ b/sound/soc/amd/raven/acp3x-i2s.c
-> @@ -250,11 +250,17 @@ static int acp3x_i2s_trigger(struct snd_pcm_substream *substream,
->   	return ret;
->   }
->   
-> +static const u64 acp3x_i2s_selectable_formats =
-> +	SND_SOC_POSSIBLE_DAIFMT_I2S	|
-> +	SND_SOC_POSSIBLE_DAIFMT_DSP_A;
-> +
->   static const struct snd_soc_dai_ops acp3x_i2s_dai_ops = {
->   	.hw_params = acp3x_i2s_hwparams,
->   	.trigger = acp3x_i2s_trigger,
->   	.set_fmt = acp3x_i2s_set_fmt,
->   	.set_tdm_slot = acp3x_i2s_set_tdm_slot,
-> +	.auto_selectable_formats = &acp3x_i2s_selectable_formats,
-> +	.num_auto_selectable_formats = 1,
->   };
->   
->   static const struct snd_soc_component_driver acp3x_dai_component = {
-> diff --git a/sound/soc/amd/vangogh/acp5x-i2s.c b/sound/soc/amd/vangogh/acp5x-i2s.c
-> index bf719f6286174..dbfb87e2fe929 100644
-> --- a/sound/soc/amd/vangogh/acp5x-i2s.c
-> +++ b/sound/soc/amd/vangogh/acp5x-i2s.c
-> @@ -337,11 +337,17 @@ static int acp5x_i2s_trigger(struct snd_pcm_substream *substream,
->   	return ret;
->   }
->   
-> +static const u64 acp5x_i2s_selectable_formats =
-> +	SND_SOC_POSSIBLE_DAIFMT_I2S	|
-> +	SND_SOC_POSSIBLE_DAIFMT_DSP_A;
-> +
->   static const struct snd_soc_dai_ops acp5x_i2s_dai_ops = {
->   	.hw_params = acp5x_i2s_hwparams,
->   	.trigger = acp5x_i2s_trigger,
->   	.set_fmt = acp5x_i2s_set_fmt,
->   	.set_tdm_slot = acp5x_i2s_set_tdm_slot,
-> +	.auto_selectable_formats = &acp5x_i2s_selectable_formats,
-> +	.num_auto_selectable_formats = 1,
->   };
->   
->   static const struct snd_soc_component_driver acp5x_dai_component = {
 
+Something a little like so, which is completely untested, except to
+build kernel/locking/spinlock.o (with clang-23).
+
+Also, I think someone should go do some performance runs with
+ARCH_INLINE_SPIN_* set for x86 just like for s390.
+
+Of course, this is only x86 done, and it doesn't nicely tie in with
+tracepoints, but it does give the sanest asm.
+
+---
+diff --git a/arch/x86/hyperv/hv_spinlock.c b/arch/x86/hyperv/hv_spinlock.c
+index 210b494e4de0..6b4bdea18218 100644
+--- a/arch/x86/hyperv/hv_spinlock.c
++++ b/arch/x86/hyperv/hv_spinlock.c
+@@ -78,8 +78,8 @@ void __init hv_init_spinlocks(void)
+ 	pr_info("PV spinlocks enabled\n");
+ 
+ 	__pv_init_lock_hash();
+-	pv_ops_lock.queued_spin_lock_slowpath = __pv_queued_spin_lock_slowpath;
+-	pv_ops_lock.queued_spin_unlock = PV_CALLEE_SAVE(__pv_queued_spin_unlock);
++	static_call_update(queued_spin_lock_slowpath, __pv_queued_spin_lock_slowpath);
++	static_call_update(queued_spin_unlock, __raw_callee_save___pv_queued_spin_unlock);
+ 	pv_ops_lock.wait = hv_qlock_wait;
+ 	pv_ops_lock.kick = hv_qlock_kick;
+ 	pv_ops_lock.vcpu_is_preempted = PV_CALLEE_SAVE(hv_vcpu_is_preempted);
+diff --git a/arch/x86/include/asm/cpufeatures.h b/arch/x86/include/asm/cpufeatures.h
+index 1d506e5d6f46..52e7ce10df57 100644
+--- a/arch/x86/include/asm/cpufeatures.h
++++ b/arch/x86/include/asm/cpufeatures.h
+@@ -225,7 +225,6 @@
+ #define X86_FEATURE_EPT_AD		( 8*32+17) /* "ept_ad" Intel Extended Page Table access-dirty bit */
+ #define X86_FEATURE_VMCALL		( 8*32+18) /* Hypervisor supports the VMCALL instruction */
+ #define X86_FEATURE_VMW_VMMCALL		( 8*32+19) /* VMware prefers VMMCALL hypercall instruction */
+-#define X86_FEATURE_PVUNLOCK		( 8*32+20) /* PV unlock function */
+ #define X86_FEATURE_VCPUPREEMPT		( 8*32+21) /* PV vcpu_is_preempted function */
+ #define X86_FEATURE_TDX_GUEST		( 8*32+22) /* "tdx_guest" Intel Trust Domain Extensions Guest */
+ 
+diff --git a/arch/x86/include/asm/paravirt-spinlock.h b/arch/x86/include/asm/paravirt-spinlock.h
+index 7beffcb08ed6..553910f92906 100644
+--- a/arch/x86/include/asm/paravirt-spinlock.h
++++ b/arch/x86/include/asm/paravirt-spinlock.h
+@@ -3,6 +3,7 @@
+ #define _ASM_X86_PARAVIRT_SPINLOCK_H
+ 
+ #include <asm/paravirt_types.h>
++#include <linux/static_call_types.h>
+ 
+ #ifdef CONFIG_SMP
+ #include <asm/spinlock_types.h>
+@@ -11,9 +12,6 @@
+ struct qspinlock;
+ 
+ struct pv_lock_ops {
+-	void (*queued_spin_lock_slowpath)(struct qspinlock *lock, u32 val);
+-	struct paravirt_callee_save queued_spin_unlock;
+-
+ 	void (*wait)(u8 *ptr, u8 val);
+ 	void (*kick)(int cpu);
+ 
+@@ -26,20 +24,23 @@ extern struct pv_lock_ops pv_ops_lock;
+ extern void native_queued_spin_lock_slowpath(struct qspinlock *lock, u32 val);
+ extern void __pv_init_lock_hash(void);
+ extern void __pv_queued_spin_lock_slowpath(struct qspinlock *lock, u32 val);
++extern void __raw_callee_save___native_queued_spin_unlock(struct qspinlock *lock);
+ extern void __raw_callee_save___pv_queued_spin_unlock(struct qspinlock *lock);
+ extern bool nopvspin;
+ 
++DECLARE_STATIC_CALL(queued_spin_lock_slowpath, native_queued_spin_lock_slowpath);
++DECLARE_STATIC_CALL(queued_spin_unlock, __raw_callee_save___native_queued_spin_unlock);
++
+ static __always_inline void pv_queued_spin_lock_slowpath(struct qspinlock *lock,
+ 							 u32 val)
+ {
+-	PVOP_VCALL2(pv_ops_lock, queued_spin_lock_slowpath, lock, val);
++	static_call(queued_spin_lock_slowpath)(lock, val);
+ }
+ 
+ static __always_inline void pv_queued_spin_unlock(struct qspinlock *lock)
+ {
+-	PVOP_ALT_VCALLEE1(pv_ops_lock, queued_spin_unlock, lock,
+-			  "movb $0, (%%" _ASM_ARG1 ")",
+-			  ALT_NOT(X86_FEATURE_PVUNLOCK));
++	__STATIC_CALL_MOD_ADDRESSABLE(queued_spin_unlock);
++	asm volatile ("call " STATIC_CALL_TRAMP_STR(queued_spin_unlock) : ASM_CALL_CONSTRAINT);
+ }
+ 
+ static __always_inline bool pv_vcpu_is_preempted(long cpu)
+diff --git a/arch/x86/kernel/kvm.c b/arch/x86/kernel/kvm.c
+index 29226d112029..5908d9fd94bb 100644
+--- a/arch/x86/kernel/kvm.c
++++ b/arch/x86/kernel/kvm.c
+@@ -1135,9 +1135,8 @@ void __init kvm_spinlock_init(void)
+ 	pr_info("PV spinlocks enabled\n");
+ 
+ 	__pv_init_lock_hash();
+-	pv_ops_lock.queued_spin_lock_slowpath = __pv_queued_spin_lock_slowpath;
+-	pv_ops_lock.queued_spin_unlock =
+-		PV_CALLEE_SAVE(__pv_queued_spin_unlock);
++	static_call_update(queued_spin_lock_slowpath, __pv_queued_spin_lock_slowpath);
++	static_call_update(queued_spin_unlock, __raw_callee_save___pv_queued_spin_unlock);
+ 	pv_ops_lock.wait = kvm_wait;
+ 	pv_ops_lock.kick = kvm_kick_cpu;
+ 
+diff --git a/arch/x86/kernel/paravirt-spinlocks.c b/arch/x86/kernel/paravirt-spinlocks.c
+index 95452444868f..28407304f123 100644
+--- a/arch/x86/kernel/paravirt-spinlocks.c
++++ b/arch/x86/kernel/paravirt-spinlocks.c
+@@ -25,9 +25,12 @@ __visible void __native_queued_spin_unlock(struct qspinlock *lock)
+ }
+ PV_CALLEE_SAVE_REGS_THUNK(__native_queued_spin_unlock);
+ 
++DEFINE_STATIC_CALL(queued_spin_lock_slowpath, native_queued_spin_lock_slowpath);
++DEFINE_STATIC_CALL(queued_spin_unlock, __raw_callee_save___native_queued_spin_unlock);
++
+ bool pv_is_native_spin_unlock(void)
+ {
+-	return pv_ops_lock.queued_spin_unlock.func ==
++	return static_call_query(queued_spin_unlock) ==
+ 		__raw_callee_save___native_queued_spin_unlock;
+ }
+ 
+@@ -45,16 +48,11 @@ bool pv_is_native_vcpu_is_preempted(void)
+ 
+ void __init paravirt_set_cap(void)
+ {
+-	if (!pv_is_native_spin_unlock())
+-		setup_force_cpu_cap(X86_FEATURE_PVUNLOCK);
+-
+ 	if (!pv_is_native_vcpu_is_preempted())
+ 		setup_force_cpu_cap(X86_FEATURE_VCPUPREEMPT);
+ }
+ 
+ struct pv_lock_ops pv_ops_lock = {
+-	.queued_spin_lock_slowpath	= native_queued_spin_lock_slowpath,
+-	.queued_spin_unlock		= PV_CALLEE_SAVE(__native_queued_spin_unlock),
+ 	.wait				= paravirt_nop,
+ 	.kick				= paravirt_nop,
+ 	.vcpu_is_preempted		= PV_CALLEE_SAVE(__native_vcpu_is_preempted),
+diff --git a/arch/x86/kernel/static_call.c b/arch/x86/kernel/static_call.c
+index 61592e41a6b1..1268b7dc93b1 100644
+--- a/arch/x86/kernel/static_call.c
++++ b/arch/x86/kernel/static_call.c
+@@ -3,6 +3,7 @@
+ #include <linux/memory.h>
+ #include <linux/bug.h>
+ #include <asm/text-patching.h>
++#include <asm/paravirt-spinlock.h>
+ 
+ enum insn_type {
+ 	CALL = 0, /* site call */
+@@ -31,6 +32,15 @@ static const u8 retinsn[] = { RET_INSN_OPCODE, 0xcc, 0xcc, 0xcc, 0xcc };
+  */
+ static const u8 warninsn[] = { 0x67, 0x48, 0x0f, 0xb9, 0x3a };
+ 
++/*
++ * ds ds movb $0, (_ASM_ARG1)
++ */
++#ifdef CONFIG_64BIT
++static const u8 unlockinsn[] = { 0x3e, 0x3e, 0xc6, 0x07, 0x00 };
++#else
++static const u8 unlockinsn[] = { 0x3e, 0x3e, 0xc6, 0x00, 0x00 };
++#endif
++
+ static u8 __is_Jcc(u8 *insn) /* Jcc.d32 */
+ {
+ 	u8 ret = 0;
+@@ -78,6 +88,10 @@ static void __ref __static_call_transform(void *insn, enum insn_type type,
+ 			emulate = code;
+ 			code = &warninsn;
+ 		}
++		if (func == &__raw_callee_save___native_queued_spin_unlock) {
++			emulate = code;
++			code = &unlockinsn;
++		}
+ 		break;
+ 
+ 	case NOP:
+diff --git a/arch/x86/xen/spinlock.c b/arch/x86/xen/spinlock.c
+index 83ac24ead289..f718e535ea7c 100644
+--- a/arch/x86/xen/spinlock.c
++++ b/arch/x86/xen/spinlock.c
+@@ -134,9 +134,8 @@ void __init xen_init_spinlocks(void)
+ 	printk(KERN_DEBUG "xen: PV spinlocks enabled\n");
+ 
+ 	__pv_init_lock_hash();
+-	pv_ops_lock.queued_spin_lock_slowpath = __pv_queued_spin_lock_slowpath;
+-	pv_ops_lock.queued_spin_unlock =
+-		PV_CALLEE_SAVE(__pv_queued_spin_unlock);
++	static_call_update(queued_spin_lock_slowpath, __pv_queued_spin_lock_slowpath);
++	static_call_update(queued_spin_unlock, __raw_callee_save___pv_queued_spin_unlock);
+ 	pv_ops_lock.wait = xen_qlock_wait;
+ 	pv_ops_lock.kick = xen_qlock_kick;
+ 	pv_ops_lock.vcpu_is_preempted = PV_CALLEE_SAVE(xen_vcpu_stolen);
+diff --git a/tools/arch/x86/include/asm/cpufeatures.h b/tools/arch/x86/include/asm/cpufeatures.h
+index 86d17b195e79..61541f042f74 100644
+--- a/tools/arch/x86/include/asm/cpufeatures.h
++++ b/tools/arch/x86/include/asm/cpufeatures.h
+@@ -225,7 +225,6 @@
+ #define X86_FEATURE_EPT_AD		( 8*32+17) /* "ept_ad" Intel Extended Page Table access-dirty bit */
+ #define X86_FEATURE_VMCALL		( 8*32+18) /* Hypervisor supports the VMCALL instruction */
+ #define X86_FEATURE_VMW_VMMCALL		( 8*32+19) /* VMware prefers VMMCALL hypercall instruction */
+-#define X86_FEATURE_PVUNLOCK		( 8*32+20) /* PV unlock function */
+ #define X86_FEATURE_VCPUPREEMPT		( 8*32+21) /* PV vcpu_is_preempted function */
+ #define X86_FEATURE_TDX_GUEST		( 8*32+22) /* "tdx_guest" Intel Trust Domain Extensions Guest */
+ 
 
