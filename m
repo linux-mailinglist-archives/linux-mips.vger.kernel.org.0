@@ -1,162 +1,211 @@
-Return-Path: <linux-mips+bounces-14916-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-14917-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id DHLwAw9/ImooYwEAu9opvQ
-	(envelope-from <linux-mips+bounces-14916-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Fri, 05 Jun 2026 09:47:27 +0200
+	id OEAVKc57ImoSYQEAu9opvQ
+	(envelope-from <linux-mips+bounces-14917-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Fri, 05 Jun 2026 09:33:34 +0200
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 716926461D3
-	for <lists+linux-mips@lfdr.de>; Fri, 05 Jun 2026 09:47:26 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5C41E646046
+	for <lists+linux-mips@lfdr.de>; Fri, 05 Jun 2026 09:33:34 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=none;
-	spf=pass (mail.lfdr.de: domain of "linux-mips+bounces-14916-lists+linux-mips=lfdr.de@vger.kernel.org" designates 2600:3c0a:e001:db::12fc:5321 as permitted sender) smtp.mailfrom="linux-mips+bounces-14916-lists+linux-mips=lfdr.de@vger.kernel.org";
-	dmarc=none;
+	dkim=pass header.d=intel.com header.s=Intel header.b="SGZhrs/N";
+	spf=pass (mail.lfdr.de: domain of "linux-mips+bounces-14917-lists+linux-mips=lfdr.de@vger.kernel.org" designates 172.105.105.114 as permitted sender) smtp.mailfrom="linux-mips+bounces-14917-lists+linux-mips=lfdr.de@vger.kernel.org";
+	dmarc=pass (policy=none) header.from=intel.com;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 73601304B139
-	for <lists+linux-mips@lfdr.de>; Fri,  5 Jun 2026 07:30:52 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 038C6304F248
+	for <lists+linux-mips@lfdr.de>; Fri,  5 Jun 2026 07:32:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 288BA47AF6C;
-	Fri,  5 Jun 2026 07:30:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5C2D147AF4D;
+	Fri,  5 Jun 2026 07:32:08 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-vk1-f172.google.com (mail-vk1-f172.google.com [209.85.221.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D6264657D7
-	for <linux-mips@vger.kernel.org>; Fri,  5 Jun 2026 07:30:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92E6442315C;
+	Fri,  5 Jun 2026 07:32:06 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780644650; cv=none; b=CnyfgFLRbF0eTZ1HDd0VJ3xenIhym7gSUYJ5F6cpCKzVnDeATqKIWQwAlWldDa/rhi4RQRbTYmEtEeDUlNHx9Ns9zsvn6cN+I6rdSfJxmWy10Jnp22T0+KeMarUZ2x1A6qxRpGqrbxOZ5mrfirwkdZLl+IxotcXaUNCwe/HeAR4=
+	t=1780644728; cv=none; b=ApTmAAsJQZeMZUYYYAxrcVUu3afBmB+xB9Leq8lQKggoFeeR5fkdT4+in+20UlE6jnoDj7zG/leucrwQ4S9yeHNp2xgOKuFyA8TULlBGCUNlKxhcDJpJzIwSOw85rLyF2NhVeSl2Cznyn++uRA2QfDPveEZ3eXYBMCimhzDyLhE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780644650; c=relaxed/simple;
-	bh=5W/tWie+s0GyiFfiVzYnA5c+lJxiUZ1i+gzNpq+8JKc=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Gzxfdwel6aPd59pXE8KpiGAaeYnX7XsTNfpLhm6KGYgd2zAmZ/KPCdIEl+SWVsXGsJ63lfB3DK6wCyIrobd1dFIvngO8i36IWVeC762axQ38rIEqJtjFyld3jM7rLGYQwVmOQRWO2c0AXQ1ssmrUUDScUJP3UOM6jpd6nR7veoc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.221.172
-Received: by mail-vk1-f172.google.com with SMTP id 71dfb90a1353d-59d07df448bso1295323e0c.0
-        for <linux-mips@vger.kernel.org>; Fri, 05 Jun 2026 00:30:48 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780644648; x=1781249448;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=JJPTFXFfEVfaClOO5icEXfzsJcEhxZLVJwj7hX3l3SM=;
-        b=Z6Ho5Rw9RaQBwFvdceFYhk78SkTLUBYrdIFtM37u5fF0R6ZYjVQBNGGzF9Z2ENebNF
-         Dzb3eBw5CF/h59Ix7siIdgCYkOMF8kYsleiMNVF0nbxwH5cipsr3lubKi9ZCXg16paj6
-         cmQ5xgtpTRDPWJSvMP7+izFOIdxbFFRTa1LfzF3W28BvXZ4mnWmLwGN+DHbD1o+ir5Ey
-         W2Je53PMq7pTAhk8QBK4Yf29a2QUcbG+9ve2tdN4VVOBK1yyPzYg5WVZXukHygHBRE7N
-         YqmYZBPExWZYdJKvXtngKN2wHdcehDceN8eKWVlGJhpq4jdwEuzK5EEpNhB1rVEe+iP7
-         OzZg==
-X-Forwarded-Encrypted: i=1; AFNElJ/M1mT1Qchrpu8WS0JcmQiI+FDG/BBS8jzwwreFbKYTeJVdBXLykA2yU504EQcY/wbESOij9ZL+5S9U@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy4oPCXxBEpGYCFPD2JjjRLBVPTgA6tVj/T5/t4uhXMI7UICHt2
-	64/gUub+piulwVH8zzipbZlSADqhmm4j3jH6jxesx/5pg3nE674s1WBMVC2pHL0mmGI=
-X-Gm-Gg: Acq92OGH3eXt3m5f6dAh+Lm9MzxFZOt0l+ifxKREvvEmiL8wdxRq4g/WH9V2XCUz657
-	A/+WjfbG4bT3X6zvFGk6u5cW70C1IvaCB8uY4uVj0m3NlQ+qHESQq6VZ1PKe8zRv9QVbKRR5GQ7
-	Vdih0Gr92dF2naEe8my8QjMM69bPFzNgMCaHz55d4hR4PIs5ALJCehcPYbAuADwESP0lbisa5KS
-	38sLL2CTgehDj5kt0HOkSBZwADQsPbBWYQu361cqX6KroaiM0KgbtSCMxaIOJYvJ8w6x2taPHg2
-	p0cS9FzotqdBXI8OY6Npmo1IRfLGi2jgnb7Pwe5rnqiIg/12fVEFxbPNRrUCm/HfoeoqStX8ifz
-	BNIvf7omgfYVbt/d1kCS13BLJ2UgJZm9yHp1ar27pQVys7kxrcHkNHcBgvL/sJhbO0OhT8FhrPT
-	ER1xqnNEHBz+M1C4Ub2Yah6Z/2lR+u6KZuwwGEA7mWl0IK9ANB2owslnDDsh/0dTgXG+ySBQQ=
-X-Received: by 2002:a05:6122:e14e:b0:5a0:3d17:f939 with SMTP id 71dfb90a1353d-5ac5291a586mr1116285e0c.9.1780644647677;
-        Fri, 05 Jun 2026 00:30:47 -0700 (PDT)
-Received: from mail-ua1-f43.google.com (mail-ua1-f43.google.com. [209.85.222.43])
-        by smtp.gmail.com with ESMTPSA id 71dfb90a1353d-5a6dd501a90sm7150741e0c.17.2026.06.05.00.30.46
-        for <linux-mips@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 05 Jun 2026 00:30:46 -0700 (PDT)
-Received: by mail-ua1-f43.google.com with SMTP id a1e0cc1a2514c-963a722ed58so1044334241.0
-        for <linux-mips@vger.kernel.org>; Fri, 05 Jun 2026 00:30:46 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AFNElJ9jJd2alsnEXUWNqjWLmS8ETua8FT9tmyBMGjlJp5cRv1FZOi2xxPsz0O/0PlMgFdwKZ/YqSGV/V6cN@vger.kernel.org
-X-Received: by 2002:a05:6102:cc8:b0:62f:3abe:907f with SMTP id
- ada2fe7eead31-6feed1adbffmr1189675137.4.1780644646130; Fri, 05 Jun 2026
- 00:30:46 -0700 (PDT)
+	s=arc-20240116; t=1780644728; c=relaxed/simple;
+	bh=c30wbulhkBn1BOKZ95h66WcDcHsR2Lig8B6kzzR9otg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=HlRM+IeYSCMvfG/BZgboPZuuSMDydBImO5nRRmQvrqvLapimmToLjtTXt7FhUz/pjkhrs636K+FXwREBcKHvjt/FRmn4fYKMMdw12zAE1PgjgqEyh/6OFQsfpOA1Z54N+Vfv8cGcq3TzlrW4gtNtS4BSoPJHN5XXULKg3LJH95Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=SGZhrs/N; arc=none smtp.client-ip=192.198.163.16
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1780644727; x=1812180727;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=c30wbulhkBn1BOKZ95h66WcDcHsR2Lig8B6kzzR9otg=;
+  b=SGZhrs/NfcpcCcqV3uRHFGGg+wyRaQlgJsWM3upHHww90ue67+lQDMBd
+   ZsmRSSOc33GM4VM9AsyTuBhhnV7MAH7xc2dqXbElIG8TGOdRNQTaFds3r
+   n+6NamFDPmklFUc3GIiDadql2qpWu4ARQrWn1130ZLqyZHtZG+i/R4Xef
+   1avlRLuGqciRhbLkSCHepAJEPKle+epn4jqQlzep4z1niyBIoi+UNi68s
+   FGLgThZnY/fmZyDtFDvW4/Il453EtwvdQTQ3YLizReE4S120cS0sKLXQH
+   EHI0KTusI7l2arMH0SA25vxbYJUAno6dDkYRfQjR27rUumN5sbB0Vczyb
+   g==;
+X-CSE-ConnectionGUID: EIBuMG3eSeyjAKKtOweGZg==
+X-CSE-MsgGUID: /0xCisKmTq2pYVBW821L0Q==
+X-IronPort-AV: E=McAfee;i="6800,10657,11807"; a="69012007"
+X-IronPort-AV: E=Sophos;i="6.24,188,1774335600"; 
+   d="scan'208";a="69012007"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jun 2026 00:32:05 -0700
+X-CSE-ConnectionGUID: dgmCPLzkTKmMjNLLI2/dBg==
+X-CSE-MsgGUID: q1Bd7HPvQi+WKekTT+SBKg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.24,188,1774335600"; 
+   d="scan'208";a="249704712"
+Received: from ettammin-mobl2.ger.corp.intel.com (HELO localhost) ([10.245.245.178])
+  by orviesa005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jun 2026 00:31:50 -0700
+Date: Fri, 5 Jun 2026 10:31:48 +0300
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: "Peter Chen (CIX)" <peter.chen@kernel.org>
+Cc: Bartosz Golaszewski <brgl@kernel.org>, Lee Jones <lee@kernel.org>,
+	Mark Brown <broonie@opensource.wolfsonmicro.com>,
+	Thierry Reding <thierry.reding@avionic-design.de>,
+	Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Srinivas Kandagatla <srini@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Vinod Koul <vkoul@kernel.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Danilo Krummrich <dakr@kernel.org>, Rob Herring <robh@kernel.org>,
+	Saravana Kannan <saravanak@kernel.org>,
+	Madhavan Srinivasan <maddy@linux.ibm.com>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Nicholas Piggin <npiggin@gmail.com>,
+	"Christophe Leroy (CS GROUP)" <chleroy@kernel.org>,
+	Andi Shyti <andi.shyti@kernel.org>, Joerg Roedel <joro@8bytes.org>,
+	Will Deacon <will@kernel.org>, Robin Murphy <robin.murphy@arm.com>,
+	Doug Berger <opendmb@gmail.com>,
+	Florian Fainelli <florian.fainelli@broadcom.com>,
+	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
+	Ulf Hansson <ulfh@kernel.org>, Frank Li <Frank.Li@nxp.com>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
+	Fabio Estevam <festevam@gmail.com>,
+	Matthew Brost <matthew.brost@intel.com>,
+	Thomas =?iso-8859-1?Q?Hellstr=F6m?= <thomas.hellstrom@linux.intel.com>,
+	Rodrigo Vivi <rodrigo.vivi@intel.com>,
+	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+	Paul Cercueil <paul@crapouillou.net>, Bin Liu <b-liu@ti.com>,
+	Philipp Zabel <p.zabel@pengutronix.de>,
+	Maximilian Luz <luzmaximilian@gmail.com>,
+	Hans de Goede <hansg@kernel.org>,
+	Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+	linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+	linux-arm-msm@vger.kernel.org, linux-sound@vger.kernel.org,
+	driver-core@lists.linux.dev, devicetree@vger.kernel.org,
+	linuxppc-dev@lists.ozlabs.org, linux-i2c@vger.kernel.org,
+	iommu@lists.linux.dev, linux-pm@vger.kernel.org,
+	imx@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
+	intel-xe@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+	linux-usb@vger.kernel.org, linux-mips@vger.kernel.org,
+	platform-driver-x86@vger.kernel.org,
+	Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>
+Subject: Re: [PATCH 20/23] usb: chipidea: use
+ platform_device_set_of_node_from_dev()
+Message-ID: <aiJ7ZB-J-TyJEwBb@ashevche-desk.local>
+References: <20260521-pdev-fwnode-ref-v1-0-88c324a1b8d2@oss.qualcomm.com>
+ <20260521-pdev-fwnode-ref-v1-20-88c324a1b8d2@oss.qualcomm.com>
+ <ah9P6Xt9SyKgc2oJ@ashevche-desk.local>
+ <CAMRc=MdhjZhGL9tEx9WEjn2f95d=ObNM0AtBNpcevm6aHgpj+Q@mail.gmail.com>
+ <aiJz6Ys4gE998ULp@nchen-desktop>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260604-remove-pktcdvd-references-v3-0-e2f06fb4eef4@gmail.com>
- <20260604-remove-pktcdvd-references-v3-1-e2f06fb4eef4@gmail.com> <88d9bb41-e51d-4b71-a6d9-f1b79eccd496@acm.org>
-In-Reply-To: <88d9bb41-e51d-4b71-a6d9-f1b79eccd496@acm.org>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Fri, 5 Jun 2026 09:30:35 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdVhjYBhKUPzx-FAKWAAkUwcpYh0v2V5w64OMJtREZr4PQ@mail.gmail.com>
-X-Gm-Features: AVVi8CdzPUN0PjO13sCwZaAxIjLcvwA5tXzyJ1zGjjn5YbgvhAb6LM_UbfPQhv4
-Message-ID: <CAMuHMdVhjYBhKUPzx-FAKWAAkUwcpYh0v2V5w64OMJtREZr4PQ@mail.gmail.com>
-Subject: Re: [PATCH v3 1/6] scsi: core: Remove remaining reference to the
- pktcdvd driver
-To: Bart Van Assche <bvanassche@acm.org>
-Cc: Catalin Iacob <iacobcatalin@gmail.com>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
-	Madhavan Srinivasan <maddy@linux.ibm.com>, Michael Ellerman <mpe@ellerman.id.au>, 
-	Nicholas Piggin <npiggin@gmail.com>, "Christophe Leroy (CS GROUP)" <chleroy@kernel.org>, Rich Felker <dalias@libc.org>, 
-	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>, "David S. Miller" <davem@davemloft.net>, 
-	Andreas Larsson <andreas@gaisler.com>, 
-	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>, 
-	"Martin K. Petersen" <martin.petersen@oracle.com>, Jens Axboe <axboe@kernel.dk>, 
-	Yoshinori Sato <ysato@users.sourceforge.jp>, linux-mips@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, 
-	linux-sh@vger.kernel.org, sparclinux@vger.kernel.org, 
-	linux-scsi@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <aiJz6Ys4gE998ULp@nchen-desktop>
+Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6
+ krs, Bertel Jungin Aukio 5, 02600 Espoo
 X-Rspamd-Action: no action
-X-Spamd-Result: default: False [-1.46 / 15.00];
+X-Spamd-Result: default: False [-0.66 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
+	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-14916-lists,linux-mips=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	DMARC_NA(0.00)[linux-m68k.org];
-	FROM_HAS_DN(0.00)[];
-	FORGED_RECIPIENTS(0.00)[m:bvanassche@acm.org,m:iacobcatalin@gmail.com,m:tsbogend@alpha.franken.de,m:maddy@linux.ibm.com,m:mpe@ellerman.id.au,m:npiggin@gmail.com,m:chleroy@kernel.org,m:dalias@libc.org,m:glaubitz@physik.fu-berlin.de,m:davem@davemloft.net,m:andreas@gaisler.com,m:James.Bottomley@hansenpartnership.com,m:martin.petersen@oracle.com,m:axboe@kernel.dk,m:ysato@users.sourceforge.jp,m:linux-mips@vger.kernel.org,m:linux-kernel@vger.kernel.org,m:linuxppc-dev@lists.ozlabs.org,m:linux-sh@vger.kernel.org,m:sparclinux@vger.kernel.org,m:linux-scsi@vger.kernel.org,s:lists@lfdr.de];
-	FORGED_SENDER(0.00)[geert@linux-m68k.org,linux-mips@vger.kernel.org];
-	RCPT_COUNT_TWELVE(0.00)[21];
-	FREEMAIL_CC(0.00)[gmail.com,alpha.franken.de,linux.ibm.com,ellerman.id.au,kernel.org,libc.org,physik.fu-berlin.de,davemloft.net,gaisler.com,hansenpartnership.com,oracle.com,kernel.dk,users.sourceforge.jp,vger.kernel.org,lists.ozlabs.org];
-	MIME_TRACE(0.00)[0:+];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	FORWARDED(0.00)[lists@lfdr.de];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	MISSING_XM_UA(0.00)[];
-	FORGED_SENDER_FORWARDING(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[6];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[geert@linux-m68k.org,linux-mips@vger.kernel.org];
-	FORGED_RECIPIENTS_FORWARDING(0.00)[];
-	ALIAS_RESOLVED(0.00)[];
-	TAGGED_RCPT(0.00)[linux-mips];
-	R_DKIM_NA(0.00)[];
+	TAGGED_FROM(0.00)[bounces-14917-lists,linux-mips=lfdr.de];
+	FORGED_RECIPIENTS(0.00)[m:peter.chen@kernel.org,m:brgl@kernel.org,m:lee@kernel.org,m:broonie@opensource.wolfsonmicro.com,m:thierry.reding@avionic-design.de,m:sebastian.hesselbarth@gmail.com,m:andrew+netdev@lunn.ch,m:davem@davemloft.net,m:edumazet@google.com,m:kuba@kernel.org,m:pabeni@redhat.com,m:srini@kernel.org,m:gregkh@linuxfoundation.org,m:vkoul@kernel.org,m:rafael@kernel.org,m:dakr@kernel.org,m:robh@kernel.org,m:saravanak@kernel.org,m:maddy@linux.ibm.com,m:mpe@ellerman.id.au,m:npiggin@gmail.com,m:chleroy@kernel.org,m:andi.shyti@kernel.org,m:joro@8bytes.org,m:will@kernel.org,m:robin.murphy@arm.com,m:opendmb@gmail.com,m:florian.fainelli@broadcom.com,m:bcm-kernel-feedback-list@broadcom.com,m:ulfh@kernel.org,m:Frank.Li@nxp.com,m:s.hauer@pengutronix.de,m:kernel@pengutronix.de,m:festevam@gmail.com,m:matthew.brost@intel.com,m:thomas.hellstrom@linux.intel.com,m:rodrigo.vivi@intel.com,m:airlied@gmail.com,m:simona@ffwll.ch,m:paul@crapouillou.net,m:b-liu@ti.com,m:p.zabel@pengutronix.de,m:
+ luzmaximilian@gmail.com,m:hansg@kernel.org,m:ilpo.jarvinen@linux.intel.com,m:krzk@kernel.org,m:benh@kernel.crashing.org,m:linux-kernel@vger.kernel.org,m:netdev@vger.kernel.org,m:linux-arm-msm@vger.kernel.org,m:linux-sound@vger.kernel.org,m:driver-core@lists.linux.dev,m:devicetree@vger.kernel.org,m:linuxppc-dev@lists.ozlabs.org,m:linux-i2c@vger.kernel.org,m:iommu@lists.linux.dev,m:linux-pm@vger.kernel.org,m:imx@lists.linux.dev,m:linux-arm-kernel@lists.infradead.org,m:intel-xe@lists.freedesktop.org,m:dri-devel@lists.freedesktop.org,m:linux-usb@vger.kernel.org,m:linux-mips@vger.kernel.org,m:platform-driver-x86@vger.kernel.org,m:bartosz.golaszewski@oss.qualcomm.com,m:sebastianhesselbarth@gmail.com,m:andrew@lunn.ch,s:lists@lfdr.de];
+	FORGED_SENDER(0.00)[andriy.shevchenko@linux.intel.com,linux-mips@vger.kernel.org];
 	TO_DN_SOME(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[mail.gmail.com:mid,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,acm.org:email,vger.kernel.org:from_smtp,linux-m68k.org:from_mime,linux-m68k.org:email]
+	FREEMAIL_CC(0.00)[kernel.org,opensource.wolfsonmicro.com,avionic-design.de,gmail.com,lunn.ch,davemloft.net,google.com,redhat.com,linuxfoundation.org,linux.ibm.com,ellerman.id.au,8bytes.org,arm.com,broadcom.com,nxp.com,pengutronix.de,intel.com,linux.intel.com,ffwll.ch,crapouillou.net,ti.com,kernel.crashing.org,vger.kernel.org,lists.linux.dev,lists.ozlabs.org,lists.infradead.org,lists.freedesktop.org,oss.qualcomm.com];
+	MIME_TRACE(0.00)[0:+];
+	HAS_ORG_HEADER(0.00)[];
+	FORWARDED(0.00)[lists@lfdr.de];
+	FROM_HAS_DN(0.00)[];
+	MISSING_XM_UA(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	FORGED_SENDER_FORWARDING(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[5];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[andriy.shevchenko@linux.intel.com,linux-mips@vger.kernel.org];
+	DKIM_TRACE(0.00)[intel.com:+];
+	RCPT_COUNT_GT_50(0.00)[65];
+	FORGED_RECIPIENTS_FORWARDING(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	ALIAS_RESOLVED(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	TAGGED_RCPT(0.00)[linux-mips,netdev];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[linux.intel.com:from_mime,ashevche-desk.local:mid,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,intel.com:email,intel.com:dkim,vger.kernel.org:from_smtp]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 716926461D3
+X-Rspamd-Queue-Id: 5C41E646046
 
-Hoi Bart,
+On Fri, Jun 05, 2026 at 02:59:53PM +0800, Peter Chen (CIX) wrote:
+> On 26-06-04 08:34:16, Bartosz Golaszewski wrote:
+> > On Tue, 2 Jun 2026 23:49:29 +0200, Andy Shevchenko
+> > <andriy.shevchenko@linux.intel.com> said:
+> > > On Thu, May 21, 2026 at 10:36:43AM +0200, Bartosz Golaszewski wrote:
 
-On Thu, 4 Jun 2026 at 18:01, Bart Van Assche <bvanassche@acm.org> wrote:
-> On 6/4/26 6:20 AM, Catalin Iacob wrote:
-> > Commit 1cea5180f2f8 ("block: remove pktcdvd driver") left behind an
-> > export that is now dead code. Remove it.
-> The subject should say something like "Unexport
-> scsi_device_from_queue()".
+...
 
-<pedantic>
-But that is not what it does: the symbol is never exported, as
-CONFIG_CDROM_PKTCDVD_MODULE can never be set?
-</pedantic>
+> > >>  	pdev->dev.parent = dev;
+> > >> -	device_set_of_node_from_dev(&pdev->dev, dev);
+> > >> +	platform_device_set_of_node_from_dev(pdev, dev);
+> > >
+> > > Why do they even do that? Do they have a USB connected pin control?
+> > 
+> > I don't know. I can't test it so I don't want to break it. If they don't need
+> > it, the person who can test it, can remove it later.
+> 
+> It was introduced by below commits:
+> 
+> commit 0f153a1b8193ce768be4df0400aeb2c8f2a3b3da
+> Author: Rob Herring <robh@kernel.org>
+> Date:   Wed Dec 15 16:56:46 2021 -0600
+> 
+>     usb: chipidea: Set the DT node on the child device
+> 
+>     The ChipIdea glue drivers just copy the glue resources to the "ci_hdrc"
+>     child device. Instead, set the child device's DT node pointer to the
+>     parent device's node so that platform_get_irq() can find the IRQ
+>     resources in the DT. This removes the need for statically populating the
+>     IRQ resources from the DT which has been deprecated for some time.
 
-Gr{oetje,eeting}s,
-
-                        Geert
+This doesn't explain why the node marked as reused. device_set_node() fits
+the above description. Rob?
 
 -- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+With Best Regards,
+Andy Shevchenko
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+
 
