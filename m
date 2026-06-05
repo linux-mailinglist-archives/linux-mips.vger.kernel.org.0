@@ -1,201 +1,171 @@
-Return-Path: <linux-mips+bounces-14914-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-14915-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id lIlDImt1ImrWXgEAu9opvQ
-	(envelope-from <linux-mips+bounces-14914-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Fri, 05 Jun 2026 09:06:19 +0200
+	id a33MGYx6ImqcYAEAu9opvQ
+	(envelope-from <linux-mips+bounces-14915-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Fri, 05 Jun 2026 09:28:12 +0200
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id DA41A645C30
-	for <lists+linux-mips@lfdr.de>; Fri, 05 Jun 2026 09:06:18 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id B8922645F7D
+	for <lists+linux-mips@lfdr.de>; Fri, 05 Jun 2026 09:28:11 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=kernel.org header.s=k20260515 header.b=YsZyfuH0;
-	spf=pass (mail.lfdr.de: domain of "linux-mips+bounces-14914-lists+linux-mips=lfdr.de@vger.kernel.org" designates 2600:3c0a:e001:db::12fc:5321 as permitted sender) smtp.mailfrom="linux-mips+bounces-14914-lists+linux-mips=lfdr.de@vger.kernel.org";
-	dmarc=pass (policy=quarantine) header.from=kernel.org;
+	dkim=pass header.d=gmail.com header.s=20251104 header.b=Ps89oNVR;
+	spf=pass (mail.lfdr.de: domain of "linux-mips+bounces-14915-lists+linux-mips=lfdr.de@vger.kernel.org" designates 172.234.253.10 as permitted sender) smtp.mailfrom="linux-mips+bounces-14915-lists+linux-mips=lfdr.de@vger.kernel.org";
+	dmarc=pass (policy=none) header.from=gmail.com;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id B0C22300F5DA
-	for <lists+linux-mips@lfdr.de>; Fri,  5 Jun 2026 07:00:18 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 1DB853102747
+	for <lists+linux-mips@lfdr.de>; Fri,  5 Jun 2026 07:12:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0FEB043E498;
-	Fri,  5 Jun 2026 07:00:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E796C426EB9;
+	Fri,  5 Jun 2026 07:12:13 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B6EA42EEC4;
-	Fri,  5 Jun 2026 07:00:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91C0A3AEF2E
+	for <linux-mips@vger.kernel.org>; Fri,  5 Jun 2026 07:12:12 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780642817; cv=none; b=RoE34PfVM0qak9wgXNL8q8hyxaySKJ0ZKFZ+yv2TrNzJpzvz482DOSqeFWdIC9TdrRB6FPsZSi5LZ2aU59faDK8F2HLc3EBcBPqpzLao0DxHU8bfLiZ5Qcm6NHYB8Ij3l/sGl2uwQIFRWY2cR4CGm0AP2Murd1T6XCGdqNTAw+s=
+	t=1780643533; cv=none; b=ggG4+QbERrGOOdFWpozgi7VAcYVJX8+CmZG2Sk+SzTfrQWFFdkYvls/xKlJ48mfESNyjppKjhhYNlu86wfHa4T7K4Ny1GEg3D7PK9QYHrbwKLgTUGm0WOZPVG/xTyb2Wpf9Chho8gJJ3mAY20ErTrdohasgUOmkHhdWfUfkhWPo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780642817; c=relaxed/simple;
-	bh=DdINVUBttw6klrnTn+6VWBp4sfhuGwvaqZSXK6B9SXw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=qsaTldnqQNAiY7PbHIEI8P9KORqrMiu6M/YG/x1J7nkIoHb1LblzXC/Ixyma9fSaC2H0C7L+eU6TYzxF2pv5419XUFTpN/DGb6U+6PVG/GjKv3s7aGQzZ6B7IPSD/dZGvQVLxRJtf2ctHtf1nVJfxe77zoehbhyIBIOrM3Qlbg8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YsZyfuH0; arc=none smtp.client-ip=100.103.45.18
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AF3B51F00893;
-	Fri,  5 Jun 2026 06:59:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780642807;
-	bh=mLaeht+14OltYjlKRnSLpPtYOk2E9Ea1Lx7tk/hcws8=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=YsZyfuH0DNQ7mv7u3TjtJz2xyIwZsrK8oVaqlPhk64DT+j0rV42P72G1+i/iwKkjR
-	 NRcuOWYnbQoyKyo3l2FM69tbt1G6e/HuNgC0tjlGYq95rMPDSYtqVOPYzvnqYUPxmO
-	 AWjPhYcJZ6wydfSYXF/XBNDK3f5d8IIgdI55O1W1HwIefukk8kexEUl8N5fsDeXx2z
-	 4BExZj5mf+2VTADoOZFYWQlBUHvbteLd4O8xGa6QVu9YQUtYookUrNQ3mqvO9CAt4H
-	 08LnpIh0I2Rne5hZA1mQuw5b6DWAlajftwY4jPb1w8G4b6cEGfnkYFO9vhRvcAILg8
-	 LyUNuKdCiw8wA==
-Date: Fri, 5 Jun 2026 14:59:53 +0800
-From: "Peter Chen (CIX)" <peter.chen@kernel.org>
-To: Bartosz Golaszewski <brgl@kernel.org>
-Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	Lee Jones <lee@kernel.org>,
-	Mark Brown <broonie@opensource.wolfsonmicro.com>,
-	Thierry Reding <thierry.reding@avionic-design.de>,
-	Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Srinivas Kandagatla <srini@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Vinod Koul <vkoul@kernel.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Danilo Krummrich <dakr@kernel.org>, Rob Herring <robh@kernel.org>,
-	Saravana Kannan <saravanak@kernel.org>,
-	Madhavan Srinivasan <maddy@linux.ibm.com>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Nicholas Piggin <npiggin@gmail.com>,
-	"Christophe Leroy (CS GROUP)" <chleroy@kernel.org>,
-	Andi Shyti <andi.shyti@kernel.org>, Joerg Roedel <joro@8bytes.org>,
-	Will Deacon <will@kernel.org>, Robin Murphy <robin.murphy@arm.com>,
-	Doug Berger <opendmb@gmail.com>,
-	Florian Fainelli <florian.fainelli@broadcom.com>,
-	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
-	Ulf Hansson <ulfh@kernel.org>, Frank Li <Frank.Li@nxp.com>,
-	Sascha Hauer <s.hauer@pengutronix.de>,
-	Pengutronix Kernel Team <kernel@pengutronix.de>,
-	Fabio Estevam <festevam@gmail.com>,
-	Matthew Brost <matthew.brost@intel.com>,
-	Thomas =?utf-8?Q?Hellstr=C3=B6m?= <thomas.hellstrom@linux.intel.com>,
-	Rodrigo Vivi <rodrigo.vivi@intel.com>,
-	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
-	Paul Cercueil <paul@crapouillou.net>, Bin Liu <b-liu@ti.com>,
-	Philipp Zabel <p.zabel@pengutronix.de>,
-	Maximilian Luz <luzmaximilian@gmail.com>,
-	Hans de Goede <hansg@kernel.org>,
-	Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-	linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-	linux-arm-msm@vger.kernel.org, linux-sound@vger.kernel.org,
-	driver-core@lists.linux.dev, devicetree@vger.kernel.org,
-	linuxppc-dev@lists.ozlabs.org, linux-i2c@vger.kernel.org,
-	iommu@lists.linux.dev, linux-pm@vger.kernel.org,
-	imx@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
-	intel-xe@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-	linux-usb@vger.kernel.org, linux-mips@vger.kernel.org,
-	platform-driver-x86@vger.kernel.org,
-	Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>
-Subject: Re: [PATCH 20/23] usb: chipidea: use
- platform_device_set_of_node_from_dev()
-Message-ID: <aiJz6Ys4gE998ULp@nchen-desktop>
-References: <20260521-pdev-fwnode-ref-v1-0-88c324a1b8d2@oss.qualcomm.com>
- <20260521-pdev-fwnode-ref-v1-20-88c324a1b8d2@oss.qualcomm.com>
- <ah9P6Xt9SyKgc2oJ@ashevche-desk.local>
- <CAMRc=MdhjZhGL9tEx9WEjn2f95d=ObNM0AtBNpcevm6aHgpj+Q@mail.gmail.com>
+	s=arc-20240116; t=1780643533; c=relaxed/simple;
+	bh=LTLQc7ME7J7eUP93Wq//rFEEyGgeOk62Srx02OHipjI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=JYt2UrSTslwtoKe4TqrEpqI6896NS7zPvlbJNm5/Asa/kAL8wd5EJYb1MwdYkoe2FaWsNUdfQ9mpuhkMa1JkqpO8PFid0f6L5WmP8aUyDMesu6VGbhJrpvy5W8fg3QtC2YXWKSXZwdcLDTBs5IME07PZqNkSgXuFq3ZDz/UOyAM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ps89oNVR; arc=none smtp.client-ip=209.85.221.46
+Received: by mail-wr1-f46.google.com with SMTP id ffacd0b85a97d-45eeea039ebso801646f8f.1
+        for <linux-mips@vger.kernel.org>; Fri, 05 Jun 2026 00:12:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1780643531; x=1781248331; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ayZZoFINc62/YbxwsJhIjKy4nCpiHkUbwPnuNcQomCM=;
+        b=Ps89oNVRaZn5rmNq6doJt7zy/0DrYF9JhbwicNE+Arvwr/QS1dll52VQdATXxAl48g
+         vJa3dIJuLWcz9Z+1UqLWbuec5xfR8G9UTJEdP/g0E0+bRhq5wJYc4O0EZ25CO74oXFrA
+         ZJGMYMQkh99t3sgdCc5krpCpSVmBI1xsnLaxJz4dRrn4OaeNwBR2BICfsCa44Cw28Rfp
+         jhFVXxK2hx9Pzn1H27o80FXr/LOoeOSMlb1ClJBWz0GW6yP07MqpftLhWzl7rapOl4lk
+         zlPP0XJR+u8Dc48d3/jTu+GnODEcYz6kcZyP+INTfahdmu7YAf7gu5uqx0Z8SLIcNscR
+         pB1g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1780643531; x=1781248331;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ayZZoFINc62/YbxwsJhIjKy4nCpiHkUbwPnuNcQomCM=;
+        b=gHEeidKNTwUT7IeqON/ZfgLZHWu09a95iFS2rNeldqx14sGteTGlJPyJdoRSADlvd/
+         f0e4e4iEQXpmWbB0Fvp02F+wBRghRA6zVVDOv1K4mARJF0qf8xIskzFwON6o+vW/2RVK
+         ZLRJZhcZ02wX/H7eaoA03kRCCg9vDQokcjLUpWsIcC9ftrjlB9uhNA8thfJB/IaXogZZ
+         m3jE8MN6ADesnRv3qRG6DVGq1al1iVlVKCmP89MpB0DfEx9tJHztW9u3mwrma/vA7Ppn
+         pYeZiOfRYbRnPzyMRVG+czjZrgEMBnyn9tQUY0R8ho31YiC9PfCpQwbHsubbqrmtsmbz
+         Zn2g==
+X-Forwarded-Encrypted: i=1; AFNElJ/Mwzd2DC9S0deU+gK4A0aysR8xdcBFL8SDK4o9lrbLkshCNFpUR9c8XhdpKGVlCP6OKrG5eBkRbgkb@vger.kernel.org
+X-Gm-Message-State: AOJu0YxXdAVm9/udv4h3xmk9nUcnn7ui8Yvtxj0QCSUI3ByK7cN2oUhz
+	Q0DxP9rvqw5UsfoomfZIUdXZg4yvuvfrSwVaJBxKptU8GvllZyVFrn/Z
+X-Gm-Gg: Acq92OEcLkOnKxYIqw1syGcsRjVQk597J8Lkb1wzbjYkPPy+N+HNtyxPvntp8xrAr/w
+	lP8AYvYPFPtzDcOBxOO60nIKf62Bf2LNY1qUAHQL99R9jyT7JaVZiRIBP3AKdNWfWZo2/HnrNQj
+	No9loLg4mcpZpjcW87MT/lLFimFI7+cGLfUy3jfB+5MTtYddC73X9UWiKMoGceHj6xUjTjx6XDh
+	r+7Gy5h8Oso9UrxA9+cBOYbFMwKk6MQfn+SfU6oAAaWdKEEYHki+Wy5Wvr8fz2OcIpM3Lk+6c14
+	MJOTNUfpBRfFygHo8sQaMuHAKTwl2jRojP3P0tByALpBwlUE3LwAPEhFPGvEJAk2LO53PZrV8N7
+	ET4YvyCY1064s9aczSRt6GWo+Pv0yUfJigpARVRg6G4Oli2554A32Z5ZDgpI4pQVNv7JJap/XjW
+	wlYWZ3BnjbKH4vdpgX5yjFPhFxOvmKFgxkhgq+6Xt41hoAGsGxknFtUGFlsS0bYrKLgjS3sqEYx
+	ITIuKb7TozlcR3HehpZKCO8XuIhg8KQaF2xb9qc8M938dE=
+X-Received: by 2002:a5d:4e09:0:b0:45e:ea68:523e with SMTP id ffacd0b85a97d-460304fe066mr2960398f8f.21.1780643530812;
+        Fri, 05 Jun 2026 00:12:10 -0700 (PDT)
+Received: from ?IPV6:2001:9e8:f133:a901:840b:2bf2:919c:cec5? ([2001:9e8:f133:a901:840b:2bf2:919c:cec5])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4601f2f5612sm22213455f8f.15.2026.06.05.00.12.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 05 Jun 2026 00:12:10 -0700 (PDT)
+Message-ID: <02b1e77e-5b7e-41cb-95b6-731ed00d9e74@gmail.com>
+Date: Fri, 5 Jun 2026 09:12:09 +0200
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CAMRc=MdhjZhGL9tEx9WEjn2f95d=ObNM0AtBNpcevm6aHgpj+Q@mail.gmail.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] MIPS: smp: report dying CPU to RCU in stop_this_cpu()
+Content-Language: en-US
+To: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+ linux-mips@vger.kernel.org, Clark Williams <clrkwllms@kernel.org>,
+ Steven Rostedt <rostedt@goodmis.org>, Thomas Gleixner <tglx@kernel.org>,
+ Jiayuan Chen <jiayuan.chen@linux.dev>, linux-rt-devel@lists.linux.dev,
+ linux-kernel@vger.kernel.org, stable@vger.kernel.org
+References: <20260604182407.3109536-1-jelonek.jonas@gmail.com>
+ <20260605064250.q0aRKkon@linutronix.de>
+From: Jonas Jelonek <jelonek.jonas@gmail.com>
+In-Reply-To: <20260605064250.q0aRKkon@linutronix.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 X-Rspamd-Action: no action
-X-Spamd-Result: default: False [-0.16 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_RHS_NOT_FQDN(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20260515];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
+	TAGGED_FROM(0.00)[bounces-14915-lists,linux-mips=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-14914-lists,linux-mips=lfdr.de];
-	FORGED_RECIPIENTS(0.00)[m:brgl@kernel.org,m:andriy.shevchenko@linux.intel.com,m:lee@kernel.org,m:broonie@opensource.wolfsonmicro.com,m:thierry.reding@avionic-design.de,m:sebastian.hesselbarth@gmail.com,m:andrew+netdev@lunn.ch,m:davem@davemloft.net,m:edumazet@google.com,m:kuba@kernel.org,m:pabeni@redhat.com,m:srini@kernel.org,m:gregkh@linuxfoundation.org,m:vkoul@kernel.org,m:rafael@kernel.org,m:dakr@kernel.org,m:robh@kernel.org,m:saravanak@kernel.org,m:maddy@linux.ibm.com,m:mpe@ellerman.id.au,m:npiggin@gmail.com,m:chleroy@kernel.org,m:andi.shyti@kernel.org,m:joro@8bytes.org,m:will@kernel.org,m:robin.murphy@arm.com,m:opendmb@gmail.com,m:florian.fainelli@broadcom.com,m:bcm-kernel-feedback-list@broadcom.com,m:ulfh@kernel.org,m:Frank.Li@nxp.com,m:s.hauer@pengutronix.de,m:kernel@pengutronix.de,m:festevam@gmail.com,m:matthew.brost@intel.com,m:thomas.hellstrom@linux.intel.com,m:rodrigo.vivi@intel.com,m:airlied@gmail.com,m:simona@ffwll.ch,m:paul@crapouillou.net,m:b-liu@ti.com,m:p.zabel@pengu
- tronix.de,m:luzmaximilian@gmail.com,m:hansg@kernel.org,m:ilpo.jarvinen@linux.intel.com,m:krzk@kernel.org,m:benh@kernel.crashing.org,m:linux-kernel@vger.kernel.org,m:netdev@vger.kernel.org,m:linux-arm-msm@vger.kernel.org,m:linux-sound@vger.kernel.org,m:driver-core@lists.linux.dev,m:devicetree@vger.kernel.org,m:linuxppc-dev@lists.ozlabs.org,m:linux-i2c@vger.kernel.org,m:iommu@lists.linux.dev,m:linux-pm@vger.kernel.org,m:imx@lists.linux.dev,m:linux-arm-kernel@lists.infradead.org,m:intel-xe@lists.freedesktop.org,m:dri-devel@lists.freedesktop.org,m:linux-usb@vger.kernel.org,m:linux-mips@vger.kernel.org,m:platform-driver-x86@vger.kernel.org,m:bartosz.golaszewski@oss.qualcomm.com,m:sebastianhesselbarth@gmail.com,m:andrew@lunn.ch,s:lists@lfdr.de];
-	RCVD_COUNT_THREE(0.00)[4];
-	MIME_TRACE(0.00)[0:+];
-	FREEMAIL_CC(0.00)[linux.intel.com,kernel.org,opensource.wolfsonmicro.com,avionic-design.de,gmail.com,lunn.ch,davemloft.net,google.com,redhat.com,linuxfoundation.org,linux.ibm.com,ellerman.id.au,8bytes.org,arm.com,broadcom.com,nxp.com,pengutronix.de,intel.com,ffwll.ch,crapouillou.net,ti.com,kernel.crashing.org,vger.kernel.org,lists.linux.dev,lists.ozlabs.org,lists.infradead.org,lists.freedesktop.org,oss.qualcomm.com];
-	FORWARDED(0.00)[lists@lfdr.de];
-	FORGED_SENDER(0.00)[peter.chen@kernel.org,linux-mips@vger.kernel.org];
-	FORGED_SENDER_MAILLIST(0.00)[];
+	FORGED_RECIPIENTS(0.00)[m:bigeasy@linutronix.de,m:tsbogend@alpha.franken.de,m:linux-mips@vger.kernel.org,m:clrkwllms@kernel.org,m:rostedt@goodmis.org,m:tglx@kernel.org,m:jiayuan.chen@linux.dev,m:linux-rt-devel@lists.linux.dev,m:linux-kernel@vger.kernel.org,m:stable@vger.kernel.org,s:lists@lfdr.de];
 	FROM_HAS_DN(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	FORGED_SENDER(0.00)[jelonekjonas@gmail.com,linux-mips@vger.kernel.org];
 	TO_DN_SOME(0.00)[];
+	DKIM_TRACE(0.00)[gmail.com:+];
+	MIME_TRACE(0.00)[0:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	FORWARDED(0.00)[lists@lfdr.de];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	FREEMAIL_FROM(0.00)[gmail.com];
 	FORGED_SENDER_FORWARDING(0.00)[];
-	RCPT_COUNT_GT_50(0.00)[65];
+	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[peter.chen@kernel.org,linux-mips@vger.kernel.org];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	ALIAS_RESOLVED(0.00)[];
-	TAGGED_RCPT(0.00)[linux-mips,netdev];
-	MISSING_XM_UA(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[jelonekjonas@gmail.com,linux-mips@vger.kernel.org];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	ALIAS_RESOLVED(0.00)[];
+	MID_RHS_MATCH_FROM(0.00)[];
+	RCPT_COUNT_SEVEN(0.00)[10];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[vger.kernel.org:from_smtp,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,intel.com:email,nchen-desktop:mid]
+	TAGGED_RCPT(0.00)[linux-mips];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[vger.kernel.org:from_smtp,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: DA41A645C30
+X-Rspamd-Queue-Id: B8922645F7D
 
-On 26-06-04 08:34:16, Bartosz Golaszewski wrote:
-> On Tue, 2 Jun 2026 23:49:29 +0200, Andy Shevchenko
-> <andriy.shevchenko@linux.intel.com> said:
-> > On Thu, May 21, 2026 at 10:36:43AM +0200, Bartosz Golaszewski wrote:
-> >> Ahead of reworking the reference counting logic for platform devices,
-> >> encapsulate the assignment of the OF node from another device for
-> >> dynamically allocated platform devices with the provided helper.
-> >
-> > ...
-> >
-> >>  	pdev->dev.parent = dev;
-> >> -	device_set_of_node_from_dev(&pdev->dev, dev);
-> >> +	platform_device_set_of_node_from_dev(pdev, dev);
-> >
-> > Why do they even do that? Do they have a USB connected pin control?
-> >
-> 
-> I don't know. I can't test it so I don't want to break it. If they don't need
-> it, the person who can test it, can remove it later.
-> 
+Hi Sebastian,
 
-It was introduced by below commits:
+I'm not an expert in this area so please correct me if some claim or
+explanation is wrong.
 
-commit 0f153a1b8193ce768be4df0400aeb2c8f2a3b3da
-Author: Rob Herring <robh@kernel.org>
-Date:   Wed Dec 15 16:56:46 2021 -0600
+On 05.06.26 08:42, Sebastian Andrzej Siewior wrote:
+> On 2026-06-04 18:24:07 [+0000], Jonas Jelonek wrote:
+> …
+>> This issue popped up during kernel bump downstream in OpenWrt from
+>> 6.18.33 to 6.18.34, since the suspected change has been backported to
+>> 6.18 stable branch [1].
+> I would avoid the link and simply write after the backport of the patch
+> or so.
 
-    usb: chipidea: Set the DT node on the child device
+Fine with that, I can adjust that in a v2.
 
-    The ChipIdea glue drivers just copy the glue resources to the "ci_hdrc"
-    child device. Instead, set the child device's DT node pointer to the
-    parent device's node so that platform_get_irq() can find the IRQ
-    resources in the DT. This removes the need for statically populating the
-    IRQ resources from the DT which has been deprecated for some time.
+>> Call rcutree_report_cpu_dead() once interrupts are disabled, mirroring the
+>> generic CPU-hotplug offline path (and arm64's stop handling), so RCU stops
+>> waiting on the parked CPUs and grace periods can still complete.
+> This is part of cpuhp_report_idle_dead(). Is it now invoked twice? Or is
+> something else missing/ different? 
 
-    Acked-by: Peter Chen <peter.chen@kernel.org>
-    Signed-off-by: Rob Herring <robh@kernel.org>
-    Link: https://lore.kernel.org/r/20211215225646.1997946-1-robh@kernel.org
-    Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Those seem to be two different paths. To be honest I'm not confident
+under which circumstances which of those paths is used to take down
+a CPU. In my case, issuing a reboot command reaches smp_send_stop()
+where the issue explained in the patch message then happens.
 
+> Sebastian
 
--- 
-
-Best regards,
-Peter
+Best,
+Jonas
 
