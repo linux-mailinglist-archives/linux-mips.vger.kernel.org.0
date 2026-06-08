@@ -1,42 +1,42 @@
-Return-Path: <linux-mips+bounces-14986-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-14988-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id C+TuLsPbJmrKlwIAu9opvQ
-	(envelope-from <linux-mips+bounces-14986-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Mon, 08 Jun 2026 17:12:03 +0200
+	id ewsPKgXaJmpYlwIAu9opvQ
+	(envelope-from <linux-mips+bounces-14988-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Mon, 08 Jun 2026 17:04:37 +0200
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5A9E4657E02
-	for <lists+linux-mips@lfdr.de>; Mon, 08 Jun 2026 17:12:03 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3925A657CA5
+	for <lists+linux-mips@lfdr.de>; Mon, 08 Jun 2026 17:04:37 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
 	dkim=none;
 	dmarc=none;
-	spf=pass (mail.lfdr.de: domain of "linux-mips+bounces-14986-lists+linux-mips=lfdr.de@vger.kernel.org" designates 172.232.135.74 as permitted sender) smtp.mailfrom="linux-mips+bounces-14986-lists+linux-mips=lfdr.de@vger.kernel.org";
+	spf=pass (mail.lfdr.de: domain of "linux-mips+bounces-14988-lists+linux-mips=lfdr.de@vger.kernel.org" designates 2600:3c04:e001:36c::12fc:5321 as permitted sender) smtp.mailfrom="linux-mips+bounces-14988-lists+linux-mips=lfdr.de@vger.kernel.org";
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id BE3883196E43
-	for <lists+linux-mips@lfdr.de>; Mon,  8 Jun 2026 14:54:23 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 33F1B30C25FA
+	for <lists+linux-mips@lfdr.de>; Mon,  8 Jun 2026 14:54:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C72EC3FE661;
-	Mon,  8 Jun 2026 14:43:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0F0FC3FF89F;
+	Mon,  8 Jun 2026 14:43:36 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
 Received: from mail.8bytes.org (mail.8bytes.org [85.214.250.239])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2ED813F5BDE;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 675AB3F5BEF;
 	Mon,  8 Jun 2026 14:43:25 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780929815; cv=none; b=MRuTlXBnQyGtK9t4HDdmPZBJ89wvdKN/x8nsWMLb+222FrGnUBPacUIhIAzXtRHHEB2cciWsGTYKY7xa1GOfpONDujEvn+iuL30zl8yqtKX7C3FnLo7BuXPQ8k159jaXNfPqQbaXVkve8GeTvQGRzytXpr5uxKy1+Y8Q0cQ7c3c=
+	t=1780929815; cv=none; b=CLheGBJoDcdfHa5S4qgfusdZy8TiYumJ1ucpHpGeSsC3zmwbvTMlxWKF0aj3s0P63RyEnTPfPzz2xPcm1BAJQQ6zgfyF2x/tRLY5/CchBbK665TGh4MOaWLCIkIq+G19odUvbYDHFUeVVMHGGcU6xXJBUZFFpNczpgQYfFV/fT4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1780929815; c=relaxed/simple;
-	bh=Whw3JGgkGggT2rG+xbclcMaz/4KUpmd0p9KAn+6WfPo=;
+	bh=QCFeoZd5NYF+cl012pK51iVSnEkExT5Dkr2peOuQ8ZY=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=KiARWmfj2uaCL6Ty+PUvhng/LJb5kuPaKr+EkGs11+gjXJmQtHrRPFYcb+QkFlW7o5x588RF+L9Atx5YgMYh5KtkxhqqCT279QIgASs76yMERh+7xDixJpc14RR20jQUllB1sydXQWiSSZcveu+YcPGpCSD0Qi69YBXAppIlpaU=
+	 MIME-Version; b=nTcfk/oPlNitlDE2DewhuGB/qf7ARziYdoKq/AZqT0npVUILI1EI5Ra9ociGWcFpdVyOwWpTxQaUzBO+h/8jpwq8IRaWrmkHgbOSkifCzNDMJyjXYMpGRFBPfom4naAU+efsxsUcqtoBPE8fxmP3OQm0rhhKl9jscXGJg/g0uEw=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=8bytes.org; spf=pass smtp.mailfrom=8bytes.org; arc=none smtp.client-ip=85.214.250.239
 Received: from io.home.8bytes.org (p4ffe1d30.dip0.t-ipconnect.de [79.254.29.48])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mail.8bytes.org (Postfix) with ESMTPSA id 1BB562028CD;
+	by mail.8bytes.org (Postfix) with ESMTPSA id 50CD62028CE;
 	Mon,  8 Jun 2026 16:43:14 +0200 (CEST)
 From: =?UTF-8?q?J=C3=B6rg=20R=C3=B6del?= <joro@8bytes.org>
 To: Paolo Bonzini <pbonzini@redhat.com>,
@@ -58,9 +58,9 @@ Cc: Tom Lendacky <thomas.lendacky@amd.com>,
 	x86@kernel.org,
 	coconut-svsm@lists.linux.dev,
 	joerg.roedel@amd.com
-Subject: [PATCH 42/60] kvm: x86: Make local APIC code aware of planes
-Date: Mon,  8 Jun 2026 16:42:34 +0200
-Message-ID: <20260608144252.351443-43-joro@8bytes.org>
+Subject: [PATCH 43/60] kvm: x86: Move CPUID state to struct kvm_vcpu_arch_common
+Date: Mon,  8 Jun 2026 16:42:35 +0200
+Message-ID: <20260608144252.351443-44-joro@8bytes.org>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260608144252.351443-1-joro@8bytes.org>
 References: <20260608144252.351443-1-joro@8bytes.org>
@@ -72,431 +72,367 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Rspamd-Action: no action
-X-Spamd-Result: default: False [0.71 / 15.00];
+X-Spamd-Result: default: False [0.75 / 15.00];
 	MID_CONTAINS_FROM(1.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_MIXED_CHARSET(0.67)[subject];
+	R_MIXED_CHARSET(0.71)[subject];
 	R_MISSING_CHARSET(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCPT_COUNT_TWELVE(0.00)[19];
-	FORWARDED(0.00)[lists@lfdr.de];
-	DMARC_NA(0.00)[8bytes.org: no valid DMARC record];
 	RCVD_TLS_LAST(0.00)[];
+	DMARC_NA(0.00)[8bytes.org: no valid DMARC record];
+	RCPT_COUNT_TWELVE(0.00)[19];
 	FORGED_RECIPIENTS(0.00)[m:pbonzini@redhat.com,m:seanjc@google.com,m:thomas.lendacky@amd.com,m:ashish.kalra@amd.com,m:michael.roth@amd.com,m:nsaenz@amazon.com,m:anelkz@amazon.de,m:James.Bottomley@HansenPartnership.com,m:huibo.wang@amd.com,m:kvm@vger.kernel.org,m:linux-kernel@vger.kernel.org,m:kvmarm@lists.linux.dev,m:loongarch@lists.linux.dev,m:linux-mips@vger.kernel.org,m:linuxppc-dev@lists.ozlabs.org,m:kvm-riscv@lists.infradead.org,m:x86@kernel.org,m:coconut-svsm@lists.linux.dev,m:joerg.roedel@amd.com,s:lists@lfdr.de];
+	FORWARDED(0.00)[lists@lfdr.de];
 	RCVD_COUNT_THREE(0.00)[4];
-	TAGGED_FROM(0.00)[bounces-14986-lists,linux-mips=lfdr.de];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-14988-lists,linux-mips=lfdr.de];
 	FORGED_SENDER(0.00)[joro@8bytes.org,linux-mips@vger.kernel.org];
-	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
 	FORGED_SENDER_FORWARDING(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
 	FROM_NEQ_ENVFROM(0.00)[joro@8bytes.org,linux-mips@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	ALIAS_RESOLVED(0.00)[];
 	TAGGED_RCPT(0.00)[linux-mips];
 	R_DKIM_NA(0.00)[];
 	TO_DN_SOME(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	FROM_HAS_DN(0.00)[]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[amd.com:email,8bytes.org:mid,8bytes.org:from_mime,tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo,vger.kernel.org:from_smtp]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 5A9E4657E02
+X-Rspamd-Queue-Id: 3925A657CA5
 
-From: Paolo Bonzini <pbonzini@redhat.com>
+From: Joerg Roedel <joerg.roedel@amd.com>
 
-Make the local apic code aware of planes and only operate on APICs
-within the same plane level.
+The CPUID state is shared across all planes, so move it to struct
+kvm_vcpu_arch_common.
 
-Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
-Co-developed-by: Joerg Roedel <joerg.roedel@amd.com>
 Signed-off-by: Joerg Roedel <joerg.roedel@amd.com>
 ---
- arch/x86/kvm/hyperv.c |  2 +-
- arch/x86/kvm/ioapic.c |  8 +++----
- arch/x86/kvm/irq.c    |  8 ++++---
- arch/x86/kvm/lapic.c  | 50 +++++++++++++++++++++----------------------
- arch/x86/kvm/lapic.h  | 12 +++++------
- arch/x86/kvm/x86.c    |  6 +++---
- arch/x86/kvm/xen.c    |  2 +-
- 7 files changed, 45 insertions(+), 43 deletions(-)
+ arch/x86/include/asm/kvm_host.h | 17 ++++++++--------
+ arch/x86/kvm/cpuid.c            | 36 +++++++++++++++++++--------------
+ arch/x86/kvm/cpuid.h            | 14 ++++++++++---
+ arch/x86/kvm/lapic.c            |  2 +-
+ arch/x86/kvm/smm.c              |  2 +-
+ arch/x86/kvm/svm/svm.c          |  2 +-
+ arch/x86/kvm/vmx/vmx.c          |  2 +-
+ arch/x86/kvm/x86.c              | 17 ++++++++++++----
+ 8 files changed, 58 insertions(+), 34 deletions(-)
 
-diff --git a/arch/x86/kvm/hyperv.c b/arch/x86/kvm/hyperv.c
-index 4438ecac9a89..0a5d8e302f32 100644
---- a/arch/x86/kvm/hyperv.c
-+++ b/arch/x86/kvm/hyperv.c
-@@ -492,7 +492,7 @@ static int synic_set_irq(struct kvm_vcpu_hv_synic *synic, u32 sint)
- 	irq.vector = vector;
- 	irq.level = 1;
+diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
+index 11e52f8bb2c2..3a64bdae6e23 100644
+--- a/arch/x86/include/asm/kvm_host.h
++++ b/arch/x86/include/asm/kvm_host.h
+@@ -794,10 +794,16 @@ enum kvm_only_cpuid_leafs {
+ 	NKVMCAPINTS = NR_KVM_CPU_CAPS - NCAPINTS,
+ };
  
--	ret = kvm_irq_delivery_to_apic(vcpu->kvm, vcpu->arch.apic, &irq);
-+	ret = kvm_irq_delivery_to_apic(vcpu->plane, vcpu->arch.apic, &irq);
- 	trace_kvm_hv_synic_set_irq(vcpu->vcpu_id, sint, irq.vector, ret);
- 	return ret;
- }
-diff --git a/arch/x86/kvm/ioapic.c b/arch/x86/kvm/ioapic.c
-index eed96ff6e722..539edee73047 100644
---- a/arch/x86/kvm/ioapic.c
-+++ b/arch/x86/kvm/ioapic.c
-@@ -429,7 +429,7 @@ static void ioapic_write_indirect(struct kvm_ioapic *ioapic, u32 val)
- 			irq.dest_id = e->fields.dest_id;
- 			irq.msi_redir_hint = false;
- 			bitmap_zero(vcpu_bitmap, KVM_MAX_VCPUS);
--			kvm_bitmap_or_dest_vcpus(ioapic->kvm, &irq,
-+			kvm_bitmap_or_dest_vcpus(ioapic->kvm->planes[0], &irq,
- 						 vcpu_bitmap);
- 			if (old_dest_mode != e->fields.dest_mode ||
- 			    old_dest_id != e->fields.dest_id) {
-@@ -442,7 +442,7 @@ static void ioapic_write_indirect(struct kvm_ioapic *ioapic, u32 val)
- 				irq.dest_mode =
- 				    kvm_lapic_irq_dest_mode(
- 					!!e->fields.dest_mode);
--				kvm_bitmap_or_dest_vcpus(ioapic->kvm, &irq,
-+				kvm_bitmap_or_dest_vcpus(ioapic->kvm->planes[0], &irq,
- 							 vcpu_bitmap);
- 			}
- 			kvm_make_scan_ioapic_request_mask(ioapic->kvm,
-@@ -485,11 +485,11 @@ static int ioapic_service(struct kvm_ioapic *ioapic, int irq, bool line_status)
- 		 * if rtc_irq_check_coalesced returns false).
- 		 */
- 		BUG_ON(ioapic->rtc_status.pending_eoi != 0);
--		ret = __kvm_irq_delivery_to_apic(ioapic->kvm, NULL, &irqe,
-+		ret = __kvm_irq_delivery_to_apic(ioapic->kvm->planes[0], NULL, &irqe,
- 						 &ioapic->rtc_status);
- 		ioapic->rtc_status.pending_eoi = (ret < 0 ? 0 : ret);
- 	} else
--		ret = kvm_irq_delivery_to_apic(ioapic->kvm, NULL, &irqe);
-+		ret = kvm_irq_delivery_to_apic(ioapic->kvm->planes[0], NULL, &irqe);
+-struct kvm_vcpu_arch_common {};
++struct kvm_vcpu_arch_common {
++	/* CPUID related state */
++	int cpuid_nent;
++	struct kvm_cpuid_entry2 *cpuid_entries;
++	bool cpuid_dynamic_bits_dirty;
++	bool is_amd_compatible;
++};
  
- 	if (ret && irqe.trig_mode == IOAPIC_LEVEL_TRIG)
- 		entry->fields.remote_irr = 1;
-diff --git a/arch/x86/kvm/irq.c b/arch/x86/kvm/irq.c
-index bc748a4b7cbd..3bf2ecfd9cb4 100644
---- a/arch/x86/kvm/irq.c
-+++ b/arch/x86/kvm/irq.c
-@@ -226,6 +226,7 @@ int kvm_set_msi(struct kvm_kernel_irq_routing_entry *e,
- 		struct kvm *kvm, int irq_source_id, int level, bool line_status)
+-static inline int kvm_arch_vcpu_common_init(struct kvm_vcpu_common *common) { return 0; }
+-static inline void kvm_arch_vcpu_common_destroy(struct kvm_vcpu_common *common) {}
++int kvm_arch_vcpu_common_init(struct kvm_vcpu_common *common);
++void kvm_arch_vcpu_common_destroy(struct kvm_vcpu_common *common);
+ 
+ struct kvm_vcpu_arch {
+ 	/*
+@@ -919,11 +925,6 @@ struct kvm_vcpu_arch {
+ 
+ 	int halt_request; /* real mode on Intel only */
+ 
+-	int cpuid_nent;
+-	struct kvm_cpuid_entry2 *cpuid_entries;
+-	bool cpuid_dynamic_bits_dirty;
+-	bool is_amd_compatible;
+-
+ 	/*
+ 	 * cpu_caps holds the effective guest capabilities, i.e. the features
+ 	 * the vCPU is allowed to use.  Typically, but not always, features can
+diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
+index e69156b54cff..6d948d63306c 100644
+--- a/arch/x86/kvm/cpuid.c
++++ b/arch/x86/kvm/cpuid.c
+@@ -176,6 +176,7 @@ static void kvm_update_cpuid_runtime(struct kvm_vcpu *vcpu);
+ static int kvm_cpuid_check_equal(struct kvm_vcpu *vcpu, struct kvm_cpuid_entry2 *e2,
+ 				 int nent)
  {
- 	struct kvm_lapic_irq irq;
-+	struct kvm_plane *plane;
++	struct kvm_vcpu_common *common = vcpu->common;
+ 	struct kvm_cpuid_entry2 *orig;
+ 	int i;
  
- 	if (kvm_msi_route_invalid(kvm, e))
+@@ -188,11 +189,11 @@ static int kvm_cpuid_check_equal(struct kvm_vcpu *vcpu, struct kvm_cpuid_entry2
+ 	kvm_update_cpuid_runtime(vcpu);
+ 	kvm_apply_cpuid_pv_features_quirk(vcpu);
+ 
+-	if (nent != vcpu->arch.cpuid_nent)
++	if (nent != common->arch.cpuid_nent)
  		return -EINVAL;
-@@ -234,8 +235,9 @@ int kvm_set_msi(struct kvm_kernel_irq_routing_entry *e,
- 		return -1;
  
- 	kvm_msi_to_lapic_irq(kvm, e, &irq);
-+	plane = kvm->planes[e->msi.plane_level];
+ 	for (i = 0; i < nent; i++) {
+-		orig = &vcpu->arch.cpuid_entries[i];
++		orig = &common->arch.cpuid_entries[i];
+ 		if (e2[i].function != orig->function ||
+ 		    e2[i].index != orig->index ||
+ 		    e2[i].flags != orig->flags ||
+@@ -290,7 +291,7 @@ static void kvm_update_cpuid_runtime(struct kvm_vcpu *vcpu)
+ {
+ 	struct kvm_cpuid_entry2 *best;
  
--	return kvm_irq_delivery_to_apic(kvm, NULL, &irq);
-+	return kvm_irq_delivery_to_apic(plane, NULL, &irq);
+-	vcpu->arch.cpuid_dynamic_bits_dirty = false;
++	vcpu->common->arch.cpuid_dynamic_bits_dirty = false;
+ 
+ 	best = kvm_find_cpuid_entry(vcpu, 1);
+ 	if (best) {
+@@ -374,6 +375,7 @@ static int cpuid_func_emulated(struct kvm_cpuid_entry2 *entry, u32 func,
+ 
+ void kvm_vcpu_after_set_cpuid(struct kvm_vcpu *vcpu)
+ {
++	struct kvm_vcpu_common *common = vcpu->common;
+ 	struct kvm_lapic *apic = vcpu->arch.apic;
+ 	struct kvm_cpuid_entry2 *best;
+ 	struct kvm_cpuid_entry2 *entry;
+@@ -443,7 +445,7 @@ void kvm_vcpu_after_set_cpuid(struct kvm_vcpu *vcpu)
+ 
+ 	vcpu->arch.pv_cpuid.features = kvm_apply_cpuid_pv_features_quirk(vcpu);
+ 
+-	vcpu->arch.is_amd_compatible = guest_cpuid_is_amd_or_hygon(vcpu);
++	common->arch.is_amd_compatible = guest_cpuid_is_amd_or_hygon(vcpu);
+ 	vcpu->arch.maxphyaddr = cpuid_query_maxphyaddr(vcpu);
+ 	vcpu->arch.reserved_gpa_bits = kvm_vcpu_reserved_gpa_bits_raw(vcpu);
+ 
+@@ -509,6 +511,7 @@ u64 kvm_vcpu_reserved_gpa_bits_raw(struct kvm_vcpu *vcpu)
+ static int kvm_set_cpuid(struct kvm_vcpu *vcpu, struct kvm_cpuid_entry2 *e2,
+                         int nent)
+ {
++	struct kvm_vcpu_common *common = vcpu->common;
+ 	u32 vcpu_caps[NR_KVM_CPU_CAPS];
+ 	int r;
+ 
+@@ -516,7 +519,7 @@ static int kvm_set_cpuid(struct kvm_vcpu *vcpu, struct kvm_cpuid_entry2 *e2,
+ 	 * Apply pending runtime CPUID updates to the current CPUID entries to
+ 	 * avoid false positives due to mismatches on KVM-owned feature flags.
+ 	 */
+-	if (vcpu->arch.cpuid_dynamic_bits_dirty)
++	if (common->arch.cpuid_dynamic_bits_dirty)
+ 		kvm_update_cpuid_runtime(vcpu);
+ 
+ 	/*
+@@ -530,8 +533,8 @@ static int kvm_set_cpuid(struct kvm_vcpu *vcpu, struct kvm_cpuid_entry2 *e2,
+ 	 * updates.  Full initialization is done if and only if the vCPU hasn't
+ 	 * run, i.e. only if userspace is potentially changing CPUID features.
+ 	 */
+-	swap(vcpu->arch.cpuid_entries, e2);
+-	swap(vcpu->arch.cpuid_nent, nent);
++	swap(common->arch.cpuid_entries, e2);
++	swap(common->arch.cpuid_nent, nent);
+ 
+ 	memcpy(vcpu_caps, vcpu->arch.cpu_caps, sizeof(vcpu_caps));
+ 	BUILD_BUG_ON(sizeof(vcpu_caps) != sizeof(vcpu->arch.cpu_caps));
+@@ -580,8 +583,8 @@ static int kvm_set_cpuid(struct kvm_vcpu *vcpu, struct kvm_cpuid_entry2 *e2,
+ 
+ err:
+ 	memcpy(vcpu->arch.cpu_caps, vcpu_caps, sizeof(vcpu_caps));
+-	swap(vcpu->arch.cpuid_entries, e2);
+-	swap(vcpu->arch.cpuid_nent, nent);
++	swap(common->arch.cpuid_entries, e2);
++	swap(common->arch.cpuid_nent, nent);
+ 	return r;
  }
  
- int kvm_arch_set_irq_inatomic(struct kvm_kernel_irq_routing_entry *e,
-@@ -258,7 +260,7 @@ int kvm_arch_set_irq_inatomic(struct kvm_kernel_irq_routing_entry *e,
+@@ -658,17 +661,19 @@ int kvm_vcpu_ioctl_get_cpuid2(struct kvm_vcpu *vcpu,
+ 			      struct kvm_cpuid2 *cpuid,
+ 			      struct kvm_cpuid_entry2 __user *entries)
+ {
+-	if (cpuid->nent < vcpu->arch.cpuid_nent)
++	struct kvm_vcpu_common *common = vcpu->common;
++
++	if (cpuid->nent < common->arch.cpuid_nent)
+ 		return -E2BIG;
  
- 		kvm_msi_to_lapic_irq(kvm, e, &irq);
+-	if (vcpu->arch.cpuid_dynamic_bits_dirty)
++	if (common->arch.cpuid_dynamic_bits_dirty)
+ 		kvm_update_cpuid_runtime(vcpu);
  
--		if (kvm_irq_delivery_to_apic_fast(kvm, NULL, &irq, &r))
-+		if (kvm_irq_delivery_to_apic_fast(kvm->planes[e->msi.plane_level], NULL, &irq, &r))
- 			return r;
- 		break;
+-	if (copy_to_user(entries, vcpu->arch.cpuid_entries,
+-			 vcpu->arch.cpuid_nent * sizeof(struct kvm_cpuid_entry2)))
++	if (copy_to_user(entries, common->arch.cpuid_entries,
++			 common->arch.cpuid_nent * sizeof(struct kvm_cpuid_entry2)))
+ 		return -EFAULT;
  
-@@ -453,7 +455,7 @@ static int kvm_pi_update_irte(struct kvm_kernel_irqfd *irqfd,
- 		 * if they have a single CPU as the destination, e.g. only if
- 		 * the guest has affined the interrupt to a single vCPU.
- 		 */
--		if (!kvm_intr_is_single_vcpu(kvm, &irq, &vcpu) ||
-+		if (!kvm_intr_is_single_vcpu(kvm->planes[0], &irq, &vcpu) ||
- 		    !kvm_irq_is_postable(&irq))
- 			vcpu = NULL;
- 	}
+-	cpuid->nent = vcpu->arch.cpuid_nent;
++	cpuid->nent = common->arch.cpuid_nent;
+ 	return 0;
+ }
+ 
+@@ -2089,10 +2094,11 @@ bool kvm_cpuid(struct kvm_vcpu *vcpu, u32 *eax, u32 *ebx,
+ 	       u32 *ecx, u32 *edx, bool exact_only)
+ {
+ 	u32 orig_function = *eax, function = *eax, index = *ecx;
++	struct kvm_vcpu_common *common = vcpu->common;
+ 	struct kvm_cpuid_entry2 *entry;
+ 	bool exact, used_max_basic = false;
+ 
+-	if (vcpu->arch.cpuid_dynamic_bits_dirty)
++	if (common->arch.cpuid_dynamic_bits_dirty)
+ 		kvm_update_cpuid_runtime(vcpu);
+ 
+ 	entry = kvm_find_cpuid_entry_index(vcpu, function, index);
+diff --git a/arch/x86/kvm/cpuid.h b/arch/x86/kvm/cpuid.h
+index 039b8e6f40ba..143ea8531611 100644
+--- a/arch/x86/kvm/cpuid.h
++++ b/arch/x86/kvm/cpuid.h
+@@ -36,14 +36,18 @@ struct kvm_cpuid_entry2 *kvm_find_cpuid_entry2(struct kvm_cpuid_entry2 *entries,
+ static inline struct kvm_cpuid_entry2 *kvm_find_cpuid_entry_index(struct kvm_vcpu *vcpu,
+ 								  u32 function, u32 index)
+ {
+-	return kvm_find_cpuid_entry2(vcpu->arch.cpuid_entries, vcpu->arch.cpuid_nent,
++	struct kvm_vcpu_common *common = vcpu->common;
++
++	return kvm_find_cpuid_entry2(common->arch.cpuid_entries, common->arch.cpuid_nent,
+ 				     function, index);
+ }
+ 
+ static inline struct kvm_cpuid_entry2 *kvm_find_cpuid_entry(struct kvm_vcpu *vcpu,
+ 							    u32 function)
+ {
+-	return kvm_find_cpuid_entry2(vcpu->arch.cpuid_entries, vcpu->arch.cpuid_nent,
++	struct kvm_vcpu_common *common = vcpu->common;
++
++	return kvm_find_cpuid_entry2(common->arch.cpuid_entries, common->arch.cpuid_nent,
+ 				     function, KVM_CPUID_INDEX_NOT_SIGNIFICANT);
+ }
+ 
+@@ -135,7 +139,7 @@ static __always_inline bool guest_cpuid_has(struct kvm_vcpu *vcpu,
+ 
+ static inline bool guest_cpuid_is_amd_compatible(struct kvm_vcpu *vcpu)
+ {
+-	return vcpu->arch.is_amd_compatible;
++	return vcpu->common->arch.is_amd_compatible;
+ }
+ 
+ static inline bool guest_cpuid_is_intel_compatible(struct kvm_vcpu *vcpu)
+@@ -300,4 +304,8 @@ static inline bool guest_has_pred_cmd_msr(struct kvm_vcpu *vcpu)
+ 		guest_cpu_cap_has(vcpu, X86_FEATURE_SBPB));
+ }
+ 
++static inline void cpuid_set_dirty(struct kvm_vcpu *vcpu)
++{
++	vcpu->common->arch.cpuid_dynamic_bits_dirty = true;
++}
+ #endif
 diff --git a/arch/x86/kvm/lapic.c b/arch/x86/kvm/lapic.c
-index 06a12b49fafa..cac076445472 100644
+index cac076445472..dc7a08831a54 100644
 --- a/arch/x86/kvm/lapic.c
 +++ b/arch/x86/kvm/lapic.c
-@@ -1153,7 +1153,7 @@ static int kvm_apic_compare_prio(struct kvm_vcpu *vcpu1, struct kvm_vcpu *vcpu2)
-  * means that the interrupt should be dropped.  In this case, *bitmap would be
-  * zero and *dst undefined.
-  */
--static inline bool kvm_apic_map_get_dest_lapic(struct kvm *kvm,
-+static inline bool kvm_apic_map_get_dest_lapic(struct kvm_plane *plane,
- 		struct kvm_lapic **src, struct kvm_lapic_irq *irq,
- 		struct kvm_apic_map *map, struct kvm_lapic ***dst,
- 		unsigned long *bitmap)
-@@ -1167,7 +1167,7 @@ static inline bool kvm_apic_map_get_dest_lapic(struct kvm *kvm,
- 	} else if (irq->shorthand)
- 		return false;
+@@ -2754,7 +2754,7 @@ static void __kvm_apic_set_base(struct kvm_vcpu *vcpu, u64 value)
+ 	vcpu->arch.apic_base = value;
  
--	if (!map || kvm_apic_is_broadcast_dest(kvm, src, irq, map))
-+	if (!map || kvm_apic_is_broadcast_dest(plane->kvm, src, irq, map))
- 		return false;
+ 	if ((old_value ^ value) & MSR_IA32_APICBASE_ENABLE)
+-		vcpu->arch.cpuid_dynamic_bits_dirty = true;
++		cpuid_set_dirty(vcpu);
  
- 	if (irq->dest_mode == APIC_DEST_PHYSICAL) {
-@@ -1208,7 +1208,7 @@ static inline bool kvm_apic_map_get_dest_lapic(struct kvm *kvm,
- 				bitmap, 16);
+ 	if (!apic)
+ 		return;
+diff --git a/arch/x86/kvm/smm.c b/arch/x86/kvm/smm.c
+index f623c5986119..736ab345b9fd 100644
+--- a/arch/x86/kvm/smm.c
++++ b/arch/x86/kvm/smm.c
+@@ -363,7 +363,7 @@ void enter_smm(struct kvm_vcpu *vcpu)
+ 			goto error;
+ #endif
  
- 		if (!(*dst)[lowest]) {
--			kvm_apic_disabled_lapic_found(kvm);
-+			kvm_apic_disabled_lapic_found(plane->kvm);
- 			*bitmap = 0;
- 			return true;
- 		}
-@@ -1219,7 +1219,7 @@ static inline bool kvm_apic_map_get_dest_lapic(struct kvm *kvm,
- 	return true;
+-	vcpu->arch.cpuid_dynamic_bits_dirty = true;
++	cpuid_set_dirty(vcpu);
+ 	kvm_mmu_reset_context(vcpu);
+ 	return;
+ error:
+diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
+index e8ad880a4266..612db7ad8b2a 100644
+--- a/arch/x86/kvm/svm/svm.c
++++ b/arch/x86/kvm/svm/svm.c
+@@ -1848,7 +1848,7 @@ void svm_set_cr4(struct kvm_vcpu *vcpu, unsigned long cr4)
+ 	vmcb_mark_dirty(to_svm(vcpu)->vmcb, VMCB_CR);
+ 
+ 	if ((cr4 ^ old_cr4) & (X86_CR4_OSXSAVE | X86_CR4_PKE))
+-		vcpu->arch.cpuid_dynamic_bits_dirty = true;
++		cpuid_set_dirty(vcpu);
  }
  
--static bool __kvm_irq_delivery_to_apic_fast(struct kvm *kvm, struct kvm_lapic *src,
-+static bool __kvm_irq_delivery_to_apic_fast(struct kvm_plane *plane, struct kvm_lapic *src,
- 					    struct kvm_lapic_irq *irq, int *r,
- 					    struct rtc_status *rtc_status)
- {
-@@ -1232,7 +1232,7 @@ static bool __kvm_irq_delivery_to_apic_fast(struct kvm *kvm, struct kvm_lapic *s
- 	*r = -1;
+ static void svm_set_segment(struct kvm_vcpu *vcpu,
+diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
+index 20262855bfe8..62e180651143 100644
+--- a/arch/x86/kvm/vmx/vmx.c
++++ b/arch/x86/kvm/vmx/vmx.c
+@@ -3595,7 +3595,7 @@ void vmx_set_cr4(struct kvm_vcpu *vcpu, unsigned long cr4)
+ 	vmcs_writel(GUEST_CR4, hw_cr4);
  
- 	if (irq->shorthand == APIC_DEST_SELF) {
--		if (KVM_BUG_ON(!src, kvm)) {
-+		if (KVM_BUG_ON(!src, plane->kvm)) {
- 			*r = 0;
- 			return true;
- 		}
-@@ -1241,9 +1241,9 @@ static bool __kvm_irq_delivery_to_apic_fast(struct kvm *kvm, struct kvm_lapic *s
- 	}
- 
- 	rcu_read_lock();
--	map = rcu_dereference(kvm->planes[0]->arch.apic_map);
-+	map = rcu_dereference(plane->arch.apic_map);
- 
--	ret = kvm_apic_map_get_dest_lapic(kvm, &src, irq, map, &dst, &bitmap);
-+	ret = kvm_apic_map_get_dest_lapic(plane, &src, irq, map, &dst, &bitmap);
- 	if (ret) {
- 		*r = 0;
- 		for_each_set_bit(i, &bitmap, 16) {
-@@ -1258,10 +1258,10 @@ static bool __kvm_irq_delivery_to_apic_fast(struct kvm *kvm, struct kvm_lapic *s
+ 	if ((cr4 ^ old_cr4) & (X86_CR4_OSXSAVE | X86_CR4_PKE))
+-		vcpu->arch.cpuid_dynamic_bits_dirty = true;
++		cpuid_set_dirty(vcpu);
  }
  
- 
--bool kvm_irq_delivery_to_apic_fast(struct kvm *kvm, struct kvm_lapic *src,
-+bool kvm_irq_delivery_to_apic_fast(struct kvm_plane *plane, struct kvm_lapic *src,
- 				   struct kvm_lapic_irq *irq, int *r)
- {
--	return __kvm_irq_delivery_to_apic_fast(kvm, src, irq, r, NULL);
-+	return __kvm_irq_delivery_to_apic_fast(plane, src, irq, r, NULL);
- }
- 
- /*
-@@ -1278,7 +1278,7 @@ bool kvm_irq_delivery_to_apic_fast(struct kvm *kvm, struct kvm_lapic *src,
-  *	   interrupt.
-  * - Otherwise, use remapped mode to inject the interrupt.
-  */
--static bool kvm_intr_is_single_vcpu_fast(struct kvm *kvm,
-+static bool kvm_intr_is_single_vcpu_fast(struct kvm_plane *plane,
- 					 struct kvm_lapic_irq *irq,
- 					 struct kvm_vcpu **dest_vcpu)
- {
-@@ -1291,9 +1291,9 @@ static bool kvm_intr_is_single_vcpu_fast(struct kvm *kvm,
- 		return false;
- 
- 	rcu_read_lock();
--	map = rcu_dereference(kvm->planes[0]->arch.apic_map);
-+	map = rcu_dereference(plane->arch.apic_map);
- 
--	if (kvm_apic_map_get_dest_lapic(kvm, NULL, irq, map, &dst, &bitmap) &&
-+	if (kvm_apic_map_get_dest_lapic(plane, NULL, irq, map, &dst, &bitmap) &&
- 			hweight16(bitmap) == 1) {
- 		unsigned long i = find_first_bit(&bitmap, 16);
- 
-@@ -1307,17 +1307,17 @@ static bool kvm_intr_is_single_vcpu_fast(struct kvm *kvm,
- 	return ret;
- }
- 
--bool kvm_intr_is_single_vcpu(struct kvm *kvm, struct kvm_lapic_irq *irq,
-+bool kvm_intr_is_single_vcpu(struct kvm_plane *plane, struct kvm_lapic_irq *irq,
- 			     struct kvm_vcpu **dest_vcpu)
- {
- 	int r = 0;
- 	unsigned long i;
- 	struct kvm_vcpu *vcpu;
- 
--	if (kvm_intr_is_single_vcpu_fast(kvm, irq, dest_vcpu))
-+	if (kvm_intr_is_single_vcpu_fast(plane, irq, dest_vcpu))
- 		return true;
- 
--	kvm_for_each_vcpu(i, vcpu, kvm) {
-+	plane_for_each_vcpu(i, vcpu, plane) {
- 		if (!kvm_apic_present(vcpu))
- 			continue;
- 
-@@ -1335,7 +1335,7 @@ bool kvm_intr_is_single_vcpu(struct kvm *kvm, struct kvm_lapic_irq *irq,
- }
- EXPORT_SYMBOL_FOR_KVM_INTERNAL(kvm_intr_is_single_vcpu);
- 
--int __kvm_irq_delivery_to_apic(struct kvm *kvm, struct kvm_lapic *src,
-+int __kvm_irq_delivery_to_apic(struct kvm_plane *plane, struct kvm_lapic *src,
- 			       struct kvm_lapic_irq *irq,
- 			       struct rtc_status *rtc_status)
- {
-@@ -1344,7 +1344,7 @@ int __kvm_irq_delivery_to_apic(struct kvm *kvm, struct kvm_lapic *src,
- 	unsigned long i, dest_vcpu_bitmap[BITS_TO_LONGS(KVM_MAX_VCPUS)];
- 	unsigned int dest_vcpus = 0;
- 
--	if (__kvm_irq_delivery_to_apic_fast(kvm, src, irq, &r, rtc_status))
-+	if (__kvm_irq_delivery_to_apic_fast(plane, src, irq, &r, rtc_status))
- 		return r;
- 
- 	if (irq->dest_mode == APIC_DEST_PHYSICAL &&
-@@ -1355,7 +1355,7 @@ int __kvm_irq_delivery_to_apic(struct kvm *kvm, struct kvm_lapic *src,
- 
- 	memset(dest_vcpu_bitmap, 0, sizeof(dest_vcpu_bitmap));
- 
--	kvm_for_each_vcpu(i, vcpu, kvm) {
-+	plane_for_each_vcpu(i, vcpu, plane) {
- 		if (!kvm_apic_present(vcpu))
- 			continue;
- 
-@@ -1384,7 +1384,7 @@ int __kvm_irq_delivery_to_apic(struct kvm *kvm, struct kvm_lapic *src,
- 		int idx = kvm_vector_to_index(irq->vector, dest_vcpus,
- 					dest_vcpu_bitmap, KVM_MAX_VCPUS);
- 
--		lowest = kvm_get_vcpu(kvm, idx);
-+		lowest = plane_get_vcpu(plane, idx);
- 	}
- 
- 	if (lowest)
-@@ -1500,7 +1500,7 @@ static int __apic_accept_irq(struct kvm_lapic *apic, int delivery_mode,
-  * out the destination vcpus array and set the bitmap or it traverses to
-  * each available vcpu to identify the same.
-  */
--void kvm_bitmap_or_dest_vcpus(struct kvm *kvm, struct kvm_lapic_irq *irq,
-+void kvm_bitmap_or_dest_vcpus(struct kvm_plane *plane, struct kvm_lapic_irq *irq,
- 			      unsigned long *vcpu_bitmap)
- {
- 	struct kvm_lapic **dest_vcpu = NULL;
-@@ -1512,9 +1512,9 @@ void kvm_bitmap_or_dest_vcpus(struct kvm *kvm, struct kvm_lapic_irq *irq,
- 	bool ret;
- 
- 	rcu_read_lock();
--	map = rcu_dereference(kvm->planes[0]->arch.apic_map);
-+	map = rcu_dereference(plane->arch.apic_map);
- 
--	ret = kvm_apic_map_get_dest_lapic(kvm, &src, irq, map, &dest_vcpu,
-+	ret = kvm_apic_map_get_dest_lapic(plane, &src, irq, map, &dest_vcpu,
- 					  &bitmap);
- 	if (ret) {
- 		for_each_set_bit(i, &bitmap, 16) {
-@@ -1524,7 +1524,7 @@ void kvm_bitmap_or_dest_vcpus(struct kvm *kvm, struct kvm_lapic_irq *irq,
- 			__set_bit(vcpu_idx, vcpu_bitmap);
- 		}
- 	} else {
--		kvm_for_each_vcpu(i, vcpu, kvm) {
-+		plane_for_each_vcpu(i, vcpu, plane) {
- 			if (!kvm_apic_present(vcpu))
- 				continue;
- 			if (!kvm_apic_match_dest(vcpu, NULL,
-@@ -1651,7 +1651,7 @@ void kvm_apic_send_ipi(struct kvm_lapic *apic, u32 icr_low, u32 icr_high)
- 
- 	trace_kvm_apic_ipi(icr_low, irq.dest_id);
- 
--	kvm_irq_delivery_to_apic(apic->vcpu->kvm, apic, &irq);
-+	kvm_irq_delivery_to_apic(apic->vcpu->plane, apic, &irq);
- }
- EXPORT_SYMBOL_FOR_KVM_INTERNAL(kvm_apic_send_ipi);
- 
-@@ -2619,7 +2619,7 @@ static int __kvm_x2apic_icr_write(struct kvm_lapic *apic, u64 data, bool fast)
- 
- 		kvm_icr_to_lapic_irq(apic, (u32)data, (u32)(data >> 32), &irq);
- 
--		if (!kvm_irq_delivery_to_apic_fast(apic->vcpu->kvm, apic, &irq,
-+		if (!kvm_irq_delivery_to_apic_fast(apic->vcpu->plane, apic, &irq,
- 						   &ignored))
- 			return -EWOULDBLOCK;
- 
-diff --git a/arch/x86/kvm/lapic.h b/arch/x86/kvm/lapic.h
-index afd440c88981..a9ede0e145d9 100644
---- a/arch/x86/kvm/lapic.h
-+++ b/arch/x86/kvm/lapic.h
-@@ -116,17 +116,17 @@ void kvm_apic_update_apicv(struct kvm_vcpu *vcpu);
- int kvm_alloc_apic_access_page(struct kvm *kvm);
- void kvm_inhibit_apic_access_page(struct kvm_vcpu *vcpu);
- 
--bool kvm_irq_delivery_to_apic_fast(struct kvm *kvm, struct kvm_lapic *src,
-+bool kvm_irq_delivery_to_apic_fast(struct kvm_plane *plane, struct kvm_lapic *src,
- 				   struct kvm_lapic_irq *irq, int *r);
--int __kvm_irq_delivery_to_apic(struct kvm *kvm, struct kvm_lapic *src,
-+int __kvm_irq_delivery_to_apic(struct kvm_plane *plane, struct kvm_lapic *src,
- 			       struct kvm_lapic_irq *irq,
- 			       struct rtc_status *rtc_status);
- 
--static inline int kvm_irq_delivery_to_apic(struct kvm *kvm,
-+static inline int kvm_irq_delivery_to_apic(struct kvm_plane *plane,
- 					   struct kvm_lapic *src,
- 					   struct kvm_lapic_irq *irq)
- {
--	return __kvm_irq_delivery_to_apic(kvm, src, irq, NULL);
-+	return __kvm_irq_delivery_to_apic(plane, src, irq, NULL);
- }
- 
- void kvm_apic_send_ipi(struct kvm_lapic *apic, u32 icr_low, u32 icr_high);
-@@ -244,10 +244,10 @@ bool kvm_lapic_suppress_eoi_broadcast(struct kvm_lapic *apic);
- 
- void kvm_wait_lapic_expire(struct kvm_vcpu *vcpu);
- 
--void kvm_bitmap_or_dest_vcpus(struct kvm *kvm, struct kvm_lapic_irq *irq,
-+void kvm_bitmap_or_dest_vcpus(struct kvm_plane *plane, struct kvm_lapic_irq *irq,
- 			      unsigned long *vcpu_bitmap);
- 
--bool kvm_intr_is_single_vcpu(struct kvm *kvm, struct kvm_lapic_irq *irq,
-+bool kvm_intr_is_single_vcpu(struct kvm_plane *plane, struct kvm_lapic_irq *irq,
- 			     struct kvm_vcpu **dest_vcpu);
- void kvm_lapic_switch_to_sw_timer(struct kvm_vcpu *vcpu);
- void kvm_lapic_switch_to_hv_timer(struct kvm_vcpu *vcpu);
+ void vmx_get_segment(struct kvm_vcpu *vcpu, struct kvm_segment *var, int seg)
 diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-index 070f87ae23eb..7fc08df245bd 100644
+index 7fc08df245bd..7e94a378b3d2 100644
 --- a/arch/x86/kvm/x86.c
 +++ b/arch/x86/kvm/x86.c
-@@ -10373,7 +10373,7 @@ static int kvm_pv_clock_pairing(struct kvm_vcpu *vcpu, gpa_t paddr,
-  *
-  * @apicid - apicid of vcpu to be kicked.
-  */
--static void kvm_pv_kick_cpu_op(struct kvm *kvm, int apicid)
-+static void kvm_pv_kick_cpu_op(struct kvm_plane *plane, int apicid)
- {
- 	/*
- 	 * All other fields are unused for APIC_DM_REMRD, but may be consumed by
-@@ -10386,7 +10386,7 @@ static void kvm_pv_kick_cpu_op(struct kvm *kvm, int apicid)
- 		.dest_id = apicid,
- 	};
+@@ -1322,7 +1322,7 @@ int __kvm_set_xcr(struct kvm_vcpu *vcpu, u32 index, u64 xcr)
+ 	vcpu->arch.xcr0 = xcr0;
  
--	kvm_irq_delivery_to_apic(kvm, NULL, &lapic_irq);
-+	kvm_irq_delivery_to_apic(plane, NULL, &lapic_irq);
+ 	if ((xcr0 ^ old_xcr0) & XFEATURE_MASK_EXTEND)
+-		vcpu->arch.cpuid_dynamic_bits_dirty = true;
++		cpuid_set_dirty(vcpu);
+ 	return 0;
  }
- 
- bool kvm_apicv_activated(struct kvm *kvm)
-@@ -10515,7 +10515,7 @@ int ____kvm_emulate_hypercall(struct kvm_vcpu *vcpu, int cpl,
- 		if (!guest_pv_has(vcpu, KVM_FEATURE_PV_UNHALT))
+ EXPORT_SYMBOL_FOR_KVM_INTERNAL(__kvm_set_xcr);
+@@ -4089,7 +4089,7 @@ int kvm_set_msr_common(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
+ 			if (!guest_cpu_cap_has(vcpu, X86_FEATURE_XMM3))
+ 				return 1;
+ 			vcpu->arch.ia32_misc_enable_msr = data;
+-			vcpu->arch.cpuid_dynamic_bits_dirty = true;
++			cpuid_set_dirty(vcpu);
+ 		} else {
+ 			vcpu->arch.ia32_misc_enable_msr = data;
+ 		}
+@@ -4121,7 +4121,7 @@ int kvm_set_msr_common(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
+ 		if (vcpu->arch.ia32_xss == data)
  			break;
- 
--		kvm_pv_kick_cpu_op(vcpu->kvm, a1);
-+		kvm_pv_kick_cpu_op(vcpu->plane, a1);
- 		kvm_sched_yield(vcpu, a1);
- 		ret = 0;
+ 		vcpu->arch.ia32_xss = data;
+-		vcpu->arch.cpuid_dynamic_bits_dirty = true;
++		cpuid_set_dirty(vcpu);
  		break;
-diff --git a/arch/x86/kvm/xen.c b/arch/x86/kvm/xen.c
-index 91fd3673c09a..06c5789f406b 100644
---- a/arch/x86/kvm/xen.c
-+++ b/arch/x86/kvm/xen.c
-@@ -626,7 +626,7 @@ void kvm_xen_inject_vcpu_vector(struct kvm_vcpu *v)
- 	irq.delivery_mode = APIC_DM_FIXED;
- 	irq.level = 1;
- 
--	kvm_irq_delivery_to_apic(v->kvm, NULL, &irq);
-+	kvm_irq_delivery_to_apic(v->plane, NULL, &irq);
+ 	case MSR_SMI_COUNT:
+ 		if (!msr_info->host_initiated)
+@@ -13034,7 +13034,16 @@ void kvm_arch_vcpu_destroy(struct kvm_vcpu *vcpu)
+ 	kvm_mmu_destroy(vcpu);
+ 	srcu_read_unlock(&vcpu->kvm->srcu, idx);
+ 	free_page((unsigned long)vcpu->arch.pio_data);
+-	kvfree(vcpu->arch.cpuid_entries);
++}
++
++int kvm_arch_vcpu_common_init(struct kvm_vcpu_common *common)
++{
++	return 0;
++}
++
++void kvm_arch_vcpu_common_destroy(struct kvm_vcpu_common *common)
++{
++	kvfree(common->arch.cpuid_entries);
  }
  
- /*
+ static void kvm_xstate_reset(struct kvm_vcpu *vcpu, bool init_event)
 -- 
 2.53.0
 
