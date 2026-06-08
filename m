@@ -1,42 +1,42 @@
-Return-Path: <linux-mips+bounces-14988-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-14980-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id ewsPKgXaJmpYlwIAu9opvQ
-	(envelope-from <linux-mips+bounces-14988-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Mon, 08 Jun 2026 17:04:37 +0200
+	id 6ymcMmXZJmorlwIAu9opvQ
+	(envelope-from <linux-mips+bounces-14980-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Mon, 08 Jun 2026 17:01:57 +0200
 X-Original-To: lists+linux-mips@lfdr.de
 Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3925A657CA5
-	for <lists+linux-mips@lfdr.de>; Mon, 08 Jun 2026 17:04:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 48DF6657C3D
+	for <lists+linux-mips@lfdr.de>; Mon, 08 Jun 2026 17:01:57 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
 	dkim=none;
 	dmarc=none;
-	spf=pass (mail.lfdr.de: domain of "linux-mips+bounces-14988-lists+linux-mips=lfdr.de@vger.kernel.org" designates 2600:3c04:e001:36c::12fc:5321 as permitted sender) smtp.mailfrom="linux-mips+bounces-14988-lists+linux-mips=lfdr.de@vger.kernel.org";
+	spf=pass (mail.lfdr.de: domain of "linux-mips+bounces-14980-lists+linux-mips=lfdr.de@vger.kernel.org" designates 2600:3c04:e001:36c::12fc:5321 as permitted sender) smtp.mailfrom="linux-mips+bounces-14980-lists+linux-mips=lfdr.de@vger.kernel.org";
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 33F1B30C25FA
-	for <lists+linux-mips@lfdr.de>; Mon,  8 Jun 2026 14:54:35 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id DCB9F308F2BF
+	for <lists+linux-mips@lfdr.de>; Mon,  8 Jun 2026 14:53:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0F0FC3FF89F;
-	Mon,  8 Jun 2026 14:43:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1401B3FBEC3;
+	Mon,  8 Jun 2026 14:43:33 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
 Received: from mail.8bytes.org (mail.8bytes.org [85.214.250.239])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 675AB3F5BEF;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8B4D03F482F;
 	Mon,  8 Jun 2026 14:43:25 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780929815; cv=none; b=CLheGBJoDcdfHa5S4qgfusdZy8TiYumJ1ucpHpGeSsC3zmwbvTMlxWKF0aj3s0P63RyEnTPfPzz2xPcm1BAJQQ6zgfyF2x/tRLY5/CchBbK665TGh4MOaWLCIkIq+G19odUvbYDHFUeVVMHGGcU6xXJBUZFFpNczpgQYfFV/fT4=
+	t=1780929812; cv=none; b=gc1EEJ/EihDJYAWwPe6BvPxkK/Y5FRihh8MIiAD0wSn6GQ3T7ZBGGJtZrQMDW99IZlmX5KjmVfXxwwCTJdAhRSNOigaQ4zOSqQroHYKVsuRbwSpWH/y9HzIqfHSR/mq4gIJLejsPpLTRTQP3LU67hlKAyb42tALi7QsqPXrTjP0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780929815; c=relaxed/simple;
-	bh=QCFeoZd5NYF+cl012pK51iVSnEkExT5Dkr2peOuQ8ZY=;
+	s=arc-20240116; t=1780929812; c=relaxed/simple;
+	bh=ndcuyAPx2C4MKTidMkaU1qTNUAY37NxMM2+ire8vk/Q=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=nTcfk/oPlNitlDE2DewhuGB/qf7ARziYdoKq/AZqT0npVUILI1EI5Ra9ociGWcFpdVyOwWpTxQaUzBO+h/8jpwq8IRaWrmkHgbOSkifCzNDMJyjXYMpGRFBPfom4naAU+efsxsUcqtoBPE8fxmP3OQm0rhhKl9jscXGJg/g0uEw=
+	 MIME-Version; b=stmitiBS/Umiht9i1qw2V1mr9h1QnAMioqp06Lav2kHB4s2ts+Mkzk3O7vWMr1wEV6rzrRurYgBAr9VvKxl4TNK1Ml8x8zKUUoe5Zhhi6ZgfdnGDSWS+PibddJRlN3C2Bk6AHGnJzJV9IYytfGyn6IC3BP6AeFuZ+p4djirmUlQ=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=8bytes.org; spf=pass smtp.mailfrom=8bytes.org; arc=none smtp.client-ip=85.214.250.239
 Received: from io.home.8bytes.org (p4ffe1d30.dip0.t-ipconnect.de [79.254.29.48])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mail.8bytes.org (Postfix) with ESMTPSA id 50CD62028CE;
+	by mail.8bytes.org (Postfix) with ESMTPSA id 84F122028CF;
 	Mon,  8 Jun 2026 16:43:14 +0200 (CEST)
 From: =?UTF-8?q?J=C3=B6rg=20R=C3=B6del?= <joro@8bytes.org>
 To: Paolo Bonzini <pbonzini@redhat.com>,
@@ -58,9 +58,9 @@ Cc: Tom Lendacky <thomas.lendacky@amd.com>,
 	x86@kernel.org,
 	coconut-svsm@lists.linux.dev,
 	joerg.roedel@amd.com
-Subject: [PATCH 43/60] kvm: x86: Move CPUID state to struct kvm_vcpu_arch_common
-Date: Mon,  8 Jun 2026 16:42:35 +0200
-Message-ID: <20260608144252.351443-44-joro@8bytes.org>
+Subject: [PATCH 44/60] kvm: x86: Move cpu_caps to struct kvm_vcpu_arch_common
+Date: Mon,  8 Jun 2026 16:42:36 +0200
+Message-ID: <20260608144252.351443-45-joro@8bytes.org>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260608144252.351443-1-joro@8bytes.org>
 References: <20260608144252.351443-1-joro@8bytes.org>
@@ -72,10 +72,10 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Rspamd-Action: no action
-X-Spamd-Result: default: False [0.75 / 15.00];
+X-Spamd-Result: default: False [0.81 / 15.00];
 	MID_CONTAINS_FROM(1.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_MIXED_CHARSET(0.71)[subject];
+	R_MIXED_CHARSET(0.77)[subject];
 	R_MISSING_CHARSET(0.50)[];
 	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
 	MAILLIST(-0.15)[generic];
@@ -89,7 +89,7 @@ X-Spamd-Result: default: False [0.75 / 15.00];
 	RCVD_COUNT_THREE(0.00)[4];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-14988-lists,linux-mips=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-14980-lists,linux-mips=lfdr.de];
 	FORGED_SENDER(0.00)[joro@8bytes.org,linux-mips@vger.kernel.org];
 	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
@@ -103,336 +103,232 @@ X-Spamd-Result: default: False [0.75 / 15.00];
 	R_DKIM_NA(0.00)[];
 	TO_DN_SOME(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[amd.com:email,8bytes.org:mid,8bytes.org:from_mime,tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo,vger.kernel.org:from_smtp]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[vger.kernel.org:from_smtp,8bytes.org:mid,8bytes.org:from_mime,tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo,amd.com:email]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 3925A657CA5
+X-Rspamd-Queue-Id: 48DF6657C3D
 
 From: Joerg Roedel <joerg.roedel@amd.com>
 
-The CPUID state is shared across all planes, so move it to struct
-kvm_vcpu_arch_common.
+Now that CPUID state is shared across all planes, cpu_caps can be
+shared as well.
 
 Signed-off-by: Joerg Roedel <joerg.roedel@amd.com>
 ---
- arch/x86/include/asm/kvm_host.h | 17 ++++++++--------
- arch/x86/kvm/cpuid.c            | 36 +++++++++++++++++++--------------
- arch/x86/kvm/cpuid.h            | 14 ++++++++++---
- arch/x86/kvm/lapic.c            |  2 +-
- arch/x86/kvm/smm.c              |  2 +-
- arch/x86/kvm/svm/svm.c          |  2 +-
+ arch/x86/include/asm/kvm_host.h | 33 +++++++++++++++++----------------
+ arch/x86/kvm/cpuid.c            | 18 +++++++++---------
+ arch/x86/kvm/cpuid.h            | 17 +++++++++--------
+ arch/x86/kvm/svm/svm.c          |  4 ++--
  arch/x86/kvm/vmx/vmx.c          |  2 +-
- arch/x86/kvm/x86.c              | 17 ++++++++++++----
- 8 files changed, 58 insertions(+), 34 deletions(-)
+ 5 files changed, 38 insertions(+), 36 deletions(-)
 
 diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
-index 11e52f8bb2c2..3a64bdae6e23 100644
+index 3a64bdae6e23..b0d040528f9d 100644
 --- a/arch/x86/include/asm/kvm_host.h
 +++ b/arch/x86/include/asm/kvm_host.h
-@@ -794,10 +794,16 @@ enum kvm_only_cpuid_leafs {
- 	NKVMCAPINTS = NR_KVM_CPU_CAPS - NCAPINTS,
+@@ -800,6 +800,23 @@ struct kvm_vcpu_arch_common {
+ 	struct kvm_cpuid_entry2 *cpuid_entries;
+ 	bool cpuid_dynamic_bits_dirty;
+ 	bool is_amd_compatible;
++
++	/*
++	 * cpu_caps holds the effective guest capabilities, i.e. the features
++	 * the vCPU is allowed to use.  Typically, but not always, features can
++	 * be used by the guest if and only if both KVM and userspace want to
++	 * expose the feature to the guest.
++	 *
++	 * A common exception is for virtualization holes, i.e. when KVM can't
++	 * prevent the guest from using a feature, in which case the vCPU "has"
++	 * the feature regardless of what KVM or userspace desires.
++	 *
++	 * Note, features that don't require KVM involvement in any way are
++	 * NOT enforced/sanitized by KVM, i.e. are taken verbatim from the
++	 * guest CPUID provided by userspace.
++	 */
++	u32 cpu_caps[NR_KVM_CPU_CAPS];
++
  };
  
--struct kvm_vcpu_arch_common {};
-+struct kvm_vcpu_arch_common {
-+	/* CPUID related state */
-+	int cpuid_nent;
-+	struct kvm_cpuid_entry2 *cpuid_entries;
-+	bool cpuid_dynamic_bits_dirty;
-+	bool is_amd_compatible;
-+};
- 
--static inline int kvm_arch_vcpu_common_init(struct kvm_vcpu_common *common) { return 0; }
--static inline void kvm_arch_vcpu_common_destroy(struct kvm_vcpu_common *common) {}
-+int kvm_arch_vcpu_common_init(struct kvm_vcpu_common *common);
-+void kvm_arch_vcpu_common_destroy(struct kvm_vcpu_common *common);
- 
- struct kvm_vcpu_arch {
- 	/*
-@@ -919,11 +925,6 @@ struct kvm_vcpu_arch {
+ int kvm_arch_vcpu_common_init(struct kvm_vcpu_common *common);
+@@ -925,22 +942,6 @@ struct kvm_vcpu_arch {
  
  	int halt_request; /* real mode on Intel only */
  
--	int cpuid_nent;
--	struct kvm_cpuid_entry2 *cpuid_entries;
--	bool cpuid_dynamic_bits_dirty;
--	bool is_amd_compatible;
+-	/*
+-	 * cpu_caps holds the effective guest capabilities, i.e. the features
+-	 * the vCPU is allowed to use.  Typically, but not always, features can
+-	 * be used by the guest if and only if both KVM and userspace want to
+-	 * expose the feature to the guest.
+-	 *
+-	 * A common exception is for virtualization holes, i.e. when KVM can't
+-	 * prevent the guest from using a feature, in which case the vCPU "has"
+-	 * the feature regardless of what KVM or userspace desires.
+-	 *
+-	 * Note, features that don't require KVM involvement in any way are
+-	 * NOT enforced/sanitized by KVM, i.e. are taken verbatim from the
+-	 * guest CPUID provided by userspace.
+-	 */
+-	u32 cpu_caps[NR_KVM_CPU_CAPS];
 -
- 	/*
- 	 * cpu_caps holds the effective guest capabilities, i.e. the features
- 	 * the vCPU is allowed to use.  Typically, but not always, features can
+ 	u64 reserved_gpa_bits;
+ 	int maxphyaddr;
+ 
 diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
-index e69156b54cff..6d948d63306c 100644
+index 6d948d63306c..27e2f7e25038 100644
 --- a/arch/x86/kvm/cpuid.c
 +++ b/arch/x86/kvm/cpuid.c
-@@ -176,6 +176,7 @@ static void kvm_update_cpuid_runtime(struct kvm_vcpu *vcpu);
- static int kvm_cpuid_check_equal(struct kvm_vcpu *vcpu, struct kvm_cpuid_entry2 *e2,
- 				 int nent)
+@@ -284,7 +284,7 @@ static __always_inline void kvm_update_feature_runtime(struct kvm_vcpu *vcpu,
+ 						       bool has_feature)
  {
-+	struct kvm_vcpu_common *common = vcpu->common;
- 	struct kvm_cpuid_entry2 *orig;
+ 	cpuid_entry_change(entry, x86_feature, has_feature);
+-	guest_cpu_cap_change(vcpu, x86_feature, has_feature);
++	guest_cpu_cap_change(vcpu->common, x86_feature, has_feature);
+ }
+ 
+ static void kvm_update_cpuid_runtime(struct kvm_vcpu *vcpu)
+@@ -382,7 +382,7 @@ void kvm_vcpu_after_set_cpuid(struct kvm_vcpu *vcpu)
+ 	bool allow_gbpages;
  	int i;
  
-@@ -188,11 +189,11 @@ static int kvm_cpuid_check_equal(struct kvm_vcpu *vcpu, struct kvm_cpuid_entry2
- 	kvm_update_cpuid_runtime(vcpu);
- 	kvm_apply_cpuid_pv_features_quirk(vcpu);
- 
--	if (nent != vcpu->arch.cpuid_nent)
-+	if (nent != common->arch.cpuid_nent)
- 		return -EINVAL;
- 
- 	for (i = 0; i < nent; i++) {
--		orig = &vcpu->arch.cpuid_entries[i];
-+		orig = &common->arch.cpuid_entries[i];
- 		if (e2[i].function != orig->function ||
- 		    e2[i].index != orig->index ||
- 		    e2[i].flags != orig->flags ||
-@@ -290,7 +291,7 @@ static void kvm_update_cpuid_runtime(struct kvm_vcpu *vcpu)
- {
- 	struct kvm_cpuid_entry2 *best;
- 
--	vcpu->arch.cpuid_dynamic_bits_dirty = false;
-+	vcpu->common->arch.cpuid_dynamic_bits_dirty = false;
- 
- 	best = kvm_find_cpuid_entry(vcpu, 1);
- 	if (best) {
-@@ -374,6 +375,7 @@ static int cpuid_func_emulated(struct kvm_cpuid_entry2 *entry, u32 func,
- 
- void kvm_vcpu_after_set_cpuid(struct kvm_vcpu *vcpu)
- {
-+	struct kvm_vcpu_common *common = vcpu->common;
- 	struct kvm_lapic *apic = vcpu->arch.apic;
- 	struct kvm_cpuid_entry2 *best;
- 	struct kvm_cpuid_entry2 *entry;
-@@ -443,7 +445,7 @@ void kvm_vcpu_after_set_cpuid(struct kvm_vcpu *vcpu)
- 
- 	vcpu->arch.pv_cpuid.features = kvm_apply_cpuid_pv_features_quirk(vcpu);
- 
--	vcpu->arch.is_amd_compatible = guest_cpuid_is_amd_or_hygon(vcpu);
-+	common->arch.is_amd_compatible = guest_cpuid_is_amd_or_hygon(vcpu);
- 	vcpu->arch.maxphyaddr = cpuid_query_maxphyaddr(vcpu);
- 	vcpu->arch.reserved_gpa_bits = kvm_vcpu_reserved_gpa_bits_raw(vcpu);
- 
-@@ -509,6 +511,7 @@ u64 kvm_vcpu_reserved_gpa_bits_raw(struct kvm_vcpu *vcpu)
- static int kvm_set_cpuid(struct kvm_vcpu *vcpu, struct kvm_cpuid_entry2 *e2,
-                         int nent)
- {
-+	struct kvm_vcpu_common *common = vcpu->common;
- 	u32 vcpu_caps[NR_KVM_CPU_CAPS];
- 	int r;
- 
-@@ -516,7 +519,7 @@ static int kvm_set_cpuid(struct kvm_vcpu *vcpu, struct kvm_cpuid_entry2 *e2,
- 	 * Apply pending runtime CPUID updates to the current CPUID entries to
- 	 * avoid false positives due to mismatches on KVM-owned feature flags.
- 	 */
--	if (vcpu->arch.cpuid_dynamic_bits_dirty)
-+	if (common->arch.cpuid_dynamic_bits_dirty)
- 		kvm_update_cpuid_runtime(vcpu);
+-	memset(vcpu->arch.cpu_caps, 0, sizeof(vcpu->arch.cpu_caps));
++	memset(common->arch.cpu_caps, 0, sizeof(common->arch.cpu_caps));
+ 	BUILD_BUG_ON(ARRAY_SIZE(reverse_cpuid) != NR_KVM_CPU_CAPS);
  
  	/*
-@@ -530,8 +533,8 @@ static int kvm_set_cpuid(struct kvm_vcpu *vcpu, struct kvm_cpuid_entry2 *e2,
- 	 * updates.  Full initialization is done if and only if the vCPU hasn't
- 	 * run, i.e. only if userspace is potentially changing CPUID features.
- 	 */
--	swap(vcpu->arch.cpuid_entries, e2);
--	swap(vcpu->arch.cpuid_nent, nent);
-+	swap(common->arch.cpuid_entries, e2);
-+	swap(common->arch.cpuid_nent, nent);
+@@ -408,9 +408,9 @@ void kvm_vcpu_after_set_cpuid(struct kvm_vcpu *vcpu)
+ 		 * in guest CPUID.  Note, this includes features that are
+ 		 * supported by KVM but aren't advertised to userspace!
+ 		 */
+-		vcpu->arch.cpu_caps[i] = kvm_cpu_caps[i] |
+-					 cpuid_get_reg_unsafe(&emulated, cpuid.reg);
+-		vcpu->arch.cpu_caps[i] &= cpuid_get_reg_unsafe(entry, cpuid.reg);
++		common->arch.cpu_caps[i] = kvm_cpu_caps[i] |
++					   cpuid_get_reg_unsafe(&emulated, cpuid.reg);
++		common->arch.cpu_caps[i] &= cpuid_get_reg_unsafe(entry, cpuid.reg);
+ 	}
  
- 	memcpy(vcpu_caps, vcpu->arch.cpu_caps, sizeof(vcpu_caps));
- 	BUILD_BUG_ON(sizeof(vcpu_caps) != sizeof(vcpu->arch.cpu_caps));
-@@ -580,8 +583,8 @@ static int kvm_set_cpuid(struct kvm_vcpu *vcpu, struct kvm_cpuid_entry2 *e2,
+ 	kvm_update_cpuid_runtime(vcpu);
+@@ -428,7 +428,7 @@ void kvm_vcpu_after_set_cpuid(struct kvm_vcpu *vcpu)
+ 	 */
+ 	allow_gbpages = tdp_enabled ? boot_cpu_has(X86_FEATURE_GBPAGES) :
+ 				      guest_cpu_cap_has(vcpu, X86_FEATURE_GBPAGES);
+-	guest_cpu_cap_change(vcpu, X86_FEATURE_GBPAGES, allow_gbpages);
++	guest_cpu_cap_change(common, X86_FEATURE_GBPAGES, allow_gbpages);
+ 
+ 	best = kvm_find_cpuid_entry(vcpu, 1);
+ 	if (best && apic) {
+@@ -536,8 +536,8 @@ static int kvm_set_cpuid(struct kvm_vcpu *vcpu, struct kvm_cpuid_entry2 *e2,
+ 	swap(common->arch.cpuid_entries, e2);
+ 	swap(common->arch.cpuid_nent, nent);
+ 
+-	memcpy(vcpu_caps, vcpu->arch.cpu_caps, sizeof(vcpu_caps));
+-	BUILD_BUG_ON(sizeof(vcpu_caps) != sizeof(vcpu->arch.cpu_caps));
++	memcpy(vcpu_caps, common->arch.cpu_caps, sizeof(vcpu_caps));
++	BUILD_BUG_ON(sizeof(vcpu_caps) != sizeof(common->arch.cpu_caps));
+ 
+ 	/*
+ 	 * KVM does not correctly handle changing guest CPUID after KVM_RUN or
+@@ -582,7 +582,7 @@ static int kvm_set_cpuid(struct kvm_vcpu *vcpu, struct kvm_cpuid_entry2 *e2,
+ 	return 0;
  
  err:
- 	memcpy(vcpu->arch.cpu_caps, vcpu_caps, sizeof(vcpu_caps));
--	swap(vcpu->arch.cpuid_entries, e2);
--	swap(vcpu->arch.cpuid_nent, nent);
-+	swap(common->arch.cpuid_entries, e2);
-+	swap(common->arch.cpuid_nent, nent);
+-	memcpy(vcpu->arch.cpu_caps, vcpu_caps, sizeof(vcpu_caps));
++	memcpy(common->arch.cpu_caps, vcpu_caps, sizeof(vcpu_caps));
+ 	swap(common->arch.cpuid_entries, e2);
+ 	swap(common->arch.cpuid_nent, nent);
  	return r;
- }
- 
-@@ -658,17 +661,19 @@ int kvm_vcpu_ioctl_get_cpuid2(struct kvm_vcpu *vcpu,
- 			      struct kvm_cpuid2 *cpuid,
- 			      struct kvm_cpuid_entry2 __user *entries)
- {
--	if (cpuid->nent < vcpu->arch.cpuid_nent)
-+	struct kvm_vcpu_common *common = vcpu->common;
-+
-+	if (cpuid->nent < common->arch.cpuid_nent)
- 		return -E2BIG;
- 
--	if (vcpu->arch.cpuid_dynamic_bits_dirty)
-+	if (common->arch.cpuid_dynamic_bits_dirty)
- 		kvm_update_cpuid_runtime(vcpu);
- 
--	if (copy_to_user(entries, vcpu->arch.cpuid_entries,
--			 vcpu->arch.cpuid_nent * sizeof(struct kvm_cpuid_entry2)))
-+	if (copy_to_user(entries, common->arch.cpuid_entries,
-+			 common->arch.cpuid_nent * sizeof(struct kvm_cpuid_entry2)))
- 		return -EFAULT;
- 
--	cpuid->nent = vcpu->arch.cpuid_nent;
-+	cpuid->nent = common->arch.cpuid_nent;
- 	return 0;
- }
- 
-@@ -2089,10 +2094,11 @@ bool kvm_cpuid(struct kvm_vcpu *vcpu, u32 *eax, u32 *ebx,
- 	       u32 *ecx, u32 *edx, bool exact_only)
- {
- 	u32 orig_function = *eax, function = *eax, index = *ecx;
-+	struct kvm_vcpu_common *common = vcpu->common;
- 	struct kvm_cpuid_entry2 *entry;
- 	bool exact, used_max_basic = false;
- 
--	if (vcpu->arch.cpuid_dynamic_bits_dirty)
-+	if (common->arch.cpuid_dynamic_bits_dirty)
- 		kvm_update_cpuid_runtime(vcpu);
- 
- 	entry = kvm_find_cpuid_entry_index(vcpu, function, index);
 diff --git a/arch/x86/kvm/cpuid.h b/arch/x86/kvm/cpuid.h
-index 039b8e6f40ba..143ea8531611 100644
+index 143ea8531611..75abf447eabf 100644
 --- a/arch/x86/kvm/cpuid.h
 +++ b/arch/x86/kvm/cpuid.h
-@@ -36,14 +36,18 @@ struct kvm_cpuid_entry2 *kvm_find_cpuid_entry2(struct kvm_cpuid_entry2 *entries,
- static inline struct kvm_cpuid_entry2 *kvm_find_cpuid_entry_index(struct kvm_vcpu *vcpu,
- 								  u32 function, u32 index)
+@@ -239,36 +239,37 @@ static __always_inline bool guest_pv_has(struct kvm_vcpu *vcpu,
+ 	return vcpu->arch.pv_cpuid.features & (1u << kvm_feature);
+ }
+ 
+-static __always_inline void guest_cpu_cap_set(struct kvm_vcpu *vcpu,
++static __always_inline void guest_cpu_cap_set(struct kvm_vcpu_common *common,
+ 					      unsigned int x86_feature)
  {
--	return kvm_find_cpuid_entry2(vcpu->arch.cpuid_entries, vcpu->arch.cpuid_nent,
+ 	unsigned int x86_leaf = __feature_leaf(x86_feature);
+ 
+-	vcpu->arch.cpu_caps[x86_leaf] |= __feature_bit(x86_feature);
++	common->arch.cpu_caps[x86_leaf] |= __feature_bit(x86_feature);
+ }
+ 
+-static __always_inline void guest_cpu_cap_clear(struct kvm_vcpu *vcpu,
++static __always_inline void guest_cpu_cap_clear(struct kvm_vcpu_common *common,
+ 						unsigned int x86_feature)
+ {
+ 	unsigned int x86_leaf = __feature_leaf(x86_feature);
+ 
+-	vcpu->arch.cpu_caps[x86_leaf] &= ~__feature_bit(x86_feature);
++	common->arch.cpu_caps[x86_leaf] &= ~__feature_bit(x86_feature);
+ }
+ 
+-static __always_inline void guest_cpu_cap_change(struct kvm_vcpu *vcpu,
++static __always_inline void guest_cpu_cap_change(struct kvm_vcpu_common *common,
+ 						 unsigned int x86_feature,
+ 						 bool guest_has_cap)
+ {
+ 	if (guest_has_cap)
+-		guest_cpu_cap_set(vcpu, x86_feature);
++		guest_cpu_cap_set(common, x86_feature);
+ 	else
+-		guest_cpu_cap_clear(vcpu, x86_feature);
++		guest_cpu_cap_clear(common, x86_feature);
+ }
+ 
+ static __always_inline bool guest_cpu_cap_has(struct kvm_vcpu *vcpu,
+ 					      unsigned int x86_feature)
+ {
+ 	unsigned int x86_leaf = __feature_leaf(x86_feature);
 +	struct kvm_vcpu_common *common = vcpu->common;
-+
-+	return kvm_find_cpuid_entry2(common->arch.cpuid_entries, common->arch.cpuid_nent,
- 				     function, index);
+ 
+ 	/*
+ 	 * Except for MWAIT, querying dynamic feature bits is disallowed, so
+@@ -278,7 +279,7 @@ static __always_inline bool guest_cpu_cap_has(struct kvm_vcpu *vcpu,
+ 		     x86_feature == X86_FEATURE_OSXSAVE ||
+ 		     x86_feature == X86_FEATURE_OSPKE);
+ 
+-	return vcpu->arch.cpu_caps[x86_leaf] & __feature_bit(x86_feature);
++	return common->arch.cpu_caps[x86_leaf] & __feature_bit(x86_feature);
  }
  
- static inline struct kvm_cpuid_entry2 *kvm_find_cpuid_entry(struct kvm_vcpu *vcpu,
- 							    u32 function)
- {
--	return kvm_find_cpuid_entry2(vcpu->arch.cpuid_entries, vcpu->arch.cpuid_nent,
-+	struct kvm_vcpu_common *common = vcpu->common;
-+
-+	return kvm_find_cpuid_entry2(common->arch.cpuid_entries, common->arch.cpuid_nent,
- 				     function, KVM_CPUID_INDEX_NOT_SIGNIFICANT);
- }
- 
-@@ -135,7 +139,7 @@ static __always_inline bool guest_cpuid_has(struct kvm_vcpu *vcpu,
- 
- static inline bool guest_cpuid_is_amd_compatible(struct kvm_vcpu *vcpu)
- {
--	return vcpu->arch.is_amd_compatible;
-+	return vcpu->common->arch.is_amd_compatible;
- }
- 
- static inline bool guest_cpuid_is_intel_compatible(struct kvm_vcpu *vcpu)
-@@ -300,4 +304,8 @@ static inline bool guest_has_pred_cmd_msr(struct kvm_vcpu *vcpu)
- 		guest_cpu_cap_has(vcpu, X86_FEATURE_SBPB));
- }
- 
-+static inline void cpuid_set_dirty(struct kvm_vcpu *vcpu)
-+{
-+	vcpu->common->arch.cpuid_dynamic_bits_dirty = true;
-+}
- #endif
-diff --git a/arch/x86/kvm/lapic.c b/arch/x86/kvm/lapic.c
-index cac076445472..dc7a08831a54 100644
---- a/arch/x86/kvm/lapic.c
-+++ b/arch/x86/kvm/lapic.c
-@@ -2754,7 +2754,7 @@ static void __kvm_apic_set_base(struct kvm_vcpu *vcpu, u64 value)
- 	vcpu->arch.apic_base = value;
- 
- 	if ((old_value ^ value) & MSR_IA32_APICBASE_ENABLE)
--		vcpu->arch.cpuid_dynamic_bits_dirty = true;
-+		cpuid_set_dirty(vcpu);
- 
- 	if (!apic)
- 		return;
-diff --git a/arch/x86/kvm/smm.c b/arch/x86/kvm/smm.c
-index f623c5986119..736ab345b9fd 100644
---- a/arch/x86/kvm/smm.c
-+++ b/arch/x86/kvm/smm.c
-@@ -363,7 +363,7 @@ void enter_smm(struct kvm_vcpu *vcpu)
- 			goto error;
- #endif
- 
--	vcpu->arch.cpuid_dynamic_bits_dirty = true;
-+	cpuid_set_dirty(vcpu);
- 	kvm_mmu_reset_context(vcpu);
- 	return;
- error:
+ static inline bool kvm_vcpu_is_legal_cr3(struct kvm_vcpu *vcpu, unsigned long cr3)
 diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
-index e8ad880a4266..612db7ad8b2a 100644
+index 612db7ad8b2a..0b57dde29e40 100644
 --- a/arch/x86/kvm/svm/svm.c
 +++ b/arch/x86/kvm/svm/svm.c
-@@ -1848,7 +1848,7 @@ void svm_set_cr4(struct kvm_vcpu *vcpu, unsigned long cr4)
- 	vmcb_mark_dirty(to_svm(vcpu)->vmcb, VMCB_CR);
+@@ -4706,7 +4706,7 @@ static void svm_vcpu_after_set_cpuid(struct kvm_vcpu *vcpu)
+ 	 * XSS on VM-Enter/VM-Exit.  Failure to do so would effectively give
+ 	 * the guest read/write access to the host's XSS.
+ 	 */
+-	guest_cpu_cap_change(vcpu, X86_FEATURE_XSAVES,
++	guest_cpu_cap_change(vcpu->common, X86_FEATURE_XSAVES,
+ 			     boot_cpu_has(X86_FEATURE_XSAVES) &&
+ 			     guest_cpu_cap_has(vcpu, X86_FEATURE_XSAVE));
  
- 	if ((cr4 ^ old_cr4) & (X86_CR4_OSXSAVE | X86_CR4_PKE))
--		vcpu->arch.cpuid_dynamic_bits_dirty = true;
-+		cpuid_set_dirty(vcpu);
- }
+@@ -4716,7 +4716,7 @@ static void svm_vcpu_after_set_cpuid(struct kvm_vcpu *vcpu)
+ 	 * SVM on Intel is bonkers and extremely unlikely to work).
+ 	 */
+ 	if (guest_cpuid_is_intel_compatible(vcpu))
+-		guest_cpu_cap_clear(vcpu, X86_FEATURE_V_VMSAVE_VMLOAD);
++		guest_cpu_cap_clear(vcpu->common, X86_FEATURE_V_VMSAVE_VMLOAD);
  
- static void svm_set_segment(struct kvm_vcpu *vcpu,
+ 	if (is_sev_guest(vcpu))
+ 		sev_vcpu_after_set_cpuid(svm);
 diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-index 20262855bfe8..62e180651143 100644
+index 62e180651143..d10aa5f60cad 100644
 --- a/arch/x86/kvm/vmx/vmx.c
 +++ b/arch/x86/kvm/vmx/vmx.c
-@@ -3595,7 +3595,7 @@ void vmx_set_cr4(struct kvm_vcpu *vcpu, unsigned long cr4)
- 	vmcs_writel(GUEST_CR4, hw_cr4);
+@@ -7994,7 +7994,7 @@ void vmx_vcpu_after_set_cpuid(struct kvm_vcpu *vcpu)
+ 	 * set if and only if XSAVE is supported.
+ 	 */
+ 	if (!guest_cpu_cap_has(vcpu, X86_FEATURE_XSAVE))
+-		guest_cpu_cap_clear(vcpu, X86_FEATURE_XSAVES);
++		guest_cpu_cap_clear(vcpu->common, X86_FEATURE_XSAVES);
  
- 	if ((cr4 ^ old_cr4) & (X86_CR4_OSXSAVE | X86_CR4_PKE))
--		vcpu->arch.cpuid_dynamic_bits_dirty = true;
-+		cpuid_set_dirty(vcpu);
- }
+ 	vmx_setup_uret_msrs(vmx);
  
- void vmx_get_segment(struct kvm_vcpu *vcpu, struct kvm_segment *var, int seg)
-diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-index 7fc08df245bd..7e94a378b3d2 100644
---- a/arch/x86/kvm/x86.c
-+++ b/arch/x86/kvm/x86.c
-@@ -1322,7 +1322,7 @@ int __kvm_set_xcr(struct kvm_vcpu *vcpu, u32 index, u64 xcr)
- 	vcpu->arch.xcr0 = xcr0;
- 
- 	if ((xcr0 ^ old_xcr0) & XFEATURE_MASK_EXTEND)
--		vcpu->arch.cpuid_dynamic_bits_dirty = true;
-+		cpuid_set_dirty(vcpu);
- 	return 0;
- }
- EXPORT_SYMBOL_FOR_KVM_INTERNAL(__kvm_set_xcr);
-@@ -4089,7 +4089,7 @@ int kvm_set_msr_common(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
- 			if (!guest_cpu_cap_has(vcpu, X86_FEATURE_XMM3))
- 				return 1;
- 			vcpu->arch.ia32_misc_enable_msr = data;
--			vcpu->arch.cpuid_dynamic_bits_dirty = true;
-+			cpuid_set_dirty(vcpu);
- 		} else {
- 			vcpu->arch.ia32_misc_enable_msr = data;
- 		}
-@@ -4121,7 +4121,7 @@ int kvm_set_msr_common(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
- 		if (vcpu->arch.ia32_xss == data)
- 			break;
- 		vcpu->arch.ia32_xss = data;
--		vcpu->arch.cpuid_dynamic_bits_dirty = true;
-+		cpuid_set_dirty(vcpu);
- 		break;
- 	case MSR_SMI_COUNT:
- 		if (!msr_info->host_initiated)
-@@ -13034,7 +13034,16 @@ void kvm_arch_vcpu_destroy(struct kvm_vcpu *vcpu)
- 	kvm_mmu_destroy(vcpu);
- 	srcu_read_unlock(&vcpu->kvm->srcu, idx);
- 	free_page((unsigned long)vcpu->arch.pio_data);
--	kvfree(vcpu->arch.cpuid_entries);
-+}
-+
-+int kvm_arch_vcpu_common_init(struct kvm_vcpu_common *common)
-+{
-+	return 0;
-+}
-+
-+void kvm_arch_vcpu_common_destroy(struct kvm_vcpu_common *common)
-+{
-+	kvfree(common->arch.cpuid_entries);
- }
- 
- static void kvm_xstate_reset(struct kvm_vcpu *vcpu, bool init_event)
 -- 
 2.53.0
 
