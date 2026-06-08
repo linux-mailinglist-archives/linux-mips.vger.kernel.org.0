@@ -1,42 +1,42 @@
-Return-Path: <linux-mips+bounces-14983-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-14991-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id puh9BRHrJmp/nAIAu9opvQ
-	(envelope-from <linux-mips+bounces-14983-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Mon, 08 Jun 2026 18:17:21 +0200
+	id dL9VNEfrJmqSnAIAu9opvQ
+	(envelope-from <linux-mips+bounces-14991-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Mon, 08 Jun 2026 18:18:15 +0200
 X-Original-To: lists+linux-mips@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5CFE2658991
-	for <lists+linux-mips@lfdr.de>; Mon, 08 Jun 2026 18:17:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 2EB446589BA
+	for <lists+linux-mips@lfdr.de>; Mon, 08 Jun 2026 18:18:15 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
 	dkim=none;
 	dmarc=none;
-	spf=pass (mail.lfdr.de: domain of "linux-mips+bounces-14983-lists+linux-mips=lfdr.de@vger.kernel.org" designates 2600:3c0a:e001:db::12fc:5321 as permitted sender) smtp.mailfrom="linux-mips+bounces-14983-lists+linux-mips=lfdr.de@vger.kernel.org";
+	spf=pass (mail.lfdr.de: domain of "linux-mips+bounces-14991-lists+linux-mips=lfdr.de@vger.kernel.org" designates 2600:3c0a:e001:db::12fc:5321 as permitted sender) smtp.mailfrom="linux-mips+bounces-14991-lists+linux-mips=lfdr.de@vger.kernel.org";
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 69FB43044B83
-	for <lists+linux-mips@lfdr.de>; Mon,  8 Jun 2026 14:53:57 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 99C4C30CDC65
+	for <lists+linux-mips@lfdr.de>; Mon,  8 Jun 2026 14:54:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6474B3FD147;
-	Mon,  8 Jun 2026 14:43:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3C0AB400E18;
+	Mon,  8 Jun 2026 14:43:37 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
 Received: from mail.8bytes.org (mail.8bytes.org [85.214.250.239])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 866463F7AAD;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8A6DD3F410C;
 	Mon,  8 Jun 2026 14:43:27 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780929813; cv=none; b=cL3+OQMf2qJ/4QdqKQKkAJPUhHdTCoS1YvzGFqIhzdG0y/BbYunp6CH/5pZ2gNAb4pBoPhal+n43xxZU9BBeWBJ14coeSC58nU7DPsWDGj2OmkQEh54GiT+ikMaFK9Ox6iCyMWQ5ufbVRl+P+WcQE20Z3IZ48cpsGzJNizjK3U0=
+	t=1780929816; cv=none; b=tpuLHi1z+lHne+R93u/Ytgm2JI1wBL8K9IbWdnnAmc+iDFOwwgs54yYakSOJxGi6VYlo3ZAugnCAcA9dDwP/emKzylswl82PsXFFjpmgxyFt0Eawx9Wwzcq9LxKxdf1FY0wjtAe3pMtY2HOv1WMxT9HRnIFjTYt3vAKLH6sn8V4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780929813; c=relaxed/simple;
-	bh=P9kibLlfEUjyZzPaotXP3JYgm+Axn66eD8m0X8kJH4U=;
+	s=arc-20240116; t=1780929816; c=relaxed/simple;
+	bh=BvjNCxnN228MSt40dnG4giObj3PBnoIC1IoQ5WyhYzg=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=MeMF/tx+zna4ReGXdBoeA4Uhvuom16T8MIYx65T9NFzg1bLaO5IL8COuJKattfsPbuK6ex52Lrpa+02f4pQ6FYMBZo5JT+7qgXmSyovUYBaEu0WRgSz+za7gzA/xTh2A1LTDAbTT54iv+xxGlLvpawACrRUn+eBYSrPq4GtkRc4=
+	 MIME-Version; b=pf9VBj6cZJxbTWor6QOO/ZL5hLw58Q0X+0LyMlKS9mRKYsZGK5uPMeSwRVMrRlFjT+IVmm4MiFDbrVFczPQvm4qVNupaCriHLP4EqkxcGYQtR771mqZaGqRmQLBO/QDDEu2tuF9ZJVtsNIa8oUUh/VbQeCR3RPsf3ea1ocj/y/8=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=8bytes.org; spf=pass smtp.mailfrom=8bytes.org; arc=none smtp.client-ip=85.214.250.239
 Received: from io.home.8bytes.org (p4ffe1d30.dip0.t-ipconnect.de [79.254.29.48])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mail.8bytes.org (Postfix) with ESMTPSA id 611962028D3;
+	by mail.8bytes.org (Postfix) with ESMTPSA id 94CCC2028D4;
 	Mon,  8 Jun 2026 16:43:15 +0200 (CEST)
 From: =?UTF-8?q?J=C3=B6rg=20R=C3=B6del?= <joro@8bytes.org>
 To: Paolo Bonzini <pbonzini@redhat.com>,
@@ -58,9 +58,9 @@ Cc: Tom Lendacky <thomas.lendacky@amd.com>,
 	x86@kernel.org,
 	coconut-svsm@lists.linux.dev,
 	joerg.roedel@amd.com
-Subject: [PATCH 48/60] kvm: x86: Make event injection VCPU requests per-plane
-Date: Mon,  8 Jun 2026 16:42:40 +0200
-Message-ID: <20260608144252.351443-49-joro@8bytes.org>
+Subject: [PATCH 49/60] kvm: x86: Allow hardware backend to overwrite struct kvm_plane allocation
+Date: Mon,  8 Jun 2026 16:42:41 +0200
+Message-ID: <20260608144252.351443-50-joro@8bytes.org>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260608144252.351443-1-joro@8bytes.org>
 References: <20260608144252.351443-1-joro@8bytes.org>
@@ -72,10 +72,10 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Rspamd-Action: no action
-X-Spamd-Result: default: False [0.71 / 15.00];
+X-Spamd-Result: default: False [0.66 / 15.00];
 	MID_CONTAINS_FROM(1.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_MIXED_CHARSET(0.67)[subject];
+	R_MIXED_CHARSET(0.62)[subject];
 	R_MISSING_CHARSET(0.50)[];
 	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
@@ -89,7 +89,7 @@ X-Spamd-Result: default: False [0.71 / 15.00];
 	RCVD_COUNT_THREE(0.00)[4];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-14983-lists,linux-mips=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-14991-lists,linux-mips=lfdr.de];
 	FORGED_SENDER(0.00)[joro@8bytes.org,linux-mips@vger.kernel.org];
 	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
@@ -103,51 +103,133 @@ X-Spamd-Result: default: False [0.71 / 15.00];
 	R_DKIM_NA(0.00)[];
 	TO_DN_SOME(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[amd.com:email,vger.kernel.org:from_smtp,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,8bytes.org:mid,8bytes.org:from_mime]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[amd.com:email,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,8bytes.org:mid,8bytes.org:from_mime]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 5CFE2658991
+X-Rspamd-Queue-Id: 2EB446589BA
 
 From: Joerg Roedel <joerg.roedel@amd.com>
 
-These events must be handled on the plane-vcpu that they were raised
-on.
+Allow the hardware backend implementations to allocate the struct
+kvm_plane instances so that they can carry hardware specific
+information along them.
 
 Signed-off-by: Joerg Roedel <joerg.roedel@amd.com>
 ---
- arch/x86/include/asm/kvm_host.h | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+ arch/x86/include/asm/kvm-x86-ops.h |  2 ++
+ arch/x86/include/asm/kvm_host.h    |  3 +++
+ arch/x86/kvm/svm/svm.c             |  3 +++
+ arch/x86/kvm/vmx/main.c            |  5 ++++-
+ arch/x86/kvm/x86.c                 | 16 ++++++++++++++--
+ arch/x86/kvm/x86.h                 |  4 ++++
+ 6 files changed, 30 insertions(+), 3 deletions(-)
 
+diff --git a/arch/x86/include/asm/kvm-x86-ops.h b/arch/x86/include/asm/kvm-x86-ops.h
+index c8bff1e9325e..207d56d12459 100644
+--- a/arch/x86/include/asm/kvm-x86-ops.h
++++ b/arch/x86/include/asm/kvm-x86-ops.h
+@@ -150,6 +150,8 @@ KVM_X86_OP_OPTIONAL(alloc_apic_backing_page)
+ KVM_X86_OP_OPTIONAL_RET0(gmem_prepare)
+ KVM_X86_OP_OPTIONAL_RET0(gmem_max_mapping_level)
+ KVM_X86_OP_OPTIONAL(gmem_invalidate)
++KVM_X86_OP(alloc_plane)
++KVM_X86_OP(free_plane)
+ #endif
+ 
+ #undef KVM_X86_OP
 diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
-index f30173093c44..c2651774d785 100644
+index c2651774d785..0955097aca9c 100644
 --- a/arch/x86/include/asm/kvm_host.h
 +++ b/arch/x86/include/asm/kvm_host.h
-@@ -85,20 +85,20 @@
- 						 KVM_X86_NOTIFY_VMEXIT_USER)
+@@ -2011,6 +2011,9 @@ struct kvm_x86_ops {
+ 	int (*gmem_prepare)(struct kvm *kvm, kvm_pfn_t pfn, gfn_t gfn, int max_order);
+ 	void (*gmem_invalidate)(kvm_pfn_t start, kvm_pfn_t end);
+ 	int (*gmem_max_mapping_level)(struct kvm *kvm, kvm_pfn_t pfn, bool is_private);
++
++	struct kvm_plane *(*alloc_plane)(void);
++	void (*free_plane)(struct kvm_plane *);
+ };
  
- /* x86-specific vcpu->requests bit members */
--#define KVM_REQ_MIGRATE_TIMER		KVM_ARCH_REQ(0)
-+#define KVM_REQ_MIGRATE_TIMER		KVM_ARCH_PLANE_REQ(0)
- #define KVM_REQ_REPORT_TPR_ACCESS	KVM_ARCH_REQ(1)
- #define KVM_REQ_TRIPLE_FAULT		KVM_ARCH_REQ(2)
- #define KVM_REQ_MMU_SYNC		KVM_ARCH_REQ(3)
- #define KVM_REQ_CLOCK_UPDATE		KVM_ARCH_REQ(4)
- #define KVM_REQ_LOAD_MMU_PGD		KVM_ARCH_REQ(5)
--#define KVM_REQ_EVENT			KVM_ARCH_REQ(6)
-+#define KVM_REQ_EVENT			KVM_ARCH_PLANE_REQ(6)
- #define KVM_REQ_APF_HALT		KVM_ARCH_REQ(7)
- #define KVM_REQ_STEAL_UPDATE		KVM_ARCH_REQ(8)
--#define KVM_REQ_NMI			KVM_ARCH_REQ(9)
--#define KVM_REQ_PMU			KVM_ARCH_REQ(10)
--#define KVM_REQ_PMI			KVM_ARCH_REQ(11)
-+#define KVM_REQ_NMI			KVM_ARCH_PLANE_REQ(9)
-+#define KVM_REQ_PMU			KVM_ARCH_PLANE_REQ(10)
-+#define KVM_REQ_PMI			KVM_ARCH_PLANE_REQ(11)
- #ifdef CONFIG_KVM_SMM
--#define KVM_REQ_SMI			KVM_ARCH_REQ(12)
-+#define KVM_REQ_SMI			KVM_ARCH_PLANE_REQ(12)
+ struct kvm_x86_nested_ops {
+diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
+index 0b57dde29e40..2a92d8d18d7c 100644
+--- a/arch/x86/kvm/svm/svm.c
++++ b/arch/x86/kvm/svm/svm.c
+@@ -5445,6 +5445,9 @@ struct kvm_x86_ops svm_x86_ops __initdata = {
+ 	.gmem_prepare = sev_gmem_prepare,
+ 	.gmem_invalidate = sev_gmem_invalidate,
+ 	.gmem_max_mapping_level = sev_gmem_max_mapping_level,
++
++	.alloc_plane = x86_alloc_plane,
++	.free_plane = x86_free_plane,
+ };
+ 
+ /*
+diff --git a/arch/x86/kvm/vmx/main.c b/arch/x86/kvm/vmx/main.c
+index f9c4703dda54..a2fc4eeeca1d 100644
+--- a/arch/x86/kvm/vmx/main.c
++++ b/arch/x86/kvm/vmx/main.c
+@@ -1030,7 +1030,10 @@ struct kvm_x86_ops vt_x86_ops __initdata = {
+ 	.vcpu_mem_enc_ioctl = vt_op_tdx_only(vcpu_mem_enc_ioctl),
+ 	.vcpu_mem_enc_unlocked_ioctl = vt_op_tdx_only(vcpu_mem_enc_unlocked_ioctl),
+ 
+-	.gmem_max_mapping_level = vt_op_tdx_only(gmem_max_mapping_level)
++	.gmem_max_mapping_level = vt_op_tdx_only(gmem_max_mapping_level),
++
++	.alloc_plane = x86_alloc_plane,
++	.free_plane = x86_free_plane,
+ };
+ 
+ struct kvm_x86_init_ops vt_init_ops __initdata = {
+diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+index b9828cd31136..5f48392d4738 100644
+--- a/arch/x86/kvm/x86.c
++++ b/arch/x86/kvm/x86.c
+@@ -487,18 +487,30 @@ unsigned kvm_arch_max_planes(struct kvm *kvm)
+ 	return 1;
+ }
+ 
+-struct kvm_plane *kvm_alloc_plane(void)
++struct kvm_plane *x86_alloc_plane(void)
+ {
+ 	/* For better type checking, do not return kzalloc() value directly */
+ 	struct kvm_plane *plane = kzalloc(sizeof(*plane), GFP_KERNEL_ACCOUNT);
+ 
+ 	return plane;
+ }
++EXPORT_SYMBOL_FOR_KVM_INTERNAL(x86_alloc_plane);
+ 
+-void kvm_free_plane(struct kvm_plane *plane)
++void x86_free_plane(struct kvm_plane *plane)
+ {
+ 	kfree(plane);
+ }
++EXPORT_SYMBOL_FOR_KVM_INTERNAL(x86_free_plane);
++
++struct kvm_plane *kvm_alloc_plane(void)
++{
++	return kvm_x86_call(alloc_plane)();
++}
++
++void kvm_free_plane(struct kvm_plane *plane)
++{
++	kvm_x86_call(free_plane)(plane);
++}
+ 
+ /*
+  * All feature MSRs except uCode revID, which tracks the currently loaded uCode
+diff --git a/arch/x86/kvm/x86.h b/arch/x86/kvm/x86.h
+index 38a905fa86de..812bd6004a4c 100644
+--- a/arch/x86/kvm/x86.h
++++ b/arch/x86/kvm/x86.h
+@@ -797,4 +797,8 @@ static inline bool kvm_is_valid_u_s_cet(struct kvm_vcpu *vcpu, u64 data)
+ 
+ 	return true;
+ }
++
++struct kvm_plane *x86_alloc_plane(void);
++void x86_free_plane(struct kvm_plane *plane);
++
  #endif
- #define KVM_REQ_MASTERCLOCK_UPDATE	KVM_ARCH_REQ(13)
- #define KVM_REQ_MCLOCK_INPROGRESS \
 -- 
 2.53.0
 
