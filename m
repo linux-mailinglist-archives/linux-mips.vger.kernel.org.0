@@ -1,42 +1,42 @@
-Return-Path: <linux-mips+bounces-14964-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-14969-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id 6j13FDHbJmqnlwIAu9opvQ
-	(envelope-from <linux-mips+bounces-14964-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Mon, 08 Jun 2026 17:09:37 +0200
+	id 4IA3LFbbJmqxlwIAu9opvQ
+	(envelope-from <linux-mips+bounces-14969-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Mon, 08 Jun 2026 17:10:14 +0200
 X-Original-To: lists+linux-mips@lfdr.de
 Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id E23FE657D8B
-	for <lists+linux-mips@lfdr.de>; Mon, 08 Jun 2026 17:09:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 9707B657DB5
+	for <lists+linux-mips@lfdr.de>; Mon, 08 Jun 2026 17:10:14 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
 	dkim=none;
 	dmarc=none;
-	spf=pass (mail.lfdr.de: domain of "linux-mips+bounces-14964-lists+linux-mips=lfdr.de@vger.kernel.org" designates 2600:3c09:e001:a7::12fc:5321 as permitted sender) smtp.mailfrom="linux-mips+bounces-14964-lists+linux-mips=lfdr.de@vger.kernel.org";
+	spf=pass (mail.lfdr.de: domain of "linux-mips+bounces-14969-lists+linux-mips=lfdr.de@vger.kernel.org" designates 2600:3c09:e001:a7::12fc:5321 as permitted sender) smtp.mailfrom="linux-mips+bounces-14969-lists+linux-mips=lfdr.de@vger.kernel.org";
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 08DDC303239C
-	for <lists+linux-mips@lfdr.de>; Mon,  8 Jun 2026 14:52:02 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id CC3DF3048777
+	for <lists+linux-mips@lfdr.de>; Mon,  8 Jun 2026 14:52:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2746B3F6C26;
-	Mon,  8 Jun 2026 14:43:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D624C3F8717;
+	Mon,  8 Jun 2026 14:43:28 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
 Received: from mail.8bytes.org (mail.8bytes.org [85.214.250.239])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1CEC23F166A;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9DF293F20E4;
 	Mon,  8 Jun 2026 14:43:20 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780929805; cv=none; b=q6Z4Z/dzMXf8jmFRlCefvQyJxY+DjHIS9ShBp4gI2SB0CE/gFa0z9aG9jwT3puSFP2uG06SBClxPKqcMjCNRb1fdfNyEw5BX6iOWegOCthakhrq/A4VXLrIDy9AmSRMk2Qi0pz5kGblLXmPdQS7Y+3u6VJvoA5ffTf3+l0BSrDo=
+	t=1780929808; cv=none; b=Z4Ab0rFZXBBXo/GYXxj94ThT32UiIpGaVbTMf3e8dXIenAPllb641cExcxGu/yli6i0nRm9clMSWblEL8LvzDBjCPVzPJ4hvPEsHIGsv074+lH6QL2jCTRqfE2E/O+BYbOI4A+S6rkPFObrRDLIfCrYe+nHEUyp7WdA2zMVHA9I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780929805; c=relaxed/simple;
-	bh=75KxlGnkwC/kmi3XF4Qw6hXJxaPunEix++qeQB+dLBk=;
+	s=arc-20240116; t=1780929808; c=relaxed/simple;
+	bh=V/Ys57aOLGv6qIDnHGtiqpzoSHb4c8fN1Q0hv67K0O4=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=kXEDvBp/txXE7MjaH08ES7YmN8utEXmKvRRrzivTLBWDQXPpJNddZ0O+wj15NWQgGfMmJDu7xUzmVVmCmPmAi+p8uZPvJGIenWSBw9+q1wvlk2NT0V2X/HvK9DOINLKOw8azaKwg6tZQK5P0XsoeAUmzaFfFVynXwlxt7T5AydU=
+	 MIME-Version; b=QiZ+KvtcRZ3h3L+Z0hNGvOFujF1fOsfxXlaQ24Kk6IPWTQKgpKZDH/OrSAVoJvMKSRvkgsJlosM3K1ubOvTjibzNwJTuVE5Bp4Mgzj2A7GffXOuu0mJGwJeChjYb10/LL8eIKr4P8h05TiKHIuAA1N5c+MyEwXTUsow145QeDN4=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=8bytes.org; spf=pass smtp.mailfrom=8bytes.org; arc=none smtp.client-ip=85.214.250.239
 Received: from io.home.8bytes.org (p4ffe1d30.dip0.t-ipconnect.de [79.254.29.48])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mail.8bytes.org (Postfix) with ESMTPSA id 337162028BB;
+	by mail.8bytes.org (Postfix) with ESMTPSA id 67A2E2028BC;
 	Mon,  8 Jun 2026 16:43:10 +0200 (CEST)
 From: =?UTF-8?q?J=C3=B6rg=20R=C3=B6del?= <joro@8bytes.org>
 To: Paolo Bonzini <pbonzini@redhat.com>,
@@ -58,9 +58,9 @@ Cc: Tom Lendacky <thomas.lendacky@amd.com>,
 	x86@kernel.org,
 	coconut-svsm@lists.linux.dev,
 	joerg.roedel@amd.com
-Subject: [PATCH 24/60] kvm: Move kvm_vcpu spinloop members to struct kvm_vcpu_common
-Date: Mon,  8 Jun 2026 16:42:16 +0200
-Message-ID: <20260608144252.351443-25-joro@8bytes.org>
+Subject: [PATCH 25/60] kvm: Move kvm_vcpu->dirty_ring to struct kvm_vcpu_common
+Date: Mon,  8 Jun 2026 16:42:17 +0200
+Message-ID: <20260608144252.351443-26-joro@8bytes.org>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260608144252.351443-1-joro@8bytes.org>
 References: <20260608144252.351443-1-joro@8bytes.org>
@@ -72,10 +72,10 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Rspamd-Action: no action
-X-Spamd-Result: default: False [0.75 / 15.00];
+X-Spamd-Result: default: False [0.81 / 15.00];
 	MID_CONTAINS_FROM(1.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_MIXED_CHARSET(0.71)[subject];
+	R_MIXED_CHARSET(0.77)[subject];
 	R_MISSING_CHARSET(0.50)[];
 	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
 	MAILLIST(-0.15)[generic];
@@ -89,7 +89,7 @@ X-Spamd-Result: default: False [0.75 / 15.00];
 	RCVD_COUNT_THREE(0.00)[4];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-14964-lists,linux-mips=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-14969-lists,linux-mips=lfdr.de];
 	FORGED_SENDER(0.00)[joro@8bytes.org,linux-mips@vger.kernel.org];
 	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
@@ -103,220 +103,140 @@ X-Spamd-Result: default: False [0.75 / 15.00];
 	R_DKIM_NA(0.00)[];
 	TO_DN_SOME(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[vger.kernel.org:from_smtp,sto.lore.kernel.org:rdns,sto.lore.kernel.org:helo,8bytes.org:mid,8bytes.org:from_mime,amd.com:email]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[vger.kernel.org:from_smtp,8bytes.org:mid,8bytes.org:from_mime,amd.com:email,sto.lore.kernel.org:rdns,sto.lore.kernel.org:helo]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: E23FE657D8B
+X-Rspamd-Queue-Id: 9707B657DB5
 
 From: Joerg Roedel <joerg.roedel@amd.com>
 
-Onlyh one struct kvm_vcpu across all planes can be in a spin-loop.
-Move the state to struct kvm_vcpu_common to make detection independent
-of the active struct kvm_vcpu.
+The dirty tracking should happen across all planes of a given VCPU, so
+move the dirty_ring to struct kvm_vcpu_common.
 
 Signed-off-by: Joerg Roedel <joerg.roedel@amd.com>
 ---
- include/linux/kvm_host.h | 32 +++++++++++++++----------------
- virt/kvm/kvm_main.c      | 41 ++++++++++++++++++++++------------------
- 2 files changed, 39 insertions(+), 34 deletions(-)
+ include/linux/kvm_host.h |  3 ++-
+ virt/kvm/dirty_ring.c    |  4 ++--
+ virt/kvm/kvm_main.c      | 22 ++++++++++------------
+ 3 files changed, 14 insertions(+), 15 deletions(-)
 
 diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
-index 9220c452aa3a..f6e8a0b653b3 100644
+index f6e8a0b653b3..7d06459a06f3 100644
 --- a/include/linux/kvm_host.h
 +++ b/include/linux/kvm_host.h
-@@ -350,6 +350,20 @@ struct kvm_vcpu_common {
- 	rwlock_t pid_lock;
- 	int sigset_active;
- 	sigset_t sigset;
-+	unsigned int halt_poll_ns;
+@@ -373,6 +373,8 @@ struct kvm_vcpu_common {
+ 	bool preempted;
+ 	bool ready;
+ 	bool scheduled_out;
 +
-+#ifdef CONFIG_HAVE_KVM_CPU_RELAX_INTERCEPT
-+	/*
-+	 * Cpu relax intercept or pause loop exit optimization
-+	 * in_spin_loop: set when a vcpu does a pause loop exit
-+	 *  or cpu relax intercepted.
-+	 * dy_eligible: indicates whether vcpu is eligible for directed yield.
-+	 */
-+	struct {
-+		bool in_spin_loop;
-+		bool dy_eligible;
-+	} spin_loop;
-+#endif
++	struct kvm_dirty_ring dirty_ring;
+ };
  
- 	/* Scheduling state */
- #ifdef CONFIG_PREEMPT_NOTIFIERS
-@@ -373,8 +387,6 @@ struct kvm_vcpu {
- 
- 	struct kvm_run *run;
- 
--	unsigned int halt_poll_ns;
--
- 	u64 plane_requests;
- 
- 	/* S390 only */
-@@ -398,18 +410,6 @@ struct kvm_vcpu {
- 	} async_pf;
- #endif
- 
--#ifdef CONFIG_HAVE_KVM_CPU_RELAX_INTERCEPT
--	/*
--	 * Cpu relax intercept or pause loop exit optimization
--	 * in_spin_loop: set when a vcpu does a pause loop exit
--	 *  or cpu relax intercepted.
--	 * dy_eligible: indicates whether vcpu is eligible for directed yield.
--	 */
--	struct {
--		bool in_spin_loop;
--		bool dy_eligible;
--	} spin_loop;
--#endif
+ struct kvm_vcpu {
+@@ -413,7 +415,6 @@ struct kvm_vcpu {
  	struct kvm_vcpu_arch arch;
  	struct kvm_vcpu_stat stat;
  	char stats_id[KVM_STATS_NAME_SIZE];
-@@ -2500,11 +2500,11 @@ extern struct kvm_device_ops kvm_arm_vgic_v5_ops;
+-	struct kvm_dirty_ring dirty_ring;
  
- static inline void kvm_vcpu_set_in_spin_loop(struct kvm_vcpu *vcpu, bool val)
- {
--	vcpu->spin_loop.in_spin_loop = val;
-+	vcpu->common->spin_loop.in_spin_loop = val;
- }
- static inline void kvm_vcpu_set_dy_eligible(struct kvm_vcpu *vcpu, bool val)
- {
--	vcpu->spin_loop.dy_eligible = val;
-+	vcpu->common->spin_loop.dy_eligible = val;
- }
+ 	/*
+ 	 * The most recently used memslot by this vCPU and the slots generation
+diff --git a/virt/kvm/dirty_ring.c b/virt/kvm/dirty_ring.c
+index 572b854edf74..c6f46b93bddb 100644
+--- a/virt/kvm/dirty_ring.c
++++ b/virt/kvm/dirty_ring.c
+@@ -218,7 +218,7 @@ int kvm_dirty_ring_reset(struct kvm *kvm, struct kvm_dirty_ring *ring,
  
- #else /* !CONFIG_HAVE_KVM_CPU_RELAX_INTERCEPT */
+ void kvm_dirty_ring_push(struct kvm_vcpu *vcpu, u32 slot, u64 offset)
+ {
+-	struct kvm_dirty_ring *ring = &vcpu->dirty_ring;
++	struct kvm_dirty_ring *ring = &vcpu->common->dirty_ring;
+ 	struct kvm_dirty_gfn *entry;
+ 
+ 	/* It should never get full */
+@@ -250,7 +250,7 @@ bool kvm_dirty_ring_check_request(struct kvm_vcpu *vcpu)
+ 	 * the dirty ring is reset by userspace.
+ 	 */
+ 	if (kvm_check_request(KVM_REQ_DIRTY_RING_SOFT_FULL, vcpu) &&
+-	    kvm_dirty_ring_soft_full(&vcpu->dirty_ring)) {
++	    kvm_dirty_ring_soft_full(&vcpu->common->dirty_ring)) {
+ 		kvm_make_request(KVM_REQ_DIRTY_RING_SOFT_FULL, vcpu);
+ 		vcpu->run->exit_reason = KVM_EXIT_DIRTY_RING_FULL;
+ 		trace_kvm_dirty_ring_exit(vcpu);
 diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
-index 1858880ee3d3..24ff8748a317 100644
+index 24ff8748a317..f85ddb0fc781 100644
 --- a/virt/kvm/kvm_main.c
 +++ b/virt/kvm/kvm_main.c
-@@ -485,6 +485,9 @@ static int kvm_vcpu_init_common(struct kvm_vcpu *vcpu, struct kvm *kvm, unsigned
+@@ -483,6 +483,13 @@ static int kvm_vcpu_init_common(struct kvm_vcpu *vcpu, struct kvm *kvm, unsigned
+ 	common->ready = false;
+ 	preempt_notifier_init(&common->preempt_notifier, &kvm_preempt_ops);
  
++	if (kvm->dirty_ring_size) {
++		r = kvm_dirty_ring_alloc(kvm, &common->dirty_ring,
++					 id, kvm->dirty_ring_size);
++		if (r)
++			goto out_drop_counter;
++	}
++
  	vcpu->common = no_free_ptr(common);
  
-+	kvm_vcpu_set_in_spin_loop(vcpu, false);
-+	kvm_vcpu_set_dy_eligible(vcpu, false);
-+
- 	return 0;
- 
- out_drop_counter:
-@@ -515,8 +518,6 @@ static void kvm_vcpu_init(struct kvm_vcpu *vcpu, struct kvm *kvm, unsigned id)
- 	vcpu->vcpu_id = id;
- 	kvm_async_pf_vcpu_init(vcpu);
- 
--	kvm_vcpu_set_in_spin_loop(vcpu, false);
--	kvm_vcpu_set_dy_eligible(vcpu, false);
- 	vcpu->last_used_slot = NULL;
- 
- 	vcpu->plane_level = 0;
-@@ -3721,9 +3722,10 @@ void kvm_sigset_deactivate(struct kvm_vcpu *vcpu)
- 
- static void grow_halt_poll_ns(struct kvm_vcpu *vcpu)
- {
-+	struct kvm_vcpu_common *common = vcpu->common;
- 	unsigned int old, val, grow, grow_start;
- 
--	old = val = vcpu->halt_poll_ns;
-+	old = val = common->halt_poll_ns;
- 	grow_start = READ_ONCE(halt_poll_ns_grow_start);
- 	grow = READ_ONCE(halt_poll_ns_grow);
- 	if (!grow)
-@@ -3733,16 +3735,17 @@ static void grow_halt_poll_ns(struct kvm_vcpu *vcpu)
- 	if (val < grow_start)
- 		val = grow_start;
- 
--	vcpu->halt_poll_ns = val;
-+	common->halt_poll_ns = val;
- out:
- 	trace_kvm_halt_poll_ns_grow(vcpu->vcpu_id, val, old);
+ 	kvm_vcpu_set_in_spin_loop(vcpu, false);
+@@ -547,6 +554,7 @@ static void kvm_vcpu_common_destroy(struct kvm_vcpu *vcpu)
+ 	 * are already gone.
+ 	 */
+ 	put_pid(common->pid);
++	kvm_dirty_ring_free(&common->dirty_ring);
+ 	kfree(common);
  }
  
- static void shrink_halt_poll_ns(struct kvm_vcpu *vcpu)
- {
-+	struct kvm_vcpu_common *common = vcpu->common;
- 	unsigned int old, val, shrink, grow_start;
+@@ -555,7 +563,6 @@ static void kvm_vcpu_destroy(struct kvm_vcpu *vcpu)
+ 	kvm_arch_vcpu_destroy(vcpu);
  
--	old = val = vcpu->halt_poll_ns;
-+	old = val = common->halt_poll_ns;
- 	shrink = READ_ONCE(halt_poll_ns_shrink);
- 	grow_start = READ_ONCE(halt_poll_ns_grow_start);
- 	if (shrink == 0)
-@@ -3753,7 +3756,7 @@ static void shrink_halt_poll_ns(struct kvm_vcpu *vcpu)
- 	if (val < grow_start)
- 		val = 0;
+ 	kvm_vcpu_common_destroy(vcpu);
+-	kvm_dirty_ring_free(&vcpu->dirty_ring);
  
--	vcpu->halt_poll_ns = val;
-+	common->halt_poll_ns = val;
- 	trace_kvm_halt_poll_ns_shrink(vcpu->vcpu_id, val, old);
- }
+ 	free_page((unsigned long)vcpu->run);
+ 	kmem_cache_free(kvm_vcpu_cache, vcpu);
+@@ -4209,7 +4216,7 @@ static vm_fault_t kvm_vcpu_fault(struct vm_fault *vmf)
+ #endif
+ 	else if (kvm_page_in_dirty_ring(vcpu->kvm, vmf->pgoff))
+ 		page = kvm_dirty_ring_get_page(
+-		    &vcpu->dirty_ring,
++		    &vcpu->common->dirty_ring,
+ 		    vmf->pgoff - KVM_DIRTY_LOG_PAGE_OFFSET);
+ 	else
+ 		return kvm_arch_vcpu_fault(vcpu, vmf);
+@@ -4338,13 +4345,6 @@ static int kvm_vm_ioctl_create_vcpu(struct kvm *kvm, unsigned long id)
+ 	if (r)
+ 		goto vcpu_free_run_page;
  
-@@ -3864,19 +3867,20 @@ void kvm_vcpu_halt(struct kvm_vcpu *vcpu)
- {
- 	unsigned int max_halt_poll_ns = kvm_vcpu_max_halt_poll_ns(vcpu);
- 	bool halt_poll_allowed = !kvm_arch_no_poll(vcpu);
-+	struct kvm_vcpu_common *common = vcpu->common;
- 	ktime_t start, cur, poll_end;
- 	bool waited = false;
- 	bool do_halt_poll;
- 	u64 halt_ns;
+-	if (kvm->dirty_ring_size) {
+-		r = kvm_dirty_ring_alloc(kvm, &vcpu->dirty_ring,
+-					 id, kvm->dirty_ring_size);
+-		if (r)
+-			goto arch_vcpu_destroy;
+-	}
+-
+ 	mutex_lock(&kvm->lock);
  
--	if (vcpu->halt_poll_ns > max_halt_poll_ns)
--		vcpu->halt_poll_ns = max_halt_poll_ns;
-+	if (common->halt_poll_ns > max_halt_poll_ns)
-+		common->halt_poll_ns = max_halt_poll_ns;
+ 	if (kvm_get_vcpu_by_id(kvm, id)) {
+@@ -4385,8 +4385,6 @@ static int kvm_vm_ioctl_create_vcpu(struct kvm *kvm, unsigned long id)
+ 	xa_erase(&kvm->planes[0]->vcpu_array, vcpu->vcpu_idx);
+ unlock_vcpu_destroy:
+ 	mutex_unlock(&kvm->lock);
+-	kvm_dirty_ring_free(&vcpu->dirty_ring);
+-arch_vcpu_destroy:
+ 	kvm_arch_vcpu_destroy(vcpu);
+ vcpu_free_run_page:
+ 	free_page((unsigned long)vcpu->run);
+@@ -5120,7 +5118,7 @@ static int kvm_vm_ioctl_reset_dirty_pages(struct kvm *kvm)
+ 	mutex_lock(&kvm->slots_lock);
  
--	do_halt_poll = halt_poll_allowed && vcpu->halt_poll_ns;
-+	do_halt_poll = halt_poll_allowed && common->halt_poll_ns;
- 
- 	start = cur = poll_end = ktime_get();
- 	if (do_halt_poll) {
--		ktime_t stop = ktime_add_ns(start, vcpu->halt_poll_ns);
-+		ktime_t stop = ktime_add_ns(start, common->halt_poll_ns);
- 
- 		do {
- 			if (kvm_vcpu_check_block(vcpu) < 0)
-@@ -3914,18 +3918,18 @@ void kvm_vcpu_halt(struct kvm_vcpu *vcpu)
- 		if (!vcpu_valid_wakeup(vcpu)) {
- 			shrink_halt_poll_ns(vcpu);
- 		} else if (max_halt_poll_ns) {
--			if (halt_ns <= vcpu->halt_poll_ns)
-+			if (halt_ns <= common->halt_poll_ns)
- 				;
- 			/* we had a long block, shrink polling */
--			else if (vcpu->halt_poll_ns &&
-+			else if (common->halt_poll_ns &&
- 				 halt_ns > max_halt_poll_ns)
- 				shrink_halt_poll_ns(vcpu);
- 			/* we had a short halt and our poll time is too small */
--			else if (vcpu->halt_poll_ns < max_halt_poll_ns &&
-+			else if (common->halt_poll_ns < max_halt_poll_ns &&
- 				 halt_ns < max_halt_poll_ns)
- 				grow_halt_poll_ns(vcpu);
- 		} else {
--			vcpu->halt_poll_ns = 0;
-+			common->halt_poll_ns = 0;
- 		}
+ 	kvm_for_each_vcpu(i, vcpu, kvm) {
+-		r = kvm_dirty_ring_reset(vcpu->kvm, &vcpu->dirty_ring, &cleared);
++		r = kvm_dirty_ring_reset(vcpu->kvm, &vcpu->common->dirty_ring, &cleared);
+ 		if (r)
+ 			break;
  	}
- 
-@@ -4046,13 +4050,14 @@ EXPORT_SYMBOL_FOR_KVM_INTERNAL(kvm_vcpu_yield_to);
- static bool kvm_vcpu_eligible_for_directed_yield(struct kvm_vcpu *vcpu)
- {
- #ifdef CONFIG_HAVE_KVM_CPU_RELAX_INTERCEPT
-+	struct kvm_vcpu_common *common = vcpu->common;
- 	bool eligible;
- 
--	eligible = !vcpu->spin_loop.in_spin_loop ||
--		    vcpu->spin_loop.dy_eligible;
-+	eligible = !common->spin_loop.in_spin_loop ||
-+		    common->spin_loop.dy_eligible;
- 
--	if (vcpu->spin_loop.in_spin_loop)
--		kvm_vcpu_set_dy_eligible(vcpu, !vcpu->spin_loop.dy_eligible);
-+	if (common->spin_loop.in_spin_loop)
-+		kvm_vcpu_set_dy_eligible(vcpu, !common->spin_loop.dy_eligible);
- 
- 	return eligible;
- #else
 -- 
 2.53.0
 
