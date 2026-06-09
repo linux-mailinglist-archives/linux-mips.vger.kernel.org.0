@@ -1,245 +1,147 @@
-Return-Path: <linux-mips+bounces-15016-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-15017-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id P2gFIcowKGpf/wIAu9opvQ
-	(envelope-from <linux-mips+bounces-15016-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Tue, 09 Jun 2026 17:27:06 +0200
+	id afcxFGgvKGoN/wIAu9opvQ
+	(envelope-from <linux-mips+bounces-15017-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Tue, 09 Jun 2026 17:21:12 +0200
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id E9B4F661B9C
-	for <lists+linux-mips@lfdr.de>; Tue, 09 Jun 2026 17:27:05 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id C0F5F661ABA
+	for <lists+linux-mips@lfdr.de>; Tue, 09 Jun 2026 17:21:11 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=linutronix.de header.s=2020 header.b=kzO8ljim;
-	dkim=pass header.d=linutronix.de header.s=2020e header.b=ntozgrfG;
-	spf=pass (mail.lfdr.de: domain of "linux-mips+bounces-15016-lists+linux-mips=lfdr.de@vger.kernel.org" designates 172.105.105.114 as permitted sender) smtp.mailfrom="linux-mips+bounces-15016-lists+linux-mips=lfdr.de@vger.kernel.org";
-	dmarc=pass (policy=none) header.from=linutronix.de;
+	dkim=pass header.d=hansenpartnership.com header.s=20151216 header.b=tlAO8Olg;
+	spf=pass (mail.lfdr.de: domain of "linux-mips+bounces-15017-lists+linux-mips=lfdr.de@vger.kernel.org" designates 2600:3c04:e001:36c::12fc:5321 as permitted sender) smtp.mailfrom="linux-mips+bounces-15017-lists+linux-mips=lfdr.de@vger.kernel.org";
+	dmarc=pass (policy=quarantine) header.from=hansenpartnership.com;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id DFEE931A7E20
-	for <lists+linux-mips@lfdr.de>; Tue,  9 Jun 2026 15:06:11 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 534D332385DA
+	for <lists+linux-mips@lfdr.de>; Tue,  9 Jun 2026 15:07:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 15C4248A2A0;
-	Tue,  9 Jun 2026 15:04:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8C32647F2E5;
+	Tue,  9 Jun 2026 15:06:26 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+Received: from lamorak.hansenpartnership.com (lamorak.hansenpartnership.com [198.37.111.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C28F481FA6;
-	Tue,  9 Jun 2026 15:04:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F071647ECCE;
+	Tue,  9 Jun 2026 15:06:24 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781017447; cv=none; b=WmjhTagCUvQ7jNIAZVAIxi5HHKeUz1pRFA074pl8MrmKg5bUmsjaCD/2STnAlwAim27JUI5AZBaUq1D5gWJO60dDypLMT1dsF9j8XO9C+L2eDuztZNeEkLf4e5l0g/Oib18mOTGK98TXo9bZTdK7bvfe8gxYjkoVxTxgC48ZVVc=
+	t=1781017586; cv=none; b=cE1KzYcGy9rK+kXAC7lHKqGgo8C5P2b7mSKlu5/VNfuw4syzXqKj4ShHDaeBcgy5YnKXc2BXUO6LwY64lEsKaItn8f7IrA3vYYjFJw/BuCPrfusxVwcHbx7hiSxF+2zsHMfHNoFqA3ZJU9c5iDNXE0UJsBJUGgMDK8rMgSewG0c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781017447; c=relaxed/simple;
-	bh=bT60d23jIzgJbNN8wzEWcEa/xazTrn+G1wpPCM1B09Y=;
-	h=Date:From:To:Subject:Cc:In-Reply-To:References:MIME-Version:
-	 Message-ID:Content-Type; b=PKhYn5Ypguwbq6uULJwL6TqiWdfgckycUpt/EB6jBZpn5ODEFKxBMlWan6sKQ8XWGf4F3JxQiENTXBCn5pv8sawFPqQAFNPwXJVBCbJ8NwPBHFJYAql/L6DT1tyVeCVV/avX7cUEhe+Ze7zoOHIqJn52jqCFxrvg/9OzQM7uNlo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=kzO8ljim; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=ntozgrfG; arc=none smtp.client-ip=193.142.43.55
-Date: Tue, 09 Jun 2026 15:04:02 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1781017444;
-	h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-	 message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-	 content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=ToO8Qrmzd/065g6nGrpbdYe7f+GCfMHHuZ01aa8TSSA=;
-	b=kzO8ljimGWqsLgtQPuKA5WW0EsO2GTB0IkXwufmTmyonv2k5YRUCtlX2ex6S+ykreRoyRK
-	+kftDiLql+9CWxPpjjSBXhWzca0fe1ZaFFpTId5B0xciURhj1YqjYTZgkRWDQC6t1BkY8d
-	qSpzLsEEkESWWnTYMu8jtLmxRo098YievITnINXRghC+UPkMcQjmbcaBamvuPHNDdHT0Tr
-	bTzeeYAJsQqe8GqkbxHXpHA2dHpW3SWyioAmHQVxCfFQcgvHB5Qe18hng5yOWdkDBvCCOa
-	TIvPQWJ/39AqvXQHCLLZfEvrwE4LSmUgzqKAv3InBjn6bV0u6YcK6XptvDv+6A==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1781017444;
-	h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-	 message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-	 content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=ToO8Qrmzd/065g6nGrpbdYe7f+GCfMHHuZ01aa8TSSA=;
-	b=ntozgrfGiCMLsre9QJYzju8SFTfYTd3SlEUxUmKJgQe3SspU6+O28vI3pPg/HqeUuiIdKE
-	cVooXoUo1bgsBMDw==
-From: tip-bot2 for Thomas =?utf-8?q?Wei=C3=9Fschuh?= <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To: linux-tip-commits@vger.kernel.org
-Subject: [tip: timers/vdso] MIPS: VDSO: Fold MIPS_DISABLE_VDSO into
- MIPS_GENERIC_GETTIMEOFDAY
-Cc: thomas.weissschuh@linutronix.de, Thomas Gleixner <tglx@kernel.org>,
- Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
- Daniel Lezcano <daniel.lezcano@kernel.org>, Andy Lutomirski <luto@kernel.org>,
- Vincenzo Frascino <vincenzo.frascino@arm.com>, Arnd Bergmann <arnd@arndb.de>,
- linux-mips@vger.kernel.org, x86@kernel.org, linux-kernel@vger.kernel.org
-In-Reply-To: <20260521-vdso-mips-kconfig-v1-7-2f79dcd6c78f@linutronix.de>
-References: <20260521-vdso-mips-kconfig-v1-7-2f79dcd6c78f@linutronix.de>
+	s=arc-20240116; t=1781017586; c=relaxed/simple;
+	bh=tahiq5O3Nk1z/G0wQjDJovGejhaXM1BRoXxE5UiALoQ=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=o8cfIxsop2t0Fj2vPTyg4OBFrLhrPg0xE+zOhHgx+iQSgYQXnq9LJTKTVDAbcH3CQGBPTuikAp0MD8ojVZ2dhLalD1bltPhpg7Rv167uMi1ZlWWaK/cpjGsBskEnKx3qpNOuYj+es4xVd+xwHs7bmZ0zpKmROW73UrByCp812hA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=HansenPartnership.com; spf=pass smtp.mailfrom=HansenPartnership.com; dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b=tlAO8Olg; arc=none smtp.client-ip=198.37.111.173
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+	d=hansenpartnership.com; s=20151216; t=1781017583;
+	bh=tahiq5O3Nk1z/G0wQjDJovGejhaXM1BRoXxE5UiALoQ=;
+	h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
+	b=tlAO8OlgAX05/6tP1FR2knGIZtZwIFb3h31+k9n7KMcWdukoze2koL4BfIfbLQMkV
+	 aNF2zSICFs6pMb445F8009JRZ1BLGr/C6ydJtK8MbkQY+L4bJbEYIzmJEcpHkY6wyN
+	 vDw5+b8hXKJQmcxQ6hoOsVteNRXqMijKqWlBGPb8=
+Received: from lingrow.int.hansenpartnership.com (unknown [IPv6:2601:5c4:4300:d341::8c71])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange x25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by lamorak.hansenpartnership.com (Postfix) with ESMTPSA id 40EE61C0381;
+	Tue, 09 Jun 2026 11:06:23 -0400 (EDT)
+Message-ID: <c44907bbee9807787ba785e89fadad15f1222aeb.camel@HansenPartnership.com>
+Subject: Re: [PATCH 35/60] kvm: Add VCPU plane-scheduling state and helpers
+From: James Bottomley <James.Bottomley@HansenPartnership.com>
+To: =?ISO-8859-1?Q?J=F6rg_R=F6del?= <joro@8bytes.org>
+Cc: Paolo Bonzini <pbonzini@redhat.com>, Sean Christopherson
+ <seanjc@google.com>,  Tom Lendacky <thomas.lendacky@amd.com>,
+ ashish.kalra@amd.com, michael.roth@amd.com, nsaenz@amazon.com, 
+ anelkz@amazon.de, Melody Wang <huibo.wang@amd.com>, kvm@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, kvmarm@lists.linux.dev,
+ loongarch@lists.linux.dev,  linux-mips@vger.kernel.org,
+ linuxppc-dev@lists.ozlabs.org,  kvm-riscv@lists.infradead.org,
+ x86@kernel.org, coconut-svsm@lists.linux.dev,  joerg.roedel@amd.com
+Date: Tue, 09 Jun 2026 11:06:22 -0400
+In-Reply-To: <aigifVmRZA0TXIrK@8bytes.org>
+References: <20260608144252.351443-1-joro@8bytes.org>
+	 <20260608144252.351443-36-joro@8bytes.org>
+	 <e7eb0dba-790a-4644-9895-5c9a7420d7fe@redhat.com>
+	 <aib8n5lO6HKbLC4Y@8bytes.org>
+	 <CABgObfbUsDeStnZF-7oyR-W-Bvd4qTMoeUwGizgn10UTdKtZ2A@mail.gmail.com>
+	 <aigE2EvJyZlYDz0V@8bytes.org>
+	 <51421426e0d4b154281e80d9f1c6c9a628d21c94.camel@HansenPartnership.com>
+	 <aigifVmRZA0TXIrK@8bytes.org>
+Autocrypt: addr=James.Bottomley@HansenPartnership.com;
+ keydata=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
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.50.3 
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-ID: <178101744261.529383.4172241930455809223.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe:
- Contact <mailto:tglx@kernel.org> to get blacklisted from these emails
-Precedence: bulk
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
 X-Rspamd-Action: no action
-X-Spamd-Result: default: False [-1.66 / 15.00];
+X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[linutronix.de,none];
-	MID_RHS_NOT_FQDN(0.50)[];
-	R_DKIM_ALLOW(-0.20)[linutronix.de:s=2020,linutronix.de:s=2020e];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114];
+	DMARC_POLICY_ALLOW(-0.50)[hansenpartnership.com,quarantine];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+	R_DKIM_ALLOW(-0.20)[hansenpartnership.com:s=20151216];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FORGED_RECIPIENTS(0.00)[m:linux-tip-commits@vger.kernel.org,m:thomas.weissschuh@linutronix.de,m:tglx@kernel.org,m:tsbogend@alpha.franken.de,m:daniel.lezcano@kernel.org,m:luto@kernel.org,m:vincenzo.frascino@arm.com,m:arnd@arndb.de,m:linux-mips@vger.kernel.org,m:x86@kernel.org,m:linux-kernel@vger.kernel.org,s:lists@lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	RCVD_COUNT_THREE(0.00)[3];
-	FORGED_SENDER(0.00)[tip-bot2@linutronix.de,linux-mips@vger.kernel.org];
-	TO_DN_SOME(0.00)[];
-	REPLYTO_DOM_EQ_TO_DOM(0.00)[];
-	MIME_TRACE(0.00)[0:+];
+	FORGED_RECIPIENTS(0.00)[m:joro@8bytes.org,m:pbonzini@redhat.com,m:seanjc@google.com,m:thomas.lendacky@amd.com,m:ashish.kalra@amd.com,m:michael.roth@amd.com,m:nsaenz@amazon.com,m:anelkz@amazon.de,m:huibo.wang@amd.com,m:kvm@vger.kernel.org,m:linux-kernel@vger.kernel.org,m:kvmarm@lists.linux.dev,m:loongarch@lists.linux.dev,m:linux-mips@vger.kernel.org,m:linuxppc-dev@lists.ozlabs.org,m:kvm-riscv@lists.infradead.org,m:x86@kernel.org,m:coconut-svsm@lists.linux.dev,m:joerg.roedel@amd.com,s:lists@lfdr.de];
+	RCVD_COUNT_THREE(0.00)[4];
+	FORGED_SENDER(0.00)[James.Bottomley@HansenPartnership.com,linux-mips@vger.kernel.org];
 	FORGED_SENDER_MAILLIST(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[19];
+	TAGGED_FROM(0.00)[bounces-15017-lists,linux-mips=lfdr.de];
+	MIME_TRACE(0.00)[0:+];
 	FORWARDED(0.00)[lists@lfdr.de];
-	TAGGED_FROM(0.00)[bounces-15016-lists,linux-mips=lfdr.de];
-	DKIM_TRACE(0.00)[linutronix.de:+];
-	HAS_REPLYTO(0.00)[linux-kernel@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	FORGED_SENDER_FORWARDING(0.00)[];
 	ALIAS_RESOLVED(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[tip-bot2@linutronix.de,linux-mips@vger.kernel.org];
-	REPLYTO_DOM_NEQ_FROM_DOM(0.00)[];
-	RCPT_COUNT_SEVEN(0.00)[11];
+	FROM_NEQ_ENVFROM(0.00)[James.Bottomley@HansenPartnership.com,linux-mips@vger.kernel.org];
+	DKIM_TRACE(0.00)[hansenpartnership.com:+];
+	MID_RHS_MATCH_FROM(0.00)[];
 	TAGGED_RCPT(0.00)[linux-mips];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
-	MISSING_XM_UA(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo,tip-bot2:mid,vger.kernel.org:replyto,vger.kernel.org:from_smtp,msgid.link:url,arndb.de:email,linutronix.de:dkim,linutronix.de:email,linutronix.de:from_mime,franken.de:email,arm.com:email]
+	TO_DN_SOME(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[vger.kernel.org:from_smtp,hansenpartnership.com:dkim,tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo,HansenPartnership.com:mid,HansenPartnership.com:from_mime]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: E9B4F661B9C
+X-Rspamd-Queue-Id: C0F5F661ABA
 
-The following commit has been merged into the timers/vdso branch of tip:
+On Tue, 2026-06-09 at 16:27 +0200, J=C3=B6rg R=C3=B6del wrote:
+> Hi James,
+>=20
+> On Tue, Jun 09, 2026 at 08:59:02AM -0400, James Bottomley wrote:
+> > Are the details of this anywhere?=C2=A0 The last PUCK information I saw
+> > on the kvm list was the cancellation of the March and April calls.
+>=20
+> Here is the calendar link I use, which has the appointments GMeet
+> links:
+>=20
+> https://calendar.google.com/calendar/embed?src=3Dc_61a5b1f644739bf5bed7e5=
+ea5fc3669ce32a2544c5db1c7c891702ca5090c7d5%40group.calendar.google.com
 
-Commit-ID:     51512c216e1d2ab4822282c9ecdd40f43fa1484c
-Gitweb:        https://git.kernel.org/tip/51512c216e1d2ab4822282c9ecdd40f43fa=
-1484c
-Author:        Thomas Wei=C3=9Fschuh <thomas.weissschuh@linutronix.de>
-AuthorDate:    Thu, 21 May 2026 08:53:21 +02:00
-Committer:     Thomas Gleixner <tglx@kernel.org>
-CommitterDate: Tue, 09 Jun 2026 17:02:10 +02:00
+Thanks.  For people who don't use gmail, google does have a well hidden
+ical link:
 
-MIPS: VDSO: Fold MIPS_DISABLE_VDSO into MIPS_GENERIC_GETTIMEOFDAY
+https://calendar.google.com/calendar/ical/c_61a5b1f644739bf5bed7e5ea5fc3669=
+ce32a2544c5db1c7c891702ca5090c7d5%40group.calendar.google.com/public/basic.=
+ics
 
-The currently used MIPS_DISABLE_VDSO will disable only the userspace
-bits of the time-related vDSO. The kernel part is still pointlessly
-built and running.
+Regards,
 
-Remove MIPS_DISABLE_VDSO and fold its usecase into
-MIPS_GENERIC_GETTIMEOFDAY, which works correctly.
+James
 
-Signed-off-by: Thomas Wei=C3=9Fschuh <thomas.weissschuh@linutronix.de>
-Signed-off-by: Thomas Gleixner <tglx@kernel.org>
-Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc: Daniel Lezcano <daniel.lezcano@kernel.org>
-Cc: Thomas Gleixner <tglx@kernel.org>
-Cc: Andy Lutomirski <luto@kernel.org>
-Cc: Vincenzo Frascino <vincenzo.frascino@arm.com>
-Cc: Arnd Bergmann <arnd@arndb.de>
-Cc: linux-mips@vger.kernel.org
-Link: https://patch.msgid.link/20260521-vdso-mips-kconfig-v1-7-2f79dcd6c78f@l=
-inutronix.de
----
- arch/mips/Kconfig         | 6 ++++--
- arch/mips/vdso/Kconfig    | 6 ------
- arch/mips/vdso/Makefile   | 7 ++-----
- arch/mips/vdso/vdso.lds.S | 2 +-
- 4 files changed, 7 insertions(+), 14 deletions(-)
- delete mode 100644 arch/mips/vdso/Kconfig
-
-diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
-index f56e1a5..6463b0b 100644
---- a/arch/mips/Kconfig
-+++ b/arch/mips/Kconfig
-@@ -3171,6 +3171,10 @@ config MIPS_GENERIC_GETTIMEOFDAY
- 	def_bool y
- 	select GENERIC_GETTIMEOFDAY
- 	select HAVE_GENERIC_VDSO
-+	# GCC (at least up to version 9.2) appears to emit function calls that make=
- use
-+	# of the GOT when targeting microMIPS, which we can't use in the VDSO due to
-+	# the lack of relocations. As such, we disable the VDSO for microMIPS build=
-s.
-+	depends on !CPU_MICROMIPS
-=20
- menu "CPU Power Management"
-=20
-@@ -3183,5 +3187,3 @@ source "drivers/cpuidle/Kconfig"
- endmenu
-=20
- source "arch/mips/kvm/Kconfig"
--
--source "arch/mips/vdso/Kconfig"
-diff --git a/arch/mips/vdso/Kconfig b/arch/mips/vdso/Kconfig
-deleted file mode 100644
-index 7014024..0000000
---- a/arch/mips/vdso/Kconfig
-+++ /dev/null
-@@ -1,6 +0,0 @@
--# GCC (at least up to version 9.2) appears to emit function calls that make =
-use
--# of the GOT when targeting microMIPS, which we can't use in the VDSO due to
--# the lack of relocations. As such, we disable the VDSO for microMIPS builds.
--
--config MIPS_DISABLE_VDSO
--	def_bool CPU_MICROMIPS
-diff --git a/arch/mips/vdso/Makefile b/arch/mips/vdso/Makefile
-index 69d4593..00d3ba2 100644
---- a/arch/mips/vdso/Makefile
-+++ b/arch/mips/vdso/Makefile
-@@ -4,7 +4,7 @@
- # Include the generic Makefile to check the built vdso.
- include $(srctree)/lib/vdso/Makefile.include
-=20
--obj-vdso-y :=3D elf.o vgettimeofday.o sigreturn.o
-+obj-vdso-y :=3D elf.o sigreturn.o
-=20
- # Common compiler flags between ABIs.
- ccflags-vdso :=3D \
-@@ -36,6 +36,7 @@ aflags-vdso :=3D $(ccflags-vdso) \
- 	-D__ASSEMBLY__ -Wa,-gdwarf-2
-=20
- ifneq ($(c-gettimeofday-y),)
-+obj-vdso-y +=3D vgettimeofday.o
- CFLAGS_vgettimeofday.o =3D -include $(c-gettimeofday-y)
-=20
- # config-n32-o32-env.c prepares the environment to build a 32bit vDSO
-@@ -47,10 +48,6 @@ endif
-=20
- CFLAGS_REMOVE_vgettimeofday.o =3D $(CC_FLAGS_FTRACE)
-=20
--ifdef CONFIG_MIPS_DISABLE_VDSO
--  obj-vdso-y :=3D $(filter-out vgettimeofday.o, $(obj-vdso-y))
--endif
--
- # VDSO linker flags.
- ldflags-y :=3D -Bsymbolic --no-undefined -soname=3Dlinux-vdso.so.1 \
- 	$(filter -E%,$(KBUILD_CFLAGS)) -shared \
-diff --git a/arch/mips/vdso/vdso.lds.S b/arch/mips/vdso/vdso.lds.S
-index 5d08be3..fd263b0 100644
---- a/arch/mips/vdso/vdso.lds.S
-+++ b/arch/mips/vdso/vdso.lds.S
-@@ -94,7 +94,7 @@ PHDRS
- VERSION
- {
- 	LINUX_2.6 {
--#ifndef CONFIG_MIPS_DISABLE_VDSO
-+#ifdef CONFIG_GENERIC_GETTIMEOFDAY
- 	global:
- 		__vdso_clock_gettime;
- #ifdef CONFIG_MIPS_CLOCK_VSYSCALL
 
