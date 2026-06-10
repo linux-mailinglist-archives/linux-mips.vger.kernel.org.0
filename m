@@ -1,322 +1,241 @@
-Return-Path: <linux-mips+bounces-15040-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-15041-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id +0j9ACuEKWrDYQMAu9opvQ
-	(envelope-from <linux-mips+bounces-15040-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Wed, 10 Jun 2026 17:35:07 +0200
+	id bbGMHVOMKWraZAMAu9opvQ
+	(envelope-from <linux-mips+bounces-15041-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Wed, 10 Jun 2026 18:09:55 +0200
 X-Original-To: lists+linux-mips@lfdr.de
 Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6E34666AD90
-	for <lists+linux-mips@lfdr.de>; Wed, 10 Jun 2026 17:35:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 34C5B66B32C
+	for <lists+linux-mips@lfdr.de>; Wed, 10 Jun 2026 18:09:55 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=suse.de header.s=susede2_rsa header.b=LErn801m;
-	dkim=pass header.d=suse.de header.s=susede2_ed25519 header.b="/gj2oqwe";
-	dkim=pass header.d=suse.de header.s=susede2_rsa header.b=LErn801m;
-	dkim=pass header.d=suse.de header.s=susede2_ed25519 header.b="/gj2oqwe";
-	spf=pass (mail.lfdr.de: domain of "linux-mips+bounces-15040-lists+linux-mips=lfdr.de@vger.kernel.org" designates 172.232.135.74 as permitted sender) smtp.mailfrom="linux-mips+bounces-15040-lists+linux-mips=lfdr.de@vger.kernel.org";
-	dmarc=pass (policy=none) header.from=suse.de;
+	dkim=pass header.d=google.com header.s=20251104 header.b=A1dV01Ov;
+	spf=pass (mail.lfdr.de: domain of "linux-mips+bounces-15041-lists+linux-mips=lfdr.de@vger.kernel.org" designates 172.232.135.74 as permitted sender) smtp.mailfrom="linux-mips+bounces-15041-lists+linux-mips=lfdr.de@vger.kernel.org";
+	dmarc=pass (policy=reject) header.from=google.com;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id A793331219EF
-	for <lists+linux-mips@lfdr.de>; Wed, 10 Jun 2026 15:27:08 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id E547C3050DDF
+	for <lists+linux-mips@lfdr.de>; Wed, 10 Jun 2026 15:56:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 015393F9F2A;
-	Wed, 10 Jun 2026 15:26:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D988F4779BF;
+	Wed, 10 Jun 2026 15:50:15 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 053E740B362
-	for <linux-mips@vger.kernel.org>; Wed, 10 Jun 2026 15:26:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8453A43C063
+	for <linux-mips@vger.kernel.org>; Wed, 10 Jun 2026 15:50:13 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781105181; cv=none; b=O+DamXJ619BozcgjtFJD5YVhr2cfkW5D+zD/hkmh9Knjb9gTxz396disv76miaMNUMf+yUAzX7tsj6IJJ8BVJJOEz9VSiWlHoHIXl8SrG+xoLdF2jXk8x6WMOU1TxvvOUif2LPtlbuBqgc/R1643wSLmIXU2Iz82pH5a8pY97ww=
+	t=1781106615; cv=none; b=anOteCYBTXQJTI3V2tMAaW9Qd07FxvaPAWF8sSOSda6frqdNmgyhouRGNwmqN5u9Z5BgVfI2L5KDEKpt/+ScTb8H4msy+l1UJ72LVoYAgsVa0ERzgtr/Y+nAIULZCdWXxWZiKWR/Kam8Rir5KHVnUlLrLFJUMD6mFDG3LaPwL5A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781105181; c=relaxed/simple;
-	bh=EtB5zUdqQxGY0QLd9me2IGQntms8ZG2oiNylF+JVeEQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=aSY4QX4oWvp4fIVQKhRf3ixWoZFMMcAZ3Cz0mdrxjun6HDWIW5Q9rgDxGb+nrdcaAncP1BmgZ+8DQ0ko+sbKTqV5vTC0FWOF3rIFJUMbeZll/7Ly6f40lJ8d+5ydwynQMlPLQ4UHb9qPTR9aj2cWBdEXcmVS5P9jsn6dc9S/arA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=LErn801m; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=/gj2oqwe; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=LErn801m; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=/gj2oqwe; arc=none smtp.client-ip=195.135.223.130
-Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id 344C76AED7;
-	Wed, 10 Jun 2026 15:25:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1781105125; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=y5UtJ6eV6iOSreVQ99DfSSH13XZuuKC0qy/3UHtKhSU=;
-	b=LErn801mgf0Wj2MbLzMjH9WR8A2GfoXtHgvC4Kgg5XcqnGRLO4WucHIqSMIrl9LtfjaeJ3
-	f9JoFG9cSP6BSKsvEq7MmOxOs7hVOJR9ECVZZWlTUHvYhFHKBFiIKfdSB3QFi9ZzPTIQis
-	ulr4+xns++2oB5B/UpyPg9/sEjHHbIY=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1781105125;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=y5UtJ6eV6iOSreVQ99DfSSH13XZuuKC0qy/3UHtKhSU=;
-	b=/gj2oqweTBBHd8ryXjO4cluY8v9LaZrF9oBqMR+EgAOTTCUNVGdHRhxkxrt1O82U3YVqhq
-	Wx/f6dDn0M5okzCQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1781105125; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=y5UtJ6eV6iOSreVQ99DfSSH13XZuuKC0qy/3UHtKhSU=;
-	b=LErn801mgf0Wj2MbLzMjH9WR8A2GfoXtHgvC4Kgg5XcqnGRLO4WucHIqSMIrl9LtfjaeJ3
-	f9JoFG9cSP6BSKsvEq7MmOxOs7hVOJR9ECVZZWlTUHvYhFHKBFiIKfdSB3QFi9ZzPTIQis
-	ulr4+xns++2oB5B/UpyPg9/sEjHHbIY=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1781105125;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=y5UtJ6eV6iOSreVQ99DfSSH13XZuuKC0qy/3UHtKhSU=;
-	b=/gj2oqweTBBHd8ryXjO4cluY8v9LaZrF9oBqMR+EgAOTTCUNVGdHRhxkxrt1O82U3YVqhq
-	Wx/f6dDn0M5okzCQ==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 6098A779A9;
-	Wed, 10 Jun 2026 15:25:24 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id +JMmFuSBKWr3HwAAD6G6ig
-	(envelope-from <tzimmermann@suse.de>); Wed, 10 Jun 2026 15:25:24 +0000
-From: Thomas Zimmermann <tzimmermann@suse.de>
-To: mripard@kernel.org,
-	maarten.lankhorst@linux.intel.com,
-	airlied@redhat.com,
-	airlied@gmail.com,
-	simona@ffwll.ch,
-	admin@kodeit.net,
-	gargaditya08@proton.me,
-	paul@crapouillou.net,
-	jani.nikula@linux.intel.com,
-	mhklkml@zohomail.com,
-	zack.rusin@broadcom.com,
-	bcm-kernel-feedback-list@broadcom.com,
-	harry.wentland@amd.com,
-	sunpeng.li@amd.com,
-	siqueira@igalia.com,
-	alexander.deucher@amd.com,
-	rodrigo.vivi@intel.com,
-	joonas.lahtinen@linux.intel.com,
-	tursulin@ursulin.net,
-	javierm@redhat.com,
-	dmitry.osipenko@collabora.com,
-	gurchetansingh@chromium.org,
-	olvaffe@gmail.com
-Cc: dri-devel@lists.freedesktop.org,
-	linux-hyperv@vger.kernel.org,
-	intel-gfx@lists.freedesktop.org,
-	intel-xe@lists.freedesktop.org,
-	linux-mips@vger.kernel.org,
-	virtualization@lists.linux.dev,
-	amd-gfx@lists.freedesktop.org,
-	Thomas Zimmermann <tzimmermann@suse.de>
-Subject: [PATCH v5 15/15] drm/vmwgfx: Remove unused field struct vmwgfx_du_update_plane.old_state
-Date: Wed, 10 Jun 2026 17:18:31 +0200
-Message-ID: <20260610152505.260172-16-tzimmermann@suse.de>
-X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20260610152505.260172-1-tzimmermann@suse.de>
-References: <20260610152505.260172-1-tzimmermann@suse.de>
+	s=arc-20240116; t=1781106615; c=relaxed/simple;
+	bh=Uy1jEB3de+y/OfX3XHuNkFbcXv0lUt9DsP84+jWEy24=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=JpeM89AyexZ+NZm0w31lCftDrVI7zciMX39BNeHEGMWyWv7+nMWziruNHz3sluLH8a2TtZvtXYfTzEFU6KJP9t8ERNODroQ2fogi76D2Vi8ZbkxTgQ4aOZc+hiYTV/FL0tsVDI8slFwwtNxgM4r3rJ5sCRU7DgkuGye33V8hh1U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=A1dV01Ov; arc=none smtp.client-ip=209.85.214.181
+Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-2c132ac5ec2so68697685ad.1
+        for <linux-mips@vger.kernel.org>; Wed, 10 Jun 2026 08:50:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1781106613; x=1781711413; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=N62HLkzXr48klLfiaIQLz719iwqu6H5OvWl+Uf/YYek=;
+        b=A1dV01OvXQXtNo8CxM7FlcRA15o3kDdFauiOlq/K7Jbo1CPLHuGv9XLx6XY9b5VHcp
+         06B44qE9eUsouvWDveW0Ov0gRPCJjC2V5l+HPGk8MQonRkx4oguTVrbei1McOH10S7P/
+         J2LDaOvk4RQXd06ja1P0Nq7Y9M7gxFGSRlj7rIoc6G0wZhfFce0COX0MvMEzpQgZ8c+o
+         btQVGqUqIuxkp2Hkp68j15hGIjrDWWFny1IcmegC7L/HclR/I91nxK4WO9UPaDWVmZqH
+         Ip76RJFSYJ+ZI8SfwAgtNQIVbxvKk13ym5JCIjm/jBzFPt3beqDTEHNjpM48dM77H+oB
+         Dbjw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1781106613; x=1781711413;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=N62HLkzXr48klLfiaIQLz719iwqu6H5OvWl+Uf/YYek=;
+        b=KMG8qWUHkeuxkz1DBD0OJ4Z1CurTcAO8njTt4AEoK4T1B0/qVUweUjUtaGeYmGeZYx
+         dP0xBpLqrfuq1CZo28Ispq4ZfFmfVoIqC7Tw7p97EsyEWfWoCHS5zWI6SaQdF0pWeQ+L
+         J/nsXuAe2ESCB4bv7rP/IOVTMhbuC9pRxCLtX+RA8a9tguTifq7AmG1W5ASyMq7FiZMM
+         M2tLQFUq/CXYnvBA9oitIqto26M2/k2ofhaeUnNJBQOcBW46+P+vugnGToJMjnY4tGm1
+         kUACEEaFkeXa9aR8OgZhFWfg31Df7U6x4iyfv1kIjqGln+rplZr2ftnpBiZesHUzDjjM
+         wSjw==
+X-Forwarded-Encrypted: i=1; AFNElJ94FmE9INtydOAYcOqKKQmzEyKt4P7+iAdZG1ewoIgZ/DVptT3Gzx3lvi5A6rHQZsy8uQ4im5gjBPjQ@vger.kernel.org
+X-Gm-Message-State: AOJu0YwBW/bfvsA2Q8XFq3PT/5um4TJSh8JgM4L7GJAGR7tDe02+ZwYb
+	S1yN7Gl5S9Ipf6AMH5sovQMFhU7mHDpfFaVR/QgXJGcfwfGJ5CFZFvvJB2rvqmxLpw==
+X-Gm-Gg: Acq92OHRJKZj1fgPzIXVOuhKuLA9yYZjWcEL5e5WSKPI4Ny9mkTo0kDytqwjWvzvKc5
+	q+hhkQ5kkVAwEQMyt55TitJbDk3gMhdC6QUk9EEa8T6WZTLfKX9NndTpSOCyHDU8SuH2dOLTPdU
+	KwkyEY255Ov8H/v1hZ3cuYWoNneeYEgxmSKIik1ZxnEHlLl433K9xAUv9H4nrA6Rt2M24lBkyeJ
+	4uOMBD0B6P8PCHUaQeyToRbIc/5+MPU3MTSlFfXRCFMi02DIlqYa3rX4etoWWiiTaN5cuc9aS87
+	aY/o54hI/CkT8r5TS33RnNGFqWAkmowMQZKDO4U9cGU1C/KukDOy4ZemHGroj6eCfRbwdjasGyR
+	7/E6QwTX8eIhz/wiyObGdfJFyuULpO4FjjmFWdljqLtrPVwFw8jSeFbM7nPuUqqhfCI0vxawLcM
+	sEFP98uU//Xz10dzxdp44fXshArEPY9rB54fdXoxKM/heHGU5YVLJfypBuywuThD9CwZ8BYRfZ9
+	izjaoowcrhgK8Sp
+X-Received: by 2002:a17:902:fc4c:b0:2c2:1982:527a with SMTP id d9443c01a7336-2c2198254f0mr234468445ad.16.1781106612163;
+        Wed, 10 Jun 2026 08:50:12 -0700 (PDT)
+Received: from google.com (112.173.50.34.bc.googleusercontent.com. [34.50.173.112])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2c2a4a64e22sm56793545ad.61.2026.06.10.08.50.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 10 Jun 2026 08:50:11 -0700 (PDT)
+Date: Wed, 10 Jun 2026 15:50:07 +0000
+From: Nick Desaulniers <ndesaulniers@google.com>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>, 
+	Thomas Gleixner <tglx@kernel.org>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+	linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>
+Subject: Re: [PATCH] MIPS: VDSO: Avoid including .got in dynamic segment
+Message-ID: <aimHmmG48fpqtcJO@google.com>
+References: <20260609-mips-vdso-fix-section-layout-v1-1-0e80ffadf7c7@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Flag: NO
-X-Spam-Score: -6.79
-X-Spam-Level: 
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260609-mips-vdso-fix-section-layout-v1-1-0e80ffadf7c7@kernel.org>
 X-Rspamd-Action: no action
 X-Spamd-Result: default: False [-0.66 / 15.00];
-	MID_CONTAINS_FROM(1.00)[];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_MISSING_CHARSET(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[suse.de,none];
+	DMARC_POLICY_ALLOW(-0.50)[google.com,reject];
 	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
-	R_DKIM_ALLOW(-0.20)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	R_DKIM_ALLOW(-0.20)[google.com:s=20251104];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
+	FREEMAIL_CC(0.00)[linutronix.de,kernel.org,alpha.franken.de,google.com,vger.kernel.org,lists.linux.dev,gmail.com];
+	TAGGED_FROM(0.00)[bounces-15041-lists,linux-mips=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[31];
-	TAGGED_FROM(0.00)[bounces-15040-lists,linux-mips=lfdr.de];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	FORGED_RECIPIENTS(0.00)[m:mripard@kernel.org,m:maarten.lankhorst@linux.intel.com,m:airlied@redhat.com,m:airlied@gmail.com,m:simona@ffwll.ch,m:admin@kodeit.net,m:gargaditya08@proton.me,m:paul@crapouillou.net,m:jani.nikula@linux.intel.com,m:mhklkml@zohomail.com,m:zack.rusin@broadcom.com,m:bcm-kernel-feedback-list@broadcom.com,m:harry.wentland@amd.com,m:sunpeng.li@amd.com,m:siqueira@igalia.com,m:alexander.deucher@amd.com,m:rodrigo.vivi@intel.com,m:joonas.lahtinen@linux.intel.com,m:tursulin@ursulin.net,m:javierm@redhat.com,m:dmitry.osipenko@collabora.com,m:gurchetansingh@chromium.org,m:olvaffe@gmail.com,m:dri-devel@lists.freedesktop.org,m:linux-hyperv@vger.kernel.org,m:intel-gfx@lists.freedesktop.org,m:intel-xe@lists.freedesktop.org,m:linux-mips@vger.kernel.org,m:virtualization@lists.linux.dev,m:amd-gfx@lists.freedesktop.org,m:tzimmermann@suse.de,s:lists@lfdr.de];
-	MIME_TRACE(0.00)[0:+];
-	FORWARDED(0.00)[lists@lfdr.de];
-	FORGED_SENDER(0.00)[tzimmermann@suse.de,linux-mips@vger.kernel.org];
-	FREEMAIL_TO(0.00)[kernel.org,linux.intel.com,redhat.com,gmail.com,ffwll.ch,kodeit.net,proton.me,crapouillou.net,zohomail.com,broadcom.com,amd.com,igalia.com,intel.com,ursulin.net,collabora.com,chromium.org];
-	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FORGED_SENDER_FORWARDING(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[tzimmermann@suse.de,linux-mips@vger.kernel.org];
 	FROM_HAS_DN(0.00)[];
-	DKIM_TRACE(0.00)[suse.de:+];
-	RCVD_COUNT_FIVE(0.00)[6];
-	FORGED_RECIPIENTS_FORWARDING(0.00)[];
+	FORGED_RECIPIENTS(0.00)[m:nathan@kernel.org,m:thomas.weissschuh@linutronix.de,m:tglx@kernel.org,m:tsbogend@alpha.franken.de,m:morbo@google.com,m:justinstitt@google.com,m:linux-mips@vger.kernel.org,m:linux-kernel@vger.kernel.org,m:llvm@lists.linux.dev,m:nick.desaulniers+lkml@gmail.com,m:nickdesaulniers@gmail.com,s:lists@lfdr.de];
+	MIME_TRACE(0.00)[0:+];
+	DKIM_TRACE(0.00)[google.com:+];
+	FORWARDED(0.00)[lists@lfdr.de];
+	FORGED_SENDER(0.00)[ndesaulniers@google.com,linux-mips@vger.kernel.org];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	MISSING_XM_UA(0.00)[];
 	TO_DN_SOME(0.00)[];
+	FORGED_SENDER_FORWARDING(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[5];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[ndesaulniers@google.com,linux-mips@vger.kernel.org];
+	FORGED_RECIPIENTS_FORWARDING(0.00)[];
 	ALIAS_RESOLVED(0.00)[];
+	MID_RHS_MATCH_FROM(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
+	RCPT_COUNT_SEVEN(0.00)[10];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[linux-mips];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.de:dkim,suse.de:email,suse.de:mid,suse.de:from_mime,vger.kernel.org:from_smtp,sto.lore.kernel.org:rdns,sto.lore.kernel.org:helo,broadcom.com:email]
+	TAGGED_RCPT(0.00)[linux-mips,lkml];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:rdns,sto.lore.kernel.org:helo,vger.kernel.org:from_smtp]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 6E34666AD90
+X-Rspamd-Queue-Id: 34C5B66B32C
 
-Plane updates no longer require the old plane state. Remove the field
-from struct vmwgfx_du_update_plane and fix all callers.
+On Tue, Jun 09, 2026 at 06:31:21PM -0700, Nathan Chancellor wrote:
+> After commit 2db1ec80dfd5 ("MIPS: VDSO: Fold MIPS_DISABLE_VDSO into
+> MIPS_GENERIC_GETTIMEOFDAY"), building ARCH=mips allnoconfig with LLVM=1
+> shows some warnings from llvm-readelf while checking the VDSO for
+> dynamic relocations:
+> 
+>   llvm-readelf: warning: 'arch/mips/vdso/vdso.so.dbg.raw': invalid PT_DYNAMIC size (0xa4)
+>   llvm-readelf: warning: 'arch/mips/vdso/vdso.so.dbg.raw': PT_DYNAMIC dynamic table is invalid: SHT_DYNAMIC will be used
+> 
+> The blamed commit alters the link order of objects into vdso.so.raw,
+> placing vgettimeofday.o after sigreturn.o. This ultimately results in
+> the .text section shrinking slightly in size, which in turn changes the
+> offset of the .dynamic section.
+> 
+>   -  [ 9] .text             PROGBITS        000002f0 0002f0 000930 00  AX  0   0 16
+>   -  [10] .dynamic          DYNAMIC         00000c20 000c20 000090 08   A  5   0  4
+>   +  [ 9] .text             PROGBITS        000002f0 0002f0 000924 00  AX  0   0 16
+>   +  [10] .dynamic          DYNAMIC         00000c14 000c14 000090 08   A  5   0  4
+> 
+> Changing the offset of the .dynamic section causes the dynamic segment
+> size to grow by the same amount, which triggers a warning in
+> llvm-readelf because PT_DYNAMIC's p_filesz (0xa4) is no longer a
+> multiple of its sh_entsize (8):
+> 
+>   -  DYNAMIC        0x000c20 0x00000c20 0x00000c20 0x00098 0x00098 R   0x10
+>   +  DYNAMIC        0x000c14 0x00000c14 0x00000c14 0x000a4 0x000a4 R   0x10
+> 
+> The size of the dynamic segment was already incorrect before the blamed
+> comment, as it should be 0x90 like the .dynamic section above (18
+> entries at 8 bytes per entry); it just so happens that 0x98 % 8 is 0,
+> whereas 0xa4 % 8 is 4, so there was no warning.
+> 
+> Looking at the section to segment mapping of the dynamic segment reveals
+> that it includes the .got section, as it is implicitly placed after
+> .dynamic by ld.lld's orphan section heuristics and inherits its segments
+> from the linker script.
+> 
+>   [ 9] .text             PROGBITS        000002f0 0002f0 000924 00  AX  0   0 16
+>   [10] .dynamic          DYNAMIC         00000c14 000c14 000090 08   A  5   0  4
+>   [11] .got              PROGBITS        00000cb0 000cb0 000008 00 WAp  0   0 16
+> 
+>   Section to Segment mapping:
+>    Segment Sections...
+>     00     .mips_abiflags
+>     01     .reginfo
+>     02     .mips_abiflags .reginfo .hash .dynsym .dynstr .gnu.version .gnu.version_d .note .text .dynamic .got
+>     03     .dynamic .got
+>     04     .note
+> 
+> Explicitly describe the .got section in the MIPS VDSO linker script
+> after .rodata, which switches back to the default text segment,
+> resulting in a dynamic segment that is the exact size of the .dynamic
+> section as expected with no other layout changes.
+> 
+>   -  DYNAMIC        0x000c14 0x00000c14 0x00000c14 0x000a4 0x000a4 R   0x10
+>   +  DYNAMIC        0x000c14 0x00000c14 0x00000c14 0x00090 0x00090 R   0x4
+> 
+>   -   03     .dynamic .got
+>   +   03     .dynamic
+> 
+> Closes: https://github.com/ClangBuiltLinux/linux/issues/2166
+> Fixes: 2db1ec80dfd5 ("MIPS: VDSO: Fold MIPS_DISABLE_VDSO into MIPS_GENERIC_GETTIMEOFDAY")
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
 
-Signed-off-by: Thomas Zimmermann <tzimmermann@suse.de>
-Reviewed-by: Zack Rusin <zack.rusin@broadcom.com>
-Reviewed-by: Javier Martinez Canillas <javierm@redhat.com>
----
- drivers/gpu/drm/vmwgfx/vmwgfx_kms.h  |  2 --
- drivers/gpu/drm/vmwgfx/vmwgfx_scrn.c | 12 ++----------
- drivers/gpu/drm/vmwgfx/vmwgfx_stdu.c | 11 ++---------
- 3 files changed, 4 insertions(+), 21 deletions(-)
+Thanks for the patch!
+Acked-by: Nick Desaulniers <ndesaulniers@google.com>
 
-diff --git a/drivers/gpu/drm/vmwgfx/vmwgfx_kms.h b/drivers/gpu/drm/vmwgfx/vmwgfx_kms.h
-index 2224d7d91d1b..8c2072b82062 100644
---- a/drivers/gpu/drm/vmwgfx/vmwgfx_kms.h
-+++ b/drivers/gpu/drm/vmwgfx/vmwgfx_kms.h
-@@ -19,7 +19,6 @@
- /**
-  * struct vmw_du_update_plane - Closure structure for vmw_du_helper_plane_update
-  * @plane: Plane which is being updated.
-- * @old_state: Old state of plane.
-  * @dev_priv: Device private.
-  * @du: Display unit on which to update the plane.
-  * @vfb: Framebuffer which is blitted to display unit.
-@@ -102,7 +101,6 @@ struct vmw_du_update_plane {
- 				    struct drm_rect *bb);
- 
- 	struct drm_plane *plane;
--	struct drm_plane_state *old_state;
- 	struct vmw_private *dev_priv;
- 	struct vmw_display_unit *du;
- 	struct vmw_framebuffer *vfb;
-diff --git a/drivers/gpu/drm/vmwgfx/vmwgfx_scrn.c b/drivers/gpu/drm/vmwgfx/vmwgfx_scrn.c
-index c83061cf7455..fa84bc7ab5bb 100644
---- a/drivers/gpu/drm/vmwgfx/vmwgfx_scrn.c
-+++ b/drivers/gpu/drm/vmwgfx/vmwgfx_scrn.c
-@@ -530,7 +530,6 @@ static uint32_t vmw_stud_bo_post_clip(struct vmw_du_update_plane  *update,
-  */
- static int vmw_sou_plane_update_bo(struct vmw_private *dev_priv,
- 				   struct drm_plane *plane,
--				   struct drm_plane_state *old_state,
- 				   struct vmw_framebuffer *vfb,
- 				   struct vmw_fence_obj **out_fence)
- {
-@@ -538,7 +537,6 @@ static int vmw_sou_plane_update_bo(struct vmw_private *dev_priv,
- 
- 	memset(&bo_update, 0, sizeof(struct vmw_du_update_plane_buffer));
- 	bo_update.base.plane = plane;
--	bo_update.base.old_state = old_state;
- 	bo_update.base.dev_priv = dev_priv;
- 	bo_update.base.du = vmw_crtc_to_du(plane->state->crtc);
- 	bo_update.base.vfb = vfb;
-@@ -692,7 +690,6 @@ static uint32_t vmw_sou_surface_post_clip(struct vmw_du_update_plane *update,
-  */
- static int vmw_sou_plane_update_surface(struct vmw_private *dev_priv,
- 					struct drm_plane *plane,
--					struct drm_plane_state *old_state,
- 					struct vmw_framebuffer *vfb,
- 					struct vmw_fence_obj **out_fence)
- {
-@@ -700,7 +697,6 @@ static int vmw_sou_plane_update_surface(struct vmw_private *dev_priv,
- 
- 	memset(&srf_update, 0, sizeof(struct vmw_du_update_plane_surface));
- 	srf_update.base.plane = plane;
--	srf_update.base.old_state = old_state;
- 	srf_update.base.dev_priv = dev_priv;
- 	srf_update.base.du = vmw_crtc_to_du(plane->state->crtc);
- 	srf_update.base.vfb = vfb;
-@@ -721,7 +717,6 @@ static void
- vmw_sou_primary_plane_atomic_update(struct drm_plane *plane,
- 				    struct drm_atomic_commit *state)
- {
--	struct drm_plane_state *old_state = drm_atomic_get_old_plane_state(state, plane);
- 	struct drm_plane_state *new_state = drm_atomic_get_new_plane_state(state, plane);
- 	struct drm_crtc *crtc = new_state->crtc;
- 	struct vmw_fence_obj *fence = NULL;
-@@ -734,12 +729,9 @@ vmw_sou_primary_plane_atomic_update(struct drm_plane *plane,
- 			vmw_framebuffer_to_vfb(new_state->fb);
- 
- 		if (vfb->bo)
--			ret = vmw_sou_plane_update_bo(dev_priv, plane,
--						      old_state, vfb, &fence);
-+			ret = vmw_sou_plane_update_bo(dev_priv, plane, vfb, &fence);
- 		else
--			ret = vmw_sou_plane_update_surface(dev_priv, plane,
--							   old_state, vfb,
--							   &fence);
-+			ret = vmw_sou_plane_update_surface(dev_priv, plane, vfb, &fence);
- 		if (ret != 0)
- 			DRM_ERROR("Failed to update screen.\n");
- 	} else {
-diff --git a/drivers/gpu/drm/vmwgfx/vmwgfx_stdu.c b/drivers/gpu/drm/vmwgfx/vmwgfx_stdu.c
-index f0df2b1c8465..474e3badb80f 100644
---- a/drivers/gpu/drm/vmwgfx/vmwgfx_stdu.c
-+++ b/drivers/gpu/drm/vmwgfx/vmwgfx_stdu.c
-@@ -1240,7 +1240,6 @@ vmw_stdu_bo_populate_update_cpu(struct vmw_du_update_plane  *update, void *cmd,
-  */
- static int vmw_stdu_plane_update_bo(struct vmw_private *dev_priv,
- 				    struct drm_plane *plane,
--				    struct drm_plane_state *old_state,
- 				    struct vmw_framebuffer *vfb,
- 				    struct vmw_fence_obj **out_fence)
- {
-@@ -1248,7 +1247,6 @@ static int vmw_stdu_plane_update_bo(struct vmw_private *dev_priv,
- 
- 	memset(&bo_update, 0, sizeof(struct vmw_du_update_plane_buffer));
- 	bo_update.base.plane = plane;
--	bo_update.base.old_state = old_state;
- 	bo_update.base.dev_priv = dev_priv;
- 	bo_update.base.du = vmw_crtc_to_du(plane->state->crtc);
- 	bo_update.base.vfb = vfb;
-@@ -1350,7 +1348,6 @@ vmw_stdu_surface_populate_update(struct vmw_du_update_plane  *update, void *cmd,
-  */
- static int vmw_stdu_plane_update_surface(struct vmw_private *dev_priv,
- 					 struct drm_plane *plane,
--					 struct drm_plane_state *old_state,
- 					 struct vmw_framebuffer *vfb,
- 					 struct vmw_fence_obj **out_fence)
- {
-@@ -1363,7 +1360,6 @@ static int vmw_stdu_plane_update_surface(struct vmw_private *dev_priv,
- 
- 	memset(&srf_update, 0, sizeof(struct vmw_du_update_plane));
- 	srf_update.plane = plane;
--	srf_update.old_state = old_state;
- 	srf_update.dev_priv = dev_priv;
- 	srf_update.du = vmw_crtc_to_du(plane->state->crtc);
- 	srf_update.vfb = vfb;
-@@ -1424,12 +1420,9 @@ vmw_stdu_primary_plane_atomic_update(struct drm_plane *plane,
- 			DRM_ERROR("Failed to bind surface to STDU.\n");
- 
- 		if (vfb->bo)
--			ret = vmw_stdu_plane_update_bo(dev_priv, plane,
--						       old_state, vfb, &fence);
-+			ret = vmw_stdu_plane_update_bo(dev_priv, plane, vfb, &fence);
- 		else
--			ret = vmw_stdu_plane_update_surface(dev_priv, plane,
--							    old_state, vfb,
--							    &fence);
-+			ret = vmw_stdu_plane_update_surface(dev_priv, plane, vfb, &fence);
- 		if (ret)
- 			DRM_ERROR("Failed to update STDU.\n");
- 	} else {
--- 
-2.54.0
-
+> ---
+> The fixes tag feels a little strong since it seems like it has just been
+> luck up until this point that there has been no warning but I decided to
+> be conservative and include it regardless. Feel free to remove it if you
+> see fit.
+> 
+> I think this should go via timers/vdso with the blamed commit. I plan to
+> send a follow up series for 7.3 to add '--orphan-handling' to the MIPS
+> VDSO to avoid issues like this in the future but that can go via the
+> MIPS tree, as it is not really a fix and I will need to properly test
+> it.
+> ---
+>  arch/mips/vdso/vdso.lds.S | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/arch/mips/vdso/vdso.lds.S b/arch/mips/vdso/vdso.lds.S
+> index 05badf3ae0ff..278ab6444e98 100644
+> --- a/arch/mips/vdso/vdso.lds.S
+> +++ b/arch/mips/vdso/vdso.lds.S
+> @@ -56,6 +56,7 @@ SECTIONS
+>  	.dynamic	: { *(.dynamic) }		:text :dynamic
+>  
+>  	.rodata		: { *(.rodata*) }		:text
+> +	.got		: { *(.got) }
+>  
+>  	_end = .;
+>  	PROVIDE(end = .);
+> 
+> ---
+> base-commit: 13f6218e6fe79dc64aed76d738b765b45f62492b
+> change-id: 20260608-mips-vdso-fix-section-layout-262bc18d0c29
+> 
+> Best regards,
+> --  
+> Cheers,
+> Nathan
+> 
 
