@@ -1,111 +1,53 @@
-Return-Path: <linux-mips+bounces-15018-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-15019-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id 5vZpDWqUKGr8GQMAu9opvQ
-	(envelope-from <linux-mips+bounces-15018-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Wed, 10 Jun 2026 00:32:10 +0200
+	id Bq9+N4S+KGq8IwMAu9opvQ
+	(envelope-from <linux-mips+bounces-15019-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Wed, 10 Jun 2026 03:31:48 +0200
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8E570664976
-	for <lists+linux-mips@lfdr.de>; Wed, 10 Jun 2026 00:32:09 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5729C6653A3
+	for <lists+linux-mips@lfdr.de>; Wed, 10 Jun 2026 03:31:48 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=baylibre.com header.s=google header.b=Ckt5g5mh;
-	spf=pass (mail.lfdr.de: domain of "linux-mips+bounces-15018-lists+linux-mips=lfdr.de@vger.kernel.org" designates 172.234.253.10 as permitted sender) smtp.mailfrom="linux-mips+bounces-15018-lists+linux-mips=lfdr.de@vger.kernel.org";
-	dmarc=none;
+	dkim=pass header.d=kernel.org header.s=k20260515 header.b=Cl+wZQcU;
+	spf=pass (mail.lfdr.de: domain of "linux-mips+bounces-15019-lists+linux-mips=lfdr.de@vger.kernel.org" designates 2600:3c04:e001:36c::12fc:5321 as permitted sender) smtp.mailfrom="linux-mips+bounces-15019-lists+linux-mips=lfdr.de@vger.kernel.org";
+	dmarc=pass (policy=quarantine) header.from=kernel.org;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 81A763085E9E
-	for <lists+linux-mips@lfdr.de>; Tue,  9 Jun 2026 22:26:00 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id E689B302BFCE
+	for <lists+linux-mips@lfdr.de>; Wed, 10 Jun 2026 01:31:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7954A4BC014;
-	Tue,  9 Jun 2026 22:25:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AE209224B15;
+	Wed, 10 Jun 2026 01:31:33 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D1473FE348
-	for <linux-mips@vger.kernel.org>; Tue,  9 Jun 2026 22:25:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8685419C556;
+	Wed, 10 Jun 2026 01:31:32 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781043958; cv=none; b=t5aG4B4PeIKDeXgM6rbBXF0gkhr0+LMh85WdNLhk6PyQYYKWG11tgvdgv090COOt2WFlWeEFVnEBjcP5NeB2Q027W3eiV2vj0G+5CHfU2eqkCN/a7CdYh8jvX+equ4Kefb4R5DqUgYPqF9pU6xrZaTrNRHQ5uVutVC5F/rUQ/rU=
+	t=1781055093; cv=none; b=aTIucN0qNDe7zgTaRnuMqQwwO83u5YOYbdBAQY6jorLAYq/iilSe/LJH1Eilc45/Swo2uRZpNDIIQnFWzj0J9/bxT3B3mZ80RMVv/oAOQMhaUWKBAQbv55cgFv1H6Nfp91JVbjOBkd7dOR9TPNXiUZmhx1dK07JSIftbpbSeWuU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781043958; c=relaxed/simple;
-	bh=gC5RijoMreJ37E+ZXnO6sSCfWOZUThbmrEidBKcTv9A=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=O6mw5X9aQkNIQ3AMWtSm71yMIj3+5VaX4tZrLiGYNgZdiYFgDGP7b9AjDycIJxzjonwIJtRX2CBpo6TPck1BiJDCT4RJEarSKvWSyICbo88eZAsnjyp+LfJ3cGb7zYFD/a9eAIN5y/hJdjdg/QuHIT4nqVgBMaVFvttE9jlqTpc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre.com header.i=@baylibre.com header.b=Ckt5g5mh; arc=none smtp.client-ip=209.85.216.43
-Received: by mail-pj1-f43.google.com with SMTP id 98e67ed59e1d1-36bdda53d99so2639957a91.0
-        for <linux-mips@vger.kernel.org>; Tue, 09 Jun 2026 15:25:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre.com; s=google; t=1781043956; x=1781648756; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=6D7duqRcD3fdsTRow2UhPRWiLjw5TIDW3U11ZLjAtzg=;
-        b=Ckt5g5mhS8YR2cizTWbJ5Fwk8gGj6VebB+0OEJgvf02706OxaHIh/MLoWUZkdc8W2v
-         tDVO9ou14uqgirHWrZKF4TT22SL8Kw6c9cIfwgHoNv09ym9tEccqMSP/b5lQeWoqDES9
-         4Y/1fE4bs5q1c26wMjvtkzwBbmD6R5ZssJo+Ql4XeIs+Yw9IhdJtj3WObSFvTKV2NsRh
-         KdAHyJOP9ZzIAXpBIl9bEt8fkARYApQC8HuCBb+LFcyPHM7jM2nhfg7jU3w/egVF/fFg
-         eqBE7VWfKHsswmA0XGrVNRgAu6OAU+Z/4WuvEPeIm2Pew6bt4mI47RFHA/Njj5qWoKdw
-         N24g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781043956; x=1781648756;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=6D7duqRcD3fdsTRow2UhPRWiLjw5TIDW3U11ZLjAtzg=;
-        b=s2s9xpNInJQBVUFZP5mallNPvhu+COL7lwrRJwd/JSJ4zbcf4LijQVQmDKm/k1v89B
-         n0vhR+X6BggydO85YrO78AxUJBeqo0LnNaC+Sw3t+YYr467J5HOwPvJ/Zjuo3qVaCgID
-         3gcNuNJ+MJstDeBYzqSh7OibZQJUmI1CmOjGwTyLpSzhWRv01pnamZNAjCLia1cCilV5
-         NME5C1IOA0mysLAPJvkRNBhNJpyuew8DTfSc5M4JkUSbRI7kNei8fb8K1GqFFo53yL77
-         6Nh3SDDTP9wlrNsJ0m3MhIJbT22BF8RiYMZh1ugw+2kY+djdzdam6xK1xNh2mHVNM12v
-         zXtw==
-X-Forwarded-Encrypted: i=1; AFNElJ/QUJlC8i/nXyNxUIUFAQddVKQAv/U0pf6ZC11mKNlH7LE8uOsTbVQGcedpjR/L31FJKZtZJ7Gog9vm@vger.kernel.org
-X-Gm-Message-State: AOJu0YxSfHTl4WyrdVME7nCIUuGi/WuX6lJCZGbos/PVhL3OnzIkWzij
-	SeWzv++ElPLfLInmfb4AgZNQ384xasQ4TblR2AXY3S59FMMrFlJ6t/3Df5CEP7JWgl0=
-X-Gm-Gg: Acq92OHSpkhtCuv+vWB61ceKuluCdN2axFLVG2vekD2lRdwSACmknQfcLfML9H/+6dP
-	VJlxp7f6S2eg45ldMO/brB70gk8q4bDvxC3x+i51p3VQxkPWPN0XmtNq3nrpz8s+o4ToaGjEGUW
-	SBn3Daa5tXQgMrH4AI3IZqoOAW3h16Qrk14+r1Ek4rFevvcIIsoZjFPC9tIggev7b+if2Eb6udu
-	TJy9FdOfRRAsiiulGfFGZEK7i7NicMtmYAfp7VQU2wSb37IdDR/Up+ieriiySOJbC6qdFQh883P
-	KNm1YHlcDBp/FaGHoGxlKCsOZ4VCbmsowmfl9qQ7vf35j7tekk9mMLTG+3+r467024WJcbj2t2t
-	OoVrBtMpGppqNJnvGfx4x5lNisvuPKoeTqcTuv0k3OaCISCX+q+NU2fcLvhuei44/YREDedn9VO
-	9IChi+A1iLkVQzeQXpCUBR7Eg0WvSPz3c=
-X-Received: by 2002:a17:903:2381:b0:2c2:27be:39a7 with SMTP id d9443c01a7336-2c2a1c9ac2emr57718625ad.29.1781043956535;
-        Tue, 09 Jun 2026 15:25:56 -0700 (PDT)
-Received: from localhost ([71.212.202.210])
-        by smtp.gmail.com with UTF8SMTPSA id d9443c01a7336-2c164f6e2adsm238181875ad.5.2026.06.09.15.25.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 09 Jun 2026 15:25:56 -0700 (PDT)
-From: Kevin Hilman <khilman@baylibre.com>
-To: linux-gpio@vger.kernel.org, Arnd Bergmann <arnd@kernel.org>
-Cc: linux-kernel@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>, 
- Christian Lamparter <chunkeey@googlemail.com>, 
- Johannes Berg <johannes@sipsolutions.net>, 
- Aaro Koskinen <aaro.koskinen@iki.fi>, 
- Andreas Kemnade <andreas@kemnade.info>, Roger Quadros <rogerq@kernel.org>, 
- Tony Lindgren <tony@atomide.com>, 
- Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
- John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>, 
- Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, 
- Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, 
- x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>, 
- Linus Walleij <linusw@kernel.org>, Bartosz Golaszewski <brgl@kernel.org>, 
- Dmitry Torokhov <dmitry.torokhov@gmail.com>, Lee Jones <lee@kernel.org>, 
- Pavel Machek <pavel@kernel.org>, Matti Vaittinen <mazziesaccount@gmail.com>, 
- Florian Fainelli <florian.fainelli@broadcom.com>, 
- Jonas Gorski <jonas.gorski@gmail.com>, Andrew Lunn <andrew@lunn.ch>, 
- Vladimir Oltean <olteanv@gmail.com>, 
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
- linux-wireless@vger.kernel.org, linux-omap@vger.kernel.org, 
- linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org, 
- linux-sh@vger.kernel.org, linux-input@vger.kernel.org, 
- linux-leds@vger.kernel.org, netdev@vger.kernel.org
-In-Reply-To: <20260520183815.2510387-1-arnd@kernel.org>
-References: <20260520183815.2510387-1-arnd@kernel.org>
-Subject: Re: (subset) [PATCH v2 00/10] gpiolib: fence off legacy interfaces
-Message-Id: <178104395573.234140.4413143072350533512.b4-ty@b4>
-Date: Tue, 09 Jun 2026 15:25:55 -0700
+	s=arc-20240116; t=1781055093; c=relaxed/simple;
+	bh=jX8yPtpLfo082EYodxQm099uzhz7yXG2rLZ5bXSmxRs=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=NZEb5NiNCLEAn28iAITFzZXfuPAdOCsPr0nrz7ql9DTVJ3Tx0k9gL0F6hUyfxrfUzrKte9AHqbOvG11hKWB5DEabR6K472sdzGlluuQx33WHhL1bOg0WcGdak6SzLg3MQTMJSeJ9XuBoSrpuQqa5jISlTqHZh3//WRkIA4ocCXM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Cl+wZQcU; arc=none smtp.client-ip=100.103.45.18
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E5B3D1F00893;
+	Wed, 10 Jun 2026 01:31:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1781055092;
+	bh=8wSvSr5wgJYhG1T0+g2KEtONnq0QWojGMFssZM8uMN0=;
+	h=From:Date:Subject:To:Cc;
+	b=Cl+wZQcUQ0btce1W4WCJokjCCNBpEG4u/71kr35kGKxv368MLZBO4Tynuzore4Pjf
+	 qNVwZLNzHpb3q+dPNTHkeRAvIfCa+XoAJq+CYCQMYidsA/EblfJ6NR87oIqXoeYk/Q
+	 Ndkocd0APGtwvKlblhm6d8lbkFnbXkwnqajr3e7mWyDD9zzuiARjtsTKMZB7+rIiy1
+	 xlxwT+UuEf2L7kMUooDCVhpRsjzQlYbt7SUzKWT1jsfMK0CXthkVXX+9fK3R1xnHZo
+	 v1MnAxvYNEkpjKA0aMmX3P44/VSNkSOOVxGJ4t7waxeho/24GL1w0AuovYPUp1iiJq
+	 cJuyIAQiG1aAg==
+From: Nathan Chancellor <nathan@kernel.org>
+Date: Tue, 09 Jun 2026 18:31:21 -0700
+Subject: [PATCH] MIPS: VDSO: Avoid including .got in dynamic segment
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -114,65 +56,162 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.15.2
+Message-Id: <20260609-mips-vdso-fix-section-layout-v1-1-0e80ffadf7c7@kernel.org>
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/yWMQQqDQAwAvyI5N7DmsFi/UnrQ3Wgj6spGxSL+v
+ Wl7HJiZE5SzsEJdnJB5F5U0G5S3AsKrmXtGicZAjrzzrsJJFsU9asJODlQOqxU4Nu+0rUie2lB
+ W0QW6gy2WzGb99o/nn3VrB4u+T7iuDxpQDjuAAAAA
+X-Change-ID: 20260608-mips-vdso-fix-section-layout-262bc18d0c29
+To: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>, 
+ Thomas Gleixner <tglx@kernel.org>
+Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+ linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ llvm@lists.linux.dev, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
+ Nathan Chancellor <nathan@kernel.org>
+X-Mailer: b4 0.16-dev
+X-Developer-Signature: v=1; a=openpgp-sha256; l=4237; i=nathan@kernel.org;
+ h=from:subject:message-id; bh=jX8yPtpLfo082EYodxQm099uzhz7yXG2rLZ5bXSmxRs=;
+ b=owGbwMvMwCUmm602sfCA1DTG02pJDFka+wofLJfzPXsw55Pw/U/7Z9dYHnSd0FGRaVWk8cf1w
+ Sf2Q2v8O0pZGMS4GGTFFFmqH6seNzScc5bxxqlJMHNYmUCGMHBxCsBEFloyMhzsT/UO/r/K+O3x
+ M9N++F5p09F8N/Xl++pn635VxLSZ71jP8D/39K/iBW1mp5yWvHu//vGz3alWz/XEPcMOvyiLcPV
+ M9uYCAA==
+X-Developer-Key: i=nathan@kernel.org; a=openpgp;
+ fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
 X-Rspamd-Action: no action
-X-Spamd-Result: default: False [0.34 / 15.00];
+X-Spamd-Result: default: False [-3.66 / 15.00];
+	WHITELIST_SPF_DKIM(-3.00)[kernel.org:d:+,kernel.org:s:+];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_RHS_NOT_FQDN(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
-	R_DKIM_ALLOW(-0.20)[baylibre.com:s=google];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20260515];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
+	TAGGED_FROM(0.00)[bounces-15019-lists,linux-mips=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	RECEIVED_HELO_LOCALHOST(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	DMARC_NA(0.00)[baylibre.com];
-	FORGED_SENDER(0.00)[khilman@baylibre.com,linux-mips@vger.kernel.org];
-	RCPT_COUNT_TWELVE(0.00)[40];
-	FORGED_RECIPIENTS(0.00)[m:linux-gpio@vger.kernel.org,m:arnd@kernel.org,m:linux-kernel@vger.kernel.org,m:arnd@arndb.de,m:chunkeey@googlemail.com,m:johannes@sipsolutions.net,m:aaro.koskinen@iki.fi,m:andreas@kemnade.info,m:rogerq@kernel.org,m:tony@atomide.com,m:tsbogend@alpha.franken.de,m:glaubitz@physik.fu-berlin.de,m:tglx@kernel.org,m:mingo@redhat.com,m:bp@alien8.de,m:dave.hansen@linux.intel.com,m:x86@kernel.org,m:hpa@zytor.com,m:linusw@kernel.org,m:brgl@kernel.org,m:dmitry.torokhov@gmail.com,m:lee@kernel.org,m:pavel@kernel.org,m:mazziesaccount@gmail.com,m:florian.fainelli@broadcom.com,m:jonas.gorski@gmail.com,m:andrew@lunn.ch,m:olteanv@gmail.com,m:davem@davemloft.net,m:edumazet@google.com,m:kuba@kernel.org,m:pabeni@redhat.com,m:linux-wireless@vger.kernel.org,m:linux-omap@vger.kernel.org,m:linux-arm-kernel@lists.infradead.org,m:linux-mips@vger.kernel.org,m:linux-sh@vger.kernel.org,m:linux-input@vger.kernel.org,m:linux-leds@vger.kernel.org,m:netdev@vger.kernel.org,m:chunkeey@gmail.com
- ,m:dmitrytorokhov@gmail.com,m:jonasgorski@gmail.com,s:lists@lfdr.de];
+	RCVD_COUNT_THREE(0.00)[4];
+	FREEMAIL_CC(0.00)[alpha.franken.de,google.com,vger.kernel.org,lists.linux.dev,gmail.com,kernel.org];
 	MIME_TRACE(0.00)[0:+];
-	FORGED_SENDER_MAILLIST(0.00)[];
+	FORGED_RECIPIENTS(0.00)[m:thomas.weissschuh@linutronix.de,m:tglx@kernel.org,m:tsbogend@alpha.franken.de,m:morbo@google.com,m:justinstitt@google.com,m:linux-mips@vger.kernel.org,m:linux-kernel@vger.kernel.org,m:llvm@lists.linux.dev,m:nick.desaulniers+lkml@gmail.com,m:nathan@kernel.org,m:nickdesaulniers@gmail.com,s:lists@lfdr.de];
 	FORWARDED(0.00)[lists@lfdr.de];
-	TAGGED_FROM(0.00)[bounces-15018-lists,linux-mips=lfdr.de];
-	DKIM_TRACE(0.00)[baylibre.com:+];
+	FORGED_SENDER(0.00)[nathan@kernel.org,linux-mips@vger.kernel.org];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	TO_DN_SOME(0.00)[];
 	FORGED_SENDER_FORWARDING(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[khilman@baylibre.com,linux-mips@vger.kernel.org];
-	FREEMAIL_CC(0.00)[vger.kernel.org,arndb.de,googlemail.com,sipsolutions.net,iki.fi,kemnade.info,kernel.org,atomide.com,alpha.franken.de,physik.fu-berlin.de,redhat.com,alien8.de,linux.intel.com,zytor.com,gmail.com,broadcom.com,lunn.ch,davemloft.net,google.com,lists.infradead.org];
 	ALIAS_RESOLVED(0.00)[];
-	TAGGED_RCPT(0.00)[linux-mips];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[nathan@kernel.org,linux-mips@vger.kernel.org];
+	DKIM_TRACE(0.00)[kernel.org:+];
+	RCPT_COUNT_SEVEN(0.00)[10];
+	TAGGED_RCPT(0.00)[linux-mips,lkml];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[baylibre.com:dkim,baylibre.com:email,baylibre.com:from_mime,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,vger.kernel.org:from_smtp,arndb.de:email]
+	MID_RHS_MATCH_FROM(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo,vger.kernel.org:from_smtp]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 8E570664976
+X-Rspamd-Queue-Id: 5729C6653A3
 
+After commit 2db1ec80dfd5 ("MIPS: VDSO: Fold MIPS_DISABLE_VDSO into
+MIPS_GENERIC_GETTIMEOFDAY"), building ARCH=mips allnoconfig with LLVM=1
+shows some warnings from llvm-readelf while checking the VDSO for
+dynamic relocations:
 
-On Wed, 20 May 2026 20:38:05 +0200, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
-> 
-> This is an update of all the patches that are still required before
-> we can actually turn off CONFIG_GPIOLIB_LEGACY for most platforms
-> in the final patch of this series.
-> 
-> I originally posted this as a series in
-> https://lore.kernel.org/all/20250808151822.536879-1-arnd@kernel.org/
-> 
-> [...]
+  llvm-readelf: warning: 'arch/mips/vdso/vdso.so.dbg.raw': invalid PT_DYNAMIC size (0xa4)
+  llvm-readelf: warning: 'arch/mips/vdso/vdso.so.dbg.raw': PT_DYNAMIC dynamic table is invalid: SHT_DYNAMIC will be used
 
-Applied, thanks!
+The blamed commit alters the link order of objects into vdso.so.raw,
+placing vgettimeofday.o after sigreturn.o. This ultimately results in
+the .text section shrinking slightly in size, which in turn changes the
+offset of the .dynamic section.
 
-[09/10] ARM: dts: omap2: add stlc4560 spi-wireless node
-        commit: c5a0ac76b364bbd1d4fb7e440edabcd2a369343c
+  -  [ 9] .text             PROGBITS        000002f0 0002f0 000930 00  AX  0   0 16
+  -  [10] .dynamic          DYNAMIC         00000c20 000c20 000090 08   A  5   0  4
+  +  [ 9] .text             PROGBITS        000002f0 0002f0 000924 00  AX  0   0 16
+  +  [10] .dynamic          DYNAMIC         00000c14 000c14 000090 08   A  5   0  4
+
+Changing the offset of the .dynamic section causes the dynamic segment
+size to grow by the same amount, which triggers a warning in
+llvm-readelf because PT_DYNAMIC's p_filesz (0xa4) is no longer a
+multiple of its sh_entsize (8):
+
+  -  DYNAMIC        0x000c20 0x00000c20 0x00000c20 0x00098 0x00098 R   0x10
+  +  DYNAMIC        0x000c14 0x00000c14 0x00000c14 0x000a4 0x000a4 R   0x10
+
+The size of the dynamic segment was already incorrect before the blamed
+comment, as it should be 0x90 like the .dynamic section above (18
+entries at 8 bytes per entry); it just so happens that 0x98 % 8 is 0,
+whereas 0xa4 % 8 is 4, so there was no warning.
+
+Looking at the section to segment mapping of the dynamic segment reveals
+that it includes the .got section, as it is implicitly placed after
+.dynamic by ld.lld's orphan section heuristics and inherits its segments
+from the linker script.
+
+  [ 9] .text             PROGBITS        000002f0 0002f0 000924 00  AX  0   0 16
+  [10] .dynamic          DYNAMIC         00000c14 000c14 000090 08   A  5   0  4
+  [11] .got              PROGBITS        00000cb0 000cb0 000008 00 WAp  0   0 16
+
+  Section to Segment mapping:
+   Segment Sections...
+    00     .mips_abiflags
+    01     .reginfo
+    02     .mips_abiflags .reginfo .hash .dynsym .dynstr .gnu.version .gnu.version_d .note .text .dynamic .got
+    03     .dynamic .got
+    04     .note
+
+Explicitly describe the .got section in the MIPS VDSO linker script
+after .rodata, which switches back to the default text segment,
+resulting in a dynamic segment that is the exact size of the .dynamic
+section as expected with no other layout changes.
+
+  -  DYNAMIC        0x000c14 0x00000c14 0x00000c14 0x000a4 0x000a4 R   0x10
+  +  DYNAMIC        0x000c14 0x00000c14 0x00000c14 0x00090 0x00090 R   0x4
+
+  -   03     .dynamic .got
+  +   03     .dynamic
+
+Closes: https://github.com/ClangBuiltLinux/linux/issues/2166
+Fixes: 2db1ec80dfd5 ("MIPS: VDSO: Fold MIPS_DISABLE_VDSO into MIPS_GENERIC_GETTIMEOFDAY")
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+---
+The fixes tag feels a little strong since it seems like it has just been
+luck up until this point that there has been no warning but I decided to
+be conservative and include it regardless. Feel free to remove it if you
+see fit.
+
+I think this should go via timers/vdso with the blamed commit. I plan to
+send a follow up series for 7.3 to add '--orphan-handling' to the MIPS
+VDSO to avoid issues like this in the future but that can go via the
+MIPS tree, as it is not really a fix and I will need to properly test
+it.
+---
+ arch/mips/vdso/vdso.lds.S | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/arch/mips/vdso/vdso.lds.S b/arch/mips/vdso/vdso.lds.S
+index 05badf3ae0ff..278ab6444e98 100644
+--- a/arch/mips/vdso/vdso.lds.S
++++ b/arch/mips/vdso/vdso.lds.S
+@@ -56,6 +56,7 @@ SECTIONS
+ 	.dynamic	: { *(.dynamic) }		:text :dynamic
+ 
+ 	.rodata		: { *(.rodata*) }		:text
++	.got		: { *(.got) }
+ 
+ 	_end = .;
+ 	PROVIDE(end = .);
+
+---
+base-commit: 13f6218e6fe79dc64aed76d738b765b45f62492b
+change-id: 20260608-mips-vdso-fix-section-layout-262bc18d0c29
 
 Best regards,
--- 
-Kevin Hilman (TI) <khilman@baylibre.com>
+--  
+Cheers,
+Nathan
 
 
