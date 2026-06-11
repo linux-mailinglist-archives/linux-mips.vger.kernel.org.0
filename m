@@ -1,99 +1,99 @@
-Return-Path: <linux-mips+bounces-15050-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-15051-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id J18fEwSKKmoOsAMAu9opvQ
-	(envelope-from <linux-mips+bounces-15050-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Thu, 11 Jun 2026 12:12:20 +0200
+	id Ba2CGS2KKmogsAMAu9opvQ
+	(envelope-from <linux-mips+bounces-15051-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Thu, 11 Jun 2026 12:13:01 +0200
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3E9DC670BC5
-	for <lists+linux-mips@lfdr.de>; Thu, 11 Jun 2026 12:12:19 +0200 (CEST)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id 00764670BEA
+	for <lists+linux-mips@lfdr.de>; Thu, 11 Jun 2026 12:13:00 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=redhat.com header.s=mimecast20190719 header.b=jQH+Awhi;
-	dkim=pass header.d=redhat.com header.s=google header.b=QR3XvazO;
-	spf=pass (mail.lfdr.de: domain of "linux-mips+bounces-15050-lists+linux-mips=lfdr.de@vger.kernel.org" designates 104.64.211.4 as permitted sender) smtp.mailfrom="linux-mips+bounces-15050-lists+linux-mips=lfdr.de@vger.kernel.org";
+	dkim=pass header.d=redhat.com header.s=mimecast20190719 header.b=W5P8aYKS;
+	dkim=pass header.d=redhat.com header.s=google header.b=MXxR86fN;
+	spf=pass (mail.lfdr.de: domain of "linux-mips+bounces-15051-lists+linux-mips=lfdr.de@vger.kernel.org" designates 172.232.135.74 as permitted sender) smtp.mailfrom="linux-mips+bounces-15051-lists+linux-mips=lfdr.de@vger.kernel.org";
 	dmarc=pass (policy=quarantine) header.from=redhat.com;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 37CAD3008080
-	for <lists+linux-mips@lfdr.de>; Thu, 11 Jun 2026 10:12:16 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 6B18A300B452
+	for <lists+linux-mips@lfdr.de>; Thu, 11 Jun 2026 10:13:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D74053375CB;
-	Thu, 11 Jun 2026 10:12:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 198383C988D;
+	Thu, 11 Jun 2026 10:13:00 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83DFB3C988D
-	for <linux-mips@vger.kernel.org>; Thu, 11 Jun 2026 10:12:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B717D23EA94
+	for <linux-mips@vger.kernel.org>; Thu, 11 Jun 2026 10:12:58 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781172732; cv=none; b=VPWb/KahcjONiC9j8lK7rY6cw9rFlstFvB9W/W+RJ4gy+KkGZtmcSSG7gLVhfwBGEEWDVhlbRmkRwB8yDQAixnBPFcpRl26HwlFqzpoxC9AQoGCM/NGXuzyLCPwAHBJWSXaSvU15G4ES5pVjSTLB+4X4rojRrm1jG0Ba3oDC7F4=
+	t=1781172780; cv=none; b=NQvbz7/1Ii5+8LfCqp5PUzd2hCWiDec19m4xgKvMZ4uEReD+360OMyF/IGQjdYFFODRAnj2eYV6C9HrCGVVu29xMICE+aY0euOjkQR7ARDK1xEw7fbbo7RCrzcCmyKuQI44//gPdH/+mhd7eJ/h5cgUX9s/w8KXeTBR2q/dyHiM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781172732; c=relaxed/simple;
-	bh=0DTkubvoxHBUMHmj/JTP8y1M7mVG+8twCULO8Aq9NZw=;
+	s=arc-20240116; t=1781172780; c=relaxed/simple;
+	bh=JQ5T8Ove8mxcipFoyWUXvQY6lHTB2vT/asE++CDukY0=;
 	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=ZsJMF1T3RQ/pcxgenJwmKiXiEuheUAQGxa5Jt/+4rKD7j0MNEtMTIAq9Aqvn/DwuNgTgVP44tQHbkdJ+lZChtTGdZroOYbo4fTeIpJhSri9eMT7yUeSSiGkV3ErY0N7aGN4DkT7+b/PTgr8OJeWXW+BlE3SMFuG2/oVfiV83f3Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=jQH+Awhi; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=QR3XvazO; arc=none smtp.client-ip=170.10.133.124
+	 MIME-Version:Content-Type; b=ThMQRVZ/zJdVO+QYADDTKtHh3sZTp70z5RFjX2esDbb4SEfN/VA5PLvHsa8eCbTbE2D96h5eyyAbhdJa/K42l4ue3cZpD0K5mbggkAT/8UR87Gn+gTwi2WaN3/Rc0rQNvItXknIgV5E1/l8bqusC/9NYMFum/9hwq7fNxPGjbyg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=W5P8aYKS; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=MXxR86fN; arc=none smtp.client-ip=170.10.133.124
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1781172730;
+	s=mimecast20190719; t=1781172777;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 in-reply-to:in-reply-to:references:references;
-	bh=q0r9Bb05wU768Bts6kNipr0zjojivSJzgQogOHI5wH0=;
-	b=jQH+AwhiNYfDNE+fpr4EyyfDzX+dLcde4fPwRfQtPkFv4U4Ir1NylXa63M2xY7sHY9Lsh0
-	2QjNaTT2VebPP1X4WLmCuDf8Q08O5dzGXjc8KU7LN722trj0LbRBVADxg9kRbg8AOdBkGb
-	FynE6i7WfrFwElLyvj9LvMXWaXI+0/g=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+	bh=dFYGrtWClhfZ3Q43+mH8yJXNZwovzAkM0JScXulojb8=;
+	b=W5P8aYKSblK3mjJytCe0Ph6MGhk/zYy591McbqpHdtgc5kRUjVo6Uibuz314zqoR8ND4AG
+	QZ1jdRPlTX1qhVOO9F9cdF8bZ5grbi+hAWRyio/5e2OaC1xV11HkTD+5kOQc+/i2izSCKz
+	Lv5uu5PjTZJCM4Xe1rB06/6F5cvl1TA=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-436-ZBYNZ2fuMPqZLgOFOXoDpA-1; Thu, 11 Jun 2026 06:12:09 -0400
-X-MC-Unique: ZBYNZ2fuMPqZLgOFOXoDpA-1
-X-Mimecast-MFC-AGG-ID: ZBYNZ2fuMPqZLgOFOXoDpA_1781172728
-Received: by mail-wm1-f72.google.com with SMTP id 5b1f17b1804b1-490c4f61a34so41269715e9.2
-        for <linux-mips@vger.kernel.org>; Thu, 11 Jun 2026 03:12:09 -0700 (PDT)
+ us-mta-546-_xFp7_WsN1SqE-8NkuaSQw-1; Thu, 11 Jun 2026 06:12:56 -0400
+X-MC-Unique: _xFp7_WsN1SqE-8NkuaSQw-1
+X-Mimecast-MFC-AGG-ID: _xFp7_WsN1SqE-8NkuaSQw_1781172775
+Received: by mail-wm1-f69.google.com with SMTP id 5b1f17b1804b1-490dad70f95so22723375e9.3
+        for <linux-mips@vger.kernel.org>; Thu, 11 Jun 2026 03:12:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1781172728; x=1781777528; darn=vger.kernel.org;
+        d=redhat.com; s=google; t=1781172775; x=1781777575; darn=vger.kernel.org;
         h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
          :from:from:to:cc:subject:date:message-id:reply-to;
-        bh=q0r9Bb05wU768Bts6kNipr0zjojivSJzgQogOHI5wH0=;
-        b=QR3XvazOsjMUZk1ZXGzPlbIZJ65yiI1gk/o8VU5XSCgCZnJU8bl/twjoPQcdWbAdZX
-         KdJ1vgB3WkGOxvyKlFmJzbxZtpUueoWp3eAMZRtTpz+PPmZoA9RbiKe5RdzGtJiUqnvS
-         WVMqE+L/7wg+2Y3lczY7UNyXATbYk/0Zn/nfBSN/MwdTyAgfkHBq9bPh7QeAHhniaUQ/
-         2NLUM/XdKhD+zdEqQlCdebSKp6IH3YdUT0fuLpL5IiNbG+dmC5429KH3FOX/v1951u1G
-         8lP3yXir0mDlJOPir73L2UAUEoXWBLzqYyWcCyK0OvdEsrIa5MgaGkE8GANZORZtzRWY
-         U15Q==
+        bh=dFYGrtWClhfZ3Q43+mH8yJXNZwovzAkM0JScXulojb8=;
+        b=MXxR86fNpMK2OJliQ1xWyAYroB+y4pje2MzQ2LzDglJfeX9+gsikXoQmeyrFdzpRsb
+         YEE/VR4MBldAruYqG+EdchGJ727Kfox2A+AgqT6XpMDo1hG+uQaL+6DUMOEAox3jv/Nn
+         vHd5Dp72LumCHe6v7UHqD8WhymbA68gHwyYYBEbNyzeo23AAUIYxYDSZixmkjEXxkhhk
+         JeCDMrvLi8p6+bAKDs+X3/upH7KmN7phxBGQydi/Rm9kTMiMZbe47aEfvg+f7sVSp7Ch
+         cQaQBKOSKT8gHifd2WR0gd7BHj8a22rlxPHo5fFoKS0MONDKI2+RVyxLfDaRxyrvDjs8
+         cqiQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781172728; x=1781777528;
+        d=1e100.net; s=20251104; t=1781172775; x=1781777575;
         h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
          :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=q0r9Bb05wU768Bts6kNipr0zjojivSJzgQogOHI5wH0=;
-        b=kLk4duA5Kf4fd1Fmbc3kUpkzcVeLY7CqTmEL440inA/FuEuhrVR4WQo2u63RNXD38R
-         cLuz0AXsIUrUsGbV8CasEhbcgc3Ak0OhdhOZe1muiVlknnE2s2W1hhCa7VUIzU2Q0MMo
-         idf6aPrIW7cAIUpfS1otMJMyWLSOFDWWZ4ceH0k8prp34msms5jvgO09aPEFvxhf4KOf
-         lrsKxpVopCZBvcYjGIATCDbV1GaFZtmOMw9Fd3nTbXetJKPKdQdRm2zzCQUiIbZY5cNW
-         kLukkOUAChMXTadjiRtbvIhPyX6ZLl/use8iRg7NzUjfts9Y5MFsB1B8xWL7HqNDu2Hs
-         yYkA==
-X-Forwarded-Encrypted: i=1; AFNElJ82QWiqq4DhPVzD3OGP7vX4VC5B6EpNls6M9hWwtFyVPw57Sq6QpA9rC+hqNDSIbqAJYVL5Knqxu42n@vger.kernel.org
-X-Gm-Message-State: AOJu0YxkFo4YPz1A77V2q5cDypH50sSygMXcGpBWBREEWEDS08j4+H/8
-	AmDsk2t7hZThKkhkC9RIQclELIc1WtKtxwPN0JUxRyQpU5KwTDKMdHbs+tNeYRchlVmycV8+gqX
-	gESwqh133Un2+SfwLzh0dED/CCxHdj8E6KvYXamjQZZ7fvHDsYC7MW3XLnArCjzQ=
-X-Gm-Gg: Acq92OFxGt9jkci67V3HqE871oKKnuL2XErnB5e1kwq5ypmnwUBYtbJ4O1/87jj+qnY
-	Jv6ryPL9/5DMnqPL4qb3Pqm5rO2sKAgBukmgrGDEAUPub/2OpBoK2Uplo6R9Y15J/m0sf76+9eJ
-	bgNQIccMWVc8LTvAp3rCgzlqius+jXtoxd6I89PeMV//qem6jsAG09gqWOx4yi+TsbEsqxtVK4h
-	Fd1pAXnCMNsV+Q08+3njUjO4uuzahma80Irg/I/ognPDazhBamxhqKpxVf/AsVYNDd2f1f1oemY
-	mkC3DKz0fjW73lpYl4NyDcRZaH+5TVrvP7sQZMFZNG9S+pbraB/sRDlt8q3NN+cUmNfN29T1CTd
-	3e8tV9lUBwmj6YVfrbgg0XUTCFOWILmaTUc7nFDmPGw44SISzD5FnK0OY78RuSVSKb5r8sUxYQH
-	LuWFlh69t15wkhnR0=
-X-Received: by 2002:a05:600c:a39b:b0:490:c08b:b24b with SMTP id 5b1f17b1804b1-490e5607e3cmr15876155e9.26.1781172728118;
-        Thu, 11 Jun 2026 03:12:08 -0700 (PDT)
-X-Received: by 2002:a05:600c:a39b:b0:490:c08b:b24b with SMTP id 5b1f17b1804b1-490e5607e3cmr15875655e9.26.1781172727683;
-        Thu, 11 Jun 2026 03:12:07 -0700 (PDT)
+        bh=dFYGrtWClhfZ3Q43+mH8yJXNZwovzAkM0JScXulojb8=;
+        b=QAF2mZl28RcC1lrYVk80VPxOEW3n1IoTKGQt1boEjd1O7cVqUZaR3xxrheoiSqnJEK
+         L/2GgfkazteRmLe57Zz+Tqz2alcKFAD59px1f5cUCkH+1EfuO9pHtpTPR06rPMgi5Dhh
+         pe0hpcdctXoJB8LXGR/ZAdXgdDrEhifJm7pkrsxNJ2u5c/tCvWsqRKJvzjosJVEpuPoh
+         VIK/Wxtmkn9TxceyxpteLWp7CdWu81IBoX3QLKboQQUrLW9+OhysBC3H4N5GV9DH0owV
+         gBRC4x3zQYjB40XrO6ybkns9GV61Vm6BpM/S9v41afT68RXv3+GiBmORAGSjY+QPDrKt
+         kSiA==
+X-Forwarded-Encrypted: i=1; AFNElJ+2zp6dbzdh6mpjP2czanf8idpSEa3gZ+fi1zXb00TBH5MOX1cLk8pNHburaIZL9XLRrNokgxeLcnu3@vger.kernel.org
+X-Gm-Message-State: AOJu0YzIq9WPhsboizo9T68sMhejGrqO39TcDfnNGCOApN4UdCYvePdI
+	8FlIaf1cUBOBJewr574S5yl9qC9VUKNlzVj5yyDlEcQCcwjCcaK+X7SJlU61v8a5NGqIO0p7Xdx
+	Ckvt3133bI8xU6Ez92pePeCdQcRic+pt14OGU9bTpUVoXZ1L1IWTKiXjN2GNjX/U=
+X-Gm-Gg: Acq92OHLNCISkusGtEzds5mf6SNUGKFhT3q14IyHlWbpBwsaICjqrLdOAZdhffawSwC
+	b6Ht65YAIR5PHUN+4XJMldfsKvnI1PqLMTYAgFEJT76CRaudyDW5nvmWsWbcMfqqCcMFlIUwL9S
+	6IMkQm7cM/LWHaJKlAYY5YrUyXiSauraJ8hkY62oNTx+QyIIsjIbI+/Bw7J8o2koYdLa4bSrJmN
+	lhdVA7aQOQvEgXlvTMK4YAQCJJM9O2CGHUowfPNRWz2vPyThTSk7SBl7CGfJFnS94lm7enodJzh
+	3WCH3GuMpnIRy6aH6XFEdIjyT/nHLjn54pvFkjqK3chsh+V+zkFuDs4JhaYKEP96NF5/XqupieH
+	fS1lvnI8AfcpR18l6OHTB+RJdCk/G/091OTlFmEDQ0oZ8gr+SFkOLYUUHQhWyyfzGvaX7I29QbZ
+	kc70yGEoprrJJ6N0c=
+X-Received: by 2002:a05:600c:c493:b0:490:a298:3859 with SMTP id 5b1f17b1804b1-490e5639bf0mr26218415e9.24.1781172775364;
+        Thu, 11 Jun 2026 03:12:55 -0700 (PDT)
+X-Received: by 2002:a05:600c:c493:b0:490:a298:3859 with SMTP id 5b1f17b1804b1-490e5639bf0mr26217975e9.24.1781172775016;
+        Thu, 11 Jun 2026 03:12:55 -0700 (PDT)
 Received: from localhost (62-151-111-63.jazzfree.ya.com. [62.151.111.63])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-490e2d09a85sm51975965e9.14.2026.06.11.03.12.06
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-490e532c778sm38051805e9.14.2026.06.11.03.12.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 11 Jun 2026 03:12:07 -0700 (PDT)
+        Thu, 11 Jun 2026 03:12:54 -0700 (PDT)
 From: Javier Martinez Canillas <javierm@redhat.com>
 To: Thomas Zimmermann <tzimmermann@suse.de>, mripard@kernel.org,
  maarten.lankhorst@linux.intel.com, airlied@redhat.com, airlied@gmail.com,
@@ -110,13 +110,13 @@ Cc: dri-devel@lists.freedesktop.org, linux-hyperv@vger.kernel.org,
  linux-mips@vger.kernel.org, virtualization@lists.linux.dev,
  amd-gfx@lists.freedesktop.org, Thomas Zimmermann <tzimmermann@suse.de>,
  Zack Rusin <zackr@vmware.com>, stable@vger.kernel.org
-Subject: Re: [PATCH v5 03/15] drm/vboxvideo: Handle struct
+Subject: Re: [PATCH v5 04/15] drm/vmwgfx: Handle struct
  drm_plane_state.ignore_damage_clips
-In-Reply-To: <20260610152505.260172-4-tzimmermann@suse.de>
+In-Reply-To: <20260610152505.260172-5-tzimmermann@suse.de>
 References: <20260610152505.260172-1-tzimmermann@suse.de>
- <20260610152505.260172-4-tzimmermann@suse.de>
-Date: Thu, 11 Jun 2026 12:12:06 +0200
-Message-ID: <87se6t5qtl.fsf@ocarina.mail-host-address-is-not-set>
+ <20260610152505.260172-5-tzimmermann@suse.de>
+Date: Thu, 11 Jun 2026 12:12:53 +0200
+Message-ID: <87pl1x5qsa.fsf@ocarina.mail-host-address-is-not-set>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -129,7 +129,7 @@ X-Spamd-Result: default: False [-1.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	R_MISSING_CHARSET(0.50)[];
 	DMARC_POLICY_ALLOW(-0.50)[redhat.com,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
+	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
 	R_DKIM_ALLOW(-0.20)[redhat.com:s=mimecast20190719,redhat.com:s=google];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
@@ -137,7 +137,7 @@ X-Spamd-Result: default: False [-1.66 / 15.00];
 	RCPT_COUNT_TWELVE(0.00)[33];
 	MIME_TRACE(0.00)[0:+];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-15050-lists,linux-mips=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-15051-lists,linux-mips=lfdr.de];
 	FORGED_SENDER(0.00)[javierm@redhat.com,linux-mips@vger.kernel.org];
 	FORWARDED(0.00)[lists@lfdr.de];
 	FORGED_RECIPIENTS(0.00)[m:tzimmermann@suse.de,m:mripard@kernel.org,m:maarten.lankhorst@linux.intel.com,m:airlied@redhat.com,m:airlied@gmail.com,m:simona@ffwll.ch,m:admin@kodeit.net,m:gargaditya08@proton.me,m:paul@crapouillou.net,m:jani.nikula@linux.intel.com,m:mhklkml@zohomail.com,m:zack.rusin@broadcom.com,m:bcm-kernel-feedback-list@broadcom.com,m:harry.wentland@amd.com,m:sunpeng.li@amd.com,m:siqueira@igalia.com,m:alexander.deucher@amd.com,m:rodrigo.vivi@intel.com,m:joonas.lahtinen@linux.intel.com,m:tursulin@ursulin.net,m:dmitry.osipenko@collabora.com,m:gurchetansingh@chromium.org,m:olvaffe@gmail.com,m:dri-devel@lists.freedesktop.org,m:linux-hyperv@vger.kernel.org,m:intel-gfx@lists.freedesktop.org,m:intel-xe@lists.freedesktop.org,m:linux-mips@vger.kernel.org,m:virtualization@lists.linux.dev,m:amd-gfx@lists.freedesktop.org,m:zackr@vmware.com,m:stable@vger.kernel.org,s:lists@lfdr.de];
@@ -154,13 +154,13 @@ X-Spamd-Result: default: False [-1.66 / 15.00];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	RCVD_COUNT_FIVE(0.00)[6];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
+	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
 	ALIAS_RESOLVED(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-mips];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:rdns,sin.lore.kernel.org:helo,ocarina.mail-host-address-is-not-set:mid,suse.de:email,vger.kernel.org:from_smtp]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[ocarina.mail-host-address-is-not-set:mid,sto.lore.kernel.org:rdns,sto.lore.kernel.org:helo,suse.de:email,vger.kernel.org:from_smtp]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 3E9DC670BC5
+X-Rspamd-Queue-Id: 00764670BEA
 
 Thomas Zimmermann <tzimmermann@suse.de> writes:
 
@@ -168,21 +168,17 @@ Thomas Zimmermann <tzimmermann@suse.de> writes:
 > by setting ignore_damage_clips in struct drm_plane_state. The commit
 > will then do a full display update.
 >
-> Test the flag in the primary plane's atomic_update and do a full update
-> if it has been set.
+> Test the flag in the primary ldu plane's atomic_update and do a full
+> update if it has been set.
 >
 > Commit 35ed38d58257 ("drm: Allow drivers to indicate the damage helpers
 > to ignore damage clips") introduced ignore_damage_clips to selectively
-> ignore damage clipping in certain framebuffer changes. Vboxvideo does not
+> ignore damage clipping in certain framebuffer changes. Vmwgfx does not
 > do that, but DRM's damage iterator will soon rely on the flag. Therefore
 > supporting it here as well make sense for consistency.
 >
-> While at it, also replace uint32_t with the preferred u32.
->
 > Signed-off-by: Thomas Zimmermann <tzimmermann@suse.de>
 > Fixes: 35ed38d58257 ("drm: Allow drivers to indicate the damage helpers to ignore damage clips")
-
-And for this one as well.
 
 Reviewed-by: Javier Martinez Canillas <javierm@redhat.com>
 
