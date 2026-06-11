@@ -1,329 +1,375 @@
-Return-Path: <linux-mips+bounces-15046-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-15047-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id 7w54LoZhKmrxoQMAu9opvQ
-	(envelope-from <linux-mips+bounces-15046-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Thu, 11 Jun 2026 09:19:34 +0200
+	id aSx7I/FzKmo5pgMAu9opvQ
+	(envelope-from <linux-mips+bounces-15047-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Thu, 11 Jun 2026 10:38:09 +0200
 X-Original-To: lists+linux-mips@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2E76866F53C
-	for <lists+linux-mips@lfdr.de>; Thu, 11 Jun 2026 09:19:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id DB1CB66FEEA
+	for <lists+linux-mips@lfdr.de>; Thu, 11 Jun 2026 10:38:08 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=ilvokhin.com header.s=mail header.b=sy5dx0+f;
-	spf=pass (mail.lfdr.de: domain of "linux-mips+bounces-15046-lists+linux-mips=lfdr.de@vger.kernel.org" designates 2600:3c0a:e001:db::12fc:5321 as permitted sender) smtp.mailfrom="linux-mips+bounces-15046-lists+linux-mips=lfdr.de@vger.kernel.org";
-	dmarc=pass (policy=reject) header.from=ilvokhin.com;
+	dkim=pass header.d=cjdns.fr header.s=dkim header.b=DqEvztGW;
+	spf=pass (mail.lfdr.de: domain of "linux-mips+bounces-15047-lists+linux-mips=lfdr.de@vger.kernel.org" designates 2600:3c0a:e001:db::12fc:5321 as permitted sender) smtp.mailfrom="linux-mips+bounces-15047-lists+linux-mips=lfdr.de@vger.kernel.org";
+	dmarc=pass (policy=none) header.from=cjdns.fr;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 3B3B8302E327
-	for <lists+linux-mips@lfdr.de>; Thu, 11 Jun 2026 07:17:56 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 086E23258F4D
+	for <lists+linux-mips@lfdr.de>; Thu, 11 Jun 2026 08:33:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 088C935E937;
-	Thu, 11 Jun 2026 07:17:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B794A309F09;
+	Thu, 11 Jun 2026 08:33:38 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail.ilvokhin.com (mail.ilvokhin.com [178.62.254.231])
+Received: from mail.cjdns.fr (mail.cjdns.fr [5.135.140.105])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9821635E950;
-	Thu, 11 Jun 2026 07:17:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA2BC31A07F;
+	Thu, 11 Jun 2026 08:33:36 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781162275; cv=none; b=GC9lpDkZXL1L1nTqBTdSaJrAIdkZNmkIMmxK1/e8MFF4GnHN++LkK++I+hma/xODJC9hcLWprBQB2wJkDkcMU+nlgU27j0w+a2iNbRMp0oTOLeUMqJi/l6Tl8DdU7F+/n7t9feDOyJxkQhldgvS+o55JAODEns5MLtl1tOIQLng=
+	t=1781166818; cv=none; b=KZORu6DgT1FOt1taAOpURYYCLnCj3gRKtG8qDbglkuLuEDb5jGwh+2ZTOixhbdKwAgXDawDyL4nykKCvnyEI+BfQ/q1dgYyQQ23A9Ab5XQp9N1QSBxeiIScVHHUE1ddQHC2PRXYogAFq7TOstBuOWO9lG6URNvsbaWrA6iczFnE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781162275; c=relaxed/simple;
-	bh=mx7Coopivs4IKxGcY9Afs8u7C5ixpvwisrBYow1ZD3g=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=RZSYYBPR49asn/MyYlbqgu18t84SfNSQADm/jCs5+W1td1y3VttJnq22R/MYuRI0tZhQhauGvz5lMMMyBLx3sxFv4W03mIfQyREb25qMimK2wrY9UbhDjX2HmUgdi1O8SROxo4f9SL9TpI52rfyKfaQzcgT/F5aWf3t+w/ZXn4U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=ilvokhin.com; spf=pass smtp.mailfrom=ilvokhin.com; dkim=pass (1024-bit key) header.d=ilvokhin.com header.i=@ilvokhin.com header.b=sy5dx0+f; arc=none smtp.client-ip=178.62.254.231
-Received: from shell.ilvokhin.com (shell.ilvokhin.com [138.68.190.75])
-	(Authenticated sender: d@ilvokhin.com)
-	by mail.ilvokhin.com (Postfix) with ESMTPSA id B2D35D1438;
-	Thu, 11 Jun 2026 07:17:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ilvokhin.com;
-	s=mail; t=1781162265;
-	bh=SQhvUZ/DbKf6/FrlFmNBUBTYC4OnQ9SUq8CAmtvtmpA=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=sy5dx0+foJ2ScZ4tBYFnB4DhLS92V5pg+v0SGYTkem1nbyFd6xfJTyFf9OYEhfLwJ
-	 ZaAc/VbC7/EOornnQ7Y6s4ARfBsV0d9MxWFS+NCaBc1HINhdYGNHKpn29lf2DyNF1K
-	 8iW896swJPRi2QnuCHQ4br1eZusJ65henUh4DGAA=
-Date: Thu, 11 Jun 2026 07:17:41 +0000
-From: Dmitry Ilvokhin <d@ilvokhin.com>
-To: Peter Zijlstra <peterz@infradead.org>
-Cc: Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
-	Boqun Feng <boqun@kernel.org>, Waiman Long <longman@redhat.com>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	Juergen Gross <jgross@suse.com>,
-	Ajay Kaher <ajay.kaher@broadcom.com>,
-	Alexey Makhalov <alexey.makhalov@broadcom.com>,
-	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
-	Thomas Gleixner <tglx@kernel.org>, Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>, Arnd Bergmann <arnd@arndb.de>,
-	Dennis Zhou <dennis@kernel.org>, Tejun Heo <tj@kernel.org>,
-	Christoph Lameter <cl@gentwo.org>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
-	virtualization@lists.linux.dev, linux-arch@vger.kernel.org,
-	linux-mm@kvack.org, linux-trace-kernel@vger.kernel.org,
-	kernel-team@meta.com, "Paul E. McKenney" <paulmck@kernel.org>
-Subject: Re: [PATCH v6 5/7] locking: Add contended_release tracepoint to
- qspinlock
-Message-ID: <aiphFXe_TPNPxZ_n@shell.ilvokhin.com>
-References: <cover.1777999826.git.d@ilvokhin.com>
- <5d7ea75ffe74a785e6b234ada9f23c6373d4b4c1.1777999826.git.d@ilvokhin.com>
- <20260513193342.GB2545104@noisy.programming.kicks-ass.net>
- <agXBb0ga_6HJrrnm@shell.ilvokhin.com>
- <20260603120811.GW3493090@noisy.programming.kicks-ass.net>
+	s=arc-20240116; t=1781166818; c=relaxed/simple;
+	bh=At0X49EwSDL53Qffvdm5Qu9D2GZTVFjS95YXuVVwOJI=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=Yx1+a9f9BT1yVFdI+s5QZo1gFJNkJNLKY6y48BtrVYL21jLIfHMiK4e8KIdMbdUnmgFg8kHhwzm6K/Pecz4dGjQwZzZCckRR0bnlLLeIC80xho1k+XMC+Erbmk5eoUXmp4HgXwFPSGtaZlH/B1SofUCIXCWUU4RV3+NjfVy9vMY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=cjdns.fr; spf=none smtp.mailfrom=cjdns.fr; dkim=pass (2048-bit key) header.d=cjdns.fr header.i=@cjdns.fr header.b=DqEvztGW; arc=none smtp.client-ip=5.135.140.105
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 52F1CAEB8E;
+	Thu, 11 Jun 2026 10:23:48 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cjdns.fr; s=dkim;
+	t=1781166232; h=from:subject:date:message-id:to:cc:mime-version:
+	 content-transfer-encoding:in-reply-to:references;
+	bh=gfGWmRsaQMosyX7X7FA9xHvd6BwyeE4vtSF2KWuOw7c=;
+	b=DqEvztGWDtmk+s919MaU/FkJaOw/s53heKafWbN2JuCZ7yfCjCNONJ1jP7mCaQxI5e3vtv
+	LKdhwqabYllEkv8PPrRpb5wSyhUlANP052E4yLMPyVYLpApFzkyeS8vEInVuSjCJZeHjue
+	FErOX2OJexlZTgLp8WFQuz4YW0qvtHGSAemuUr4POqgNoaJqP/My5ODxBFBBfp1XsRrw6j
+	MCPU5QntYFCH28/kljMT4mKHljm1sUItJpBEiP6dvCbi4Rn8s8Ff8QzHFB06Niv4VI+eNW
+	szTwfZAOwv1choUPUHDMDWl+UDzTbbs9JGlyyuJfYE1VuBlsNAnC6eVfcw435w==
+From: Caleb James DeLisle <cjd@cjdns.fr>
+To: mani@kernel.org
+Cc: linux-pci@vger.kernel.org,
+	linux-mips@vger.kernel.org,
+	naseefkm@gmail.com,
+	ryder.lee@mediatek.com,
+	helgaas@kernel.org,
+	lpieralisi@kernel.org,
+	kwilczynski@kernel.org,
+	robh@kernel.org,
+	krzk+dt@kernel.org,
+	conor+dt@kernel.org,
+	matthias.bgg@gmail.com,
+	angelogioacchino.delregno@collabora.com,
+	ansuelsmth@gmail.com,
+	linux-mediatek@lists.infradead.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Caleb James DeLisle <cjd@cjdns.fr>
+Subject: [PATCH v10] PCI: mediatek: Add support for EcoNet EN7528 SoC
+Date: Thu, 11 Jun 2026 08:23:28 +0000
+Message-Id: <20260611082329.243515-1-cjd@cjdns.fr>
+In-Reply-To: <qwjq6jt3akjk6m4qp4s7xpqf2kzc3tyhsrmcoqhc3canknauxh@leu5dbmv5ngl>
+References: <qwjq6jt3akjk6m4qp4s7xpqf2kzc3tyhsrmcoqhc3canknauxh@leu5dbmv5ngl>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20260603120811.GW3493090@noisy.programming.kicks-ass.net>
+X-Last-TLS-Session-Version: TLSv1.3
 X-Rspamd-Action: no action
-X-Spamd-Result: default: False [-1.66 / 15.00];
+X-Spamd-Result: default: False [0.84 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[ilvokhin.com,reject];
-	URL_NUMERIC_PRIVATE_IP(0.50)[127.0.0.1];
-	R_DKIM_ALLOW(-0.20)[ilvokhin.com:s=mail];
+	MID_CONTAINS_FROM(1.00)[];
+	R_MISSING_CHARSET(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[cjdns.fr,none];
 	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_DKIM_ALLOW(-0.20)[cjdns.fr:s=dkim];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-15046-lists,linux-mips=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-15047-lists,linux-mips=lfdr.de];
 	RCVD_COUNT_THREE(0.00)[4];
-	FORGED_SENDER(0.00)[d@ilvokhin.com,linux-mips@vger.kernel.org];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[30];
-	FORGED_RECIPIENTS(0.00)[m:peterz@infradead.org,m:mingo@redhat.com,m:will@kernel.org,m:boqun@kernel.org,m:longman@redhat.com,m:tsbogend@alpha.franken.de,m:jgross@suse.com,m:ajay.kaher@broadcom.com,m:alexey.makhalov@broadcom.com,m:bcm-kernel-feedback-list@broadcom.com,m:tglx@kernel.org,m:bp@alien8.de,m:dave.hansen@linux.intel.com,m:x86@kernel.org,m:hpa@zytor.com,m:arnd@arndb.de,m:dennis@kernel.org,m:tj@kernel.org,m:cl@gentwo.org,m:rostedt@goodmis.org,m:mhiramat@kernel.org,m:mathieu.desnoyers@efficios.com,m:linux-kernel@vger.kernel.org,m:linux-mips@vger.kernel.org,m:virtualization@lists.linux.dev,m:linux-arch@vger.kernel.org,m:linux-mm@kvack.org,m:linux-trace-kernel@vger.kernel.org,m:kernel-team@meta.com,m:paulmck@kernel.org,s:lists@lfdr.de];
+	FORGED_RECIPIENTS(0.00)[m:mani@kernel.org,m:linux-pci@vger.kernel.org,m:linux-mips@vger.kernel.org,m:naseefkm@gmail.com,m:ryder.lee@mediatek.com,m:helgaas@kernel.org,m:lpieralisi@kernel.org,m:kwilczynski@kernel.org,m:robh@kernel.org,m:krzk+dt@kernel.org,m:conor+dt@kernel.org,m:matthias.bgg@gmail.com,m:angelogioacchino.delregno@collabora.com,m:ansuelsmth@gmail.com,m:linux-mediatek@lists.infradead.org,m:devicetree@vger.kernel.org,m:linux-kernel@vger.kernel.org,m:cjd@cjdns.fr,m:krzk@kernel.org,m:conor@kernel.org,m:matthiasbgg@gmail.com,s:lists@lfdr.de];
+	FORGED_SENDER(0.00)[cjd@cjdns.fr,linux-mips@vger.kernel.org];
+	RCPT_COUNT_TWELVE(0.00)[18];
+	RECEIVED_HELO_LOCALHOST(0.00)[];
 	MIME_TRACE(0.00)[0:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
 	FORWARDED(0.00)[lists@lfdr.de];
-	FROM_HAS_DN(0.00)[];
-	FORGED_RECIPIENTS_FORWARDING(0.00)[];
+	FREEMAIL_CC(0.00)[vger.kernel.org,gmail.com,mediatek.com,kernel.org,collabora.com,lists.infradead.org,cjdns.fr];
+	DKIM_TRACE(0.00)[cjdns.fr:+];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	FORGED_SENDER_FORWARDING(0.00)[];
-	ALIAS_RESOLVED(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[d@ilvokhin.com,linux-mips@vger.kernel.org];
-	DKIM_TRACE(0.00)[ilvokhin.com:+];
-	MID_RHS_MATCH_FROMTLD(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
+	FORGED_SENDER_FORWARDING(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[cjd@cjdns.fr,linux-mips@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
 	TO_DN_SOME(0.00)[];
-	TAGGED_RCPT(0.00)[linux-mips];
+	ALIAS_RESOLVED(0.00)[];
+	TAGGED_RCPT(0.00)[linux-mips,dt];
 	MISSING_XM_UA(0.00)[];
+	FORGED_RECIPIENTS_FORWARDING(0.00)[];
 	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,vger.kernel.org:from_smtp,shell.ilvokhin.com:mid]
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[vger.kernel.org:from_smtp,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 2E76866F53C
+X-Rspamd-Queue-Id: DB1CB66FEEA
 
-On Wed, Jun 03, 2026 at 02:08:11PM +0200, Peter Zijlstra wrote:
-> Also, I think someone should go do some performance runs with
-> ARCH_INLINE_SPIN_* set for x86 just like for s390.
+Add support for the PCIe present on the EcoNet EN7528 (and EN751221) SoCs.
 
-As promised, I set ARCH_INLINE_SPIN_UNLOCK{,_BH,_IRQ,_IRQRESTORE} for
-x86 and measured the effect on a few real workloads.
+These SoCs have a mix of Gen1 and Gen2 capable ports, but the Gen2 ports
+require re-training after startup.
 
-Short version: inlining of _raw_spin_unlock() adds measurable kernel
-i-cache pressure on every workload I tried, and on a
-kernel-i-cache-bound one (nginx connection churn) it costs ~1.27%
-throughput. I did not find a workload where it helps.
-
-HOW BENCHMARKS WERE CHOSEN
-
-The cost of inlining unlock is text footprint increase. Every unlock
-site grows, and the extra bytes compete for the shared L1i. The bill is
-paid by unrelated code, in both kernel and userspace.
-
-Locktorture and similar microbenchmarks can't see this, because they
-usually hammer a tiny loop that stays L1i-resident, so they measure
-fast-path cycles, where inlining (fewer instructions per unlock) looks
-neutral-to-good.
-
-To make the cost visible, the workload has to have real instruction
-cache pressure. To achieve that, it has to touch a lot of code.
-
-A good way to screen benchmarks: look for high tma_frontend_bound
-fraction from 'perf stat -M TopdownL1' and simultaneously require it to
-spend non-trivial time in the kernel (be syscall-heavy).
-
-SETUP
-
-Hardware: 2x Intel Xeon Gold 6138 (Skylake-SP), 20 cores/socket, 40C/80T
-with kernel built from locking/core branch. Baseline _raw_spin_unlock()
-is out-of-line via UNINLINE_SPIN_UNLOCK=y. Experiment adds the four
-selects above (exact patch is at the end of this message). Cache
-geometry (lscpu -C):
-
-NAME ONE-SIZE ALL-SIZE WAYS TYPE        LEVEL  SETS PHY-LINE COHERENCY-SIZE
-L1d       32K     1.3M    8 Data            1    64        1             64
-L1i       32K     1.3M    8 Instruction     1    64        1             64
-L2         1M      40M   16 Unified         2  1024        1             64
-L3      27.5M      55M   11 Unified         3 40960        1             64
-
-Per run I collected cycles, instructions and L1i-misses. To stay within
-the available PMU counters, each run used only 3 events: cycles,
-instructions and one L1i filter (:u or :k). The NMI watchdog was off and
-every run reported 100% counter enablement (no multiplexing). Userspace
-and kernel misses therefore come from separate runs. Each benchmark was
-run 20x per side: 10 with the :u counter, 10 with :k.  Cycles,
-instructions and throughput are pooled across all 20, each L1i split
-comes from its 10.
-
-KERNEL IMAGE SIZE
-
-To give a sense of the code-footprint increase, scripts/bloat-o-meter on
-vmlinux, GCC 11, x86_64, defconfig + CONFIG_PARAVIRT_SPINLOCKS=y:
-
-    Total: Before=23838694, After=23977159, chg +0.58%
-
-ROCKSDB (DELETESEQ)
-
-    db_bench -benchmarks=deleteseq
-
-Metric                       Baseline      Experiment     Delta   Sig
-----------------------------------------------------------------------
-Instructions (total)    9,574,476,543   9,573,602,441    -0.01%   flat
-L1i-miss :k (kernel)      198,588,165     216,672,536    +9.11%   **
-L1i-miss :u (userspace)   593,276,235     616,433,813    +3.90%   **
-Throughput ops/s            431,398         432,897      +0.35%   ns
-Cycles (total)          4,681,002,302   4,665,106,876    -0.34%   ns
-IPC                          2.045           2.052       +0.33%   ns
-Time elapsed (s)            2.4012          2.3865       -0.62%   ns
-----------------------------------------------------------------------
-L1i-miss: higher = worse. Throughput: higher = better.
-** = beyond per-run noise (+-0.1..0.36%), ns = within noise.
-
-At constant instructions, inlining raises L1i misses +9.11% (kernel) and
-+3.90% (userspace), both well beyond noise. Throughput, cycles, IPC and
-wall-time all stay within run-to-run noise. So the i-cache cost is real,
-but at IPC ~2 db_bench isn't fetch-bound at the app level, so it doesn't
-surface.
-
-No benefit from _raw_spin_unlock() inlining.
-
-KERNEL BUILD
-
-Building locking/core (defconfig), GCC 11.
-
-    make -j80
-
-Metric              Baseline      Experiment     Delta   Sig
--------------------------------------------------------------
-L1i-miss :k          36.72G        37.51G       +2.16%   **
-L1i-miss :u         246.99G       246.06G       -0.38%   **
-Sys (s)             478.250       482.420       +0.87%   **
-Time elapsed (s)    105.221       105.373       +0.14%   ns
-User (s)           4022.046      4024.012       +0.05%   flat
-Cycles            8,894.10G     8,902.12G       +0.09%   flat
-Instructions      8,424.28G     8,426.48G       +0.03%   flat
-IPC                   0.947         0.947       -0.06%   flat
--------------------------------------------------------------
-L1i-miss/Sys: higher = worse.
-** = beyond per-run noise, ns = within noise.
-
-Kernel i-cache misses (+2.16%) and sys time (+0.87%) both rise and are
-significant. Wall-time and userspace L1i are flat. Kernel build is
-GCC/userspace-bound (User 4022s vs Sys 478s), so the added kernel fetch
-cost is real but appears to sit off the critical path.
-
-No benefit from _raw_spin_unlock() inlining.
-
-NGINX
-
-I ran nginx with taskset -c 2.
-
-    perf stat -C 2 ... -- ab -n 100000 -c 80 http://127.0.0.1:8080/
-
-Config for nginx was the following.
-
-  worker_processes 1;
-  error_log /tmp/ngx/error.log;
-  pid       /tmp/ngx/nginx.pid;
-  events { worker_connections 16384; }
-  http {
-      access_log off;
-      server { listen 8080 reuseport; location / { return 200 "ok\n"; } }
-  }
-
-
-I used nginx version 1.20.1 (prebuilt, from CentOS repo).
-
-Metric              Baseline      Experiment     Delta   Sig
-------------------------------------------------------------
-req/s (ab)           25,113        24,795       -1.27%   **
-L1i MPKI :k          70.06         72.10        +2.92%   **
-L1i MPKI :u          20.16         20.66        +2.50%   **
-instructions          5.86G         5.83G       -0.50%   **
-L1i-miss :k           0.41G         0.42G       +2.44%   **
-L1i-miss :u           0.12G         0.12G       +1.95%   **
-cycles                4.82G         4.81G       -0.28%   ns
-IPC                   1.215         1.213       -0.22%   ns
-perf time (s)         4.077         4.129       +1.26%   **
-failed reqs              0             0          -      valid
-------------------------------------------------------------
-req/s: higher=better. MPKI: higher=worse.
-** = beyond per-run noise, ns = within noise.
-
-nginx connection-churn is the one workload that is genuinely
-kernel-fetch-bound: MPKI:k ~70 and IPC ~1.2 (vs db_bench's 2.05). Here
-the cost surfaces: req/s −1.27%. Misses rise in both domains (+2.9%
-MPKI:k, +2.5% MPKI:u). Unlike kernel build, userspace is hit too,
-because nginx runs user and kernel hot on the same core and the kernel
-bloat pollutes the shared L1i.
-
-And the kicker: instructions fell 0.5% (inlining removed the call/ret)
-yet throughput dropped.
-
-Caveat: ab is single-threaded, so it seems the worker core is
-under-saturated: cycles is flat (−0.28%, ns) while wall-time rose
-(+1.26%).
-
-Measurable throughput regression from _raw_spin_unlock() inlining.
-
-CONCLUSION
-
-Inlining _raw_spin_unlock() raises kernel L1i misses on every workload.
-It's an unconditional cost. Whether it costs the application throughput
-depends on how kernel-fetch-bound the workload is.
-  
-The cost is real everywhere. It only surfaces as throughput regression
-where the kernel is on the fetch critical path. And inlining did not
-help in any workload I measured. The one micro-effect inlining produced
-(-0.5% instructions on nginx) was erased by the added i-cache pressure.
-
-
-From 99502328caed3c195e20cf194a1e8aa1563f3896 Mon Sep 17 00:00:00 2001
-From: Dmitry Ilvokhin <d@ilvokhin.com>
-Date: Thu, 4 Jun 2026 07:43:00 -0700
-Subject: [PATCH] x86/locking: Inline the spin_unlock()
-
-Signed-off-by: Dmitry Ilvokhin <d@ilvokhin.com>
+Co-developed-by: Ahmed Naseef <naseefkm@gmail.com>
+Signed-off-by: Ahmed Naseef <naseefkm@gmail.com>
+Signed-off-by: Caleb James DeLisle <cjd@cjdns.fr>
 ---
- arch/x86/Kconfig | 4 ++++
- 1 file changed, 4 insertions(+)
+This is dubbed v10 because it comes from a patchset which was
+already mostly applied.
+Link: https://lore.kernel.org/linux-mips/20260521171951.1495781-1-cjd@cjdns.fr/
+---
+ drivers/pci/controller/Kconfig         |   2 +-
+ drivers/pci/controller/pcie-mediatek.c | 154 +++++++++++++++++++++++++
+ 2 files changed, 155 insertions(+), 1 deletion(-)
 
-diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-index fdaef60b46d6..c9a0638225fd 100644
---- a/arch/x86/Kconfig
-+++ b/arch/x86/Kconfig
-@@ -113,6 +113,10 @@ config X86
- 	select ARCH_HAS_ZONE_DMA_SET if EXPERT
- 	select ARCH_HAVE_NMI_SAFE_CMPXCHG
- 	select ARCH_HAVE_EXTRA_ELF_NOTES
-+	select ARCH_INLINE_SPIN_UNLOCK
-+	select ARCH_INLINE_SPIN_UNLOCK_BH
-+	select ARCH_INLINE_SPIN_UNLOCK_IRQ
-+	select ARCH_INLINE_SPIN_UNLOCK_IRQRESTORE
- 	select ARCH_MEMORY_ORDER_TSO
- 	select ARCH_MHP_MEMMAP_ON_MEMORY_ENABLE
- 	select ARCH_MIGHT_HAVE_ACPI_PDC		if ACPI
+diff --git a/drivers/pci/controller/Kconfig b/drivers/pci/controller/Kconfig
+index 2247709ef6d6..8a3a31b2bc12 100644
+--- a/drivers/pci/controller/Kconfig
++++ b/drivers/pci/controller/Kconfig
+@@ -209,7 +209,7 @@ config PCI_MVEBU
+ 
+ config PCIE_MEDIATEK
+ 	tristate "MediaTek PCIe controller"
+-	depends on ARCH_AIROHA || ARCH_MEDIATEK || COMPILE_TEST
++	depends on ARCH_AIROHA || ARCH_MEDIATEK || ECONET || COMPILE_TEST
+ 	depends on OF
+ 	depends on PCI_MSI
+ 	select IRQ_MSI_LIB
+diff --git a/drivers/pci/controller/pcie-mediatek.c b/drivers/pci/controller/pcie-mediatek.c
+index 1bb8839c3cb0..95b651ddc355 100644
+--- a/drivers/pci/controller/pcie-mediatek.c
++++ b/drivers/pci/controller/pcie-mediatek.c
+@@ -10,11 +10,13 @@
+ #include <linux/bitfield.h>
+ #include <linux/clk.h>
+ #include <linux/delay.h>
++#include <linux/errno.h>
+ #include <linux/iopoll.h>
+ #include <linux/irq.h>
+ #include <linux/irqchip/chained_irq.h>
+ #include <linux/irqchip/irq-msi-lib.h>
+ #include <linux/irqdomain.h>
++#include <linux/kconfig.h>
+ #include <linux/kernel.h>
+ #include <linux/mfd/syscon.h>
+ #include <linux/msi.h>
+@@ -78,6 +80,7 @@
+ 
+ #define PCIE_CONF_VEND_ID	0x100
+ #define PCIE_CONF_DEVICE_ID	0x102
++#define PCIE_CONF_REV_CLASS	0x104
+ #define PCIE_CONF_CLASS_ID	0x106
+ 
+ #define PCIE_INT_MASK		0x420
+@@ -90,6 +93,11 @@
+ #define MSI_MASK		BIT(23)
+ #define MTK_MSI_IRQS_NUM	32
+ 
++#define EN7528_HOST_MODE	0x00804201
++#define EN7528_LINKUP_REG	0x50
++#define EN7528_RC0_LINKUP	BIT(1)
++#define EN7528_RC1_LINKUP	BIT(2)
++
+ #define PCIE_AHB_TRANS_BASE0_L	0x438
+ #define PCIE_AHB_TRANS_BASE0_H	0x43c
+ #define AHB2PCIE_SIZE(x)	((x) & GENMASK(4, 0))
+@@ -149,12 +157,15 @@ struct mtk_pcie_port;
+  * @MTK_PCIE_FIX_DEVICE_ID: host's device ID needed to be fixed
+  * @MTK_PCIE_NO_MSI: Bridge has no MSI support, and relies on an external block
+  * @MTK_PCIE_SKIP_RSTB: Skip calling RSTB bits on PCIe probe
++ * @MTK_PCIE_RETRAIN: Retrain link to bridge after startup because some
++ *                    Gen2-capable devices start as Gen1.
+  */
+ enum mtk_pcie_quirks {
+ 	MTK_PCIE_FIX_CLASS_ID = BIT(0),
+ 	MTK_PCIE_FIX_DEVICE_ID = BIT(1),
+ 	MTK_PCIE_NO_MSI = BIT(2),
+ 	MTK_PCIE_SKIP_RSTB = BIT(3),
++	MTK_PCIE_RETRAIN = BIT(4),
+ };
+ 
+ /**
+@@ -760,6 +771,134 @@ static int mtk_pcie_startup_port_v2(struct mtk_pcie_port *port)
+ 	return 0;
+ }
+ 
++static int mtk_pcie_startup_port_en7528(struct mtk_pcie_port *port)
++{
++	struct mtk_pcie *pcie = port->pcie;
++	struct pci_host_bridge *host = pci_host_bridge_from_priv(pcie);
++	struct resource *mem = NULL;
++	struct resource_entry *entry;
++	u32 val, link_mask;
++	int err;
++
++	entry = resource_list_first_type(&host->windows, IORESOURCE_MEM);
++	if (entry)
++		mem = entry->res;
++	if (!mem)
++		return -EINVAL;
++
++	if (!pcie->cfg) {
++		dev_err(pcie->dev, "EN7528: pciecfg syscon not available\n");
++		return -EINVAL;
++	}
++
++	/* Assert all reset signals */
++	writel(0, port->base + PCIE_RST_CTRL);
++
++	/*
++	 * Enable PCIe link down reset, if link status changed from link up to
++	 * link down, this will reset MAC control registers and configuration
++	 * space.
++	 */
++	writel(PCIE_LINKDOWN_RST_EN, port->base + PCIE_RST_CTRL);
++
++	msleep(PCIE_T_PVPERL_MS);
++
++	/* De-assert PHY, PE, PIPE, MAC and configuration reset */
++	val = readl(port->base + PCIE_RST_CTRL);
++	val |= PCIE_PHY_RSTB | PCIE_PERSTB | PCIE_PIPE_SRSTB |
++	       PCIE_MAC_SRSTB | PCIE_CRSTB;
++	writel(val, port->base + PCIE_RST_CTRL);
++
++	writel(PCIE_CLASS_CODE | PCIE_REVISION_ID,
++	       port->base + PCIE_CONF_REV_CLASS);
++	writel(EN7528_HOST_MODE, port->base);
++
++	link_mask = (port->slot == 0) ? EN7528_RC0_LINKUP : EN7528_RC1_LINKUP;
++
++	/* 100ms timeout value should be enough for Gen1/2 training */
++	err = regmap_read_poll_timeout(pcie->cfg, EN7528_LINKUP_REG, val,
++				       !!(val & link_mask), 20,
++				       PCI_PM_D3COLD_WAIT * USEC_PER_MSEC);
++	if (err) {
++		dev_err(pcie->dev, "EN7528: port%d link timeout\n", port->slot);
++		return -ETIMEDOUT;
++	}
++
++	/* Activate INTx interrupts */
++	val = readl(port->base + PCIE_INT_MASK);
++	val &= ~INTX_MASK;
++	writel(val, port->base + PCIE_INT_MASK);
++
++	if (IS_ENABLED(CONFIG_PCI_MSI))
++		mtk_pcie_enable_msi(port);
++
++	/* Set AHB to PCIe translation windows */
++	val = lower_32_bits(mem->start) |
++	      AHB2PCIE_SIZE(fls(resource_size(mem)));
++	writel(val, port->base + PCIE_AHB_TRANS_BASE0_L);
++
++	val = upper_32_bits(mem->start);
++	writel(val, port->base + PCIE_AHB_TRANS_BASE0_H);
++
++	writel(WIN_ENABLE, port->base + PCIE_AXI_WINDOW0);
++
++	if (!IS_BUILTIN(CONFIG_PCIE_MEDIATEK))
++		dev_info(pcie->dev,
++			 "module not built-in, Gen2 unavailable even if supported\n");
++
++	return 0;
++}
++
++/**
++ * mtk_pcie_retrain - retrain the root bridge link if needed
++ * @dev: The device, for use in logging
++ * @host: The host bridge which contains the link
++ *
++ * Due to what is likely a hardware bug, some devices (notably EcoNet) start up
++ * as Gen1, and must be retrained once after initial configuration in order to
++ * reach Gen2.
++ *
++ * These devices always self-identify as Gen2 capable, but sometimes the PHY is
++ * only capable of Gen1 operation, and sometimes the PCIe card (e.g. wifi) is
++ * only Gen1 capable. Therefore it is most convenient to retrain every port
++ * after startup.
++ */
++static int mtk_pcie_retrain(struct device *dev, struct pci_host_bridge *host)
++{
++	struct pci_dev *rp;
++	int ret = -ENOENT;
++	u16 lnksta = 0;
++	u32 speed;
++
++	/* Should already have been warned about during startup_port */
++	if (!IS_BUILTIN(CONFIG_PCIE_MEDIATEK))
++		return 0;
++
++	guard(rwsem_read)(&pci_bus_sem);
++
++	for_each_pci_bridge(rp, host->bus) {
++		if (pci_pcie_type(rp) != PCI_EXP_TYPE_ROOT_PORT)
++			continue;
++
++#if IS_BUILTIN(CONFIG_PCIE_MEDIATEK)
++		ret = pcie_retrain_link(rp, true);
++#endif
++
++		if (ret)
++			return dev_err_probe(&rp->dev, ret,
++					     "failed to retrain port\n");
++
++		pcie_capability_read_word(rp, PCI_EXP_LNKSTA, &lnksta);
++		speed = lnksta & PCI_EXP_LNKSTA_CLS;
++
++		pci_info(rp, "link retrained, speed %s\n",
++			 pci_speed_string(pcie_link_speed[speed]));
++
++	}
++
++	return 0;
++}
++
+ static void __iomem *mtk_pcie_map_bus(struct pci_bus *bus,
+ 				      unsigned int devfn, int where)
+ {
+@@ -1173,6 +1312,13 @@ static int mtk_pcie_probe(struct platform_device *pdev)
+ 	if (err)
+ 		goto put_resources;
+ 
++	/*
++	 * Ignore error because pci_host_probe() was already called, and in any
++	 * case it is possible that the port will still work as Gen1.
++	 */
++	if (pcie->soc->quirks & MTK_PCIE_RETRAIN)
++		mtk_pcie_retrain(dev, host);
++
+ 	return 0;
+ 
+ put_resources:
+@@ -1292,8 +1438,16 @@ static const struct mtk_pcie_soc mtk_pcie_soc_mt7629 = {
+ 	.quirks = MTK_PCIE_FIX_CLASS_ID | MTK_PCIE_FIX_DEVICE_ID,
+ };
+ 
++static const struct mtk_pcie_soc mtk_pcie_soc_en7528 = {
++	.ops = &mtk_pcie_ops_v2,
++	.startup = mtk_pcie_startup_port_en7528,
++	.setup_irq = mtk_pcie_setup_irq,
++	.quirks = MTK_PCIE_RETRAIN,
++};
++
+ static const struct of_device_id mtk_pcie_ids[] = {
+ 	{ .compatible = "airoha,an7583-pcie", .data = &mtk_pcie_soc_an7583 },
++	{ .compatible = "econet,en7528-pcie", .data = &mtk_pcie_soc_en7528 },
+ 	{ .compatible = "mediatek,mt2701-pcie", .data = &mtk_pcie_soc_v1 },
+ 	{ .compatible = "mediatek,mt7623-pcie", .data = &mtk_pcie_soc_v1 },
+ 	{ .compatible = "mediatek,mt2712-pcie", .data = &mtk_pcie_soc_mt2712 },
+
+base-commit: 843044971a5167087a9484f8f6eec81da30f2a71
 -- 
-2.53.0-Meta
+2.39.5
 
 
