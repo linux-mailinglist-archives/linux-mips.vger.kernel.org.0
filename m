@@ -1,253 +1,167 @@
-Return-Path: <linux-mips+bounces-15054-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-15058-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id 1SpzKoSXKmqetAMAu9opvQ
-	(envelope-from <linux-mips+bounces-15054-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Thu, 11 Jun 2026 13:09:56 +0200
+	id x/ulE+u6Kmp5vwMAu9opvQ
+	(envelope-from <linux-mips+bounces-15058-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Thu, 11 Jun 2026 15:40:59 +0200
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 452F56712B2
-	for <lists+linux-mips@lfdr.de>; Thu, 11 Jun 2026 13:09:56 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id C8FC1672657
+	for <lists+linux-mips@lfdr.de>; Thu, 11 Jun 2026 15:40:58 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=suse.de header.s=susede2_rsa header.b=04bfJD45;
-	dkim=pass header.d=suse.de header.s=susede2_ed25519 header.b=pgvPdq4t;
-	dkim=pass header.d=suse.de header.s=susede2_rsa header.b=n4EqzNXY;
-	dkim=pass header.d=suse.de header.s=susede2_ed25519 header.b=S0X4n+wt;
-	spf=pass (mail.lfdr.de: domain of "linux-mips+bounces-15054-lists+linux-mips=lfdr.de@vger.kernel.org" designates 172.105.105.114 as permitted sender) smtp.mailfrom="linux-mips+bounces-15054-lists+linux-mips=lfdr.de@vger.kernel.org";
-	dmarc=pass (policy=none) header.from=suse.de;
+	dkim=pass header.d=huawei.com header.s=dkim header.b=Q4cb6JW+;
+	dkim=pass header.d=huawei.com header.s=dkim header.b=Q4cb6JW+;
+	spf=pass (mail.lfdr.de: domain of "linux-mips+bounces-15058-lists+linux-mips=lfdr.de@vger.kernel.org" designates 172.234.253.10 as permitted sender) smtp.mailfrom="linux-mips+bounces-15058-lists+linux-mips=lfdr.de@vger.kernel.org";
+	dmarc=pass (policy=quarantine) header.from=huawei.com;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id B1B4C3021D2B
-	for <lists+linux-mips@lfdr.de>; Thu, 11 Jun 2026 11:09:54 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id C0B5E33DF4B9
+	for <lists+linux-mips@lfdr.de>; Thu, 11 Jun 2026 13:38:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7FA6B3B9D95;
-	Thu, 11 Jun 2026 11:09:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DEB0E408020;
+	Thu, 11 Jun 2026 13:38:46 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D92BC3DC878
-	for <linux-mips@vger.kernel.org>; Thu, 11 Jun 2026 11:09:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50AD3408606;
+	Thu, 11 Jun 2026 13:38:44 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781176194; cv=none; b=DRwEgPHDCT7IXWTg8QR/N7KS/w4nZDXz2lvMsNjnQiVsqaPDrGMTdhT80mZj9XQsCY4YDQ15NfHBnZMh5QFh9cPEOl632nObcOOHCJ2qTy7l2rSwZC/1gKaduZZuc5/aa42wCPI/YzXni9U596M5j/NDT5q/51BVnFd3vyFN7gs=
+	t=1781185126; cv=none; b=Jo/CuvEpp+AMuFbC3OQnnoSVzPs8pBX7OZJmyzjDcrRI7lqmcFSIoueIGW2suvLunPyWZI2xcYvX3OCvkgK5pZmhXpKKVmod4DvMf0bjeOmujjx6XhNWnDXixaJ0eBVQQENXfhM3JcABdcLFRb78eahT+3GiTgTJYz1nk9zp7A8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781176194; c=relaxed/simple;
-	bh=Vdom2FtAJ7F0cVc5tBE5I7/We+LR+muCsIpatKkKXgo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=VBglL4KuXVdFeg4h5I9rK2y4baEVm40Zc0Dlr1sKOIFAoHB324Ap5Gr+JExIqM1voYT9gFS7loDE2EcOILmemfIPFRGrrRrFZcphV7Ecw/M9f8/BoWpc8gsml6U+J/KKdKvQ3t2d4Bx2bHOdJGYadX4VdzYWkyMVUDTC1vXwJt4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=04bfJD45; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=pgvPdq4t; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=n4EqzNXY; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=S0X4n+wt; arc=none smtp.client-ip=195.135.223.130
-Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id E96936AD43;
-	Thu, 11 Jun 2026 11:09:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1781176190; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=C8NwLi3aRktSXx2ctXNhlpfjgqj4pFbqX0m47VY3N48=;
-	b=04bfJD45ru0R6EVcZbkb1Q/B3t505Zq/JWtXJqkBXN9DOFbLU+IqWsku/xwXHg9BAPyeHV
-	X5OuSy85UJNmN+9jNzBS3VCnTUxcSKBO5RrWPhDBvY9pAqVFVpyp24fJmw540uO9AQ4ybh
-	VHQf2KV+XvtzPsmUQfNIMhnUDuBtnWM=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1781176190;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=C8NwLi3aRktSXx2ctXNhlpfjgqj4pFbqX0m47VY3N48=;
-	b=pgvPdq4tX4DG6TIuYE4xdJmaICC1rNR+bRMkdZGCM605FCy5QmM6MVXi5cvQDhdm5wjNAE
-	/sZjfTCf7WsbEzCA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1781176188; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=C8NwLi3aRktSXx2ctXNhlpfjgqj4pFbqX0m47VY3N48=;
-	b=n4EqzNXYuWR2O9LFImyYScYyBS9aTbovofu853dyssJ+CV7ZGFq2Uw9bycw6gpsJRk1c3X
-	/QlTgDNCR6HX+GH3LzAt5My+UlnQtWBqVErkq+YBiJ6tkUwX6XXWVbguZwv+0BPWj7r5Ih
-	5D30KdLdS9Xzd2KeigFRvC9eYAHHVyw=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1781176188;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=C8NwLi3aRktSXx2ctXNhlpfjgqj4pFbqX0m47VY3N48=;
-	b=S0X4n+wtXa6Ptd/dW60I5yWPMxkBzi1NZjXRnv2RZ5qC7sIkfKo/9flPx3K5Qbb9vNZEhr
-	16zNS3ppWDtockAQ==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 12BDC779A7;
-	Thu, 11 Jun 2026 11:09:48 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id 0ZEnA3yXKmpcCgAAD6G6ig
-	(envelope-from <tzimmermann@suse.de>); Thu, 11 Jun 2026 11:09:48 +0000
-Message-ID: <be1848f1-6a29-4c4f-999c-ea79de82f250@suse.de>
-Date: Thu, 11 Jun 2026 13:09:47 +0200
+	s=arc-20240116; t=1781185126; c=relaxed/simple;
+	bh=Y0eYG4JjRCRyiW6drRchJ7OcmOhXIR3VQR9tnjixIXU=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type; b=Yy9dwlYgSrCibcc4HYtbTTI1OSPxLPoO94Cv809wcw+lajReLzw7WVM8aHyEpsTzhqwwmnkkm4/m7lqMREuzQGCnxR3dJzOa7dvT9M8q8uSRNyq9u9CDtwe/BX+zKz4EJdvStQfQPx/+IJiQpBepmFcSe/3FM5UN80245waE4UE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=Q4cb6JW+; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=Q4cb6JW+; arc=none smtp.client-ip=45.249.212.187
+dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
+	c=relaxed/relaxed; q=dns/txt;
+	h=From;
+	bh=L5MJGjgiyYXsGkeqYYWhkEAYdplRJ6vM+lP/xwLDgU0=;
+	b=Q4cb6JW+tb/S8ENElUjH4KZyfImN5RGVPnZfI7NXL/rAmJKrC3Sh97W+MX4BH5/cwOIWm/4Qj
+	Zy2AajxJdY4DEt7ohGWoNyl6COw6QY7IpcyV2LYvtH5i74eUVyi2vf7nuTL7sDs/lbY+juMBjyZ
+	RH56YBf0rJdEHJgrb8Fchew=
+Received: from canpmsgout06.his.huawei.com (unknown [172.19.92.157])
+	by szxga01-in.huawei.com (SkyGuard) with ESMTPS id 4gbkHZ0DgSz1BFMZ;
+	Thu, 11 Jun 2026 21:38:18 +0800 (CST)
+dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
+	c=relaxed/relaxed; q=dns/txt;
+	h=From;
+	bh=L5MJGjgiyYXsGkeqYYWhkEAYdplRJ6vM+lP/xwLDgU0=;
+	b=Q4cb6JW+tb/S8ENElUjH4KZyfImN5RGVPnZfI7NXL/rAmJKrC3Sh97W+MX4BH5/cwOIWm/4Qj
+	Zy2AajxJdY4DEt7ohGWoNyl6COw6QY7IpcyV2LYvtH5i74eUVyi2vf7nuTL7sDs/lbY+juMBjyZ
+	RH56YBf0rJdEHJgrb8Fchew=
+Received: from mail.maildlp.com (unknown [172.19.162.223])
+	by canpmsgout06.his.huawei.com (SkyGuard) with ESMTPS id 4gbk6b0dP8zRhQv;
+	Thu, 11 Jun 2026 21:30:31 +0800 (CST)
+Received: from dggpemf500011.china.huawei.com (unknown [7.185.36.131])
+	by mail.maildlp.com (Postfix) with ESMTPS id AA07B40670;
+	Thu, 11 Jun 2026 21:38:25 +0800 (CST)
+Received: from huawei.com (10.90.53.73) by dggpemf500011.china.huawei.com
+ (7.185.36.131) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Thu, 11 Jun
+ 2026 21:38:23 +0800
+From: Jinjie Ruan <ruanjinjie@huawei.com>
+To: <catalin.marinas@arm.com>, <will@kernel.org>, <tsbogend@alpha.franken.de>,
+	<pjw@kernel.org>, <palmer@dabbelt.com>, <aou@eecs.berkeley.edu>,
+	<alex@ghiti.fr>, <tglx@kernel.org>, <mingo@redhat.com>, <bp@alien8.de>,
+	<dave.hansen@linux.intel.com>, <hpa@zytor.com>, <peterz@infradead.org>,
+	<kees@kernel.org>, <nathan@kernel.org>, <linusw@kernel.org>,
+	<ojeda@kernel.org>, <ruanjinjie@huawei.com>, <david.kaplan@amd.com>,
+	<lukas.bulwahn@redhat.com>, <ryan.roberts@arm.com>, <maz@kernel.org>,
+	<timothy.hayes@arm.com>, <lpieralisi@kernel.org>, <thuth@redhat.com>,
+	<oupton@kernel.org>, <yeoreum.yun@arm.com>, <miko.lenczewski@arm.com>,
+	<broonie@kernel.org>, <kevin.brodsky@arm.com>, <james.clark@linaro.org>,
+	<tabba@google.com>, <mrigendra.chaubey@gmail.com>, <arnd@arndb.de>,
+	<anshuman.khandual@arm.com>, <x86@kernel.org>,
+	<linux-kernel@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+	<linux-mips@vger.kernel.org>, <linux-riscv@lists.infradead.org>
+Subject: [PATCH RFC 0/3] arm64: Add HOTPLUG_PARALLEL support for secondary CPUs
+Date: Thu, 11 Jun 2026 21:38:06 +0800
+Message-ID: <20260611133809.3854977-1-ruanjinjie@huawei.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 01/15] drm/amd/display: Handle struct
- drm_plane_state.ignore_damage_clips
-To: Javier Martinez Canillas <javierm@redhat.com>, mripard@kernel.org,
- maarten.lankhorst@linux.intel.com, airlied@redhat.com, airlied@gmail.com,
- simona@ffwll.ch, admin@kodeit.net, gargaditya08@proton.me,
- paul@crapouillou.net, jani.nikula@linux.intel.com, mhklkml@zohomail.com,
- zack.rusin@broadcom.com, bcm-kernel-feedback-list@broadcom.com,
- harry.wentland@amd.com, sunpeng.li@amd.com, siqueira@igalia.com,
- alexander.deucher@amd.com, rodrigo.vivi@intel.com,
- joonas.lahtinen@linux.intel.com, tursulin@ursulin.net,
- dmitry.osipenko@collabora.com, gurchetansingh@chromium.org, olvaffe@gmail.com
-Cc: dri-devel@lists.freedesktop.org, linux-hyperv@vger.kernel.org,
- intel-gfx@lists.freedesktop.org, intel-xe@lists.freedesktop.org,
- linux-mips@vger.kernel.org, virtualization@lists.linux.dev,
- amd-gfx@lists.freedesktop.org, Zack Rusin <zackr@vmware.com>,
- stable@vger.kernel.org
-References: <20260610152505.260172-1-tzimmermann@suse.de>
- <20260610152505.260172-2-tzimmermann@suse.de>
- <87y0gl5qw8.fsf@ocarina.mail-host-address-is-not-set>
- <45aec54a-ec80-48ed-9bcc-84e7bccc11eb@suse.de>
- <87mrx15om7.fsf@ocarina.mail-host-address-is-not-set>
-Content-Language: en-US
-From: Thomas Zimmermann <tzimmermann@suse.de>
-Autocrypt: addr=tzimmermann@suse.de; keydata=
- xsBNBFs50uABCADEHPidWt974CaxBVbrIBwqcq/WURinJ3+2WlIrKWspiP83vfZKaXhFYsdg
- XH47fDVbPPj+d6tQrw5lPQCyqjwrCPYnq3WlIBnGPJ4/jreTL6V+qfKRDlGLWFjZcsrPJGE0
- BeB5BbqP5erN1qylK9i3gPoQjXGhpBpQYwRrEyQyjuvk+Ev0K1Jc5tVDeJAuau3TGNgah4Yc
- hdHm3bkPjz9EErV85RwvImQ1dptvx6s7xzwXTgGAsaYZsL8WCwDaTuqFa1d1jjlaxg6+tZsB
- 9GluwvIhSezPgnEmimZDkGnZRRSFiGP8yjqTjjWuf0bSj5rUnTGiyLyRZRNGcXmu6hjlABEB
- AAHNJ1Rob21hcyBaaW1tZXJtYW5uIDx0emltbWVybWFubkBzdXNlLmRlPsLAjgQTAQgAOAIb
- AwULCQgHAgYVCgkICwIEFgIDAQIeAQIXgBYhBHIX+6yM6c9jRKFo5WgNwR1TC3ojBQJftODH
- AAoJEGgNwR1TC3ojx1wH/0hKGWugiqDgLNXLRD/4TfHBEKmxIrmfu9Z5t7vwUKfwhFL6hqvo
- lXPJJKQpQ2z8+X2vZm/slsLn7J1yjrOsoJhKABDi+3QWWSGkaGwRJAdPVVyJMfJRNNNIKwVb
- U6B1BkX2XDKDGffF4TxlOpSQzdtNI/9gleOoUA8+jy8knnDYzjBNOZqLG2FuTdicBXblz0Mf
- vg41gd9kCwYXDnD91rJU8tzylXv03E75NCaTxTM+FBXPmsAVYQ4GYhhgFt8S2UWMoaaABLDe
- 7l5FdnLdDEcbmd8uLU2CaG4W2cLrUaI4jz2XbkcPQkqTQ3EB67hYkjiEE6Zy3ggOitiQGcqp
- j//OwE0EWznS4AEIAMYmP4M/V+T5RY5at/g7rUdNsLhWv1APYrh9RQefODYHrNRHUE9eosYb
- T6XMryR9hT8XlGOYRwKWwiQBoWSDiTMo/Xi29jUnn4BXfI2px2DTXwc22LKtLAgTRjP+qbU6
- 3Y0xnQN29UGDbYgyyK51DW3H0If2a3JNsheAAK+Xc9baj0LGIc8T9uiEWHBnCH+RdhgATnWW
- GKdDegUR5BkDfDg5O/FISymJBHx2Dyoklv5g4BzkgqTqwmaYzsl8UxZKvbaxq0zbehDda8lv
- hFXodNFMAgTLJlLuDYOGLK2AwbrS3Sp0AEbkpdJBb44qVlGm5bApZouHeJ/+n+7r12+lqdsA
- EQEAAcLAdgQYAQgAIAIbDBYhBHIX+6yM6c9jRKFo5WgNwR1TC3ojBQJftOH6AAoJEGgNwR1T
- C3ojVSkIALpAPkIJPQoURPb1VWjh34l0HlglmYHvZszJWTXYwavHR8+k6Baa6H7ufXNQtThR
- yIxJrQLW6rV5lm7TjhffEhxVCn37+cg0zZ3j7zIsSS0rx/aMwi6VhFJA5hfn3T0TtrijKP4A
- SAQO9xD1Zk9/61JWk8OysuIh7MXkl0fxbRKWE93XeQBhIJHQfnc+YBLprdnxR446Sh8Wn/2D
- Ya8cavuWf2zrB6cZurs048xe0UbSW5AOSo4V9M0jzYI4nZqTmPxYyXbm30Kvmz0rYVRaitYJ
- 4kyYYMhuULvrJDMjZRvaNe52tkKAvMevcGdt38H4KSVXAylqyQOW5zvPc4/sq9c=
-In-Reply-To: <87mrx15om7.fsf@ocarina.mail-host-address-is-not-set>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Flag: NO
-X-Spam-Score: -4.51
-X-Spam-Level: 
+Content-Type: text/plain
+X-ClientProxiedBy: kwepems500001.china.huawei.com (7.221.188.70) To
+ dggpemf500011.china.huawei.com (7.185.36.131)
 X-Rspamd-Action: no action
-X-Spamd-Result: default: False [-2.16 / 15.00];
+X-Spamd-Result: default: False [-6.16 / 15.00];
+	WHITELIST_DMARC(-7.00)[huawei.com:D:+];
+	SUSPICIOUS_RECIPS(1.50)[];
+	MID_CONTAINS_FROM(1.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[suse.de,none];
-	R_DKIM_ALLOW(-0.20)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+	R_MISSING_CHARSET(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[huawei.com,quarantine];
+	R_DKIM_ALLOW(-0.20)[huawei.com:s=dkim];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-15054-lists,linux-mips=lfdr.de];
-	FORGED_RECIPIENTS(0.00)[m:javierm@redhat.com,m:mripard@kernel.org,m:maarten.lankhorst@linux.intel.com,m:airlied@redhat.com,m:airlied@gmail.com,m:simona@ffwll.ch,m:admin@kodeit.net,m:gargaditya08@proton.me,m:paul@crapouillou.net,m:jani.nikula@linux.intel.com,m:mhklkml@zohomail.com,m:zack.rusin@broadcom.com,m:bcm-kernel-feedback-list@broadcom.com,m:harry.wentland@amd.com,m:sunpeng.li@amd.com,m:siqueira@igalia.com,m:alexander.deucher@amd.com,m:rodrigo.vivi@intel.com,m:joonas.lahtinen@linux.intel.com,m:tursulin@ursulin.net,m:dmitry.osipenko@collabora.com,m:gurchetansingh@chromium.org,m:olvaffe@gmail.com,m:dri-devel@lists.freedesktop.org,m:linux-hyperv@vger.kernel.org,m:intel-gfx@lists.freedesktop.org,m:intel-xe@lists.freedesktop.org,m:linux-mips@vger.kernel.org,m:virtualization@lists.linux.dev,m:amd-gfx@lists.freedesktop.org,m:zackr@vmware.com,m:stable@vger.kernel.org,s:lists@lfdr.de];
-	FROM_HAS_DN(0.00)[];
-	FORGED_SENDER(0.00)[tzimmermann@suse.de,linux-mips@vger.kernel.org];
-	RCPT_COUNT_TWELVE(0.00)[32];
-	FREEMAIL_TO(0.00)[redhat.com,kernel.org,linux.intel.com,gmail.com,ffwll.ch,kodeit.net,proton.me,crapouillou.net,zohomail.com,broadcom.com,amd.com,igalia.com,intel.com,ursulin.net,collabora.com,chromium.org];
-	MIME_TRACE(0.00)[0:+];
-	FORGED_SENDER_MAILLIST(0.00)[];
 	FORWARDED(0.00)[lists@lfdr.de];
-	DKIM_TRACE(0.00)[suse.de:+];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
-	TO_DN_SOME(0.00)[];
-	FORGED_SENDER_FORWARDING(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[6];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[tzimmermann@suse.de,linux-mips@vger.kernel.org];
+	MIME_TRACE(0.00)[0:+];
+	FORGED_SENDER(0.00)[ruanjinjie@huawei.com,linux-mips@vger.kernel.org];
+	FORGED_RECIPIENTS(0.00)[m:catalin.marinas@arm.com,m:will@kernel.org,m:tsbogend@alpha.franken.de,m:pjw@kernel.org,m:palmer@dabbelt.com,m:aou@eecs.berkeley.edu,m:alex@ghiti.fr,m:tglx@kernel.org,m:mingo@redhat.com,m:bp@alien8.de,m:dave.hansen@linux.intel.com,m:hpa@zytor.com,m:peterz@infradead.org,m:kees@kernel.org,m:nathan@kernel.org,m:linusw@kernel.org,m:ojeda@kernel.org,m:ruanjinjie@huawei.com,m:david.kaplan@amd.com,m:lukas.bulwahn@redhat.com,m:ryan.roberts@arm.com,m:maz@kernel.org,m:timothy.hayes@arm.com,m:lpieralisi@kernel.org,m:thuth@redhat.com,m:oupton@kernel.org,m:yeoreum.yun@arm.com,m:miko.lenczewski@arm.com,m:broonie@kernel.org,m:kevin.brodsky@arm.com,m:james.clark@linaro.org,m:tabba@google.com,m:mrigendra.chaubey@gmail.com,m:arnd@arndb.de,m:anshuman.khandual@arm.com,m:x86@kernel.org,m:linux-kernel@vger.kernel.org,m:linux-arm-kernel@lists.infradead.org,m:linux-mips@vger.kernel.org,m:linux-riscv@lists.infradead.org,m:mrigendrachaubey@gmail.com,s:lists@lfdr.de];
+	FREEMAIL_TO(0.00)[arm.com,kernel.org,alpha.franken.de,dabbelt.com,eecs.berkeley.edu,ghiti.fr,redhat.com,alien8.de,linux.intel.com,zytor.com,infradead.org,huawei.com,amd.com,linaro.org,google.com,gmail.com,arndb.de,vger.kernel.org,lists.infradead.org];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-15058-lists,linux-mips=lfdr.de];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	FORGED_SENDER_FORWARDING(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[ruanjinjie@huawei.com,linux-mips@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	DKIM_TRACE(0.00)[huawei.com:+];
+	TO_DN_NONE(0.00)[];
 	ALIAS_RESOLVED(0.00)[];
-	FORGED_RECIPIENTS_FORWARDING(0.00)[];
-	MID_RHS_MATCH_FROM(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[40];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,vger.kernel.org:from_smtp,huawei.com:dkim,huawei.com:mid,huawei.com:from_mime];
 	TAGGED_RCPT(0.00)[linux-mips];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.de:dkim,suse.de:email,suse.de:mid,suse.de:from_mime,vger.kernel.org:from_smtp,suse.com:url,tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo]
+	FORGED_RECIPIENTS_FORWARDING(0.00)[];
+	RCVD_COUNT_SEVEN(0.00)[7]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 452F56712B2
+X-Rspamd-Queue-Id: C8FC1672657
 
-Hi
+Support for parallel secondary CPU bringup is already utilized by x86,
+MIPS, and RISC-V. This patch brings this capability to the arm64
+architecture.
 
-Am 11.06.26 um 12:59 schrieb Javier Martinez Canillas:
-> Thomas Zimmermann <tzimmermann@suse.de> writes:
->
->> Hi Javier
->>
->> Am 11.06.26 um 12:10 schrieb Javier Martinez Canillas:
->>> Thomas Zimmermann <tzimmermann@suse.de> writes:
->>>
->>> Hello Thomas,
->>>
->>>> The mode-setting pipeline can disabled damage clippings for a commit
->>>> by setting ignore_damage_clips in struct drm_plane_state. The commit
->>>> will then do a full display update.
->>>>
->>>> Test the flag in DCN code and do a full update in DCN code if it has
->>>> been set.
->>>>
->>>> Commit 35ed38d58257 ("drm: Allow drivers to indicate the damage helpers
->>>> to ignore damage clips") introduced ignore_damage_clips to selectively
->>>> ignore damage clipping in certain framebuffer changes. This driver does
->>>> not do that, but DRM's damage iterator will soon rely on the flag.
->>>> Therefore supporting it here as well make sense for consistency.
->>>>
->>>> Signed-off-by: Thomas Zimmermann <tzimmermann@suse.de>
->>>> Fixes: 35ed38d58257 ("drm: Allow drivers to indicate the damage helpers to ignore damage clips")
->>> I don't think that a Fixes tag is correct here? Your patch series
->>> is changing the 'struct drm_plane_state.ignore_damage_clips' and
->>> the changes make sense, but definitely isn't a fix in my opinion.
->> But shouldn't we have added this test in amdgpu and the other drivers as
->> part of commit 35ed38d58257 ? Sure, these drivers don't use
->> ignore_damage_clips, but it's still an inconsistency wrt damage
-> I don't think so, since the original scope of ignore_damage_clips was for DRM
-> driver of virtual devices (namely virtio-gpu and vmwgfx). These do per-buffer
-> uploads instead of per-plane uploads, and so there was a need to force a full
-> plane update if the framebuffer attached to the plane was changed.
->
-> Your series are now extending the scope of ignore_damage_clips to be used by
-> core helpers and force a full plane update when doing a modeset. This makes
-> sense to me but it wasn't the original intention of the propery and that is
-> why I don't think that should be considered a fix.
->
-> The only patch that IMO is really a fix for commit 35ed38d58257 is patch #6.
-> Because is true that the plane state ignore_damage_clips was carried over
-> when the state was duplicated.
+Introduce CONFIG_PARALLEL_SMT_PRIMARY_FIRST to avoid primary SMT threads
+to boot first constraint.
 
-Ok, I'll drop the Fixes tags then.
+And Add a 'cpu' parameter to update_cpu_boot_status() to allow updating the
+boot status at a per-CPU granularity during parallel bringup.
 
-Best regards
-Thomas
+Rework the global `secondary_data` accessed during early boot into
+a per-CPU array. This array maps logical CPU IDs to MPIDR_EL1 values,
+enabling the early boot code in head.S to resolve each secondary CPU's
+logical ID concurrently.
 
->
+Jinjie Ruan (3):
+  cpu/hotplug: Introduce CONFIG_PARALLEL_SMT_PRIMARY_FIRST
+  arm64: smp: Pass CPU ID to update_cpu_boot_status()
+  arm64: Add HOTPLUG_PARALLEL support for secondary CPUs
+
+ arch/Kconfig                   |  4 ++++
+ arch/arm64/Kconfig             |  1 +
+ arch/arm64/include/asm/smp.h   | 14 +++++++++++---
+ arch/arm64/kernel/cpufeature.c |  2 +-
+ arch/arm64/kernel/head.S       | 23 ++++++++++++++++++++++
+ arch/arm64/kernel/smp.c        | 35 ++++++++++++++++++++++++++++++----
+ arch/arm64/mm/context.c        |  2 +-
+ arch/mips/Kconfig              |  1 +
+ arch/riscv/Kconfig             |  1 +
+ arch/x86/Kconfig               |  1 +
+ kernel/cpu.c                   |  6 +++++-
+ 11 files changed, 80 insertions(+), 10 deletions(-)
 
 -- 
---
-Thomas Zimmermann
-Graphics Driver Developer
-SUSE Software Solutions Germany GmbH
-Frankenstr. 146, 90461 Nürnberg, Germany, www.suse.com
-GF: Jochen Jaser, Andrew McDonald, Werner Knoblich, (HRB 36809, AG Nürnberg)
-
+2.34.1
 
 
