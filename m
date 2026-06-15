@@ -1,58 +1,58 @@
-Return-Path: <linux-mips+bounces-15072-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-15073-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id ezyXMF6+L2qVFgUAu9opvQ
-	(envelope-from <linux-mips+bounces-15072-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Mon, 15 Jun 2026 10:57:02 +0200
+	id 1Bs/NazML2q6GgUAu9opvQ
+	(envelope-from <linux-mips+bounces-15073-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Mon, 15 Jun 2026 11:58:04 +0200
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 62F09684C7E
-	for <lists+linux-mips@lfdr.de>; Mon, 15 Jun 2026 10:57:01 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0800E685360
+	for <lists+linux-mips@lfdr.de>; Mon, 15 Jun 2026 11:58:04 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=huawei.com header.s=dkim header.b=kZyP2QYI;
-	spf=pass (mail.lfdr.de: domain of "linux-mips+bounces-15072-lists+linux-mips=lfdr.de@vger.kernel.org" designates 172.105.105.114 as permitted sender) smtp.mailfrom="linux-mips+bounces-15072-lists+linux-mips=lfdr.de@vger.kernel.org";
+	dkim=pass header.d=huawei.com header.s=dkim header.b=0RQMYBFx;
+	spf=pass (mail.lfdr.de: domain of "linux-mips+bounces-15073-lists+linux-mips=lfdr.de@vger.kernel.org" designates 172.234.253.10 as permitted sender) smtp.mailfrom="linux-mips+bounces-15073-lists+linux-mips=lfdr.de@vger.kernel.org";
 	dmarc=pass (policy=quarantine) header.from=huawei.com;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 0F2A030254D6
-	for <lists+linux-mips@lfdr.de>; Mon, 15 Jun 2026 08:53:18 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id AA359301652C
+	for <lists+linux-mips@lfdr.de>; Mon, 15 Jun 2026 09:57:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 84C7531E856;
-	Mon, 15 Jun 2026 08:51:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 678B72D9EDC;
+	Mon, 15 Jun 2026 09:57:32 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
-Received: from canpmsgout03.his.huawei.com (canpmsgout03.his.huawei.com [113.46.200.218])
+Received: from canpmsgout08.his.huawei.com (canpmsgout08.his.huawei.com [113.46.200.223])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9CCE3D47BA;
-	Mon, 15 Jun 2026 08:51:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 646563DB655;
+	Mon, 15 Jun 2026 09:57:28 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781513519; cv=none; b=Vu1UhDIl8npwfBcgSmMLc/qT76WD6vAQbJYgHSjmdyRkmvN8lkgNKhRX4ucwp4rXgdc7qqiflNiy+iO88/8ijqT1kFEDheRldTbGpsneiblgE1jpii3EdC5QXGUPzEUJ0lal4XAwpVy3Mng6iXVTSe24kZ4bXYyi5kJaoN7b5is=
+	t=1781517452; cv=none; b=k1zA8K10z7FkCCLuUKO2Xmm5YAnd2ppcAvWodOajtD3UcObd09rRQ2vMx4Dqk6uN2P6XZ5PpJTX1tRunvCO3ckrGxSNyYZNPeOl/x5jrJydZhndk+2zCTEy6KUEBwsm0nlZXE25Cd9L0HG4Ox6ibR9a8cW6BgbvvH1XFsp+Bzok=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781513519; c=relaxed/simple;
-	bh=PzUF/c0Hj9VaE04wWl1jEzxSJs+BN65XZDah4JJFsEA=;
+	s=arc-20240116; t=1781517452; c=relaxed/simple;
+	bh=CApkNkwaUI39BKTsOijtLMJpwYEN5rINgmgUu2Xm3C0=;
 	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=nyBdXEAhebJgpGrizgreI8gJH9fV4UiwH/4SAbXMZe6JpK+ql+xOzaLYeC/cwzEQlVHliUgBGMQqSVljyKo2RZge7phm6I/1IAlPit1xdA3sarjyCJKlYB3DHd3W1Xyg4Bh4Otzqly9LKx3ND6AFJaKozPi7O0LzsCOZ7p457Mc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=kZyP2QYI; arc=none smtp.client-ip=113.46.200.218
+	 In-Reply-To:Content-Type; b=F37A6hdUJGkI+eIag/9JeQJONsZYWfJwFdbfmKw7gMde1BiUKEIvw2Co9KFUghnoeecuGc4dfDBNRoYU+Kmcvhs1WlEuKLIO/XcGfikG5y1daNh0GGVzLaAdCcjCH3mi9yLC4HzOZ0fGdND+1cWLYlqyI+eVVKWYIfOQbn18do8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=0RQMYBFx; arc=none smtp.client-ip=113.46.200.223
 dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
 	c=relaxed/relaxed; q=dns/txt;
 	h=From;
-	bh=+06dmrtJLnZdbs87rF1+ux5dsEP9LjcZvNfLN8dlHk4=;
-	b=kZyP2QYInrYpJQGT8hI5P+hzIwOXSNn8KJm9IS3ZYsPNJNgOq6PHW0HqyEuMjHqjtILV0h5xR
-	r4MxUI+Vo26dHexDRGEwgNHCBbrelR7D98by6DQq07Z1T+R8iajyTTcGvtBDTO3IGBAQ7OdfI0/
-	rCKwnClmHHwWxOuokS4VOTg=
-Received: from mail.maildlp.com (unknown [172.19.162.223])
-	by canpmsgout03.his.huawei.com (SkyGuard) with ESMTPS id 4gf3Yz0m9lzpSw0;
-	Mon, 15 Jun 2026 16:43:51 +0800 (CST)
+	bh=c4MJ0qLV8hTTEQqlirPS+MBb0jR5ayNJ62Pv7ajO1fw=;
+	b=0RQMYBFxPBYzIaMEWnsmo6JDwMkRJG9Ut5a/GPr2uGbfDY3BSNxxhL1uK7tBWkAmbgwyAvGUD
+	AvLrnWC/X/O32vMDUQGnyH6A387fl5Bibf1NUYmrmu52SXzqoqf54qlU/Vw/hTS5N5Ui0IAmJKe
+	BHxG3wExIub0PYtWuW1iaas=
+Received: from mail.maildlp.com (unknown [172.19.163.15])
+	by canpmsgout08.his.huawei.com (SkyGuard) with ESMTPS id 4gf51f59YnzmV6m;
+	Mon, 15 Jun 2026 17:49:26 +0800 (CST)
 Received: from dggpemf500011.china.huawei.com (unknown [7.185.36.131])
-	by mail.maildlp.com (Postfix) with ESMTPS id 9E3A940571;
-	Mon, 15 Jun 2026 16:51:50 +0800 (CST)
+	by mail.maildlp.com (Postfix) with ESMTPS id 42EE340571;
+	Mon, 15 Jun 2026 17:57:25 +0800 (CST)
 Received: from [10.67.109.254] (10.67.109.254) by
  dggpemf500011.china.huawei.com (7.185.36.131) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.11; Mon, 15 Jun 2026 16:51:48 +0800
-Message-ID: <e96a2579-c010-4198-a2a3-6ba35b14aef0@huawei.com>
-Date: Mon, 15 Jun 2026 16:51:48 +0800
+ 15.2.1544.11; Mon, 15 Jun 2026 17:57:22 +0800
+Message-ID: <4588efb4-e757-4ca7-9197-025b67ca9ef6@huawei.com>
+Date: Mon, 15 Jun 2026 17:57:22 +0800
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -97,7 +97,7 @@ From: Jinjie Ruan <ruanjinjie@huawei.com>
 In-Reply-To: <SN6PR02MB41575306521E6223561F476FD4182@SN6PR02MB4157.namprd02.prod.outlook.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: kwepems500002.china.huawei.com (7.221.188.17) To
+X-ClientProxiedBy: kwepems200002.china.huawei.com (7.221.188.68) To
  dggpemf500011.china.huawei.com (7.185.36.131)
 X-Rspamd-Action: no action
 X-Spamd-Result: default: False [-7.66 / 15.00];
@@ -106,12 +106,12 @@ X-Spamd-Result: default: False [-7.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[huawei.com,quarantine];
 	R_DKIM_ALLOW(-0.20)[huawei.com:s=dkim];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	FORWARDED(0.00)[lists@lfdr.de];
-	TAGGED_FROM(0.00)[bounces-15072-lists,linux-mips=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-15073-lists,linux-mips=lfdr.de];
 	MIME_TRACE(0.00)[0:+];
 	RCPT_COUNT_TWELVE(0.00)[40];
 	RCVD_TLS_LAST(0.00)[];
@@ -120,7 +120,7 @@ X-Spamd-Result: default: False [-7.66 / 15.00];
 	FREEMAIL_TO(0.00)[outlook.com,arm.com,kernel.org,alpha.franken.de,dabbelt.com,eecs.berkeley.edu,ghiti.fr,redhat.com,alien8.de,linux.intel.com,zytor.com,infradead.org,amd.com,linaro.org,google.com,gmail.com,arndb.de,vger.kernel.org,lists.infradead.org];
 	FORGED_SENDER(0.00)[ruanjinjie@huawei.com,linux-mips@vger.kernel.org];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
 	FORGED_SENDER_FORWARDING(0.00)[];
@@ -133,9 +133,9 @@ X-Spamd-Result: default: False [-7.66 / 15.00];
 	ALIAS_RESOLVED(0.00)[];
 	TAGGED_RCPT(0.00)[linux-mips];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[vger.kernel.org:from_smtp,tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo,huawei.com:dkim,huawei.com:email,huawei.com:mid,huawei.com:from_mime]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,vger.kernel.org:from_smtp]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 62F09684C7E
+X-Rspamd-Queue-Id: 0800E685360
 
 
 
@@ -166,29 +166,72 @@ On 6/12/2026 11:45 PM, Michael Kelley wrote:
 > The last two rows seem mixed up. I would expect parallel=0 to
 > result in a longer boot time.
 
-Hi, Michael,
+Without this patch:
 
-The results are correct and not mixed up.
+KVM event statistics (6 entries)
+Event name       Samples       Sample%     Time (ns)         Time%
+Mean Time (ns)
+  DABT_LOW        323112        75.00%    1669148000        17.00%
+5165
+       WFx         85817        19.00%     723215800         7.00%
+8427
+     SYS64         14914         3.00%     419934530         4.00%
+28157
+       IRQ          5643         1.00%    6732439250        70.00%
+1193060
+     HVC64           282         0.00%      35543970         0.00%
+126042
+  IABT_LOW             1         0.00%          6130         0.00%
+6130
 
-Compared to the original non‑HOTPLUG_PARALLEL approach, the advantage of
-cpuhp.parallel=0 lies in its use of cpu_relax(`yield` on arm64) instead
-of the wait_for_completion_timeout() mechanism (which may cause sleep
-and context switching). This significantly reduces the overhead of VM
-exits and context switches in a KVM guest, thereby cutting the secondary
-CPU boot time by more than half.
+cpuhp.parallel=0:
 
-Regarding cpuhp.parallel=1, I believe the reason it fails to optimize
-boot time is that when a large number of CPUs issue the KICK_AP call
-simultaneously, it results in severe lock contention within KVM, which
-paradoxically slows down secondary CPU bringup. However, this needs
-further investigation into the PSCI_CPU_ON code in KVM.
+Event name       Samples       Sample%     Time (ns)         Time%
+Mean Time (ns)
+ DABT_LOW        308175        80.00%     643628050         6.00%
+2088
+      WFx         55208        14.00%     261925270         2.00%
+4744
+    SYS64         14975         3.00%     155727880         1.00%
+10399
+      IRQ          4755         1.00%    8496162210        88.00%
+1786784
+    HVC64           280         0.00%      19429900         0.00%
+69392
+ IABT_LOW             1         0.00%          5850         0.00%
+5850
 
-I'm testing these performance aspects on physical hardware, so the
-results might be somewhat different because secondary CPU bringup
-requires trapping into the ATF firmware.
+cpuhp.parallel=1:
 
-Best regards,
-Jinjie
+ Event name       Samples       Sample%     Time (ns)         Time%
+Mean Time (ns)
+ DABT_LOW        307923        77.00%     692965050         2.00%
+     2250
+      WFx         59549        15.00%     287888960         0.00%
+     4834
+    SYS64         15127         3.00%     334366230         1.00%
+    22103
+      IRQ         12861         3.00%   29784004970        95.00%
+  2315838
+    HVC64           280         0.00%      21869940         0.00%
+    78106
+ IABT_LOW             1         0.00%          9320         0.00%
+     9320
+
+- Default (no patch): Slowest HVC64 handling (126 μs), highest WFx count
+(85k), and most total VM‑exits.
+
+- cpuhp.parallel=1: HVC64 latency improved to 78 μs (close to
+cpuhp.parallel=0), but IRQ exits increased dramatically (12.9k, 2.7×
+that of `cpuhp.parallel=0`), accounting for 95% of event time and
+becoming the new bottleneck.
+
+- cpuhp.parallel=0: Fastest HVC64 (69 μs), lowest IRQ exits (4.8k), and
+lowest total samples, delivering the best overall boot performance.
+
+Therefor, `cpuhp.parallel=1` reduces HVC cost but suffers from a massive
+increase in IRQ exits, while `cpuhp.parallel=0` avoids this interrupt
+storm and therefore performs best in a KVM guest.
 
 > 
 > Michael
