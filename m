@@ -1,186 +1,288 @@
-Return-Path: <linux-mips+bounces-15094-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-15095-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id M1HhFplhMGpGSQUAu9opvQ
-	(envelope-from <linux-mips+bounces-15094-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Mon, 15 Jun 2026 22:33:29 +0200
+	id MkqkDWd3MGqHTQUAu9opvQ
+	(envelope-from <linux-mips+bounces-15095-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Tue, 16 Jun 2026 00:06:31 +0200
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id EB672689DF8
-	for <lists+linux-mips@lfdr.de>; Mon, 15 Jun 2026 22:33:28 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 855A968A47B
+	for <lists+linux-mips@lfdr.de>; Tue, 16 Jun 2026 00:06:30 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=kernel.org header.s=k20260515 header.b=E86R2Mc0;
-	spf=pass (mail.lfdr.de: domain of "linux-mips+bounces-15094-lists+linux-mips=lfdr.de@vger.kernel.org" designates 172.234.253.10 as permitted sender) smtp.mailfrom="linux-mips+bounces-15094-lists+linux-mips=lfdr.de@vger.kernel.org";
-	dmarc=pass (policy=quarantine) header.from=kernel.org;
-	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
+	dkim=pass header.d=paul-moore.com header.s=google header.b=BJDCw6rF;
+	spf=pass (mail.lfdr.de: domain of "linux-mips+bounces-15095-lists+linux-mips=lfdr.de@vger.kernel.org" designates 2600:3c0a:e001:db::12fc:5321 as permitted sender) smtp.mailfrom="linux-mips+bounces-15095-lists+linux-mips=lfdr.de@vger.kernel.org";
+	dmarc=pass (policy=none) header.from=paul-moore.com;
+	arc=pass ("subspace.kernel.org:s=arc-20240116:i=2")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id CF796304BBD0
-	for <lists+linux-mips@lfdr.de>; Mon, 15 Jun 2026 20:33:23 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id CB17C307ED88
+	for <lists+linux-mips@lfdr.de>; Mon, 15 Jun 2026 22:03:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B6C643955D8;
-	Mon, 15 Jun 2026 20:33:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3AE813B71C1;
+	Mon, 15 Jun 2026 22:03:20 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com [209.85.216.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98A8A1C84D0;
-	Mon, 15 Jun 2026 20:33:21 +0000 (UTC)
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781555602; cv=none; b=n443sX1xPIpoZVt6SPAh37PyCCuFL/0F12zCj/eit4wkE2YvpjsSxPpFCuB/cNGxcL/QEuAlChpaTgHfwSHfK40HlIfz5QQAZ0+PUjW7FdNhiIoJ7vlQTnicnFYNCDmQrENJjIHdAVi/olelZtjS4FhKPoKtSM/F88Oy4jleP9s=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781555602; c=relaxed/simple;
-	bh=9Z4Q+BvDBzDR3RYOg8ewj62G0BIToP4WyuMbIhRXeBc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=CjWc7Y5Kb9piihbqZB8q2IAmM9lNEbMw3NW/0uLTMKmRjYLda/Vd701CRA7QkcJ4qNJsnMhI+0QKtgN7WM1c60T0wVsN+KkGWqEd1yrGM97wyCdc+ay5SncCL7EYlTWhcX5ICatTza1SCg/pdSTrZ+2wdj1QTIEXDiBzxhdCoNY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=E86R2Mc0; arc=none smtp.client-ip=100.103.45.18
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D89131F000E9;
-	Mon, 15 Jun 2026 20:33:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1781555601;
-	bh=as7Ogfoc/AyskAy2+J9eXyhxUhgDui71XAx+CHT5Mew=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=E86R2Mc0QLlmn6hDEj5MnafzRYyOh8VthGPhggOCVEqZ9xx+sywlJb7QXeIaMbEFA
-	 rvREbsI3Zv0iMBuDfYoDef4TgGcmk0gnzth2mBKPpYT5zfQfxZKaETEbxVznMvRfoH
-	 piXE10ylpTWfk/t+pECRYcy/iMGYN/iwRMhVbs6e5bPwfcEmSrgpliHOIWdD3C35KZ
-	 3dd4XZnD7RANNMAcrkEHv2ZJgOVbQ7VfGmUoC1gB6jeJzKn1pSM0YTSpCEnNMVRUEO
-	 3IE0flzeBTi4viwUUEYjyjwYKI+KhiEhnh6PLe1a+NU0sfU6WVODjevHGI2ZZiYcfX
-	 AyBnvEPDADOhQ==
-Message-ID: <131a450f-f9c6-464c-8e4e-a4c7a29fb5de@kernel.org>
-Date: Mon, 15 Jun 2026 22:33:11 +0200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB7523B6C16
+	for <linux-mips@vger.kernel.org>; Mon, 15 Jun 2026 22:03:18 +0000 (UTC)
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1781561000; cv=pass; b=DYQhq5OS5QkMnOn10Hqks694Fd8yMdYtG6Z5B2NEwZM+IeBpeUs+Jut6IkdfvMVUlI1Dwx8MPjICkGHjHW6SN5swou6iBtvit1kd9f+crkq66ywCLgJr+3bvqhAOU6BGxQD8PDOLw8kbu5W2R+1K4Kzl3415Qpfn5Dqf+cJufBQ=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1781561000; c=relaxed/simple;
+	bh=EmFKaOA4oNrlRBvxBZ9rHktVxwJtkaco4eJBdSabd3Q=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=stQVeMW4ML1F484eNSW/5APQvXyj2fM/5R+5fTmdBXq3bvNW4S1bPDq+vziR0wKwua6u/84Qj0vjDkXTei29HzKT2jMg1srVBG23LXFU57uyje01tI7VVIsxi6zFFlBVTnKl7U06kuv0LqURrcTCG3SXUZ62H2Jc1WTGxk48FrA=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=BJDCw6rF; arc=pass smtp.client-ip=209.85.216.53
+Received: by mail-pj1-f53.google.com with SMTP id 98e67ed59e1d1-36b8e1760ccso2467200a91.0
+        for <linux-mips@vger.kernel.org>; Mon, 15 Jun 2026 15:03:18 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1781560998; cv=none;
+        d=google.com; s=arc-20240605;
+        b=lFKHd+K69aHQ14k4XpXY9vXKgwe5AKlapbJFot1wJLgOXt+1CE+jQ5PXLNsNfrUin5
+         NOQc0PCnAFOtY7SILuBxVIaWaI2GtoDBNhfRogHFpVvVchUsiDYs+2GUJbXow684asTO
+         uGGenzp+VojbwIXn1ZJBRRDoBJp/8bLHD4H86CKf3t3YCalDhrYl3I2JIoaU2b2RQv9p
+         tyvfaT17cS0CwgI89hD7CXzb0h2s9Hq5Ly31933r7A2ltwsjc3dI+big4gUmmMRgLGZa
+         uPeJLvuV8XD8yrqYcASS040+uQIxte6jDT9WTaxT0nUs5Nw8DKgC8w8t+7DYQJltl6nD
+         TB3Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=wlUiFVf+F3ja4t9u45sKndzLjC4xR7XGyYPH3sd+NYE=;
+        fh=WbqSbzR1Mu9zHk/+IRo5Wksk40ZBC99eXjjpLsEfmJc=;
+        b=kh9SykCRkvdv0hzFt83bIXCXfdBFhg7WIwLWrWMl8/hSWUwXalaHjaXa0ovh8khHUE
+         UnJZsSRnk4jnoDMLhpBNG8FZPPxN3v6uLfGHHA7/G/jMqKqLIX3ZjVbRmDnUvrHXGQti
+         OkD7fqXFmUDFXlkQPoDGWOBK8q/hbOyAQMTPDOKVVL4vwKOaFURezm5R7Y8T+Aqrzckg
+         XczPSwtJSOyOYFV/x4frD1dJpbD5vhr5MKgpnCCkhjMyVJrRFGok0Ln58YzaFLkid+CL
+         rvyhAvyRRAR2MDdAjv8lHVoopgRdmoPVJP/SNHGDkTv1sfao4c3v7zwdHFvED4ZX6du5
+         yKfA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore.com; s=google; t=1781560998; x=1782165798; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=wlUiFVf+F3ja4t9u45sKndzLjC4xR7XGyYPH3sd+NYE=;
+        b=BJDCw6rFumNKx1ZbmdQRzwmpdly4t68vMzh62PCU+SCpV2yNZCUodou4EdDx/Qx/MW
+         6uqjkPcrhEixJmavhk0DxWbhFDZR6Ex++CRCCuuwVmXO4Oa3rzjm3nBbdFcVNypyppAu
+         b4zj7rSqzAj8uFRh0O/3B5yoknz35ttIPmwb/1KKWMah3EJkJNZutoqrUj6nPJGS3ZcG
+         Cvhq67+/rF3lat4Nwclq1vhvdOUm0JkDpMEC0c8BWgcN6b9IoWnboCiqP+wWbNyVOK7d
+         hkX69MERi9QInOruF7yjj8dzkr/v69LsZ8kg533CZ5rzzjIz4XNw+lzP+R5YRw7VvQVU
+         bKUw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1781560998; x=1782165798;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=wlUiFVf+F3ja4t9u45sKndzLjC4xR7XGyYPH3sd+NYE=;
+        b=j+Kt4m2GR/eTU2fVV1cqlIAubTjh0i6oz962K6OD4MB1qB9qcbNGRhngqSTE5qQ1u5
+         N2Dr9TtGiWsT9nZwNGaZmHQT26TrlsY8nsGYBYsYJEiJDcw+fAoVsGYRLGnnSWBuU6mp
+         Y7JjFn/hKibmr2Q9YPLHkaM6tjFdJYMWIJG3Yc5NbGb9vTGZYSKkrkxxwa06+Mb+7lSO
+         UQjRYL9+oIN7B+RYOZg1bUwU/v08Jk/HJEfK6Xqg2o50Fap2mZY0JADL3kfiB+VAjPhj
+         +YQ53XwMaKn4MbNrcIfk07NVuXcOXULLgOFVinJbHjWj5uK0+JRrAe6xCnA+fZDvq7Q1
+         tl2w==
+X-Forwarded-Encrypted: i=1; AFNElJ/FqX9tImlOu9a82HHIZFL0Kocb4j5Kms7Sl6bAqLYinRO0VcBwZseJxOBkwwAsv35dJKoV25b5jZSl@vger.kernel.org
+X-Gm-Message-State: AOJu0YzlCHCEKdQuKmcKQSiVpJPSlTM40aP5VJc64f8uZuzPTOV6ribs
+	IQ+Cfenp+AyXjTYllN2lN9PlRUa0owtz3Xgpr0mKrd8CzRW71WnMS30Gg/5nRTuq7Fj3M+jRi92
+	2lghuaFX6MVbdAEWEg7+vqzRSLKIHIHuquveeqB0o
+X-Gm-Gg: Acq92OH0ZctGZPYrekmLsoc9jg8SGGA+/y0u7Ro5cWWL8JAfWZIB502pTe6sUhw7kRE
+	+gYxzrKiLXwLgV4IX0vjCpu9lMjNXfODQzZFbTwlKQVMbloZyNY5SKmOWp7ORu0L0ukv3IL5H2w
+	1OgAXkuphXWRigFLhNyLKt5vC7dmODS1Bvd/ubVICf47no54ARtd+RF22mHAi3NByDXt5Ulyuov
+	lja6mZwlhitz9jRsFMqen5Zs8oxWoFcBgIq4eKNcUJQE/jClnvk5Mw3Z9nDXYJLRGO15fE1QY5+
+	FgiquMM=
+X-Received: by 2002:a17:90b:6cc:b0:366:10f1:3d91 with SMTP id
+ 98e67ed59e1d1-37c5280310fmr980748a91.1.1781560998051; Mon, 15 Jun 2026
+ 15:03:18 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 00/19] init: discoverable root partitions, a.k.a. an
- omittable "root=" cmdline option
-To: Al Viro <viro@zeniv.linux.org.uk>
-Cc: Jens Axboe <axboe@kernel.dk>, Davidlohr Bueso <dave@stgolabs.net>,
- Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>,
- linux-kernel@vger.kernel.org, linux-block@vger.kernel.org,
- linux-efi@vger.kernel.org, linux-fsdevel@vger.kernel.org,
- Richard Henderson <richard.henderson@linaro.org>,
- Matt Turner <mattst88@gmail.com>, Magnus Lindholm <linmag7@gmail.com>,
- linux-alpha@vger.kernel.org, Vineet Gupta <vgupta@kernel.org>,
- linux-snps-arc@lists.infradead.org, Russell King <linux@armlinux.org.uk>,
- linux-arm-kernel@lists.infradead.org,
- Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
- Huacai Chen <chenhuacai@kernel.org>, WANG Xuerui <kernel@xen0n.name>,
- loongarch@lists.linux.dev, Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
- linux-mips@vger.kernel.org,
- "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
- Helge Deller <deller@gmx.de>, linux-parisc@vger.kernel.org,
- Madhavan Srinivasan <maddy@linux.ibm.com>,
- Michael Ellerman <mpe@ellerman.id.au>, linuxppc-dev@lists.ozlabs.org,
- Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>,
- Albert Ou <aou@eecs.berkeley.edu>, linux-riscv@lists.infradead.org,
- Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>,
- Alexander Gordeev <agordeev@linux.ibm.com>, linux-s390@vger.kernel.org,
- Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
- Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
- x86@kernel.org, Jonathan Corbet <corbet@lwn.net>,
- Shuah Khan <skhan@linuxfoundation.org>, linux-doc@vger.kernel.org
-References: <20260615-discoverable-root_partitions-v1-0-39c78fac42e2@kernel.org>
- <20260615170432.GW2636677@ZenIV>
-From: Vincent Mailhol <mailhol@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=mailhol@kernel.org; keydata=
- xjMEZluomRYJKwYBBAHaRw8BAQdAf+/PnQvy9LCWNSJLbhc+AOUsR2cNVonvxhDk/KcW7FvN
- JFZpbmNlbnQgTWFpbGhvbCA8bWFpbGhvbEBrZXJuZWwub3JnPsKZBBMWCgBBFiEE7Y9wBXTm
- fyDldOjiq1/riG27mcIFAmdfB/kCGwMFCQp/CJcFCwkIBwICIgIGFQoJCAsCBBYCAwECHgcC
- F4AACgkQq1/riG27mcKBHgEAygbvORJOfMHGlq5lQhZkDnaUXbpZhxirxkAHwTypHr4A/joI
- 2wLjgTCm5I2Z3zB8hqJu+OeFPXZFWGTuk0e2wT4JzjgEZx4y8xIKKwYBBAGXVQEFAQEHQJrb
- YZzu0JG5w8gxE6EtQe6LmxKMqP6EyR33sA+BR9pLAwEIB8J+BBgWCgAmFiEE7Y9wBXTmfyDl
- dOjiq1/riG27mcIFAmceMvMCGwwFCQPCZwAACgkQq1/riG27mcJU7QEA+LmpFhfQ1aij/L8V
- zsZwr/S44HCzcz5+jkxnVVQ5LZ4BANOCpYEY+CYrld5XZvM8h2EntNnzxHHuhjfDOQ3MAkEK
-In-Reply-To: <20260615170432.GW2636677@ZenIV>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+References: <20260526142838.774711-1-atomlin@atomlin.com> <20260527085221.GQ3126523@noisy.programming.kicks-ass.net>
+ <bgjagepcfb7gz6jawatu6kpfmecw46gwg5cvb6r7dl3dn7bt4l@rtymdaslx7ef>
+ <20260527155404.GV3126523@noisy.programming.kicks-ass.net>
+ <ov33cu2wosubbfufcmfyoinfatecskjgmkvqyit33komlcla2d@2qgj45724bql>
+ <20260527195858.GC3493090@noisy.programming.kicks-ass.net>
+ <6hqq5oxvlcpmjvyns42dy2vtfvvixy7q4xyyjrrn46jrvsx5ar@gkmjsteqlpzd> <exlgb3dg2kwxgna6gx2qixexvwjjul7z2ya7npal2gz4jjtr7m@h4oxgd74gsbp>
+In-Reply-To: <exlgb3dg2kwxgna6gx2qixexvwjjul7z2ya7npal2gz4jjtr7m@h4oxgd74gsbp>
+From: Paul Moore <paul@paul-moore.com>
+Date: Mon, 15 Jun 2026 18:03:06 -0400
+X-Gm-Features: AVVi8CfvZsjFK88VKetzhE6sTJzGZThz-uSnhi3jqg2JCvabtyn_WzFIJ4i1dgo
+Message-ID: <CAHC9VhSROg6RGUN4_ZVBoEwYjRnKvyjnkbx2D88c09KiTgY3KQ@mail.gmail.com>
+Subject: Re: [PATCH v3] security: Expand task_setscheduler LSM hook to include
+ CPU affinity mask
+To: Aaron Tomlin <atomlin@atomlin.com>
+Cc: tsbogend@alpha.franken.de, jmorris@namei.org, serge@hallyn.com, 
+	mingo@redhat.com, juri.lelli@redhat.com, vincent.guittot@linaro.org, 
+	stephen.smalley.work@gmail.com, casey@schaufler-ca.com, longman@redhat.com, 
+	tj@kernel.org, hannes@cmpxchg.org, mkoutny@suse.com, 
+	chenridong@huaweicloud.com, dietmar.eggemann@arm.com, rostedt@goodmis.org, 
+	bsegall@google.com, mgorman@suse.de, vschneid@redhat.com, 
+	kprateek.nayak@amd.com, omosnace@redhat.com, kees@kernel.org, neelx@suse.com, 
+	sean@ashe.io, chjohnst@gmail.com, steve@abita.co, mproche@gmail.com, 
+	nick.lange@gmail.com, cgroups@vger.kernel.org, linux-mips@vger.kernel.org, 
+	linux-fsdevel@vger.kernel.org, linux-security-module@vger.kernel.org, 
+	selinux@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Rspamd-Action: no action
-X-Spamd-Result: default: False [-5.16 / 15.00];
-	WHITELIST_SPF_DKIM(-3.00)[kernel.org:d:+,kernel.org:s:+];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20260515];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+X-Spamd-Result: default: False [-0.66 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
+	DMARC_POLICY_ALLOW(-0.50)[paul-moore.com,none];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_DKIM_ALLOW(-0.20)[paul-moore.com:s=google];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-15094-lists,linux-mips=lfdr.de];
-	FORGED_RECIPIENTS(0.00)[m:viro@zeniv.linux.org.uk,m:axboe@kernel.dk,m:dave@stgolabs.net,m:brauner@kernel.org,m:jack@suse.cz,m:linux-kernel@vger.kernel.org,m:linux-block@vger.kernel.org,m:linux-efi@vger.kernel.org,m:linux-fsdevel@vger.kernel.org,m:richard.henderson@linaro.org,m:mattst88@gmail.com,m:linmag7@gmail.com,m:linux-alpha@vger.kernel.org,m:vgupta@kernel.org,m:linux-snps-arc@lists.infradead.org,m:linux@armlinux.org.uk,m:linux-arm-kernel@lists.infradead.org,m:catalin.marinas@arm.com,m:will@kernel.org,m:chenhuacai@kernel.org,m:kernel@xen0n.name,m:loongarch@lists.linux.dev,m:tsbogend@alpha.franken.de,m:linux-mips@vger.kernel.org,m:James.Bottomley@hansenpartnership.com,m:deller@gmx.de,m:linux-parisc@vger.kernel.org,m:maddy@linux.ibm.com,m:mpe@ellerman.id.au,m:linuxppc-dev@lists.ozlabs.org,m:pjw@kernel.org,m:palmer@dabbelt.com,m:aou@eecs.berkeley.edu,m:linux-riscv@lists.infradead.org,m:hca@linux.ibm.com,m:gor@linux.ibm.com,m:agordeev@linux.ibm.com,m:linux-s390@vger.kernel.org,m:tgl
- x@kernel.org,m:mingo@redhat.com,m:bp@alien8.de,m:dave.hansen@linux.intel.com,m:x86@kernel.org,m:corbet@lwn.net,m:skhan@linuxfoundation.org,m:linux-doc@vger.kernel.org,s:lists@lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-15095-lists,linux-mips=lfdr.de];
 	FROM_HAS_DN(0.00)[];
-	FORGED_SENDER(0.00)[mailhol@kernel.org,linux-mips@vger.kernel.org];
-	RCPT_COUNT_TWELVE(0.00)[46];
 	RCVD_COUNT_THREE(0.00)[4];
+	FORGED_SENDER(0.00)[paul@paul-moore.com,linux-mips@vger.kernel.org];
 	MIME_TRACE(0.00)[0:+];
-	FORGED_SENDER_MAILLIST(0.00)[];
+	FORGED_RECIPIENTS(0.00)[m:atomlin@atomlin.com,m:tsbogend@alpha.franken.de,m:jmorris@namei.org,m:serge@hallyn.com,m:mingo@redhat.com,m:juri.lelli@redhat.com,m:vincent.guittot@linaro.org,m:stephen.smalley.work@gmail.com,m:casey@schaufler-ca.com,m:longman@redhat.com,m:tj@kernel.org,m:hannes@cmpxchg.org,m:mkoutny@suse.com,m:chenridong@huaweicloud.com,m:dietmar.eggemann@arm.com,m:rostedt@goodmis.org,m:bsegall@google.com,m:mgorman@suse.de,m:vschneid@redhat.com,m:kprateek.nayak@amd.com,m:omosnace@redhat.com,m:kees@kernel.org,m:neelx@suse.com,m:sean@ashe.io,m:chjohnst@gmail.com,m:steve@abita.co,m:mproche@gmail.com,m:nick.lange@gmail.com,m:cgroups@vger.kernel.org,m:linux-mips@vger.kernel.org,m:linux-fsdevel@vger.kernel.org,m:linux-security-module@vger.kernel.org,m:selinux@vger.kernel.org,m:linux-kernel@vger.kernel.org,m:stephensmalleywork@gmail.com,m:nicklange@gmail.com,s:lists@lfdr.de];
 	FORWARDED(0.00)[lists@lfdr.de];
-	FREEMAIL_CC(0.00)[kernel.dk,stgolabs.net,kernel.org,suse.cz,vger.kernel.org,linaro.org,gmail.com,lists.infradead.org,armlinux.org.uk,arm.com,xen0n.name,lists.linux.dev,alpha.franken.de,hansenpartnership.com,gmx.de,linux.ibm.com,ellerman.id.au,lists.ozlabs.org,dabbelt.com,eecs.berkeley.edu,redhat.com,alien8.de,linux.intel.com,lwn.net,linuxfoundation.org];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	FREEMAIL_CC(0.00)[alpha.franken.de,namei.org,hallyn.com,redhat.com,linaro.org,gmail.com,schaufler-ca.com,kernel.org,cmpxchg.org,suse.com,huaweicloud.com,arm.com,goodmis.org,google.com,suse.de,amd.com,ashe.io,abita.co,vger.kernel.org];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	TO_DN_SOME(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[34];
 	FORGED_SENDER_FORWARDING(0.00)[];
-	ALIAS_RESOLVED(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[mailhol@kernel.org,linux-mips@vger.kernel.org];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	MID_RHS_MATCH_FROM(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[paul@paul-moore.com,linux-mips@vger.kernel.org];
+	DKIM_TRACE(0.00)[paul-moore.com:+];
+	ALIAS_RESOLVED(0.00)[];
 	TAGGED_RCPT(0.00)[linux-mips];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,vger.kernel.org:from_smtp,gnu.org:url,www.freedesktop.org:url,uapi-group.org:url]
+	MISSING_XM_UA(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	TO_DN_SOME(0.00)[]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: EB672689DF8
+X-Rspamd-Queue-Id: 855A968A47B
 
-On 15/06/2026 at 19:04, Al Viro wrote:
-> On Mon, Jun 15, 2026 at 06:08:56PM +0200, Vincent Mailhol wrote:
-> 
->> Tested with GRUB, which implements the LoaderDevicePartUUID EFI variable
->> in its bli module [3]. With this, I was able to boot a kernel with a
->> completely empty cmdline and no initrd.
->>
->> [1] The Discoverable Partitions Specification (DPS)
->> Link: https://uapi-group.org/specifications/specs/discoverable_partitions_specification/
->>
->> [2] systemd-gpt-auto-generator
->> Link: https://www.freedesktop.org/software/systemd/man/latest/systemd-gpt-auto-generator.html
->>
->> [3] GRUB -- §16.2 bli
->> Link: https://www.gnu.org/software/grub/manual/grub/html_node/bli_005fmodule.html
-> 
-> So what does that thing, tied to EFI as it is, have to do with architectures where
-> 	* firmware is rather unlike EFI
+On Mon, Jun 15, 2026 at 11:22=E2=80=AFAM Aaron Tomlin <atomlin@atomlin.com>=
+ wrote:
+> On Wed, May 27, 2026 at 09:19:11PM -0400, Aaron Tomlin wrote:
+> > On Wed, May 27, 2026 at 09:58:58PM +0200, Peter Zijlstra wrote:
+> > > On Wed, May 27, 2026 at 01:41:52PM -0400, Aaron Tomlin wrote:
+> > >
+> > > > > > The actual use case here is multi-tenant workload isolation and=
+ visibility.
+> > > > > > Passing the evaluated cpumask to the BPF LSM allows operators t=
+o write a
+> > > > > > simple eBPF program to detect spatial boundary overlaps (e.g., =
+logging an
+> > > > > > event if a requested mask intersects with platform-reserved cor=
+es).
+> > >
+> > > Why isn't cgroups good enough to enforce this? If you create a cgroup
+> > > hierarchy per tenant, and constrain them using the cpuset controller,
+> > > they should not be able to escape, rendering this event impossible.
+> >
+> > Hi Peter,
+> >
+> > You raise a very fair point. The cpuset cgroup controller is indeed the
+> > kernel's primary vehicle for spatial enforcement, and under normal
+> > circumstances, it successfully prevents a tenant from escaping their
+> > designated cores.
+> >
+> > The cpuset controller does govern resource limits, but does not audit
+> > intent. When __sched_setaffinity() is invoked, the kernel compares the
+> > requested in_mask against the task's allowed cpuset. If there is only a
+> > partial intersection, the kernel silently truncates the requested mask =
+to
+> > fit the cpuset, without raising any alarm.
+> >
+> > The BPF LSM hook, conversely, receives the raw, untruncated in_mask,
+> > affording operators the visibility to detect, audit, and even reject th=
+ese
+> > violations of intent before the kernel silently sanitises the input.
+> >
+> > This patch does not seek to replace the cpuset controller, but rather t=
+o
+> > complement it by providing auditing capabilities.
+> >
+> > > > We are not creating a bespoke BPF hook here; rather, we are rectify=
+ing a
+> > > > historical blind spot within the API. The existing LSM hook is invo=
+ked
+> > > > during sched_setaffinity(), yet it presently receives only the task=
+_struct
+> > > > pointer. Consequently, the security module is essentially asked, "S=
+hould
+> > > > Process A be permitted to alter Process B's affinity?" without bein=
+g
+> > > > informed of the proposed affinity itself. Providing in_mask simply
+> > > > furnishes the existing hook with the requisite payload to make an i=
+nformed
+> > > > decision.
+> > >
+> > > It occurs to me that this same argument would require to also pass in
+> > > the new sched_attr, no? That way the LSM can inspect the new policy
+> > > before it becomes effective.
+> >
+> > I agree, the underlying logic does indeed extend perfectly to sched_att=
+r.
+> >
+> > Presently, the LSM is equally oblivious as to whether a process is
+> > requesting a benign transition to SCHED_BATCH, or attempting to escalat=
+e
+> > its privileges by requesting a real-time policy such as SCHED_FIFO with
+> > maximum priority. Just as with the CPU mask, providing the sched_attr
+> > payload would rectify this parallel blind spot, allowing BPF policies t=
+o
+> > inspect and mediate scheduling attributes before they become effective.
+> >
+> > If you are amenable, I should be more than happy to expand the scope of=
+ the
+> > forthcoming patch to include this. Alternatively, we could address the
+> > sched_attr expansion in a separate, subsequent patch. Personally, I wou=
+ld
+> > favour the latter approach, but please do let me know your preference.
+> >
+> > I very much look forward to hearing Paul's thoughts on whether this ali=
+gns
+> > with the broader LSM vision.
+>
+> Hi Paul,
+>
+> I am writing to politely follow up on the discussion above regarding the
+> proposed enhancement to the sched_setaffinity LSM hook.
 
-I made CONFIG_DPS_ROOT_AUTO_DISCOVERY depend on CONFIG_EFI for this reason.
+Generally speaking I wait until all dependencies land in Linus' tree.
+I've lost a lot of time in the past sorting out issues only to have
+one of the dependencies rejected.
 
-> 	* firmware wouldn't know what to do with GPT
-> 	* GRUB is *not* ported to, let alone used
-> such as, say it, the very first one mentioned at your [1]?
+> As you will see from the thread, Peter Zijlstra and I have discussed the
+> architectural justification for this change. While the cpuset cgroup
+> controller effectively handles spatial enforcement, it silently truncates
+> requested affinity masks. Passing the raw in_mask to the LSM hook enables
+> security modules (such as the BPF LSM) to audit and mediate the actual
+> intent of the request before the kernel sanitises the input, a capability
+> that cgroups inherently lack.
 
-Fair point. I just did:
+The issue of resource control comes up from time to time within the
+context of LSMs, and my general comment is that we likely need to see
+a more comprehensive approach to what access control on resource
+limits would look like from a LSM perspective.  We've seen a lot of
+quick changes to solve very specific problems, but I have yet to see a
+good proposal of what it would look like for a more comprehensive
+approach.
 
-  $ git grep "^config EFI$"
-  arch/arm/Kconfig:config EFI
-  arch/arm64/Kconfig:config EFI
-  arch/loongarch/Kconfig:config EFI
-  arch/riscv/Kconfig:config EFI
-  arch/x86/Kconfig:config EFI
+There is also another issue to consider: none of the in-tree LSMs
+currently use these new parameters, raising questions about their
+purpose, maintainability, etc.  While this is not necessarily a deal
+breaker, it does go along with my comment above about taking a more
+holistic view of LSM resource controls.
 
-Anything not in this list is dead code at the moment.
+To summarize, I haven't thought about this too much yet because there
+are other fires/patches that don't (currently) have the dependency
+issues of this patch.  I would also feel a lot better if there was an
+in-tree user of this parameter and some discussion of how this might
+fit into a more holistic approach to controlling resource limits in
+the LSM subsystem.
 
-> Or is that conditional upon "if anyone wants to design replacement firmware
-> for those, and if they agree to follow our wishlist"?
-
-No, it was just an oversight from my side. I will just keep arm, arm64,
-loongarch, riscv and x86 in my v2.
-
-
-Yours sincerely,
-Vincent Mailhol
-
+--=20
+paul-moore.com
 
