@@ -1,288 +1,274 @@
-Return-Path: <linux-mips+bounces-15090-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-15091-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id bROVOAEaMGpNNgUAu9opvQ
-	(envelope-from <linux-mips+bounces-15090-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Mon, 15 Jun 2026 17:28:01 +0200
+	id sj9xOhskMGoROwUAu9opvQ
+	(envelope-from <linux-mips+bounces-15091-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Mon, 15 Jun 2026 18:11:07 +0200
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4DC0F687A9C
-	for <lists+linux-mips@lfdr.de>; Mon, 15 Jun 2026 17:28:01 +0200 (CEST)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8969E688274
+	for <lists+linux-mips@lfdr.de>; Mon, 15 Jun 2026 18:11:07 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=none;
-	dmarc=none;
-	spf=pass (mail.lfdr.de: domain of "linux-mips+bounces-15090-lists+linux-mips=lfdr.de@vger.kernel.org" designates 2600:3c0a:e001:db::12fc:5321 as permitted sender) smtp.mailfrom="linux-mips+bounces-15090-lists+linux-mips=lfdr.de@vger.kernel.org";
-	arc=reject ("cv is fail on i=2")
+	dkim=pass header.d=kernel.org header.s=k20260515 header.b=J2bt7UtU;
+	spf=pass (mail.lfdr.de: domain of "linux-mips+bounces-15091-lists+linux-mips=lfdr.de@vger.kernel.org" designates 172.232.135.74 as permitted sender) smtp.mailfrom="linux-mips+bounces-15091-lists+linux-mips=lfdr.de@vger.kernel.org";
+	dmarc=pass (policy=quarantine) header.from=kernel.org;
+	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 240F130BB99D
-	for <lists+linux-mips@lfdr.de>; Mon, 15 Jun 2026 15:22:17 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 5FA833014765
+	for <lists+linux-mips@lfdr.de>; Mon, 15 Jun 2026 16:10:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D04184028DF;
-	Mon, 15 Jun 2026 15:22:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C968F40911A;
+	Mon, 15 Jun 2026 16:10:11 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
-Received: from LO3P265CU004.outbound.protection.outlook.com (mail-uksouthazon11020090.outbound.protection.outlook.com [52.101.196.90])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 335014028F4;
-	Mon, 15 Jun 2026 15:22:14 +0000 (UTC)
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781536936; cv=fail; b=GvTGqa4yQJuQ5Dr1waNBF9cAdMaeb2aJ8Ca+gB2q3rnMAzH7U/Up27AoZzPQ9lFAHLnHioYddlhwE26B6DEbkfrP76yR5xDums/D79Pn9UlQo2ySTuVw3j2NIiotYJyYZMf1ExYJhNW/6SCu7nKi8HNlfRiS8Zb4Q2Tqj5XE0Qo=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781536936; c=relaxed/simple;
-	bh=5lkaCTU0McswHGuigaCbfp4za386DUNOuWtbUZBAFi0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=bk4srL6S+bIOzfdqKijEdeAVnxlvtCGO1NnagHrmx7BCurLJpO4AODe7uUPm3qHztpwQ/MOrFwxHY0FYrRmLTCTvBEzHinFrGEm3Qw83MMQB7qhQTqn68YGZawtHnL1uQDTfCfFbEZHV5ycqrJ7lINqS+9wFkouWtXfDOPdmGXM=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=atomlin.com; spf=pass smtp.mailfrom=atomlin.com; arc=fail smtp.client-ip=52.101.196.90
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=sej8Il35a6qcQ1G1InKgRuhreuFJ2S89kuDtfZgUxO0v5j4vjGCHjcnhjTjPLcSeKx1uTGTWfUE7xxaC80bHj4k7Bpx20qXvSjXf4lhNtnX0ryzu6whvQyeRIMG8dHJV2GXlUk2tTnWGzgoQnLmmRtj6Hn1hjGf/9Pdh8d6pRfNIRt24CA4A4QP7aD6xrwOP9gPAcSv6wG1Jp1fOwlZa119wCTCPeVjsbu8SipxVJJmJ1uq9UuVdzK+k4Sj2Hzx2h98bjvwV5tmoxBrSolmD9uDFqytyLuYNP8hpNxHbmAGA4U9xLUv6wTS/gTPEEThgmQIh87cOoT+usEXQatbc2g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001; h=From:Date:Subject:Message-ID:MIME-Version;
- bh=ncvcZTgIGK77eePxGMFdvqM6QnkflC9bpfJlVvwj7To=;
- b=Q1zKFby549YtrqhaFDDN4iWVlPRVlXcglLQyspfKjnm2RcoPvNN2XLIfeaHW9HLyFleYifW1MktveebMSiQwLqwPZWNjNaYa4aPMpHcNz5zUopxYgSnwUwiYtRHoU7NPz3z2oCo86Z0iTFc4PlarvJi9PCtelGwzEvTgCcU4gtV6WPzdyyC6r5VnqgG4hURhZgwlR3e2MqQjUZBYbGsz/yceSZ6ITgwwsflZrIcTtr+D2pa8UrFWMjdUXkwfxULSZ4gmZvhkQed8NNLPfQaF3a0JSxQwIxgWPGTtSwFDcw8JnMtfMCr1RAIGKKvuEGqa9wtu+lrWhVWGBbHAI7GiMQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=atomlin.com; dmarc=pass action=none header.from=atomlin.com;
- dkim=pass header.d=atomlin.com; arc=none
-Received: from CWLP123MB6607.GBRP123.PROD.OUTLOOK.COM (2603:10a6:400:183::5)
- by LO2P123MB7004.GBRP123.PROD.OUTLOOK.COM (2603:10a6:600:32b::6) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.113.18; Mon, 15 Jun
- 2026 15:22:10 +0000
-Received: from CWLP123MB6607.GBRP123.PROD.OUTLOOK.COM
- ([fe80::cec4:77ab:262e:d230]) by CWLP123MB6607.GBRP123.PROD.OUTLOOK.COM
- ([fe80::cec4:77ab:262e:d230%4]) with mapi id 15.21.0113.015; Mon, 15 Jun 2026
- 15:22:10 +0000
-Date: Mon, 15 Jun 2026 11:22:08 -0400
-From: Aaron Tomlin <atomlin@atomlin.com>
-To: paul@paul-moore.com
-Cc: tsbogend@alpha.franken.de, paul@paul-moore.com, jmorris@namei.org, 
-	serge@hallyn.com, mingo@redhat.com, juri.lelli@redhat.com, 
-	vincent.guittot@linaro.org, stephen.smalley.work@gmail.com, casey@schaufler-ca.com, 
-	longman@redhat.com, tj@kernel.org, hannes@cmpxchg.org, mkoutny@suse.com, 
-	chenridong@huaweicloud.com, dietmar.eggemann@arm.com, rostedt@goodmis.org, 
-	bsegall@google.com, mgorman@suse.de, vschneid@redhat.com, kprateek.nayak@amd.com, 
-	omosnace@redhat.com, kees@kernel.org, neelx@suse.com, sean@ashe.io, 
-	chjohnst@gmail.com, steve@abita.co, mproche@gmail.com, nick.lange@gmail.com, 
-	cgroups@vger.kernel.org, linux-mips@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
-	linux-security-module@vger.kernel.org, selinux@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] security: Expand task_setscheduler LSM hook to
- include CPU affinity mask
-Message-ID: <exlgb3dg2kwxgna6gx2qixexvwjjul7z2ya7npal2gz4jjtr7m@h4oxgd74gsbp>
-References: <20260526142838.774711-1-atomlin@atomlin.com>
- <20260527085221.GQ3126523@noisy.programming.kicks-ass.net>
- <bgjagepcfb7gz6jawatu6kpfmecw46gwg5cvb6r7dl3dn7bt4l@rtymdaslx7ef>
- <20260527155404.GV3126523@noisy.programming.kicks-ass.net>
- <ov33cu2wosubbfufcmfyoinfatecskjgmkvqyit33komlcla2d@2qgj45724bql>
- <20260527195858.GC3493090@noisy.programming.kicks-ass.net>
- <6hqq5oxvlcpmjvyns42dy2vtfvvixy7q4xyyjrrn46jrvsx5ar@gkmjsteqlpzd>
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <6hqq5oxvlcpmjvyns42dy2vtfvvixy7q4xyyjrrn46jrvsx5ar@gkmjsteqlpzd>
-X-ClientProxiedBy: LO4P265CA0292.GBRP265.PROD.OUTLOOK.COM
- (2603:10a6:600:38f::18) To CWLP123MB6607.GBRP123.PROD.OUTLOOK.COM
- (2603:10a6:400:183::5)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76C1A408603;
+	Mon, 15 Jun 2026 16:10:10 +0000 (UTC)
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1781539811; cv=none; b=MZQqMCQtX3jiIn/HPzoIj6MHS5ShzEXqO8/nNYhhMCl5XeojQXurP1TJ/AXOX33g0MAjtSTmYy75nB8G53YhQe0WVLvuqKQKZmV4HwFAdllAzOElM47+xJnIqsh3Z21m3FOYm2CHHoBtYpSS5JYCfasdFMJi8oB21HEHXd4C84o=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1781539811; c=relaxed/simple;
+	bh=RjmwbjJUekMN4XQbpwM2sAMQ8Q4VGqazX1lTIqnbeDs=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=IMl7CLdJOsS2s6bxCbiYu6LtSl35ibyDER8y61j9QAvdZR2VLKpRCnUJWFZJWGIMWcxlRNxAwAxt/x+J773LjG3QMktPr8+uR0bVZ/Q4X8HGr0n8SON811H+ce7WUmcdhZbFGrfUdWhmwCIXkGsjzpyfS0N5bGZhIc4USuEj9no=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=J2bt7UtU; arc=none smtp.client-ip=100.103.45.18
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 659B51F000E9;
+	Mon, 15 Jun 2026 16:09:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1781539810;
+	bh=WrhOiAXY4BpdFNkpuEH5kqbHucFA9LBquobYeTzjtI4=;
+	h=From:Subject:Date:To:Cc;
+	b=J2bt7UtU/OYY8PxVyIm3d95v5G+IcTrjBW3L2jU7dt2De3kFnXcxRBS+wcjkcf6fN
+	 XltNpsJON5Ei+eQjAfRadOoGZ6Zr5MKKrnWqjtat85KDYFuJIzaAhhV9joTPZvvnm/
+	 Upf4GSVXporZ+/9u524Qsag7+a/uWIBE8WrhynM4IvaF/bx9BOfhayePviKAuHtMdm
+	 yF/mMlzcia/W4uNmZrGta+pMv2x8g5cbMGvX0YqVwoVCDJpU+Ht9xei0zv8nicGVwV
+	 SRcRt86DYJ9ycUYURQM1lx9ByNJFh+o5TVH1JyohwC9u2Q2ptXr+Wwo4pEiWgn9BWI
+	 W8aRU0vDmzPwg==
+From: Vincent Mailhol <mailhol@kernel.org>
+Subject: [PATCH 00/19] init: discoverable root partitions, a.k.a. an
+ omittable "root=" cmdline option
+Date: Mon, 15 Jun 2026 18:08:56 +0200
+Message-Id: <20260615-discoverable-root_partitions-v1-0-39c78fac42e2@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CWLP123MB6607:EE_|LO2P123MB7004:EE_
-X-MS-Office365-Filtering-Correlation-Id: 41d3da7d-df1f-4b21-2ef2-08decaf1de8f
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|1800799024|366016|23010399003|376014|7416014|18002099003|22082099003|6133799003|5023799004|3023799007|4143699003|56012099006;
-X-Microsoft-Antispam-Message-Info:
-	GaUzuwQ9YHgiFgUDUs7jC+UwSAkLPlMB4us7VzWGffOSKaktWtuOJXUkgRLsfNvOdjbqGt3QqgzSxqWW/eI8+c+IrW0m7QxunGUD/mDTjjpe6DmHSwLFfFGLfvshw99njGoDIsL2HiDitCWz3iYTCzht5omZlZSuOrP6ekpkOySvsDXHpN6xVRYxj9bJadSq5r9NtF35Nh9/aTy/8P2gyMGPCOoYwDOA1g3VemPJ12syP3Sjo9qr2O8jX2DhJntzn+q32Sw/RX/Yyy0btrIq5/O/ysnfjtgeb/ouD8fTqtqLKsH8Cwr+n1UfCnuxB5wGAN/Sj6w8jeSJPFJ4eaYFjY0L1M9jzkWrLGURxLWR7nTHuH81KZOPLXWhIDi/gkS5X4+aoKsmjuOGPFpn9zEEQhbCdMTz+U2JTctCInsXOWOmtF9pLCti79nh/gze8s8k65BTTgbRHz9BAR1UxhsZKSuzRYS+mjZg7odqtuIDM3JFPNbuaFyG/ZnBKHZv/mTj5Vw73LCEis7F9dFCx2O3tH1UKqD3nHGCVPzo0GKtii/YayGelC/Sx7CnlymYuKxAJLAgSc9Dv1yswpI0sPST/fViexmJl3tCJxOj3bxrSr89aKdVIQEgjkoWaHrktetR0YI9QZtRhTm/fu/XBqsq6Em1/xCO1f3PZNbaUui+GO/CjZr/Nia/G/ZkKv4e19lnb4SpPv8Zh0E0eFEWDObLTg==
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CWLP123MB6607.GBRP123.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(23010399003)(376014)(7416014)(18002099003)(22082099003)(6133799003)(5023799004)(3023799007)(4143699003)(56012099006);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?SG9hV25HRnc3Mk8ySlFHSkpiQ09TNHg2aWFPNWJGYUNUWkFqNWVSUzJDZ0Nm?=
- =?utf-8?B?OFZMaCtUSExCRm5sb0FXMTVtTkdFVWlCZmhZVHZtcHVMb2pQbjk3dlcxZ2N3?=
- =?utf-8?B?YS9lU21zSlhuYnhkT25SVWk5Y29nZFZmdzVRMUQzZ0NQYk1kSm1qM1hSVjE5?=
- =?utf-8?B?KytCS0FZa0FuY0VRK1pHdGJ5U3hpN0FWUXUrb1RyN0ViU3U0b2JFNERTQVpB?=
- =?utf-8?B?dzE1Vnh0WVFCdkxXMVhLbm1xb2c2VXpzOEdWMlVyRFZYWGlkblJIQlJackV6?=
- =?utf-8?B?NzVmNDhrZDV0TlA1OWduZUtVbmcza2ExMTV3b0hNN0dqWUFKRUtqZzZTZ1dS?=
- =?utf-8?B?YU1XMks5ZWxEZ1o5MW02Y09JNXZWYU1xMDFmMXhkMi94Vzlwc1JXUkhGc1BW?=
- =?utf-8?B?dHV3Tm5PKzBDQ2k3MHZLU0hWUzhsNXRaSTNYT3BRUFJlUnhleUxXbFJPakZx?=
- =?utf-8?B?RWtzTDBoa2k2OVNhalRYbDltYSsvSEhlakZNT0NBV0lCZlBLNUs0b0hQWDE2?=
- =?utf-8?B?aTQ4STllRHY5T0QxMDZKZXF5NDdlbFhabmFvaFRwaDN6TWdmWXFJZFl2OGxM?=
- =?utf-8?B?WWt0QUY4dTN3S3ZVaEZzcnhtWE44UlMzaHNJREVjM0w1ZURrVzBDdlgxM2E2?=
- =?utf-8?B?Y2s1VGdKRG9vbmtvQWJBQmtIOFAwZnYwTk04ejdNc1RNUHBlclpQeHJUS0RX?=
- =?utf-8?B?RURFWDVqVEdwTFBiMmpjd053M2R2aGFZcjZnS2FPQkFOWlJTMUZ6Qys0S3Ri?=
- =?utf-8?B?bnhoOG9GZVhXM29GQi9qWkpGUzI3Q2FwZENnQXowbzV4dWpUQm1YWXB2aHJr?=
- =?utf-8?B?MFJaaHJXU2FVQWwxWXBWK1RSWEtONFVoRDNWMW1TQUZmRE5HT0FoSlplOGtI?=
- =?utf-8?B?OWNtZDZBWW5nMTdnZnQxT2lQU05yZHJ5UTVzS1NFbmQrQllJTTRpK1BYK2xG?=
- =?utf-8?B?VzJQL3Z1b3NwTk1VSmZrV2srbW1sQ2FkQ1lYblp2RFpzL1Z6NEZUM0ZZYUZn?=
- =?utf-8?B?WnFOenZac3lpN1JTSC8vZ0g2eTB6dkVwYm83R2wzTWxIK3JuVktHb2lpUHcv?=
- =?utf-8?B?b2ttNDM3YW5kdFMwOXlDdjNtSTBrQ3ozaTRVOTkvems1eG1veU9UT0tadmhI?=
- =?utf-8?B?QzFDQ3Rtc3NyVjVnbEhBamQ4d0lXVHBuQ092ekl1dGtjNHJjVGZPRitndGV5?=
- =?utf-8?B?SmwrcFRrSUlMMUZhbHZSUlFRRVE3ajBvVXExZjdCMTF6cFMrVnREakVleEw0?=
- =?utf-8?B?eFZDR1pHS3FUcVFvRVNrc2IyeGg3WndzaVJLTjBHTlZHY3Myb1BUZEJ6M2t1?=
- =?utf-8?B?WWd1RTEzZGc2RTZJR0JqYjl2dG56QkxkZWxYdXdFdXlHS0hqMm1aVytGU0No?=
- =?utf-8?B?UEhxakR5YUxqWEVka0xhODZjN2F3eUNIL1VFKzRtQzJSV2pmMXhscFFzeVI5?=
- =?utf-8?B?M2t1R2Q5cDRSZ1BhWklpUUFNS2FHMzNTQ0paUnRoQk5yTElvY3kyYU9XeXRR?=
- =?utf-8?B?bUVqdDZnUDlXY3lOenVWVERZQkFxZ21vdmJ1VjNFeTZGc0FZN1A5Qm82OEFx?=
- =?utf-8?B?QXNXZkNlaXg2dzgyZUJETHlmMWp4M2JxWkx0RTBPREE2QnR6OXM1T3FmS1Ni?=
- =?utf-8?B?ZzNZb3NBdklpNUJWdjZBVG1ocHZqd2NWUUVYdlhQMzB0Z1llMmVQOUdqWkd2?=
- =?utf-8?B?enVNVk5pSUNWZ3R5K3VnOVlGbkpNWFJvZStUUHBaTy9LMWJvZEwwdHpRbm9K?=
- =?utf-8?B?RUczN3dXalRGN0dOZ1llUTZkTXE2elplQUc1WTdJUFZpYVFVKzNyU21nTWQw?=
- =?utf-8?B?aiswNHNIRldlMVllcnBLMFcxT05Pa1ozWWVra3BFbzlxMEptOXRqZ1FMdnQ5?=
- =?utf-8?B?UjhrdElUWVZJWDEzWGJzRk8yY2Jnd0xmdU1VQllabTlFYUlxaGgvcis3TWNN?=
- =?utf-8?B?T2RENlNjSWJ4REg2OEhGcU1TMCtIdmdSQjk1OGZXcWJBbzd5L0RBU3owZ1Qv?=
- =?utf-8?B?aHNleWxkcEZ6WGxQbzduTDlzNlNhMUMrK2c0MFFGd3pmVm56ZXFidnFkWGtG?=
- =?utf-8?B?Y2dMbGprQ2pHTmU0ekM4T1pwSlg3b3pmaE5wWFFLUnZRaDZrMi8vMDR6Z29s?=
- =?utf-8?B?QW5KSUhQUHk2S1pHdTRGRVB6WjV3MWIwQVFRYWU2Z092eXF6QVAzZmVtakJi?=
- =?utf-8?B?dzFJWEhQZ0hUL0E3UUIvNkpFUkVmQ1RIcC95UGwzUUUrQTlaZUZJbFZVSm9a?=
- =?utf-8?B?RGJCQzNycjNROHJQeEE5WUxEaTFQOU9GSzExVFZ6YVVCQURXaWEyU2g2cnUw?=
- =?utf-8?Q?tecn6hfKZacSeYFFK0?=
-X-OriginatorOrg: atomlin.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 41d3da7d-df1f-4b21-2ef2-08decaf1de8f
-X-MS-Exchange-CrossTenant-AuthSource: CWLP123MB6607.GBRP123.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Jun 2026 15:22:10.5829
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: e6a32402-7d7b-4830-9a2b-76945bbbcb57
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 19ohcmb8MNOsYQE/hGHPCtSppMFIXPQ7vFnUOlwoIuLY/43Ad8/REnmAEYtmVi8yr3enkuC0D9miqE0yw0rBAg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: LO2P123MB7004
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/x3MQQqEMAxA0atI1hZaQQWvMgySNlEDYiUpMiDef
+ YrLt/j/BmMVNpiaG5QvMclHRWgbSBseKzuhauh8N/ghBEdiKV+sGHd2mnOZT9QipXbmImGKSNi
+ PnqAuTuVFfu/+832eP+2uWG1uAAAA
+X-Change-ID: 20260611-discoverable-root_partitions-bdacbada570d
+To: Jens Axboe <axboe@kernel.dk>, Davidlohr Bueso <dave@stgolabs.net>, 
+ Alexander Viro <viro@zeniv.linux.org.uk>, 
+ Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>
+Cc: linux-kernel@vger.kernel.org, linux-block@vger.kernel.org, 
+ linux-efi@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
+ Vincent Mailhol <mailhol@kernel.org>, 
+ Richard Henderson <richard.henderson@linaro.org>, 
+ Matt Turner <mattst88@gmail.com>, Magnus Lindholm <linmag7@gmail.com>, 
+ linux-alpha@vger.kernel.org, Vineet Gupta <vgupta@kernel.org>, 
+ linux-snps-arc@lists.infradead.org, Russell King <linux@armlinux.org.uk>, 
+ linux-arm-kernel@lists.infradead.org, 
+ Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
+ Huacai Chen <chenhuacai@kernel.org>, WANG Xuerui <kernel@xen0n.name>, 
+ loongarch@lists.linux.dev, Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
+ linux-mips@vger.kernel.org, 
+ "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>, 
+ Helge Deller <deller@gmx.de>, linux-parisc@vger.kernel.org, 
+ Madhavan Srinivasan <maddy@linux.ibm.com>, 
+ Michael Ellerman <mpe@ellerman.id.au>, linuxppc-dev@lists.ozlabs.org, 
+ Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>, 
+ Albert Ou <aou@eecs.berkeley.edu>, linux-riscv@lists.infradead.org, 
+ Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>, 
+ Alexander Gordeev <agordeev@linux.ibm.com>, linux-s390@vger.kernel.org, 
+ Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, 
+ Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, 
+ x86@kernel.org, Jonathan Corbet <corbet@lwn.net>, 
+ Shuah Khan <skhan@linuxfoundation.org>, linux-doc@vger.kernel.org
+X-Mailer: b4 0.14.3
+X-Developer-Signature: v=1; a=openpgp-sha256; l=6653; i=mailhol@kernel.org;
+ h=from:subject:message-id; bh=RjmwbjJUekMN4XQbpwM2sAMQ8Q4VGqazX1lTIqnbeDs=;
+ b=owGbwMvMwCV2McXO4Xp97WbG02pJDFkGyhcU3klMvHNzftiCl6lmH3kWl02+abz8VKXHlaTy/
+ w4vP39V7pjIwiDGxWAppsiyrJyTW6Gj0Dvs0F9LmDmsTCBDpEUaGICAhYEvNzGv1EjHSM9U21DP
+ EMjQMWLg4hSAqfbXZfgr2rolQuyW6w6JgNKDJ4tvO69i+ZPHkj6Tv9JAckFms/tLRoYma5u3R6a
+ 1csurnulLb7M78HnNmlIVnlf38k/kSby8dJsZAA==
+X-Developer-Key: i=mailhol@kernel.org; a=openpgp;
+ fpr=ED8F700574E67F20E574E8E2AB5FEB886DBB99C2
 X-Rspamd-Action: no action
-X-Spamd-Result: default: False [2.54 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
-	ARC_REJECT(1.00)[cv is fail on i=2];
-	MID_RHS_NOT_FQDN(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+X-Spamd-Result: default: False [-5.16 / 15.00];
+	WHITELIST_SPF_DKIM(-3.00)[kernel.org:d:+,kernel.org:s:+];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20260515];
+	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
+	TAGGED_FROM(0.00)[bounces-15091-lists,linux-mips=lfdr.de];
+	FORGED_RECIPIENTS(0.00)[m:axboe@kernel.dk,m:dave@stgolabs.net,m:viro@zeniv.linux.org.uk,m:brauner@kernel.org,m:jack@suse.cz,m:linux-kernel@vger.kernel.org,m:linux-block@vger.kernel.org,m:linux-efi@vger.kernel.org,m:linux-fsdevel@vger.kernel.org,m:mailhol@kernel.org,m:richard.henderson@linaro.org,m:mattst88@gmail.com,m:linmag7@gmail.com,m:linux-alpha@vger.kernel.org,m:vgupta@kernel.org,m:linux-snps-arc@lists.infradead.org,m:linux@armlinux.org.uk,m:linux-arm-kernel@lists.infradead.org,m:catalin.marinas@arm.com,m:will@kernel.org,m:chenhuacai@kernel.org,m:kernel@xen0n.name,m:loongarch@lists.linux.dev,m:tsbogend@alpha.franken.de,m:linux-mips@vger.kernel.org,m:James.Bottomley@HansenPartnership.com,m:deller@gmx.de,m:linux-parisc@vger.kernel.org,m:maddy@linux.ibm.com,m:mpe@ellerman.id.au,m:linuxppc-dev@lists.ozlabs.org,m:pjw@kernel.org,m:palmer@dabbelt.com,m:aou@eecs.berkeley.edu,m:linux-riscv@lists.infradead.org,m:hca@linux.ibm.com,m:gor@linux.ibm.com,m:agordeev@linux.ibm.com,m:linux-s390@
+ vger.kernel.org,m:tglx@kernel.org,m:mingo@redhat.com,m:bp@alien8.de,m:dave.hansen@linux.intel.com,m:x86@kernel.org,m:corbet@lwn.net,m:skhan@linuxfoundation.org,m:linux-doc@vger.kernel.org,s:lists@lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-15090-lists,linux-mips=lfdr.de];
 	FROM_HAS_DN(0.00)[];
-	DMARC_NA(0.00)[atomlin.com];
-	FORGED_SENDER(0.00)[atomlin@atomlin.com,linux-mips@vger.kernel.org];
+	FORGED_SENDER(0.00)[mailhol@kernel.org,linux-mips@vger.kernel.org];
+	RCPT_COUNT_TWELVE(0.00)[47];
+	RCVD_COUNT_THREE(0.00)[4];
 	MIME_TRACE(0.00)[0:+];
-	FORGED_RECIPIENTS(0.00)[m:paul@paul-moore.com,m:tsbogend@alpha.franken.de,m:jmorris@namei.org,m:serge@hallyn.com,m:mingo@redhat.com,m:juri.lelli@redhat.com,m:vincent.guittot@linaro.org,m:stephen.smalley.work@gmail.com,m:casey@schaufler-ca.com,m:longman@redhat.com,m:tj@kernel.org,m:hannes@cmpxchg.org,m:mkoutny@suse.com,m:chenridong@huaweicloud.com,m:dietmar.eggemann@arm.com,m:rostedt@goodmis.org,m:bsegall@google.com,m:mgorman@suse.de,m:vschneid@redhat.com,m:kprateek.nayak@amd.com,m:omosnace@redhat.com,m:kees@kernel.org,m:neelx@suse.com,m:sean@ashe.io,m:chjohnst@gmail.com,m:steve@abita.co,m:mproche@gmail.com,m:nick.lange@gmail.com,m:cgroups@vger.kernel.org,m:linux-mips@vger.kernel.org,m:linux-fsdevel@vger.kernel.org,m:linux-security-module@vger.kernel.org,m:selinux@vger.kernel.org,m:linux-kernel@vger.kernel.org,m:stephensmalleywork@gmail.com,m:nicklange@gmail.com,s:lists@lfdr.de];
-	FORWARDED(0.00)[lists@lfdr.de];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	FREEMAIL_CC(0.00)[alpha.franken.de,paul-moore.com,namei.org,hallyn.com,redhat.com,linaro.org,gmail.com,schaufler-ca.com,kernel.org,cmpxchg.org,suse.com,huaweicloud.com,arm.com,goodmis.org,google.com,suse.de,amd.com,ashe.io,abita.co,vger.kernel.org];
-	FORGED_RECIPIENTS_FORWARDING(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[35];
-	FORGED_SENDER_FORWARDING(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[atomlin@atomlin.com,linux-mips@vger.kernel.org];
+	FORWARDED(0.00)[lists@lfdr.de];
+	FREEMAIL_CC(0.00)[vger.kernel.org,kernel.org,linaro.org,gmail.com,lists.infradead.org,armlinux.org.uk,arm.com,xen0n.name,lists.linux.dev,alpha.franken.de,HansenPartnership.com,gmx.de,linux.ibm.com,ellerman.id.au,lists.ozlabs.org,dabbelt.com,eecs.berkeley.edu,redhat.com,alien8.de,linux.intel.com,lwn.net,linuxfoundation.org];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	TO_DN_NONE(0.00)[];
-	R_DKIM_NA(0.00)[];
-	MISSING_XM_UA(0.00)[];
+	TO_DN_SOME(0.00)[];
+	FORGED_SENDER_FORWARDING(0.00)[];
 	ALIAS_RESOLVED(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[mailhol@kernel.org,linux-mips@vger.kernel.org];
+	DKIM_TRACE(0.00)[kernel.org:+];
+	MID_RHS_MATCH_FROM(0.00)[];
 	TAGGED_RCPT(0.00)[linux-mips];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[atomlin.com:from_mime,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,vger.kernel.org:from_smtp,h4oxgd74gsbp:mid]
+	FORGED_RECIPIENTS_FORWARDING(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[gnu.org:url,sto.lore.kernel.org:rdns,sto.lore.kernel.org:helo,vger.kernel.org:from_smtp,uapi-group.org:url]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 4DC0F687A9C
+X-Rspamd-Queue-Id: 8969E688274
 
-On Wed, May 27, 2026 at 09:19:11PM -0400, Aaron Tomlin wrote:
-> On Wed, May 27, 2026 at 09:58:58PM +0200, Peter Zijlstra wrote:
-> > On Wed, May 27, 2026 at 01:41:52PM -0400, Aaron Tomlin wrote:
-> > 
-> > > > > The actual use case here is multi-tenant workload isolation and visibility.
-> > > > > Passing the evaluated cpumask to the BPF LSM allows operators to write a
-> > > > > simple eBPF program to detect spatial boundary overlaps (e.g., logging an
-> > > > > event if a requested mask intersects with platform-reserved cores).
-> > 
-> > Why isn't cgroups good enough to enforce this? If you create a cgroup
-> > hierarchy per tenant, and constrain them using the cpuset controller,
-> > they should not be able to escape, rendering this event impossible.
-> 
-> Hi Peter,
-> 
-> You raise a very fair point. The cpuset cgroup controller is indeed the
-> kernel's primary vehicle for spatial enforcement, and under normal
-> circumstances, it successfully prevents a tenant from escaping their
-> designated cores.
-> 
-> The cpuset controller does govern resource limits, but does not audit
-> intent. When __sched_setaffinity() is invoked, the kernel compares the
-> requested in_mask against the task's allowed cpuset. If there is only a
-> partial intersection, the kernel silently truncates the requested mask to
-> fit the cpuset, without raising any alarm.
-> 
-> The BPF LSM hook, conversely, receives the raw, untruncated in_mask,
-> affording operators the visibility to detect, audit, and even reject these
-> violations of intent before the kernel silently sanitises the input.
-> 
-> This patch does not seek to replace the cpuset controller, but rather to
-> complement it by providing auditing capabilities.
-> 
-> > > We are not creating a bespoke BPF hook here; rather, we are rectifying a
-> > > historical blind spot within the API. The existing LSM hook is invoked
-> > > during sched_setaffinity(), yet it presently receives only the task_struct
-> > > pointer. Consequently, the security module is essentially asked, "Should
-> > > Process A be permitted to alter Process B's affinity?" without being
-> > > informed of the proposed affinity itself. Providing in_mask simply
-> > > furnishes the existing hook with the requisite payload to make an informed
-> > > decision.
-> > 
-> > It occurs to me that this same argument would require to also pass in
-> > the new sched_attr, no? That way the LSM can inspect the new policy
-> > before it becomes effective.
-> 
-> I agree, the underlying logic does indeed extend perfectly to sched_attr.
-> 
-> Presently, the LSM is equally oblivious as to whether a process is
-> requesting a benign transition to SCHED_BATCH, or attempting to escalate
-> its privileges by requesting a real-time policy such as SCHED_FIFO with
-> maximum priority. Just as with the CPU mask, providing the sched_attr
-> payload would rectify this parallel blind spot, allowing BPF policies to
-> inspect and mediate scheduling attributes before they become effective.
-> 
-> If you are amenable, I should be more than happy to expand the scope of the
-> forthcoming patch to include this. Alternatively, we could address the
-> sched_attr expansion in a separate, subsequent patch. Personally, I would
-> favour the latter approach, but please do let me know your preference.
-> 
-> I very much look forward to hearing Paul's thoughts on whether this aligns
-> with the broader LSM vision.
+DPS [1] defines GPT partition type UUIDs for OS partitions and
+attributes that control whether such partitions should be
+automatically discovered. The specification states that:
 
-Hi Paul,
+  The OS can discover and mount the necessary file systems with a
+  non-existent or incomplete /etc/fstab file and without the root=
+  kernel command line option.
 
-I am writing to politely follow up on the discussion above regarding the
-proposed enhancement to the sched_setaffinity LSM hook.
+DPS is already implemented in systemd-gpt-auto-generator [2], which,
+when embedded in an initrd, indeed allows automatic detection of the
+root filesystem through its partition type UUID.
 
-As you will see from the thread, Peter Zijlstra and I have discussed the
-architectural justification for this change. While the cpuset cgroup
-controller effectively handles spatial enforcement, it silently truncates
-requested affinity masks. Passing the raw in_mask to the LSM hook enables
-security modules (such as the BPF LSM) to audit and mediate the actual
-intent of the request before the kernel sanitises the input, a capability
-that cgroups inherently lack.
+This series adds this discovery feature directly into the kernel so
+that people who are not using systemd or not using an initrd can still
+benefit from it. The implementation follows the same model as
+systemd-gpt-auto-generator:
 
-Furthermore, Peter rightly observed that this reasoning extends naturally
-to sched_attr. Presently, the LSM cannot inspect whether a process is
-requesting a benign scheduling policy or attempting to escalate to a
-real-time priority. I am entirely amenable to addressing this parallel
-blind spot, preferably in a subsequent patch.
+  - GPT partition type UUIDs are used for automatic discovery policy
+    only. No root=PARTTYPEUUID=xxx cmdline option or similar syntax is
+    added.
 
-Before I proceed any further, I would be most grateful for your perspective
-as the Security sub-system maintainer. Do you feel this expansion is
-acceptable?
+  - The root= cmdline option takes precedence. This prevents unexpected
+    behaviour.
 
-As a brief administrative aside, please note that Thomas Bogendoerfer has
-already queued the MIPS-specific changes related to this work into the
-mips-next tree [1][2].
+  - Only the disk with the active EFI System Partition is scanned, as
+    required by DPS. The disk is identified through the Boot Loader
+    Interface LoaderDevicePartUUID EFI variable.
 
-I look forward to hearing your thoughts.
+The DPS no-auto attribute is also implemented, giving another option for
+the user to disable this auto discovery. However, the DPS read-only
+attribute is intentionally not enforced. The kernel already mounts the
+root filesystem read-only by default unless the command line requests
+rw, and user space remains responsible for deciding whether a discovered
+root should later be remounted read-write based on DPS metadata and
+local policy. The other partition type UUIDs (home, swap, var...) are
+also out of scope for the same reason: user space remains responsible
+for mounting anything other than the root partition.
 
-[1]: https://lore.kernel.org/lkml/psb6pxogv2dlknps4p3sh6rt2h7xuuxkoif6ock5vxfz2jimec@txa6iy65crtb/
-[2]: https://git.kernel.org/pub/scm/linux/kernel/git/mips/linux.git/commit/?id=98e37db4a34d3af3fb2f4648295c25b5e40b20e3
+Patch 1 adds the ARCH_HAS_DPS_ROOT_PARTITION_TYPE_UUID capability and
+the hidden CONFIG_DPS_ROOT_AUTO_DISCOVERY Kconfig symbol used to signal
+whether the feature is available. Patches 2 to 12 declare the
+ARCH_HAS_DPS_ROOT_PARTITION_TYPE_UUID capability for the supported
+architectures and define their architecture-specific root partition type
+UUID values in asm/dps_root.h.
 
+Patches 13 to 16 make the GPT partition type UUID and the no-auto
+attribute available during early block lookup.
 
-Kind regards,
+Patch 17 is a small code refactor that prepares for patch 18, which
+updates the root mount path so that, when root= is omitted, the kernel
+reads LoaderDevicePartUUID and uses the early block lookup
+infrastructure to discover the DPS root partition on that disk.
+
+Finally, patch 19 documents this automatic root discovery feature.
+
+Tested with GRUB, which implements the LoaderDevicePartUUID EFI variable
+in its bli module [3]. With this, I was able to boot a kernel with a
+completely empty cmdline and no initrd.
+
+[1] The Discoverable Partitions Specification (DPS)
+Link: https://uapi-group.org/specifications/specs/discoverable_partitions_specification/
+
+[2] systemd-gpt-auto-generator
+Link: https://www.freedesktop.org/software/systemd/man/latest/systemd-gpt-auto-generator.html
+
+[3] GRUB -- §16.2 bli
+Link: https://www.gnu.org/software/grub/manual/grub/html_node/bli_005fmodule.html
+
+Signed-off-by: Vincent Mailhol <mailhol@kernel.org>
+---
+Vincent Mailhol (19):
+      init: add DPS root partition type UUID capability
+      alpha: define DPS root partition type UUID
+      arc: define DPS root partition type UUID
+      arm: define DPS root partition type UUID
+      arm64: define DPS root partition type UUID
+      loongarch: define DPS root partition type UUID
+      mips: define DPS root partition type UUIDs
+      parisc: define DPS root partition type UUID
+      powerpc: define DPS root partition type UUIDs
+      riscv: define DPS root partition type UUIDs
+      s390: define DPS root partition type UUIDs
+      x86: define DPS root partition type UUIDs
+      block: store GPT partition type UUID
+      block: add early_lookup_bdev_by_type_uuid()
+      block: store GPT attributes as a raw value
+      block: don't discover partition with DPS no-auto GPT attribute
+      init: factor out root device lookup into lookup_root_device()
+      init: discover root by DPS partition type UUID
+      docs: document discoverable root partitions
+
+ Documentation/admin-guide/discoverable-root.rst | 33 +++++++++
+ Documentation/admin-guide/index.rst             |  1 +
+ Documentation/admin-guide/kernel-parameters.txt |  5 ++
+ arch/alpha/Kconfig                              |  1 +
+ arch/alpha/include/asm/dps_root.h               |  8 +++
+ arch/arc/Kconfig                                |  1 +
+ arch/arc/include/asm/dps_root.h                 |  8 +++
+ arch/arm/Kconfig                                |  1 +
+ arch/arm/include/asm/dps_root.h                 |  8 +++
+ arch/arm64/Kconfig                              |  1 +
+ arch/arm64/include/asm/dps_root.h               |  8 +++
+ arch/loongarch/Kconfig                          |  1 +
+ arch/loongarch/include/asm/dps_root.h           |  8 +++
+ arch/mips/Kconfig                               |  1 +
+ arch/mips/include/asm/dps_root.h                | 20 ++++++
+ arch/parisc/Kconfig                             |  1 +
+ arch/parisc/include/asm/dps_root.h              |  8 +++
+ arch/powerpc/Kconfig                            |  1 +
+ arch/powerpc/include/asm/dps_root.h             | 16 +++++
+ arch/riscv/Kconfig                              |  1 +
+ arch/riscv/include/asm/dps_root.h               | 12 ++++
+ arch/s390/Kconfig                               |  1 +
+ arch/s390/include/asm/dps_root.h                | 12 ++++
+ arch/x86/Kconfig                                |  1 +
+ arch/x86/include/asm/dps_root.h                 | 12 ++++
+ block/blk.h                                     |  1 +
+ block/early-lookup.c                            | 68 +++++++++++++++++-
+ block/partitions/core.c                         |  2 +
+ block/partitions/efi.c                          |  3 +
+ block/partitions/efi.h                          | 11 ++-
+ include/linux/blk_types.h                       |  1 +
+ include/linux/blkdev.h                          |  5 ++
+ include/linux/root_dev.h                        |  6 ++
+ init/Kconfig                                    |  6 ++
+ init/do_mounts.c                                | 94 ++++++++++++++++++++++++-
+ 35 files changed, 355 insertions(+), 12 deletions(-)
+---
+base-commit: 36808d5e983985bbda87e01059cccc071fe3ec8d
+change-id: 20260611-discoverable-root_partitions-bdacbada570d
+
+Best regards,
 -- 
-Aaron Tomlin
+Vincent Mailhol <mailhol@kernel.org>
+
 
