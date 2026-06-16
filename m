@@ -1,147 +1,196 @@
-Return-Path: <linux-mips+bounces-15112-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-15113-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id lEZxCEF0MWr1jgUAu9opvQ
-	(envelope-from <linux-mips+bounces-15112-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Tue, 16 Jun 2026 18:05:21 +0200
+	id lGyYAaGSMWpjnAUAu9opvQ
+	(envelope-from <linux-mips+bounces-15113-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Tue, 16 Jun 2026 20:14:57 +0200
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7E6C9691ACF
-	for <lists+linux-mips@lfdr.de>; Tue, 16 Jun 2026 18:05:20 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 978B5693F31
+	for <lists+linux-mips@lfdr.de>; Tue, 16 Jun 2026 20:14:56 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=kernel.org header.s=k20260515 header.b=K1Zgu4IM;
-	spf=pass (mail.lfdr.de: domain of "linux-mips+bounces-15112-lists+linux-mips=lfdr.de@vger.kernel.org" designates 172.105.105.114 as permitted sender) smtp.mailfrom="linux-mips+bounces-15112-lists+linux-mips=lfdr.de@vger.kernel.org";
-	dmarc=pass (policy=quarantine) header.from=kernel.org;
-	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
+	dkim=pass header.d=gmail.com header.s=20251104 header.b=rAnxvk94;
+	spf=pass (mail.lfdr.de: domain of "linux-mips+bounces-15113-lists+linux-mips=lfdr.de@vger.kernel.org" designates 2600:3c04:e001:36c::12fc:5321 as permitted sender) smtp.mailfrom="linux-mips+bounces-15113-lists+linux-mips=lfdr.de@vger.kernel.org";
+	dmarc=pass (policy=none) header.from=gmail.com;
+	arc=pass ("subspace.kernel.org:s=arc-20240116:i=2")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 0B3E531833AD
-	for <lists+linux-mips@lfdr.de>; Tue, 16 Jun 2026 15:49:05 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 57D4830A2080
+	for <lists+linux-mips@lfdr.de>; Tue, 16 Jun 2026 18:13:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C57CD3C414F;
-	Tue, 16 Jun 2026 15:49:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 755563D47CE;
+	Tue, 16 Jun 2026 18:13:53 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yx1-f44.google.com (mail-yx1-f44.google.com [74.125.224.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7B9339282C;
-	Tue, 16 Jun 2026 15:49:02 +0000 (UTC)
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781624943; cv=none; b=QHc2a7ikmJUfhXa3JSo+B6cbs2vOG5NSYIQNQMgpxIwagpjeWoz7N8nUvOqdZMarNRWYbjZ/cvaDPFDDsDqTSg8VWNpNJqsewXVMjZBoaxIBWBiLeu09mf6mAdR5H1AlIFJ+MMzbIbuGpnp8ImGtm2ea3hdy1+Lne0J6jAwWHa4=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781624943; c=relaxed/simple;
-	bh=NQKEtwuJplslo1S0a1EuGFXO5pQxOKxvj/9PhHq1Gw0=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=eAsEYpyUHsE2ca0dy5FYNCEzzNhAYhmc2CzqGzuncP41+T73jgsm/NbNYiWT4CGlI7p88iDoWks/FUhVTtFzJbW//E5NfT+Td0/Se3x3vOF44LElgN5C2OUatuTcmDDXxKFGTvzQESOG8tqSrtXBysaizhC13eRNPvpu19EEcg8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=K1Zgu4IM; arc=none smtp.client-ip=100.103.45.18
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D13EC1F00A3A;
-	Tue, 16 Jun 2026 15:49:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1781624942;
-	bh=LwBPJI0zIYaGqkx1gEaeFo2rsRmh3p4qrOGbWDxyeO0=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References;
-	b=K1Zgu4IMExh7jVVg+2IFXKcFfxCtgqqknPSgNk95pMqsypDLzD2QVFu6TptWzkDGZ
-	 1YRTc4b7aRDRfRCJLepsIdRKV5PlqaJRGKGzjOzgErOK+HC6N+5vicmrEDClCyYvrG
-	 YEm5iik1EYQiaWU5qzafp8VM/hJ1QPW6iusrwEaaSZWtD/CtGIzbai0Z2JCQJPH2nz
-	 4I/CEpzHPrk0WGCzwnkZeJSrepcJ3biv4V1RH6JUebicDQcaPZifoORh3ZbSOpE+do
-	 CDP1qjdZij4tJYT85PBnJMjWGjmTmywO1no7Rx4VzWJeyaIo6tBSEENR2qURrq5B8B
-	 wOgf3aKc7W4kg==
-Date: Tue, 16 Jun 2026 08:49:01 -0700
-From: Jakub Kicinski <kuba@kernel.org>
-To: Carsten Strotmann <cas@strotmann.de>
-Cc: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
- davem@davemloft.net, netdev@vger.kernel.org, edumazet@google.com,
- pabeni@redhat.com, andrew+netdev@lunn.ch, horms@kernel.org,
- geert@linux-m68k.org, chleroy@kernel.org, npiggin@gmail.com,
- mpe@ellerman.id.au, maddy@linux.ibm.com, linux-mips@vger.kernel.org,
- linux-m68k@lists.linux-m68k.org, linuxppc-dev@lists.ozlabs.org
-Subject: Re: [PATCH net-next 0/2] appletalk: move the protocol out of tree
-Message-ID: <20260616084901.3319d82e@kernel.org>
-In-Reply-To: <A3590144-073C-46D6-8425-90EE0C4D48E8@strotmann.de>
-References: <20260615222935.947233-1-kuba@kernel.org>
-	<c3789160609a10e232ba3e27c4b13adbb170956c.camel@physik.fu-berlin.de>
-	<20260615175535.5bc56cfc@kernel.org>
-	<A3590144-073C-46D6-8425-90EE0C4D48E8@strotmann.de>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 363F33D5656
+	for <linux-mips@vger.kernel.org>; Tue, 16 Jun 2026 18:13:52 +0000 (UTC)
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1781633633; cv=pass; b=Ki0qTYrsRQAPNaqQnG3DtfcroQ6+vKsrIzZPpJKuinBTTmtgpN6SKxGE0wRNmlmlZ+3qzkJcyLWk8yQcm2tvB000AsGxPU+voCdYrMlgdNj1vV+ydLIYrbcfpIqhb1QQZRQZcQYBag+qie1FGv28WIX/JFFJI3IJpA49ykf0DTE=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1781633633; c=relaxed/simple;
+	bh=XVDXOs5PD1K5upzQNmkXI9UANSCojiYwT2l1mSGO/eE=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=P5m+3upnZp67CKIy+yDCeuXw2WO8DkbzsFF3zZmPG4rOqkZPA232WCjqJueOilzchlOhKbCaWq2djmghhNOOIjplbJUwg4IdwxE3UTpUV8/Iq0OVM30gel4Xxw2xmy2fCvSqpCnJJEiXwkiCjWM7gOJZFJ7CwFGUMYSOUnyeb/4=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=rAnxvk94; arc=pass smtp.client-ip=74.125.224.44
+Received: by mail-yx1-f44.google.com with SMTP id 956f58d0204a3-660e9ff0587so2117117d50.0
+        for <linux-mips@vger.kernel.org>; Tue, 16 Jun 2026 11:13:52 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1781633631; cv=none;
+        d=google.com; s=arc-20240605;
+        b=ejSmsW3HdJsIsQ+izMlWG6aZWGJxZEwYgbA/YAP+dkze2ayQFJ4GdTGZEAvPKnUiZC
+         8ZnRC6Kzjm7/j9tJTdxs0hsQC/XUu7FCR4UteIWFHPKs/xIO/aA37t6DmdiyIhO6Ldpc
+         1O6Gha6yezEmebmXcM6WX3YhtOlPkc5zNZEMt6Qc/D/FMT9DsHhRZ59vCDY16dUNif27
+         dm/glvfT6gS+GwP1U0PLnS0lHvtP5Y2MWbY23LK+0OPKCdsvAvXBonocVYdMc80XmRmX
+         OgeW3OWzuHr51FTlt3tcXf2D3YoB2ssZ3atcM6FePm7KJhCfC0rnSPdZYKF9Vnr9SnzE
+         V6Qw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=tAuGRKuOlDbkCJf/rcFDQnFKbzVCieXn0KWbIFna+U4=;
+        fh=Q+6lv1M3x2LXi+YhQFQNeh/ge4KlXXxn4bpVhuJFqnc=;
+        b=X0xGfRsGDolpawYuhdADUQ/GI5Csuo+tuwWPXCD6TAqP9oZkNcQC8sNydsku1Mos7b
+         PbbzBeV7FTcDebFoampEgSzTPwrNXEkRQhHmCF3zd75CKw6b3AhcyYXWKrgEIbBU2w4g
+         8F3ALqwWRI/P0jPDri0UkqdevVfLz820h14PYeeCPnt+P7XlgDKH46E2TYWW/jQWIYv3
+         a6nLBRJknNEijQMRKh/32FBHGn6H9JMlJA5adM1RB0kYx1BUw9ZMUA9tPNsEVpTMbha2
+         wJaVaRS79u6Dgu7Ti2G9mqk527LAfV07RVddBBnJ/oTnpgRtZNAAFq/wCgaYOiK+LRB4
+         dFUQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1781633631; x=1782238431; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=tAuGRKuOlDbkCJf/rcFDQnFKbzVCieXn0KWbIFna+U4=;
+        b=rAnxvk947cvJ8ukLbiBKxhRl+YNdBW7Y02O9Zulprv2+8noCPttVhKT2baOBLMvEK5
+         lvsHgOwNJ9PJhCoIYlRDESOCtoA/qBh4TomXhxtNyzQFaQonFC2UHlD3CLdOC9N54VAf
+         qfk+PKjzZ0747AaH5uE/2cXPWPOh9RYfipXOtvJWsnusbs6Bw1tW1lsuCLCziJqgcc5Q
+         WuiqaO8toIjAtVd8C4lTYrq8sgyXM3EXR0RuEcHUQxSbNmjpbbZSP4/Wg39oAUF0nnVO
+         NX7CIqNty/AEFmOl8Q8iDi+SyIGQgwmGn3QdtlJtGcqAvDWaR4X5WdLEYvJJaMrmj7Nu
+         R3yA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1781633631; x=1782238431;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=tAuGRKuOlDbkCJf/rcFDQnFKbzVCieXn0KWbIFna+U4=;
+        b=HzkO6WBIkYDhjbV9+VOT/nBAksTb6vv/wfpVOT5VcjJptRFf43CaQSCKlx3797JUT3
+         1LR5ltYR6fE0Ypeahha0pMJsOHaeOI/NRyAmRoUTrTgNWzKV/wdW4Gp8A2a9iA1XhMGd
+         hM1EAmbWBqcVqPzTbpVnWkygcB6J4ckpcr2Tz7ZVT2uxZnChtMp3v987xfzhuWntdDJq
+         oiH66UQlLThY9vcmzE2jjmeEF4PXPDW13U/vkgp6rixJEi72/lHS2B6/Mm4l+rXQAZ4U
+         eTDpelQjv7kPYRj4Y3PKUF5ST1xwSkMPn4eC0z2BEIk5J+fA9v3ZCPvy5Jjek034ythD
+         l6dA==
+X-Forwarded-Encrypted: i=1; AFNElJ+QGFOiV5c5LOVw0Sb6hXKXApgScjsLlJ5oQ9S7XCeV64gTOAXT7KutIYFFj7/uAPj0MMezEhqUNPXZ@vger.kernel.org
+X-Gm-Message-State: AOJu0YwaIrLRRRudKXIxIJTeG8yz/3QHKL1RojZIp1m8IPHDf0nsyiWP
+	zKpXwF51BEiN5ozaBSKPtkHUAJ+IthsXG4QA3MN71hkkLT9Wyg7KIdFPUTNC57Y1Kr+JHiKvWJe
+	+oo4v+bIKZTP2L3Cs0IORqVTBDLVAVuA=
+X-Gm-Gg: AfdE7ck0kgs+RemEVx6ljYQs4a4TSORKlY89kaX9D8QZBgWWNulqTRoiusyAj7fg9sH
+	UBA3WF0HqplnRTIsj0fOSrQxNVuSnZBxGYWy6FHB/mmqilCm6AVrQ5M7yMPpcPXNvoLEdxOB47j
+	z8KN5wVwff2abQwK+kTVkRpC738C+aZDWVop8CHxQuXLmz4JhDtmiYO361HtaE4NA9wdIuUdBLT
+	+GHYNdN3yq/WBxVHRMMUHRnYzUuUdCCZjluuUa8yjJj3tN1EyOEzO4qmoBpGyDBJAzYF5trm562
+	+AUT
+X-Received: by 2002:a05:690e:1446:b0:662:b875:b149 with SMTP id
+ 956f58d0204a3-662cb9a5521mr488948d50.28.1781633631026; Tue, 16 Jun 2026
+ 11:13:51 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+References: <20260614161503.2219681-1-ekffu200098@gmail.com>
+ <20260614161503.2219681-2-ekffu200098@gmail.com> <20260616131945.GA2236977-robh@kernel.org>
+In-Reply-To: <20260616131945.GA2236977-robh@kernel.org>
+From: Sang-Heon Jeon <ekffu200098@gmail.com>
+Date: Wed, 17 Jun 2026 03:13:38 +0900
+X-Gm-Features: AVVi8CfDQJdb4Q9jLQYUPY3KXB7WpMZ-iKjsv1-5FCLStEz_WwunrIBu4QHvpOQ
+Message-ID: <CABFDxMGYTP4uLaH-ew+zf4++CtPY54+pDsRVO6TbC9W5nVVtBA@mail.gmail.com>
+Subject: Re: [PATCH 1/3] of/fdt: fix misleading elfcorehdr reservation success message
+To: Rob Herring <robh@kernel.org>
+Cc: Saravana Kannan <saravanak@kernel.org>, Huacai Chen <chenhuacai@kernel.org>, 
+	WANG Xuerui <kernel@xen0n.name>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
+	devicetree@vger.kernel.org, loongarch@lists.linux.dev, 
+	linux-mips@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Rspamd-Action: no action
-X-Spamd-Result: default: False [-3.66 / 15.00];
-	WHITELIST_SPF_DKIM(-3.00)[kernel.org:d:+,kernel.org:s:+];
-	SUSPICIOUS_RECIPS(1.50)[];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20260515];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+X-Spamd-Result: default: False [-2.16 / 15.00];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-15112-lists,linux-mips=lfdr.de];
-	RCVD_COUNT_THREE(0.00)[4];
-	RCVD_TLS_LAST(0.00)[];
 	FROM_HAS_DN(0.00)[];
-	FORGED_SENDER(0.00)[kuba@kernel.org,linux-mips@vger.kernel.org];
-	RCPT_COUNT_TWELVE(0.00)[16];
-	FORGED_RECIPIENTS(0.00)[m:cas@strotmann.de,m:glaubitz@physik.fu-berlin.de,m:davem@davemloft.net,m:netdev@vger.kernel.org,m:edumazet@google.com,m:pabeni@redhat.com,m:andrew+netdev@lunn.ch,m:horms@kernel.org,m:geert@linux-m68k.org,m:chleroy@kernel.org,m:npiggin@gmail.com,m:mpe@ellerman.id.au,m:maddy@linux.ibm.com,m:linux-mips@vger.kernel.org,m:linux-m68k@lists.linux-m68k.org,m:linuxppc-dev@lists.ozlabs.org,m:andrew@lunn.ch,s:lists@lfdr.de];
-	MIME_TRACE(0.00)[0:+];
+	TAGGED_FROM(0.00)[bounces-15113-lists,linux-mips=lfdr.de];
+	RCVD_TLS_LAST(0.00)[];
+	FORGED_RECIPIENTS(0.00)[m:robh@kernel.org,m:saravanak@kernel.org,m:chenhuacai@kernel.org,m:kernel@xen0n.name,m:tsbogend@alpha.franken.de,m:devicetree@vger.kernel.org,m:loongarch@lists.linux.dev,m:linux-mips@vger.kernel.org,s:lists@lfdr.de];
+	RCVD_COUNT_THREE(0.00)[4];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	FORWARDED(0.00)[lists@lfdr.de];
-	FREEMAIL_CC(0.00)[physik.fu-berlin.de,davemloft.net,vger.kernel.org,google.com,redhat.com,lunn.ch,kernel.org,linux-m68k.org,gmail.com,ellerman.id.au,linux.ibm.com,lists.linux-m68k.org,lists.ozlabs.org];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	TO_DN_SOME(0.00)[];
+	FORGED_SENDER(0.00)[ekffu200098@gmail.com,linux-mips@vger.kernel.org];
+	MIME_TRACE(0.00)[0:+];
+	FORWARDED(0.00)[lists@lfdr.de];
+	DKIM_TRACE(0.00)[gmail.com:+];
+	FORGED_RECIPIENTS_FORWARDING(0.00)[];
+	FREEMAIL_FROM(0.00)[gmail.com];
 	FORGED_SENDER_FORWARDING(0.00)[];
 	ALIAS_RESOLVED(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[kuba@kernel.org,linux-mips@vger.kernel.org];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	MID_RHS_MATCH_FROM(0.00)[];
-	TAGGED_RCPT(0.00)[linux-mips,netdev];
+	FROM_NEQ_ENVFROM(0.00)[ekffu200098@gmail.com,linux-mips@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	MID_RHS_MATCH_FROMTLD(0.00)[];
+	TAGGED_RCPT(0.00)[linux-mips];
+	RCPT_COUNT_SEVEN(0.00)[8];
 	MISSING_XM_UA(0.00)[];
-	FORGED_RECIPIENTS_FORWARDING(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo,vger.kernel.org:from_smtp]
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[mail.gmail.com:mid,tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo,vger.kernel.org:from_smtp]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 7E6C9691ACF
+X-Rspamd-Queue-Id: 978B5693F31
 
-On Tue, 16 Jun 2026 09:13:46 +0200 Carsten Strotmann wrote:
-> I'm a user of AppleTalk and other "Retro"-Features in the Linux Kernel.
-> 
-> On 16 Jun 2026, at 2:55, Jakub Kicinski wrote:
-> 
-> > We can complain about the AI slop til the cows comes home.
-> > I don't like it, you don't like it. What difference does it make?
+On Tue, Jun 16, 2026 at 10:19=E2=80=AFPM Rob Herring <robh@kernel.org> wrot=
+e:
+>
+> On Mon, Jun 15, 2026 at 01:15:01AM +0900, Sang-Heon Jeon wrote:
+> > fdt_reserve_elfcorehdr() does not check the return value of
+> > memblock_reserve(), so a success message is falsely printed when the
+> > reservation fails.
 > >
-> > If y'all have real solutions please share. Complaining about
-> > "commercial interests" and "nuk[ing] everything in a panic reaction"
-> > is not helpful.  
-> 
-> the solution, as Adrian pointed out, is to leave these features in
-> the Linux kernel but have them disabled by default.
+> > Check the return value and warn on failure instead.
+> >
+> > Signed-off-by: Sang-Heon Jeon <ekffu200098@gmail.com>
+> > ---
+> >  drivers/of/fdt.c | 5 ++++-
+> >  1 file changed, 4 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/drivers/of/fdt.c b/drivers/of/fdt.c
+> > index 26f66046cc32..d985c07d7c5c 100644
+> > --- a/drivers/of/fdt.c
+> > +++ b/drivers/of/fdt.c
+> > @@ -479,7 +479,10 @@ static void __init fdt_reserve_elfcorehdr(void)
+> >               return;
+> >       }
+> >
+> > -     memblock_reserve(elfcorehdr_addr, elfcorehdr_size);
+> > +     if (memblock_reserve(elfcorehdr_addr, elfcorehdr_size)) {
+> > +             pr_warn("Failed to reserve memory for elfcorehdr\n");
+>
+> I would think memblock_reserve() should always succeed and if not it
+> should print a message rather than having every caller print a message.
 
-I think y'all need to internalize that "just leave it in" means work.
-_Someone_ has to handle the reports and patches. And since nobody is
-doing that the code is going to GitHub, where it can continue to "just
-be left" or whatever, without racking up CVEs for the Linux kernel
-and leading to maintainer burn out :/
+Thanks for reviewing, Rob.
 
-> Maybe put a warning message in the kernel config tools that people
-> should only enable these if they know what they are doing.
-> 
-> These "retro"-features should not pose any security risk of they are
-> not compiled into a kernel.
+You're right. After taking a closer look, memblock_reserve() either
+succeeds or panics before memblock_allow_resize() called.
+So the check that I added in this patchset is totally unreachable.
 
-Nobody is stopping you from using this code! It's perfectly suitable 
-to be an out of tree module. Maybe it'd be harder if someone wanted to
-remove a CPU architecture you want to use, but protocols are perfectly
-fine as loadable modules. You can continue to use the code from:
- https://github.com/linux-netdev/mod-orphan
+Please drop this patchset. I'll be more careful when sending patches next t=
+ime.
 
-Presumably you could get Debian to package that and you wouldn't even
-know the sources no longer live in the kernel tree.
+> Rob
+
+Best Regards,
+Sang-Heon Jeon
 
