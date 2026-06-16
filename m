@@ -1,151 +1,133 @@
-Return-Path: <linux-mips+bounces-15103-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-15104-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id 5uztDqCuMGq/WAUAu9opvQ
-	(envelope-from <linux-mips+bounces-15103-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Tue, 16 Jun 2026 04:02:08 +0200
+	id obyCG6T5MGpQZwUAu9opvQ
+	(envelope-from <linux-mips+bounces-15104-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Tue, 16 Jun 2026 09:22:12 +0200
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id E214468B5F4
-	for <lists+linux-mips@lfdr.de>; Tue, 16 Jun 2026 04:02:07 +0200 (CEST)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id F422168CCCD
+	for <lists+linux-mips@lfdr.de>; Tue, 16 Jun 2026 09:22:11 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=networkplumber-org.20251104.gappssmtp.com header.s=20251104 header.b=wAbfpxlE;
-	spf=pass (mail.lfdr.de: domain of "linux-mips+bounces-15103-lists+linux-mips=lfdr.de@vger.kernel.org" designates 172.105.105.114 as permitted sender) smtp.mailfrom="linux-mips+bounces-15103-lists+linux-mips=lfdr.de@vger.kernel.org";
-	dmarc=fail reason="SPF not aligned (relaxed), DKIM not aligned (relaxed)" header.from=networkplumber.org (policy=none);
+	dkim=none;
+	dmarc=fail reason="SPF not aligned (relaxed), No valid DKIM" header.from=strotmann.de (policy=quarantine);
+	spf=pass (mail.lfdr.de: domain of "linux-mips+bounces-15104-lists+linux-mips=lfdr.de@vger.kernel.org" designates 172.232.135.74 as permitted sender) smtp.mailfrom="linux-mips+bounces-15104-lists+linux-mips=lfdr.de@vger.kernel.org";
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id D52CA3019C84
-	for <lists+linux-mips@lfdr.de>; Tue, 16 Jun 2026 02:02:06 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 6EB3230182DF
+	for <lists+linux-mips@lfdr.de>; Tue, 16 Jun 2026 07:22:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2B67038D014;
-	Tue, 16 Jun 2026 02:02:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BFA7C397338;
+	Tue, 16 Jun 2026 07:22:09 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-dy1-f172.google.com (mail-dy1-f172.google.com [74.125.82.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from strotmann.de (smtp3.strotmann.de [46.38.233.133])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C988B38B7D7
-	for <linux-mips@vger.kernel.org>; Tue, 16 Jun 2026 02:02:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92950395AE6;
+	Tue, 16 Jun 2026 07:22:07 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781575324; cv=none; b=MaI841z64AVf20sj7XYuWyEcuO2ncw3IFNzHAYePc3keIPauRTmsxxnSqYMchxbbW2vrSea+Pqh7AFo+PeyjVWL4hCyznaLDuOvFMwwfz97s88sgfJgJN80aGLTkxd5ZpHL1vgFRT1wKn778A0sQoHiZSS+MwYSbKqHxyYPpJFE=
+	t=1781594529; cv=none; b=W0RSuoSeEbAhVIOnnUPsB2x0VVpwB3JIhkz1KAci3OqO9mjhdU+q7UxPOUgbHymYhkjHqrT0GwB4PkbYic0BW9iKqTDw0DI+Oe92+WGcUW4rkyCDw+BzCaGbvrduoOahx9woapqz6gkfm+HeSPsxMU5Qv7jzujWq/O5JaCFzqkM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781575324; c=relaxed/simple;
-	bh=GuqXIH4/Mp464G7SngNzHsMa6/UILMPguBBa2NVHWZQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=jjhjuTImta1n7o433ZtZeUntSZeSqrcukzeWoKB7hBz/moA7FTipMBUBFsGeRKfYFsPIXGaQ+MpEzyKTuLEkrnP8KdF0Tq3UPD+kJIPD67w8BmMM4Z2PP7ZTWXmsOhDObVEHYaA1FckxK1IMc1QPF9rFzBHTpBzLm0Qe9nphXLU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=networkplumber.org; spf=pass smtp.mailfrom=networkplumber.org; dkim=pass (2048-bit key) header.d=networkplumber-org.20251104.gappssmtp.com header.i=@networkplumber-org.20251104.gappssmtp.com header.b=wAbfpxlE; arc=none smtp.client-ip=74.125.82.172
-Received: by mail-dy1-f172.google.com with SMTP id 5a478bee46e88-304d8362a58so2991654eec.1
-        for <linux-mips@vger.kernel.org>; Mon, 15 Jun 2026 19:02:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=networkplumber-org.20251104.gappssmtp.com; s=20251104; t=1781575322; x=1782180122; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Ij2ukDXcMwBNLXQ6jucFsqZ3k4ldmE3wNeTpnN4p5Zc=;
-        b=wAbfpxlEkKRwaRTaQS7Tr/pvDnqmdunDSPePGIEMriQJhK2PCPK/f3S8iN6OqzNwiZ
-         AHCMPBOL+xuvLn2nQgZcqFB8L+i0Cow6TZ2ZQ2N10OUBVO9CAmhPjB0m56TBwdOA4XCB
-         qpnEyyp0jz+LZojQcrrLKYeHdup2kqV8fP6cGExbbWnrrQV4kgMbYYwSKToLTtixl0a5
-         q7tAWgcF5h1BubQngtjn0JBvtOvb0cR9WuSJuTZ8rVfeDs4WM3Wya+ozkzSI8rhvJkZ8
-         lYwiqHwwZZCA3zCkE05FNCYD+8J/ANjJzrpw8lv64OsICvEC8djdOr9zoPlqv83oJIB7
-         TaaA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781575322; x=1782180122;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=Ij2ukDXcMwBNLXQ6jucFsqZ3k4ldmE3wNeTpnN4p5Zc=;
-        b=iSPzvyqARV3WKznEvqp1fzVfSZPTVCmbS2rvjERo48HeTYR7vN3r4tZUBYrO46L04s
-         j1oPd9GKXonv3PwpLpEeH8f9VyTjHYPnwNPP40YG3gUkZj+iN0Z4eB7PU/oDyK/VR4jV
-         pDkwXvgH/Vq2j9JgZ7gbLCMcqSbNqBtXZvhHy/AeflzdYcLcSMw0xWVmg10iN3GjZeEl
-         9XY6uBk2bBoS0wnT5l8OremG/xkREsVATlZ6em5tOZTPgbG8gQQmRowm22RC9W/jFjjV
-         wcjnNIssFbXV+Q05ev/CcxAXXGZFTNZrHtkQbdH2+ITRVEVnNEWorSFF4yy9wfwQGeYm
-         CPqQ==
-X-Forwarded-Encrypted: i=1; AFNElJ+q577N6uuSaOMFiAek9EVtsdIA1T0l0n62Nc2Bh74XdP9Iffx6pRrGe1jJZ/Zre1pVbQ8ZcfwnFH9L@vger.kernel.org
-X-Gm-Message-State: AOJu0YyS2GCVL53RN1VDUmuzgZRIGe0gaOKBDwXdprgGd6qXsz52JIXy
-	B+yuHM5XDIB2q1xQX/Ha2WoWMs6Nrl+LEpFYTKfGRrmdHaEb0nnPV/QMBq1naI4sB1I=
-X-Gm-Gg: Acq92OH41VvOw0MkQZwwiUVXoljmaaTAQqkCq1OT1c8WLRHPx5DzM4xEZlP9spXy2Qk
-	mxH56n92Y6rCZOgflpdFiPQGinc6jsqAbujru7taWM7BQX+QKyw96KsAvk8xM4+gTra7aDdLu7X
-	y/nRIGERjuwrLywNeMa4qrLvQboQ77NSzibbA+HjhH9Jl+zuMcw9uQr1q4N2tSF8wTrsHOJhCyH
-	j8C5QKXcdKNMcvVkWa43lGEvo2FWRImcUjJcJ0jmVVVtWxoK+u/IWUssL1E9xpr6wM4C9G0S8xl
-	h2gpD18FbwEAKRA4KH3V0fKsbPagpv+YUteSW/agxDuofwf0e0ppzCjfXrQVuheB2giU+pY1ea4
-	Z/2KKLgFLVhqiuTeC7iCQq8cz/Ru2dRClVB4yMP8ADYkqK+JJbvk/xddZQ2ZTOsennsxtSB5y7g
-	I0GTJli5dwjCzYdLG3AgotlS+bIPD6sxRuCF9eH/XLwFHD3af5izlh5coTRluDoQvk
-X-Received: by 2002:a05:7300:691d:b0:2c9:ee15:a0ee with SMTP id 5a478bee46e88-30ba33dbf37mr1207167eec.12.1781575321794;
-        Mon, 15 Jun 2026 19:02:01 -0700 (PDT)
-Received: from phoenix.local (204-195-96-226.wavecable.com. [204.195.96.226])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-3081e5cea89sm18324839eec.8.2026.06.15.19.02.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 15 Jun 2026 19:02:01 -0700 (PDT)
-Date: Mon, 15 Jun 2026 19:01:58 -0700
-From: Stephen Hemminger <stephen@networkplumber.org>
+	s=arc-20240116; t=1781594529; c=relaxed/simple;
+	bh=juhXNLlnPzgyRynEqG91o/WPu2WsUH4/kzqpgpcpPCs=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=q5WUzGM31oMENvJAC2CG95dwlnvUlXsPDEKW3w0kxvNQw0P1HNTKVQuqPiYCle/2+kjPnNU1N98pfs39Y/C3pSwfswlSQEgMbdhtkcyySM3CJLzsWv+D920j1QBPCGhKV31pq/mcgrR3gFDAraa7QTfcW5F8x1FVqQ059uXcgkM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=strotmann.de; spf=pass smtp.mailfrom=strotmann.de; arc=none smtp.client-ip=46.38.233.133
+Received: from smtp2.strotmann.de (unknown [IPv6:fd01::1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange x25519)
+	(No client certificate requested)
+	by smtp3.strotmann.de (Postfix) with ESMTPS id 495787FE91;
+	Tue, 16 Jun 2026 09:13:56 +0200 (CEST)
+Received: from [192.168.8.114] (unknown [IPv6:fd00::1000])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp2.strotmann.de (Postfix) with ESMTPSA id 4gfdWb3KmCzHfrn;
+	Tue, 16 Jun 2026 09:13:47 +0200 (CEST)
+From: Carsten Strotmann <cas@strotmann.de>
 To: Jakub Kicinski <kuba@kernel.org>
-Cc: davem@davemloft.net, netdev@vger.kernel.org, edumazet@google.com,
+Cc: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+ davem@davemloft.net, netdev@vger.kernel.org, edumazet@google.com,
  pabeni@redhat.com, andrew+netdev@lunn.ch, horms@kernel.org,
  geert@linux-m68k.org, chleroy@kernel.org, npiggin@gmail.com,
  mpe@ellerman.id.au, maddy@linux.ibm.com, linux-mips@vger.kernel.org,
  linux-m68k@lists.linux-m68k.org, linuxppc-dev@lists.ozlabs.org
 Subject: Re: [PATCH net-next 0/2] appletalk: move the protocol out of tree
-Message-ID: <20260615190158.55cbf94d@phoenix.local>
-In-Reply-To: <20260615222935.947233-1-kuba@kernel.org>
+Date: Tue, 16 Jun 2026 09:13:46 +0200
+Message-ID: <A3590144-073C-46D6-8425-90EE0C4D48E8@strotmann.de>
+In-Reply-To: <20260615175535.5bc56cfc@kernel.org>
 References: <20260615222935.947233-1-kuba@kernel.org>
+ <c3789160609a10e232ba3e27c4b13adbb170956c.camel@physik.fu-berlin.de>
+ <20260615175535.5bc56cfc@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
+Content-Transfer-Encoding: quoted-printable
 X-Rspamd-Action: no action
-X-Spamd-Result: default: False [-0.06 / 15.00];
+X-Spamd-Result: default: False [2.04 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
+	DMARC_POLICY_QUARANTINE(1.50)[strotmann.de : SPF not aligned (relaxed), No valid DKIM,quarantine];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
-	R_DKIM_ALLOW(-0.20)[networkplumber-org.20251104.gappssmtp.com:s=20251104];
+	R_MISSING_CHARSET(0.50)[];
+	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
 	MAILLIST(-0.15)[generic];
-	DMARC_POLICY_SOFTFAIL(0.10)[networkplumber.org : SPF not aligned (relaxed), DKIM not aligned (relaxed),quarantine,sampled_out];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-15103-lists,linux-mips=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
-	FORGED_RECIPIENTS(0.00)[m:kuba@kernel.org,m:davem@davemloft.net,m:netdev@vger.kernel.org,m:edumazet@google.com,m:pabeni@redhat.com,m:andrew+netdev@lunn.ch,m:horms@kernel.org,m:geert@linux-m68k.org,m:chleroy@kernel.org,m:npiggin@gmail.com,m:mpe@ellerman.id.au,m:maddy@linux.ibm.com,m:linux-mips@vger.kernel.org,m:linux-m68k@lists.linux-m68k.org,m:linuxppc-dev@lists.ozlabs.org,m:andrew@lunn.ch,s:lists@lfdr.de];
-	FROM_HAS_DN(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[15];
-	FORGED_SENDER(0.00)[stephen@networkplumber.org,linux-mips@vger.kernel.org];
-	MIME_TRACE(0.00)[0:+];
-	FORWARDED(0.00)[lists@lfdr.de];
-	FREEMAIL_CC(0.00)[davemloft.net,vger.kernel.org,google.com,redhat.com,lunn.ch,kernel.org,linux-m68k.org,gmail.com,ellerman.id.au,linux.ibm.com,lists.linux-m68k.org,lists.ozlabs.org];
-	MISSING_XM_UA(0.00)[];
+	FREEMAIL_CC(0.00)[physik.fu-berlin.de,davemloft.net,vger.kernel.org,google.com,redhat.com,lunn.ch,kernel.org,linux-m68k.org,gmail.com,ellerman.id.au,linux.ibm.com,lists.linux-m68k.org,lists.ozlabs.org];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	FORGED_SENDER_FORWARDING(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
+	TAGGED_FROM(0.00)[bounces-15104-lists,linux-mips=lfdr.de];
+	RCVD_TLS_LAST(0.00)[];
+	FORGED_SENDER(0.00)[cas@strotmann.de,linux-mips@vger.kernel.org];
+	RCPT_COUNT_TWELVE(0.00)[16];
+	FORGED_RECIPIENTS(0.00)[m:kuba@kernel.org,m:glaubitz@physik.fu-berlin.de,m:davem@davemloft.net,m:netdev@vger.kernel.org,m:edumazet@google.com,m:pabeni@redhat.com,m:andrew+netdev@lunn.ch,m:horms@kernel.org,m:geert@linux-m68k.org,m:chleroy@kernel.org,m:npiggin@gmail.com,m:mpe@ellerman.id.au,m:maddy@linux.ibm.com,m:linux-mips@vger.kernel.org,m:linux-m68k@lists.linux-m68k.org,m:linuxppc-dev@lists.ozlabs.org,m:andrew@lunn.ch,s:lists@lfdr.de];
+	MIME_TRACE(0.00)[0:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	FORWARDED(0.00)[lists@lfdr.de];
+	FORGED_RECIPIENTS_FORWARDING(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
+	TO_DN_SOME(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[stephen@networkplumber.org,linux-mips@vger.kernel.org];
-	DKIM_TRACE(0.00)[networkplumber-org.20251104.gappssmtp.com:+];
+	FORGED_SENDER_FORWARDING(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[cas@strotmann.de,linux-mips@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	MISSING_XM_UA(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[5];
+	R_DKIM_NA(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
 	ALIAS_RESOLVED(0.00)[];
 	TAGGED_RCPT(0.00)[linux-mips,netdev];
-	TO_DN_SOME(0.00)[];
-	FORGED_RECIPIENTS_FORWARDING(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[networkplumber.org:from_mime,networkplumber.org:email,networkplumber-org.20251104.gappssmtp.com:dkim,tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo,phoenix.local:mid,vger.kernel.org:from_smtp]
+	MID_RHS_MATCH_FROM(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:rdns,sto.lore.kernel.org:helo,vger.kernel.org:from_smtp]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: E214468B5F4
+X-Rspamd-Queue-Id: F422168CCCD
 
-On Mon, 15 Jun 2026 15:29:33 -0700
-Jakub Kicinski <kuba@kernel.org> wrote:
+Hi,
 
-> This tiny series moves appletalk out of tree, to:
-> 
->   https://github.com/linux-netdev/mod-orphan
-> 
-> Core maintainainers are unable to keep up with the rate of security
-> bug reports and fixes. Nobody seems to care about appletalk enough
-> to review the patches.
-> 
-> As Eric pointed out Mac OS dropped AppleTalk over a decade ago.
+I'm a user of AppleTalk and other "Retro"-Features in the Linux Kernel.
 
+On 16 Jun 2026, at 2:55, Jakub Kicinski wrote:
 
-Acked-by: Stephen Hemminger <stephen@networkplumber.org>
+> We can complain about the AI slop til the cows comes home.
+> I don't like it, you don't like it. What difference does it make?
+>
+> If y'all have real solutions please share. Complaining about
+> "commercial interests" and "nuk[ing] everything in a panic reaction"
+> is not helpful.
+
+the solution, as Adrian pointed out, is to leave these features in the Li=
+nux kernel but have them disabled by default. Maybe put a warning message=
+ in the kernel config tools that people should only enable these if they =
+know what they are doing.
+
+These "retro"-features should not pose any security risk of they are not =
+compiled into a kernel.
+
+Greetings
+
+Carsten
 
