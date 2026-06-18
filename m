@@ -1,370 +1,183 @@
-Return-Path: <linux-mips+bounces-15136-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-15138-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id ShnLF865M2oQFgYAu9opvQ
-	(envelope-from <linux-mips+bounces-15136-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Thu, 18 Jun 2026 11:26:38 +0200
+	id ssbEIpfUM2rkGwYAu9opvQ
+	(envelope-from <linux-mips+bounces-15138-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Thu, 18 Jun 2026 13:20:55 +0200
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id EE0CC69ED98
-	for <lists+linux-mips@lfdr.de>; Thu, 18 Jun 2026 11:26:37 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id EBB0E69FB6F
+	for <lists+linux-mips@lfdr.de>; Thu, 18 Jun 2026 13:20:54 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=huawei.com header.s=dkim header.b=Q8B29D0z;
-	spf=pass (mail.lfdr.de: domain of "linux-mips+bounces-15136-lists+linux-mips=lfdr.de@vger.kernel.org" designates 2600:3c09:e001:a7::12fc:5321 as permitted sender) smtp.mailfrom="linux-mips+bounces-15136-lists+linux-mips=lfdr.de@vger.kernel.org";
-	dmarc=pass (policy=quarantine) header.from=huawei.com;
+	dkim=pass header.d=kernel.org header.s=k20260515 header.b=lDJjZJYJ;
+	spf=pass (mail.lfdr.de: domain of "linux-mips+bounces-15138-lists+linux-mips=lfdr.de@vger.kernel.org" designates 172.105.105.114 as permitted sender) smtp.mailfrom="linux-mips+bounces-15138-lists+linux-mips=lfdr.de@vger.kernel.org";
+	dmarc=pass (policy=quarantine) header.from=kernel.org;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id D6D203041307
-	for <lists+linux-mips@lfdr.de>; Thu, 18 Jun 2026 09:26:22 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id E8DAF3035F03
+	for <lists+linux-mips@lfdr.de>; Thu, 18 Jun 2026 11:20:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 571933D7D61;
-	Thu, 18 Jun 2026 09:26:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3CA2435B631;
+	Thu, 18 Jun 2026 11:20:53 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
-Received: from canpmsgout09.his.huawei.com (canpmsgout09.his.huawei.com [113.46.200.224])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F8363C4575;
-	Thu, 18 Jun 2026 09:26:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D57B83DEAC3;
+	Thu, 18 Jun 2026 11:20:50 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781774774; cv=none; b=kkyaGmnYq3QZv4CuMqQT67rhpabH0BR6E2xCVMDchb62rt70EnTjvvE1KfTNfQu1kSlaNgPKAgRr7yC5+VPXtM1dNNWK4VdWG9V6ddixGXO43SCqVMRqZfsQMn48Y2zBdqaGZZcg5NjizNSey+zMEwgycw25uC7z8fz3m+84jIw=
+	t=1781781653; cv=none; b=EaerhyCE2qL0WmrZtdHQvfR10LGfxG8UEN4NAfzk0yzdZhkNIfiKLWKT+KilnJIUd39I2yO3AAQr30i1STiYMSQSz/ElzBNHyWRgZ7q4LN+v5x4Ss3/QYJF1Zqg0RT6HfDXop/d3pemzUmXWxxYryXVJh6fJgdOTH64Tfme60Qk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781774774; c=relaxed/simple;
-	bh=+kLKeN9As0vdHAmdyhHNMU1eWIrlwrxzYYBy+T/YcdQ=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=mR0LApyCY9yBlipz/fbg7EDH7C/9zXJnbPBuzcTLG7ttC2VFfy0F4KJXFjf80HN3tNPDPqM4ZokilcWTM7mJQP1eCsZAZK+g/9xUn9BYLuwECa55yWqJRfdWPBQ49KStlRuK5frQdA9kH3WQ5VOqXXC4K1rFS92vAT32GpizgTc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=Q8B29D0z; arc=none smtp.client-ip=113.46.200.224
-dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
-	c=relaxed/relaxed; q=dns/txt;
-	h=From;
-	bh=M2DVm3kV6Ggi8rv8O5YqfCiXLk7nZR1mnvOZP3H/9bQ=;
-	b=Q8B29D0zg2x24QYMY56En+H9ByPxLoagoKjJ4PBlPDI+UPKSz/G8+sSVEf9RKfYV6Kb5kTzQ0
-	vu10qTrjjuUFHGbCJ2o4pry5inI42gZ4gwjqp5TQUH8gWGGYgiTRHZT28nj3yzcGNUja0Kz0Hcy
-	aA1mw4xEqQ9sveRqX92PZrQ=
-Received: from mail.maildlp.com (unknown [172.19.162.92])
-	by canpmsgout09.his.huawei.com (SkyGuard) with ESMTPS id 4ggwB83cyFz1cyVP;
-	Thu, 18 Jun 2026 17:18:08 +0800 (CST)
-Received: from dggpemf500011.china.huawei.com (unknown [7.185.36.131])
-	by mail.maildlp.com (Postfix) with ESMTPS id 6E41D4056E;
-	Thu, 18 Jun 2026 17:26:06 +0800 (CST)
-Received: from huawei.com (10.90.53.73) by dggpemf500011.china.huawei.com
- (7.185.36.131) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Thu, 18 Jun
- 2026 17:26:04 +0800
-From: Jinjie Ruan <ruanjinjie@huawei.com>
-To: <catalin.marinas@arm.com>, <will@kernel.org>, <tsbogend@alpha.franken.de>,
-	<pjw@kernel.org>, <palmer@dabbelt.com>, <aou@eecs.berkeley.edu>,
-	<alex@ghiti.fr>, <tglx@kernel.org>, <mingo@redhat.com>, <bp@alien8.de>,
-	<dave.hansen@linux.intel.com>, <hpa@zytor.com>, <peterz@infradead.org>,
-	<kees@kernel.org>, <nathan@kernel.org>, <linusw@kernel.org>,
-	<jpoimboe@kernel.org>, <lukas.bulwahn@redhat.com>, <ryan.roberts@arm.com>,
-	<ojeda@kernel.org>, <maz@kernel.org>, <timothy.hayes@arm.com>,
-	<lpieralisi@kernel.org>, <thuth@redhat.com>, <menglong8.dong@gmail.com>,
-	<oupton@kernel.org>, <yeoreum.yun@arm.com>, <miko.lenczewski@arm.com>,
-	<broonie@kernel.org>, <kevin.brodsky@arm.com>, <james.clark@linaro.org>,
-	<tabba@google.com>, <mrigendra.chaubey@gmail.com>, <arnd@arndb.de>,
-	<anshuman.khandual@arm.com>, <x86@kernel.org>,
-	<linux-kernel@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-	<linux-mips@vger.kernel.org>, <linux-riscv@lists.infradead.org>,
-	<apatel@ventanamicro.com>, <mhklinux@outlook.com>
-CC: <ruanjinjie@huawei.com>
-Subject: [PATCH v2 4/4] arm64: Add HOTPLUG_PARALLEL support for secondary CPUs
-Date: Thu, 18 Jun 2026 17:24:44 +0800
-Message-ID: <20260618092444.1316336-5-ruanjinjie@huawei.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20260618092444.1316336-1-ruanjinjie@huawei.com>
-References: <20260618092444.1316336-1-ruanjinjie@huawei.com>
+	s=arc-20240116; t=1781781653; c=relaxed/simple;
+	bh=on2p7v01JMLQEd/mSi9ZWJJJ8bOMuh6PkCqEPxyESE4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=lREkbLk8W7yUu5A6h+4wCK8wsg7Hzq11vr8bnm6+XreMvg8EpHDjuWy6HNliyjRa/FB6f7UA77A0B1liL8KOrXXa1mnbqe3DCZwS6uKDB3tsInMMmDfJr7hAD8ZkhdflA2TEbJIJbx6Eqprn4iMwqr1ryfvKmji7ERdau1mUK3Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lDJjZJYJ; arc=none smtp.client-ip=100.103.45.18
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9A7D51F000E9;
+	Thu, 18 Jun 2026 11:20:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1781781650;
+	bh=on2p7v01JMLQEd/mSi9ZWJJJ8bOMuh6PkCqEPxyESE4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=lDJjZJYJ44Uudg+UUCLEZ5y/sv+9qsCPzXEK/SlWqYFGHdqWrKYDhJ4GlvtafSPeG
+	 BkI9mR7gXaoUCd4fEyAkAOCIb6hs7ZVVEZxps+vtBfvMuGWrZ+g8P46pmqYV9yzIX7
+	 lDScLN3sjh5PcMVWfKktO2MLuQTjps9HxV3GWvOMA69qTMUNK+3zZ6+0hv4oo/XNzL
+	 DYxycW66o0SD0Q/+o9gPry+0FHF0e5kJQCNDSyN1ihKq5/tmrs+qsvdpnHSogWO5sP
+	 2rL8P9jMCTf9/vdXIynUS0O3GRdllKsChiOnpuT+MC4LBV5F17k1ryXsmIVt8EmV58
+	 ERuEDJonnxdFw==
+Date: Thu, 18 Jun 2026 13:20:47 +0200
+From: Maxime Ripard <mripard@kernel.org>
+To: Andrzej Hajda <andrzej.hajda@intel.com>, 
+	Neil Armstrong <neil.armstrong@linaro.org>, Robert Foss <rfoss@kernel.org>, 
+	Laurent Pinchart <Laurent.pinchart@ideasonboard.com>, Jonas Karlman <jonas@kwiboo.se>, 
+	Jernej Skrabec <jernej.skrabec@gmail.com>, Luca Ceresoli <luca.ceresoli@bootlin.com>, 
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Thomas Zimmermann <tzimmermann@suse.de>, 
+	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>
+Cc: Dmitry Baryshkov <lumag@kernel.org>, dri-devel@lists.freedesktop.org, 
+	Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>, Jagan Teki <jagan@amarulasolutions.com>, 
+	Liu Ying <victor.liu@nxp.com>, Frank Li <Frank.Li@nxp.com>, 
+	Sascha Hauer <s.hauer@pengutronix.de>, Pengutronix Kernel Team <kernel@pengutronix.de>, 
+	Fabio Estevam <festevam@gmail.com>, imx@lists.linux.dev, linux-arm-kernel@lists.infradead.org, 
+	Andy Yan <andy.yan@rock-chips.com>, Phong LE <ple@baylibre.com>, 
+	Douglas Anderson <dianders@chromium.org>, Inki Dae <inki.dae@samsung.com>, 
+	Marek Szyprowski <m.szyprowski@samsung.com>, Philipp Zabel <p.zabel@pengutronix.de>, 
+	Paul Cercueil <paul@crapouillou.net>, linux-mips@vger.kernel.org, 
+	Chun-Kuang Hu <chunkuang.hu@kernel.org>, Matthias Brugger <matthias.bgg@gmail.com>, 
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org, 
+	Kevin Hilman <khilman@baylibre.com>, Jerome Brunet <jbrunet@baylibre.com>, 
+	Martin Blumenstingl <martin.blumenstingl@googlemail.com>, linux-amlogic@lists.infradead.org, 
+	Tomi Valkeinen <tomi.valkeinen+renesas@ideasonboard.com>, Geert Uytterhoeven <geert+renesas@glider.be>, 
+	Magnus Damm <magnus.damm@gmail.com>, Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>, 
+	linux-renesas-soc@vger.kernel.org, Biju Das <biju.das.jz@bp.renesas.com>, 
+	Heiko Stuebner <heiko@sntech.de>, Sandy Huang <hjc@rock-chips.com>, 
+	linux-rockchip@lists.infradead.org, Yannick Fertre <yannick.fertre@foss.st.com>, 
+	Raphael Gallais-Pou <raphael.gallais-pou@foss.st.com>, Philippe Cornu <philippe.cornu@foss.st.com>, 
+	Maxime Coquelin <mcoquelin.stm32@gmail.com>, Alexandre Torgue <alexandre.torgue@foss.st.com>, 
+	linux-stm32@st-md-mailman.stormreply.com, Jyri Sarha <jyri.sarha@iki.fi>, 
+	Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>, Dave Stevenson <dave.stevenson@raspberrypi.com>, 
+	=?utf-8?B?TWHDrXJh?= Canal <mcanal@igalia.com>, Raspberry Pi Kernel Maintenance <kernel-list@raspberrypi.com>, 
+	Icenowy Zheng <zhengxingda@iscas.ac.cn>, Michal Simek <michal.simek@amd.com>
+Subject: Re: [PATCH v2 00/78] drm/bridge: Convert all reset users to
+ create_state
+Message-ID: <20260618-terrestrial-abiding-tamarin-01befc@houat>
+References: <20260608-drm-no-more-bridge-reset-v2-0-0a91018bf886@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: kwepems200001.china.huawei.com (7.221.188.67) To
- dggpemf500011.china.huawei.com (7.185.36.131)
+Content-Type: multipart/signed; micalg=pgp-sha384;
+	protocol="application/pgp-signature"; boundary="ozjpmz32viqzzrdv"
+Content-Disposition: inline
+In-Reply-To: <20260608-drm-no-more-bridge-reset-v2-0-0a91018bf886@kernel.org>
 X-Rspamd-Action: no action
-X-Spamd-Result: default: False [-6.16 / 15.00];
-	WHITELIST_DMARC(-7.00)[huawei.com:D:+];
+X-Spamd-Result: default: False [-5.26 / 15.00];
+	WHITELIST_SPF_DKIM(-3.00)[kernel.org:d:+,kernel.org:s:+];
+	SIGNED_PGP(-2.00)[];
 	SUSPICIOUS_RECIPS(1.50)[];
-	MID_CONTAINS_FROM(1.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_MISSING_CHARSET(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[huawei.com,quarantine];
-	R_DKIM_ALLOW(-0.20)[huawei.com:s=dkim];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
+	MID_RHS_NOT_FQDN(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+	MIME_GOOD(-0.20)[multipart/signed,text/plain];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20260515];
 	MAILLIST(-0.15)[generic];
-	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FORWARDED(0.00)[lists@lfdr.de];
-	MIME_TRACE(0.00)[0:+];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-15136-lists,linux-mips=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-15138-lists,linux-mips=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	FREEMAIL_TO(0.00)[arm.com,kernel.org,alpha.franken.de,dabbelt.com,eecs.berkeley.edu,ghiti.fr,redhat.com,alien8.de,linux.intel.com,zytor.com,infradead.org,gmail.com,linaro.org,google.com,arndb.de,vger.kernel.org,lists.infradead.org,ventanamicro.com,outlook.com];
-	FORGED_SENDER(0.00)[ruanjinjie@huawei.com,linux-mips@vger.kernel.org];
-	FORGED_RECIPIENTS(0.00)[m:catalin.marinas@arm.com,m:will@kernel.org,m:tsbogend@alpha.franken.de,m:pjw@kernel.org,m:palmer@dabbelt.com,m:aou@eecs.berkeley.edu,m:alex@ghiti.fr,m:tglx@kernel.org,m:mingo@redhat.com,m:bp@alien8.de,m:dave.hansen@linux.intel.com,m:hpa@zytor.com,m:peterz@infradead.org,m:kees@kernel.org,m:nathan@kernel.org,m:linusw@kernel.org,m:jpoimboe@kernel.org,m:lukas.bulwahn@redhat.com,m:ryan.roberts@arm.com,m:ojeda@kernel.org,m:maz@kernel.org,m:timothy.hayes@arm.com,m:lpieralisi@kernel.org,m:thuth@redhat.com,m:menglong8.dong@gmail.com,m:oupton@kernel.org,m:yeoreum.yun@arm.com,m:miko.lenczewski@arm.com,m:broonie@kernel.org,m:kevin.brodsky@arm.com,m:james.clark@linaro.org,m:tabba@google.com,m:mrigendra.chaubey@gmail.com,m:arnd@arndb.de,m:anshuman.khandual@arm.com,m:x86@kernel.org,m:linux-kernel@vger.kernel.org,m:linux-arm-kernel@lists.infradead.org,m:linux-mips@vger.kernel.org,m:linux-riscv@lists.infradead.org,m:apatel@ventanamicro.com,m:mhklinux@outlook.com,m:ruanjinjie
- @huawei.com,m:menglong8dong@gmail.com,m:mrigendrachaubey@gmail.com,s:lists@lfdr.de];
-	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FORGED_SENDER_FORWARDING(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[ruanjinjie@huawei.com,linux-mips@vger.kernel.org];
+	RCVD_COUNT_THREE(0.00)[4];
+	FREEMAIL_TO(0.00)[intel.com,linaro.org,kernel.org,ideasonboard.com,kwiboo.se,gmail.com,bootlin.com,linux.intel.com,suse.de,ffwll.ch];
+	FORGED_SENDER(0.00)[mripard@kernel.org,linux-mips@vger.kernel.org];
+	MIME_TRACE(0.00)[0:+,1:+,2:~];
+	FORGED_RECIPIENTS(0.00)[m:andrzej.hajda@intel.com,m:neil.armstrong@linaro.org,m:rfoss@kernel.org,m:Laurent.pinchart@ideasonboard.com,m:jonas@kwiboo.se,m:jernej.skrabec@gmail.com,m:luca.ceresoli@bootlin.com,m:maarten.lankhorst@linux.intel.com,m:tzimmermann@suse.de,m:airlied@gmail.com,m:simona@ffwll.ch,m:lumag@kernel.org,m:dri-devel@lists.freedesktop.org,m:laurent.pinchart+renesas@ideasonboard.com,m:jagan@amarulasolutions.com,m:victor.liu@nxp.com,m:Frank.Li@nxp.com,m:s.hauer@pengutronix.de,m:kernel@pengutronix.de,m:festevam@gmail.com,m:imx@lists.linux.dev,m:linux-arm-kernel@lists.infradead.org,m:andy.yan@rock-chips.com,m:ple@baylibre.com,m:dianders@chromium.org,m:inki.dae@samsung.com,m:m.szyprowski@samsung.com,m:p.zabel@pengutronix.de,m:paul@crapouillou.net,m:linux-mips@vger.kernel.org,m:chunkuang.hu@kernel.org,m:matthias.bgg@gmail.com,m:angelogioacchino.delregno@collabora.com,m:linux-mediatek@lists.infradead.org,m:linux-kernel@vger.kernel.org,m:khilman@baylibre.com,m:jbrunet@baylibre
+ .com,m:martin.blumenstingl@googlemail.com,m:linux-amlogic@lists.infradead.org,m:tomi.valkeinen+renesas@ideasonboard.com,m:geert+renesas@glider.be,m:magnus.damm@gmail.com,m:kieran.bingham+renesas@ideasonboard.com,m:linux-renesas-soc@vger.kernel.org,m:biju.das.jz@bp.renesas.com,m:heiko@sntech.de,m:hjc@rock-chips.com,m:linux-rockchip@lists.infradead.org,m:yannick.fertre@foss.st.com,m:raphael.gallais-pou@foss.st.com,m:philippe.cornu@foss.st.com,m:mcoquelin.stm32@gmail.com,m:alexandre.torgue@foss.st.com,m:linux-stm32@st-md-mailman.stormreply.com,m:jyri.sarha@iki.fi,m:tomi.valkeinen@ideasonboard.com,m:dave.stevenson@raspberrypi.com,m:mcanal@igalia.com,m:kernel-list@raspberrypi.com,m:zhengxingda@iscas.ac.cn,m:michal.simek@amd.com,m:jernejskrabec@gmail.com,m:laurent.pinchart@ideasonboard.com,m:matthiasbgg@gmail.com,m:martinblumenstingl@gmail.com,s:lists@lfdr.de];
+	FORWARDED(0.00)[lists@lfdr.de];
+	FORGED_SENDER_MAILLIST(0.00)[];
 	FROM_HAS_DN(0.00)[];
-	DKIM_TRACE(0.00)[huawei.com:+];
-	RCVD_COUNT_FIVE(0.00)[6];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	DKIM_TRACE(0.00)[kernel.org:+];
+	RCPT_COUNT_GT_50(0.00)[61];
 	ALIAS_RESOLVED(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[43];
-	TO_DN_NONE(0.00)[];
-	TAGGED_RCPT(0.00)[linux-mips];
+	FORGED_SENDER_FORWARDING(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[mripard@kernel.org,linux-mips@vger.kernel.org];
+	PRECEDENCE_BULK(0.00)[];
+	FREEMAIL_CC(0.00)[kernel.org,lists.freedesktop.org,ideasonboard.com,amarulasolutions.com,nxp.com,pengutronix.de,gmail.com,lists.linux.dev,lists.infradead.org,rock-chips.com,baylibre.com,chromium.org,samsung.com,crapouillou.net,vger.kernel.org,collabora.com,googlemail.com,glider.be,bp.renesas.com,sntech.de,foss.st.com,st-md-mailman.stormreply.com,iki.fi,raspberrypi.com,igalia.com,iscas.ac.cn,amd.com];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:rdns,sto.lore.kernel.org:helo,huawei.com:dkim,huawei.com:email,huawei.com:mid,huawei.com:from_mime,b.ne:url,vger.kernel.org:from_smtp,outlook.com:email]
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TO_DN_SOME(0.00)[];
+	TAGGED_RCPT(0.00)[linux-mips,renesas];
+	MISSING_XM_UA(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo,houat:mid,vger.kernel.org:from_smtp]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: EE0CC69ED98
+X-Rspamd-Queue-Id: EBB0E69FB6F
 
-Support for parallel secondary CPU bringup is already utilized by x86,
-MIPS, and RISC-V. This patch brings this capability to the arm64
-architecture.
 
-Rework the global `secondary_data` accessed during early boot into
-a per-CPU array `cpu_boot_data` to allow secondary CPUs to boot
-in parallel.
+--ozjpmz32viqzzrdv
+Content-Type: text/plain; protected-headers=v1; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH v2 00/78] drm/bridge: Convert all reset users to
+ create_state
+MIME-Version: 1.0
 
-And reuse `__cpu_logical_map` array in the early boot code in head.S
-to resolve each secondary CPU's logical ID concurrently.
+Hi,
 
-To fully enable HOTPLUG_PARALLEL, this patch implements:
-1) An arm64-specific arch_cpuhp_init_parallel_bringup() handler.
-2) An arm64-specific arch_cpuhp_kick_ap_alive() handler.
-3) Callbacks to cpuhp_ap_sync_alive() inside secondary_start_kernel().
+On Mon, Jun 08, 2026 at 04:35:42PM +0200, Maxime Ripard wrote:
+> Hi,=20
+>=20
+> All the bridges use reset to create a blank state only and don't use it
+> to reset the hardware at all. This is what the new atomic_create_state
+> is exactly supposed to be doing, so we can convert all existing bridge
+> users to it, and remove the reset hook and helpers.
+>=20
+> Let me know what you think,
+> Maxime=20
+>=20
+> Signed-off-by: Maxime Ripard <mripard@kernel.org>
 
-Tested natively with ATF on QEMU arm64 virt machine with 64 cores
-and also tested with KVM arm64 guest with 128 vCPUs.
+FTR, Thomas on IRC yesterday[1] added
+Reviewed-by: Thomas Zimmermann <tzimmermann@suse.de>
 
-Bringup Time Comparison (ms, lower is better):
+Unless another review shows up, I intend to merge this tomorrow
 
-|     Platform			   | Baseline|   P=0   |   P=1  | Delta(%)|
-| -------------------------------- | ------- | ------- | ------ | ------- |
-| 128 vCPUs KVM (256-core HIP09)   | 1921.5  | 1895.9  | 2776.9 | -44.52% |
-| 48 vCPUs KVM (64-core Cortex-A72)| 3644.7  | 3883.6  | 4406.3 | -20.9%  |
-| 64-core ATF QEMU		   | 2075.8  | 2080.7  | 1653.4 | 20.34%  |
-| 192-core server(HIP12)	   | 14619.2 | 14619.1 | 8589.4 | 41.21%  |
-| 32-core board			   | 2776.5  | 2881.0  | 1045.0 | 62.36%  |
+Maxime
 
-Tested-by: Michael Kelley <mhklinux@outlook.com>
-Signed-off-by: Jinjie Ruan <ruanjinjie@huawei.com>
----
- arch/arm64/Kconfig              |  1 +
- arch/arm64/include/asm/smp.h    | 11 ++++++++++
- arch/arm64/kernel/asm-offsets.c |  4 ++++
- arch/arm64/kernel/head.S        | 36 +++++++++++++++++++++++++++++++++
- arch/arm64/kernel/smp.c         | 33 ++++++++++++++++++++++++++++++
- 5 files changed, 85 insertions(+)
+1: https://oftc.catirclogs.org/dri-devel/2026-06-17#35422999;
 
-diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
-index 9091c67e1cc2..8735e9d8ed13 100644
---- a/arch/arm64/Kconfig
-+++ b/arch/arm64/Kconfig
-@@ -113,6 +113,7 @@ config ARM64
- 	select CPUMASK_OFFSTACK if NR_CPUS > 256
- 	select DCACHE_WORD_ACCESS
- 	select HAVE_EXTRA_IPI_TRACEPOINTS
-+	select HOTPLUG_PARALLEL if SMP && HOTPLUG_CPU
- 	select DYNAMIC_FTRACE if FUNCTION_TRACER
- 	select DMA_BOUNCE_UNALIGNED_KMALLOC
- 	select DMA_DIRECT_REMAP
-diff --git a/arch/arm64/include/asm/smp.h b/arch/arm64/include/asm/smp.h
-index e2151a01731f..30025030489c 100644
---- a/arch/arm64/include/asm/smp.h
-+++ b/arch/arm64/include/asm/smp.h
-@@ -92,7 +92,14 @@ struct secondary_data {
- 	long status;
- };
- 
-+#ifdef CONFIG_HOTPLUG_PARALLEL
-+static_assert((sizeof(struct secondary_data) & (sizeof(struct secondary_data) - 1)) == 0,
-+	      "secondary_data size must be a power of 2 for assembly lsl assembly!");
-+
-+extern struct secondary_data cpu_boot_data[NR_CPUS];
-+#else
- extern struct secondary_data secondary_data;
-+#endif
- extern long __early_cpu_boot_status;
- extern void secondary_entry(void);
- 
-@@ -124,7 +131,11 @@ static inline void __noreturn cpu_park_loop(void)
- 
- static inline void update_cpu_boot_status(unsigned int cpu, int val)
- {
-+#ifdef CONFIG_HOTPLUG_PARALLEL
-+	WRITE_ONCE(cpu_boot_data[cpu].status, val);
-+#else
- 	WRITE_ONCE(secondary_data.status, val);
-+#endif
- 	/* Ensure the visibility of the status update */
- 	dsb(ishst);
- }
-diff --git a/arch/arm64/kernel/asm-offsets.c b/arch/arm64/kernel/asm-offsets.c
-index b6367ff3a49c..0a0aa965dbb4 100644
---- a/arch/arm64/kernel/asm-offsets.c
-+++ b/arch/arm64/kernel/asm-offsets.c
-@@ -11,6 +11,7 @@
- #include <linux/arm_sdei.h>
- #include <linux/sched.h>
- #include <linux/ftrace.h>
-+#include <linux/log2.h>
- #include <linux/kexec.h>
- #include <linux/mm.h>
- #include <linux/kvm_host.h>
-@@ -97,6 +98,9 @@ int main(void)
-   BLANK();
- #endif
-   DEFINE(CPU_BOOT_TASK,		offsetof(struct secondary_data, task));
-+#ifdef CONFIG_HOTPLUG_PARALLEL
-+  DEFINE(SECONDARY_DATA_SHIFT,	ilog2(sizeof(struct secondary_data)));
-+#endif
-   BLANK();
-   DEFINE(FTR_OVR_VAL_OFFSET,	offsetof(struct arm64_ftr_override, val));
-   DEFINE(FTR_OVR_MASK_OFFSET,	offsetof(struct arm64_ftr_override, mask));
-diff --git a/arch/arm64/kernel/head.S b/arch/arm64/kernel/head.S
-index 87a822e5c4ca..000ab1acf7c5 100644
---- a/arch/arm64/kernel/head.S
-+++ b/arch/arm64/kernel/head.S
-@@ -12,6 +12,7 @@
- #include <linux/linkage.h>
- #include <linux/init.h>
- #include <linux/pgtable.h>
-+#include <linux/threads.h>
- 
- #include <asm/asm_pointer_auth.h>
- #include <asm/assembler.h>
-@@ -378,6 +379,33 @@ alternative_else_nop_endif
- 	br	x8
- SYM_FUNC_END(secondary_startup)
- 
-+#ifdef CONFIG_HOTPLUG_PARALLEL
-+	/*
-+	 * Convert the physical MPIDR of the current secondary CPU
-+	 * to its logical CPUID by traversing __cpu_logical_map
-+	 * in parallel.
-+	 */
-+	.macro	mpidr_to_cpuid, mpidr, cpuid, tmp1, tmp2
-+	mov_q	\tmp1, MPIDR_HWID_BITMASK
-+	and	\mpidr, \mpidr, \tmp1
-+
-+	adr_l	\tmp1, __cpu_logical_map
-+	mov	\cpuid, #0
-+.Lfind_cpuid\@:
-+	ldr	\tmp2, [\tmp1, \cpuid, lsl #3]
-+	cmp	\tmp2, #-1
-+	b.eq	.Lnext_cpu\@
-+	cmp	\tmp2, \mpidr
-+	b.eq	.Lfound_cpuid\@
-+.Lnext_cpu\@:
-+	add	\cpuid, \cpuid, #1
-+	cmp	\cpuid, #NR_CPUS
-+	b.ne	.Lfind_cpuid\@
-+	b	__secondary_too_slow
-+.Lfound_cpuid\@:
-+	.endm
-+#endif
-+
- 	.text
- SYM_FUNC_START_LOCAL(__secondary_switched)
- 	mov	x0, x20
-@@ -391,7 +419,15 @@ SYM_FUNC_START_LOCAL(__secondary_switched)
- 	msr	vbar_el1, x5
- 	isb
- 
-+#ifdef CONFIG_HOTPLUG_PARALLEL
-+	mrs	x0, mpidr_el1
-+	mpidr_to_cpuid mpidr=x0, cpuid=x2, tmp1=x1, tmp2=x3
-+
-+	adr_l	x0, cpu_boot_data
-+	add	x0, x0, x2, lsl #SECONDARY_DATA_SHIFT
-+#else
- 	adr_l	x0, secondary_data
-+#endif
- 	ldr	x2, [x0, #CPU_BOOT_TASK]
- 	cbz	x2, __secondary_too_slow
- 
-diff --git a/arch/arm64/kernel/smp.c b/arch/arm64/kernel/smp.c
-index 52edabc13d51..f7562c38d724 100644
---- a/arch/arm64/kernel/smp.c
-+++ b/arch/arm64/kernel/smp.c
-@@ -61,6 +61,11 @@
-  * where to place its SVC stack
-  */
- struct secondary_data secondary_data;
-+
-+#ifdef CONFIG_HOTPLUG_PARALLEL
-+struct secondary_data cpu_boot_data[NR_CPUS] ____cacheline_aligned;
-+#endif
-+
- /* Number of CPUs which aren't online, but looping in kernel text. */
- static int cpus_stuck_in_kernel;
- 
-@@ -106,8 +111,30 @@ static int boot_secondary(unsigned int cpu, struct task_struct *idle)
- 	return -EOPNOTSUPP;
- }
- 
-+#ifndef CONFIG_HOTPLUG_PARALLEL
- static DECLARE_COMPLETION(cpu_running);
-+#endif
-+
-+#ifdef CONFIG_HOTPLUG_PARALLEL
-+extern const struct cpu_operations smp_spin_table_ops;
-+
-+/* Establish whether parallel bringup can be supported. */
-+bool __init arch_cpuhp_init_parallel_bringup(void)
-+{
-+	int cpu = smp_processor_id();
-+	const struct cpu_operations *ops = get_cpu_ops(cpu);
- 
-+	return ops && ops != &smp_spin_table_ops;
-+}
-+
-+int arch_cpuhp_kick_ap_alive(unsigned int cpu, struct task_struct *tidle)
-+{
-+	cpu_boot_data[cpu].task = tidle;
-+	update_cpu_boot_status(cpu, CPU_MMU_OFF);
-+
-+	return boot_secondary(cpu, tidle);
-+}
-+#else
- int __cpu_up(unsigned int cpu, struct task_struct *idle)
- {
- 	int ret;
-@@ -172,6 +199,7 @@ int __cpu_up(unsigned int cpu, struct task_struct *idle)
- 
- 	return -EIO;
- }
-+#endif /* CONFIG_HOTPLUG_PARALLEL */
- 
- static void init_gic_priority_masking(void)
- {
-@@ -223,6 +251,9 @@ asmlinkage notrace void secondary_start_kernel(void)
- 	 * fail to come online.
- 	 */
- 	check_local_cpu_capabilities();
-+#ifdef CONFIG_HOTPLUG_PARALLEL
-+	cpuhp_ap_sync_alive();
-+#endif
- 	rcutree_report_cpu_starting(cpu);
- 
- 	ops = get_cpu_ops(cpu);
-@@ -254,7 +285,9 @@ asmlinkage notrace void secondary_start_kernel(void)
- 					 read_cpuid_id());
- 	update_cpu_boot_status(cpu, CPU_BOOT_SUCCESS);
- 	set_cpu_online(cpu, true);
-+#ifndef CONFIG_HOTPLUG_PARALLEL
- 	complete(&cpu_running);
-+#endif
- 
- 	/*
- 	 * Secondary CPUs enter the kernel with all DAIF exceptions masked.
--- 
-2.34.1
+--ozjpmz32viqzzrdv
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
+
+iJUEABMJAB0WIQTkHFbLp4ejekA/qfgnX84Zoj2+dgUCajPUigAKCRAnX84Zoj2+
+dk0JAX0RbkGWPGoPi2IhEx+Ot7RE2mv5pF2NW5NdvgyvbZjvKNkWJ3WWtN4N+yZb
+Ll4R1c0BgNqzNQmnFhM4Nh5uf+0aPC7FMvJmkSeQcUNUGNIKHOukmjyX3PgrtUcT
+RE+nxMSDvw==
+=eAVV
+-----END PGP SIGNATURE-----
+
+--ozjpmz32viqzzrdv--
 
