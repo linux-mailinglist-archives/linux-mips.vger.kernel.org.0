@@ -1,192 +1,274 @@
-Return-Path: <linux-mips+bounces-15141-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-15142-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id sdeAJvf0M2oGJwYAu9opvQ
-	(envelope-from <linux-mips+bounces-15141-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Thu, 18 Jun 2026 15:39:03 +0200
+	id aSjPIcsNNGoBMgYAu9opvQ
+	(envelope-from <linux-mips+bounces-15142-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Thu, 18 Jun 2026 17:24:59 +0200
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 373E06A0A15
-	for <lists+linux-mips@lfdr.de>; Thu, 18 Jun 2026 15:39:03 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id EA9DC6A137C
+	for <lists+linux-mips@lfdr.de>; Thu, 18 Jun 2026 17:24:58 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=bootlin.com header.s=dkim header.b=PUOZ5Di9;
-	spf=pass (mail.lfdr.de: domain of "linux-mips+bounces-15141-lists+linux-mips=lfdr.de@vger.kernel.org" designates 2600:3c09:e001:a7::12fc:5321 as permitted sender) smtp.mailfrom="linux-mips+bounces-15141-lists+linux-mips=lfdr.de@vger.kernel.org";
-	dmarc=pass (policy=reject) header.from=bootlin.com;
+	dkim=pass header.d=kernel.org header.s=k20260515 header.b=Kw5ZAvji;
+	spf=pass (mail.lfdr.de: domain of "linux-mips+bounces-15142-lists+linux-mips=lfdr.de@vger.kernel.org" designates 2600:3c0a:e001:db::12fc:5321 as permitted sender) smtp.mailfrom="linux-mips+bounces-15142-lists+linux-mips=lfdr.de@vger.kernel.org";
+	dmarc=pass (policy=quarantine) header.from=kernel.org;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id A5FEC300D4FA
-	for <lists+linux-mips@lfdr.de>; Thu, 18 Jun 2026 13:39:02 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 2E005308D439
+	for <lists+linux-mips@lfdr.de>; Thu, 18 Jun 2026 15:17:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 06C6A2C11D6;
-	Thu, 18 Jun 2026 13:39:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6D6D93FBB6C;
+	Thu, 18 Jun 2026 15:17:08 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C39DA2BDC28
-	for <linux-mips@vger.kernel.org>; Thu, 18 Jun 2026 13:38:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42D133FB7C1;
+	Thu, 18 Jun 2026 15:17:07 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781789941; cv=none; b=gQA86s4gs5Q3gY7wCiS0PluP/OIBvdH9U97BoFJc6UaVnIzPz7BpRAivkjweyM5jclNNi3lh/U5f+v1sw77/JxSk+xxSfjzopTiMXiX34EpweeJjRsq1bBNjRRWTR627m2BSDbJEOtGK57Gcon98wM4cuVAHQgcuA8uImlNCfR8=
+	t=1781795828; cv=none; b=F1/kaTvGeIwEUPgUfWiS0ShilufgGgeUhQdeW4KY2l4T1xO7ddMl+Iz4Z6KzlR/EAWvZIj8NObN4JEp5Y/XMCxxdYILio0Es7jNwu1hqDUYHJm5KoPHSWuqJ7OfXp7crDQdXtFa3fAGV7hZWLEaCmOs/2NDmEhPHAgQotYu7tcY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781789941; c=relaxed/simple;
-	bh=q17Yakrk0jyin/K7MigNcOnMz+6gtRbwepNdHP9jFKM=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Subject:Cc:To:From:
-	 References:In-Reply-To; b=caLFDR9ubBMW8fg0CUA6GIpzM/IKpKt+N5oateWGA9CuSVleeQmHWzjW5C7eKcU7b9QmpB6i0/femNZcR9z4aincPjqtMrmyccY6iVf+rnLEy793k7UrjMOhn9xpv69KTNqWsze/MTBBWgXyjP/AqE8whop+Uq/TCrhW4kBRqjA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=PUOZ5Di9; arc=none smtp.client-ip=185.171.202.116
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-04.galae.net (Postfix) with ESMTPS id 6C27FC06CD1;
-	Thu, 18 Jun 2026 13:39:02 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id E97F5601AE;
-	Thu, 18 Jun 2026 13:38:56 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id E90E5106C8181;
-	Thu, 18 Jun 2026 15:38:34 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1781789933; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding:in-reply-to:references;
-	bh=q17Yakrk0jyin/K7MigNcOnMz+6gtRbwepNdHP9jFKM=;
-	b=PUOZ5Di9LG9HfrQqQCFFBVq94tgu/N/628JI3wjlG+04IUEZ/TDfwfWPiCYIYoY01Ml/zT
-	u6fzfs/sOXhZCzpGZcGWKrttnj2hg362abIuU+SlEEsUQGe8DjkMXc8FOQFe+vm08MjMCD
-	q4ik5cK5VDldEGCZCpBmhx07jaHCoG868HTUDceg1cGMzWrhvEOeO+nri9uBQ9XxJlsEEd
-	kFcTWnviop36LYp6WwxAMULWvuPB1A6oFC1kNXA6jr27XI08XezUNwOxPYoBipe1i/JzdI
-	5yYVYBawm+zEtwTD77BtUYcO3v4DG3A1Zq8nGdrWLS8BS2P5ZVV6JJvam6Mhog==
+	s=arc-20240116; t=1781795828; c=relaxed/simple;
+	bh=dQJD6FzjhXRNTB4jV11MMKs6Kcig4JKIkMMz/4AJ/Ro=;
+	h=From:To:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=PHPCxE7pzVFJIJ8gUrHy3yXqMz+xAeh9OBpl7mJ0iSXpXf0+DVOfoqYJ4kzvevlrL+iow7RdYyCTbbsd2/P2wT6Fj7nmRNpVXVA95I0iz889JwIowl8OaVXfmiELftQG66KtoPkP0wY1mzIAoOApD7odaLqo4jiKB+EpyHbYKhw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Kw5ZAvji; arc=none smtp.client-ip=100.103.45.18
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E83B01F000E9;
+	Thu, 18 Jun 2026 15:17:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1781795826;
+	bh=FcnhWkyO1wGk9YYSayyGesrPHSxn9xDSAmpQC/JH0nU=;
+	h=From:To:Subject:In-Reply-To:References:Date;
+	b=Kw5ZAvjikp4kCrXrajYE//oWC8BHzHzkpD6/cgf6/RN5sQClRuEN2kHaEsD8of4Zn
+	 spJ7grwLuiYTtFyvS6QX37eXs9bQeoy9yzVItprpWNUTPvnP1oS4PLZf8BjhYIGSpk
+	 TWbaczj4CHjjVRrLOcXgm4ZQxMX1g1xlddM/TMWJbeWtCF9E9TL8Ff2zYH9ff9JCLf
+	 P1gXuOmoexYnpljtiH2qFKYUX0/zwUCan6C+ZEnXllpCweOtHA5Yq0YLXOslIln3uR
+	 UHOjzPoagPE8cZs78+EsEKMqssXxQ9A3YjzTAdx2oMxECZ3hc+nEGbNHsbg4paHL2V
+	 IK9BUz5djY0NQ==
+From: Thomas Gleixner <tglx@kernel.org>
+To: Jinjie Ruan <ruanjinjie@huawei.com>, catalin.marinas@arm.com,
+ will@kernel.org, tsbogend@alpha.franken.de, pjw@kernel.org,
+ palmer@dabbelt.com, aou@eecs.berkeley.edu, alex@ghiti.fr,
+ mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+ hpa@zytor.com, peterz@infradead.org, kees@kernel.org, nathan@kernel.org,
+ linusw@kernel.org, ojeda@kernel.org, ruanjinjie@huawei.com,
+ david.kaplan@amd.com, lukas.bulwahn@redhat.com, ryan.roberts@arm.com,
+ maz@kernel.org, timothy.hayes@arm.com, lpieralisi@kernel.org,
+ thuth@redhat.com, oupton@kernel.org, yeoreum.yun@arm.com,
+ miko.lenczewski@arm.com, broonie@kernel.org, kevin.brodsky@arm.com,
+ james.clark@linaro.org, tabba@google.com, mrigendra.chaubey@gmail.com,
+ arnd@arndb.de, anshuman.khandual@arm.com, x86@kernel.org,
+ linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-mips@vger.kernel.org, linux-riscv@lists.infradead.org
+Subject: Re: [PATCH RFC 1/3] cpu/hotplug: Introduce
+ CONFIG_PARALLEL_SMT_PRIMARY_FIRST
+In-Reply-To: <20260611133809.3854977-2-ruanjinjie@huawei.com>
+References: <20260611133809.3854977-1-ruanjinjie@huawei.com>
+ <20260611133809.3854977-2-ruanjinjie@huawei.com>
+Date: Thu, 18 Jun 2026 17:17:03 +0200
+Message-ID: <87a4srdgk0.ffs@fw13>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Thu, 18 Jun 2026 15:38:33 +0200
-Message-Id: <DJC7T6B6DCZI.3F29YF2M1ZCAF@bootlin.com>
-Subject: Re: [PATCH v2 00/78] drm/bridge: Convert all reset users to
- create_state
-Cc: "Dmitry Baryshkov" <lumag@kernel.org>,
- <dri-devel@lists.freedesktop.org>, "Laurent Pinchart"
- <laurent.pinchart+renesas@ideasonboard.com>, "Jagan Teki"
- <jagan@amarulasolutions.com>, "Liu Ying" <victor.liu@nxp.com>, "Frank Li"
- <Frank.Li@nxp.com>, "Sascha Hauer" <s.hauer@pengutronix.de>, "Pengutronix
- Kernel Team" <kernel@pengutronix.de>, "Fabio Estevam" <festevam@gmail.com>,
- <imx@lists.linux.dev>, <linux-arm-kernel@lists.infradead.org>, "Andy Yan"
- <andy.yan@rock-chips.com>, "Phong LE" <ple@baylibre.com>, "Douglas
- Anderson" <dianders@chromium.org>, "Inki Dae" <inki.dae@samsung.com>,
- "Marek Szyprowski" <m.szyprowski@samsung.com>, "Philipp Zabel"
- <p.zabel@pengutronix.de>, "Paul Cercueil" <paul@crapouillou.net>,
- <linux-mips@vger.kernel.org>, "Chun-Kuang Hu" <chunkuang.hu@kernel.org>,
- "Matthias Brugger" <matthias.bgg@gmail.com>, "AngeloGioacchino Del Regno"
- <angelogioacchino.delregno@collabora.com>,
- <linux-mediatek@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
- "Kevin Hilman" <khilman@baylibre.com>, "Jerome Brunet"
- <jbrunet@baylibre.com>, "Martin Blumenstingl"
- <martin.blumenstingl@googlemail.com>, <linux-amlogic@lists.infradead.org>,
- "Tomi Valkeinen" <tomi.valkeinen+renesas@ideasonboard.com>, "Geert
- Uytterhoeven" <geert+renesas@glider.be>, "Magnus Damm"
- <magnus.damm@gmail.com>, "Kieran Bingham"
- <kieran.bingham+renesas@ideasonboard.com>,
- <linux-renesas-soc@vger.kernel.org>, "Biju Das"
- <biju.das.jz@bp.renesas.com>, "Heiko Stuebner" <heiko@sntech.de>, "Sandy
- Huang" <hjc@rock-chips.com>, <linux-rockchip@lists.infradead.org>, "Yannick
- Fertre" <yannick.fertre@foss.st.com>, "Raphael Gallais-Pou"
- <raphael.gallais-pou@foss.st.com>, "Philippe Cornu"
- <philippe.cornu@foss.st.com>, "Maxime Coquelin"
- <mcoquelin.stm32@gmail.com>, "Alexandre Torgue"
- <alexandre.torgue@foss.st.com>, <linux-stm32@st-md-mailman.stormreply.com>,
- "Jyri Sarha" <jyri.sarha@iki.fi>, "Tomi Valkeinen"
- <tomi.valkeinen@ideasonboard.com>, "Dave Stevenson"
- <dave.stevenson@raspberrypi.com>, =?utf-8?q?Ma=C3=ADra_Canal?=
- <mcanal@igalia.com>, "Raspberry Pi Kernel Maintenance"
- <kernel-list@raspberrypi.com>, "Icenowy Zheng" <zhengxingda@iscas.ac.cn>,
- "Michal Simek" <michal.simek@amd.com>
-To: "Maxime Ripard" <mripard@kernel.org>, "Andrzej Hajda"
- <andrzej.hajda@intel.com>, "Neil Armstrong" <neil.armstrong@linaro.org>,
- "Robert Foss" <rfoss@kernel.org>, "Laurent Pinchart"
- <Laurent.pinchart@ideasonboard.com>, "Jonas Karlman" <jonas@kwiboo.se>,
- "Jernej Skrabec" <jernej.skrabec@gmail.com>, "Luca Ceresoli"
- <luca.ceresoli@bootlin.com>, "Maarten Lankhorst"
- <maarten.lankhorst@linux.intel.com>, "Thomas Zimmermann"
- <tzimmermann@suse.de>, "David Airlie" <airlied@gmail.com>, "Simona Vetter"
- <simona@ffwll.ch>
-From: "Luca Ceresoli" <luca.ceresoli@bootlin.com>
-X-Mailer: aerc 0.21.0
-References: <20260608-drm-no-more-bridge-reset-v2-0-0a91018bf886@kernel.org>
- <20260618-terrestrial-abiding-tamarin-01befc@houat>
-In-Reply-To: <20260618-terrestrial-abiding-tamarin-01befc@houat>
-X-Last-TLS-Session-Version: TLSv1.3
+MIME-Version: 1.0
+Content-Type: text/plain
 X-Rspamd-Action: no action
-X-Spamd-Result: default: False [-0.16 / 15.00];
+X-Spamd-Result: default: False [-2.66 / 15.00];
+	WHITELIST_SPF_DKIM(-3.00)[kernel.org:d:+,kernel.org:s:+];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[bootlin.com,reject];
-	MV_CASE(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
-	R_DKIM_ALLOW(-0.20)[bootlin.com:s=dkim];
+	MID_RHS_NOT_FQDN(0.50)[];
+	R_MISSING_CHARSET(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20260515];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FORGED_SENDER(0.00)[luca.ceresoli@bootlin.com,linux-mips@vger.kernel.org];
-	FORWARDED(0.00)[lists@lfdr.de];
-	MIME_TRACE(0.00)[0:+];
-	TAGGED_FROM(0.00)[bounces-15141-lists,linux-mips=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	RECEIVED_HELO_LOCALHOST(0.00)[];
-	FREEMAIL_CC(0.00)[kernel.org,lists.freedesktop.org,ideasonboard.com,amarulasolutions.com,nxp.com,pengutronix.de,gmail.com,lists.linux.dev,lists.infradead.org,rock-chips.com,baylibre.com,chromium.org,samsung.com,crapouillou.net,vger.kernel.org,collabora.com,googlemail.com,glider.be,bp.renesas.com,sntech.de,foss.st.com,st-md-mailman.stormreply.com,iki.fi,raspberrypi.com,igalia.com,iscas.ac.cn,amd.com];
+	RCVD_COUNT_THREE(0.00)[4];
+	FREEMAIL_TO(0.00)[huawei.com,arm.com,kernel.org,alpha.franken.de,dabbelt.com,eecs.berkeley.edu,ghiti.fr,redhat.com,alien8.de,linux.intel.com,zytor.com,infradead.org,amd.com,linaro.org,google.com,gmail.com,arndb.de,vger.kernel.org,lists.infradead.org];
+	FORGED_SENDER(0.00)[tglx@kernel.org,linux-mips@vger.kernel.org];
+	RCPT_COUNT_TWELVE(0.00)[40];
+	FORGED_RECIPIENTS(0.00)[m:ruanjinjie@huawei.com,m:catalin.marinas@arm.com,m:will@kernel.org,m:tsbogend@alpha.franken.de,m:pjw@kernel.org,m:palmer@dabbelt.com,m:aou@eecs.berkeley.edu,m:alex@ghiti.fr,m:mingo@redhat.com,m:bp@alien8.de,m:dave.hansen@linux.intel.com,m:hpa@zytor.com,m:peterz@infradead.org,m:kees@kernel.org,m:nathan@kernel.org,m:linusw@kernel.org,m:ojeda@kernel.org,m:david.kaplan@amd.com,m:lukas.bulwahn@redhat.com,m:ryan.roberts@arm.com,m:maz@kernel.org,m:timothy.hayes@arm.com,m:lpieralisi@kernel.org,m:thuth@redhat.com,m:oupton@kernel.org,m:yeoreum.yun@arm.com,m:miko.lenczewski@arm.com,m:broonie@kernel.org,m:kevin.brodsky@arm.com,m:james.clark@linaro.org,m:tabba@google.com,m:mrigendra.chaubey@gmail.com,m:arnd@arndb.de,m:anshuman.khandual@arm.com,m:x86@kernel.org,m:linux-kernel@vger.kernel.org,m:linux-arm-kernel@lists.infradead.org,m:linux-mips@vger.kernel.org,m:linux-riscv@lists.infradead.org,m:mrigendrachaubey@gmail.com,s:lists@lfdr.de];
+	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	FREEMAIL_TO(0.00)[kernel.org,intel.com,linaro.org,ideasonboard.com,kwiboo.se,gmail.com,bootlin.com,linux.intel.com,suse.de,ffwll.ch];
-	FORGED_RECIPIENTS(0.00)[m:lumag@kernel.org,m:dri-devel@lists.freedesktop.org,m:laurent.pinchart+renesas@ideasonboard.com,m:jagan@amarulasolutions.com,m:victor.liu@nxp.com,m:Frank.Li@nxp.com,m:s.hauer@pengutronix.de,m:kernel@pengutronix.de,m:festevam@gmail.com,m:imx@lists.linux.dev,m:linux-arm-kernel@lists.infradead.org,m:andy.yan@rock-chips.com,m:ple@baylibre.com,m:dianders@chromium.org,m:inki.dae@samsung.com,m:m.szyprowski@samsung.com,m:p.zabel@pengutronix.de,m:paul@crapouillou.net,m:linux-mips@vger.kernel.org,m:chunkuang.hu@kernel.org,m:matthias.bgg@gmail.com,m:angelogioacchino.delregno@collabora.com,m:linux-mediatek@lists.infradead.org,m:linux-kernel@vger.kernel.org,m:khilman@baylibre.com,m:jbrunet@baylibre.com,m:martin.blumenstingl@googlemail.com,m:linux-amlogic@lists.infradead.org,m:tomi.valkeinen+renesas@ideasonboard.com,m:geert+renesas@glider.be,m:magnus.damm@gmail.com,m:kieran.bingham+renesas@ideasonboard.com,m:linux-renesas-soc@vger.kernel.org,m:biju.das.jz@bp.renesas.com,m
- :heiko@sntech.de,m:hjc@rock-chips.com,m:linux-rockchip@lists.infradead.org,m:yannick.fertre@foss.st.com,m:raphael.gallais-pou@foss.st.com,m:philippe.cornu@foss.st.com,m:mcoquelin.stm32@gmail.com,m:alexandre.torgue@foss.st.com,m:linux-stm32@st-md-mailman.stormreply.com,m:jyri.sarha@iki.fi,m:tomi.valkeinen@ideasonboard.com,m:dave.stevenson@raspberrypi.com,m:mcanal@igalia.com,m:kernel-list@raspberrypi.com,m:zhengxingda@iscas.ac.cn,m:michal.simek@amd.com,m:mripard@kernel.org,m:andrzej.hajda@intel.com,m:neil.armstrong@linaro.org,m:rfoss@kernel.org,m:Laurent.pinchart@ideasonboard.com,m:jonas@kwiboo.se,m:jernej.skrabec@gmail.com,m:luca.ceresoli@bootlin.com,m:maarten.lankhorst@linux.intel.com,m:tzimmermann@suse.de,m:airlied@gmail.com,m:simona@ffwll.ch,m:laurent.pinchart@ideasonboard.com,m:matthiasbgg@gmail.com,m:martinblumenstingl@gmail.com,m:geert@glider.be,m:magnusdamm@gmail.com,m:kieran.bingham@ideasonboard.com,s:lists@lfdr.de];
-	FROM_HAS_DN(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
+	FORWARDED(0.00)[lists@lfdr.de];
+	TAGGED_FROM(0.00)[bounces-15142-lists,linux-mips=lfdr.de];
+	DKIM_TRACE(0.00)[kernel.org:+];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[6];
-	RCPT_COUNT_GT_50(0.00)[62];
-	FORGED_SENDER_FORWARDING(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[luca.ceresoli@bootlin.com,linux-mips@vger.kernel.org];
 	PRECEDENCE_BULK(0.00)[];
-	DKIM_TRACE(0.00)[bootlin.com:+];
-	ALIAS_RESOLVED(0.00)[];
-	FORGED_RECIPIENTS_FORWARDING(0.00)[];
+	FORGED_SENDER_FORWARDING(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[tglx@kernel.org,linux-mips@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
 	TO_DN_SOME(0.00)[];
-	MID_RHS_MATCH_FROM(0.00)[];
+	ALIAS_RESOLVED(0.00)[];
+	TAGGED_RCPT(0.00)[linux-mips];
+	MISSING_XM_UA(0.00)[];
+	FORGED_RECIPIENTS_FORWARDING(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[linux-mips,renesas];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[vger.kernel.org:from_smtp,sto.lore.kernel.org:rdns,sto.lore.kernel.org:helo]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,fw13:mid,vger.kernel.org:from_smtp,huawei.com:email]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 373E06A0A15
+X-Rspamd-Queue-Id: EA9DC6A137C
 
-Hi Maxime,
+On Thu, Jun 11 2026 at 21:38, Jinjie Ruan wrote:
 
-On Thu Jun 18, 2026 at 1:20 PM CEST, Maxime Ripard wrote:
-> Hi,
+> During parallel CPU bringup, x86 requires primary SMT threads to boot
+> first to avoid siblings stopping during microcode updates. This constraint
+> is architecture-specific and unnecessary for other platforms
+> like arm64.
 >
-> On Mon, Jun 08, 2026 at 04:35:42PM +0200, Maxime Ripard wrote:
->> Hi,
->>
->> All the bridges use reset to create a blank state only and don't use it
->> to reset the hardware at all. This is what the new atomic_create_state
->> is exactly supposed to be doing, so we can convert all existing bridge
->> users to it, and remove the reset hook and helpers.
->>
->> Let me know what you think,
->> Maxime
->>
->> Signed-off-by: Maxime Ripard <mripard@kernel.org>
+> Introduce CONFIG_PARALLEL_SMT_PRIMARY_FIRST to decouple this constraint.
+> Platforms requiring this temporal order (e.g., x86) can select it
+> in Kconfig. Other architectures (e.g., arm64) can leave it unselected
+> to entirely bypass the SMT branch via the preprocessor.
 >
-> FTR, Thomas on IRC yesterday[1] added
-> Reviewed-by: Thomas Zimmermann <tzimmermann@suse.de>
+> Signed-off-by: Jinjie Ruan <ruanjinjie@huawei.com>
+> ---
+>  arch/Kconfig       | 4 ++++
+>  arch/mips/Kconfig  | 1 +
+>  arch/riscv/Kconfig | 1 +
+>  arch/x86/Kconfig   | 1 +
+>  kernel/cpu.c       | 6 +++++-
+>  5 files changed, 12 insertions(+), 1 deletion(-)
 >
-> Unless another review shows up, I intend to merge this tomorrow
+> diff --git a/arch/Kconfig b/arch/Kconfig
+> index e86880045158..0365d2df2659 100644
+> --- a/arch/Kconfig
+> +++ b/arch/Kconfig
+> @@ -102,6 +102,10 @@ config HOTPLUG_PARALLEL
+>  	bool
+>  	select HOTPLUG_SPLIT_STARTUP
+>  
+> +config PARALLEL_SMT_PRIMARY_FIRST
 
-Did you have a look at my questions for patches 7 and 8?
+Proper namespaces are overrated, right?
 
-I was planning to review the following patches but that would be based on
-what I asked there.
+All related options start with HOTPLUG_....
 
-Luca
+> +	bool
+> +	depends on HOTPLUG_PARALLEL
+> +
+>  config GENERIC_IRQ_ENTRY
+>  	bool
+>  
+> diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
+> index 4364f3dba688..84e11ac0cf71 100644
+> --- a/arch/mips/Kconfig
+> +++ b/arch/mips/Kconfig
+> @@ -642,6 +642,7 @@ config EYEQ
+>  	select MIPS_CPU_SCACHE
+>  	select MIPS_GIC
+>  	select MIPS_L1_CACHE_SHIFT_7
+> +	select PARALLEL_SMT_PRIMARY_FIRST if HOTPLUG_PARALLEL
+>  	select PCI_DRIVERS_GENERIC
+>  	select SMP_UP if SMP
+>  	select SWAP_IO_SPACE
+> diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+> index d235396c4514..0cc49aecc841 100644
+> --- a/arch/riscv/Kconfig
+> +++ b/arch/riscv/Kconfig
+> @@ -210,6 +210,7 @@ config RISCV
+>  	select OF
+>  	select OF_EARLY_FLATTREE
+>  	select OF_IRQ
+> +	select PARALLEL_SMT_PRIMARY_FIRST if HOTPLUG_PARALLEL
 
---
-Luca Ceresoli, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Why does RISCV need this? It does not select HOTPLUG_SMT to begin with.
+
+> +#ifdef CONFIG_PARALLEL_SMT_PRIMARY_FIRST
+>  #ifdef CONFIG_HOTPLUG_SMT
+
+More #ifdeffery is better, right?
+
+>  static inline bool cpuhp_smt_aware(void)
+>  {
+> @@ -1811,7 +1812,8 @@ static inline const struct cpumask *cpuhp_get_primary_thread_mask(void)
+>  {
+>  	return cpu_none_mask;
+>  }
+> -#endif
+> +#endif /* CONFIG_HOTPLUG_SMT */
+> +#endif /* CONFIG_PARALLEL_SMT_PRIMARY_FIRST */
+>  
+>  bool __weak arch_cpuhp_init_parallel_bringup(void)
+>  {
+> @@ -1837,6 +1839,7 @@ static bool __init cpuhp_bringup_cpus_parallel(unsigned int ncpus)
+>  	if (!__cpuhp_parallel_bringup)
+>  		return false;
+>  
+> +#ifdef CONFIG_PARALLEL_SMT_PRIMARY_FIRST
+
+Seriously?
+
+>  	if (cpuhp_smt_aware()) {
+>  		const struct cpumask *pmask = cpuhp_get_primary_thread_mask();
+>  		static struct cpumask tmp_mask __initdata;
+> @@ -1857,6 +1860,7 @@ static bool __init cpuhp_bringup_cpus_parallel(unsigned int ncpus)
+>  		cpumask_andnot(&tmp_mask, mask, pmask);
+>  		mask = &tmp_mask;
+>  	}
+> +#endif /* CONFIG_PARALLEL_SMT_PRIMARY_FIRST */
+
+Something simple like the uncompiled below should just work, no?
+
+---
+--- a/arch/Kconfig
++++ b/arch/Kconfig
+@@ -102,6 +102,10 @@ config HOTPLUG_PARALLEL
+ 	bool
+ 	select HOTPLUG_SPLIT_STARTUP
+ 
++config HOTPLUG_PARALLEL_SMT
++	bool
++	select HOTPLUG_PARALLEL
++
+ config GENERIC_IRQ_ENTRY
+ 	bool
+ 
+--- a/arch/mips/Kconfig
++++ b/arch/mips/Kconfig
+@@ -657,7 +657,7 @@ config EYEQ
+ 	select USB_UHCI_BIG_ENDIAN_DESC if CPU_BIG_ENDIAN
+ 	select USB_UHCI_BIG_ENDIAN_MMIO if CPU_BIG_ENDIAN
+ 	select USE_OF
+-	select HOTPLUG_PARALLEL if HOTPLUG_CPU
++	select HOTPLUG_PARALLEL_SMT if HOTPLUG_CPU
+ 	help
+ 	  Select this to build a kernel supporting EyeQ SoC from Mobileye.
+ 
+@@ -2295,7 +2295,6 @@ config MIPS_CPS
+ 	select MIPS_CM
+ 	select MIPS_CPS_PM if HOTPLUG_CPU
+ 	select SMP
+-	select HOTPLUG_SMT if HOTPLUG_PARALLEL
+ 	select HOTPLUG_CORE_SYNC_DEAD if HOTPLUG_CPU
+ 	select SYNC_R4K if (CEVT_R4K || CSRC_R4K)
+ 	select SYS_SUPPORTS_HOTPLUG_CPU
+--- a/arch/x86/Kconfig
++++ b/arch/x86/Kconfig
+@@ -304,7 +304,7 @@ config X86
+ 	select HAVE_USER_RETURN_NOTIFIER
+ 	select HAVE_GENERIC_VDSO
+ 	select VDSO_GETRANDOM			if X86_64
+-	select HOTPLUG_PARALLEL			if SMP && X86_64
++	select HOTPLUG_PARALLEL_SMT		if SMP && X86_64
+ 	select HOTPLUG_SMT			if SMP
+ 	select HOTPLUG_SPLIT_STARTUP		if SMP && X86_32
+ 	select IRQ_FORCED_THREADING
+--- a/kernel/cpu.c
++++ b/kernel/cpu.c
+@@ -1792,7 +1792,7 @@ static int __init parallel_bringup_parse
+ }
+ early_param("cpuhp.parallel", parallel_bringup_parse_param);
+ 
+-#ifdef CONFIG_HOTPLUG_SMT
++#ifdef CONFIG_HOTPLUG_PARALLEL_SMT
+ static inline bool cpuhp_smt_aware(void)
+ {
+ 	return cpu_smt_max_threads > 1;
 
