@@ -1,173 +1,180 @@
-Return-Path: <linux-mips+bounces-15132-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-15135-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id Bp2GGT2tM2rbEwYAu9opvQ
-	(envelope-from <linux-mips+bounces-15132-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Thu, 18 Jun 2026 10:33:01 +0200
+	id kFWMHsC5M2oPFgYAu9opvQ
+	(envelope-from <linux-mips+bounces-15135-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Thu, 18 Jun 2026 11:26:24 +0200
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id B172F69E7A2
-	for <lists+linux-mips@lfdr.de>; Thu, 18 Jun 2026 10:33:00 +0200 (CEST)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id 286FD69ED93
+	for <lists+linux-mips@lfdr.de>; Thu, 18 Jun 2026 11:26:24 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=messagingengine.com header.s=fm1 header.b="a7bLhF/a";
-	spf=pass (mail.lfdr.de: domain of "linux-mips+bounces-15132-lists+linux-mips=lfdr.de@vger.kernel.org" designates 172.234.253.10 as permitted sender) smtp.mailfrom="linux-mips+bounces-15132-lists+linux-mips=lfdr.de@vger.kernel.org";
-	dmarc=none;
+	dkim=pass header.d=huawei.com header.s=dkim header.b=Ro5n4Dsx;
+	spf=pass (mail.lfdr.de: domain of "linux-mips+bounces-15135-lists+linux-mips=lfdr.de@vger.kernel.org" designates 172.232.135.74 as permitted sender) smtp.mailfrom="linux-mips+bounces-15135-lists+linux-mips=lfdr.de@vger.kernel.org";
+	dmarc=pass (policy=quarantine) header.from=huawei.com;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id C0C103041788
-	for <lists+linux-mips@lfdr.de>; Thu, 18 Jun 2026 08:32:07 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 90916302FA5F
+	for <lists+linux-mips@lfdr.de>; Thu, 18 Jun 2026 09:26:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D7A402F8E85;
-	Thu, 18 Jun 2026 08:32:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A3EA03D8914;
+	Thu, 18 Jun 2026 09:26:11 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
-Received: from fout-a5-smtp.messagingengine.com (fout-a5-smtp.messagingengine.com [103.168.172.148])
+Received: from canpmsgout09.his.huawei.com (canpmsgout09.his.huawei.com [113.46.200.224])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F156838F92D;
-	Thu, 18 Jun 2026 08:32:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1D5A38F92F;
+	Thu, 18 Jun 2026 09:26:08 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781771525; cv=none; b=UZS7uuEzNrHtZtMgUTk0BfunTFcc8V3Bhy4IdHKht/sY6TGy+2lE5/LaBhAKRchm4yiI6S+18Rt4lS4g/V+FD4v7Z62KdQi1I7H0MfXkT0a9z0lHdLAPTMIb/zvXrSKp3M++joftsxbWAL1D2blchQStfN7NBBzh2nREwMe5HO8=
+	t=1781774771; cv=none; b=qmneSaoYR+VPVb/+fz/KLQ6lSCpE9IWkmqsX0JExV2TnHgiUI0N9h0+qiVkmeNsmo4K3JbiyL3DnLIwCrtiMnrbfucdt/nVLPsg06PXVEWND/dH5CfGYssW/1bjLrySCGT6OWqqpvYD69EpdHXKyhSbaq4anG5GunFs0+frTMFU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781771525; c=relaxed/simple;
-	bh=ngGey/dDjPJxxE8rcnNt7BxBlhmXCynXpzagHqIx1G8=;
-	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=GN+DYGY4pUMmX17rpueNDG9BJcyyMisTVs14NPujmtTAufMWRmxuc7C/xOzHyZOSajQONNSDdrz5+9M0S3P5dYewEX64YuKXTd3zO6tvt+WGyW8iHaAIRdMxUfAEtRjN38CXpwx6/S5oiJyb0Z2sFj4+Zjgxfp3ZTFZlEfla4k8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=none smtp.mailfrom=linux-m68k.org; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=a7bLhF/a; arc=none smtp.client-ip=103.168.172.148
-Received: from phl-compute-05.internal (phl-compute-05.internal [10.202.2.45])
-	by mailfout.phl.internal (Postfix) with ESMTP id 3EE3CEC0125;
-	Thu, 18 Jun 2026 04:32:03 -0400 (EDT)
-Received: from phl-frontend-04 ([10.202.2.163])
-  by phl-compute-05.internal (MEProxy); Thu, 18 Jun 2026 04:32:03 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
-	1781771523; x=1781857923; bh=DX/5eoMehoRMx1NS0o3ilj6Cat8DUGz4t+h
-	0dl/9b8w=; b=a7bLhF/avj96bs8ne8CbAjwUs9qrJycSakuzm7NpXWgZobZcDJd
-	97IGbNu/qmA9gBGPBPbt6U3H4fdFM4Ur0JupUaEHSO1CuD6X4PIZLMTtBwmThK7i
-	U1K6naJpXHb8f9MJiYh6yjbr0hBUvvqhMPCPjDVRva6rOovXq8ly7UXnRbt4ZDbg
-	A+v+fWIpNl8XPIEeqB0lFds6r2JG1bp/DrNJ/AIHrPSN4kfZzbFG/96BV154YZ8H
-	Iyd3xXzuZ++SsIQgH8q3kDj/dAiCf35oGVR7FTtQHR5st9k1DzeYsxZJO9Floa+Z
-	hlZRD1hUJ3bwQVBJk9lTd5fPMPyiWj0rSUw==
-X-ME-Sender: <xms:Aq0zap0az8UG10rexhGH9sHYzO9pzrr35k3cJscocbx9fclwlFKmww>
-    <xme:Aq0zar-x1tU0MkrrIzSKKKWpEG0tzYj6npaSbBkuHvbftxLntPwZaEJd-o4icysvq
-    zUrxB9pbwVJcwMpv77L-S5vGnRBGnFLTb3yNGU6Cge9H-Tr9Wp4wM0>
-X-ME-Received: <xmr:Aq0zalYvQ3dpyrtCrpEs9-T8vfL3TYTjJEK2SFc4D32akizW3mvU9SyadFWk>
-X-ME-Proxy-Cause: dmFkZTENUo1ZmJt29bGwYRxNLA/I+cx87fAWyEWHgTjdGerg5dLt/PVhI8bN6q9UjDukdN
-    m0Dby0iAlLvdA93Tb246Tx53rTY4N97xRSicwUn+OaBVZmBlmlNSDPB2p9AXE4zW5ZBNBW
-    yUZ9m5kMt9vA32mPt71DSoPh/ovPZiR47gjL2xWM+ZS/mKDMl5rHa8+816FK43bPOoOy8b
-    t02nTTbmkFWULrtaps3qJnuK0Tk3EU0TIMz+GeRwZusioUwIrQomUDFx+fJXsjjHOyQOCr
-    jpz2p58GQ6I3GuTa3sMzUx466v4Fc+qPeNgnVqY0VVIUZrbr6+0GKUwLT+vdJWuRcK8vee
-    WcWB4I8H1UrY7YgFfyclVx12Iws2XY9FWqutabemH10TvAfLoiT37z3P9GxlG1YDSvgdoH
-    RlI/XownDhkRbg1D3coHR/NFeU+nR4D14Kj/bm51Qh+dae1VZUfig7aa5sFTrcwkCBBsZV
-    YtgvrT3AnUw5QnW/mqpbmFlnHSqTOBR9uxhYMi4aAAOnO1F5QCwS6fzO4ZAJJmthFxOaOH
-    62E9AhfHlCCchvM25CyqKP+0Y95H0/OTIZVKwsq/nLDkfOk7JLve7rQhmJb8UEZysLtwwd
-    tra4bDuA8Ph6lacrGYoSGWYSgNYu9xolAQX8hMIdjxopXjwiXuljwbJvaAGA
-X-ME-Proxy: <xmx:Aq0zaqxV3a70epHyy_Xk7BDS6N4_GJHhP5-h8e4BOPLyNjr0dI3UmA>
-    <xmx:Aq0zaj-7Me0Rt6HBSYVfAX_DliHHakKRqX1cDt3G7usLSRaIYxI4EA>
-    <xmx:Aq0zamzq1qxfnDlMBwn1cqwNsiY__E9NIpjqXRijCKz6MuKgFSzRSg>
-    <xmx:Aq0zaov5eHvAQNUxJ3oQ2L2z1tzg2WzOfTjPen8jL7kTCIU0X1uBxA>
-    <xmx:A60zarQxTkwnS_YYBiQm1quQzacJKLs6ftsDWO2YEV-4YFzYy3Le3l4a>
-Feedback-ID: i58a146ae:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 18 Jun 2026 04:32:00 -0400 (EDT)
-Date: Thu, 18 Jun 2026 18:31:55 +1000 (AEST)
-From: Finn Thain <fthain@linux-m68k.org>
-To: Andrew Lunn <andrew@lunn.ch>
-cc: Carsten Strotmann <carsten@strotmann.de>, Jakub Kicinski <kuba@kernel.org>, 
-    Carsten Strotmann <cas@strotmann.de>, 
-    John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>, 
-    davem@davemloft.net, netdev@vger.kernel.org, edumazet@google.com, 
-    pabeni@redhat.com, andrew+netdev@lunn.ch, horms@kernel.org, 
-    geert@linux-m68k.org, chleroy@kernel.org, npiggin@gmail.com, 
-    mpe@ellerman.id.au, maddy@linux.ibm.com, linux-mips@vger.kernel.org, 
-    linux-m68k@lists.linux-m68k.org, linuxppc-dev@lists.ozlabs.org
-Subject: Re: [PATCH net-next 0/2] appletalk: move the protocol out of tree
-In-Reply-To: <2791b2e3-bf58-4dce-9262-4f1d8d3241fb@lunn.ch>
-Message-ID: <4b08a56c-b209-22c8-7835-6fee7ac7a8b8@linux-m68k.org>
-References: <20260616084901.3319d82e@kernel.org> <1781694488854.956546368.818588236@strotmann.de> <489024bc-b6e5-f601-3bce-444d75abbf5d@linux-m68k.org> <2791b2e3-bf58-4dce-9262-4f1d8d3241fb@lunn.ch>
+	s=arc-20240116; t=1781774771; c=relaxed/simple;
+	bh=J+jkQ+sXMm8l9Dh0LfGo1lXcyjA6YktgInzmY+Y4cQI=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=ZGeN5JqwEuGez7p5AWB5zf3hCfGfrCSXPQ0xevWv74YW3CMhxh3LVEFAM3TOdJyGBDSBvhdhtKm1H96MDuHkIABRCeMbCgKwtlvtlbQ96OrB9wObsyDsfHrX4FeM0uLzT9GCX/Jci/aVQIcGrqS1wQ5fd+YDURZ0PgL33sR9l8w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=Ro5n4Dsx; arc=none smtp.client-ip=113.46.200.224
+dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
+	c=relaxed/relaxed; q=dns/txt;
+	h=From;
+	bh=FXuskZWum2eND8Kqapvq5CnQPejvfWzbZgr0VCqB+mM=;
+	b=Ro5n4DsxTcv6kcYs7xwikkAk0E+3gHlYekrLI9Fnl76bnX6pYxu1ksRN3nVu/o8LEnCGulWn4
+	NYHbDMn2L8ZXZbDOkC/9bxJ0EO5TjUstPmISyMxyYmOpRKKSfKS2b9EMry/A0gxrQPqInzl7H83
+	eyAYjkOIHutvlhnE6ZVBqIA=
+Received: from mail.maildlp.com (unknown [172.19.163.15])
+	by canpmsgout09.his.huawei.com (SkyGuard) with ESMTPS id 4ggw9z4mYZz1cyQF;
+	Thu, 18 Jun 2026 17:17:59 +0800 (CST)
+Received: from dggpemf500011.china.huawei.com (unknown [7.185.36.131])
+	by mail.maildlp.com (Postfix) with ESMTPS id 9535440539;
+	Thu, 18 Jun 2026 17:25:57 +0800 (CST)
+Received: from huawei.com (10.90.53.73) by dggpemf500011.china.huawei.com
+ (7.185.36.131) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Thu, 18 Jun
+ 2026 17:25:55 +0800
+From: Jinjie Ruan <ruanjinjie@huawei.com>
+To: <catalin.marinas@arm.com>, <will@kernel.org>, <tsbogend@alpha.franken.de>,
+	<pjw@kernel.org>, <palmer@dabbelt.com>, <aou@eecs.berkeley.edu>,
+	<alex@ghiti.fr>, <tglx@kernel.org>, <mingo@redhat.com>, <bp@alien8.de>,
+	<dave.hansen@linux.intel.com>, <hpa@zytor.com>, <peterz@infradead.org>,
+	<kees@kernel.org>, <nathan@kernel.org>, <linusw@kernel.org>,
+	<jpoimboe@kernel.org>, <lukas.bulwahn@redhat.com>, <ryan.roberts@arm.com>,
+	<ojeda@kernel.org>, <maz@kernel.org>, <timothy.hayes@arm.com>,
+	<lpieralisi@kernel.org>, <thuth@redhat.com>, <menglong8.dong@gmail.com>,
+	<oupton@kernel.org>, <yeoreum.yun@arm.com>, <miko.lenczewski@arm.com>,
+	<broonie@kernel.org>, <kevin.brodsky@arm.com>, <james.clark@linaro.org>,
+	<tabba@google.com>, <mrigendra.chaubey@gmail.com>, <arnd@arndb.de>,
+	<anshuman.khandual@arm.com>, <x86@kernel.org>,
+	<linux-kernel@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+	<linux-mips@vger.kernel.org>, <linux-riscv@lists.infradead.org>,
+	<apatel@ventanamicro.com>, <mhklinux@outlook.com>
+CC: <ruanjinjie@huawei.com>
+Subject: [PATCH v2 0/4] arm64: Add HOTPLUG_PARALLEL support for secondary CPUs
+Date: Thu, 18 Jun 2026 17:24:40 +0800
+Message-ID: <20260618092444.1316336-1-ruanjinjie@huawei.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: kwepems200001.china.huawei.com (7.221.188.67) To
+ dggpemf500011.china.huawei.com (7.185.36.131)
 X-Rspamd-Action: no action
-X-Spamd-Result: default: False [-0.16 / 15.00];
+X-Spamd-Result: default: False [-6.16 / 15.00];
+	WHITELIST_DMARC(-7.00)[huawei.com:D:+];
 	SUSPICIOUS_RECIPS(1.50)[];
+	MID_CONTAINS_FROM(1.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_DKIM_ALLOW(-0.20)[messagingengine.com:s=fm1];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_MISSING_CHARSET(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[huawei.com,quarantine];
+	R_DKIM_ALLOW(-0.20)[huawei.com:s=dkim];
+	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FROM_HAS_DN(0.00)[];
-	TAGGED_FROM(0.00)[bounces-15132-lists,linux-mips=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
-	FORGED_RECIPIENTS(0.00)[m:andrew@lunn.ch,m:carsten@strotmann.de,m:kuba@kernel.org,m:cas@strotmann.de,m:glaubitz@physik.fu-berlin.de,m:davem@davemloft.net,m:netdev@vger.kernel.org,m:edumazet@google.com,m:pabeni@redhat.com,m:andrew+netdev@lunn.ch,m:horms@kernel.org,m:geert@linux-m68k.org,m:chleroy@kernel.org,m:npiggin@gmail.com,m:mpe@ellerman.id.au,m:maddy@linux.ibm.com,m:linux-mips@vger.kernel.org,m:linux-m68k@lists.linux-m68k.org,m:linuxppc-dev@lists.ozlabs.org,s:lists@lfdr.de];
-	DMARC_NA(0.00)[linux-m68k.org];
-	FORGED_SENDER(0.00)[fthain@linux-m68k.org,linux-mips@vger.kernel.org];
-	RCPT_COUNT_TWELVE(0.00)[19];
-	FREEMAIL_CC(0.00)[strotmann.de,kernel.org,physik.fu-berlin.de,davemloft.net,vger.kernel.org,google.com,redhat.com,lunn.ch,linux-m68k.org,gmail.com,ellerman.id.au,linux.ibm.com,lists.linux-m68k.org,lists.ozlabs.org];
+	FORWARDED(0.00)[lists@lfdr.de];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	FORWARDED(0.00)[lists@lfdr.de];
-	DKIM_TRACE(0.00)[messagingengine.com:+];
-	MISSING_XM_UA(0.00)[];
-	TO_DN_SOME(0.00)[];
-	FORGED_SENDER_FORWARDING(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[6];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[fthain@linux-m68k.org,linux-mips@vger.kernel.org];
+	TAGGED_FROM(0.00)[bounces-15135-lists,linux-mips=lfdr.de];
+	RCVD_TLS_LAST(0.00)[];
+	FREEMAIL_TO(0.00)[arm.com,kernel.org,alpha.franken.de,dabbelt.com,eecs.berkeley.edu,ghiti.fr,redhat.com,alien8.de,linux.intel.com,zytor.com,infradead.org,gmail.com,linaro.org,google.com,arndb.de,vger.kernel.org,lists.infradead.org,ventanamicro.com,outlook.com];
+	FORGED_SENDER(0.00)[ruanjinjie@huawei.com,linux-mips@vger.kernel.org];
+	FORGED_RECIPIENTS(0.00)[m:catalin.marinas@arm.com,m:will@kernel.org,m:tsbogend@alpha.franken.de,m:pjw@kernel.org,m:palmer@dabbelt.com,m:aou@eecs.berkeley.edu,m:alex@ghiti.fr,m:tglx@kernel.org,m:mingo@redhat.com,m:bp@alien8.de,m:dave.hansen@linux.intel.com,m:hpa@zytor.com,m:peterz@infradead.org,m:kees@kernel.org,m:nathan@kernel.org,m:linusw@kernel.org,m:jpoimboe@kernel.org,m:lukas.bulwahn@redhat.com,m:ryan.roberts@arm.com,m:ojeda@kernel.org,m:maz@kernel.org,m:timothy.hayes@arm.com,m:lpieralisi@kernel.org,m:thuth@redhat.com,m:menglong8.dong@gmail.com,m:oupton@kernel.org,m:yeoreum.yun@arm.com,m:miko.lenczewski@arm.com,m:broonie@kernel.org,m:kevin.brodsky@arm.com,m:james.clark@linaro.org,m:tabba@google.com,m:mrigendra.chaubey@gmail.com,m:arnd@arndb.de,m:anshuman.khandual@arm.com,m:x86@kernel.org,m:linux-kernel@vger.kernel.org,m:linux-arm-kernel@lists.infradead.org,m:linux-mips@vger.kernel.org,m:linux-riscv@lists.infradead.org,m:apatel@ventanamicro.com,m:mhklinux@outlook.com,m:ruanjinjie
+ @huawei.com,m:menglong8dong@gmail.com,m:mrigendrachaubey@gmail.com,s:lists@lfdr.de];
+	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	FORGED_SENDER_FORWARDING(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[ruanjinjie@huawei.com,linux-mips@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	DKIM_TRACE(0.00)[huawei.com:+];
+	RCVD_COUNT_FIVE(0.00)[6];
 	ALIAS_RESOLVED(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[43];
+	TO_DN_NONE(0.00)[];
+	TAGGED_RCPT(0.00)[linux-mips];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	MID_RHS_MATCH_FROM(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[linux-mips,netdev];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,vger.kernel.org:from_smtp,linux-m68k.org:mid,linux-m68k.org:from_mime,messagingengine.com:dkim]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:rdns,sto.lore.kernel.org:helo,vger.kernel.org:from_smtp,huawei.com:dkim,huawei.com:mid,huawei.com:from_mime,sashiko.dev:url]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: B172F69E7A2
+X-Rspamd-Queue-Id: 286FD69ED93
 
+Support for parallel secondary CPU bringup is already utilized by x86,
+MIPS, and RISC-V. This patch brings this capability to the arm64
+architecture.
 
-On Thu, 18 Jun 2026, Andrew Lunn wrote:
+Introduce CONFIG_PARALLEL_SMT_PRIMARY_FIRST to avoid primary SMT threads
+to boot first constraint.
 
-> appletalk is just one of many many drivers where the listed Maintainers 
-> does not respond to patches, or there is no Maintainer at all. So a lot 
-> of work falls on the top level netdev Maintainers.
+And Add a 'cpu' parameter to update_cpu_boot_status() to allow updating the
+boot status at a per-CPU granularity during parallel bringup.
 
-It goes with the territory. If that messes up their performance reviews, I 
-am okay with that. We all make our own choices.
+Rework the global `secondary_data` accessed during early boot into
+a per-CPU array `cpu_boot_data` to allow secondary CPUs to boot
+in parallel.
 
-> In fact, a lot of the AI driven bug fixes tend to fall into this 
-> category of old drivers with no active Maintainers, since that tends to 
-> be where the poorer quality code is.
+And reuse `__cpu_logical_map` array in the early boot code in head.S
+to resolve each secondary CPU's logical ID concurrently.
 
-That has not been my experience. I rarely see a review from sashiko-bot on 
-the scsi mailing list that doesn't list as many pre-existing bugs as new 
-bugs. This is almost always actively developed code, not mature code.
+Changes in v2:
+- Remove RFC.
+- Add Tested-by.
+- Fix AI review issues in [1].
+- Add arch_cpuhp_init_parallel_bringup() to check psci boot.
+- Reuse `__cpu_logical_map` instead of a new aray.
+- Defer rcutree_report_cpu_starting() until after
+  check_local_cpu_capabilities() to prevent a potential control CPU
+  deadlock if an early capability check fails.
+- Move the assembly in head.S to a macro called `mpidr_to_cpuid`.
+- Add `SECONDARY_DATA_SHIFT` for `lsl` to access `cpu_boot_data`.
+- Add sizeof(struct secondary_data) power of 2 assert check.
+- Expand testing with more data collected from real hardware.
 
-In anycase, quality is irrelevant here. I'm happy to see fixes for any 
-code base whatever its level of quality and whatever the quality metric. 
+[1] https://sashiko.dev/#/patchset/20260611133809.3854977-1-ruanjinjie%40huawei.com
 
-What matters more to me than quality is utility.
+Jinjie Ruan (4):
+  cpu/hotplug: Introduce CONFIG_PARALLEL_SMT_PRIMARY_FIRST
+  arm64: smp: Pass CPU ID to update_cpu_boot_status()
+  arm64: smp: Defer RCU reporting until after local CPU capability
+    checks
+  arm64: Add HOTPLUG_PARALLEL support for secondary CPUs
 
-> So top level netdev Maintainers are having to do a lot more work, on old 
-> drivers which very few people care about. That is a poor use of their 
-> talent, when we actually want them working on drivers for modern 
-> hardware with a lot of users.
-> 
+ arch/Kconfig                    |  4 +++
+ arch/arm64/Kconfig              |  1 +
+ arch/arm64/include/asm/smp.h    | 17 ++++++++++---
+ arch/arm64/kernel/asm-offsets.c |  4 +++
+ arch/arm64/kernel/cpufeature.c  | 22 ++++++++--------
+ arch/arm64/kernel/head.S        | 36 ++++++++++++++++++++++++++
+ arch/arm64/kernel/smp.c         | 45 ++++++++++++++++++++++++++++-----
+ arch/arm64/mm/context.c         |  4 +--
+ arch/mips/Kconfig               |  1 +
+ arch/riscv/Kconfig              |  1 +
+ arch/x86/Kconfig                |  1 +
+ kernel/cpu.c                    |  6 ++++-
+ 12 files changed, 119 insertions(+), 23 deletions(-)
 
-Again, that has not been my experience. Linux often gets installed because 
-the hardware is not modern enough so the vendor has abandoned it and so
-there's no better alternative than Linux.
+-- 
+2.34.1
 
-As for wasted talent, this industry discards skillsets just as fast as you 
-discard e-waste. It goes with the territory. Moreover, if maintainers are 
-not using AI to make themselves more effective then they should admit to 
-retro-computing.
 
