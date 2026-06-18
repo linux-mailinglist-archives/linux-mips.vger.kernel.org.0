@@ -1,67 +1,56 @@
-Return-Path: <linux-mips+bounces-15134-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-15137-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id 6hvlMLi5M2oNFgYAu9opvQ
-	(envelope-from <linux-mips+bounces-15134-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Thu, 18 Jun 2026 11:26:16 +0200
+	id 0941GgG6M2oYFgYAu9opvQ
+	(envelope-from <linux-mips+bounces-15137-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Thu, 18 Jun 2026 11:27:29 +0200
 X-Original-To: lists+linux-mips@lfdr.de
 Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 366B969ED8D
-	for <lists+linux-mips@lfdr.de>; Thu, 18 Jun 2026 11:26:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id CC61769EDAF
+	for <lists+linux-mips@lfdr.de>; Thu, 18 Jun 2026 11:27:28 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=huawei.com header.s=dkim header.b=3pRLLMQX;
-	dkim=pass header.d=huawei.com header.s=dkim header.b=3pRLLMQX;
-	spf=pass (mail.lfdr.de: domain of "linux-mips+bounces-15134-lists+linux-mips=lfdr.de@vger.kernel.org" designates 172.105.105.114 as permitted sender) smtp.mailfrom="linux-mips+bounces-15134-lists+linux-mips=lfdr.de@vger.kernel.org";
+	dkim=pass header.d=huawei.com header.s=dkim header.b=ajlEvkAH;
+	spf=pass (mail.lfdr.de: domain of "linux-mips+bounces-15137-lists+linux-mips=lfdr.de@vger.kernel.org" designates 172.105.105.114 as permitted sender) smtp.mailfrom="linux-mips+bounces-15137-lists+linux-mips=lfdr.de@vger.kernel.org";
 	dmarc=pass (policy=quarantine) header.from=huawei.com;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 7A8F6302F4F1
-	for <lists+linux-mips@lfdr.de>; Thu, 18 Jun 2026 09:26:10 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id A338130D4CB8
+	for <lists+linux-mips@lfdr.de>; Thu, 18 Jun 2026 09:26:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 996E83C6A2B;
-	Thu, 18 Jun 2026 09:26:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EF8053DA7E6;
+	Thu, 18 Jun 2026 09:26:14 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
-Received: from canpmsgout02.his.huawei.com (canpmsgout02.his.huawei.com [113.46.200.217])
+Received: from canpmsgout08.his.huawei.com (canpmsgout08.his.huawei.com [113.46.200.223])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D57B52E7373;
-	Thu, 18 Jun 2026 09:26:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BCB383C7E1D;
+	Thu, 18 Jun 2026 09:26:12 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781774769; cv=none; b=q8/XqI9lHK5kmgRDHsq71UIDnIbHA8uEMbp/v5u0KzkeA3mOGUjKZudTzQrrvkhZ6GHX9mElKFx8DdQgzqNY+yN1QIXOjMkKLVf/dKvHCNKtp+WzlqGhmggBg4BKk4W3bYc/lYFw3WvzDhKC0+623EwMESoocXxbOoIfQDW11SE=
+	t=1781774774; cv=none; b=bF760KBNovzkwWBnYBJitDGvmU7YCSF8DkWVX+9UPo+hOhI9xl+exBdiGEWKOdrfyYydAbR2adYAaHC1bSQT7AzqJXIXc/VtyokTjZ0kcoZZHiI/l8G4X/y+5pCYu1CzPB5PRaqoGMu8K2/Qar6Yq7Nxrk5UQT6pCnjxPeF/Si0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781774769; c=relaxed/simple;
-	bh=0gP4p0OW0nBKnpSggtrr5qKGAhEnw2p7kjXUyU3CDsM=;
+	s=arc-20240116; t=1781774774; c=relaxed/simple;
+	bh=TB2QZSA/D3dv3TAko5Aq5xk6m3pRwE/4EQJwD+FwXMs=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=I73//KNbfE06OPzBVfpe67P/b9eDtse43l7+1hhDd90noXN4IQ5c5iUVAHyrlIDYc478kgVdNxyBV3Lbslsw83sdnOTMwIeoelC66CKY05uhNT2VLe9uDb1H2Z/TNZtRnuxdZakbCiU40mwrEaIYE23PoDkT06VQZ87Pv4UNdP0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=3pRLLMQX; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=3pRLLMQX; arc=none smtp.client-ip=113.46.200.217
+	 MIME-Version:Content-Type; b=dY8biNucNz3C9/AHu2rAje8g+TVGNF2aYY57z/v4WIxVYwxfO/a0TtrPCI2b1JZQj8yqICFUF/Wc9eKd+BN2GhYHaCbliu+E2wS0VJYuR7C+ZEk57NvRWaBNZ6HtvkxoUf2ET4j4+frM2NmFZyx3c9LoWhnbNngoWlW8cwkMvio=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=ajlEvkAH; arc=none smtp.client-ip=113.46.200.223
 dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
 	c=relaxed/relaxed; q=dns/txt;
 	h=From;
-	bh=c152yyawWOwtqOgmdJ351m5tfsJBbmik79lhDs9C+mM=;
-	b=3pRLLMQXbk5Ji4A9Nr/somPIkUqHEODjvTuRHTO+MqQLE8vsaFxa49OIQx3vdq3I3YSzfKjwe
-	TCdziiCYZWuQpsNpKj8Ief3gxPdRwEDLjg8av45OjqLzqGDIgOLQUayxMNTbqmapJ5IeDVn1evq
-	t0JJEd2E1UK2l2+MLfufj7w=
-Received: from canpmsgout01.his.huawei.com (unknown [172.19.92.178])
-	by canpmsgout02.his.huawei.com (SkyGuard) with ESMTPS id 4ggw9W69v5zcZyR;
-	Thu, 18 Jun 2026 17:17:35 +0800 (CST)
-dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
-	c=relaxed/relaxed; q=dns/txt;
-	h=From;
-	bh=c152yyawWOwtqOgmdJ351m5tfsJBbmik79lhDs9C+mM=;
-	b=3pRLLMQXbk5Ji4A9Nr/somPIkUqHEODjvTuRHTO+MqQLE8vsaFxa49OIQx3vdq3I3YSzfKjwe
-	TCdziiCYZWuQpsNpKj8Ief3gxPdRwEDLjg8av45OjqLzqGDIgOLQUayxMNTbqmapJ5IeDVn1evq
-	t0JJEd2E1UK2l2+MLfufj7w=
-Received: from mail.maildlp.com (unknown [172.19.162.223])
-	by canpmsgout01.his.huawei.com (SkyGuard) with ESMTPS id 4ggw9P563Bz1T4Kt;
-	Thu, 18 Jun 2026 17:17:29 +0800 (CST)
+	bh=7Xl9xYHC9lg9V/pmv90pnoUjI6yJDwuBsZCpKRShEqs=;
+	b=ajlEvkAHLgSpEPEMpfBqVSr5UvWXU8wXW4IUKGpObpMBwjgXPPRnw+6/l4pERzX/5m+I37Uod
+	VnouE1t2ATQu2qaa63uw3vyL5gowaCBzo9ZOmwc8rFOOgcssTOlVeHhdzdQtYPBWjqyh8tdCUes
+	Rgw2FpMV0mHgD52ub97nbiI=
+Received: from mail.maildlp.com (unknown [172.19.163.15])
+	by canpmsgout08.his.huawei.com (SkyGuard) with ESMTPS id 4ggwB35ydrzmVXy;
+	Thu, 18 Jun 2026 17:18:03 +0800 (CST)
 Received: from dggpemf500011.china.huawei.com (unknown [7.185.36.131])
-	by mail.maildlp.com (Postfix) with ESMTPS id 04E0B40561;
-	Thu, 18 Jun 2026 17:26:02 +0800 (CST)
+	by mail.maildlp.com (Postfix) with ESMTPS id 351F240539;
+	Thu, 18 Jun 2026 17:26:04 +0800 (CST)
 Received: from huawei.com (10.90.53.73) by dggpemf500011.china.huawei.com
  (7.185.36.131) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Thu, 18 Jun
- 2026 17:25:59 +0800
+ 2026 17:26:01 +0800
 From: Jinjie Ruan <ruanjinjie@huawei.com>
 To: <catalin.marinas@arm.com>, <will@kernel.org>, <tsbogend@alpha.franken.de>,
 	<pjw@kernel.org>, <palmer@dabbelt.com>, <aou@eecs.berkeley.edu>,
@@ -79,9 +68,9 @@ To: <catalin.marinas@arm.com>, <will@kernel.org>, <tsbogend@alpha.franken.de>,
 	<linux-mips@vger.kernel.org>, <linux-riscv@lists.infradead.org>,
 	<apatel@ventanamicro.com>, <mhklinux@outlook.com>
 CC: <ruanjinjie@huawei.com>
-Subject: [PATCH v2 2/4] arm64: smp: Pass CPU ID to update_cpu_boot_status()
-Date: Thu, 18 Jun 2026 17:24:42 +0800
-Message-ID: <20260618092444.1316336-3-ruanjinjie@huawei.com>
+Subject: [PATCH v2 3/4] arm64: smp: Defer RCU reporting until after local CPU capability checks
+Date: Thu, 18 Jun 2026 17:24:43 +0800
+Message-ID: <20260618092444.1316336-4-ruanjinjie@huawei.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20260618092444.1316336-1-ruanjinjie@huawei.com>
 References: <20260618092444.1316336-1-ruanjinjie@huawei.com>
@@ -108,15 +97,15 @@ X-Spamd-Result: default: False [-6.16 / 15.00];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_TLS_LAST(0.00)[];
 	FORWARDED(0.00)[lists@lfdr.de];
 	MIME_TRACE(0.00)[0:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-15137-lists,linux-mips=lfdr.de];
+	RCVD_TLS_LAST(0.00)[];
+	FREEMAIL_TO(0.00)[arm.com,kernel.org,alpha.franken.de,dabbelt.com,eecs.berkeley.edu,ghiti.fr,redhat.com,alien8.de,linux.intel.com,zytor.com,infradead.org,gmail.com,linaro.org,google.com,arndb.de,vger.kernel.org,lists.infradead.org,ventanamicro.com,outlook.com];
 	FORGED_SENDER(0.00)[ruanjinjie@huawei.com,linux-mips@vger.kernel.org];
 	FORGED_RECIPIENTS(0.00)[m:catalin.marinas@arm.com,m:will@kernel.org,m:tsbogend@alpha.franken.de,m:pjw@kernel.org,m:palmer@dabbelt.com,m:aou@eecs.berkeley.edu,m:alex@ghiti.fr,m:tglx@kernel.org,m:mingo@redhat.com,m:bp@alien8.de,m:dave.hansen@linux.intel.com,m:hpa@zytor.com,m:peterz@infradead.org,m:kees@kernel.org,m:nathan@kernel.org,m:linusw@kernel.org,m:jpoimboe@kernel.org,m:lukas.bulwahn@redhat.com,m:ryan.roberts@arm.com,m:ojeda@kernel.org,m:maz@kernel.org,m:timothy.hayes@arm.com,m:lpieralisi@kernel.org,m:thuth@redhat.com,m:menglong8.dong@gmail.com,m:oupton@kernel.org,m:yeoreum.yun@arm.com,m:miko.lenczewski@arm.com,m:broonie@kernel.org,m:kevin.brodsky@arm.com,m:james.clark@linaro.org,m:tabba@google.com,m:mrigendra.chaubey@gmail.com,m:arnd@arndb.de,m:anshuman.khandual@arm.com,m:x86@kernel.org,m:linux-kernel@vger.kernel.org,m:linux-arm-kernel@lists.infradead.org,m:linux-mips@vger.kernel.org,m:linux-riscv@lists.infradead.org,m:apatel@ventanamicro.com,m:mhklinux@outlook.com,m:ruanjinjie
  @huawei.com,m:menglong8dong@gmail.com,m:mrigendrachaubey@gmail.com,s:lists@lfdr.de];
-	FREEMAIL_TO(0.00)[arm.com,kernel.org,alpha.franken.de,dabbelt.com,eecs.berkeley.edu,ghiti.fr,redhat.com,alien8.de,linux.intel.com,zytor.com,infradead.org,gmail.com,linaro.org,google.com,arndb.de,vger.kernel.org,lists.infradead.org,ventanamicro.com,outlook.com];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-15134-lists,linux-mips=lfdr.de];
 	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
@@ -124,119 +113,203 @@ X-Spamd-Result: default: False [-6.16 / 15.00];
 	FROM_NEQ_ENVFROM(0.00)[ruanjinjie@huawei.com,linux-mips@vger.kernel.org];
 	FROM_HAS_DN(0.00)[];
 	DKIM_TRACE(0.00)[huawei.com:+];
-	TO_DN_NONE(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[6];
 	ALIAS_RESOLVED(0.00)[];
 	RCPT_COUNT_TWELVE(0.00)[43];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[huawei.com:dkim,huawei.com:email,huawei.com:mid,huawei.com:from_mime,vger.kernel.org:from_smtp];
+	TO_DN_NONE(0.00)[];
 	TAGGED_RCPT(0.00)[linux-mips];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
-	RCVD_COUNT_SEVEN(0.00)[7]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo,vger.kernel.org:from_smtp,huawei.com:dkim,huawei.com:email,huawei.com:mid,huawei.com:from_mime]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 366B969ED8D
+X-Rspamd-Queue-Id: CC61769EDAF
 
-To support CONFIG_HOTPLUG_PARALLEL, the CPU boot status tracking must
-be refactored from a single global variable (secondary_data.status)
-to a per-CPU tracking structure to prevent multi-core race conditions.
+To support HOTPLUG_PARALLEL on arm64, and to prevent a potential deadlock
+on the control CPU, check_local_cpu_capabilities() must be executed
+before cpuhp_ap_sync_alive(). This ensures that if an early capability
+mismatch occurs and the AP invokes cpu_die_early(), the control CPU
+can detect the boot timeout and proceed, rather than hanging
+indefinitely.
 
-Add a 'cpu' parameter to update_cpu_boot_status() and update all its
-callsites to pass the corresponding CPU ID. This allows updating the
-boot status at a per-CPU granularity during parallel bringup.
+Furthermore, under parallel bringup, cpuhp_ap_sync_alive() must be called
+before rcutree_report_cpu_starting(). This sequence prevents a false
+RCU CPU Stall Warning caused by the prolonged spin-waiting/busy-waiting
+required during the AP synchronization process.
+
+	GICv3: CPU1: using allocated LPI pending table @0x0000000104160000
+	CPU1: Booted secondary processor 0x0000000001 [0x410fd082]
+	rcu: INFO: rcu_preempt detected stalls on CPUs/tasks:
+	rcu:     2-O..!: (2 GPs behind) idle=0004/1/0x4000000000000000 softirq=0/0 fqs=2625
+	rcu:     3-O..!: (2 GPs behind) idle=0004/1/0x4000000000000000 softirq=0/0 fqs=2625
+	rcu:     (detected by 0, t=5252 jiffies, g=-1187, q=1 ncpus=16)
+	rcu: Offline CPU 2 blocking current GP.
+	rcu: Offline CPU 3 blocking current GP.
+
+To avoid suspicious RCU usage, commit ce3d31ad3cac ("arm64/smp: Move
+rcu_cpu_starting() earlier") move rcutree_report_cpu_starting() earlier
+which is before check_local_cpu_capabilities().
+
+But For parallel bringup, the order should be as following:
+
+	secondary_start_kernel()
+	    -> check_local_cpu_capabilities()
+	       -> cpu_die_early()
+	    -> cpuhp_ap_sync_alive()
+	    -> rcutree_report_cpu_starting()
+
+And this required order forces standard printk/pr_* statements inside
+check_local_cpu_capabilities() to execute while the secondary CPU is still
+marked as offline to RCU, triggering a lockdep "suspicious RCU usage" splat
+due to console semaphore operations.
+
+So converting early capability logging and failure paths to printk_deferred().
+This pushes the logs into the lockless ringbuffer without triggering console
+locks or RCU validation on the offline CPU, resolving the lockdep splat while
+preserving critical error messages and the strictly required initialization
+order.
 
 Signed-off-by: Jinjie Ruan <ruanjinjie@huawei.com>
 ---
- arch/arm64/include/asm/smp.h   | 6 +++---
- arch/arm64/kernel/cpufeature.c | 2 +-
- arch/arm64/kernel/smp.c        | 8 ++++----
- arch/arm64/mm/context.c        | 2 +-
- 4 files changed, 9 insertions(+), 9 deletions(-)
+ arch/arm64/kernel/cpufeature.c | 20 ++++++++++----------
+ arch/arm64/kernel/smp.c        |  4 ++--
+ arch/arm64/mm/context.c        |  2 +-
+ 3 files changed, 13 insertions(+), 13 deletions(-)
 
-diff --git a/arch/arm64/include/asm/smp.h b/arch/arm64/include/asm/smp.h
-index 10ea4f543069..e2151a01731f 100644
---- a/arch/arm64/include/asm/smp.h
-+++ b/arch/arm64/include/asm/smp.h
-@@ -122,7 +122,7 @@ static inline void __noreturn cpu_park_loop(void)
- 	}
- }
- 
--static inline void update_cpu_boot_status(int val)
-+static inline void update_cpu_boot_status(unsigned int cpu, int val)
- {
- 	WRITE_ONCE(secondary_data.status, val);
- 	/* Ensure the visibility of the status update */
-@@ -134,9 +134,9 @@ static inline void update_cpu_boot_status(int val)
-  * which calls for a kernel panic. Update the boot status and park the calling
-  * CPU.
-  */
--static inline void __noreturn cpu_panic_kernel(void)
-+static inline void __noreturn cpu_panic_kernel(unsigned int cpu)
- {
--	update_cpu_boot_status(CPU_PANIC_KERNEL);
-+	update_cpu_boot_status(cpu, CPU_PANIC_KERNEL);
- 	cpu_park_loop();
- }
- 
 diff --git a/arch/arm64/kernel/cpufeature.c b/arch/arm64/kernel/cpufeature.c
-index 6d53bb15cf7b..0552202702bf 100644
+index 0552202702bf..a5e0bc4d383b 100644
 --- a/arch/arm64/kernel/cpufeature.c
 +++ b/arch/arm64/kernel/cpufeature.c
-@@ -3674,7 +3674,7 @@ static void verify_local_cpu_caps(u16 scope_mask)
+@@ -3546,7 +3546,7 @@ static void update_cpu_capabilities(u16 scope_mask)
+ 		 * system capabilities are finalised.
+ 		 */
+ 		if (!match_all && caps->desc && !caps->cpus)
+-			pr_info("detected: %s\n", caps->desc);
++			printk_deferred(KERN_INFO "detected: %s\n", caps->desc);
+ 
+ 		__set_bit(caps->capability, system_cpucaps);
+ 
+@@ -3669,7 +3669,7 @@ static void verify_local_cpu_caps(u16 scope_mask)
+ 	}
+ 
+ 	if (i < ARM64_NCAPS) {
+-		pr_crit("CPU%d: Detected conflict for capability %d (%s), System: %d, CPU: %d\n",
++		printk_deferred(KERN_CRIT "CPU%d: Detected conflict for capability %d (%s), System: %d, CPU: %d\n",
+ 			smp_processor_id(), caps->capability,
  			caps->desc, system_has_cap, cpu_has_cap);
  
- 		if (cpucap_panic_on_conflict(caps))
--			cpu_panic_kernel();
-+			cpu_panic_kernel(smp_processor_id());
- 		else
+@@ -3697,7 +3697,7 @@ __verify_local_elf_hwcaps(const struct arm64_cpu_capabilities *caps)
+ 
+ 	for (; caps->matches; caps++)
+ 		if (cpus_have_elf_hwcap(caps) && !caps->matches(caps, SCOPE_LOCAL_CPU)) {
+-			pr_crit("CPU%d: missing HWCAP: %s\n",
++			printk_deferred(KERN_CRIT "CPU%d: missing HWCAP: %s\n",
+ 					smp_processor_id(), caps->desc);
  			cpu_die_early();
+ 		}
+@@ -3716,7 +3716,7 @@ static void verify_sve_features(void)
+ 	unsigned long cpacr = cpacr_save_enable_kernel_sve();
+ 
+ 	if (vec_verify_vq_map(ARM64_VEC_SVE)) {
+-		pr_crit("CPU%d: SVE: vector length support mismatch\n",
++		printk_deferred(KERN_CRIT "CPU%d: SVE: vector length support mismatch\n",
+ 			smp_processor_id());
+ 		cpu_die_early();
  	}
+@@ -3729,7 +3729,7 @@ static void verify_sme_features(void)
+ 	unsigned long cpacr = cpacr_save_enable_kernel_sme();
+ 
+ 	if (vec_verify_vq_map(ARM64_VEC_SME)) {
+-		pr_crit("CPU%d: SME: vector length support mismatch\n",
++		printk_deferred(KERN_CRIT "CPU%d: SME: vector length support mismatch\n",
+ 			smp_processor_id());
+ 		cpu_die_early();
+ 	}
+@@ -3754,7 +3754,7 @@ static void verify_hyp_capabilities(void)
+ 	safe_vmid_bits = get_vmid_bits(safe_mmfr1);
+ 	vmid_bits = get_vmid_bits(mmfr1);
+ 	if (vmid_bits < safe_vmid_bits) {
+-		pr_crit("CPU%d: VMID width mismatch\n", smp_processor_id());
++		printk_deferred(KERN_CRIT "CPU%d: VMID width mismatch\n", smp_processor_id());
+ 		cpu_die_early();
+ 	}
+ 
+@@ -3763,7 +3763,7 @@ static void verify_hyp_capabilities(void)
+ 				ID_AA64MMFR0_EL1_PARANGE_SHIFT);
+ 	ipa_max = id_aa64mmfr0_parange_to_phys_shift(parange);
+ 	if (ipa_max < get_kvm_ipa_limit()) {
+-		pr_crit("CPU%d: IPA range mismatch\n", smp_processor_id());
++		printk_deferred(KERN_CRIT "CPU%d: IPA range mismatch\n", smp_processor_id());
+ 		cpu_die_early();
+ 	}
+ }
+@@ -3776,7 +3776,7 @@ static void verify_mpam_capabilities(void)
+ 
+ 	if (FIELD_GET(ID_AA64PFR0_EL1_MPAM_MASK, cpu_idr) !=
+ 	    FIELD_GET(ID_AA64PFR0_EL1_MPAM_MASK, sys_idr)) {
+-		pr_crit("CPU%d: MPAM version mismatch\n", smp_processor_id());
++		printk_deferred(KERN_CRIT "CPU%d: MPAM version mismatch\n", smp_processor_id());
+ 		cpu_die_early();
+ 	}
+ 
+@@ -3784,7 +3784,7 @@ static void verify_mpam_capabilities(void)
+ 	sys_idr = read_sanitised_ftr_reg(SYS_MPAMIDR_EL1);
+ 	if (FIELD_GET(MPAMIDR_EL1_HAS_HCR, cpu_idr) !=
+ 	    FIELD_GET(MPAMIDR_EL1_HAS_HCR, sys_idr)) {
+-		pr_crit("CPU%d: Missing MPAM HCR\n", smp_processor_id());
++		printk_deferred(KERN_CRIT "CPU%d: Missing MPAM HCR\n", smp_processor_id());
+ 		cpu_die_early();
+ 	}
+ 
+@@ -3793,7 +3793,7 @@ static void verify_mpam_capabilities(void)
+ 	sys_partid_max = FIELD_GET(MPAMIDR_EL1_PARTID_MAX, sys_idr);
+ 	sys_pmg_max = FIELD_GET(MPAMIDR_EL1_PMG_MAX, sys_idr);
+ 	if (cpu_partid_max < sys_partid_max || cpu_pmg_max < sys_pmg_max) {
+-		pr_crit("CPU%d: MPAM PARTID/PMG max values are mismatched\n", smp_processor_id());
++		printk_deferred(KERN_CRIT "CPU%d: MPAM PARTID/PMG max values are mismatched\n", smp_processor_id());
+ 		cpu_die_early();
+ 	}
+ }
 diff --git a/arch/arm64/kernel/smp.c b/arch/arm64/kernel/smp.c
-index 24f8448e1fbb..6bc90ee4820a 100644
+index 6bc90ee4820a..52edabc13d51 100644
 --- a/arch/arm64/kernel/smp.c
 +++ b/arch/arm64/kernel/smp.c
-@@ -118,7 +118,7 @@ int __cpu_up(unsigned int cpu, struct task_struct *idle)
- 	 * page tables.
+@@ -215,7 +215,6 @@ asmlinkage notrace void secondary_start_kernel(void)
+ 	if (system_uses_irq_prio_masking())
+ 		init_gic_priority_masking();
+ 
+-	rcutree_report_cpu_starting(cpu);
+ 	trace_hardirqs_off();
+ 
+ 	/*
+@@ -224,6 +223,7 @@ asmlinkage notrace void secondary_start_kernel(void)
+ 	 * fail to come online.
  	 */
- 	secondary_data.task = idle;
--	update_cpu_boot_status(CPU_MMU_OFF);
-+	update_cpu_boot_status(cpu, CPU_MMU_OFF);
+ 	check_local_cpu_capabilities();
++	rcutree_report_cpu_starting(cpu);
  
- 	/* Now bring the CPU into our world */
- 	ret = boot_secondary(cpu, idle);
-@@ -252,7 +252,7 @@ asmlinkage notrace void secondary_start_kernel(void)
- 	pr_info("CPU%u: Booted secondary processor 0x%010lx [0x%08x]\n",
- 					 cpu, (unsigned long)mpidr,
- 					 read_cpuid_id());
--	update_cpu_boot_status(CPU_BOOT_SUCCESS);
-+	update_cpu_boot_status(cpu, CPU_BOOT_SUCCESS);
- 	set_cpu_online(cpu, true);
- 	complete(&cpu_running);
+ 	ops = get_cpu_ops(cpu);
+ 	if (ops->cpu_postboot)
+@@ -404,7 +404,7 @@ void __noreturn cpu_die_early(void)
+ {
+ 	int cpu = smp_processor_id();
  
-@@ -411,11 +411,11 @@ void __noreturn cpu_die_early(void)
- 	rcutree_report_cpu_dead();
+-	pr_crit("CPU%d: will not boot\n", cpu);
++	printk_deferred(KERN_CRIT "CPU%d: will not boot\n", cpu);
  
- 	if (IS_ENABLED(CONFIG_HOTPLUG_CPU)) {
--		update_cpu_boot_status(CPU_KILL_ME);
-+		update_cpu_boot_status(cpu, CPU_KILL_ME);
- 		__cpu_try_die(cpu);
- 	}
- 
--	update_cpu_boot_status(CPU_STUCK_IN_KERNEL);
-+	update_cpu_boot_status(cpu, CPU_STUCK_IN_KERNEL);
- 
- 	cpu_park_loop();
- }
+ 	/* Mark this CPU absent */
+ 	set_cpu_present(cpu, 0);
 diff --git a/arch/arm64/mm/context.c b/arch/arm64/mm/context.c
-index 0f4a28b87469..6b8a3245f393 100644
+index 6b8a3245f393..9b5ab56aad5a 100644
 --- a/arch/arm64/mm/context.c
 +++ b/arch/arm64/mm/context.c
-@@ -72,7 +72,7 @@ void verify_cpu_asid_bits(void)
+@@ -70,7 +70,7 @@ void verify_cpu_asid_bits(void)
+ 		 * We cannot decrease the ASID size at runtime, so panic if we support
+ 		 * fewer ASID bits than the boot CPU.
  		 */
- 		pr_crit("CPU%d: smaller ASID size(%u) than boot CPU (%u)\n",
+-		pr_crit("CPU%d: smaller ASID size(%u) than boot CPU (%u)\n",
++		printk_deferred(KERN_CRIT "CPU%d: smaller ASID size(%u) than boot CPU (%u)\n",
  				smp_processor_id(), asid, asid_bits);
--		cpu_panic_kernel();
-+		cpu_panic_kernel(smp_processor_id());
+ 		cpu_panic_kernel(smp_processor_id());
  	}
- }
- 
 -- 
 2.34.1
 
