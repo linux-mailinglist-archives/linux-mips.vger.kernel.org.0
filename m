@@ -1,78 +1,47 @@
-Return-Path: <linux-mips+bounces-15149-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-15150-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id I6GjAvEONWr7mQYAu9opvQ
-	(envelope-from <linux-mips+bounces-15149-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Fri, 19 Jun 2026 11:42:09 +0200
+	id lHLrCWEnNWq8ngYAu9opvQ
+	(envelope-from <linux-mips+bounces-15150-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Fri, 19 Jun 2026 13:26:25 +0200
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 47EF86A5047
-	for <lists+linux-mips@lfdr.de>; Fri, 19 Jun 2026 11:42:08 +0200 (CEST)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id ACA1C6A56AD
+	for <lists+linux-mips@lfdr.de>; Fri, 19 Jun 2026 13:26:24 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=infradead.org header.s=desiato.20200630 header.b=dxCpgYGo;
-	spf=pass (mail.lfdr.de: domain of "linux-mips+bounces-15149-lists+linux-mips=lfdr.de@vger.kernel.org" designates 172.234.253.10 as permitted sender) smtp.mailfrom="linux-mips+bounces-15149-lists+linux-mips=lfdr.de@vger.kernel.org";
-	dmarc=pass (policy=none) header.from=infradead.org;
+	dkim=none;
+	dmarc=none;
+	spf=pass (mail.lfdr.de: domain of "linux-mips+bounces-15150-lists+linux-mips=lfdr.de@vger.kernel.org" designates 2600:3c09:e001:a7::12fc:5321 as permitted sender) smtp.mailfrom="linux-mips+bounces-15150-lists+linux-mips=lfdr.de@vger.kernel.org";
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 157E83014D85
-	for <lists+linux-mips@lfdr.de>; Fri, 19 Jun 2026 09:42:07 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 2870B3006175
+	for <lists+linux-mips@lfdr.de>; Fri, 19 Jun 2026 11:26:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9F09B368D71;
-	Fri, 19 Jun 2026 09:42:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BDD7937C0EB;
+	Fri, 19 Jun 2026 11:26:20 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
-Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0B5F368D45;
-	Fri, 19 Jun 2026 09:41:57 +0000 (UTC)
+Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 86CC9349CDC;
+	Fri, 19 Jun 2026 11:26:16 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781862125; cv=none; b=kgsXJpBXr1pqiRjjYQCyDhYg48bhDIXIq6YiAkB9549twPYHMwzVly97IaW60grDIIgUsxY2k8jMPDdPfBnFRTlIMdT5V7/zXtBeyKqrRcOiT+7zQl/VC/GzJVZ8pMyfDwBLJvisRajbPV8Z5lN/2RipubDYUHvq23pTbFHEhhQ=
+	t=1781868380; cv=none; b=Jr3pJzBLNlLSo0Ln0tMLFxo1RJ8CtFnU+4dw+E9SNvEz41Rh8jzcCcaFLxqF0Ft/M937VpP9QgXlS2gdLYZSAoCMUQbiTd515V8KxoPWCth2brBhLthq/ERI93ib71hzoE1pU2EoetGCtnsebtfqbcTl+gEi9qnxd7ae/7QGsgs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781862125; c=relaxed/simple;
-	bh=j2Qkkop7jtzsGY//Nd1ivpjhXQ+UfznUwGQQwGDPuH8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=R8I1KhjdEyXphZD2nis5nWS0I7PdL+Z3j41dnTri6qScS4gpYmeoGIiY+toxpVIyXAYFZcnKynLcBO5I8uq/txRvBLrDx9q6p7gn5rV5fRrdqxbRv8bZo3Kqq1iI9vjQoAlfY8kHCgN/fNMCzuPDuE4LBpqshe7MZ6WcVrV2Bmk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=pass smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=dxCpgYGo; arc=none smtp.client-ip=90.155.92.199
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=t2NuC61jQhkLZlTPdr5bUtoaoRRTUEJ6wbF953eCit8=; b=dxCpgYGotPMuA2p6gEibYEHVV3
-	8SYC4JMjwV+Fla0Xbzblgh7OCk7snf4aoCvaL5fNDG1m4tQ79ZMZwNdPBvHgv8y6ajbc5f4/YGSBe
-	S+O32/eTHR97OKvqdgmMKFQkz9w9zmr2vicnDrlCXPgw4ny9YEgreZAUVptOUKQRahCKBiWhDqhKf
-	DSydSwO1kiClKiV4gxdwM4tbiPbercmFalG6w05YvAdx8SRHtNtjt7KI06YAtlWP/SWqW+Fkeb+lY
-	X11FaOOKvHvtRfRMcwjrTl8Wgp2VigJeehKMWCaxutPrahrO+YGN+skUyaUbsvocqspsIA7etIWC5
-	Izg8KwdA==;
-Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
-	by desiato.infradead.org with esmtpsa (Exim 4.99.2 #2 (Red Hat Linux))
-	id 1waVjA-0000000EM2X-2Lb1;
-	Fri, 19 Jun 2026 09:41:32 +0000
-Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
-	id 795F6300CB5; Fri, 19 Jun 2026 11:41:30 +0200 (CEST)
-Date: Fri, 19 Jun 2026 11:41:30 +0200
-From: Peter Zijlstra <peterz@infradead.org>
-To: Thomas Gleixner <tglx@kernel.org>
-Cc: Jinjie Ruan <ruanjinjie@huawei.com>, catalin.marinas@arm.com,
-	will@kernel.org, tsbogend@alpha.franken.de, pjw@kernel.org,
-	palmer@dabbelt.com, aou@eecs.berkeley.edu, alex@ghiti.fr,
-	mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-	hpa@zytor.com, kees@kernel.org, nathan@kernel.org,
-	linusw@kernel.org, ojeda@kernel.org, david.kaplan@amd.com,
-	lukas.bulwahn@redhat.com, ryan.roberts@arm.com, maz@kernel.org,
-	timothy.hayes@arm.com, lpieralisi@kernel.org, thuth@redhat.com,
-	oupton@kernel.org, yeoreum.yun@arm.com, miko.lenczewski@arm.com,
-	broonie@kernel.org, kevin.brodsky@arm.com, james.clark@linaro.org,
-	tabba@google.com, mrigendra.chaubey@gmail.com, arnd@arndb.de,
-	anshuman.khandual@arm.com, x86@kernel.org,
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-mips@vger.kernel.org, linux-riscv@lists.infradead.org
-Subject: Re: [PATCH RFC 1/3] cpu/hotplug: Introduce
- CONFIG_PARALLEL_SMT_PRIMARY_FIRST
-Message-ID: <20260619094130.GU49951@noisy.programming.kicks-ass.net>
-References: <20260611133809.3854977-1-ruanjinjie@huawei.com>
- <20260611133809.3854977-2-ruanjinjie@huawei.com>
- <87a4srdgk0.ffs@fw13>
+	s=arc-20240116; t=1781868380; c=relaxed/simple;
+	bh=caqXjvKHn/XY8xLmXZ7nv3e1jf47C5//B2yUQunhHeQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=Eqh8rQqVOTM4KQs6UA6Ei7AEZNHEiht1krFCA9F77qaWycA3X/xRp0trdHI7dlTjmx9UHnLPDrHqvvlAAIfhRnPyA9e1qrCCAghc94cSslYE+3hOe9r4xdiiNpwwpJ/cs8IOVT2w1WEz3J0KwvDWWhod9fnFkrxtcJwWKxp+eEo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de; spf=pass smtp.mailfrom=alpha.franken.de; arc=none smtp.client-ip=193.175.24.41
+Received: from uucp by elvis.franken.de with local-rmail (Exim 3.36 #1)
+	id 1waXMO-0003g1-00; Fri, 19 Jun 2026 13:26:08 +0200
+Received: by alpha.franken.de (Postfix, from userid 1000)
+	id 4E701C00E8; Fri, 19 Jun 2026 13:25:58 +0200 (CEST)
+Date: Fri, 19 Jun 2026 13:25:58 +0200
+From: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To: torvalds@linux-foundation.org
+Cc: linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [GIT PULL] MIPS changes for v7.2
+Message-ID: <ajUnRiURsctnJ7R9@alpha.franken.de>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -81,58 +50,199 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <87a4srdgk0.ffs@fw13>
 X-Rspamd-Action: no action
-X-Spamd-Result: default: False [-0.66 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+X-Spamd-Result: default: False [-1.46 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[infradead.org,none];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
-	R_DKIM_ALLOW(-0.20)[infradead.org:s=desiato.20200630];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_TLS_LAST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[39];
-	MIME_TRACE(0.00)[0:+];
-	TAGGED_FROM(0.00)[bounces-15149-lists,linux-mips=lfdr.de];
-	FORWARDED(0.00)[lists@lfdr.de];
-	FORGED_RECIPIENTS(0.00)[m:tglx@kernel.org,m:ruanjinjie@huawei.com,m:catalin.marinas@arm.com,m:will@kernel.org,m:tsbogend@alpha.franken.de,m:pjw@kernel.org,m:palmer@dabbelt.com,m:aou@eecs.berkeley.edu,m:alex@ghiti.fr,m:mingo@redhat.com,m:bp@alien8.de,m:dave.hansen@linux.intel.com,m:hpa@zytor.com,m:kees@kernel.org,m:nathan@kernel.org,m:linusw@kernel.org,m:ojeda@kernel.org,m:david.kaplan@amd.com,m:lukas.bulwahn@redhat.com,m:ryan.roberts@arm.com,m:maz@kernel.org,m:timothy.hayes@arm.com,m:lpieralisi@kernel.org,m:thuth@redhat.com,m:oupton@kernel.org,m:yeoreum.yun@arm.com,m:miko.lenczewski@arm.com,m:broonie@kernel.org,m:kevin.brodsky@arm.com,m:james.clark@linaro.org,m:tabba@google.com,m:mrigendra.chaubey@gmail.com,m:arnd@arndb.de,m:anshuman.khandual@arm.com,m:x86@kernel.org,m:linux-kernel@vger.kernel.org,m:linux-arm-kernel@lists.infradead.org,m:linux-mips@vger.kernel.org,m:linux-riscv@lists.infradead.org,m:mrigendrachaubey@gmail.com,s:lists@lfdr.de];
+	RCPT_COUNT_THREE(0.00)[3];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	FORGED_SENDER(0.00)[peterz@infradead.org,linux-mips@vger.kernel.org];
-	FREEMAIL_CC(0.00)[huawei.com,arm.com,kernel.org,alpha.franken.de,dabbelt.com,eecs.berkeley.edu,ghiti.fr,redhat.com,alien8.de,linux.intel.com,zytor.com,amd.com,linaro.org,google.com,gmail.com,arndb.de,vger.kernel.org,lists.infradead.org];
-	FROM_HAS_DN(0.00)[];
-	MISSING_XM_UA(0.00)[];
+	FORGED_RECIPIENTS(0.00)[m:torvalds@linux-foundation.org,m:linux-mips@vger.kernel.org,m:linux-kernel@vger.kernel.org,s:lists@lfdr.de];
+	FORWARDED(0.00)[lists@lfdr.de];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-15150-lists,linux-mips=lfdr.de];
+	RCVD_TLS_LAST(0.00)[];
+	FORGED_SENDER(0.00)[tsbogend@alpha.franken.de,linux-mips@vger.kernel.org];
+	DMARC_NA(0.00)[franken.de];
+	FORGED_RECIPIENTS_FORWARDING(0.00)[];
+	MISSING_XM_UA(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_FORWARDING(0.00)[];
 	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[peterz@infradead.org,linux-mips@vger.kernel.org];
-	DKIM_TRACE(0.00)[infradead.org:+];
+	FROM_NEQ_ENVFROM(0.00)[tsbogend@alpha.franken.de,linux-mips@vger.kernel.org];
+	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
+	TO_DN_NONE(0.00)[];
+	R_DKIM_NA(0.00)[];
 	ALIAS_RESOLVED(0.00)[];
 	TAGGED_RCPT(0.00)[linux-mips];
-	TO_DN_SOME(0.00)[];
-	FORGED_RECIPIENTS_FORWARDING(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,infradead.org:dkim,infradead.org:from_mime,vger.kernel.org:from_smtp]
+	MID_RHS_MATCH_FROM(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:rdns,sto.lore.kernel.org:helo,vger.kernel.org:from_smtp]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 47EF86A5047
+X-Rspamd-Queue-Id: ACA1C6A56AD
 
-On Thu, Jun 18, 2026 at 05:17:03PM +0200, Thomas Gleixner wrote:
+The following changes since commit e7ae89a0c97ce2b68b0983cd01eda67cf373517d:
 
-> Something simple like the uncompiled below should just work, no?
-> 
-> ---
-> --- a/arch/Kconfig
-> +++ b/arch/Kconfig
-> @@ -102,6 +102,10 @@ config HOTPLUG_PARALLEL
->  	bool
->  	select HOTPLUG_SPLIT_STARTUP
->  
-> +config HOTPLUG_PARALLEL_SMT
-> +	bool
-> +	select HOTPLUG_PARALLEL
+  Linux 7.1-rc5 (2026-05-24 13:48:06 -0700)
 
-	depends on ARCH_SUPPORTS_SCHED_SMT ?
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/mips/linux.git/ tags/mips_7.2
+
+for you to fetch changes up to 6f25741b7565d7f82fc09947c981cae17535894d:
+
+  mips: select legacy gpiolib interfaces where used (2026-06-15 12:32:43 +0200)
+
+----------------------------------------------------------------
+- use software nodes for GPIO code
+- cleanups and fixes
+
+----------------------------------------------------------------
+Aaron Tomlin (1):
+      mips: sched: Fix CPUMASK_OFFSTACK memory corruption
+
+Arnd Bergmann (1):
+      mips: select legacy gpiolib interfaces where used
+
+Bartosz Golaszewski (4):
+      MIPS: RB532: attach the software node to its target GPIO controller
+      MIPS: RB532: serial: statify setup_serial_port()
+      MIPS: alchemy: platform: add missing include
+      MIPS: alchemy: provide visible function prototypes to board files
+
+Catalin Iacob (1):
+      mips: Remove remaining defconfig references to the pktcdvd driver
+
+Costa Shulyupin (2):
+      include: Remove unused jz4740-adc.h
+      include: Remove unused jz4740-battery.h
+
+Dmitry Torokhov (4):
+      MIPS: alchemy: mtx1: attach software nodes to GPIO chips
+      MIPS: alchemy: db1000: use nodes attached to GPIO chips in properties
+      MIPS: alchemy: gpr: switch to static device properties
+      MIPS: alchemy: db1300: switch to static device properties
+
+Ethan Nelson-Moore (1):
+      MIPS: mm: remove comment referring to removed CONFIG_MIPS_CMP
+
+Icenowy Zheng (2):
+      MIPS: Loongson64: dts: Sort nodes
+      MIPS: Loongson64: dts: Add node for LS7A PCH LPC
+
+Johan Hovold (5):
+      MIPS: ip22-gio: fix kfree() of static object
+      MIPS: ip22-gio: fix gio device memory leak
+      MIPS: ip22-gio: fix device reference leak in probe
+      MIPS: ip22-gio: switch to dynamic root device
+      MIPS: ip22-gio: do not export device release function
+
+Jonas Jelonek (1):
+      MIPS: smp: report dying CPU to RCU in stop_this_cpu()
+
+Maciej W. Rozycki (7):
+      MIPS: Fix big-endian stack argument fetching in o32 wrapper
+      MIPS: Make do_IRQ() available for assembly callers
+      MIPS: DEC: Remove do_IRQ() call indirection
+      MIPS: DEC: Fix prototypes for halt/reset handlers
+      MIPS: DEC: Remove IRQF_ONESHOT reference for IOASIC DMA error IRQs
+      MIPS: DEC: Ensure 32-bit stack location for o32 prom_printf()
+      MIPS: DEC: Prevent initial console buffer from landing in XKPHYS
+
+Markus Elfring (2):
+      MIPS: kernel: proc: Use seq_putc() calls in show_cpuinfo()
+      MIPS: kernel: proc: Delete unnecessary braces in show_cpuinfo()
+
+Nathan Chancellor (2):
+      MIPS: VDSO: Avoid including .got in dynamic segment
+      MIPS: lib: Remove '.hidden' for local symbols
+
+Qingfang Deng (1):
+      MIPS: ralink: reduce ARCH_DMA_MINALIGN
+
+Rosen Penev (5):
+      mips: cps: Assemble jr.hb with an R2 ISA level
+      mips: ralink: mt7621: add missing __iomem
+      mips: n64: add __iomem for writel call
+      mips: dts: ar9132: fix wdt node name
+      MIPS: ath79: reduce ARCH_DMA_MINALIGN
+
+Sasha Levin (1):
+      MIPS: mobileye: Remove duplicate FIT_IMAGE_FDT_EPM5 from main Kconfig
+
+Yadan Fan (1):
+      MIPS: mm: Fix out-of-bounds write in maar_res_walk()
+
+ arch/mips/Kconfig                               |  14 +-
+ arch/mips/alchemy/Kconfig                       |   1 -
+ arch/mips/alchemy/board-gpr.c                   | 127 ++++++++------
+ arch/mips/alchemy/board-mtx1.c                  |  34 ++--
+ arch/mips/alchemy/common/gpiolib.c              |  45 ++++-
+ arch/mips/alchemy/devboards/db1000.c            |  31 ++--
+ arch/mips/alchemy/devboards/db1200.c            |   1 +
+ arch/mips/alchemy/devboards/db1300.c            | 219 ++++++++++++++++--------
+ arch/mips/alchemy/devboards/db1550.c            |   2 +
+ arch/mips/alchemy/devboards/db1xxx.c            |  11 +-
+ arch/mips/alchemy/devboards/db1xxx.h            |  18 ++
+ arch/mips/alchemy/devboards/platform.c          |   2 +
+ arch/mips/boot/dts/loongson/ls7a-pch.dtsi       |  17 +-
+ arch/mips/boot/dts/qca/ar9132.dtsi              |   2 +-
+ arch/mips/configs/fuloong2e_defconfig           |   1 -
+ arch/mips/configs/ip22_defconfig                |   1 -
+ arch/mips/configs/ip27_defconfig                |   1 -
+ arch/mips/configs/ip30_defconfig                |   1 -
+ arch/mips/configs/jazz_defconfig                |   1 -
+ arch/mips/configs/malta_defconfig               |   1 -
+ arch/mips/configs/malta_kvm_defconfig           |   1 -
+ arch/mips/configs/maltaup_xpa_defconfig         |   1 -
+ arch/mips/configs/rm200_defconfig               |   1 -
+ arch/mips/configs/sb1250_swarm_defconfig        |   1 -
+ arch/mips/dec/int-handler.S                     |   2 +-
+ arch/mips/dec/ioasic-irq.c                      |   5 +-
+ arch/mips/dec/prom/console.c                    |   7 +-
+ arch/mips/dec/prom/init.c                       |   6 +-
+ arch/mips/dec/reset.c                           |   2 +
+ arch/mips/dec/setup.c                           |  12 +-
+ arch/mips/fw/lib/call_o32.S                     |   2 +-
+ arch/mips/include/asm/dec/prom.h                |  15 +-
+ arch/mips/include/asm/dec/reset.h               |  19 ++
+ arch/mips/include/asm/gio_device.h              |   6 -
+ arch/mips/include/asm/irq.h                     |   2 +-
+ arch/mips/include/asm/mach-ath79/kmalloc.h      |   7 +
+ arch/mips/include/asm/mach-au1x00/gpio-au1000.h |   5 +
+ arch/mips/include/asm/mach-au1x00/gpio-au1300.h |   3 +
+ arch/mips/include/asm/mach-ralink/kmalloc.h     |   9 +
+ arch/mips/kernel/cps-vec.S                      |   6 +
+ arch/mips/kernel/irq.c                          |   2 +-
+ arch/mips/kernel/mips-mt-fpaff.c                |  28 +--
+ arch/mips/kernel/proc.c                         |   9 +-
+ arch/mips/kernel/smp.c                          |   2 +
+ arch/mips/lib/memcpy.S                          |   2 -
+ arch/mips/lib/memset.S                          |   2 -
+ arch/mips/mm/c-r4k.c                            |   5 -
+ arch/mips/mm/init.c                             |  12 +-
+ arch/mips/n64/init.c                            |   2 +-
+ arch/mips/ralink/mt7621.c                       |   2 +-
+ arch/mips/rb532/devices.c                       |  32 +++-
+ arch/mips/rb532/gpio.c                          |  41 ++---
+ arch/mips/rb532/serial.c                        |   2 +-
+ arch/mips/sgi-ip22/ip22-gio.c                   |  34 ++--
+ arch/mips/txx9/Kconfig                          |   1 +
+ arch/mips/vdso/vdso.lds.S                       |   1 +
+ include/linux/jz4740-adc.h                      |  33 ----
+ include/linux/power/jz4740-battery.h            |  15 --
+ 58 files changed, 505 insertions(+), 362 deletions(-)
+ create mode 100644 arch/mips/alchemy/devboards/db1xxx.h
+ create mode 100644 arch/mips/include/asm/dec/reset.h
+ create mode 100644 arch/mips/include/asm/mach-ath79/kmalloc.h
+ create mode 100644 arch/mips/include/asm/mach-ralink/kmalloc.h
+ delete mode 100644 include/linux/jz4740-adc.h
+ delete mode 100644 include/linux/power/jz4740-battery.h
+
+-- 
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]
 
