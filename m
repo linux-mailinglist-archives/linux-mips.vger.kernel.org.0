@@ -1,63 +1,63 @@
-Return-Path: <linux-mips+bounces-15169-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-15170-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id VksYJRKmOWrsvwcAu9opvQ
-	(envelope-from <linux-mips+bounces-15169-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Mon, 22 Jun 2026 23:16:02 +0200
+	id SY0SDoOmOWoFwAcAu9opvQ
+	(envelope-from <linux-mips+bounces-15170-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Mon, 22 Jun 2026 23:17:55 +0200
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1A85D6B26FD
-	for <lists+linux-mips@lfdr.de>; Mon, 22 Jun 2026 23:16:02 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 86CD56B2734
+	for <lists+linux-mips@lfdr.de>; Mon, 22 Jun 2026 23:17:54 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=none ("invalid DKIM record") header.d=mobileye.com header.s=MoEyIP header.b=iVBod8UD;
-	spf=pass (mail.lfdr.de: domain of "linux-mips+bounces-15169-lists+linux-mips=lfdr.de@vger.kernel.org" designates 2600:3c09:e001:a7::12fc:5321 as permitted sender) smtp.mailfrom="linux-mips+bounces-15169-lists+linux-mips=lfdr.de@vger.kernel.org";
+	dkim=none ("invalid DKIM record") header.d=mobileye.com header.s=MoEyIP header.b=bbwR3ho7;
+	spf=pass (mail.lfdr.de: domain of "linux-mips+bounces-15170-lists+linux-mips=lfdr.de@vger.kernel.org" designates 2600:3c0a:e001:db::12fc:5321 as permitted sender) smtp.mailfrom="linux-mips+bounces-15170-lists+linux-mips=lfdr.de@vger.kernel.org";
 	dmarc=fail reason="SPF not aligned (relaxed)" header.from=mobileye.com (policy=quarantine);
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 85D2C3028CBD
-	for <lists+linux-mips@lfdr.de>; Mon, 22 Jun 2026 21:16:01 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id E9C07305A45D
+	for <lists+linux-mips@lfdr.de>; Mon, 22 Jun 2026 21:16:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C8FA92EC0B0;
-	Mon, 22 Jun 2026 21:15:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4789B27A476;
+	Mon, 22 Jun 2026 21:16:02 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
-Received: from esa3.hc555-34.eu.iphmx.com (esa3.hc555-34.eu.iphmx.com [207.54.77.50])
+Received: from esa1.hc555-34.eu.iphmx.com (esa1.hc555-34.eu.iphmx.com [23.90.104.144])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC365235358;
-	Mon, 22 Jun 2026 21:15:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23044357CFA;
+	Mon, 22 Jun 2026 21:15:59 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782162959; cv=none; b=eUnqdv6mzxRRNLxbzBXRyRX9a9e5nUeRqUxjQ3gETG4csosh5ZP0SA5PcO9Dy60u06o95LAatuMtE34u4bvSerN30VDNixGPWWuZEYWARlppnj+FQ4nmWO3WPqjMSi9qqUy49wGLM859tAYS7YkcitZnA/kSjks4gCuU/hmpw6k=
+	t=1782162962; cv=none; b=LC/+V2+t/PgqLA3ntFDkEzMbafIUV0SSjWIoyHGDLhhLpwr41183OAMCmiViuYeIp072muZ5pRE/x/JsEWyf4MGUC7i7UL0E8gk7mC1IX41PtcuvFvtw6sNDJgViPtWcgsc7GadUzHyp+vhbSmmTJOg167WewljkzGs5F3DYzD4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782162959; c=relaxed/simple;
-	bh=FTIF5cEmVnxxDW8vrLW8IxPoavSb7ayg0HJS7UNjj2U=;
+	s=arc-20240116; t=1782162962; c=relaxed/simple;
+	bh=NzDP/Qf23/prJJNPPgsghEZJIH7cLqjLXgSqIcy81Tw=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=njeaWiJGUZcCi5eZ7kJyRtwflJAfwtMbHRghMVazhLsHiRTqzAmjn+NinJc6AWlRE8bBQbypje4bs2jYFlnRD4Akne22svnUNlTtuUxkacOm8D29/FGJ4W8ZYgpNjsuJTRLdywud+29pLgL9gAHGQt0WOKKdcuriaUm07vKdqq4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mobileye.com; spf=pass smtp.mailfrom=mobileye.com; dkim=fail (0-bit key) header.d=mobileye.com header.i=@mobileye.com header.b=iVBod8UD reason="key not found in DNS"; arc=none smtp.client-ip=207.54.77.50
+	 MIME-Version; b=V1ykZE+WglP4It3yggWebFuCOfteIE9moSnUZTQKye6zMoKV/5oWpN8o5dMoDvj83aAplcHjskDSlqqlECfVcgw6Ekipg35UfMVjF+GqITAfM32s2NvdtpQY9h2fATIdKRLQ9GoX+LnVr/UOavLX1HOv5eyBFS5KvIJnKfjoKXE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mobileye.com; spf=pass smtp.mailfrom=mobileye.com; dkim=fail (0-bit key) header.d=mobileye.com header.i=@mobileye.com header.b=bbwR3ho7 reason="key not found in DNS"; arc=none smtp.client-ip=23.90.104.144
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
   d=mobileye.com; i=@mobileye.com; q=dns/txt; s=MoEyIP;
-  t=1782162958; x=1813698958;
+  t=1782162960; x=1813698960;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=FTIF5cEmVnxxDW8vrLW8IxPoavSb7ayg0HJS7UNjj2U=;
-  b=iVBod8UDtppU3YJO0iwvkFb1Wb4v62/GtQLY8fIYfOZtT7TpHEIqAJwr
-   TeVtuQ2Q+LflN5aWHr/uvT0mcKjzofinpg6OHR7Zjk3zKObTVNUZTvX5J
-   LUcjODCO6NJiQ0VHyfZycn+c/9e5eBspDg5nRoUjJ07RsfFzx/P0jFQvO
-   PA0k111c+i4zAVcM7/Bg7LOdqUsamV4Mw0COuOneFs4d/L9fsKaZx4CNS
-   j0BeP4C+/EL8U3d1pkH/uxBG11ecIlA+vpEmJ5tt8HMBZIhVpQK5IdvJB
-   LRlIZNdTuf3kobDUTfHYXxX1mhF4ZcojjecEd0eRK/xnCp6c3vis4p0/c
+  bh=NzDP/Qf23/prJJNPPgsghEZJIH7cLqjLXgSqIcy81Tw=;
+  b=bbwR3ho7EZwGdBskwD+U4WX5oU1fsDIqSoEOgzR91WSuz0zFqD5xkhDh
+   Nn1Uok+P6lIJbCodPZdt1qmdmhT5KfOv3SvdfQoPrbt2fI3msvbVZ0gKv
+   b0f5Q5FxehA0a3hwJqaBMKBEONQaWxTXczTXuZMdxsJIX3vdWSSjC8VFB
+   Kzg5k1nVL6tnISWweDkr+RmqjItg7WXGW+fvaaTLQLi2fE+wCDJMml0wx
+   98+LKjO4L3Ulxx7UUDe6FbcD9kYoVWIl7rwUqXgwFsWnLmj/yDExuJGql
+   hBpaJiwgFSWQkcmS376ulgmELujjJmMQyQ9fwpO+oMHzwN2yNhRBKo9At
    g==;
-X-CSE-ConnectionGUID: 6viJilUMQMS0i1YfiLMwzQ==
-X-CSE-MsgGUID: ECE+S/+wRUOqEFTzRY8w/g==
+X-CSE-ConnectionGUID: ItTf23kdRN2Q2hgcFQPqfw==
+X-CSE-MsgGUID: fALokgqGTVWre3ci6DjaHA==
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
-Received: from unknown (HELO ces03_data.me-corp.lan) ([146.255.191.134])
-  by esa3.hc555-34.eu.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jun 2026 00:14:46 +0300
-X-CSE-ConnectionGUID: d2Mj9Z/LTAyQwRo8bu/WlA==
-X-CSE-MsgGUID: awrFJsz0TTW7kTmYesvBUg==
-Received: from unknown (HELO epgd034.me-corp.lan) ([10.154.54.3])
-  by ces03_data.me-corp.lan with SMTP; 23 Jun 2026 00:19:45 +0300
-Received: by epgd034.me-corp.lan (sSMTP sendmail emulation); Tue, 23 Jun 2026 00:14:45 +0300
+Received: from unknown (HELO ces01_data.me-corp.lan) ([146.255.191.134])
+  by esa1.hc555-34.eu.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jun 2026 00:14:48 +0300
+X-CSE-ConnectionGUID: PIZbsQHORw2HX0SvceFskA==
+X-CSE-MsgGUID: G7hsW6c/S6ifmNGfrT+2Lg==
+Received: from unknown (HELO epgd034.me-corp.lan) ([10.154.54.2])
+  by ces01_data.me-corp.lan with SMTP; 23 Jun 2026 00:19:57 +0300
+Received: by epgd034.me-corp.lan (sSMTP sendmail emulation); Tue, 23 Jun 2026 00:14:46 +0300
 From: Pnina Feder <pnina.feder@mobileye.com>
 To: Andrew Morton <akpm@linux-foundation.org>,
 	Baoquan He <bhe@redhat.com>,
@@ -77,9 +77,9 @@ Cc: Dave Young <ruirui.yang@linux.dev>,
 	linux-riscv@lists.infradead.org,
 	linux-doc@vger.kernel.org,
 	Pnina Feder <pnina.feder@mobileye.com>
-Subject: [PATCH 3/4] riscv: vmcore_info: export riscv arch-specific struct offsets to vmcoreinfo
-Date: Tue, 23 Jun 2026 00:14:29 +0300
-Message-ID: <20260622211430.4008899-4-pnina.feder@mobileye.com>
+Subject: [PATCH 4/4] mips: vmcore_info: export mips arch-specific struct offsets to vmcoreinfo
+Date: Tue, 23 Jun 2026 00:14:30 +0300
+Message-ID: <20260622211430.4008899-5-pnina.feder@mobileye.com>
 In-Reply-To: <20260622211430.4008899-1-pnina.feder@mobileye.com>
 References: <20260622211430.4008899-1-pnina.feder@mobileye.com>
 Precedence: bulk
@@ -95,7 +95,7 @@ X-Spamd-Result: default: False [1.54 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	MID_CONTAINS_FROM(1.00)[];
 	R_MISSING_CHARSET(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
@@ -105,11 +105,11 @@ X-Spamd-Result: default: False [1.54 / 15.00];
 	MIME_TRACE(0.00)[0:+];
 	RCVD_TLS_LAST(0.00)[];
 	FORWARDED(0.00)[lists@lfdr.de];
-	TAGGED_FROM(0.00)[bounces-15169-lists,linux-mips=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-15170-lists,linux-mips=lfdr.de];
 	FORGED_SENDER(0.00)[pnina.feder@mobileye.com,linux-mips@vger.kernel.org];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	FORGED_RECIPIENTS(0.00)[m:akpm@linux-foundation.org,m:bhe@redhat.com,m:rppt@kernel.org,m:pasha.tatashin@soleen.com,m:pratyush@kernel.org,m:tsbogend@alpha.franken.de,m:pjw@kernel.org,m:palmer@dabbelt.com,m:aou@eecs.berkeley.edu,m:ruirui.yang@linux.dev,m:corbet@lwn.net,m:alex@ghiti.fr,m:kexec@lists.infradead.org,m:linux-kernel@vger.kernel.org,m:linux-mips@vger.kernel.org,m:linux-riscv@lists.infradead.org,m:linux-doc@vger.kernel.org,m:pnina.feder@mobileye.com,s:lists@lfdr.de];
-	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
 	TO_DN_SOME(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
 	FORGED_SENDER_FORWARDING(0.00)[];
@@ -121,35 +121,41 @@ X-Spamd-Result: default: False [1.54 / 15.00];
 	ALIAS_RESOLVED(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	TAGGED_RCPT(0.00)[linux-mips];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[vger.kernel.org:from_smtp,sto.lore.kernel.org:rdns,sto.lore.kernel.org:helo]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[vger.kernel.org:from_smtp,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,mobileye.com:email,mobileye.com:mid,mobileye.com:from_mime]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 1A85D6B26FD
+X-Rspamd-Queue-Id: 86CD56B2734
 
-Export RISC-V architecture-specific struct offsets needed by the
+Export MIPS architecture-specific struct offsets needed by the
 vmcore-tasks tool, including signal frame layouts and register
 context structures used to reconstruct user-space register state
 from a vmcore dump.
 
 Signed-off-by: Pnina Feder <pnina.feder@mobileye.com>
 ---
- .../admin-guide/kdump/vmcoreinfo.rst          | 26 +++++++++++++++++++
- arch/riscv/kernel/signal.c                    |  8 ++++++
- arch/riscv/kernel/vmcore_info.c               | 11 ++++++++
- 3 files changed, 45 insertions(+)
+ .../admin-guide/kdump/vmcoreinfo.rst          | 34 +++++++++++++++++++
+ arch/mips/kernel/Makefile                     |  1 +
+ arch/mips/kernel/signal.c                     |  8 +++++
+ arch/mips/kernel/vmcore_info.c                | 22 ++++++++++++
+ 4 files changed, 65 insertions(+)
+ create mode 100644 arch/mips/kernel/vmcore_info.c
 
 diff --git a/Documentation/admin-guide/kdump/vmcoreinfo.rst b/Documentation/admin-guide/kdump/vmcoreinfo.rst
-index 36103b3cdc05..3c364434b846 100644
+index 3c364434b846..4af32ddf5615 100644
 --- a/Documentation/admin-guide/kdump/vmcoreinfo.rst
 +++ b/Documentation/admin-guide/kdump/vmcoreinfo.rst
-@@ -595,6 +595,32 @@ va_kernel_pa_offset
- Indicates the offset between the kernel virtual and physical mappings.
- Used to translate virtual to physical addresses.
+@@ -494,6 +494,40 @@ Used to get the vmalloc_start address from the high_memory symbol.
  
-+STACK_ALIGN
-+-----------
+ The maximum number of CPUs.
+ 
++MIPS
++====
 +
-+Stack alignment requirement for the architecture. Used to locate signal
-+frames on the user stack.
++(rt_sigframe, rs_uc)
++--------------------
++
++Offset of the ucontext member within the MIPS rt_sigframe structure.
++Used to locate the signal context within a signal frame on the user
++stack.
 +
 +(sigcontext, sc_regs)
 +---------------------
@@ -157,76 +163,93 @@ index 36103b3cdc05..3c364434b846 100644
 +Offset of the saved register array within struct sigcontext. Used to
 +extract user-space register state from signal frames in a vmcore dump.
 +
-+_PAGE_PFN_SHIFT
-+---------------
++PAGE_SHIFT
++----------
 +
-+The bit shift to extract the PFN from a page table entry. Used for
-+virtual-to-physical address translation when walking page tables from
-+a vmcore dump.
++The base-2 logarithm of the page size. Used for page frame number
++calculations during address translation.
 +
-+(rt_sigframe, uc)
-+-----------------
++_PFN_MASK|_PAGE_PRESENT|_PAGE_VALID|_PAGE_GLOBAL
++-------------------------------------------------
 +
-+Offset of the ucontext member within the RISC-V rt_sigframe structure.
-+Used to locate the signal context (and thus saved registers) within a
-+signal frame on the user stack.
++Page table entry bit masks and flags. Used for walking MIPS page tables
++and translating virtual to physical addresses in a vmcore dump.
 +
- Task and VMA metadata
- =====================
++PTRS_PER_PGD|PTRS_PER_PMD|PTRS_PER_PTE
++---------------------------------------
++
++Number of entries per page table level. Used for page table walking
++during virtual-to-physical address translation.
++
+ powerpc
+ =======
  
-diff --git a/arch/riscv/kernel/signal.c b/arch/riscv/kernel/signal.c
-index 59784dc117e4..eb03c0ea6aae 100644
---- a/arch/riscv/kernel/signal.c
-+++ b/arch/riscv/kernel/signal.c
-@@ -13,6 +13,7 @@
+diff --git a/arch/mips/kernel/Makefile b/arch/mips/kernel/Makefile
+index 95a1e674fd67..99f2961f6ee1 100644
+--- a/arch/mips/kernel/Makefile
++++ b/arch/mips/kernel/Makefile
+@@ -24,6 +24,7 @@ CFLAGS_REMOVE_perf_event_mipsxx.o = $(CC_FLAGS_FTRACE)
+ endif
+ 
+ obj-$(CONFIG_CEVT_BCM1480)	+= cevt-bcm1480.o
++obj-$(CONFIG_VMCORE_INFO)	+= vmcore_info.o
+ obj-$(CONFIG_CEVT_R4K)		+= cevt-r4k.o
+ obj-$(CONFIG_CEVT_DS1287)	+= cevt-ds1287.o
+ obj-$(CONFIG_CEVT_GT641XX)	+= cevt-gt641xx.o
+diff --git a/arch/mips/kernel/signal.c b/arch/mips/kernel/signal.c
+index 4a10f18a8806..f2241f52fa17 100644
+--- a/arch/mips/kernel/signal.c
++++ b/arch/mips/kernel/signal.c
+@@ -26,6 +26,7 @@
+ #include <linux/syscalls.h>
+ #include <linux/uaccess.h>
  #include <linux/resume_user_mode.h>
- #include <linux/linkage.h>
- #include <linux/entry-common.h>
 +#include <linux/vmcore_info.h>
  
- #include <asm/ucontext.h>
- #include <asm/vdso.h>
-@@ -40,6 +41,13 @@ struct rt_sigframe {
- #endif
+ #include <asm/abi.h>
+ #include <asm/asm.h>
+@@ -62,6 +63,13 @@ struct rt_sigframe {
+ 	struct ucontext rs_uc;
  };
  
 +#ifdef CONFIG_VMCORE_INFO
-+void riscv_rt_signal_frame(void)
++void mips_rt_signal_frame(void)
 +{
-+	VMCOREINFO_OFFSET(rt_sigframe, uc);
++	VMCOREINFO_OFFSET(rt_sigframe, rs_uc);
 +}
 +#endif
 +
- #ifdef CONFIG_FPU
- static long restore_fp_state(struct pt_regs *regs,
- 			     union __riscv_fp_state __user *sc_fpregs)
-diff --git a/arch/riscv/kernel/vmcore_info.c b/arch/riscv/kernel/vmcore_info.c
-index c27efceec3cc..dd174042dba3 100644
---- a/arch/riscv/kernel/vmcore_info.c
-+++ b/arch/riscv/kernel/vmcore_info.c
-@@ -3,6 +3,12 @@
- #include <linux/vmcore_info.h>
- #include <linux/pagemap.h>
+ #ifdef CONFIG_MIPS_FP_SUPPORT
  
-+#include <asm/processor.h>
-+#include <asm/pgtable-bits.h>
+ /*
+diff --git a/arch/mips/kernel/vmcore_info.c b/arch/mips/kernel/vmcore_info.c
+new file mode 100644
+index 000000000000..5d7fdc662065
+--- /dev/null
++++ b/arch/mips/kernel/vmcore_info.c
+@@ -0,0 +1,22 @@
++// SPDX-License-Identifier: GPL-2.0-only
++
++#include <linux/vmcore_info.h>
++
++#include <asm/pgtable.h>
 +#include <asm/sigcontext.h>
 +
-+extern void riscv_rt_signal_frame(void);
++extern void mips_rt_signal_frame(void);
 +
- static inline u64 get_satp_value(void)
- {
- 	return csr_read(CSR_SATP);
-@@ -28,4 +34,9 @@ void arch_crash_save_vmcoreinfo(void)
- 						kernel_map.va_kernel_pa_offset);
- 	vmcoreinfo_append_str("KERNELOFFSET=%lx\n", kaslr_offset());
- 	vmcoreinfo_append_str("NUMBER(satp)=0x%llx\n", get_satp_value());
-+	riscv_rt_signal_frame();
-+
-+	VMCOREINFO_NUMBER(STACK_ALIGN);
++void arch_crash_save_vmcoreinfo(void)
++{
++	mips_rt_signal_frame();
 +	VMCOREINFO_OFFSET(sigcontext, sc_regs);
-+	VMCOREINFO_NUMBER(_PAGE_PFN_SHIFT);
- }
++	VMCOREINFO_NUMBER(PAGE_SHIFT);
++	VMCOREINFO_NUMBER(_PFN_MASK);
++	VMCOREINFO_NUMBER(_PAGE_PRESENT);
++	VMCOREINFO_NUMBER(_PAGE_VALID);
++	VMCOREINFO_NUMBER(_PAGE_GLOBAL);
++	VMCOREINFO_NUMBER(PTRS_PER_PGD);
++	VMCOREINFO_NUMBER(PTRS_PER_PMD);
++	VMCOREINFO_NUMBER(PTRS_PER_PTE);
++}
 -- 
 2.43.0
 
