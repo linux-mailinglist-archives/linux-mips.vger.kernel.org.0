@@ -1,144 +1,164 @@
-Return-Path: <linux-mips+bounces-15177-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-15178-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id +uTCGtZ2O2pVYQgAu9opvQ
-	(envelope-from <linux-mips+bounces-15177-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Wed, 24 Jun 2026 08:19:02 +0200
+	id ULWwIa+SO2qhZwgAu9opvQ
+	(envelope-from <linux-mips+bounces-15178-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Wed, 24 Jun 2026 10:17:51 +0200
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id D15096BBB89
-	for <lists+linux-mips@lfdr.de>; Wed, 24 Jun 2026 08:19:01 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id D1CEE6BC830
+	for <lists+linux-mips@lfdr.de>; Wed, 24 Jun 2026 10:17:50 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=linutronix.de header.s=2020 header.b=RbqnWZGg;
-	dkim=pass header.d=linutronix.de header.s=2020e header.b="A3o/2qr5";
-	spf=pass (mail.lfdr.de: domain of "linux-mips+bounces-15177-lists+linux-mips=lfdr.de@vger.kernel.org" designates 2600:3c04:e001:36c::12fc:5321 as permitted sender) smtp.mailfrom="linux-mips+bounces-15177-lists+linux-mips=lfdr.de@vger.kernel.org";
-	dmarc=pass (policy=none) header.from=linutronix.de;
+	dkim=none;
+	dmarc=none;
+	spf=pass (mail.lfdr.de: domain of "linux-mips+bounces-15178-lists+linux-mips=lfdr.de@vger.kernel.org" designates 172.234.253.10 as permitted sender) smtp.mailfrom="linux-mips+bounces-15178-lists+linux-mips=lfdr.de@vger.kernel.org";
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id D7123301B4EC
-	for <lists+linux-mips@lfdr.de>; Wed, 24 Jun 2026 06:19:00 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 05021300B130
+	for <lists+linux-mips@lfdr.de>; Wed, 24 Jun 2026 08:17:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 842F431F998;
-	Wed, 24 Jun 2026 06:18:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C3A3339A7FA;
+	Wed, 24 Jun 2026 08:17:43 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from cstnet.cn (smtp81.cstnet.cn [159.226.251.81])
+	(using TLSv1.2 with cipher DHE-RSA-AES256-SHA (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B2331C5F27;
-	Wed, 24 Jun 2026 06:18:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B19E5346AE3;
+	Wed, 24 Jun 2026 08:17:41 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782281939; cv=none; b=nL6Oi/2r8Rx7ra/9wXdj8F+3Fv65RI/5FJ+S5foHqsXitnlJHZuU8A5M3hNXDmzijz5tb1No7LQ4wmVFcIV8XSr1dOIdHmnmq78JrunBtrXl2VJPp07VBdFn1WoLjVlRWO0R9LoPvLmmuRVhBnfJf2ApTVjZyo8g0w2Rco0aSzc=
+	t=1782289063; cv=none; b=hSbPrEbr7h+n3r496yJlP1h8SXhRkpu+dPe3qWdb1JEU5gAMjixINFlZVIBi0yhK/WOWFAu5EdmOJIgUHs/pEQioQPcN354unyN+vW8Cyq5tgvzmphVi9OkXYyedX09DEn/R7suLyXHDKSPCZigvGBGeEr+VE9lywinz0MrQfnA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782281939; c=relaxed/simple;
-	bh=eC4lfErW+pR+pmA2pRiyG8E+5zceic1+1XV2r3gfocI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=JN4Z0HZc3GbKD+4mHcfjJ/CvJhK9YWIAtOcbJXvOZfAks6iCx1BhGIWBrG+ZhUua2E0evKWafZKzDmenli7WIkmdOmSdBbx2GF4Lyy+G/Dqy7Qd5Wy960iQITCGzBZs8GzQ4FIPIeEc6NcODe2k9F+trDQS1EBhGHH2C0wfM93E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=RbqnWZGg; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=A3o/2qr5; arc=none smtp.client-ip=193.142.43.55
-Date: Wed, 24 Jun 2026 08:18:48 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1782281930;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=uadqRAI2LngWZ5a6Pld4O97ztBIDaJnPvhfMToZjyag=;
-	b=RbqnWZGgDz7b37XGb/YS6kRSATRZUMu7oEpxmNoY/LTxohVvqTa2jkGFZnmtyRi7da6L+D
-	byIh800LSqoL8xEgGgi3Ds/ICvQL6zBXXcXlb9ZSJegftALReg4SoNajutV9Qs6aRGRcmz
-	iIeKkGplXcAh4/usUSH+NNCvkWWWAZLLAisqRMevxdIqUepH8Nz3FfpdblNavtnU8Bme30
-	WsQcQEr0DhAH13dY8eCYhnLlWBKkbDC0KGrD7PnqSnOroEkR3KnEIdOD8hiMWxcZTqtJNY
-	LfTjuJDYD6zywanjTuiQpXVhRk9VEsp2ZzJ9iuePRMwP3fyZZLuJS9CM02gxYQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1782281930;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=uadqRAI2LngWZ5a6Pld4O97ztBIDaJnPvhfMToZjyag=;
-	b=A3o/2qr517AlyeH6REsGBIwqETSY6/6SB36VagU0oYlAPV8fcYkDm+4iL7qCCJqZhNDqlM
-	J8j7QUV5fq5RjYBw==
-From: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-To: Xi Ruoyao <xry111@xry111.site>
-Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	Huacai Chen <chenhuacai@kernel.org>,
-	Jiaxun Yang <jiaxun.yang@flygoat.com>,
-	Mingcong Bai <jeffbai@aosc.io>, Henry Chen <chenx97@aosc.io>,
-	Jiayuan Chen <jiayuan.chen@linux.dev>,
-	Clark Williams <clrkwllms@kernel.org>,
-	Steven Rostedt <rostedt@goodmis.org>, linux-mips@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-rt-devel@lists.linux.dev
-Subject: Re: [PATCH] MIPS: loongson64: add IRQ work based on self-IPI
-Message-ID: <20260624061848.DKue8khU@linutronix.de>
-References: <20260623172728.191557-1-xry111@xry111.site>
+	s=arc-20240116; t=1782289063; c=relaxed/simple;
+	bh=IKwWY2KcEnwkx+U8pBgQ9z1BZZhEqdcHk64z/V+kpp4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=WdYsqo9rCnUkGjQ34YF4K75lDsvCSg6GQliryZ+F7ROGMoc0WO/3ogLY+Y1JmSCzRP2ZbS5aOUhphJZs82AsJtqeIMxgBwhCBmUggIAZPcXGH+9iTATXtGmKif1jHeBNkhJGUaMLK1IOoXZhPF9auEXCgE2CYCGux0ZT7F/nM2w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn; spf=pass smtp.mailfrom=iscas.ac.cn; arc=none smtp.client-ip=159.226.251.81
+Received: from localhost.localdomain (unknown [111.196.245.140])
+	by APP-03 (Coremail) with SMTP id rQCowABHW9KjkjtqKA2wFQ--.14729S2;
+	Wed, 24 Jun 2026 16:17:39 +0800 (CST)
+From: Pengpeng Hou <pengpeng@iscas.ac.cn>
+To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: Pengpeng Hou <pengpeng@iscas.ac.cn>,
+	linux-mips@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] MIPS: configs: Enable the current Ingenic USB PHY symbol
+Date: Wed, 24 Jun 2026 16:17:39 +0800
+Message-ID: <20260624081739.1283-1-pengpeng@iscas.ac.cn>
+X-Mailer: git-send-email 2.50.1
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20260623172728.191557-1-xry111@xry111.site>
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:rQCowABHW9KjkjtqKA2wFQ--.14729S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7Wry3JFW8try5ur1DJr1rtFb_yoW8uFW7pw
+	1rXa9rJF4kXF1rJFW7ZrWvgrW5tFsxJrWYkF1jyFyUAryrZ3yUAr93trnrJrZrXrZxJF4F
+	9as3K3ZIyr4IywUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUyG14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+	rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+	1l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
+	JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
+	CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
+	2Ix0cI8IcVAFwI0_JF0_Jw1lYx0Ex4A2jsIE14v26r4j6F4UMcvjeVCFs4IE7xkEbVWUJV
+	W8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1l42xK82IYc2Ij64vI
+	r41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8Gjc
+	xK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAKI48JMIIF0xvE2Ix0
+	cI8IcVAFwI0_JFI_Gr1lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8V
+	AvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVW8JVWxJwCI42IY6I8E87Iv6xkF7I0E
+	14v26r4UJVWxJrUvcSsGvfC2KfnxnUUI43ZEXa7VUj9a97UUUUU==
+X-CM-SenderInfo: pshqw1xhqjqxpvfd2hldfou0/
 X-Rspamd-Action: no action
-X-Spamd-Result: default: False [-2.16 / 15.00];
+X-Spamd-Result: default: False [0.04 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[linutronix.de,none];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
-	R_DKIM_ALLOW(-0.20)[linutronix.de:s=2020,linutronix.de:s=2020e];
+	MID_CONTAINS_FROM(1.00)[];
+	R_MISSING_CHARSET(0.50)[];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	RCVD_TLS_LAST(0.00)[];
-	FORGED_RECIPIENTS(0.00)[m:xry111@xry111.site,m:tsbogend@alpha.franken.de,m:chenhuacai@kernel.org,m:jiaxun.yang@flygoat.com,m:jeffbai@aosc.io,m:chenx97@aosc.io,m:jiayuan.chen@linux.dev,m:clrkwllms@kernel.org,m:rostedt@goodmis.org,m:linux-mips@vger.kernel.org,m:linux-kernel@vger.kernel.org,m:linux-rt-devel@lists.linux.dev,s:lists@lfdr.de];
-	RCVD_COUNT_THREE(0.00)[3];
-	FORGED_SENDER(0.00)[bigeasy@linutronix.de,linux-mips@vger.kernel.org];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[12];
-	TAGGED_FROM(0.00)[bounces-15177-lists,linux-mips=lfdr.de];
+	DMARC_NA(0.00)[iscas.ac.cn];
+	TAGGED_FROM(0.00)[bounces-15178-lists,linux-mips=lfdr.de];
+	FORGED_RECIPIENTS(0.00)[m:tsbogend@alpha.franken.de,m:pengpeng@iscas.ac.cn,m:linux-mips@vger.kernel.org,m:linux-kernel@vger.kernel.org,s:lists@lfdr.de];
+	FORGED_SENDER(0.00)[pengpeng@iscas.ac.cn,linux-mips@vger.kernel.org];
 	MIME_TRACE(0.00)[0:+];
+	RCVD_COUNT_THREE(0.00)[4];
 	FORWARDED(0.00)[lists@lfdr.de];
-	FROM_HAS_DN(0.00)[];
-	MISSING_XM_UA(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	FORGED_SENDER_FORWARDING(0.00)[];
-	ALIAS_RESOLVED(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[bigeasy@linutronix.de,linux-mips@vger.kernel.org];
-	DKIM_TRACE(0.00)[linutronix.de:+];
-	MID_RHS_MATCH_FROM(0.00)[];
-	TAGGED_RCPT(0.00)[linux-mips];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
 	TO_DN_SOME(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[vger.kernel.org:from_smtp,tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo,linutronix.de:dkim,linutronix.de:email,linutronix.de:mid,linutronix.de:from_mime]
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[pengpeng@iscas.ac.cn,linux-mips@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	RCPT_COUNT_THREE(0.00)[4];
+	FORGED_SENDER_FORWARDING(0.00)[];
+	R_DKIM_NA(0.00)[];
+	ALIAS_RESOLVED(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	TAGGED_RCPT(0.00)[linux-mips];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[vger.kernel.org:from_smtp,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: D15096BBB89
+X-Rspamd-Queue-Id: D1CEE6BC830
 
-On 2026-06-24 01:27:21 [+0800], Xi Ruoyao wrote:
-> Since the commit 91840be8f710 ("irq_work: Fix use-after-free in
-> irq_work_single() on PREEMPT_RT"), we observed the performance of
-> execve() is significantly impacted on MIPS.
->=20
-> While we are unsure how that commit caused the impact or how to improve
-> it (or even if it can be improved at all), implementing IRQ work with
-> self-IPI seems able to mitigate the impaction.
+The Ingenic USB PHY provider is now built from phy-ingenic-usb.o under
+`CONFIG_PHY_INGENIC_USB`.
 
-I suspect mm_struct::mm_cid.irq_work.
-That IPI ensures that after irq_work_sync() returns the enqueued
-irq_work can be freed.=20
+The Ingenic defconfigs below still enable the stale `CONFIG_JZ4770_PHY`
+symbol.  That symbol no longer carries the provider object, so the
+defconfigs lose the intended USB PHY provider after olddefconfig.
 
-> Perhaps this can/should be implemented for other MIPS architecture
-> processors as well, but we don't have the enough knowledge of them, nor
-> access to the hardware.  So only implement it for loongson64 here.
+Use `CONFIG_PHY_INGENIC_USB` instead.
 
-I have half done bits for cavium and need to finish it=E2=80=A6
+Signed-off-by: Pengpeng Hou <pengpeng@iscas.ac.cn>
+---
+ arch/mips/configs/cu1000-neo_defconfig | 2 +-
+ arch/mips/configs/cu1830-neo_defconfig | 2 +-
+ arch/mips/configs/gcw0_defconfig       | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
 
-> Link: https://lore.kernel.org/6be1cdd5f91dd7418a32ff372a6f3ae259b19195.ca=
-mel@xry111.site/
-> Signed-off-by: Xi Ruoyao <xry111@xry111.site>
+diff --git a/arch/mips/configs/cu1000-neo_defconfig b/arch/mips/configs/cu1000-neo_defconfig
+--- a/arch/mips/configs/cu1000-neo_defconfig
++++ b/arch/mips/configs/cu1000-neo_defconfig
+@@ -86,7 +86,7 @@ CONFIG_RTC_DRV_JZ4740=y
+ CONFIG_DMADEVICES=y
+ CONFIG_DMA_JZ4780=y
+ # CONFIG_INGENIC_TIMER is not set
+ CONFIG_INGENIC_SYSOST=y
+ # CONFIG_IOMMU_SUPPORT is not set
+-CONFIG_JZ4770_PHY=y
++CONFIG_PHY_INGENIC_USB=y
+ CONFIG_EXT4_FS=y
+ # CONFIG_DNOTIFY is not set
+ CONFIG_AUTOFS_FS=y
+diff --git a/arch/mips/configs/cu1830-neo_defconfig b/arch/mips/configs/cu1830-neo_defconfig
+--- a/arch/mips/configs/cu1830-neo_defconfig
++++ b/arch/mips/configs/cu1830-neo_defconfig
+@@ -89,7 +89,7 @@ CONFIG_RTC_DRV_JZ4740=y
+ CONFIG_DMADEVICES=y
+ CONFIG_DMA_JZ4780=y
+ # CONFIG_INGENIC_TIMER is not set
+ CONFIG_INGENIC_SYSOST=y
+ # CONFIG_IOMMU_SUPPORT is not set
+-CONFIG_JZ4770_PHY=y
++CONFIG_PHY_INGENIC_USB=y
+ CONFIG_EXT4_FS=y
+ # CONFIG_DNOTIFY is not set
+ CONFIG_AUTOFS_FS=y
+diff --git a/arch/mips/configs/gcw0_defconfig b/arch/mips/configs/gcw0_defconfig
+--- a/arch/mips/configs/gcw0_defconfig
++++ b/arch/mips/configs/gcw0_defconfig
+@@ -99,7 +99,7 @@ CONFIG_USB_OHCI_HCD_PLATFORM=y
+ CONFIG_USB_MUSB_HDRC=y
+ CONFIG_USB_MUSB_GADGET=y
+ CONFIG_USB_MUSB_JZ4740=y
+ CONFIG_USB_INVENTRA_DMA=y
+-CONFIG_JZ4770_PHY=y
++CONFIG_PHY_INGENIC_USB=y
+ CONFIG_USB_GADGET=y
+ CONFIG_USB_GADGET_VBUS_DRAW=500
+ CONFIG_USB_ETH=y
 
-Reviewed-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-
-Sebastian
 
