@@ -1,58 +1,58 @@
-Return-Path: <linux-mips+bounces-15193-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-15194-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id azzADAukO2rlaggAu9opvQ
-	(envelope-from <linux-mips+bounces-15193-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Wed, 24 Jun 2026 11:31:55 +0200
+	id L4JZAfqqO2pEbAgAu9opvQ
+	(envelope-from <linux-mips+bounces-15194-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Wed, 24 Jun 2026 12:01:30 +0200
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id D01526BCF67
-	for <lists+linux-mips@lfdr.de>; Wed, 24 Jun 2026 11:31:54 +0200 (CEST)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id 492C86BD275
+	for <lists+linux-mips@lfdr.de>; Wed, 24 Jun 2026 12:01:24 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=huawei.com header.s=dkim header.b=no3zg9rE;
-	spf=pass (mail.lfdr.de: domain of "linux-mips+bounces-15193-lists+linux-mips=lfdr.de@vger.kernel.org" designates 172.105.105.114 as permitted sender) smtp.mailfrom="linux-mips+bounces-15193-lists+linux-mips=lfdr.de@vger.kernel.org";
+	dkim=pass header.d=huawei.com header.s=dkim header.b=qlRqlki8;
+	spf=pass (mail.lfdr.de: domain of "linux-mips+bounces-15194-lists+linux-mips=lfdr.de@vger.kernel.org" designates 104.64.211.4 as permitted sender) smtp.mailfrom="linux-mips+bounces-15194-lists+linux-mips=lfdr.de@vger.kernel.org";
 	dmarc=pass (policy=quarantine) header.from=huawei.com;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 25DD03035156
-	for <lists+linux-mips@lfdr.de>; Wed, 24 Jun 2026 09:29:53 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 1574A3027AA0
+	for <lists+linux-mips@lfdr.de>; Wed, 24 Jun 2026 10:01:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BB20528D8D0;
-	Wed, 24 Jun 2026 09:29:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3F99C3B8105;
+	Wed, 24 Jun 2026 10:00:58 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
-Received: from canpmsgout10.his.huawei.com (canpmsgout10.his.huawei.com [113.46.200.225])
+Received: from canpmsgout05.his.huawei.com (canpmsgout05.his.huawei.com [113.46.200.220])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 980CC22CBE6;
-	Wed, 24 Jun 2026 09:29:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 032973AFCFC;
+	Wed, 24 Jun 2026 10:00:53 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782293392; cv=none; b=g9eZMrWAcppgaQhlWnI6U6CiJdgIBEJt6KdBzSo/ux1X3aWBLd7DQdfoXCADxB0teghfRGioHtvEh/yvWtL1Slb1Gw2OyV5g1vdmllDnc7uCgwiQgqLYuE74Hc76RPAcPyCF5P19UfGjaovV0Se3FbhasEGMe5as3QAKkWTH/W0=
+	t=1782295258; cv=none; b=qFBI/XMfyURM+pzJf8mSprqnEiqOS6/2cfQguuOOdweJnLcJ1RKra0tQCGzUAhM0ywwkJaownqvl8/kxpOdrhpI87QtomNK7zygfwmE6CB7sQOrrTx1rPOq/S4t8lTE+GMYr0bUFixj9ju0bX1QtjMTPItzNqe8uaB/HX+aUQbI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782293392; c=relaxed/simple;
-	bh=by16IdkmGgw9kEEeOZRGyj2p7WGePb4njrQC2EdIS70=;
+	s=arc-20240116; t=1782295258; c=relaxed/simple;
+	bh=dJJUXV6NeuW1qn0h1mROj4BDOaxxeX2+im4Q4TptAlg=;
 	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=Jt3pWeFNZCXUC+4NY7QFI09+AK8jX8532wsdqywRvqv+BAABmqZRpuJSpaEQBfQWm/D5TS6AsID41cLRaruAOYC4TdbAX8apAYrdL+nnJI/10InHtrKv341mvqgz8TPIrbld7mwmuarl++6ydBCq9DXjY2zkNQ5vIIwG//rq/Cw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=no3zg9rE; arc=none smtp.client-ip=113.46.200.225
+	 In-Reply-To:Content-Type; b=IET2TCKMJjqYhOdG+CcHsOaKeu/gNZgHMDJZay9DRdahghGGw/jMtyEiQCvQPucjReYEK8Ww49e33Ba/Md91S3SC1eKFTPbJrpa+qD+36eKqYOG0w8QB8c5bQQN7FP4Aemh9PtlNImJpjCZO7xSq3pZvl/EbS/38e3cM8Qnwe2A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=qlRqlki8; arc=none smtp.client-ip=113.46.200.220
 dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
 	c=relaxed/relaxed; q=dns/txt;
 	h=From;
-	bh=d1eG3hPlsm1+oT45P4zhN9osQ73dxXUyqZH+WHKL4Lo=;
-	b=no3zg9rEHsY+O6tH7lGBZCr/wtQTLde9WTBakbu/lBUC2VtlVNPDQ7njD2eIAQDbPGnbNU2jA
-	HUJhzeTdVN3bmifdnpxCNgcDjzfTf/O21bzqAMhNYus0NTL070RWrW3IB5vlEXdFX6WLp1Gmefd
-	V2TB0gHX2ucPShwXbN+bL2U=
-Received: from mail.maildlp.com (unknown [172.19.162.92])
-	by canpmsgout10.his.huawei.com (SkyGuard) with ESMTPS id 4glby464Fzz1K9Z7;
-	Wed, 24 Jun 2026 17:20:28 +0800 (CST)
+	bh=1395hZTLdzjvGEUA5mY2MXbrSyHdvWfUix1ZT9yBBvU=;
+	b=qlRqlki8Vete58SPLgzXr/AdeIESPRlfvmDp+qvgdcQ9hdmA0UUGgAXDOKcsXvSaxXgIiKOXt
+	3DjyBcgH9e3sBFpLQEQzJHUd57n5Xz+/Cmhtv/VSkMbJOFp8Ulw3OyOt2bVX4hKemQQiKbc1Qfp
+	7EHlN4/awC+2PYDruCMPWZw=
+Received: from mail.maildlp.com (unknown [172.19.162.223])
+	by canpmsgout05.his.huawei.com (SkyGuard) with ESMTPS id 4glcfW6d8Rz12LCg;
+	Wed, 24 Jun 2026 17:52:03 +0800 (CST)
 Received: from dggpemf500011.china.huawei.com (unknown [7.185.36.131])
-	by mail.maildlp.com (Postfix) with ESMTPS id ECEA240565;
-	Wed, 24 Jun 2026 17:29:32 +0800 (CST)
+	by mail.maildlp.com (Postfix) with ESMTPS id F21A540575;
+	Wed, 24 Jun 2026 18:00:50 +0800 (CST)
 Received: from [10.67.109.254] (10.67.109.254) by
  dggpemf500011.china.huawei.com (7.185.36.131) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.11; Wed, 24 Jun 2026 17:29:31 +0800
-Message-ID: <39df6d17-5151-469d-bcff-b0db3fb5f417@huawei.com>
-Date: Wed, 24 Jun 2026 17:29:30 +0800
+ 15.2.1544.11; Wed, 24 Jun 2026 18:00:48 +0800
+Message-ID: <a0a531b7-6f1e-4055-ad0c-c1ebf3fadba3@huawei.com>
+Date: Wed, 24 Jun 2026 18:00:47 +0800
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -96,13 +96,13 @@ References: <20260611133809.3854977-1-ruanjinjie@huawei.com>
  <SN6PR02MB41575306521E6223561F476FD4182@SN6PR02MB4157.namprd02.prod.outlook.com>
  <e96a2579-c010-4198-a2a3-6ba35b14aef0@huawei.com>
  <ajPitENEHWa8lDfC@willie-the-truck>
- <b828dd7a-0363-46cf-aad0-e4962e299338@huawei.com>
- <ajqZJVBCu_D-BkTy@willie-the-truck>
+ <2a34ff43-78a0-4d99-885a-0e7f560634ca@huawei.com>
+ <ajqYaklhIyvaNLlk@willie-the-truck>
 From: Jinjie Ruan <ruanjinjie@huawei.com>
-In-Reply-To: <ajqZJVBCu_D-BkTy@willie-the-truck>
+In-Reply-To: <ajqYaklhIyvaNLlk@willie-the-truck>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: kwepems500002.china.huawei.com (7.221.188.17) To
+X-ClientProxiedBy: kwepems500001.china.huawei.com (7.221.188.70) To
  dggpemf500011.china.huawei.com (7.185.36.131)
 X-Rspamd-Action: no action
 X-Spamd-Result: default: False [-7.66 / 15.00];
@@ -110,47 +110,44 @@ X-Spamd-Result: default: False [-7.66 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[huawei.com,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
 	R_DKIM_ALLOW(-0.20)[huawei.com:s=dkim];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
+	FREEMAIL_CC(0.00)[outlook.com,arm.com,alpha.franken.de,kernel.org,dabbelt.com,eecs.berkeley.edu,ghiti.fr,redhat.com,alien8.de,linux.intel.com,zytor.com,infradead.org,amd.com,linaro.org,google.com,gmail.com,arndb.de,vger.kernel.org,lists.infradead.org];
+	TAGGED_FROM(0.00)[bounces-15194-lists,linux-mips=lfdr.de];
+	RCVD_TLS_LAST(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
 	FORGED_SENDER(0.00)[ruanjinjie@huawei.com,linux-mips@vger.kernel.org];
 	RCPT_COUNT_TWELVE(0.00)[40];
-	FORWARDED(0.00)[lists@lfdr.de];
-	MIME_TRACE(0.00)[0:+];
-	TAGGED_FROM(0.00)[bounces-15193-lists,linux-mips=lfdr.de];
-	TO_DN_EQ_ADDR_SOME(0.00)[];
-	RCVD_TLS_LAST(0.00)[];
 	FORGED_RECIPIENTS(0.00)[m:will@kernel.org,m:mhklinux@outlook.com,m:catalin.marinas@arm.com,m:tsbogend@alpha.franken.de,m:pjw@kernel.org,m:palmer@dabbelt.com,m:aou@eecs.berkeley.edu,m:alex@ghiti.fr,m:tglx@kernel.org,m:mingo@redhat.com,m:bp@alien8.de,m:dave.hansen@linux.intel.com,m:hpa@zytor.com,m:peterz@infradead.org,m:kees@kernel.org,m:nathan@kernel.org,m:linusw@kernel.org,m:ojeda@kernel.org,m:david.kaplan@amd.com,m:lukas.bulwahn@redhat.com,m:ryan.roberts@arm.com,m:maz@kernel.org,m:timothy.hayes@arm.com,m:lpieralisi@kernel.org,m:thuth@redhat.com,m:oupton@kernel.org,m:yeoreum.yun@arm.com,m:miko.lenczewski@arm.com,m:broonie@kernel.org,m:kevin.brodsky@arm.com,m:james.clark@linaro.org,m:tabba@google.com,m:mrigendra.chaubey@gmail.com,m:arnd@arndb.de,m:anshuman.khandual@arm.com,m:x86@kernel.org,m:linux-kernel@vger.kernel.org,m:linux-arm-kernel@lists.infradead.org,m:linux-mips@vger.kernel.org,m:linux-riscv@lists.infradead.org,m:mrigendrachaubey@gmail.com,s:lists@lfdr.de];
-	FREEMAIL_CC(0.00)[outlook.com,arm.com,alpha.franken.de,kernel.org,dabbelt.com,eecs.berkeley.edu,ghiti.fr,redhat.com,alien8.de,linux.intel.com,zytor.com,infradead.org,amd.com,linaro.org,google.com,gmail.com,arndb.de,vger.kernel.org,lists.infradead.org];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	TO_DN_EQ_ADDR_SOME(0.00)[];
+	FORWARDED(0.00)[lists@lfdr.de];
+	DKIM_TRACE(0.00)[huawei.com:+];
+	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
+	RSPAMD_EMAILBL_FAIL(0.00)[ruanjinjie@huawei.com:query timed out];
 	PRECEDENCE_BULK(0.00)[];
 	FORGED_SENDER_FORWARDING(0.00)[];
 	FROM_NEQ_ENVFROM(0.00)[ruanjinjie@huawei.com,linux-mips@vger.kernel.org];
 	FROM_HAS_DN(0.00)[];
-	DKIM_TRACE(0.00)[huawei.com:+];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	RCVD_COUNT_FIVE(0.00)[6];
 	MID_RHS_MATCH_FROM(0.00)[];
 	TO_DN_SOME(0.00)[];
 	ALIAS_RESOLVED(0.00)[];
 	TAGGED_RCPT(0.00)[linux-mips];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[vger.kernel.org:from_smtp,tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[vger.kernel.org:from_smtp,sin.lore.kernel.org:rdns,sin.lore.kernel.org:helo,huawei.com:dkim,huawei.com:email,huawei.com:mid,huawei.com:from_mime]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: D01526BCF67
+X-Rspamd-Queue-Id: 492C86BD275
 
 
 
-On 6/23/2026 10:33 PM, Will Deacon wrote:
-> On Mon, Jun 22, 2026 at 05:16:30PM +0800, Jinjie Ruan wrote:
->>
->>
+On 6/23/2026 10:30 PM, Will Deacon wrote:
+> On Mon, Jun 22, 2026 at 04:06:38PM +0800, Jinjie Ruan wrote:
 >> On 6/18/2026 8:21 PM, Will Deacon wrote:
->>> Hi Jinjie,
->>>
 >>> On Mon, Jun 15, 2026 at 04:51:48PM +0800, Jinjie Ruan wrote:
 >>>> On 6/12/2026 11:45 PM, Michael Kelley wrote:
 >>>>> From: Jinjie Ruan <ruanjinjie@huawei.com> Sent: Thursday, June 11, 2026 6:38 AM
@@ -179,8 +176,6 @@ On 6/23/2026 10:33 PM, Will Deacon wrote:
 >>>>> The last two rows seem mixed up. I would expect parallel=0 to
 >>>>> result in a longer boot time.
 >>>>
->>>> Hi, Michael,
->>>>
 >>>> The results are correct and not mixed up.
 >>>>
 >>>> Compared to the original non‑HOTPLUG_PARALLEL approach, the advantage of
@@ -194,105 +189,119 @@ On 6/23/2026 10:33 PM, Will Deacon wrote:
 >>> arm64, in all honesty. The yield instruction typically doesn't do
 >>> anything on actual arm64 silicon, so this probably means that you're
 >>> introducing busy-loops which tend to be bad for power and scalability.
->>>
->>> I implemented this a while ago [1] but didn't manage to see much in terms
->>> of performance improvement and so I didn't bother to send the patches out
->>> after talking about it at KVM forum [2]. However, as mentioned at the end
->>> of that talk, it _is_ still useful for confidential VMs using PSCI so
->>> let me dust off my old series and send it out to see what you think.
 >>
->> Hi Will,
->>
->> Thanks for the insights! Your point about using PSCI v0.2's Context ID
->> to avoid the NR_CPUS array for input parameters (like
->> secondary_data.task) is incredibly elegant.
->>
->> However, if I understand your series correctly, it seems your approach
->> primarily targets preventing the concurrent use of secondary_data.task,
->> but it doesn't seem to account for the potential data trampling on
->> secondary_data.status when multiple secondary CPUs are brought up
->> simultaneously.
->>
->> update_cpu_boot_status()
->>   -> WRITE_ONCE(secondary_data.status.flags[val], 1)
->>
->> arch_cpuhp_cleanup_kick_cpu()
->>   -> status = READ_ONCE(secondary_data.status)
+>> After updating the implementation in v2, the performance gains are
+>> primarily observed on actual hardware.
 > 
-> I need to dust it back off but IIRC I made that thing a byte array, with
-> a separate byte for each failure reason.
-> 
-> Will
+> ... but that's presumably because the secondary cores are busy-looping.
+> That's not something we should do during boot. It might be "fast" on
+> your machine but it will probably be "hot" as well.
 
 Hi, Will,
 
-Thanks for the clarification. A byte array with a separate byte per
-failure reason does prevent trampling between different failure types.
+I see your point regarding the 'hot boot' issue, which is indeed a valid
+concern for power-constrained devices,
 
-However, the issue arises if multiple secondary CPUs fail for the exact
-same reason simultaneously. In that scenario, they will still attempt to
-write to the same byte index at the same time. As a result, the primary
-CPU reading the status later won't be able to distinguish which specific
-CPUs encountered the problem, or how many of them failed.
+My optimization is tailored for servers and continuously powered single
+boards, where boot-up speed is much more critical than temporary power
+usage during the early boot phase.
 
-I test your patch with error inject, which configures CPU4 and CPU6,
-along with CPU16 and CPU18, to generate distinct boot failures, while
-making CPU17 hit the same boot failure as CPU16. The output is not
-correct as below:
+Perhaps we could replace the "yield" instruction with "WFE / SEV"
+instructions to coordinate the parallel boot of the primary and
+secondary cores. This approach would allow the secondary cores to enter
+a low-power standby state rather than busy-looping, effectively
+preventing the thermal and power issues on battery-constrained machines.
 
-[    0.332528] smp: Bringing up secondary CPUs ...
-[   10.674114] CPU1 failed to report alive state
-[   10.674392] CPU1 detected lack of support for 52-bit VAs
-[   10.674610] CPUs may be stuck in kernel
-[   21.016707] CPU2 failed to report alive state
-[   31.357320] CPU3 failed to report alive state
-[   41.693228] CPU4 failed to report alive state
-[   52.033112] CPU5 failed to report alive state
-[   62.378198] CPU6 failed to report alive state
-[   72.716467] CPU7 failed to report alive state
-[   83.046746] CPU8 failed to report alive state
-[   93.338020] CPU9 failed to report alive state
-[  103.591986] CPU10 failed to report alive state
-[  113.893741] CPU11 failed to report alive state
-[  124.230870] CPU12 failed to report alive state
-[  134.567597] CPU13 failed to report alive state
-[  144.905256] CPU14 failed to report alive state
-[  155.247633] CPU15 failed to report alive state
-[  165.584891] CPU16 failed to report alive state
-[  175.920794] CPU17 failed to report alive state
-[  186.256323] CPU18 failed to report alive state
-[  196.596136] CPU19 failed to report alive state
+> 
+>>> I implemented this a while ago [1] but didn't manage to see much in terms
+>>> of performance improvement and so I didn't bother to send the patches out
+>>
+>> As shown in v2 below, on actual hardware, this results in a 40%–60%
+>> reduction in boot time.
+>>
+>> Bringup Time Comparison (ms, lower is better):
+>>
+>> |     Platform		| Baseline|   P=0   |   P=1  | Delta(%)|
+>> | --------------------- | ------- | ------- | ------ | ------- |
+>> | 64-core ATF QEMU	| 2075.8  | 2080.7  | 1653.4 | 20.34%  |
+>> | 192-core server(HIP12)| 14619.2 | 14619.1 | 8589.4 | 41.21%  |
+>> | 32-core board	        | 2776.5  | 2881.0  | 1045.0 | 62.36%  |
+>>
+>> Link:
+>> https://lore.kernel.org/all/20260618092444.1316336-5-ruanjinjie@huawei.com/
+> 
+> To be honest, I'm pretty confused with all these numbers. Your first
+> table above suggests that parallel boot is *slower* but then this table
+> suggests the opposite. However, it also has a QEMU entry despite being
+> "on actual hardware". Is that in a VM?
 
-The expected output is as below:
+Sorry, there is a little confused. 192-core server(HIP12) and 32-core
+board are tested on real hardware, which has 40%–60% reduction in boot time.
 
-        CPU4 failed to report alive state
-        CPU4: is stuck in kernel
-        CPU4: does not support 52-bit VAs
+> 
+>>> after talking about it at KVM forum [2]. However, as mentioned at the end
+>>> of that talk, it _is_ still useful for confidential VMs using PSCI so
+>>> let me dust off my old series and send it out to see what you think.
+>>>
+>>> It relies on PSCI v0.2, which means we don't need the NR_CPUS size array
+>>> for secondary_data and I also have some support for error handling (it
+>>> doesn't look like you handle __early_cpu_boot_status properly).
+>>
+>> I need some time to look closely at your patch. Alternatively, I will
+>> integrate your changes, re-test everything on actual hardware, and then
+>> send out a revised version.
+> 
+> Please just give me a week or so to rebase my changes and send them out
+> for discussion. It'll be interesting to see what numbers you get.
 
-        CPU6 failed to report alive state
-        CPU6: is stuck in kernel
-        CPU6: does not support 4K granule
+Sounds good! Take your time, and I'm looking forward to your series.
 
-        GICv3: CPU8: found redistributor 8 region 0:0x00000000081a0000
-        GICv3: CPU8: using allocated LPI pending table @0x0000000100360000
-        CPU8: Booted secondary processor 0x0000000008 [0x410fd034]
-        ...
-        CPU16 failed to report alive state
-        psci: CPU16 killed (polled 0 ms)
-        CPU16: died during early boot
+In the meantime, I have just sent out v3 of this patch. While working
+closely with your previous code, I identified a few bugs (including the
+multi-CPU status trampling issue we discussed) and addressed them in
+this new version.I wanted to share v3 with you now so you can easily
+review the fixes and potentially integrate them when you rebase your
+changes next week. It also includes the updated performance numbers on
+my setup for your reference.
 
-        CPU17: will not boot
-        CPU17 failed to report alive state
-        psci: CPU17 killed (polled 0 ms)
-        CPU17: died during early boot
+Link:
+https://lore.kernel.org/all/20260624092537.2916971-1-ruanjinjie@huawei.com/
 
-        CPU18 failed to report alive state
-        Kernel panic - not syncing: CPU18 detected unsupported configuration
+Looking forward to the discussion!
 
 Best regards,
 Jinjie
 
-
+> 
+>> It seems that the following patch removing
+>> `rcutree_report_cpu_starting()` will reintroduce the original issue as
+>> commit ce3d31ad3cac ("arm64/smp: Move
+>> rcu_cpu_starting() earlier") soloved.
+>>
+>> Link:
+>> https://web.git.kernel.org/pub/scm/linux/kernel/git/will/linux.git/commit/?h=cpu-hotplug&id=bba4b62f45f2614bf6085e6cd3f233528f85bf26
+>>
+>> Indeed, I also noticed that the invocation order of
+>> rcutree_report_cpu_starting() on arm64 is somewhat suboptimal. It
+>> hinders the implementation of parallel bringup on arm64 and could
+>> potentially lead to RCU stalls.
+>>
+>> Link:
+>> https://lore.kernel.org/all/20260618092444.1316336-4-ruanjinjie@huawei.com/
+>>
+>> [    0.329017] smp: Bringing up secondary CPUs ...
+>> [    0.343628] Detected VIPT I-cache on CPU1
+>> [    0.343788]
+>> [    0.343806] =============================
+>> [    0.343816] WARNING: suspicious RCU usage
+>> [    0.343966] 7.1.0-rc1-g27c1871848a2 #109 Not tainted
+>> [    0.344087] -----------------------------
+>> [    0.344098] kernel/locking/lockdep.c:3801 RCU-list traversed in
+>> non-reader section!!
+> 
+> Thanks, I'll look into this.
+> 
+> Will
 > 
 
 
