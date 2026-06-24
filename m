@@ -1,55 +1,56 @@
-Return-Path: <linux-mips+bounces-15181-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-15184-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id CGe9G8yiO2qkaggAu9opvQ
-	(envelope-from <linux-mips+bounces-15181-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Wed, 24 Jun 2026 11:26:36 +0200
+	id H71HFL6iO2qgaggAu9opvQ
+	(envelope-from <linux-mips+bounces-15184-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Wed, 24 Jun 2026 11:26:22 +0200
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id D8B586BCEB8
-	for <lists+linux-mips@lfdr.de>; Wed, 24 Jun 2026 11:26:35 +0200 (CEST)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 24BA56BCEAA
+	for <lists+linux-mips@lfdr.de>; Wed, 24 Jun 2026 11:26:21 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=huawei.com header.s=dkim header.b="q4D2r/tL";
-	spf=pass (mail.lfdr.de: domain of "linux-mips+bounces-15181-lists+linux-mips=lfdr.de@vger.kernel.org" designates 172.105.105.114 as permitted sender) smtp.mailfrom="linux-mips+bounces-15181-lists+linux-mips=lfdr.de@vger.kernel.org";
+	dkim=pass header.d=huawei.com header.s=dkim header.b=enxJSVfC;
+	spf=pass (mail.lfdr.de: domain of "linux-mips+bounces-15184-lists+linux-mips=lfdr.de@vger.kernel.org" designates 2600:3c09:e001:a7::12fc:5321 as permitted sender) smtp.mailfrom="linux-mips+bounces-15184-lists+linux-mips=lfdr.de@vger.kernel.org";
 	dmarc=pass (policy=quarantine) header.from=huawei.com;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id D4CB73042021
-	for <lists+linux-mips@lfdr.de>; Wed, 24 Jun 2026 09:26:18 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 8D11F30315FA
+	for <lists+linux-mips@lfdr.de>; Wed, 24 Jun 2026 09:26:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 678423B2D18;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BBDA73B2FC8;
 	Wed, 24 Jun 2026 09:26:17 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
-Received: from canpmsgout02.his.huawei.com (canpmsgout02.his.huawei.com [113.46.200.217])
+Received: from canpmsgout03.his.huawei.com (canpmsgout03.his.huawei.com [113.46.200.218])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8312D3A257F;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2539A3B14B9;
 	Wed, 24 Jun 2026 09:26:00 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782293176; cv=none; b=DxxhoJ2w3zjNINbY7VvVNP2qDlkFRkj2FPu5Pk1T2oaQAArCGKY9vsvLdWTFXufFF/or7204EZge0Y1CnfaMpBqkaKAFs4uMozzehSd0bvPulcO/FR3RuwF8WsFGNGuCuhZRgB3VyWk4JY1CIyO9CaYAd9Txt/uXcal3W1qSMao=
+	t=1782293177; cv=none; b=rQ8cShpaogEp734n9PXNU28dGRg3VJmPrHC1era/uYJqHP0/6+f3PG4N1XBj1VnPlu7h9Tv+1ooyKl58aTCD5s8yVhbnPpgyhKwYOITl2mvUe76MCc6+Haui1uwH8DgpqkiAA3dJXs3SHj5byw17KixzfRXU83nuyMUXYlSt2Co=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782293176; c=relaxed/simple;
-	bh=FrJMqTula744JwBxAlpoIPkaVXjNIrphhwWEBCx+IlU=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=poLfbwK7CCdx5XkMH979muGS4+V69pwlBqV7RJp0jsPgNhaTi19SLImihF+Zh3ue4OdeKYkpxyK1ZcyaH/Xs/C6qWaANd922d4pI99VZHbfh7eHEUsSlCamcReNQh3oRlvWZXLbyPM71mDKZVEuFDBynqkLbT0LHcFCeEGDD7H0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=q4D2r/tL; arc=none smtp.client-ip=113.46.200.217
+	s=arc-20240116; t=1782293177; c=relaxed/simple;
+	bh=ZkSc8oOfBnEJa1D7TuUPY5a7RIKEXVHObL9kf4KsUoo=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=BZjLe8Lj4xpQz+wzt7cO48BJQeRJ5x1P5G8lhYlFygHwblAFU0Zwh6kXWtxcts2pRecXFQuDUxOJnLJ+GJRcbqHpgxwhDDYohxn+QbE6Sj+cLI2U/zC7TlrjNwYWZFg13CFL9UQ1BLJxbyfNWdoryqHP3YnGvbHCIeI51E2jIVY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=enxJSVfC; arc=none smtp.client-ip=113.46.200.218
 dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
 	c=relaxed/relaxed; q=dns/txt;
 	h=From;
-	bh=6rmLKcb4WRNUXeQ7hP00fLUu61cNXG6u4DRE42LSnkk=;
-	b=q4D2r/tLrukbpLa/BUPY4FNk0Rx6P78YcaJiOiT4ZZlm6uBYwK7G398712jx5Zbewg4V5auz3
-	Vln6V+6ykBK44Mw5jJmHHFvX13lL1Rr10sni/YEZ5EQV0A8sqS75Xkq2fMiSmfEgfmm81rLxlZZ
-	2Aj0J5TQZVq38VhWptzWepc=
-Received: from mail.maildlp.com (unknown [172.19.162.140])
-	by canpmsgout02.his.huawei.com (SkyGuard) with ESMTPS id 4glbtJ1DCYzcZyp;
-	Wed, 24 Jun 2026 17:17:12 +0800 (CST)
+	bh=uuIHUavUzhyt/C6rQx8OpYKtXN7bn3za9grEbqeMnzo=;
+	b=enxJSVfC9LiH4Y+dT+G/S2D94z7Dr6pXIahi1+GYklbX25doXvQefgoSHtbXgcCvPoPkIFUUB
+	ctA58VRp1/unD68P0rnXpOGmByvrJoOx6WiXUc3KnASoYDXp+5+JehC8x4KOMW4DT9nsN5u/m0B
+	PBW4ysVB5DaZFW43EeRhcXE=
+Received: from mail.maildlp.com (unknown [172.19.163.0])
+	by canpmsgout03.his.huawei.com (SkyGuard) with ESMTPS id 4glbtm4Sj7zpSvJ;
+	Wed, 24 Jun 2026 17:17:36 +0800 (CST)
 Received: from dggpemf500011.china.huawei.com (unknown [7.185.36.131])
-	by mail.maildlp.com (Postfix) with ESMTPS id B19E22012A;
-	Wed, 24 Jun 2026 17:25:49 +0800 (CST)
+	by mail.maildlp.com (Postfix) with ESMTPS id 1B56240537;
+	Wed, 24 Jun 2026 17:25:52 +0800 (CST)
 Received: from huawei.com (10.90.53.73) by dggpemf500011.china.huawei.com
  (7.185.36.131) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Wed, 24 Jun
- 2026 17:25:47 +0800
+ 2026 17:25:49 +0800
 From: Jinjie Ruan <ruanjinjie@huawei.com>
 To: <catalin.marinas@arm.com>, <will@kernel.org>, <tsbogend@alpha.franken.de>,
 	<tglx@kernel.org>, <mingo@redhat.com>, <bp@alien8.de>,
@@ -70,10 +71,12 @@ To: <catalin.marinas@arm.com>, <will@kernel.org>, <tsbogend@alpha.franken.de>,
 	<linux-kernel@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
 	<linux-mips@vger.kernel.org>
 CC: <ruanjinjie@huawei.com>
-Subject: [PATCH v3 00/12] arm64: Add HOTPLUG_PARALLEL support for secondary CPUs
-Date: Wed, 24 Jun 2026 17:25:25 +0800
-Message-ID: <20260624092537.2916971-1-ruanjinjie@huawei.com>
+Subject: [PATCH v3 01/12] cpu/hotplug: Introduce CONFIG_HOTPLUG_PARALLEL_SMT
+Date: Wed, 24 Jun 2026 17:25:26 +0800
+Message-ID: <20260624092537.2916971-2-ruanjinjie@huawei.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20260624092537.2916971-1-ruanjinjie@huawei.com>
+References: <20260624092537.2916971-1-ruanjinjie@huawei.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -93,20 +96,20 @@ X-Spamd-Result: default: False [-6.16 / 15.00];
 	R_MISSING_CHARSET(0.50)[];
 	DMARC_POLICY_ALLOW(-0.50)[huawei.com,quarantine];
 	R_DKIM_ALLOW(-0.20)[huawei.com:s=dkim];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	FORWARDED(0.00)[lists@lfdr.de];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-15181-lists,linux-mips=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-15184-lists,linux-mips=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
 	FREEMAIL_TO(0.00)[arm.com,kernel.org,alpha.franken.de,redhat.com,alien8.de,linux.intel.com,zytor.com,infradead.org,amd.com,gmail.com,linaro.org,hisilicon.com,google.com,fb.com,arndb.de,linux-foundation.org,os.amperecomputing.com,chinatelecom.cn,linux.ibm.com,linux.dev,intel.com,vger.kernel.org,lists.infradead.org];
 	FORGED_SENDER(0.00)[ruanjinjie@huawei.com,linux-mips@vger.kernel.org];
 	FORGED_RECIPIENTS(0.00)[m:catalin.marinas@arm.com,m:will@kernel.org,m:tsbogend@alpha.franken.de,m:tglx@kernel.org,m:mingo@redhat.com,m:bp@alien8.de,m:dave.hansen@linux.intel.com,m:hpa@zytor.com,m:peterz@infradead.org,m:kees@kernel.org,m:nathan@kernel.org,m:linusw@kernel.org,m:ojeda@kernel.org,m:david.kaplan@amd.com,m:lukas.bulwahn@redhat.com,m:ryan.roberts@arm.com,m:maz@kernel.org,m:timothy.hayes@arm.com,m:lpieralisi@kernel.org,m:thuth@redhat.com,m:menglong8.dong@gmail.com,m:oupton@kernel.org,m:yeoreum.yun@arm.com,m:miko.lenczewski@arm.com,m:broonie@kernel.org,m:kevin.brodsky@arm.com,m:james.clark@linaro.org,m:yangyicong@hisilicon.com,m:tabba@google.com,m:osandov@fb.com,m:arnd@arndb.de,m:anshuman.khandual@arm.com,m:david@kernel.org,m:akpm@linux-foundation.org,m:ljs@kernel.org,m:dev.jain@arm.com,m:yang@os.amperecomputing.com,m:chaitanyas.prakash@arm.com,m:kprateek.nayak@amd.com,m:chenl311@chinatelecom.cn,m:sshegde@linux.ibm.com,m:thorsten.blum@linux.dev,m:chang.seok.bae@intel.com,m:t
  im.c.chen@linux.intel.com,m:x86@kernel.org,m:linux-kernel@vger.kernel.org,m:linux-arm-kernel@lists.infradead.org,m:linux-mips@vger.kernel.org,m:ruanjinjie@huawei.com,m:menglong8dong@gmail.com,s:lists@lfdr.de];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
 	FORGED_SENDER_FORWARDING(0.00)[];
@@ -119,170 +122,101 @@ X-Spamd-Result: default: False [-6.16 / 15.00];
 	TO_DN_NONE(0.00)[];
 	TAGGED_RCPT(0.00)[linux-mips];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[vger.kernel.org:from_smtp,huawei.com:dkim,huawei.com:mid,huawei.com:from_mime,tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo,sashiko.dev:url]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:rdns,sto.lore.kernel.org:helo,vger.kernel.org:from_smtp,huawei.com:dkim,huawei.com:email,huawei.com:mid,huawei.com:from_mime]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: D8B586BCEB8
+X-Rspamd-Queue-Id: 24BA56BCEAA
 
-Support for parallel secondary CPU bringup is already utilized by x86,
-MIPS, and RISC-V. This patch brings this capability to the arm64
-architecture.
+During parallel CPU bringup, x86 requires primary SMT threads to boot
+first to avoid siblings stopping during microcode updates. This constraint
+is architecture-specific and unnecessary for other platforms
+like arm64.
 
-Introduce CONFIG_HOTPLUG_PARALLEL_SMT to avoid primary SMT threads
-to boot first constraint.
+Introduce CONFIG_HOTPLUG_PARALLEL_SMT to decouple this constraint.
+Platforms requiring this temporal order (e.g., x86) can select it
+in Kconfig. Other architectures (e.g., arm64) can leave it unselected
+to entirely bypass the SMT branch.
 
-And add a 'cpu' parameter to update_cpu_boot_status() to allow updating
-the boot status at a per-CPU granularity during parallel bringup.
+Suggested-by: Thomas Gleixner <tglx@kernel.org>
+Signed-off-by: Jinjie Ruan <ruanjinjie@huawei.com>
+---
+ arch/Kconfig      | 5 +++++
+ arch/mips/Kconfig | 3 +--
+ arch/x86/Kconfig  | 2 +-
+ kernel/cpu.c      | 4 ++--
+ 4 files changed, 9 insertions(+), 5 deletions(-)
 
-Rework the global `secondary_data` and `__early_cpu_boot_status` accessed
-during early boot into per-CPU arrays to allow secondary CPUs to boot
-in parallel.
-
-And reuse `__cpu_logical_map` array in the early boot code in head.S
-to resolve each secondary CPU's logical ID concurrently.
-
-This series includes a subset of the refactoring patches proposed
-by Will Deacon, with further adjustments.
-
-Link: https://web.git.kernel.org/pub/scm/linux/kernel/git/will/linux.git/log/?h=cpu-hotplug
-
-Bringup Time Comparison on real hardware(ms, lower is better):
-
- |     Platform                     | Baseline|   P=0   |   P=1  | Delta(%)|
- | -------------------------------- | ------- | ------- | ------ | ------- |
- | 192-core server(HIP12)           | 14619.2 | 14619.1 | 8589.4 | 41.21%  |
- | 32-core board                    | 2776.5  | 2881.0  | 1045.0 | 62.36%  |
- | 64-core board                    | 2297.0  |    /    | 814.4  | 64.5%   |
-
-Below is the actual dmesg output demonstrating four concurrent boot
-failures on different CPUs:
-
-	CPU4 failed to report alive state
-	CPU4: is stuck in kernel
-	CPU4: does not support 52-bit VAs
-
-	CPU6 failed to report alive state
-	CPU6: is stuck in kernel
-	CPU6: does not support 4K granule
-
-	GICv3: CPU8: found redistributor 8 region 0:0x00000000081a0000
-	GICv3: CPU8: using allocated LPI pending table @0x0000000100360000
-	CPU8: Booted secondary processor 0x0000000008 [0x410fd034]
-	...
-	CPU16 failed to report alive state
-	psci: CPU16 killed (polled 0 ms)
-	CPU16: died during early boot
-
-	CPU17: will not boot
-	CPU17 failed to report alive state
-	psci: CPU17 killed (polled 0 ms)
-	CPU17: died during early boot
-
-	CPU18 failed to report alive state
-	Kernel panic - not syncing: CPU18 detected unsupported configuration
-	CPU: 0 UID: 0 PID: 1 Comm: swapper/0 Not tainted 7.1.0-rc1-gdd2d3bbca3b5 #151 PREEMPT
-	Hardware name: linux,dummy-virt (DT)
-	Call trace:
-	 show_stack+0x18/0x24 (C)
-	 dump_stack_lvl+0x38/0xd0
-	 dump_stack+0x18/0x24
-	 vpanic+0x4f8/0x4fc
-	 do_panic_on_target_cpu+0x0/0x1c
-	 secondary_start_kernel+0x0/0x17c
-	 cpuhp_bringup_ap+0x2cc/0x2dc
-	 cpuhp_invoke_callback+0x168/0x2ac
-	 __cpuhp_invoke_callback_range+0x90/0x118
-	 _cpu_up+0x148/0x220
-	 cpu_up+0xcc/0x158
-	 cpuhp_bringup_mask.constprop.0+0x80/0xcc
-	 bringup_nonboot_cpus+0x38/0x80
-	 smp_init+0x30/0x8c
-	 kernel_init_freeable+0x170/0x35c
-	 kernel_init+0x24/0x1e0
-	 ret_from_fork+0x10/0x20
-	SMP: stopping secondary CPUs
-	---[ end Kernel panic - not syncing: CPU18 detected unsupported configuration ]---
-
-Changes in v3:
-- Add necessary rework patches.
-- Fix AI review issues in [2].
-  1. Use lockdep_off() and lockdep_on to resolve the lockdep splat
-     on failure paths, which avoid printk_deferred() and solve
-     the pr_fmt() prefix issue or missing update.
-  2. Ensure atomic updates to system_cpucaps bitmap for arm64 cpufeature.
-  3. Use NR_CPUS __early_cpu_boot_status array in head.S and not clear
-     __early_cpu_boot_status.
-  4. Solve get_cpu_ops(0) which evaluates to the boot CPU issue in
-    arch_cpuhp_init_parallel_bringup() with Will's rework patch.
-- Handle `__early_cpu_boot_status` properly as Will pointed out with
-  Will's patch.
-- Implement arch_cpuhp_cleanup_kick_cpu() to cleanup for fail boot
-  secondary CPUS and add support for error handling with Will's patch.
-- Update the code as Thomas suggested. Rename PARALLEL_SMT_PRIMARY_FIRST
-  to `HOTPLUG_PARALLEL_SMT` and not select it for RISC-V.
-- Select HOTPLUG_PARALLEL if SMP as Thomas suggested.
-- Rework early boot data into per-CPU arrays directly rather than using
-  CONFIG_HOTPLUG_PARALLEL to differentiate code paths as Thomas suggested.
-- Remove `cpu_running` and related complete.
-- Add new test data on new hardware.
-
-[2]: https://sashiko.dev/#/patchset/20260618092444.1316336-1-ruanjinjie%40huawei.com
-
-Changes in v2:
-- Remove RFC.
-- Add Tested-by.
-- Fix AI review issues in [1].
-- Add arch_cpuhp_init_parallel_bringup() to check psci boot.
-- Reuse `__cpu_logical_map` instead of a new aray.
-- Defer rcutree_report_cpu_starting() until after
-  check_local_cpu_capabilities() to prevent a potential control CPU
-  deadlock if an early capability check fails.
-- Move the assembly in head.S to a macro called `mpidr_to_cpuid`.
-- Add `SECONDARY_DATA_SHIFT` for `lsl` to access `cpu_boot_data`.
-- Add sizeof(struct secondary_data) power of 2 assert check.
-- Expand testing with more data collected from real hardware.
-
-[1] https://sashiko.dev/#/patchset/20260611133809.3854977-1-ruanjinjie%40huawei.com
-
-Jinjie Ruan (5):
-  cpu/hotplug: Introduce CONFIG_HOTPLUG_PARALLEL_SMT
-  arm64: cpufeature: Ensure atomic updates to system_cpucaps bitmap
-  arm64: smp: Pass CPU ID to update_cpu_boot_status()
-  arm64: smp: Rework early boot data into per-CPU arrays
-  arm64: Add HOTPLUG_PARALLEL support for secondary CPUs
-
-Will Deacon (7):
-  cpu/hotplug: Propagate bring-up status to
-    arch_cpuhp_cleanup_kick_cpu()
-  arm64: smp: Tidy up smp_prepare_cpus()
-  arm64: smp: Tidy up cpuinfo init and cpufeature updates
-  arm64: smp: Defer RCU registration during secondary CPU bringup
-  arm64: smp: Use generic HOTPLUG_SPLIT_STARTUP machinery for CPU
-    onlining
-  arm64: cpu_ops: Make 'cpu_operations' pointer global instead of
-    per-cpu
-  arm64: cpu_ops: Introduce get_secondary_cpu_ops()
-
- arch/Kconfig                     |   5 ++
- arch/arm64/Kconfig               |   2 +-
- arch/arm64/include/asm/cpu.h     |   6 +-
- arch/arm64/include/asm/cpu_ops.h |   1 +
- arch/arm64/include/asm/smp.h     |  22 +++---
- arch/arm64/kernel/asm-offsets.c  |   2 +
- arch/arm64/kernel/cpu_ops.c      |  34 ++++++---
- arch/arm64/kernel/cpufeature.c   |  27 +++++--
- arch/arm64/kernel/cpuinfo.c      |  11 ---
- arch/arm64/kernel/head.S         |  44 ++++++++++--
- arch/arm64/kernel/setup.c        |   9 +++
- arch/arm64/kernel/smp.c          | 118 +++++++++++++++++--------------
- arch/arm64/mm/context.c          |   5 +-
- arch/arm64/mm/mmu.c              |   2 +-
- arch/mips/Kconfig                |   3 +-
- arch/x86/Kconfig                 |   2 +-
- arch/x86/kernel/smpboot.c        |   4 +-
- include/linux/cpuhotplug.h       |   2 +-
- kernel/cpu.c                     |   8 +--
- 19 files changed, 189 insertions(+), 118 deletions(-)
-
+diff --git a/arch/Kconfig b/arch/Kconfig
+index e86880045158..d25b61dc03b2 100644
+--- a/arch/Kconfig
++++ b/arch/Kconfig
+@@ -102,6 +102,11 @@ config HOTPLUG_PARALLEL
+ 	bool
+ 	select HOTPLUG_SPLIT_STARTUP
+ 
++config HOTPLUG_PARALLEL_SMT
++	bool
++	select HOTPLUG_PARALLEL
++	select HOTPLUG_SMT
++
+ config GENERIC_IRQ_ENTRY
+ 	bool
+ 
+diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
+index 4364f3dba688..8d9c57f3df23 100644
+--- a/arch/mips/Kconfig
++++ b/arch/mips/Kconfig
+@@ -660,7 +660,7 @@ config EYEQ
+ 	select USB_UHCI_BIG_ENDIAN_DESC if CPU_BIG_ENDIAN
+ 	select USB_UHCI_BIG_ENDIAN_MMIO if CPU_BIG_ENDIAN
+ 	select USE_OF
+-	select HOTPLUG_PARALLEL if HOTPLUG_CPU
++	select HOTPLUG_PARALLEL_SMT if HOTPLUG_CPU
+ 	help
+ 	  Select this to build a kernel supporting EyeQ SoC from Mobileye.
+ 
+@@ -2301,7 +2301,6 @@ config MIPS_CPS
+ 	select MIPS_CM
+ 	select MIPS_CPS_PM if HOTPLUG_CPU
+ 	select SMP
+-	select HOTPLUG_SMT if HOTPLUG_PARALLEL
+ 	select HOTPLUG_CORE_SYNC_DEAD if HOTPLUG_CPU
+ 	select SYNC_R4K if (CEVT_R4K || CSRC_R4K)
+ 	select SYS_SUPPORTS_HOTPLUG_CPU
+diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+index f3f7cb01d69d..2ea80da1e4f8 100644
+--- a/arch/x86/Kconfig
++++ b/arch/x86/Kconfig
+@@ -305,7 +305,7 @@ config X86
+ 	select HAVE_USER_RETURN_NOTIFIER
+ 	select HAVE_GENERIC_VDSO
+ 	select VDSO_GETRANDOM			if X86_64
+-	select HOTPLUG_PARALLEL			if SMP && X86_64
++	select HOTPLUG_PARALLEL_SMT		if SMP && X86_64
+ 	select HOTPLUG_SMT			if SMP
+ 	select HOTPLUG_SPLIT_STARTUP		if SMP && X86_32
+ 	select IRQ_FORCED_THREADING
+diff --git a/kernel/cpu.c b/kernel/cpu.c
+index bc4f7a9ba64e..5a90f60ff60e 100644
+--- a/kernel/cpu.c
++++ b/kernel/cpu.c
+@@ -1792,7 +1792,7 @@ static int __init parallel_bringup_parse_param(char *arg)
+ }
+ early_param("cpuhp.parallel", parallel_bringup_parse_param);
+ 
+-#ifdef CONFIG_HOTPLUG_SMT
++#ifdef CONFIG_HOTPLUG_PARALLEL_SMT
+ static inline bool cpuhp_smt_aware(void)
+ {
+ 	return cpu_smt_max_threads > 1;
+@@ -1811,7 +1811,7 @@ static inline const struct cpumask *cpuhp_get_primary_thread_mask(void)
+ {
+ 	return cpu_none_mask;
+ }
+-#endif
++#endif /* CONFIG_HOTPLUG_PARALLEL_SMT */
+ 
+ bool __weak arch_cpuhp_init_parallel_bringup(void)
+ {
 -- 
 2.34.1
 
