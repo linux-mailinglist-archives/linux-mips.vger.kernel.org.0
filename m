@@ -1,56 +1,56 @@
-Return-Path: <linux-mips+bounces-15183-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-15180-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id F6tON86iO2qmaggAu9opvQ
-	(envelope-from <linux-mips+bounces-15183-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Wed, 24 Jun 2026 11:26:38 +0200
+	id s9liLcWiO2qhaggAu9opvQ
+	(envelope-from <linux-mips+bounces-15180-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Wed, 24 Jun 2026 11:26:29 +0200
 X-Original-To: lists+linux-mips@lfdr.de
 Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 98D3F6BCEC3
-	for <lists+linux-mips@lfdr.de>; Wed, 24 Jun 2026 11:26:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 35E686BCEAF
+	for <lists+linux-mips@lfdr.de>; Wed, 24 Jun 2026 11:26:29 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=huawei.com header.s=dkim header.b=jy8EJqo4;
-	spf=pass (mail.lfdr.de: domain of "linux-mips+bounces-15183-lists+linux-mips=lfdr.de@vger.kernel.org" designates 172.105.105.114 as permitted sender) smtp.mailfrom="linux-mips+bounces-15183-lists+linux-mips=lfdr.de@vger.kernel.org";
+	dkim=pass header.d=huawei.com header.s=dkim header.b=k8G3N8hb;
+	spf=pass (mail.lfdr.de: domain of "linux-mips+bounces-15180-lists+linux-mips=lfdr.de@vger.kernel.org" designates 172.105.105.114 as permitted sender) smtp.mailfrom="linux-mips+bounces-15180-lists+linux-mips=lfdr.de@vger.kernel.org";
 	dmarc=pass (policy=quarantine) header.from=huawei.com;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 621C9301BEC7
-	for <lists+linux-mips@lfdr.de>; Wed, 24 Jun 2026 09:26:20 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 5F9F430506A0
+	for <lists+linux-mips@lfdr.de>; Wed, 24 Jun 2026 09:26:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A11693A1690;
-	Wed, 24 Jun 2026 09:26:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7DFAD3A901C;
+	Wed, 24 Jun 2026 09:26:14 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
-Received: from canpmsgout12.his.huawei.com (canpmsgout12.his.huawei.com [113.46.200.227])
+Received: from canpmsgout08.his.huawei.com (canpmsgout08.his.huawei.com [113.46.200.223])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E24DD3A1A3B;
-	Wed, 24 Jun 2026 09:26:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 709283AFD08;
+	Wed, 24 Jun 2026 09:25:59 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782293177; cv=none; b=SKqPG91Xdlo9NsC3egpK+4y+mZBuBdK/cnKPSoRyQYIB7lpm+qes+gxbcgyq1gsPGKUYafleABYSe/3bXEg5aUsjq0PfNBh2tFgL+N8L13nA2y3tywtUie1UFvuHGgc42EIbZIiwyt+SHodyUDLQfbii+1JBzHnellDwOlVGjxk=
+	t=1782293174; cv=none; b=LO0wuyc0Ps2roCGTsN9rCAuaoZbfzCIu4gkAp1yCDAPWOrFOSGmWlBIFBfzWhVR0GXZSgKGGVlFYpNn9HTYHgjDxI4jTeyv4qx9CmahSNWlDPEq3GwjoGMv0lMb4JFUxh8Bk2SX8ARu5ClRFVF9g1ww20oDEib3F/NZ8/sE8Bqo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782293177; c=relaxed/simple;
-	bh=0tfppAPvOZIshQaVjHhB2yhaf6MPDRKaPO1sKiVCz4M=;
+	s=arc-20240116; t=1782293174; c=relaxed/simple;
+	bh=2y9AZQ92uIe7fq107jHK8Pqsv3ol/e4WdWhwyUGgvRM=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=NClLWWKCGgLZG2tL4e9bATUtBRjh3q++PLttqQTln5OFzNVmLZRLUqgeJu66GSQr8XMOk8MyOan0B8pmtb7nNZxQCYFI7F6dIR5WvPdAdNF3D6DIEukXakkdlzpqLx9niD2m18qAijmInLEGiCPoAYalBY6lAORfhbNXBV6cIRE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=jy8EJqo4; arc=none smtp.client-ip=113.46.200.227
+	 MIME-Version:Content-Type; b=hfdGPhJpPGy5qakzBbkI1HpYjsZZHC5mPofFAP77qlyw1MkkqaYQiGwWNCG1fip91I9PHM1vJOrpOKEHDH63Yx0mrxpJtnwjHKcmm34eQImH3P6MtYrFU6qOmRUHocwWCLaDkz6Mt5EY1TkxTz9hSF7VTBkEv29iiohufPUEcms=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=k8G3N8hb; arc=none smtp.client-ip=113.46.200.223
 dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
 	c=relaxed/relaxed; q=dns/txt;
 	h=From;
-	bh=VECIg4ov/FIyiC/SKOsbRM/La5dxB9QDanoGGZCeD2g=;
-	b=jy8EJqo4anXrwcBUdjDQlQ/2fIQgMwafJN3ExhltFZXA4QUdsCUNedBiSg+g07TDlOHfetcAy
-	nQYPSA9gE20aDubY11V2l40Pxy4aRp7HAV9fGpF28JxKIoJ3nAZKcBb9Xwze19XWTWcIoj6vJ7g
-	90Jef6ANiCcAAEGKZY3+4HQ=
-Received: from mail.maildlp.com (unknown [172.19.163.163])
-	by canpmsgout12.his.huawei.com (SkyGuard) with ESMTPS id 4glbtG3TGyznTVR;
-	Wed, 24 Jun 2026 17:17:10 +0800 (CST)
+	bh=TiI+bU6UZTaJsSDQgLd3Ye3dChV3WHZ4d0D9qJL7ZbY=;
+	b=k8G3N8hb/viyXx/pJP/K0Z/uLHUoSO7z+hUr9oYDC0S2i382rtko3ssbPeRSu7/qAzncvdB7e
+	+n488tlNnRUwAPSU7MHIovWByCHNNbIDeFkcpNZK863DLjf0+kJhDiWM2C/ax8tHB/YX7voSoo4
+	ab0o0cq44vRMTyROkhrOwws=
+Received: from mail.maildlp.com (unknown [172.19.162.92])
+	by canpmsgout08.his.huawei.com (SkyGuard) with ESMTPS id 4glbsv21fLzmV6k;
+	Wed, 24 Jun 2026 17:16:51 +0800 (CST)
 Received: from dggpemf500011.china.huawei.com (unknown [7.185.36.131])
-	by mail.maildlp.com (Postfix) with ESMTPS id 66E474048B;
-	Wed, 24 Jun 2026 17:25:54 +0800 (CST)
+	by mail.maildlp.com (Postfix) with ESMTPS id C76A440565;
+	Wed, 24 Jun 2026 17:25:56 +0800 (CST)
 Received: from huawei.com (10.90.53.73) by dggpemf500011.china.huawei.com
  (7.185.36.131) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Wed, 24 Jun
- 2026 17:25:52 +0800
+ 2026 17:25:54 +0800
 From: Jinjie Ruan <ruanjinjie@huawei.com>
 To: <catalin.marinas@arm.com>, <will@kernel.org>, <tsbogend@alpha.franken.de>,
 	<tglx@kernel.org>, <mingo@redhat.com>, <bp@alien8.de>,
@@ -71,9 +71,9 @@ To: <catalin.marinas@arm.com>, <will@kernel.org>, <tsbogend@alpha.franken.de>,
 	<linux-kernel@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
 	<linux-mips@vger.kernel.org>
 CC: <ruanjinjie@huawei.com>
-Subject: [PATCH v3 02/12] cpu/hotplug: Propagate bring-up status to arch_cpuhp_cleanup_kick_cpu()
-Date: Wed, 24 Jun 2026 17:25:27 +0800
-Message-ID: <20260624092537.2916971-3-ruanjinjie@huawei.com>
+Subject: [PATCH v3 03/12] arm64: smp: Tidy up smp_prepare_cpus()
+Date: Wed, 24 Jun 2026 17:25:28 +0800
+Message-ID: <20260624092537.2916971-4-ruanjinjie@huawei.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20260624092537.2916971-1-ruanjinjie@huawei.com>
 References: <20260624092537.2916971-1-ruanjinjie@huawei.com>
@@ -103,7 +103,7 @@ X-Spamd-Result: default: False [-6.16 / 15.00];
 	FORWARDED(0.00)[lists@lfdr.de];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-15183-lists,linux-mips=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-15180-lists,linux-mips=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
 	FREEMAIL_TO(0.00)[arm.com,kernel.org,alpha.franken.de,redhat.com,alien8.de,linux.intel.com,zytor.com,infradead.org,amd.com,gmail.com,linaro.org,hisilicon.com,google.com,fb.com,arndb.de,linux-foundation.org,os.amperecomputing.com,chinatelecom.cn,linux.ibm.com,linux.dev,intel.com,vger.kernel.org,lists.infradead.org];
 	FORGED_SENDER(0.00)[ruanjinjie@huawei.com,linux-mips@vger.kernel.org];
@@ -124,80 +124,57 @@ X-Spamd-Result: default: False [-6.16 / 15.00];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
 	DBL_BLOCKED_OPENRESOLVER(0.00)[vger.kernel.org:from_smtp,huawei.com:dkim,huawei.com:email,huawei.com:mid,huawei.com:from_mime,tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 98D3F6BCEC3
+X-Rspamd-Queue-Id: 35E686BCEAF
 
 From: Will Deacon <will@kernel.org>
 
-In preparation for enabling the generic CPU hotplug machinery on arm64,
-which has architecture-specific handling of early bringup failures,
-extend arch_cpuhp_cleanup_kick_cpu() to take an additional argument
-indicating whether or not the target AP reached the alive state.
+smp_prepare_cpus() is always run on the boot CPU (i.e. CPU 0) but goes
+to great lengths to support running on a CPU where smp_processor_id()
+is non-zero.
+
+Clean up the code a little by hardcoding zero for the boot CPU ID.
 
 Signed-off-by: Will Deacon <will@kernel.org>
 Signed-off-by: Jinjie Ruan <ruanjinjie@huawei.com>
 ---
- arch/x86/kernel/smpboot.c  | 4 ++--
- include/linux/cpuhotplug.h | 2 +-
- kernel/cpu.c               | 4 ++--
- 3 files changed, 5 insertions(+), 5 deletions(-)
+ arch/arm64/kernel/smp.c | 13 +++++--------
+ 1 file changed, 5 insertions(+), 8 deletions(-)
 
-diff --git a/arch/x86/kernel/smpboot.c b/arch/x86/kernel/smpboot.c
-index 294a8ea60298..637660b15aee 100644
---- a/arch/x86/kernel/smpboot.c
-+++ b/arch/x86/kernel/smpboot.c
-@@ -1057,7 +1057,7 @@ static int do_boot_cpu(u32 apicid, unsigned int cpu, struct task_struct *idle)
- 
- 	/* If the wakeup mechanism failed, cleanup the warm reset vector */
- 	if (ret)
--		arch_cpuhp_cleanup_kick_cpu(cpu);
-+		arch_cpuhp_cleanup_kick_cpu(cpu, false);
- 	return ret;
- }
- 
-@@ -1105,7 +1105,7 @@ int arch_cpuhp_kick_ap_alive(unsigned int cpu, struct task_struct *tidle)
- 	return smp_ops.kick_ap_alive(cpu, tidle);
- }
- 
--void arch_cpuhp_cleanup_kick_cpu(unsigned int cpu)
-+void arch_cpuhp_cleanup_kick_cpu(unsigned int cpu, bool is_alive)
+diff --git a/arch/arm64/kernel/smp.c b/arch/arm64/kernel/smp.c
+index 1aa324104afb..e858d7d64d1f 100644
+--- a/arch/arm64/kernel/smp.c
++++ b/arch/arm64/kernel/smp.c
+@@ -772,16 +772,14 @@ void __init smp_init_cpus(void)
+ void __init smp_prepare_cpus(unsigned int max_cpus)
  {
- 	/* Cleanup possible dangling ends... */
- 	if (smp_ops.kick_ap_alive == native_kick_ap && x86_platform.legacy.warm_reset)
-diff --git a/include/linux/cpuhotplug.h b/include/linux/cpuhotplug.h
-index 22ba327ec227..5c3b3e0bce47 100644
---- a/include/linux/cpuhotplug.h
-+++ b/include/linux/cpuhotplug.h
-@@ -511,7 +511,7 @@ struct task_struct;
+ 	const struct cpu_operations *ops;
+-	int err;
+ 	unsigned int cpu;
+-	unsigned int this_cpu;
++	int err;
  
- void cpuhp_ap_sync_alive(void);
- void arch_cpuhp_sync_state_poll(void);
--void arch_cpuhp_cleanup_kick_cpu(unsigned int cpu);
-+void arch_cpuhp_cleanup_kick_cpu(unsigned int cpu, bool is_alive);
- int arch_cpuhp_kick_ap_alive(unsigned int cpu, struct task_struct *tidle);
- bool arch_cpuhp_init_parallel_bringup(void);
+ 	init_cpu_topology();
  
-diff --git a/kernel/cpu.c b/kernel/cpu.c
-index 5a90f60ff60e..b0e31e624623 100644
---- a/kernel/cpu.c
-+++ b/kernel/cpu.c
-@@ -427,7 +427,7 @@ static bool cpuhp_can_boot_ap(unsigned int cpu)
- 	return true;
- }
+-	this_cpu = smp_processor_id();
+-	store_cpu_topology(this_cpu);
+-	numa_store_cpu_info(this_cpu);
+-	numa_add_cpu(this_cpu);
++	store_cpu_topology(0);
++	numa_store_cpu_info(0);
++	numa_add_cpu(0);
  
--void __weak arch_cpuhp_cleanup_kick_cpu(unsigned int cpu) { }
-+void __weak arch_cpuhp_cleanup_kick_cpu(unsigned int cpu, bool is_alive) { }
+ 	/*
+ 	 * If UP is mandated by "nosmp" (which implies "maxcpus=0"), don't set
+@@ -796,8 +794,7 @@ void __init smp_prepare_cpus(unsigned int max_cpus)
+ 	 * secondaries from the bootloader.
+ 	 */
+ 	for_each_possible_cpu(cpu) {
+-
+-		if (cpu == smp_processor_id())
++		if (cpu == 0)
+ 			continue;
  
- /*
-  * Early CPU bringup synchronization point. Cannot use cpuhp_state::done_up
-@@ -446,7 +446,7 @@ static int cpuhp_bp_sync_alive(unsigned int cpu)
- 	}
- 
- 	/* Let the architecture cleanup the kick alive mechanics. */
--	arch_cpuhp_cleanup_kick_cpu(cpu);
-+	arch_cpuhp_cleanup_kick_cpu(cpu, !ret);
- 	return ret;
- }
- #else /* CONFIG_HOTPLUG_CORE_SYNC_FULL */
+ 		ops = get_cpu_ops(cpu);
 -- 
 2.34.1
 
