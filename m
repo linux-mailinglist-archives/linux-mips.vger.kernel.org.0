@@ -1,56 +1,56 @@
-Return-Path: <linux-mips+bounces-15185-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-15187-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id gwC6Hd6iO2qpaggAu9opvQ
-	(envelope-from <linux-mips+bounces-15185-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Wed, 24 Jun 2026 11:26:54 +0200
+	id yvJiH8mjO2rYaggAu9opvQ
+	(envelope-from <linux-mips+bounces-15187-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Wed, 24 Jun 2026 11:30:49 +0200
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 13A396BCED2
-	for <lists+linux-mips@lfdr.de>; Wed, 24 Jun 2026 11:26:54 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id D84A56BCF3E
+	for <lists+linux-mips@lfdr.de>; Wed, 24 Jun 2026 11:30:48 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=huawei.com header.s=dkim header.b=kMtLT1t8;
-	spf=pass (mail.lfdr.de: domain of "linux-mips+bounces-15185-lists+linux-mips=lfdr.de@vger.kernel.org" designates 2600:3c09:e001:a7::12fc:5321 as permitted sender) smtp.mailfrom="linux-mips+bounces-15185-lists+linux-mips=lfdr.de@vger.kernel.org";
+	dkim=pass header.d=huawei.com header.s=dkim header.b=CICxvjHP;
+	spf=pass (mail.lfdr.de: domain of "linux-mips+bounces-15187-lists+linux-mips=lfdr.de@vger.kernel.org" designates 172.234.253.10 as permitted sender) smtp.mailfrom="linux-mips+bounces-15187-lists+linux-mips=lfdr.de@vger.kernel.org";
 	dmarc=pass (policy=quarantine) header.from=huawei.com;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 60463300AB3D
-	for <lists+linux-mips@lfdr.de>; Wed, 24 Jun 2026 09:26:35 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id BF7CB310578E
+	for <lists+linux-mips@lfdr.de>; Wed, 24 Jun 2026 09:27:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 064593B42D6;
-	Wed, 24 Jun 2026 09:26:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8834D3B14B9;
+	Wed, 24 Jun 2026 09:26:30 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
-Received: from canpmsgout02.his.huawei.com (canpmsgout02.his.huawei.com [113.46.200.217])
+Received: from canpmsgout04.his.huawei.com (canpmsgout04.his.huawei.com [113.46.200.219])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 741F93AC0D4;
-	Wed, 24 Jun 2026 09:26:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D65523B0AD6;
+	Wed, 24 Jun 2026 09:26:12 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782293180; cv=none; b=RSI088BoEibwgPCk/OAoPao+2hSM1Ujr29UguYRBTKR5unN210yBxtNP/XjiIgPVCmngWgCXZBd9V0jHP5/02RRhr08n8mznJ2VtK7OUS4WE+7YQZGZXKX0qDaj5+FKw48zlHOItbWvKzJhW4RMGmwuclGHrq4Ujn46C5Mkmszw=
+	t=1782293190; cv=none; b=uc4oJd3PBZSfk+YeyEm69ZqzguSJtR6TozgBcg0Okb/XpfR8HWawMyji8P3pC3fg9fherrsufLwX62IOzm6Iz0XcgAXdkcdaYnpycoydIbjCSby7HRce27SIuz/VpfJIpTDzONsxDCGT/Yq+YSIrSU193mcaSXjBHKUWNhXVTPQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782293180; c=relaxed/simple;
-	bh=PC1GZAr3w/GYt5ooUBMvY+WMak4zAyAVp4u50LphvIg=;
+	s=arc-20240116; t=1782293190; c=relaxed/simple;
+	bh=9Bor8qSNO8oe1LYgKJxvPEcRBvy16SD2ZNvSagfAJxs=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=eVC74VYTu5vS+s2lkU7VSwEhpIa2gN2teiI/BC5rgHVrf+TVB+aTPn40Hf4cIzIe0YDVWBJF08ZQPowW7W+jILYbBbvwslyMdzzDe7C0B22q8b0Z5gYPKftYC0diLC+LJiAhD3H4j51tdta71nTnrSda4bTmSxsrapo2kPksZlg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=kMtLT1t8; arc=none smtp.client-ip=113.46.200.217
+	 MIME-Version:Content-Type; b=bTKVhM/jjVAfvbuaTKJgRYVwlXaTNZOavbboGC58A9GLZY6DSjHpaQQ8/XzSLSfDwt5oINozS4YjO/h2/Uc3kjjBMYwc1IKqP9lkm8dtKkkQGKA9m2bHjzCXyxtA2pvtM6oCkSI6gaFVomWTnEDQfFH4Z5HDeqZEAEwsoAmNYRE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=CICxvjHP; arc=none smtp.client-ip=113.46.200.219
 dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
 	c=relaxed/relaxed; q=dns/txt;
 	h=From;
-	bh=9M7PkUPtYpY4RUQreVnYGCM+Ox9OBHbooKtSZnyfcNU=;
-	b=kMtLT1t8pO41raYIMLG3oelygw6Wl2zIt490i/hIKZhryX1NRx+KVJzT98BZNzWdBYJlAPmni
-	sFrBfNgDCFi0pwplLwAp6bFJjFXDclXIwKSZUCs7vaY+XDt+/k2wWm4xdU8RTdOz0AfsmYhYApM
-	UpP+FYcd7qGnxmXjMaA6XtU=
-Received: from mail.maildlp.com (unknown [172.19.162.223])
-	by canpmsgout02.his.huawei.com (SkyGuard) with ESMTPS id 4glbtW6vNdzcb3r;
-	Wed, 24 Jun 2026 17:17:23 +0800 (CST)
+	bh=P1LAsF3yfHMQr/lL87dOHp3Nz6XBq5TedJFrQXGK3yk=;
+	b=CICxvjHPHPnQhaGdXXHk82TWbhOMxvazZEY8n0NI1CZBT7sh0mzQc3QpW5GSdSWoXAOs3WM1V
+	Q291LgMeK327EHnOPflyEJdC/RJOfiqSfPxWJIx/cBxckLhTCnogX2xErLsud15Dz/jC0VC2doW
+	6He3T5K8iS4HfLK206ZFFPY=
+Received: from mail.maildlp.com (unknown [172.19.162.197])
+	by canpmsgout04.his.huawei.com (SkyGuard) with ESMTPS id 4glbt03tGmz1prKy;
+	Wed, 24 Jun 2026 17:16:56 +0800 (CST)
 Received: from dggpemf500011.china.huawei.com (unknown [7.185.36.131])
-	by mail.maildlp.com (Postfix) with ESMTPS id 7809A40561;
-	Wed, 24 Jun 2026 17:26:01 +0800 (CST)
+	by mail.maildlp.com (Postfix) with ESMTPS id CF40640569;
+	Wed, 24 Jun 2026 17:26:03 +0800 (CST)
 Received: from huawei.com (10.90.53.73) by dggpemf500011.china.huawei.com
  (7.185.36.131) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Wed, 24 Jun
- 2026 17:25:59 +0800
+ 2026 17:26:01 +0800
 From: Jinjie Ruan <ruanjinjie@huawei.com>
 To: <catalin.marinas@arm.com>, <will@kernel.org>, <tsbogend@alpha.franken.de>,
 	<tglx@kernel.org>, <mingo@redhat.com>, <bp@alien8.de>,
@@ -71,9 +71,9 @@ To: <catalin.marinas@arm.com>, <will@kernel.org>, <tsbogend@alpha.franken.de>,
 	<linux-kernel@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
 	<linux-mips@vger.kernel.org>
 CC: <ruanjinjie@huawei.com>
-Subject: [PATCH v3 05/12] arm64: smp: Defer RCU registration during secondary CPU bringup
-Date: Wed, 24 Jun 2026 17:25:30 +0800
-Message-ID: <20260624092537.2916971-6-ruanjinjie@huawei.com>
+Subject: [PATCH v3 06/12] arm64: smp: Use generic HOTPLUG_SPLIT_STARTUP machinery for CPU onlining
+Date: Wed, 24 Jun 2026 17:25:31 +0800
+Message-ID: <20260624092537.2916971-7-ruanjinjie@huawei.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20260624092537.2916971-1-ruanjinjie@huawei.com>
 References: <20260624092537.2916971-1-ruanjinjie@huawei.com>
@@ -96,20 +96,20 @@ X-Spamd-Result: default: False [-6.16 / 15.00];
 	R_MISSING_CHARSET(0.50)[];
 	DMARC_POLICY_ALLOW(-0.50)[huawei.com,quarantine];
 	R_DKIM_ALLOW(-0.20)[huawei.com:s=dkim];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	FORWARDED(0.00)[lists@lfdr.de];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-15185-lists,linux-mips=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-15187-lists,linux-mips=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
 	FREEMAIL_TO(0.00)[arm.com,kernel.org,alpha.franken.de,redhat.com,alien8.de,linux.intel.com,zytor.com,infradead.org,amd.com,gmail.com,linaro.org,hisilicon.com,google.com,fb.com,arndb.de,linux-foundation.org,os.amperecomputing.com,chinatelecom.cn,linux.ibm.com,linux.dev,intel.com,vger.kernel.org,lists.infradead.org];
 	FORGED_SENDER(0.00)[ruanjinjie@huawei.com,linux-mips@vger.kernel.org];
 	FORGED_RECIPIENTS(0.00)[m:catalin.marinas@arm.com,m:will@kernel.org,m:tsbogend@alpha.franken.de,m:tglx@kernel.org,m:mingo@redhat.com,m:bp@alien8.de,m:dave.hansen@linux.intel.com,m:hpa@zytor.com,m:peterz@infradead.org,m:kees@kernel.org,m:nathan@kernel.org,m:linusw@kernel.org,m:ojeda@kernel.org,m:david.kaplan@amd.com,m:lukas.bulwahn@redhat.com,m:ryan.roberts@arm.com,m:maz@kernel.org,m:timothy.hayes@arm.com,m:lpieralisi@kernel.org,m:thuth@redhat.com,m:menglong8.dong@gmail.com,m:oupton@kernel.org,m:yeoreum.yun@arm.com,m:miko.lenczewski@arm.com,m:broonie@kernel.org,m:kevin.brodsky@arm.com,m:james.clark@linaro.org,m:yangyicong@hisilicon.com,m:tabba@google.com,m:osandov@fb.com,m:arnd@arndb.de,m:anshuman.khandual@arm.com,m:david@kernel.org,m:akpm@linux-foundation.org,m:ljs@kernel.org,m:dev.jain@arm.com,m:yang@os.amperecomputing.com,m:chaitanyas.prakash@arm.com,m:kprateek.nayak@amd.com,m:chenl311@chinatelecom.cn,m:sshegde@linux.ibm.com,m:thorsten.blum@linux.dev,m:chang.seok.bae@intel.com,m:t
  im.c.chen@linux.intel.com,m:x86@kernel.org,m:linux-kernel@vger.kernel.org,m:linux-arm-kernel@lists.infradead.org,m:linux-mips@vger.kernel.org,m:ruanjinjie@huawei.com,m:menglong8dong@gmail.com,s:lists@lfdr.de];
-	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
 	FORGED_SENDER_FORWARDING(0.00)[];
@@ -122,95 +122,131 @@ X-Spamd-Result: default: False [-6.16 / 15.00];
 	TO_DN_NONE(0.00)[];
 	TAGGED_RCPT(0.00)[linux-mips];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[vger.kernel.org:from_smtp,huawei.com:dkim,huawei.com:email,huawei.com:mid,huawei.com:from_mime,sto.lore.kernel.org:rdns,sto.lore.kernel.org:helo]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[vger.kernel.org:from_smtp,huawei.com:dkim,huawei.com:email,huawei.com:mid,huawei.com:from_mime,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 13A396BCED2
+X-Rspamd-Queue-Id: D84A56BCF3E
 
 From: Will Deacon <will@kernel.org>
 
-Calling rcutree_report_cpu_starting() early during boot can lead to
-livelocks with the generic CPU hotplug mechanism if the boot CPU blocks
-on an RCU grace period while the CPU being onlined is spinning in
-cpuhp_ap_sync_alive(). So cpuhp_ap_sync_alive() must be called
-before rcutree_report_cpu_starting().
+In preparation for enabling parallel bringup of secondary CPUs
+on arm64, take the baby step of moving from HOTPLUG_CORE_SYNC_DEAD
+to HOTPLUG_SPLIT_STARTUP.
 
-And to prevent a potential deadlock on the boot CPU,
-check_local_cpu_capabilities() must be executed before
-cpuhp_ap_sync_alive(). This ensures that if an early capability mismatch
-occurs and the AP invokes cpu_die_early(), the boot CPU can detect
-the boot timeout and proceed, rather than hanging indefinitely.
+To fully enable HOTPLUG_SPLIT_STARTUP, this patch implements:
 
-In preparation for enabling the generic CPU hotplug code on arm64, split
-up the trace_hardirqs_off() call during secondary CPU bringup so that we
-update lockdep early but defer the tracing updates until after
-RCU is ready.
+1) arch_cpuhp_kick_ap_alive(). Kick the secondary CPU via firmware
+without blocking.
 
-Furthermore, to support parallel bringup without triggering false RCU CPU
-stall Warnings or deadlocks, the initialization order must be:
+2) arch_cpuhp_cleanup_kick_cpu(). Extracts early boot telemetry upon
+AP bringup timeouts.
 
-    secondary_start_kernel()
-        -> lockdep_hardirqs_off()
-        -> check_local_cpu_capabilities()
-           -> cpuhp_ap_sync_alive()
-        -> cpuhp_ap_sync_alive()
-        -> rcutree_report_cpu_starting()
-        -> trace_hardirqs_off_finish()
-
-Because check_local_cpu_capabilities() must execute while RCU is still
-offline on the local CPU, it normally triggers a false-positive lockdep
-"suspicious RCU usage" splat during early lock acquisitions as commit
-ce3d31ad3cac ("arm64/smp: Move rcu_cpu_starting() earlier") pointed out.
-
-Resolve this lockdep splat by wrapping the early capability verification
-path within lockdep_off() and lockdep_on(). This safely suppresses
-false-positive RCU validation flags on the offline CPU while maintaining
-the strictly mandated initialization order for race-free parallel bringup.
+3) Callbacks to cpuhp_ap_sync_alive() inside secondary_start_kernel().
+Enforces the initial pre-online boot handshake from the secondary
+CPU side.
 
 Signed-off-by: Will Deacon <will@kernel.org>
-Co-developed-by: Jinjie Ruan <ruanjinjie@huawei.com>
 Signed-off-by: Jinjie Ruan <ruanjinjie@huawei.com>
 ---
- arch/arm64/kernel/smp.c | 13 +++++++++++--
- 1 file changed, 11 insertions(+), 2 deletions(-)
+ arch/arm64/Kconfig      |  2 +-
+ arch/arm64/kernel/smp.c | 39 +++++++++++++++++++--------------------
+ 2 files changed, 20 insertions(+), 21 deletions(-)
 
+diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
+index fe60738e5943..24496e9967a8 100644
+--- a/arch/arm64/Kconfig
++++ b/arch/arm64/Kconfig
+@@ -231,7 +231,7 @@ config ARM64
+ 	select HAVE_KPROBES
+ 	select HAVE_KRETPROBES
+ 	select HAVE_GENERIC_VDSO
+-	select HOTPLUG_CORE_SYNC_DEAD if HOTPLUG_CPU
++	select HOTPLUG_SPLIT_STARTUP if SMP
+ 	select HOTPLUG_SMT if HOTPLUG_CPU
+ 	select IRQ_DOMAIN
+ 	select IRQ_FORCED_THREADING
 diff --git a/arch/arm64/kernel/smp.c b/arch/arm64/kernel/smp.c
-index c14b179c595d..87f92cf9ffa8 100644
+index 87f92cf9ffa8..9482e8d38b98 100644
 --- a/arch/arm64/kernel/smp.c
 +++ b/arch/arm64/kernel/smp.c
-@@ -35,6 +35,7 @@
- #include <linux/kgdb.h>
- #include <linux/kvm_host.h>
- #include <linux/nmi.h>
-+#include <linux/lockdep.h>
+@@ -107,12 +107,9 @@ static int boot_secondary(unsigned int cpu, struct task_struct *idle)
+ 	return -EOPNOTSUPP;
+ }
  
- #include <asm/alternative.h>
- #include <asm/atomic.h>
-@@ -215,15 +216,23 @@ asmlinkage notrace void secondary_start_kernel(void)
- 	if (system_uses_irq_prio_masking())
- 		init_gic_priority_masking();
+-static DECLARE_COMPLETION(cpu_running);
+-
+-int __cpu_up(unsigned int cpu, struct task_struct *idle)
++int arch_cpuhp_kick_ap_alive(unsigned int cpu, struct task_struct *idle)
+ {
+ 	int ret;
+-	long status;
  
--	rcutree_report_cpu_starting(cpu);
--	trace_hardirqs_off();
-+	lockdep_hardirqs_off(CALLER_ADDR0);
- 
-+	/*
-+	 * Since RCU is still offline on this CPU, any nested native printk
-+	 * or lock acquisition would normally trigger a false-positive
-+	 * "suspicious RCU usage" lockdep splat.
-+	 */
-+	lockdep_off();
  	/*
- 	 * If the system has established the capabilities, make sure
- 	 * this CPU ticks all of those. If it doesn't, the CPU will
- 	 * fail to come online.
+ 	 * We need to tell the secondary core where to find its stack and the
+@@ -123,22 +120,22 @@ int __cpu_up(unsigned int cpu, struct task_struct *idle)
+ 
+ 	/* Now bring the CPU into our world */
+ 	ret = boot_secondary(cpu, idle);
+-	if (ret) {
+-		if (ret != -EPERM)
+-			pr_err("CPU%u: failed to boot: %d\n", cpu, ret);
+-		return ret;
+-	}
++	if (ret && ret != -EPERM)
++		pr_err("CPU%u: failed to boot: %d\n", cpu, ret);
++	return ret;
++}
++
++void arch_cpuhp_cleanup_kick_cpu(unsigned int cpu, bool is_alive)
++{
++	long status;
++
++	if (is_alive)
++		return;
+ 
+ 	/*
+-	 * CPU was successfully started, wait for it to come online or
+-	 * time out.
++	 * We failed to synchronise with the CPU, so check if it left us
++	 * any breadcrumbs.
+ 	 */
+-	wait_for_completion_timeout(&cpu_running,
+-				    msecs_to_jiffies(5000));
+-	if (cpu_online(cpu))
+-		return 0;
+-
+-	pr_crit("CPU%u: failed to come online\n", cpu);
+ 	secondary_data.task = NULL;
+ 	status = READ_ONCE(secondary_data.status);
+ 	if (status == CPU_MMU_OFF)
+@@ -170,8 +167,6 @@ int __cpu_up(unsigned int cpu, struct task_struct *idle)
+ 	case CPU_PANIC_KERNEL:
+ 		panic("CPU%u detected unsupported configuration\n", cpu);
+ 	}
+-
+-	return -EIO;
+ }
+ 
+ static void init_gic_priority_masking(void)
+@@ -231,6 +226,11 @@ asmlinkage notrace void secondary_start_kernel(void)
  	 */
  	check_local_cpu_capabilities();
-+	lockdep_on();
-+	rcutree_report_cpu_starting(cpu);
-+	trace_hardirqs_off_finish();
+ 	lockdep_on();
++	/*
++	 * Synchronise with the core bringing us online so that it knows
++	 * we made it into the kernel. We're still not 'online'.
++	 */
++	cpuhp_ap_sync_alive();
+ 	rcutree_report_cpu_starting(cpu);
+ 	trace_hardirqs_off_finish();
  
- 	ops = get_cpu_ops(cpu);
- 	if (ops->cpu_postboot)
+@@ -264,7 +264,6 @@ asmlinkage notrace void secondary_start_kernel(void)
+ 					 read_cpuid_id());
+ 	update_cpu_boot_status(CPU_BOOT_SUCCESS);
+ 	set_cpu_online(cpu, true);
+-	complete(&cpu_running);
+ 
+ 	/*
+ 	 * Secondary CPUs enter the kernel with all DAIF exceptions masked.
 -- 
 2.34.1
 
