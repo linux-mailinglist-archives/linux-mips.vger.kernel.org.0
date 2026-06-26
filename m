@@ -1,116 +1,116 @@
-Return-Path: <linux-mips+bounces-15231-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-15232-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id IIJ1HKB6PmotGwkAu9opvQ
-	(envelope-from <linux-mips+bounces-15231-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Fri, 26 Jun 2026 15:12:00 +0200
+	id 9j4sIQCWPmpLIgkAu9opvQ
+	(envelope-from <linux-mips+bounces-15232-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Fri, 26 Jun 2026 17:08:48 +0200
 X-Original-To: lists+linux-mips@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id BFFE66CD4F9
-	for <lists+linux-mips@lfdr.de>; Fri, 26 Jun 2026 15:11:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id E55B16CE541
+	for <lists+linux-mips@lfdr.de>; Fri, 26 Jun 2026 17:08:47 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=redhat.com header.s=mimecast20190719 header.b=cLmglm0f;
-	dkim=pass header.d=redhat.com header.s=google header.b=MgiDcA2I;
-	spf=pass (mail.lfdr.de: domain of "linux-mips+bounces-15231-lists+linux-mips=lfdr.de@vger.kernel.org" designates 172.234.253.10 as permitted sender) smtp.mailfrom="linux-mips+bounces-15231-lists+linux-mips=lfdr.de@vger.kernel.org";
+	dkim=pass header.d=redhat.com header.s=mimecast20190719 header.b=dfU9ntf5;
+	dkim=pass header.d=redhat.com header.s=google header.b=ZJC0QmPf;
+	spf=pass (mail.lfdr.de: domain of "linux-mips+bounces-15232-lists+linux-mips=lfdr.de@vger.kernel.org" designates 172.234.253.10 as permitted sender) smtp.mailfrom="linux-mips+bounces-15232-lists+linux-mips=lfdr.de@vger.kernel.org";
 	dmarc=pass (policy=quarantine) header.from=redhat.com;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=2")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 769E63007F59
-	for <lists+linux-mips@lfdr.de>; Fri, 26 Jun 2026 13:11:58 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 2E06A304994F
+	for <lists+linux-mips@lfdr.de>; Fri, 26 Jun 2026 15:05:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CE66F3AC0F6;
-	Fri, 26 Jun 2026 13:11:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A34BE37C0FC;
+	Fri, 26 Jun 2026 15:05:23 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4DDA73F4DCD
-	for <linux-mips@vger.kernel.org>; Fri, 26 Jun 2026 13:11:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1AC0937BE7D
+	for <linux-mips@vger.kernel.org>; Fri, 26 Jun 2026 15:05:16 +0000 (UTC)
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782479517; cv=pass; b=WOLi4Cc6C0pgd3Lrx/fRj7m1QlTVarZHDBws5S+Gg8wqgWUMNZk9mvKfm3z5zxb1mwwOcpT49qpnk1ZCQubvmbnihwrQvIMDV4Zgw0FHnsmRbkPXieUgV+zQyTraJltLM9lLZ4kmfYQJ6mp5/KHCHD2LPZ5pVp5w9KJATfeWCjg=
+	t=1782486323; cv=pass; b=AOq3tQ2T5o2h3S7V4IpO+RwAyb1U6SLtyOkTCxcGFhqsdH1975YH2GzoEC+TMecHkIaz4h9a8AiMTzItEx41QLohEKi022/LOTiG0g0CLoxgUz4+A2rrjmNXXF8ZsfbBXpMGcVdpSOYyQTEgDSxE3qlviw4gX1uWUV45+BG7ll0=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782479517; c=relaxed/simple;
-	bh=VKNTFsC75BNMcJnQI4eMzMtTvr9UpO3oOorJIEMb0vQ=;
+	s=arc-20240116; t=1782486323; c=relaxed/simple;
+	bh=dQWoBG3cdhdrXUGK8cjuSemvsRSH2KT/hQo0wNib96o=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=arqJNAQDYPTZvVufNOw9LY1U7mba0GPQ3sWGHusE2fw1HGQatNtEGzsbnd8nbjsB5fjsOKM2kpmuzngF8Rlc7qCWJV6aCess1AeIKKYijq2zh1iLdGXkBI1DNlC1K/TsKwUdizae1O+xzGQy7hREQffOr1DvFEmgoTWG4Zk/jsg=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=cLmglm0f; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=MgiDcA2I; arc=pass smtp.client-ip=170.10.133.124
+	 To:Cc:Content-Type; b=ONSoLTMQpdITmJbZQydjbJvOM/ScVxJGvC0mNscy46d08nYuRtcvkvyGO+gWtPEYfkuJQSQMuR+1buYaLkzzQgZ5/atM7CT/ze1ZvwRdu8/yCzqLn4odwEB5l1udPiV5WJDc7qBv1XlXsbSpnwyhmO6lA9CMhJO/JhvI0e1dQeQ=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=dfU9ntf5; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=ZJC0QmPf; arc=pass smtp.client-ip=170.10.133.124
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1782479515;
+	s=mimecast20190719; t=1782486316;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=VKNTFsC75BNMcJnQI4eMzMtTvr9UpO3oOorJIEMb0vQ=;
-	b=cLmglm0fFtdT+tIAZb6uKVEXMr65V0gMWXMmZyYqtbeIF6nMdAu+bEKeh2VZ+R1JfpLlrc
-	pU7ZGeCtvqzRnHmVrQsaAAOCvrSNFIjeCgKSqIqGo84Yq7T70fQAU4eNrDSa/MAhN2vjmY
-	3rFzQKQT3MKDDLHfxYtEgTvV8Ku8MIo=
-Received: from mail-yw1-f197.google.com (mail-yw1-f197.google.com
- [209.85.128.197]) by relay.mimecast.com with ESMTP with STARTTLS
+	bh=dQWoBG3cdhdrXUGK8cjuSemvsRSH2KT/hQo0wNib96o=;
+	b=dfU9ntf5VCw2uQpEIlX3yxWsHBXKkdctYP9boMfsXSD7lUE4lRBGTqCeh2mBRwh0nxa1Rs
+	CxPrf1mw9fJDbFZAYsCrkZg4KrmeOu7oGZT9Oq3/m4anIwwWXyyubwdIAlGTcjDQAta7/D
+	De8D06nLkneZ27FcIo0PQoEA73TKDyg=
+Received: from mail-yw1-f199.google.com (mail-yw1-f199.google.com
+ [209.85.128.199]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-612-zo6J45WFOjmWe3BenDwHQw-1; Fri, 26 Jun 2026 09:11:54 -0400
-X-MC-Unique: zo6J45WFOjmWe3BenDwHQw-1
-X-Mimecast-MFC-AGG-ID: zo6J45WFOjmWe3BenDwHQw_1782479513
-Received: by mail-yw1-f197.google.com with SMTP id 00721157ae682-8003dfff66dso18517097b3.1
-        for <linux-mips@vger.kernel.org>; Fri, 26 Jun 2026 06:11:54 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1782479513; cv=none;
+ us-mta-626-FVN4WPihNiOLy9hTeBAFXw-1; Fri, 26 Jun 2026 11:05:15 -0400
+X-MC-Unique: FVN4WPihNiOLy9hTeBAFXw-1
+X-Mimecast-MFC-AGG-ID: FVN4WPihNiOLy9hTeBAFXw_1782486314
+Received: by mail-yw1-f199.google.com with SMTP id 00721157ae682-80533a7a4ebso16448437b3.2
+        for <linux-mips@vger.kernel.org>; Fri, 26 Jun 2026 08:05:14 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1782486314; cv=none;
         d=google.com; s=arc-20260327;
-        b=nv6vhC8GIGYyul621fgOuOgzhUJR9U8uyOGpOF3F9bhyEXvNTebaLIHZG1a3MRpJ1B
-         fhzzbN1bBNwXWkJA/IpmkQEhSaYiNo5E94ijvmZjqzVBXV2utu1XH/F0oj7EqyIotsaE
-         sM8hDEuB3WUn+rRc08aec9rASZlwfegwasOksx6H1aNQ48E/dM4GvsSNQuYRbwCRdtC4
-         BDpt/S/YTHnGkcVzYIF0cXT9PXvNs5HPAHtiFrNNkir3Jwq+6z3UnhZIRWBAAM8HKDFw
-         4YSWmrAY49uuc4bYbiXBsjKx+nLowXVuhfPm7TYmxczlB3nhm4lE+2NbadidgOno3bIw
-         rjpg==
+        b=jJbx+j9LvjDio5olh6G2J0q+3KBFR/58Hsjw/lMKT083vszPu0FdYTcJUd2tnmogH6
+         AymylfXF/dXG4ksVS318qvJf/Q1p16LCrgQz5IUgFU+GRata/YbcxlFM+AXppz1kiqfd
+         CA8qo1arKLxHGDoiicEtEUN9OYlA1eFBdAAz70QCtdWn8+TegXjXQczaYhwlwytPr7gF
+         lcQ0HtD2YFnHn2HvcVytgLxGff6W45zOvYau8u4A24LfF9h/5KU0p/jdqR/k4F3GLVKh
+         vuEYcCF8WSrecHyD81eT4jDeMQgDI/CmN0S+RCW6UWAV5/qRJSa+3gsxCNfbZZ12Qkf0
+         Xolw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=VKNTFsC75BNMcJnQI4eMzMtTvr9UpO3oOorJIEMb0vQ=;
-        fh=uwk2Stpj0/kpwXhFDHHX/MIFuF4A9m2K9W6lDLzfQyk=;
-        b=dftDRv1DXM4eeg9/FVPQN/9UcDVoE0G2YdLXmgumaykLj9fUFiUVaXRTAl1HEVIe7+
-         OiaOtCpyUKxgGL3VYvwkkHrNmprqO+RzbQFgyjauO49BtsKmfWzQFbgXENKQCIV1VZlR
-         9ytErW8yxg+XrqGaTAotvWv7INlm9hyOy32o5eQ+axuSiw2Z8AI7giiqIz9/kdCTBEDy
-         lM4am+Vt3KM7dx15y6slho0/ZlPA9gdUYB/+7vgBNsM5cz+/mXqH2e1WVgid2HU7qf/f
-         OY6Dwbei8mgOITzTqCJLnWN8DEwQLucbxyEWZnxSf/zIVFBD8xj/P6ZovgQ1fuLTNQQf
-         /REA==;
+        bh=dQWoBG3cdhdrXUGK8cjuSemvsRSH2KT/hQo0wNib96o=;
+        fh=+HJXNxh8iRagq4uSrOD9BtA56J+TVddACtqwWBga2go=;
+        b=BtqwrOxwKmJngDX6nMjeQf7v0YFAwaNHRgCibUen23yiTLQ3Yfg9GXfZsCbVsT/9/2
+         BDJT1H2xZ8eMzVD7FPoEQt1V6Iq/TuarlhuC0jXPeyd5uGdbtEt8J+IenVx4f3WaRQ7n
+         p8UejIAEe2dFJIjVlHw5Vx4Y5C3lk/t0CaEMEPBZdj/lJOu/rofSkK2C+sVEd7IAkjYZ
+         gxCgAPR1GplSaEH1ct6v5+XIrrK77zLyMM3ZzvuhqtDTCXieiBjCPEwdtN8Ngxapfjms
+         L+KxKvc9vmDXysfOsfRMS0Yjm+OUY8y2QXR/kDFogR2rNgrgPxiDroEWXcgLSOHAUplO
+         l6zQ==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1782479513; x=1783084313; darn=vger.kernel.org;
+        d=redhat.com; s=google; t=1782486314; x=1783091114; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=VKNTFsC75BNMcJnQI4eMzMtTvr9UpO3oOorJIEMb0vQ=;
-        b=MgiDcA2IyareaUA8F+1bCR7ftoqsrzWDFpj/gpuOfEOqoQPeNn42ZtbsRBhxd96I4h
-         KWAQtmWsLUa62XFLjckKGf55gTDDeM6hEcNDKfBw2VsHS+lMHjFvYm9SMMeWPQdy1DH7
-         8nvtHcJKtEmzvz3ziDLdNO4xnwMS7DoiJsvf1ZG/CWZIVEIx0tARXyN3tu5LaM3W7gkq
-         C4Uw0hk539NerXaKHjW6QeyQ1A5enFtd8XGchAufxt0XH+2WbgDbiBooZB9KKcxXYgGM
-         nWZMRERb2hEYXxG/68R8DT74ScM2JnjBlsEV4H5Auwsf2+LhCNy4Q1rDCEMvz6/qOeMn
-         rN3g==
+        bh=dQWoBG3cdhdrXUGK8cjuSemvsRSH2KT/hQo0wNib96o=;
+        b=ZJC0QmPfKiPycIBd/ikXBnaGSCiyRW2OvqFhgsh1c/24pQKnY6i1FtV0z5gSAIlRln
+         WU63sX643q0EKqypFtcTMQJ/gNeRazjO4NLyCXT4YlCXbVOfcDh9nlAW1Idxrh0mZLwD
+         thSRzigLAq+mXz5FZgTd62ObnYRHV4uySPWGt7HjiZkuGIsf7r7iuGRTDX0jXIA1l336
+         VnYt4YoBw8hK+4ztm9dP875mTpaqgsAbVNX0tIhf+T9gWAlZbQoHNMLc62WCjETuA5zp
+         yYbwrLW6BfAggAX9AizZ/CcqP0rYWIa0VcL+lQE1d5P+gn5nqgnukShkiq2mX1o8oxEp
+         3D/A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782479513; x=1783084313;
+        d=1e100.net; s=20251104; t=1782486314; x=1783091114;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=VKNTFsC75BNMcJnQI4eMzMtTvr9UpO3oOorJIEMb0vQ=;
-        b=Vqz9L3hfG0d0UYOVHRhAvu5sJIcwfxqJsLLEECLt7BTtmg8SSVSfKa4MYdtAuFDoWP
-         3qIf3PEkATXRFPkXTe8L2FNjd7bpjOTkslqOh/5YgaVFz8HrZ02Q0dpZghq9RU3esFIr
-         N9RU/zzDn5/kht7HM26jl4Jx4SKwTSGGh1/6naGBGNyJ6S7MY8Zg8v6O1n3/MQj1uRYX
-         /DJyvbGqNWf1SZnp0gY7jVEx9wEUch1tuFLo8lgTULo+fhP82UQPAOQWzXzY/3KDJuY5
-         0H6iLuyFah2NkQjYydOzPVUC2HMq+1n5HPYYEv+WO/y7bEUu6GIT/OIUfpTll/7C4dHr
-         Fxhw==
-X-Forwarded-Encrypted: i=1; AHgh+RoF8EujLD+e0Q/VGtCO3vgmadx9vu1cIEGKV01zFi3yWWKkFFo2ONO4TVcroglH540dNgc4AoeaD+A3@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy3yOBGKIIjvnPvOeyckDuxRmBFou4dKRQgzUg7wR/r2Q0vICW+
-	y1lanfPsXnR/RQ1pL/ZLeYBXoSo9dNDVUweJOv2H6/bk2riaKU38AWPU9a9GFPRrbp34mpprkju
-	ZYP9c0zFRWvicBuu4fbdv1iMnvHExDfYCMmCY3uwQcvC2npFJ5fXpUatkFHMdKDc59ShdayU0iX
-	OnGj6k8woqb1ddriVUZsd9y7BbbZIeBie7z6JQ+A==
-X-Gm-Gg: AfdE7cn9OQqArta8+iFPJkw0fhkAl/kEigBz479CsShPhY5P4pV2qNcHWueEK7tKDXs
-	MlKIwSJLca2pbB/smzsZC8BCZ4YlO3eFravx9GuSxQhagSpy5jYVASBmuzdlsY7y0SKyK+drIXP
-	sk35HcD/sesMipTS0hJ5t5zYrrCZcbw0DPj84lgDu1287VrEO4odU8tvPzOQQDztGj
-X-Received: by 2002:a05:690c:2601:b0:80b:ef0a:7aad with SMTP id 00721157ae682-80bef0a8585mr15809817b3.31.1782479513449;
-        Fri, 26 Jun 2026 06:11:53 -0700 (PDT)
-X-Received: by 2002:a05:690c:2601:b0:80b:ef0a:7aad with SMTP id
- 00721157ae682-80bef0a8585mr15808937b3.31.1782479512984; Fri, 26 Jun 2026
- 06:11:52 -0700 (PDT)
+        bh=dQWoBG3cdhdrXUGK8cjuSemvsRSH2KT/hQo0wNib96o=;
+        b=Q0W3mqgoqntAtCmilpK8cF2a6EOp1u00dHnuX9LdTtL0liT1hvQjk7eiA8yjDH3VaN
+         LVW280/zmKwzpwfcaLwEdI7weySJhlI2svotVtcigWXvh1Y5v5c9Ms1KuDjM0ot7qIaV
+         FKLGvY2MIto6u/G33YjpFa3taiyZ5QxS1FuPRoKCUujF93ir5Sv0qKeS5S/L/QIMgl2F
+         9TeZn+kgGPit9ZpmY5P9vdLA46ShC2Ul+oZ9KANpp4uZbR1TXxZNmbWzod9TQR37shRT
+         OOfPVkkqBEkAQrrWrK20HGw2GORQl+vjQZzi4UZ2fzlpTH9gRHARDvLqc+cf7mTvNBAE
+         bN/g==
+X-Forwarded-Encrypted: i=1; AHgh+RqyYm7c9uyvzH21GhDbqFl8qx/iDRbx3VZr05yQaO2w/orhbASn1j9V+VxekgB3JZUdMqAaHQdFopkU@vger.kernel.org
+X-Gm-Message-State: AOJu0YyaTHjiCJgvpG/tpBr1VmRWlxbjHpaCzJuf21nfvWci0dR7zdx+
+	HanVSQfCDHuU+s7QlVA9t1NYhwhj3nXtCv2HcXQQJmeWQnq6vvIoL2CtybHueaXXW5Az7qknP5m
+	5qfEFZAYuc2M2qP4jpIaJSXmm2RWdi3n+8m4uF4QarOSQVlUlu94mDhfmP6dQ/Oogv7FjGFUS7t
+	hm5B1w8Zq37ZNtv8mS7EBE/mq9KMZyxMrNwXTaPQ==
+X-Gm-Gg: AfdE7cmZ4WnV4SfQN7PazdPQCNUk4HMvwrNqex7lL2paYziKI4AKs0IPJnSK1Gud26R
+	kiViBx5EmIDkzg5Mpipa7CxuEsoFfd7qK3MhFxVNogm8QVHo8zV9B9Csr4PNPAOGvSWcu15Er0w
+	GrfxJKLb9NaxQPSJ/nuCQ/89MA2uDFePicZjaQm3HP/JRD+SH2Qc+pm2ME9c7Nkmbr
+X-Received: by 2002:a05:690c:4881:b0:80c:cad:c4e6 with SMTP id 00721157ae682-80c0cadc8fbmr18142157b3.32.1782486313776;
+        Fri, 26 Jun 2026 08:05:13 -0700 (PDT)
+X-Received: by 2002:a05:690c:4881:b0:80c:cad:c4e6 with SMTP id
+ 00721157ae682-80c0cadc8fbmr18140727b3.32.1782486313097; Fri, 26 Jun 2026
+ 08:05:13 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -118,14 +118,13 @@ List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 References: <20260626-drm_refcount_wiring-v1-0-cca1a7b3bdef@redhat.com>
- <20260626-drm_refcount_wiring-v1-4-cca1a7b3bdef@redhat.com> <20260626-manipulative-rainbow-rhino-d73b65@houat>
-In-Reply-To: <20260626-manipulative-rainbow-rhino-d73b65@houat>
+ <20260626-drm_refcount_wiring-v1-5-cca1a7b3bdef@redhat.com> <20260626-ivory-tarantula-of-valor-af0e2a@houat>
+In-Reply-To: <20260626-ivory-tarantula-of-valor-af0e2a@houat>
 From: Albert Esteve <aesteve@redhat.com>
-Date: Fri, 26 Jun 2026 15:11:41 +0200
-X-Gm-Features: AVVi8CcW-L7vrM5Bm_e3_mA7DiL0CVsM1LDa8FwSzsOcNktoquvN-pr6tbwgp5U
-Message-ID: <CADSE00+1m1ASzJzefO2bLuMYAJa3kSmW4py7Qng70VnZSUv0sg@mail.gmail.com>
-Subject: Re: [PATCH 4/5] drm/bridge: release panel reference on all lookup
- exit paths
+Date: Fri, 26 Jun 2026 17:05:00 +0200
+X-Gm-Features: AVVi8CfUWw7MSpxfIbgb0qtM7cCP9XXdSgcc1xFYb1Fq3hJmdhiO9Zy5mZXSYcU
+Message-ID: <CADSE00Jy9-BR9e-Dg-S4_fiLnjWjXfTq3c6OO8PxTM=gQyA7xw@mail.gmail.com>
+Subject: Re: [PATCH 5/5] drm: release panel reference after panel bridge creation
 To: Maxime Ripard <mripard@kernel.org>
 Cc: Neil Armstrong <neil.armstrong@linaro.org>, Jessica Zhang <jesszhan0024@gmail.com>, 
 	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Thomas Zimmermann <tzimmermann@suse.de>, 
@@ -175,7 +174,7 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	FREEMAIL_CC(0.00)[linaro.org,gmail.com,linux.intel.com,suse.de,ffwll.ch,intel.com,kernel.org,ideasonboard.com,kwiboo.se,bootlin.com,samsung.com,amarulasolutions.com,oss.nxp.com,pengutronix.de,nxp.com,crapouillou.net,denx.de,agner.ch,glider.be,bp.renesas.com,rock-chips.com,sntech.de,foss.st.com,sholland.org,iki.fi,sys-base.io,nvidia.com,lists.freedesktop.org,vger.kernel.org,lists.linux.dev,lists.infradead.org,st-md-mailman.stormreply.com];
-	TAGGED_FROM(0.00)[bounces-15231-lists,linux-mips=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-15232-lists,linux-mips=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
 	FROM_HAS_DN(0.00)[];
 	FORGED_SENDER(0.00)[aesteve@redhat.com,linux-mips@vger.kernel.org];
@@ -197,55 +196,51 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	ALIAS_RESOLVED(0.00)[];
 	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
 	TAGGED_RCPT(0.00)[linux-mips,renesas];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[mail.gmail.com:mid,vger.kernel.org:from_smtp]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[vger.kernel.org:from_smtp,mail.gmail.com:mid,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: BFFE66CD4F9
+X-Rspamd-Queue-Id: E55B16CE541
 
-On Fri, Jun 26, 2026 at 2:53=E2=80=AFPM Maxime Ripard <mripard@kernel.org> =
+On Fri, Jun 26, 2026 at 3:00=E2=80=AFPM Maxime Ripard <mripard@kernel.org> =
 wrote:
 >
-> On Fri, Jun 26, 2026 at 02:03:26PM +0200, Albert Esteve wrote:
+> On Fri, Jun 26, 2026 at 02:03:27PM +0200, Albert Esteve wrote:
 > > of_drm_find_panel() and drm_of_find_panel_or_bridge() now return a
-> > counted reference that the caller must release with drm_panel_put().
+> > counted reference. In drivers that immediately wrap the panel in a
+> > bridge via devm_drm_panel_bridge_add() or equivalent, the bridge
+> > acquires its own reference, so the caller's lookup reference must be
+> > released right afterwards.
 > >
-> > For bridge drivers that immediately wrap the panel in a panel_bridge
-> > (which acquires its own reference), release the lookup reference right
-> > after the bridge creation call.
-> >
-> > For analogix-anx6345, which stores the panel for direct use, release
-> > the reference in the i2c remove path.
-> >
-> > For platform drivers using analogix_dp_core with a component lifecycle
-> > (exynos_dp, rockchip analogix_dp), release the lookup reference in the
-> > platform remove() function. The panel_bridge created during bind() hold=
-s
-> > a separate reference that devm cleanup releases after remove() returns.
-> >
-> > Also fix devm_drm_of_get_bridge() and drmm_of_get_bridge() in
-> > bridge/panel.c itself: both call drm_of_find_panel_or_bridge() and
-> > then pass the panel to devm/drmm_panel_bridge_add(), which acquires
-> > its own reference via drm_panel_bridge_add_typed(). The lookup
-> > reference was never released; add drm_panel_put() after each bridge
-> > creation call.
+> > Also handle the cases where a panel is found but cannot be used,
+> > dropping the reference immediately in those paths.
 > >
 > > Assisted-by: Claude:claude-opus-4-6
 > > Signed-off-by: Albert Esteve <aesteve@redhat.com>
 >
-> I think this one should be either split into one patch per driver, or
-> merged with the of_drm_find_panel patch. I'm still not quite sure which
-> would be the best, maybe the latter?
+> drm_of_find_panel_or_bridge() does indeed return a refcounted pointer
+> now, but afaik the doc wasn't updated to reflect that.
 
-I have spent some time myself thinking about how to approach this.
-Initially I thought about doing one patch per driver as you suggested,
-but since there are many similar fixes that are mostly one-liners, In
-the end I decided that grouping them would make the review easier and
-result in a less inflated series. Maybe merging with of_drm_find_panel
-patch makes sense to avoid having one patch introducing a transient
-reference leak (even if it is fixed right after and is bisectable).
-But that will also create a giant patch (harder to review?). Another
-option could be to merge patches 4 and 5, which basically update all
-callers, and keep the API update separated. Either way, I am happy
-with whatever you decide is better. I will take note of this for v2.
+True, I'll fix that in the next version.
+
+>
+> More importantly, I feel like with both of_drm_find_panel and
+> drm_of_find_panel_or_bridge we update a path that is considered legacy
+> anyway now, and we should rather focus on providing a safe alternative.
+
+Oh, I missed that this code path is considered legacy.
+
+>
+> But none of the functions you updated are unsafe, so it won't be more
+> unsafe, or provide any illusion of safety to the caller. Idk.
+>
+> Either way, this should all be on its way out if Luca creates a bridge
+> for every panel, and we'll consolidate on bridges only, so maybe it's
+> not such a big deal to merge this patch.
+
+I see. Given what you wrote, I think it'd make sense to correct them
+while this code isn't completely dead.
+
+BR,
+Albert.
 
 >
 > Maxime
