@@ -1,58 +1,58 @@
-Return-Path: <linux-mips+bounces-15220-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-15221-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id ejZHJvJ0PmrAGQkAu9opvQ
-	(envelope-from <linux-mips+bounces-15220-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Fri, 26 Jun 2026 14:47:46 +0200
+	id V2gAHEh1PmrUGQkAu9opvQ
+	(envelope-from <linux-mips+bounces-15221-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Fri, 26 Jun 2026 14:49:12 +0200
 X-Original-To: lists+linux-mips@lfdr.de
 Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 079C96CD210
-	for <lists+linux-mips@lfdr.de>; Fri, 26 Jun 2026 14:47:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id AFCB46CD249
+	for <lists+linux-mips@lfdr.de>; Fri, 26 Jun 2026 14:49:11 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=kernel.org header.s=k20260515 header.b="cfxGAN/j";
-	spf=pass (mail.lfdr.de: domain of "linux-mips+bounces-15220-lists+linux-mips=lfdr.de@vger.kernel.org" designates 172.105.105.114 as permitted sender) smtp.mailfrom="linux-mips+bounces-15220-lists+linux-mips=lfdr.de@vger.kernel.org";
+	dkim=pass header.d=kernel.org header.s=k20260515 header.b=c1nHVby4;
+	spf=pass (mail.lfdr.de: domain of "linux-mips+bounces-15221-lists+linux-mips=lfdr.de@vger.kernel.org" designates 172.105.105.114 as permitted sender) smtp.mailfrom="linux-mips+bounces-15221-lists+linux-mips=lfdr.de@vger.kernel.org";
 	dmarc=pass (policy=quarantine) header.from=kernel.org;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 11632301025D
-	for <lists+linux-mips@lfdr.de>; Fri, 26 Jun 2026 12:47:45 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 1A7833014135
+	for <lists+linux-mips@lfdr.de>; Fri, 26 Jun 2026 12:48:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D20FF3F5BC2;
-	Fri, 26 Jun 2026 12:47:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 230663F65E7;
+	Fri, 26 Jun 2026 12:48:18 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1885C3F54C9;
-	Fri, 26 Jun 2026 12:47:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C6C33E7BD0;
+	Fri, 26 Jun 2026 12:48:12 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782478061; cv=none; b=twlpgxBL6cHMxi5RcQBIcNu4VPKEkFHj+YV616IEsbvBAS4pmZiV9TJPrRCf1/MA4BEfVo8A6mjTpgMECpyjmlCsMRHFz8dCytgWExsq1qRlkw3RWncoTNBzsP3Vcrem7qUKVmMSbKGbSsfsXXLiTr8Q8aZgBrEYRfhA0EvdN/s=
+	t=1782478097; cv=none; b=L7KKSZqq680cWRVX369lSPVIjS107EgkS4DWrSqtFilHv7NvIVtdjkjtpt3qLE1M7pkNat/sXQGfYjQXk29cON754+ScofjIJc+ZJP54hPwJlRuvf0zUkNPiAOdoQouGejEh1tcYjNmTaajyd/J9Iv6y4ZgWk/BfueVYK6tDRk0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782478061; c=relaxed/simple;
-	bh=d+LWMOcyZyTXzD9/HUFkvzlnP4bg7RRXDRK8N9avc7c=;
-	h=Message-ID:Date:From:To:Subject:In-Reply-To:References:Cc; b=TXz3QyHJ7I3CsM8xtH25uqH6wQxSnmKkTs8ex6rzJR/hFr4Urpa94pZ+caPcwnMnmUcZARJiQhvzo626HCz1ARkxjAY72vGh+CJgH2/mlgnA7Fon/ga17xmHrLxF6tr+6bbBDC8QCfE/jF7TeHu4lG57ap2VmMhsa0o2eESiqIw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cfxGAN/j; arc=none smtp.client-ip=100.103.45.18
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 71D421F000E9;
-	Fri, 26 Jun 2026 12:47:30 +0000 (UTC)
+	s=arc-20240116; t=1782478097; c=relaxed/simple;
+	bh=bGwu9Z6aMghf29dyK10iLr2V0bNIiUqqeMLm7oscLkg=;
+	h=Message-ID:Date:From:To:Subject:In-Reply-To:References:Cc; b=A/jwRP1DFnNtp8TrIKzBQVlgazPOoknZKryyYuC1T1dmflphlA6XKObNIMcprvAH1btHvPik2l04PUyzTk5Li6qOk46ow4mVPNHspnBZB/HQfh1A70fdaNzOoLwjZMSnycNbvGbF6YBGMTsaIH5eqfQ3PrnRqPO9gkuGtEo3cCM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=c1nHVby4; arc=none smtp.client-ip=100.103.45.18
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E7ABE1F000E9;
+	Fri, 26 Jun 2026 12:48:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1782478051;
-	bh=gcyGrresjTTPmNzfpyIyHzXr15imrzLhXIY91GPffew=;
+	s=k20260515; t=1782478092;
+	bh=v4y2stLxJY7uDBiTbKNkCgVELhkFZRy7m3W4tRJdf+E=;
 	h=Date:From:To:Subject:In-Reply-To:References:Cc;
-	b=cfxGAN/jcCri326WXf34xWET6jX2QyOm4MN8pOKcqeKKkNBjEv6dqSXeKvaCEjiqQ
-	 xMUnaQaNuIQ/CQpLmGf1YlXqiGM0E0hqnbxoXWt1LrQHDTq2J3OIjNE3S2u9Xn/5ix
-	 oK+DP1AL9NHLm/+ebKyBGxhWgla2EUstpziga4oibOgZCkFVMReghKfhD46XkJseIF
-	 4XVC8j4IST/6OWvdETIEQ6EjrbCmQnuVJeZuoqmH1cmfRtKD2cnh8CooWMpcUWm9DM
-	 tqoCryTCxfyH5x8StBEipzh+MB2ezInl6ba2yu/4cYIqDp4Gf/3f7LbllTeUaSycd1
-	 37NkVCXO7+daQ==
-Message-ID: <f183d0ba167f71e0555814f7447f46e0@kernel.org>
-Date: Fri, 26 Jun 2026 12:47:28 +0000
+	b=c1nHVby4VzRMzYi1WtQ/1/FW3ad4AR7RuNig6IMp0LM3ATUWQciaqWn60HmhO2Mvx
+	 cNEqkAHm18Hvnr+k13yWAhq+yWo1uNw3hHWs3Q8x1TMAn1T5q4A954G06yoTZ/xqv7
+	 lRQaMyVCNzPQM45PccrZMMHmAIAiMKXOnHAYfj6tLYr6w+/gjiQcRXuiPq4vQPbvJZ
+	 cLkFy6mqvFRYiquJKKOAOxqBTRMC3VrfNBzcr08WK3a7LEXgOXrYKDLUf/GU7q1FJs
+	 LJqnxBYj30rKVQA7A4J67kU/ZHMfl/2PT7/+94GYQY7CBjUcCvqoe/B9jXAyzpvIl0
+	 O2OBomnk1cP5w==
+Message-ID: <c5dc7d7db15a943d1b902469d79f4eb2@kernel.org>
+Date: Fri, 26 Jun 2026 12:48:10 +0000
 From: "Maxime Ripard" <mripard@kernel.org>
 To: "Albert Esteve" <aesteve@redhat.com>
-Subject: Re: [PATCH 1/5] drm/panel: have drm_panel_add/remove manage a list
- reference
-In-Reply-To: <20260626-drm_refcount_wiring-v1-1-cca1a7b3bdef@redhat.com>
-References: <20260626-drm_refcount_wiring-v1-1-cca1a7b3bdef@redhat.com>
+Subject: Re: [PATCH 2/5] drm/bridge/panel: hold a reference to the wrapped
+ panel
+In-Reply-To: <20260626-drm_refcount_wiring-v1-2-cca1a7b3bdef@redhat.com>
+References: <20260626-drm_refcount_wiring-v1-2-cca1a7b3bdef@redhat.com>
 Cc: dri-devel@lists.freedesktop.org, imx@lists.linux.dev, linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org, linux-renesas-soc@vger.kernel.org, linux-rockchip@lists.infradead.org, linux-samsung-soc@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com, linux-sunxi@lists.linux.dev, linux-tegra@vger.kernel.org, "Alain
  Volmat" <alain.volmat@foss.st.com>, "Alexandre Torgue" <alexandre.torgue@foss.st.com>, "Alim
  Akhtar" <alim.akhtar@samsung.com>, "Alison Wang" <alison.wang@nxp.com>, "Andrzej
@@ -103,7 +103,7 @@ X-Spamd-Result: default: False [-1.66 / 15.00];
 	FORGED_SENDER(0.00)[mripard@kernel.org,linux-mips@vger.kernel.org];
 	FORWARDED(0.00)[lists@lfdr.de];
 	MIME_TRACE(0.00)[0:+];
-	TAGGED_FROM(0.00)[bounces-15220-lists,linux-mips=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-15221-lists,linux-mips=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	FORGED_RECIPIENTS(0.00)[m:aesteve@redhat.com,m:dri-devel@lists.freedesktop.org,m:imx@lists.linux.dev,m:linux-arm-kernel@lists.infradead.org,m:linux-kernel@vger.kernel.org,m:linux-mips@vger.kernel.org,m:linux-renesas-soc@vger.kernel.org,m:linux-rockchip@lists.infradead.org,m:linux-samsung-soc@vger.kernel.org,m:linux-stm32@st-md-mailman.stormreply.com,m:linux-sunxi@lists.linux.dev,m:linux-tegra@vger.kernel.org,m:alain.volmat@foss.st.com,m:alexandre.torgue@foss.st.com,m:alim.akhtar@samsung.com,m:alison.wang@nxp.com,m:andrzej.hajda@intel.com,m:andy.yan@rock-chips.com,m:biju.das.jz@bp.renesas.com,m:wens@kernel.org,m:airlied@gmail.com,m:festevam@gmail.com,m:Frank.Li@nxp.com,m:geert+renesas@glider.be,m:heiko@sntech.de,m:inki.dae@samsung.com,m:jagan@amarulasolutions.com,m:jernej.skrabec@gmail.com,m:jesszhan0024@gmail.com,m:jingoohan1@gmail.com,m:jonas@kwiboo.se,m:jonathanh@nvidia.com,m:jyri.sarha@iki.fi,m:kieran.bingham+renesas@ideasonboard.com,m:krzk@kernel.org,m:kyungmin.park@samsung.com,
@@ -125,16 +125,16 @@ X-Spamd-Result: default: False [-1.66 / 15.00];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
 	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[vger.kernel.org:from_smtp,tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo,vger.kernel.org:from_smtp]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 079C96CD210
+X-Rspamd-Queue-Id: AFCB46CD249
 
-On Fri, 26 Jun 2026 14:03:23 +0200, Albert Esteve wrote:
-> The global panel_list holds raw pointers to drm_panel objects.
-> Nothing prevents a panel from being freed while it is still linked
-> in the list: if a driver's probe calls drm_panel_add() and then
-> fails at a later step, panel->list remains in panel_list. Any
-> subsequent call to of_drm_find_panel() that iterates the list will
+On Fri, 26 Jun 2026 14:03:24 +0200, Albert Esteve wrote:
+> drm_panel_bridge_add_typed() stores a pointer to the drm_panel it
+> wraps, but never acquires a reference to it. If the panel device
+> goes away while a panel_bridge still exists, the dangling pointer can
+> be dereferenced through panel_bridge->panel.
+> 
 > 
 > [ ... ]
 
