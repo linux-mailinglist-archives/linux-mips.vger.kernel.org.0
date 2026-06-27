@@ -1,324 +1,193 @@
-Return-Path: <linux-mips+bounces-15233-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-15234-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id QrchFMeWPmqMIgkAu9opvQ
-	(envelope-from <linux-mips+bounces-15233-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Fri, 26 Jun 2026 17:12:07 +0200
+	id VdO4Lr4eQGr6bwkAu9opvQ
+	(envelope-from <linux-mips+bounces-15234-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Sat, 27 Jun 2026 21:04:30 +0200
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id D25286CE5C2
-	for <lists+linux-mips@lfdr.de>; Fri, 26 Jun 2026 17:12:06 +0200 (CEST)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id B6FC56D283A
+	for <lists+linux-mips@lfdr.de>; Sat, 27 Jun 2026 21:04:29 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=redhat.com header.s=mimecast20190719 header.b=hPM9TV7B;
-	dkim=pass header.d=redhat.com header.s=google header.b=qUqywsK7;
-	spf=pass (mail.lfdr.de: domain of "linux-mips+bounces-15233-lists+linux-mips=lfdr.de@vger.kernel.org" designates 172.232.135.74 as permitted sender) smtp.mailfrom="linux-mips+bounces-15233-lists+linux-mips=lfdr.de@vger.kernel.org";
-	dmarc=pass (policy=quarantine) header.from=redhat.com;
-	arc=pass ("subspace.kernel.org:s=arc-20240116:i=2")
+	dkim=pass header.d=kernel.org header.s=k20260515 header.b=WdobY0rc;
+	spf=pass (mail.lfdr.de: domain of "linux-mips+bounces-15234-lists+linux-mips=lfdr.de@vger.kernel.org" designates 2600:3c15:e001:75::12fc:5321 as permitted sender) smtp.mailfrom="linux-mips+bounces-15234-lists+linux-mips=lfdr.de@vger.kernel.org";
+	dmarc=pass (policy=quarantine) header.from=kernel.org;
+	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 3B84D300D358
-	for <lists+linux-mips@lfdr.de>; Fri, 26 Jun 2026 15:12:06 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id C103B300681C
+	for <lists+linux-mips@lfdr.de>; Sat, 27 Jun 2026 19:04:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 667C637C108;
-	Fri, 26 Jun 2026 15:12:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9D72D2673AA;
+	Sat, 27 Jun 2026 19:04:25 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C8AE37CD2E
-	for <linux-mips@vger.kernel.org>; Fri, 26 Jun 2026 15:11:57 +0000 (UTC)
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782486724; cv=pass; b=S7m2nVZIcxgETiQC6wVGdcJwuZcxIvDPvQviMOZ9OgSZgV/icxBg/6p0LfNNg8zqyB02dviMabqRkQjwY726sYIOBLC+Lvh9A3Xln0hbiEKfglQmq1UE/AjnNbKwk9Q5q9tRRXk6Dvzb8lIPmDL+rPNgWplGYhZNhGFhHtQ2KFs=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782486724; c=relaxed/simple;
-	bh=Evlqo2mKiWd3GWD+tOTSIJ+Llo4YzdKnMs4LsgHm9FM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=bX0jME55kHAQbG8Gh8CKbtFJ8tH1I5jXP/lF7pk+mvQKGLubzJQBuojDHup3Jr0sEjWxojnuHCwJ63ikPr6J4ezhtazSY1jgZYXJkHb5oOqqjHseAplWv/9O+bS2s8anDw7DShw5fuZh3vEaA1xQf+BS21Ag+pN8HpKZAaQDADE=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=hPM9TV7B; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=qUqywsK7; arc=pass smtp.client-ip=170.10.129.124
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1782486716;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=gNWd65/LlS1S7z+e2JXdypKHFrBZo/8VRicT21AfZoc=;
-	b=hPM9TV7BCHIdybqUCzr5pGdqGZaks8qnRCS/NAKH50BrkJMA9gZ7F6gq8D8btT0Ev3sNCj
-	aU3EjI/PfTeaCvZE/OHPe8Nw3KEMpkVrItpQulKym8BuHzBbJitEbSrGWNNAhjjwFdaFuq
-	6Xxps7w+JQS9NpwJCF7pVqoIChV8oM4=
-Received: from mail-yw1-f199.google.com (mail-yw1-f199.google.com
- [209.85.128.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-287-_zQgfm03N6qII5_3Ajykkg-1; Fri, 26 Jun 2026 11:11:54 -0400
-X-MC-Unique: _zQgfm03N6qII5_3Ajykkg-1
-X-Mimecast-MFC-AGG-ID: _zQgfm03N6qII5_3Ajykkg_1782486714
-Received: by mail-yw1-f199.google.com with SMTP id 00721157ae682-7fe0184fa91so20191637b3.2
-        for <linux-mips@vger.kernel.org>; Fri, 26 Jun 2026 08:11:54 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1782486714; cv=none;
-        d=google.com; s=arc-20260327;
-        b=RYVaSXey+eFCS1wEy9mf5RP5zxDgiipuqDu8YSRjIm/+AR2/D/MRBc0eGR+b54dMPs
-         m4NECHguqWxLLg98C9GC4VAPOugXDV2vsFauhgz+cOJJWSLkfWO3zrdJqcjGFx1whC7U
-         dEEpFPWsfclnSPpWgqpUKazA6gc4gLZw/4yDhmsqofNYaxm8PuUUo4eonCxWa6g0DrNG
-         wYICZLLUatYiYJW/ZcCeUlM8No2DI0Dg5y5N/LLhgNpCIVmm5g2mazcpxbsRe1kJ+cxQ
-         uiW7/O4aqDSsxwmjYVnZR8XsAzrIO3QiD8mRp7wnexzUi0t0rnxOqHZG/kIjXl4oeEhN
-         dmkw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=gNWd65/LlS1S7z+e2JXdypKHFrBZo/8VRicT21AfZoc=;
-        fh=fotFZgTFpF7tBS+mNnI8p5jvB4SHKhoVFDCirRFZyhk=;
-        b=M71p3yZpD0EIxnyGZ47u7pvMmQn+e5iSlflVL0WvckluuwInAMNrLqnDzZghqMVDhp
-         1U3OaIy1NrfLVUH3eaOtiPnTVjItZEmkkaj2THWBhWseeHTv4jy3I2rx0zM+HbEbbRPH
-         WTVJzKtvNq4M+kyUGaxapxulv0Xd1g+fmFpj3EeiB00HWOHu6yccAKjeofbJak1CTvOn
-         Ql/Xkafjxdgav7AxD6IU8QXChMN9qgLARnKtfUuPa7muu39BQjuXH0z2wfte94lVS50l
-         opMv/rJ9rQ6aDxeO5nLfGxYrwGeYr1RjdgNnd/4FwAQjjgJ6pFhbzU+Y3jzWoLvUjXkV
-         qJZw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1782486714; x=1783091514; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=gNWd65/LlS1S7z+e2JXdypKHFrBZo/8VRicT21AfZoc=;
-        b=qUqywsK75FJf1QrIm0fEU72pMXDjQUMdBuy5NaOdS+ylNmFxDSI/yKQU+tdCbNsOMr
-         mIXjSZNn78h2dU6NFM2q0UdYYXLIz9/F0vxLaz/eQy//GfH2Ejs2LikJGXsz1xuHYktG
-         P2uDJ7eCWLNsep0X+MOaPp7xgqsfyk9AiNpeILd6yuITy2z4t0vi0ByCuiZ9qRPMxivN
-         jzaAHnLmXHKsxW9Q1U/0DjJRfUQWOKGkpAJyKxwLfyrNX5pVTRNOUImuQSn/TDTNmyZ0
-         UHQtTKGIBNbvays1jYc9Tu0rbstVRSHnIs8V/upwCKGqGM2LIpWTDsYlEdrwn5YvE+bA
-         /ToA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782486714; x=1783091514;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=gNWd65/LlS1S7z+e2JXdypKHFrBZo/8VRicT21AfZoc=;
-        b=DjgpRR233pf/pGVv0LOQKYoHnWPrRFdCdVwJyS2URy69SgjtUiBo6BEFhG1M+gvLAP
-         /3ccVoA3anSV/rfAl55obwcro1raxQ42/bDp0vX1deUVxkgK1Y1Nb88YWeXWBfvqLWEC
-         geXjFeinEVep3FRRm2D2Fn17IyyRMq8UWVFIOoKc7/6ettb2FhZjYTUfwPm/e2sUzsSz
-         Je1ckujiIrf/q4pVUlYfXqrSJujKdbIOiWkZAzkx/PahHbLQYV9YoVNdAtOyJxnsVaX6
-         0AZk5IejFi3T2OgHT/p52QbAwhtgnNVFUfHqG8AgHAv35PDXInHynt2wQ8rdVbeIb9kl
-         levw==
-X-Forwarded-Encrypted: i=1; AHgh+RqBtS+0QwwDq40jLzyAdmuns7DgWkS7OxaM9r+dGisgCjoSGJw72K1PgiFQVZHGk2r2EvMEaLm8nXJM@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx5s0fCHHHt/Q2J9EDW1QZpiEBNIsUfowsip0fv61PKa0RswBgx
-	Q+OK9IN5Na1bRo+RksFgRkgZhpsTVGTBNJAjJEvGrDwKMRL3rWihBAGXdQEwzdXfUGkYPuxKBha
-	ttUw/RD/aSRh6SZteLPJg8J86mXcAz7g2ttNdtfn89CiIbaa0O8iLD6F3Uoo6rlabba/SheMnPu
-	uyagO0f69K4hiBqIMx2sj74qBTvu5B9rWwMrGlAA==
-X-Gm-Gg: AfdE7cm3r0MpTIp2XuG1r5sVCUTVk+TwyA1j+je7uS71Gb42u2pR+LQHA1mUsTBcGGR
-	sYi2wDwO87GeNETWgRwM8bkQW6SUHCZFlqE2nAZwlm09UoX3wUUCStdwTIxX5L6jVwnWjVd6fG2
-	d8aolQrCzS4e4eoGy71OD3d7UV1eIXd4eoijVfL9mrPNCJIxBA34mJ8i9IVmgo+K2B
-X-Received: by 2002:a05:690c:6804:b0:7fc:cbe1:746d with SMTP id 00721157ae682-80c73fe6f4bmr9719367b3.42.1782486713987;
-        Fri, 26 Jun 2026 08:11:53 -0700 (PDT)
-X-Received: by 2002:a05:690c:6804:b0:7fc:cbe1:746d with SMTP id
- 00721157ae682-80c73fe6f4bmr9718797b3.42.1782486713496; Fri, 26 Jun 2026
- 08:11:53 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D4311C860A;
+	Sat, 27 Jun 2026 19:04:24 +0000 (UTC)
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1782587065; cv=none; b=AJwBB+qpmERd2D5Y4kOoA4iTRq428gsbR7kNF4k/UcWKF3E4nBmzbqPzOw0xee0JkEc95tM/1bbmIFITBcfz00209T8lt0lsk7Afl+6HGoV+sCDYrRlljYmMs+REdSGRz5eYvVyZphbLFUxDQvjghXwqTXXLdx2sRVGccv6M3VY=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1782587065; c=relaxed/simple;
+	bh=+xyLBnXJhHsCyvjH4lUKehzs56Qj0yFydtkoKSccDZM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=HqAnWAn4ScXgy2wjfVaH5oT/iWTo/FjDQK7R1n/C6NT94gAOZNmxXSQVNzxoBVIqwqo5YcUf5Kwjz2mG86Xm6/+SUShLwWHlkbHHuiU/EV8KEAigR/0XLJvP2f9u7pJ2JjWjb2j7ZQVL7n8OtHwkJQMTz6bRY8+G00v/wPZ3LvY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WdobY0rc; arc=none smtp.client-ip=100.103.45.18
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2B321F000E9;
+	Sat, 27 Jun 2026 19:04:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1782587064;
+	bh=Bcvg8OTsMn6hQMF6tt/3ezc+Zl4T8ppYfRkhsxfi6Oo=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=WdobY0rc/cvauyigEPPR+PdHBWj3YvzNRk+VrrvuRL4vPYSQfUX3TLJHN1p/2JtPz
+	 xn1udATqKwwsxVajrWs6Gz1e/gou6qGXHD2fb6WlqGfTxQQB8dtNWo4psHNlplp+cz
+	 7AXE4gb7+sGsyySNnpsy9UHExrgSdidKbqr0VK63hhVDvMY2kH09JV1/1aedC01InL
+	 PQNBplkSTfT/dgX0LjG8C8faE7ldK96cHQ1WPWLh32rJP2C8cZb3wzK5AoiuvM6nkF
+	 Zai/kiTc/xlD3NCdQ6KqGLrqCEjK7FkvqUwDmsMfUvitpbCbY1mL1PQlTopbr2RKcH
+	 sywFtRVVQqj/w==
+Message-ID: <0883a8e0-e8b4-4f22-bfc6-dd4a0fcf8b7a@kernel.org>
+Date: Sat, 27 Jun 2026 21:04:11 +0200
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260626-drm_refcount_wiring-v1-0-cca1a7b3bdef@redhat.com>
- <20260626-drm_refcount_wiring-v1-3-cca1a7b3bdef@redhat.com> <20260626-successful-badger-from-neptune-ae2bc6@houat>
-In-Reply-To: <20260626-successful-badger-from-neptune-ae2bc6@houat>
-From: Albert Esteve <aesteve@redhat.com>
-Date: Fri, 26 Jun 2026 17:11:42 +0200
-X-Gm-Features: AVVi8CdeJARTOKb4ohxfJd8a69EdpRugjimEtA7qtwxmMR2cbKOdWmwQblTZgKI
-Message-ID: <CADSE00LO98u6aDwvjijO_hAaMBXSGXaWPuFWiveQi_RWQ0MTVA@mail.gmail.com>
-Subject: Re: [PATCH 3/5] drm/panel: make *find_panel*() return a counted reference
-To: Maxime Ripard <mripard@kernel.org>
-Cc: Neil Armstrong <neil.armstrong@linaro.org>, Jessica Zhang <jesszhan0024@gmail.com>, 
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Thomas Zimmermann <tzimmermann@suse.de>, 
-	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
-	Andrzej Hajda <andrzej.hajda@intel.com>, Robert Foss <rfoss@kernel.org>, 
-	Laurent Pinchart <Laurent.pinchart@ideasonboard.com>, Jonas Karlman <jonas@kwiboo.se>, 
-	Jernej Skrabec <jernej.skrabec@gmail.com>, Luca Ceresoli <luca.ceresoli@bootlin.com>, 
-	Inki Dae <inki.dae@samsung.com>, Jagan Teki <jagan@amarulasolutions.com>, 
-	Marek Szyprowski <m.szyprowski@samsung.com>, Laurentiu Palcu <laurentiu.palcu@oss.nxp.com>, 
-	Lucas Stach <l.stach@pengutronix.de>, Frank Li <Frank.Li@nxp.com>, 
-	Sascha Hauer <s.hauer@pengutronix.de>, Pengutronix Kernel Team <kernel@pengutronix.de>, 
-	Fabio Estevam <festevam@gmail.com>, Paul Cercueil <paul@crapouillou.net>, 
-	Linus Walleij <linusw@kernel.org>, Marek Vasut <marex@denx.de>, Stefan Agner <stefan@agner.ch>, 
-	Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>, 
-	Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>, 
-	Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>, 
-	Geert Uytterhoeven <geert+renesas@glider.be>, Magnus Damm <magnus.damm@gmail.com>, 
-	Biju Das <biju.das.jz@bp.renesas.com>, Sandy Huang <hjc@rock-chips.com>, 
-	=?UTF-8?Q?Heiko_St=C3=BCbner?= <heiko@sntech.de>, 
-	Andy Yan <andy.yan@rock-chips.com>, Yannick Fertre <yannick.fertre@foss.st.com>, 
-	Raphael Gallais-Pou <raphael.gallais-pou@foss.st.com>, 
-	Philippe Cornu <philippe.cornu@foss.st.com>, Maxime Coquelin <mcoquelin.stm32@gmail.com>, 
-	Alexandre Torgue <alexandre.torgue@foss.st.com>, Chen-Yu Tsai <wens@kernel.org>, 
-	Samuel Holland <samuel@sholland.org>, Jyri Sarha <jyri.sarha@iki.fi>, 
-	Jingoo Han <jingoohan1@gmail.com>, Seung-Woo Kim <sw0312.kim@samsung.com>, 
-	Kyungmin Park <kyungmin.park@samsung.com>, Krzysztof Kozlowski <krzk@kernel.org>, 
-	Peter Griffin <peter.griffin@linaro.org>, Alim Akhtar <alim.akhtar@samsung.com>, 
-	Alison Wang <alison.wang@nxp.com>, Paul Kocialkowski <paulk@sys-base.io>, 
-	Alain Volmat <alain.volmat@foss.st.com>, Raphael Gallais-Pou <rgallaispou@gmail.com>, 
-	Thierry Reding <thierry.reding@kernel.org>, Mikko Perttunen <mperttunen@nvidia.com>, 
-	Jonathan Hunter <jonathanh@nvidia.com>, dri-devel@lists.freedesktop.org, 
-	linux-kernel@vger.kernel.org, imx@lists.linux.dev, 
-	linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org, 
-	linux-renesas-soc@vger.kernel.org, linux-rockchip@lists.infradead.org, 
-	linux-stm32@st-md-mailman.stormreply.com, linux-sunxi@lists.linux.dev, 
-	linux-samsung-soc@vger.kernel.org, linux-tegra@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-deletions] net: remove ax25 and amateur radio
+ (hamradio) subsystem
+To: Jakub Kicinski <kuba@kernel.org>, davem@davemloft.net
+Cc: netdev@vger.kernel.org, edumazet@google.com, pabeni@redhat.com,
+ andrew+netdev@lunn.ch, horms@kernel.org, corbet@lwn.net,
+ skhan@linuxfoundation.org, federico.vaga@vaga.pv.it,
+ carlos.bilbao@kernel.org, avadhut.naik@amd.com, alexs@kernel.org,
+ si.yanteng@linux.dev, dzm91@hust.edu.cn, 2023002089@link.tyut.edu.cn,
+ tsbogend@alpha.franken.de, dsahern@kernel.org, jani.nikula@intel.com,
+ mchehab+huawei@kernel.org, gregkh@linuxfoundation.org, tytso@mit.edu,
+ herbert@gondor.apana.org.au, ebiggers@kernel.org, johannes.berg@intel.com,
+ geert@linux-m68k.org, pablo@netfilter.org, tglx@kernel.org,
+ mashiro.chen@mailbox.org, mingo@kernel.org, dqfext@gmail.com,
+ jreuter@yaina.de, sdf@fomichev.me, pkshih@realtek.com,
+ enelsonmoore@gmail.com, mkl@pengutronix.de, toke@toke.dk, kees@kernel.org,
+ crossd@gmail.com, jlayton@kernel.org, wangliang74@huawei.com,
+ aha310510@gmail.com, takamitz@amazon.co.jp, kuniyu@google.com,
+ linux-doc@vger.kernel.org, linux-mips@vger.kernel.org
+References: <20260421021824.1293976-1-kuba@kernel.org>
+Content-Language: en-US
+From: Jiri Slaby <jirislaby@kernel.org>
+Autocrypt: addr=jirislaby@kernel.org; keydata=
+ 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
+In-Reply-To: <20260421021824.1293976-1-kuba@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Rspamd-Action: no action
-X-Spamd-Result: default: False [-0.66 / 15.00];
+X-Spamd-Result: default: False [-3.66 / 15.00];
+	WHITELIST_SPF_DKIM(-3.00)[kernel.org:d:+,kernel.org:s:+];
 	SUSPICIOUS_RECIPS(1.50)[];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
-	DMARC_POLICY_ALLOW(-0.50)[redhat.com,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74];
-	R_DKIM_ALLOW(-0.20)[redhat.com:s=mimecast20190719,redhat.com:s=google];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20260515];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FREEMAIL_CC(0.00)[linaro.org,gmail.com,linux.intel.com,suse.de,ffwll.ch,intel.com,kernel.org,ideasonboard.com,kwiboo.se,bootlin.com,samsung.com,amarulasolutions.com,oss.nxp.com,pengutronix.de,nxp.com,crapouillou.net,denx.de,agner.ch,glider.be,bp.renesas.com,rock-chips.com,sntech.de,foss.st.com,sholland.org,iki.fi,sys-base.io,nvidia.com,lists.freedesktop.org,vger.kernel.org,lists.linux.dev,lists.infradead.org,st-md-mailman.stormreply.com];
-	TAGGED_FROM(0.00)[bounces-15233-lists,linux-mips=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	FORGED_SENDER(0.00)[aesteve@redhat.com,linux-mips@vger.kernel.org];
 	MIME_TRACE(0.00)[0:+];
-	FORGED_RECIPIENTS(0.00)[m:mripard@kernel.org,m:neil.armstrong@linaro.org,m:jesszhan0024@gmail.com,m:maarten.lankhorst@linux.intel.com,m:tzimmermann@suse.de,m:airlied@gmail.com,m:simona@ffwll.ch,m:andrzej.hajda@intel.com,m:rfoss@kernel.org,m:Laurent.pinchart@ideasonboard.com,m:jonas@kwiboo.se,m:jernej.skrabec@gmail.com,m:luca.ceresoli@bootlin.com,m:inki.dae@samsung.com,m:jagan@amarulasolutions.com,m:m.szyprowski@samsung.com,m:laurentiu.palcu@oss.nxp.com,m:l.stach@pengutronix.de,m:Frank.Li@nxp.com,m:s.hauer@pengutronix.de,m:kernel@pengutronix.de,m:festevam@gmail.com,m:paul@crapouillou.net,m:linusw@kernel.org,m:marex@denx.de,m:stefan@agner.ch,m:tomi.valkeinen@ideasonboard.com,m:laurent.pinchart+renesas@ideasonboard.com,m:kieran.bingham+renesas@ideasonboard.com,m:geert+renesas@glider.be,m:magnus.damm@gmail.com,m:biju.das.jz@bp.renesas.com,m:hjc@rock-chips.com,m:heiko@sntech.de,m:andy.yan@rock-chips.com,m:yannick.fertre@foss.st.com,m:raphael.gallais-pou@foss.st.com,m:philippe.cornu@foss.
- st.com,m:mcoquelin.stm32@gmail.com,m:alexandre.torgue@foss.st.com,m:wens@kernel.org,m:samuel@sholland.org,m:jyri.sarha@iki.fi,m:jingoohan1@gmail.com,m:sw0312.kim@samsung.com,m:kyungmin.park@samsung.com,m:krzk@kernel.org,m:peter.griffin@linaro.org,m:alim.akhtar@samsung.com,m:alison.wang@nxp.com,m:paulk@sys-base.io,m:alain.volmat@foss.st.com,m:rgallaispou@gmail.com,m:thierry.reding@kernel.org,m:mperttunen@nvidia.com,m:jonathanh@nvidia.com,m:dri-devel@lists.freedesktop.org,m:linux-kernel@vger.kernel.org,m:imx@lists.linux.dev,m:linux-arm-kernel@lists.infradead.org,m:linux-mips@vger.kernel.org,m:linux-renesas-soc@vger.kernel.org,m:linux-rockchip@lists.infradead.org,m:linux-stm32@st-md-mailman.stormreply.com,m:linux-sunxi@lists.linux.dev,m:linux-samsung-soc@vger.kernel.org,m:linux-tegra@vger.kernel.org,m:jernejskrabec@gmail.com,m:laurent.pinchart@ideasonboard.com,m:kieran.bingham@ideasonboard.com,m:geert@glider.be,m:magnusdamm@gmail.com,s:lists@lfdr.de];
+	TAGGED_FROM(0.00)[bounces-15234-lists,linux-mips=lfdr.de];
+	RCVD_TLS_LAST(0.00)[];
+	FORGED_RECIPIENTS(0.00)[m:kuba@kernel.org,m:davem@davemloft.net,m:netdev@vger.kernel.org,m:edumazet@google.com,m:pabeni@redhat.com,m:andrew+netdev@lunn.ch,m:horms@kernel.org,m:corbet@lwn.net,m:skhan@linuxfoundation.org,m:federico.vaga@vaga.pv.it,m:carlos.bilbao@kernel.org,m:avadhut.naik@amd.com,m:alexs@kernel.org,m:si.yanteng@linux.dev,m:dzm91@hust.edu.cn,m:2023002089@link.tyut.edu.cn,m:tsbogend@alpha.franken.de,m:dsahern@kernel.org,m:jani.nikula@intel.com,m:mchehab+huawei@kernel.org,m:gregkh@linuxfoundation.org,m:tytso@mit.edu,m:herbert@gondor.apana.org.au,m:ebiggers@kernel.org,m:johannes.berg@intel.com,m:geert@linux-m68k.org,m:pablo@netfilter.org,m:tglx@kernel.org,m:mashiro.chen@mailbox.org,m:mingo@kernel.org,m:dqfext@gmail.com,m:jreuter@yaina.de,m:sdf@fomichev.me,m:pkshih@realtek.com,m:enelsonmoore@gmail.com,m:mkl@pengutronix.de,m:toke@toke.dk,m:kees@kernel.org,m:crossd@gmail.com,m:jlayton@kernel.org,m:wangliang74@huawei.com,m:aha310510@gmail.com,m:takamitz@amazon.co.jp,m:kuniyu@
+ google.com,m:linux-doc@vger.kernel.org,m:linux-mips@vger.kernel.org,m:andrew@lunn.ch,m:mchehab@kernel.org,s:lists@lfdr.de];
+	RCVD_COUNT_THREE(0.00)[4];
+	FORGED_SENDER(0.00)[jirislaby@kernel.org,linux-mips@vger.kernel.org];
+	RCPT_COUNT_TWELVE(0.00)[46];
 	FORWARDED(0.00)[lists@lfdr.de];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	DKIM_TRACE(0.00)[redhat.com:+];
-	MISSING_XM_UA(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	DKIM_TRACE(0.00)[kernel.org:+];
 	TO_DN_SOME(0.00)[];
 	FORGED_SENDER_FORWARDING(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[aesteve@redhat.com,linux-mips@vger.kernel.org];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCPT_COUNT_GT_50(0.00)[67];
-	FORGED_RECIPIENTS_FORWARDING(0.00)[];
 	ALIAS_RESOLVED(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
-	TAGGED_RCPT(0.00)[linux-mips,renesas];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[mail.gmail.com:mid,sto.lore.kernel.org:rdns,sto.lore.kernel.org:helo,vger.kernel.org:from_smtp]
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[jirislaby@kernel.org,linux-mips@vger.kernel.org];
+	FREEMAIL_CC(0.00)[vger.kernel.org,google.com,redhat.com,lunn.ch,kernel.org,lwn.net,linuxfoundation.org,vaga.pv.it,amd.com,linux.dev,hust.edu.cn,link.tyut.edu.cn,alpha.franken.de,intel.com,mit.edu,gondor.apana.org.au,linux-m68k.org,netfilter.org,mailbox.org,gmail.com,yaina.de,fomichev.me,realtek.com,pengutronix.de,toke.dk,huawei.com,amazon.co.jp];
+	MID_RHS_MATCH_FROM(0.00)[];
+	TAGGED_RCPT(0.00)[linux-mips,netdev,huawei];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	FORGED_RECIPIENTS_FORWARDING(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[vger.kernel.org:from_smtp]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: D25286CE5C2
+X-Rspamd-Queue-Id: B6FC56D283A
 
-On Fri, Jun 26, 2026 at 2:50=E2=80=AFPM Maxime Ripard <mripard@kernel.org> =
-wrote:
->
-> On Fri, Jun 26, 2026 at 02:03:25PM +0200, Albert Esteve wrote:
-> > Callers of of_drm_find_panel() receive a pointer with no reference
-> > held, creating a window where the panel device can be unregistered
-> > and freed between the lookup and first use (e.g., drm_panel_prepare()).
-> >
-> > find_panel_by_fwnode() is the fwnode counterpart of of_drm_find_panel()=
-.
-> > drm_panel_add_follower() worked around the missing panel kref by callin=
-g
-> > get_device() on the panel's underlying struct device. However, get_devi=
-ce()
-> > only prevents the device kobject from being freed. It does not prevent =
-the
-> > panel's kzalloc()'d container memory from being released when the kref
-> > reaches zero.
-> >
-> > Fix both lookup functions by acquiring a reference with drm_panel_get()
-> > before returning, under panel_lock. Callers are now responsible for cal=
-ling
-> > drm_panel_put() when they no longer need the pointer.
-> >
-> > Signed-off-by: Albert Esteve <aesteve@redhat.com>
-> > ---
-> >  drivers/gpu/drm/drm_panel.c | 22 +++++++++++++++++-----
-> >  1 file changed, 17 insertions(+), 5 deletions(-)
-> >
-> > diff --git a/drivers/gpu/drm/drm_panel.c b/drivers/gpu/drm/drm_panel.c
-> > index 545fe93dc28fe..a00ae98ed0956 100644
-> > --- a/drivers/gpu/drm/drm_panel.c
-> > +++ b/drivers/gpu/drm/drm_panel.c
-> > @@ -458,14 +458,17 @@ EXPORT_SYMBOL(__devm_drm_panel_alloc);
-> >
-> >  #ifdef CONFIG_OF
-> >  /**
-> > - * of_drm_find_panel - look up a panel using a device tree node
-> > + * of_drm_find_panel - look up and reference a panel by device tree no=
-de
-> >   * @np: device tree node of the panel
-> >   *
-> >   * Searches the set of registered panels for one that matches the give=
-n device
-> > - * tree node. If a matching panel is found, return a pointer to it.
-> > + * tree node. If a matching panel is found, the panel's reference coun=
-t is
-> > + * incremented before returning a pointer to it. The caller must call
-> > + * drm_panel_put() when it no longer needs the panel pointer.
-> >   *
-> > - * Return: A pointer to the panel registered for the specified device =
-tree
-> > - * node or an ERR_PTR() if no panel matching the device tree node can =
-be found.
-> > + * Return: A reference-counted pointer to the panel registered for the=
- specified
-> > + * device tree node or an ERR_PTR() if no panel matching the device tr=
-ee node
-> > + * can be found.
-> >   *
-> >   * Possible error codes returned by this function:
-> >   *
-> > @@ -484,6 +487,7 @@ struct drm_panel *of_drm_find_panel(const struct de=
-vice_node *np)
-> >
-> >       list_for_each_entry(panel, &panel_list, list) {
-> >               if (panel->dev->of_node =3D=3D np) {
-> > +                     drm_panel_get(panel);
-> >                       mutex_unlock(&panel_lock);
-> >                       return panel;
-> >               }
-> > @@ -538,7 +542,13 @@ int of_drm_get_panel_orientation(const struct devi=
-ce_node *np,
-> >  EXPORT_SYMBOL(of_drm_get_panel_orientation);
-> >  #endif
-> >
-> > -/* Find panel by fwnode. This should be identical to of_drm_find_panel=
-(). */
-> > +/*
-> > + * Find panel by fwnode, returning a counted reference.
-> > + *
-> > + * Behaves identically to of_drm_find_panel(). On success the returned
-> > + * pointer has been passed through drm_panel_get(); the caller must ca=
-ll
-> > + * drm_panel_put() when done with it.
-> > + */
-> >  static struct drm_panel *find_panel_by_fwnode(const struct fwnode_hand=
-le *fwnode)
-> >  {
-> >       struct drm_panel *panel;
-> > @@ -550,6 +560,7 @@ static struct drm_panel *find_panel_by_fwnode(const=
- struct fwnode_handle *fwnode
-> >
-> >       list_for_each_entry(panel, &panel_list, list) {
-> >               if (dev_fwnode(panel->dev) =3D=3D fwnode) {
-> > +                     drm_panel_get(panel);
-> >                       mutex_unlock(&panel_lock);
-> >                       return panel;
-> >               }
->
-> This part should probably be in a separate patch
+On 21. 04. 26, 4:18, Jakub Kicinski wrote:
+> Remove the amateur radio (AX.25, NET/ROM, ROSE) protocol implementation
+> and all associated hamradio device drivers from the kernel tree.
+> This set of protocols has long been a huge bug/syzbot magnet,
+> and since nobody stepped up to help us deal with the influx
+> of the AI-generated bug reports we need to move it out of tree
+> to protect our sanity.
+> 
+> The code is moved to an out-of-tree repo:
+> https://github.com/linux-netdev/mod-orphan
+> if it's cleaned up and reworked there we can accept it back.
+> 
+> Minimal stub headers are kept for include/net/ax25.h (AX25_P_IP,
+> AX25_ADDR_LEN, ax25_address) and include/net/rose.h (ROSE_ADDR_LEN)
+> so that the conditional integration code in arp.c and tun.c continues
+> to compile and work when the out-of-tree modules are loaded.
+...
+>   delete mode 100644 include/uapi/linux/scc.h
+Unfortunately, this broke builds of LLVM -- compiler-rt in particular 
+(and GCC builds allegedly too). They dropped the include and its use 
+[1], but IMO we should keep the uapi header with those two structs 
+(scc_modem + scc_stat) for some time.
 
-Yes. This is another place where I hesitated on organization, as it is
-very similar to of_drm_find_panel() fix. But find_panel_by_fwnode() is
-much more self-contained (it is declared static to begin with). So it
-makes sense to split them. I will do so in the next version.
+[1] 
+https://github.com/llvm/llvm-project/commit/3dc4fd6dd41100f051a63642f449b16324389c96
 
->
-> > @@ -686,6 +697,7 @@ void drm_panel_remove_follower(struct drm_panel_fol=
-lower *follower)
-> >       mutex_unlock(&panel->follower_lock);
-> >
-> >       put_device(panel->dev);
-> > +     drm_panel_put(panel);
-> >  }
-> >  EXPORT_SYMBOL(drm_panel_remove_follower);
->
-> together with this one?
->
-> Maxime
-
+thanks,
+-- 
+js
+suse labs
 
