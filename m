@@ -1,177 +1,169 @@
-Return-Path: <linux-mips+bounces-15242-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-15243-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id 2LxaCjUyQmpo1gkAu9opvQ
-	(envelope-from <linux-mips+bounces-15242-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Mon, 29 Jun 2026 10:52:05 +0200
+	id nAp5JFo2Qmqc1wkAu9opvQ
+	(envelope-from <linux-mips+bounces-15243-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Mon, 29 Jun 2026 11:09:46 +0200
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7C5346D7B00
-	for <lists+linux-mips@lfdr.de>; Mon, 29 Jun 2026 10:52:04 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 008E66D7E22
+	for <lists+linux-mips@lfdr.de>; Mon, 29 Jun 2026 11:09:45 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=uniontech.com header.s=onoh2408 header.b=OG609C4Q;
-	spf=pass (mail.lfdr.de: domain of "linux-mips+bounces-15242-lists+linux-mips=lfdr.de@vger.kernel.org" designates 172.105.105.114 as permitted sender) smtp.mailfrom="linux-mips+bounces-15242-lists+linux-mips=lfdr.de@vger.kernel.org";
-	dmarc=pass (policy=none) header.from=uniontech.com;
+	dkim=pass header.d=kernel.org header.s=k20260515 header.b=iyUhTV03;
+	spf=pass (mail.lfdr.de: domain of "linux-mips+bounces-15243-lists+linux-mips=lfdr.de@vger.kernel.org" designates 172.234.253.10 as permitted sender) smtp.mailfrom="linux-mips+bounces-15243-lists+linux-mips=lfdr.de@vger.kernel.org";
+	dmarc=pass (policy=quarantine) header.from=kernel.org;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 80E1C30045A6
-	for <lists+linux-mips@lfdr.de>; Mon, 29 Jun 2026 08:52:03 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 9A05A302616B
+	for <lists+linux-mips@lfdr.de>; Mon, 29 Jun 2026 09:06:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 42E5D3F822F;
-	Mon, 29 Jun 2026 08:52:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 53BCD3F8249;
+	Mon, 29 Jun 2026 09:06:13 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtpbgeu2.qq.com (smtpbgeu2.qq.com [18.194.254.142])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E7593F823F;
-	Mon, 29 Jun 2026 08:51:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1BA6D212D86
+	for <linux-mips@vger.kernel.org>; Mon, 29 Jun 2026 09:06:12 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782723121; cv=none; b=gRFUPF1j4gqN5RtjmVv9wVKLQCMmzFG5U+ABB2oVqFgf+jrjUbuoQQCoYn21mbzJHWHm5kCB6Fnt72W4KY7BIyL0XdWmKkwNO50sj71wO7w59wVx7fzHnz3ErK7fRHZlRH5byY5m/c2VQLUo1bM5+HqRS0NU8lKYnBXulSTFKIs=
+	t=1782723973; cv=none; b=aAsVGVQygQXWN0RQdIoLbLoINpk6Ma+IrV8lsGsD+gRzgQfQdQuDk5K3k5XY3cP8k3QS49Ma9yT1z8fCXirE0NnKrHgpoKIk9x8t2CNB//fVy0H/BmNyaVsCiu7ZAFW2B0faScku4CLdtr3khCuGNueTt+CB+okWcpjv+u0l+qE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782723121; c=relaxed/simple;
-	bh=KBbwYRYPW0GMqgyqxF9nRWGH7Tc+vo/MfqUayDiJGBA=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=GZaiW+Papy0C/pu63Z/4V/9J4rfR08POA73KC2tUVbOY0X27hHq6Jutwdga+QhD4Nh5ltZv+B9GOH0GCdXqlp7ZsSVychEnCLr/xcGUG5UxlDytLcOctvLf0sDpSW84wjbOhekCEMhs1Em/ehLrDsw5vfgBM/XtIf1FY4t2g51g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com; spf=pass smtp.mailfrom=uniontech.com; dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b=OG609C4Q; arc=none smtp.client-ip=18.194.254.142
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uniontech.com;
-	s=onoh2408; t=1782723076;
-	bh=GPlWodIq++298AjwM0SiZYMKvCA7hqnNN+2a2GtbAvA=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version;
-	b=OG609C4QtKEu8VeKw0c/Vc1cTZbiXR0ll/gqt/3Pw8n8Wu9APT3Re13Q1A8x5AJv8
-	 GOIzPB9mD8w/fPTW69toz0N1MB25Nv4SD4Nj21JPJAoRtsT+KrKTKAX6z2XoKZT0Zf
-	 PbnG4uuXzqD0MvHu4T4FJ6EigubmIbvRTG+ONRhE=
-X-QQ-mid: zesmtpgz6t1782723056t15444658
-X-QQ-Originating-IP: HKqs9Lg2tlHObXLTPbb2GpE5viamZAU0Zt2hPPRyweU=
-Received: from PEN202512010004 ( [113.57.152.160])
-	by bizesmtp.qq.com (ESMTP) with 
-	id ; Mon, 29 Jun 2026 16:50:55 +0800 (CST)
-X-QQ-SSF: 0000000000000000000000000000000
-X-QQ-GoodBg: 1
-X-BIZMAIL-ID: 2402098009740855058
-EX-QQ-RecipientCnt: 11
-From: raoxu <raoxu@uniontech.com>
-To: tsbogend@alpha.franken.de
-Cc: andrew+netdev@lunn.ch,
-	davem@davemloft.net,
-	edumazet@google.com,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	linux-mips@vger.kernel.org,
-	netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	raoxu@uniontech.com,
-	stable@vger.kernel.org
-Subject: [PATCH net] net: sgi: ioc3-eth: unregister netdev before freeing DMA rings
-Date: Mon, 29 Jun 2026 16:50:53 +0800
-Message-ID: <40CD736C4911C181+20260629085053.964383-1-raoxu@uniontech.com>
-X-Mailer: git-send-email 2.50.1
+	s=arc-20240116; t=1782723973; c=relaxed/simple;
+	bh=qB4tJg2aYLg8hehpYin2dptPRoadEzGzbBpoppNMyKk=;
+	h=From:In-Reply-To:MIME-Version:References:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Fb8CME2bVhcrtd+S5L3asRjLesa2n8XWmbcKvRHS6po3hQ+sP/e7S+Xk1lf091KLxIw3+crYs3YimWFzNlrtNxlC8k+rdZ8UeKp/oO8Zo/aiOkRFCjLz+tmfXTL7RAmWLgyFQ+0PXFUm3dHaNkYYxOCSSCI5VRjMHxh/OvvJ1IY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iyUhTV03; arc=none smtp.client-ip=100.103.45.18
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2B4FA1F00AC4
+	for <linux-mips@vger.kernel.org>; Mon, 29 Jun 2026 09:06:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1782723971;
+	bh=qB4tJg2aYLg8hehpYin2dptPRoadEzGzbBpoppNMyKk=;
+	h=From:In-Reply-To:References:Date:Subject:To:Cc;
+	b=iyUhTV03bOKBX3P50ZCu5uI5Z9GdSG5FaWYf46X7lJcOmFmX+TOB5ZSHaEGQvoVvi
+	 w7QBgX5wGnlIt9PwETkpMRIPTtL2gcrwvVGZlvQ9UEO6y0jwZX9Mmn6Zpk9DscDEuY
+	 F0AAPET4mFlLtpb3GilD+x3+Q8aLT5LUaL+qRXeepLEhJbSMjM6672Tt+0t+JTi4Ib
+	 aZbeAoeQD4GZ24bf76pYRPdkOembLX2HEF5nuge3oTrb5EA6IK7gusKHdgBYLt0wZe
+	 2UB/jbL1RUF+Rd3fa80u2w1VGLhbQLmwYrqVheU88CxYlRSZkCxTIpqImYjye4YPzK
+	 QVoyZa2wkJ4iA==
+Received: by mail-lj1-f169.google.com with SMTP id 38308e7fff4ca-39af6402933so14210161fa.2
+        for <linux-mips@vger.kernel.org>; Mon, 29 Jun 2026 02:06:11 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AHgh+RoAdVB7ttlcK2xk4l1XKiyelBApYIJsvpo/UbMRyDhlF4bn+5oSPtZsI0RpKiWovhLA55tiHcH8eMQF@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz0EpTMYylfNSWG7QzLmu/AeP6WKpvWpg5p7k+dvIBL0Y+gea4C
+	FwEuIJNFZzhIQfuQ1/KKUrN2kkbevq7yZbg11/uzwx5x7ELJRhUdSqsvp6hvPMe6mzcY0o9hXLu
+	YWAllkrub6Jh0TvKGJS79zoh5IaWBCv5G1D31qmm9ww==
+X-Received: by 2002:a05:651c:1587:b0:39a:e3c7:6644 with SMTP id
+ 38308e7fff4ca-39ae3c76ecdmr17150311fa.12.1782723969253; Mon, 29 Jun 2026
+ 02:06:09 -0700 (PDT)
+Received: from 969154062570 named unknown by gmailapi.google.com with
+ HTTPREST; Mon, 29 Jun 2026 09:06:07 +0000
+Received: from 969154062570 named unknown by gmailapi.google.com with
+ HTTPREST; Mon, 29 Jun 2026 09:06:07 +0000
+From: Bartosz Golaszewski <brgl@kernel.org>
+In-Reply-To: <ah9QPgco9BxEix7T@ashevche-desk.local>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: zesmtpgz:uniontech.com:qybglogicsvrgz:qybglogicsvrgz6b-0
-X-QQ-XMAILINFO: OGRTx1KypL8CZphGXTz5mxS25mjt2eoksqlynM1tgSUjzdKQg+oWhJAV
-	aVO7tsiIqQb7OCNyk2jGxS03j7G9AM+HvqvkXMX64d3RFQy1+MNIFLDiOmy5bMoLBvoUP1y
-	sHvQaz/JaP44OVKHw7DU10awJ6li5TRUjIwGR4ZuRD/pY0DzihhKupZQXhSKjpsG7RwlC1e
-	3sgB1Mc+j1kLT+0H8s/rN0SrAY7ADyCr9EZ6/NA15Gvx2T6uOpHOs/qhMYZlQ8hXRk53k4C
-	8aHVXzBs+AX4JfAk1Sh/RUjl+9EeOLjy7rLKmqhevsNBDiLNwlxfIkpz2RTupEmodYHRHZF
-	RvBnT0c7h0LyBJAeY1Z9TG/uNjorfbpYFjwBdQhTTI7D+Fj8ZqTIbUkb2bCRfDRvLnFDb5J
-	+Oji7vdzd2558B/925Ensm6y3mHyte6YJs3ldips64EbwO3PIxErtWR6PY5l02bwPk1Ggu2
-	fg46VC3kPLKGq5XT/kjGh7xtLmly9KR0HowjeWvxohj/VzKDwZ1bjm00KUrKyu/7N5ZsrBS
-	VUSlWIMD0pa8E+Ye9qx2iBStIgQjcpsxe1v6V0nV8s5SwOM674nLvRoWnpzYvLHep1W8AIk
-	fsFv6dCyyPT0uKVjwc9OU2tHPxmabJ7b8dGLOMQkrniF5biYjsY8iekvRbJm5AT4+kpE5Ic
-	XMkPwPfOrrqGREYSUbuI8KdEpRG7KVl2YXvnkNy41k3p9bKSFIKwyUZyUIth43Eo+0fsIjN
-	PQxGU0luSpoLW2Pt60tJkgXFDkP6PfWiGjuqeAlOa6LqwYPPvB/eKgUf9sF2UHzg4/QRVgC
-	rqdIPdvsMkl8UczqZZoAD3VDpCZFc0Xy8tw/Bgtn58qee7ieYC5OgwGZwCiivIUQMQZcbTZ
-	WqMA9r1F/S8aQiEciou3sSB5baqFwRUQKTrMoZJ1h9ZIjcNvQBQk0DlOCfoxT2MGnYxqsSV
-	sRqsz6rEVQZHgr1q2IiXqfh6Qlou1vAusyxtUfudY+/62klR6Au6peSNMARsTnCA8t1Ck3s
-	zrCcc5IJCmyqcR1NcqoV/2lobDNA2UlZKvmYxfFNNZjRlFV0G8
-X-QQ-XMRINFO: MSVp+SPm3vtSI1QTLgDHQqIV1w2oNKDqfg==
-X-QQ-RECHKSPAM: 0
+References: <20260521-pdev-fwnode-ref-v1-0-88c324a1b8d2@oss.qualcomm.com>
+ <20260521-pdev-fwnode-ref-v1-21-88c324a1b8d2@oss.qualcomm.com> <ah9QPgco9BxEix7T@ashevche-desk.local>
+Date: Mon, 29 Jun 2026 09:06:07 +0000
+X-Gmail-Original-Message-ID: <CAMRc=McSDNdBMc_MAbBiOgeWusQXPEvivxniX5dJq+X6rp3UZw@mail.gmail.com>
+X-Gm-Features: AVVi8Cem7nS_T_r8P1YOw4p48wRJJJKggepy3MNLXmsKDTbaRpH5jyNSSJ0YwZw
+Message-ID: <CAMRc=McSDNdBMc_MAbBiOgeWusQXPEvivxniX5dJq+X6rp3UZw@mail.gmail.com>
+Subject: Re: [PATCH 21/23] usb: musb: use platform_device_set_of_node_from_dev()
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc: Lee Jones <lee@kernel.org>, Mark Brown <broonie@opensource.wolfsonmicro.com>, 
+	Thierry Reding <thierry.reding@avionic-design.de>, 
+	Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>, Andrew Lunn <andrew+netdev@lunn.ch>, 
+	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	Srinivas Kandagatla <srini@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Vinod Koul <vkoul@kernel.org>, "Rafael J. Wysocki" <rafael@kernel.org>, Danilo Krummrich <dakr@kernel.org>, 
+	Rob Herring <robh@kernel.org>, Saravana Kannan <saravanak@kernel.org>, 
+	Madhavan Srinivasan <maddy@linux.ibm.com>, Michael Ellerman <mpe@ellerman.id.au>, 
+	Nicholas Piggin <npiggin@gmail.com>, "Christophe Leroy (CS GROUP)" <chleroy@kernel.org>, 
+	Andi Shyti <andi.shyti@kernel.org>, Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>, 
+	Robin Murphy <robin.murphy@arm.com>, Doug Berger <opendmb@gmail.com>, 
+	Florian Fainelli <florian.fainelli@broadcom.com>, 
+	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>, Ulf Hansson <ulfh@kernel.org>, 
+	Frank Li <Frank.Li@nxp.com>, Sascha Hauer <s.hauer@pengutronix.de>, 
+	Pengutronix Kernel Team <kernel@pengutronix.de>, Fabio Estevam <festevam@gmail.com>, 
+	Matthew Brost <matthew.brost@intel.com>, 
+	=?UTF-8?Q?Thomas_Hellstr=C3=B6m?= <thomas.hellstrom@linux.intel.com>, 
+	Rodrigo Vivi <rodrigo.vivi@intel.com>, David Airlie <airlied@gmail.com>, 
+	Simona Vetter <simona@ffwll.ch>, Peter Chen <peter.chen@kernel.org>, 
+	Paul Cercueil <paul@crapouillou.net>, Bin Liu <b-liu@ti.com>, 
+	Philipp Zabel <p.zabel@pengutronix.de>, Maximilian Luz <luzmaximilian@gmail.com>, 
+	Hans de Goede <hansg@kernel.org>, =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>, 
+	Krzysztof Kozlowski <krzk@kernel.org>, Benjamin Herrenschmidt <benh@kernel.crashing.org>, brgl@kernel.org, 
+	linux-kernel@vger.kernel.org, netdev@vger.kernel.org, 
+	linux-arm-msm@vger.kernel.org, linux-sound@vger.kernel.org, 
+	driver-core@lists.linux.dev, devicetree@vger.kernel.org, 
+	linuxppc-dev@lists.ozlabs.org, linux-i2c@vger.kernel.org, 
+	iommu@lists.linux.dev, linux-pm@vger.kernel.org, imx@lists.linux.dev, 
+	linux-arm-kernel@lists.infradead.org, intel-xe@lists.freedesktop.org, 
+	dri-devel@lists.freedesktop.org, linux-usb@vger.kernel.org, 
+	linux-mips@vger.kernel.org, platform-driver-x86@vger.kernel.org, 
+	Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>
+Content-Type: text/plain; charset="UTF-8"
 X-Rspamd-Action: no action
-X-Spamd-Result: default: False [0.84 / 15.00];
+X-Spamd-Result: default: False [-3.66 / 15.00];
+	WHITELIST_SPF_DKIM(-3.00)[kernel.org:d:+,kernel.org:s:+];
 	SUSPICIOUS_RECIPS(1.50)[];
-	MID_CONTAINS_FROM(1.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_MISSING_CHARSET(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[uniontech.com,none];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
-	R_DKIM_ALLOW(-0.20)[uniontech.com:s=onoh2408];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20260515];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
+	FREEMAIL_CC(0.00)[kernel.org,opensource.wolfsonmicro.com,avionic-design.de,gmail.com,lunn.ch,davemloft.net,google.com,redhat.com,linuxfoundation.org,linux.ibm.com,ellerman.id.au,8bytes.org,arm.com,broadcom.com,nxp.com,pengutronix.de,intel.com,linux.intel.com,ffwll.ch,crapouillou.net,ti.com,kernel.crashing.org,vger.kernel.org,lists.linux.dev,lists.ozlabs.org,lists.infradead.org,lists.freedesktop.org,oss.qualcomm.com];
+	TAGGED_FROM(0.00)[bounces-15243-lists,linux-mips=lfdr.de];
+	RCVD_TLS_LAST(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[intel.com:email,vger.kernel.org:from_smtp,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,mail.gmail.com:mid];
+	FORGED_SENDER(0.00)[brgl@kernel.org,linux-mips@vger.kernel.org];
+	MIME_TRACE(0.00)[0:+];
+	FORGED_RECIPIENTS(0.00)[m:andriy.shevchenko@linux.intel.com,m:lee@kernel.org,m:broonie@opensource.wolfsonmicro.com,m:thierry.reding@avionic-design.de,m:sebastian.hesselbarth@gmail.com,m:andrew+netdev@lunn.ch,m:davem@davemloft.net,m:edumazet@google.com,m:kuba@kernel.org,m:pabeni@redhat.com,m:srini@kernel.org,m:gregkh@linuxfoundation.org,m:vkoul@kernel.org,m:rafael@kernel.org,m:dakr@kernel.org,m:robh@kernel.org,m:saravanak@kernel.org,m:maddy@linux.ibm.com,m:mpe@ellerman.id.au,m:npiggin@gmail.com,m:chleroy@kernel.org,m:andi.shyti@kernel.org,m:joro@8bytes.org,m:will@kernel.org,m:robin.murphy@arm.com,m:opendmb@gmail.com,m:florian.fainelli@broadcom.com,m:bcm-kernel-feedback-list@broadcom.com,m:ulfh@kernel.org,m:Frank.Li@nxp.com,m:s.hauer@pengutronix.de,m:kernel@pengutronix.de,m:festevam@gmail.com,m:matthew.brost@intel.com,m:thomas.hellstrom@linux.intel.com,m:rodrigo.vivi@intel.com,m:airlied@gmail.com,m:simona@ffwll.ch,m:peter.chen@kernel.org,m:paul@crapouillou.net,m:b-liu@ti.com,m:p.zabel
+ @pengutronix.de,m:luzmaximilian@gmail.com,m:hansg@kernel.org,m:ilpo.jarvinen@linux.intel.com,m:krzk@kernel.org,m:benh@kernel.crashing.org,m:brgl@kernel.org,m:linux-kernel@vger.kernel.org,m:netdev@vger.kernel.org,m:linux-arm-msm@vger.kernel.org,m:linux-sound@vger.kernel.org,m:driver-core@lists.linux.dev,m:devicetree@vger.kernel.org,m:linuxppc-dev@lists.ozlabs.org,m:linux-i2c@vger.kernel.org,m:iommu@lists.linux.dev,m:linux-pm@vger.kernel.org,m:imx@lists.linux.dev,m:linux-arm-kernel@lists.infradead.org,m:intel-xe@lists.freedesktop.org,m:dri-devel@lists.freedesktop.org,m:linux-usb@vger.kernel.org,m:linux-mips@vger.kernel.org,m:platform-driver-x86@vger.kernel.org,m:bartosz.golaszewski@oss.qualcomm.com,m:sebastianhesselbarth@gmail.com,m:andrew@lunn.ch,s:lists@lfdr.de];
 	FORWARDED(0.00)[lists@lfdr.de];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	FORGED_SENDER(0.00)[raoxu@uniontech.com,linux-mips@vger.kernel.org];
-	FORGED_RECIPIENTS(0.00)[m:tsbogend@alpha.franken.de,m:andrew+netdev@lunn.ch,m:davem@davemloft.net,m:edumazet@google.com,m:kuba@kernel.org,m:pabeni@redhat.com,m:linux-mips@vger.kernel.org,m:netdev@vger.kernel.org,m:linux-kernel@vger.kernel.org,m:raoxu@uniontech.com,m:stable@vger.kernel.org,m:andrew@lunn.ch,s:lists@lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-15242-lists,linux-mips=lfdr.de];
-	RCVD_COUNT_THREE(0.00)[4];
-	DKIM_TRACE(0.00)[uniontech.com:+];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
-	MIME_TRACE(0.00)[0:+];
+	DKIM_TRACE(0.00)[kernel.org:+];
+	MISSING_XM_UA(0.00)[];
+	TO_DN_SOME(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
 	FORGED_SENDER_FORWARDING(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[raoxu@uniontech.com,linux-mips@vger.kernel.org];
+	FROM_NEQ_ENVFROM(0.00)[brgl@kernel.org,linux-mips@vger.kernel.org];
 	FROM_HAS_DN(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	TO_DN_NONE(0.00)[];
-	RCPT_COUNT_SEVEN(0.00)[11];
-	ALIAS_RESOLVED(0.00)[];
-	TAGGED_RCPT(0.00)[linux-mips,netdev];
+	RCPT_COUNT_GT_50(0.00)[66];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[uniontech.com:dkim,uniontech.com:email,uniontech.com:mid,uniontech.com:from_mime,tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo,vger.kernel.org:from_smtp]
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	ALIAS_RESOLVED(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TAGGED_RCPT(0.00)[linux-mips,netdev];
+	RCVD_COUNT_SEVEN(0.00)[7]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 7C5346D7B00
+X-Rspamd-Queue-Id: 008E66D7E22
 
-From: Xu Rao <raoxu@uniontech.com>
+On Tue, 2 Jun 2026 23:50:54 +0200, Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> said:
+> On Thu, May 21, 2026 at 10:36:44AM +0200, Bartosz Golaszewski wrote:
+>> Ahead of reworking the reference counting logic for platform devices,
+>> encapsulate the assignment of the OF node from another device for
+>> dynamically allocated platform devices with the provided helper.
+>
+> Same Q as per chipidea. Do they provide a pin control facility at the same time?
+>
+> Otherwise simple device_set_node() or whatever platform analogue should suffice.
+>
 
-ioc3eth_remove() frees the coherent RX and TX descriptor rings before
-unregistering the netdev. If the interface is running,
-unregister_netdev() invokes ioc3_close() through ndo_stop.
+Hi!
 
-ioc3_close() stops the device and then calls ioc3_free_rx_bufs() and
-ioc3_clean_tx_ring(). Both cleanup functions access descriptors in the
-rings, so the current ordering causes CPU accesses to freed coherent
-memory. Until ioc3_stop() disables RX and TX DMA, the device may also
-continue using the freed ring addresses.
+I don't know and I can't test it so let me respin the series as is. This can
+always be amended separately later.
 
-Unregister the netdev before releasing the rings. This lets the core
-close a running interface and quiesce the device while the rings are
-still valid. Keep the explicit timer deletion because ndo_stop is not
-called when the interface is already down.
-
-Fixes: c7b572747549 ("net: sgi: ioc3-eth: allocate space for desc rings only once")
-Cc: stable@vger.kernel.org
-Signed-off-by: Xu Rao <raoxu@uniontech.com>
----
- drivers/net/ethernet/sgi/ioc3-eth.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/net/ethernet/sgi/ioc3-eth.c b/drivers/net/ethernet/sgi/ioc3-eth.c
-index 261f2d35d579..009f37105eaf 100644
---- a/drivers/net/ethernet/sgi/ioc3-eth.c
-+++ b/drivers/net/ethernet/sgi/ioc3-eth.c
-@@ -967,11 +967,12 @@ static void ioc3eth_remove(struct platform_device *pdev)
- 	struct net_device *dev = platform_get_drvdata(pdev);
- 	struct ioc3_private *ip = netdev_priv(dev);
- 
-+	unregister_netdev(dev);
-+	timer_delete_sync(&ip->ioc3_timer);
-+
- 	dma_free_coherent(ip->dma_dev, RX_RING_SIZE, ip->rxr, ip->rxr_dma);
- 	dma_free_coherent(ip->dma_dev, TX_RING_SIZE + SZ_16K - 1, ip->tx_ring, ip->txr_dma);
- 
--	unregister_netdev(dev);
--	timer_delete_sync(&ip->ioc3_timer);
- 	free_netdev(dev);
- }
- 
--- 
-2.50.1
-
+Bart
 
