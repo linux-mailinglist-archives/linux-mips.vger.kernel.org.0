@@ -1,50 +1,51 @@
-Return-Path: <linux-mips+bounces-15324-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-15325-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id Qr9AA9LGQmoNBgoAu9opvQ
-	(envelope-from <linux-mips+bounces-15324-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Mon, 29 Jun 2026 21:26:10 +0200
+	id li6mIQnHQmpgBgoAu9opvQ
+	(envelope-from <linux-mips+bounces-15325-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Mon, 29 Jun 2026 21:27:05 +0200
 X-Original-To: lists+linux-mips@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9475B6DE4C3
-	for <lists+linux-mips@lfdr.de>; Mon, 29 Jun 2026 21:26:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 157396DE5A4
+	for <lists+linux-mips@lfdr.de>; Mon, 29 Jun 2026 21:27:05 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=kernel.org header.s=k20260515 header.b=WOjc9JyG;
-	spf=pass (mail.lfdr.de: domain of "linux-mips+bounces-15324-lists+linux-mips=lfdr.de@vger.kernel.org" designates 2600:3c0a:e001:db::12fc:5321 as permitted sender) smtp.mailfrom="linux-mips+bounces-15324-lists+linux-mips=lfdr.de@vger.kernel.org";
+	dkim=pass header.d=kernel.org header.s=k20260515 header.b=a5KeyFTe;
+	spf=pass (mail.lfdr.de: domain of "linux-mips+bounces-15325-lists+linux-mips=lfdr.de@vger.kernel.org" designates 2600:3c0a:e001:db::12fc:5321 as permitted sender) smtp.mailfrom="linux-mips+bounces-15325-lists+linux-mips=lfdr.de@vger.kernel.org";
 	dmarc=pass (policy=quarantine) header.from=kernel.org;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id B467630180B8
-	for <lists+linux-mips@lfdr.de>; Mon, 29 Jun 2026 19:25:58 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id B3C063045DCA
+	for <lists+linux-mips@lfdr.de>; Mon, 29 Jun 2026 19:26:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B265A39937B;
-	Mon, 29 Jun 2026 19:25:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 001F33B4E81;
+	Mon, 29 Jun 2026 19:26:00 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8583F2F2910;
-	Mon, 29 Jun 2026 19:25:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9025E39768D;
+	Mon, 29 Jun 2026 19:25:59 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782761157; cv=none; b=MDfQWrDhGWDTKkXfZLaDTrEXrwGmbZa50/W4lspm1IO5mOnsvC+g8N30jE63ZVkmi+BLsGaUcEYq8knU4XrbsGHsmDUaClvpg0kwPwK9uIIrINdGMyaqHrITej1uc5IsAkI95WQBDfAcm7lugezJkExnuBhgSV2fX5w8H+dNrqo=
+	t=1782761160; cv=none; b=CMPisVt5p2eWN4M2a7+SvXgX+l1YWGPdz3XkUw9ggCPEaFJuxx6bLMDIUaQFPyu7u27m+/521H3KRnsUC3TtX3hp1MLz9ORxwgfn6fb3VRY95PCH7Apyd18lE1tSe2hTv6Apyli/sJXE6qxNA2Yo5dNk4CKVRcgIeHClcAbpNf4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782761157; c=relaxed/simple;
-	bh=T4H8XWitNrpIiqDjEpMYqVocXGsbvgto5ocyPUBfiuk=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=fLGrOq+wOvpNPEhSw1baJyO1atyiwvPmX3bzpUrzvAhkN4HkD4WaySsSivrW0JrV73ZYbpZN7zN2pbHIZD2EQGjzlcrdRoPPAyZgwJUiFCSekiG0V8T44DEBCwNHkQQXg6msuhDUpEd4bFAzr4Pwhg1FNu588Gti+bAgQcz6/vQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WOjc9JyG; arc=none smtp.client-ip=100.103.45.18
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 52F6D1F000E9;
-	Mon, 29 Jun 2026 19:25:55 +0000 (UTC)
+	s=arc-20240116; t=1782761160; c=relaxed/simple;
+	bh=GY6m5fP4sLgG6B3JbF6swqfYDY/rcWo/g/BthIHQJKM=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=nz2uf8O76+2HzMgdtLOg3awsgHAE+SSuU7rhD4G6qU9bEnDkE80MU+Ms79PomliFx6vpRFbCNLl8iVgZ+xvVNZ30yqAdNqFlPoTB4vNogFGsjPb+zHulXL1OXkmEnHz7kc3oLa+yJ7Wd8d5MS/a4oeINxfaq1ZVbz5v8JD5YKII=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=a5KeyFTe; arc=none smtp.client-ip=100.103.45.18
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 564721F000E9;
+	Mon, 29 Jun 2026 19:25:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1782761156;
-	bh=uYIw6aQ9I+77XwEcGZ5sLAkEEwuPzF6gubx9MILGtr0=;
-	h=From:To:Cc:Subject:Date;
-	b=WOjc9JyG02UBcXhhgV9ic0phr0uZCFD5k0ILdv6ONhCv8Z1XYDxBYiwvpukl7K1Fg
-	 a8aIrsAXippHTg2Wibb6tHWkzlE4E0fWXgBDrHzByOJL4F8jISF06sHckyYY+PF7tK
-	 OiAiSmS9jz9wRn1oMBm18e5Uavo00IhgOxFuVQdHvJLDYYtq4uXlvS/eQXpk6KaIDD
-	 GN3rVLuuxb69YleGJzixCH/hWeHWpFDPzoCr2KQROO1CK5H8VnjBM1FKT5hXUj42/o
-	 WOenPbgoWzQyVU21Y69V/YrWJ0M+K8b+G7Zlo5u3zMESofU5MsPpKfLAYEn9kt+uGS
-	 wlAF5pba2Dehg==
+	s=k20260515; t=1782761159;
+	bh=RyicGxsSOzJTaoBcRQGH27oUytYBKCYLUF6jDOpzH7I=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=a5KeyFTeJjh7TJORUpSdmde4WrAK8BTgTPTho1LlZNtgrXh/Yqn9mD6/L1E9zfs8r
+	 e8za/mcjsoGeYfC+55PxZM0hLi0ZRJB+0Gbcm0U2F6Fn97SZIJM1N8XKGpsR2xQKrI
+	 yYMjTnXxd/YQ9zzdgYLIPjHCFJPa2KKvIAraY8mhyi19FlYp5ghqePfdzpdkTUseC1
+	 had3a1qZv4Z9B8qbb5LsCMcPsRJ2m5HWJRYLpaEMWR5rYHXsAk6QucmLYIa0UzO6lQ
+	 Pqa24H5c5iEEZidrzYUke9zV+idmE8KbclhOGbVFF/6WTC2VNdnFmcT1ViYuCVE/mn
+	 cARBGEsTONhTA==
 From: Lorenzo Stoakes <ljs@kernel.org>
 To: Andrew Morton <akpm@linux-foundation.org>
 Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
@@ -128,10 +129,12 @@ Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
 	linux-fsdevel@vger.kernel.org,
 	linux-mm@kvack.org,
 	linux-sound@vger.kernel.org
-Subject: [PATCH 00/13] convert more vm_flags_t users to vma_flags_t
-Date: Mon, 29 Jun 2026 20:25:23 +0100
-Message-ID: <cover.1782760670.git.ljs@kernel.org>
+Subject: [PATCH 01/13] mm: introduce vma_flags_can_grow() and vma_can_grow()
+Date: Mon, 29 Jun 2026 20:25:24 +0100
+Message-ID: <f2e8c32515d328db62279cc8bab8398ea278d74f.1782760670.git.ljs@kernel.org>
 X-Mailer: git-send-email 2.54.0
+In-Reply-To: <cover.1782760670.git.ljs@kernel.org>
+References: <cover.1782760670.git.ljs@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -153,7 +156,7 @@ X-Spamd-Result: default: False [-3.66 / 15.00];
 	HAS_LIST_UNSUB(-0.01)[];
 	MIME_TRACE(0.00)[0:+];
 	FREEMAIL_CC(0.00)[alpha.franken.de,linux.ibm.com,ellerman.id.au,linux.intel.com,kernel.org,suse.de,gmail.com,ffwll.ch,pengutronix.de,samsung.com,linaro.org,intel.com,ursulin.net,oss.qualcomm.com,redhat.com,ideasonboard.com,rock-chips.com,sntech.de,nvidia.com,collabora.com,broadcom.com,epam.com,gmx.de,kvack.org,zeniv.linux.org.uk,linux.dev,linux.alibaba.com,infradead.org,arm.com,google.com,suse.com,perex.cz,vger.kernel.org,lists.ozlabs.org,lists.freedesktop.org,lists.infradead.org,lists.linux.dev,lists.xenproject.org];
-	TAGGED_FROM(0.00)[bounces-15324-lists,linux-mips=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-15325-lists,linux-mips=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
 	FORGED_SENDER(0.00)[ljs@kernel.org,linux-mips@vger.kernel.org];
 	FORGED_SENDER_MAILLIST(0.00)[];
@@ -177,85 +180,99 @@ X-Spamd-Result: default: False [-3.66 / 15.00];
 	TAGGED_RCPT(0.00)[linux-mips];
 	DBL_BLOCKED_OPENRESOLVER(0.00)[vger.kernel.org:from_smtp,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 9475B6DE4C3
+X-Rspamd-Queue-Id: 157396DE5A4
 
-This series makes further progress in converting usage of the deprecated
-vm_flags_t type to its replacement, vma_flags_t.
+These test whether the VMA has stack sematics, i.e. is able to grow upwards
+or downwards depending on the architecture.
 
-It focuses on mm, though updates some users of mm APIs also.
+In order to account for arches which do not support upward-growing stacks,
+introduce VMA_GROWSUP whose definition depends on the architecture
+supporting it, and use vma_flags_test_single_mask() in vma_flags_can_grow()
+to account for this.
 
-It updates:
+Update the VMA userland tests to reflect the changes
 
-* The core do_mmap() code path for VMA mapping.
-* Unmapped area logic.
-* The usage of mm->def_vma_flags.
-* VMA page protection bit logic.
-* General usage of VMA flags in core mm code, mlock, mprotect, mremap.
+No functional change intended.
 
+Signed-off-by: Lorenzo Stoakes <ljs@kernel.org>
+---
+ include/linux/mm.h              | 21 ++++++++++++++++++---
+ tools/testing/vma/include/dup.h |  4 ++++
+ 2 files changed, 22 insertions(+), 3 deletions(-)
 
-REVIEWER/MERGER NOTE: This is dependent on [0], which must be merged before
-this.
-
-[0]:https://lore.kernel.org/linux-mm/cover.1782735110.git.ljs@kernel.org/
-
-Lorenzo Stoakes (13):
-  mm: introduce vma_flags_can_grow() and vma_can_grow()
-  mm/vma: update do_mmap() to use vma_flags_t
-  mm: convert __get_unmapped_area() to use vma_flags_t
-  mm: update generic_get_unmapped_area[_topdown]() to use vma_flags_t
-  mm: prefer mm->def_vma_flags in mm logic
-  mm/vma: convert vm_pgprot_modify() to use vma_flags_t and rename
-  mm/vma: rename vma_get_page_prot to vma_flags_to_page_prot
-  mm: introduce vma_get_page_prot() and use it
-  mm/vma: update create_init_stack_vma() to use vma_flags_t
-  mm/vma: convert miscellaneous uses of VMA flags in core mm
-  mm/mlock: convert mlock code to use vma_flags_t
-  mm/mprotect: convert mprotect code to use vma_flags_t
-  mm/mremap: convert mremap code to use vma_flags_t
-
- arch/mips/kernel/vdso.c                     |   4 +-
- arch/powerpc/mm/book3s64/slice.c            |   6 +-
- drivers/gpu/drm/drm_gem.c                   |   2 +-
- drivers/gpu/drm/drm_gem_dma_helper.c        |   2 +-
- drivers/gpu/drm/drm_gem_shmem_helper.c      |   2 +-
- drivers/gpu/drm/etnaviv/etnaviv_gem.c       |   2 +-
- drivers/gpu/drm/exynos/exynos_drm_gem.c     |   6 +-
- drivers/gpu/drm/i915/gem/i915_gem_mman.c    |  12 +-
- drivers/gpu/drm/msm/msm_gem.c               |   2 +-
- drivers/gpu/drm/nouveau/nouveau_gem.c       |   2 +-
- drivers/gpu/drm/omapdrm/omap_fbdev.c        |   2 +-
- drivers/gpu/drm/omapdrm/omap_gem.c          |   6 +-
- drivers/gpu/drm/rockchip/rockchip_drm_gem.c |   2 +-
- drivers/gpu/drm/tegra/gem.c                 |   2 +-
- drivers/gpu/drm/virtio/virtgpu_vram.c       |   2 +-
- drivers/gpu/drm/vmwgfx/vmwgfx_page_dirty.c  |   2 +-
- drivers/gpu/drm/xe/xe_device.c              |   2 +-
- drivers/gpu/drm/xe/xe_mmio_gem.c            |   2 +-
- drivers/gpu/drm/xen/xen_drm_front_gem.c     |   2 +-
- drivers/video/fbdev/core/fb_io_fops.c       |   2 +-
- fs/aio.c                                    |   2 +-
- fs/hugetlbfs/inode.c                        |   3 +-
- include/linux/huge_mm.h                     |  10 +-
- include/linux/memfd.h                       |   6 +-
- include/linux/mm.h                          |  51 ++++--
- include/linux/sched/mm.h                    |  16 +-
- ipc/shm.c                                   |   3 +-
- mm/debug.c                                  |   2 +-
- mm/huge_memory.c                            |  21 +--
- mm/memfd.c                                  |  15 +-
- mm/mlock.c                                  |  97 ++++++------
- mm/mmap.c                                   | 164 +++++++++++---------
- mm/mprotect.c                               |  16 +-
- mm/mremap.c                                 |  38 ++---
- mm/nommu.c                                  |   3 +-
- mm/util.c                                   |  10 +-
- mm/vma.c                                    |  27 ++--
- mm/vma.h                                    |   8 +-
- mm/vma_exec.c                               |  20 ++-
- sound/core/memalloc.c                       |   2 +-
- tools/testing/vma/include/dup.h             |  22 ++-
- 41 files changed, 339 insertions(+), 261 deletions(-)
-
---
+diff --git a/include/linux/mm.h b/include/linux/mm.h
+index 868b2334bff3..cf7df1569052 100644
+--- a/include/linux/mm.h
++++ b/include/linux/mm.h
+@@ -472,6 +472,7 @@ enum {
+ #define VM_SAO		INIT_VM_FLAG(SAO)
+ #elif defined(CONFIG_PARISC)
+ #define VM_GROWSUP	INIT_VM_FLAG(GROWSUP)
++#define VMA_GROWSUP	mk_vma_flags(VMA_GROWSUP_BIT)
+ #elif defined(CONFIG_SPARC64)
+ #define VM_SPARC_ADI	INIT_VM_FLAG(SPARC_ADI)
+ #define VM_ARCH_CLEAR	INIT_VM_FLAG(ARCH_CLEAR)
+@@ -483,6 +484,7 @@ enum {
+ #endif
+ #ifndef VM_GROWSUP
+ #define VM_GROWSUP	VM_NONE
++#define VMA_GROWSUP	EMPTY_VMA_FLAGS
+ #endif
+ #ifdef CONFIG_ARM64_MTE
+ #define VM_MTE		INIT_VM_FLAG(MTE)
+@@ -1563,11 +1565,24 @@ static inline bool vma_is_initial_stack(const struct vm_area_struct *vma)
+ 		vma->vm_end >= vma->vm_mm->start_stack;
+ }
+ 
+-static inline bool vma_is_temporary_stack(const struct vm_area_struct *vma)
++static inline bool vma_flags_can_grow(const vma_flags_t *flags)
+ {
+-	int maybe_stack = vma->vm_flags & (VM_GROWSDOWN | VM_GROWSUP);
++	if (vma_flags_test_single_mask(flags, VMA_GROWSUP))
++		return true;
++	if (vma_flags_test(flags, VMA_GROWSDOWN_BIT))
++		return true;
++
++	return false;
++}
+ 
+-	if (!maybe_stack)
++static inline bool vma_can_grow(const struct vm_area_struct *vma)
++{
++	return vma_flags_can_grow(&vma->flags);
++}
++
++static inline bool vma_is_temporary_stack(const struct vm_area_struct *vma)
++{
++	if (!vma_can_grow(vma))
+ 		return false;
+ 
+ 	if ((vma->vm_flags & VM_STACK_INCOMPLETE_SETUP) ==
+diff --git a/tools/testing/vma/include/dup.h b/tools/testing/vma/include/dup.h
+index 5d7d0afd7765..6f5bcd7fbcd8 100644
+--- a/tools/testing/vma/include/dup.h
++++ b/tools/testing/vma/include/dup.h
+@@ -245,8 +245,10 @@ enum {
+ #define VM_STACK	INIT_VM_FLAG(STACK)
+ #ifdef CONFIG_STACK_GROWS_UP
+ #define VM_STACK_EARLY	INIT_VM_FLAG(STACK_EARLY)
++#define VMA_STACK_EARLY mk_vma_flags(VMA_STACK_EARLY_BIT)
+ #else
+ #define VM_STACK_EARLY	VM_NONE
++#define VMA_STACK_EARLY EMPTY_VMA_FLAGS
+ #endif
+ #ifdef CONFIG_ARCH_HAS_PKEYS
+ #define VM_PKEY_SHIFT ((__force int)VMA_HIGH_ARCH_0_BIT)
+@@ -315,6 +317,8 @@ enum {
+ 
+ /* Bits set in the VMA until the stack is in its final location */
+ #define VM_STACK_INCOMPLETE_SETUP (VM_RAND_READ | VM_SEQ_READ | VM_STACK_EARLY)
++#define VMA_STACK_INCOMPLETE_SETUP append_vma_flags(		\
++	VMA_STACK_EARLY, VMA_RAND_READ_BIT, VMA_SEQ_READ_BIT)
+ 
+ #define TASK_EXEC_BIT ((current->personality & READ_IMPLIES_EXEC) ? \
+ 		       VM_EXEC_BIT : VM_READ_BIT)
+-- 
 2.54.0
+
 
