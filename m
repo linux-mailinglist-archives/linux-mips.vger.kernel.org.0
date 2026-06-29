@@ -1,51 +1,51 @@
-Return-Path: <linux-mips+bounces-15300-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-15301-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id zUmHDTh1Qmqq7gkAu9opvQ
-	(envelope-from <linux-mips+bounces-15300-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Mon, 29 Jun 2026 15:38:00 +0200
+	id XXzIGM95Qmp88AkAu9opvQ
+	(envelope-from <linux-mips+bounces-15301-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Mon, 29 Jun 2026 15:57:35 +0200
 X-Original-To: lists+linux-mips@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id BA6886DB52D
-	for <lists+linux-mips@lfdr.de>; Mon, 29 Jun 2026 15:37:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id DD2096DB9F9
+	for <lists+linux-mips@lfdr.de>; Mon, 29 Jun 2026 15:57:34 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=kernel.org header.s=k20260515 header.b=n0ckMEDN;
-	spf=pass (mail.lfdr.de: domain of "linux-mips+bounces-15300-lists+linux-mips=lfdr.de@vger.kernel.org" designates 172.234.253.10 as permitted sender) smtp.mailfrom="linux-mips+bounces-15300-lists+linux-mips=lfdr.de@vger.kernel.org";
+	dkim=pass header.d=kernel.org header.s=k20260515 header.b=frCMq+90;
+	spf=pass (mail.lfdr.de: domain of "linux-mips+bounces-15301-lists+linux-mips=lfdr.de@vger.kernel.org" designates 172.234.253.10 as permitted sender) smtp.mailfrom="linux-mips+bounces-15301-lists+linux-mips=lfdr.de@vger.kernel.org";
 	dmarc=pass (policy=quarantine) header.from=kernel.org;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id C84AA33C893C
-	for <lists+linux-mips@lfdr.de>; Mon, 29 Jun 2026 13:29:05 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id E391C30ED328
+	for <lists+linux-mips@lfdr.de>; Mon, 29 Jun 2026 13:29:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C0BC2408008;
-	Mon, 29 Jun 2026 13:27:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1D506408034;
+	Mon, 29 Jun 2026 13:27:52 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B498406285;
-	Mon, 29 Jun 2026 13:27:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00EBA3FF882;
+	Mon, 29 Jun 2026 13:27:50 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782739664; cv=none; b=mhMb9saHlBxARNGUYfJmNfETDykh/fd70T8yfitrIuKBr6uMNah3Y2d16+ciJSlysQLIuJlIFd65OJnYebrVGT0Oif7r0TtJKVhgi/rh0VVxM9sFE/hRoj+r8ANC/TZuH6k2kJwBAczRucuK6c3yzACLctf2WszvKBJV3kyKIVo=
+	t=1782739672; cv=none; b=WALUC2XVklNBMjzUNkGNaW50dl0ESf2rb+UaMnDWLvJqLN0shTjIBdlnXh+8TlijVjsqwWiM5yjM2uz5/q6sGvEKMQ2PyYup7SGj5TkeOg8OhfqwGQs+6dG3WLjEcyU2Dq+1Sr5RMiAVPCimObCtMkQjvVA9dSI3NPSakZvoGpc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782739664; c=relaxed/simple;
-	bh=IjnoD63PUxKmwy2OelXaHu6mAwyznQFju9qEwhzBEtQ=;
+	s=arc-20240116; t=1782739672; c=relaxed/simple;
+	bh=HjfFL0am9vxsV7d0k9jRsOtm7aABoaj496THOMS1g7Q=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=SL7nPvuX0nfMAVWIQqY9tpbTjmA9k388b6ycyHKIpOKzB4Gaojna77k7cvKhkGmlTFVWaOJ+VNzckU3oAeGj5lGdf+MBYddzns4YgAM0Fkc7u7oSdSYAEhjcGnSA7ZGSX2rhr8/vmaYnGsx1OZtrbpPusbr8yn/E+82UOAvyHyw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=n0ckMEDN; arc=none smtp.client-ip=100.103.45.18
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E9D0B1F000E9;
-	Mon, 29 Jun 2026 13:27:36 +0000 (UTC)
+	 MIME-Version; b=UI57A7MGyPEVUauzjjm5HgEAfgkZJyacUAB4si88qAls3qmyQ3T8YbCua5sMPY2d5zpVoB+f5Nsmqno8t5jht2iO8EZtPx+9T8ugCKXYJf3QmUSvbxbBDI3RsMLZ0XGkS0/5yD7YLz+jrm6uLAoaHlH2S9vA82vUVkzkgVih5C8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=frCMq+90; arc=none smtp.client-ip=100.103.45.18
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ECD421F00A3A;
+	Mon, 29 Jun 2026 13:27:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1782739663;
-	bh=sRJYXoqWCiZ6ApNEThTWgx3+Cj7z8E/TIwsvi5Pcnyo=;
+	s=k20260515; t=1782739670;
+	bh=TSJ5H7bOOMhyz7FEoPXZ7o9gnbiAA9g1/+KyzvH3xDI=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=n0ckMEDNYI3vfl11sh6myJdKtsPmw6j/S+5oU1JiNgB7S0rDcWyAhd6ptFauFBHmT
-	 VqqmKk6bmTDwYN3/oD1x4iDxEeiSf4J/cbiRVWMkip/xETGZrP8vpzxUvsQYYWa5Te
-	 Y5u6PwYaFoZRi6cCY5bq26SEvwgitBbAlRa55Wky/V4hEspwQYbQDGjIPP2B/XXQ4q
-	 TBUHZR+5sZKDYq4dtVxS/7Q9atYdco29CCSA7f1+14EG1u1Cgd3rHHlD3rf9nP54EA
-	 VN/iRji/EQD/uTEHZ6uGzg1lLTuMU42tJSMT2sb8RuLMFI3yLP5XbsvIvHY0hPwOae
-	 0Q1U9yakmt6fg==
+	b=frCMq+90h/OOkRt3VRllbgW3boGE8WzpIkP6+O9NYpBXkdj0qYzG++XaK7GJMpAGD
+	 t5ScqajVzKDdc9QUmdl5re7CGxfTCnwyyyVsDQCQFmok9I/fhirTzPrcrodaFyUQL8
+	 AZs3SrUwykM4Z/z4AX6z8O3sjPR3oLjDjs0Ah+JtckiqquvFAkl9DnIBTe34eh94Fi
+	 LDsahVUUuCuZwGmrB98x6WbJqA4xl08HihuVeRXdM1MaGOUIebzbGow9y3/cMvd5zG
+	 9fVZt5FPz0wFhjpVOnRv94Jk5QSvb/i2t4FHYbQH7gTgFlHNh3aBtXVVCN3r0AbKah
+	 WqU08S/XD1bGA==
 From: Arnd Bergmann <arnd@kernel.org>
 To: linux-gpio@vger.kernel.org
 Cc: Arnd Bergmann <arnd@arndb.de>,
@@ -81,9 +81,9 @@ Cc: Arnd Bergmann <arnd@arndb.de>,
 	linux-phy@lists.infradead.org,
 	linux-rockchip@lists.infradead.org,
 	linux-sound@vger.kernel.org
-Subject: [PATCH 08/13] pcmcia: replace linux/gpio.h inclusions
-Date: Mon, 29 Jun 2026 15:26:28 +0200
-Message-Id: <20260629132633.1300009-9-arnd@kernel.org>
+Subject: [PATCH 09/13] phy: replace linux/gpio.h inclusions
+Date: Mon, 29 Jun 2026 15:26:29 +0200
+Message-Id: <20260629132633.1300009-10-arnd@kernel.org>
 X-Mailer: git-send-email 2.39.5
 In-Reply-To: <20260629132633.1300009-1-arnd@kernel.org>
 References: <20260629132633.1300009-1-arnd@kernel.org>
@@ -107,7 +107,7 @@ X-Spamd-Result: default: False [-2.16 / 15.00];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-15300-lists,linux-mips=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-15301-lists,linux-mips=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
 	FORGED_RECIPIENTS(0.00)[m:linux-gpio@vger.kernel.org,m:arnd@arndb.de,m:brgl@kernel.org,m:andrew@lunn.ch,m:sebastian.hesselbarth@gmail.com,m:gregory.clement@bootlin.com,m:Frank.Li@nxp.com,m:robert.jarzmik@free.fr,m:krzk@kernel.org,m:gerg@linux-m68k.org,m:tsbogend@alpha.franken.de,m:hauke@hauke-m.de,m:zajec5@gmail.com,m:ysato@users.sourceforge.jp,m:glaubitz@physik.fu-berlin.de,m:linusw@kernel.org,m:dmitry.torokhov@gmail.com,m:kuba@kernel.org,m:pabeni@redhat.com,m:linux@dominikbrodowski.net,m:linux-kernel@vger.kernel.org,m:linux-arm-kernel@lists.infradead.org,m:linux-samsung-soc@vger.kernel.org,m:patches@opensource.cirrus.com,m:linux-m68k@lists.linux-m68k.org,m:linux-mips@vger.kernel.org,m:linux-sh@vger.kernel.org,m:linux-input@vger.kernel.org,m:linux-media@vger.kernel.org,m:netdev@vger.kernel.org,m:linux-sunxi@lists.linux.dev,m:linux-phy@lists.infradead.org,m:linux-rockchip@lists.infradead.org,m:linux-sound@vger.kernel.org,m:sebastianhesselbarth@gmail.com,m:dmitrytorokhov@gmail.com,s:
  lists@lfdr.de];
@@ -130,90 +130,61 @@ X-Spamd-Result: default: False [-2.16 / 15.00];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
 	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[vger.kernel.org:from_smtp,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,arndb.de:email]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,vger.kernel.org:from_smtp,arndb.de:email]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: BA6886DB52D
+X-Rspamd-Queue-Id: DD2096DB9F9
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-The pcmcia drivers all use the legacy interfaces, so convert to
-include linux/gpio/legacy.h instead.
+linux/gpio.h should no longer be used, convert these instead to
+either linux/gpio/consumer.h or linux/gpio/legacy.h as needed.
 
 Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
- drivers/pcmcia/bcm63xx_pcmcia.c | 2 +-
- drivers/pcmcia/db1xxx_ss.c      | 2 +-
- drivers/pcmcia/sa1100_h3600.c   | 2 +-
- drivers/pcmcia/soc_common.c     | 2 +-
- drivers/pcmcia/xxs1500_ss.c     | 2 +-
- 5 files changed, 5 insertions(+), 5 deletions(-)
+ drivers/phy/broadcom/phy-bcm-ns2-usbdrd.c | 2 +-
+ drivers/phy/rockchip/phy-rockchip-usbdp.c | 2 +-
+ drivers/phy/ti/phy-j721e-wiz.c            | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/pcmcia/bcm63xx_pcmcia.c b/drivers/pcmcia/bcm63xx_pcmcia.c
-index 724fd6ee0fd0..1612b5d76975 100644
---- a/drivers/pcmcia/bcm63xx_pcmcia.c
-+++ b/drivers/pcmcia/bcm63xx_pcmcia.c
-@@ -14,7 +14,7 @@
- #include <linux/slab.h>
- #include <linux/delay.h>
- #include <linux/pci.h>
--#include <linux/gpio.h>
-+#include <linux/gpio/legacy.h>
- 
- #include <bcm63xx_regs.h>
- #include <bcm63xx_io.h>
-diff --git a/drivers/pcmcia/db1xxx_ss.c b/drivers/pcmcia/db1xxx_ss.c
-index 7b896d7dbc9f..410d24762f13 100644
---- a/drivers/pcmcia/db1xxx_ss.c
-+++ b/drivers/pcmcia/db1xxx_ss.c
-@@ -23,7 +23,7 @@
-  */
+diff --git a/drivers/phy/broadcom/phy-bcm-ns2-usbdrd.c b/drivers/phy/broadcom/phy-bcm-ns2-usbdrd.c
+index 8473fa574529..d9c06129ed23 100644
+--- a/drivers/phy/broadcom/phy-bcm-ns2-usbdrd.c
++++ b/drivers/phy/broadcom/phy-bcm-ns2-usbdrd.c
+@@ -3,7 +3,7 @@
  
  #include <linux/delay.h>
+ #include <linux/extcon-provider.h>
 -#include <linux/gpio.h>
-+#include <linux/gpio/legacy.h>
- #include <linux/interrupt.h>
- #include <linux/pm.h>
- #include <linux/module.h>
-diff --git a/drivers/pcmcia/sa1100_h3600.c b/drivers/pcmcia/sa1100_h3600.c
-index 10cb99c20a7f..6c52d90795eb 100644
---- a/drivers/pcmcia/sa1100_h3600.c
-+++ b/drivers/pcmcia/sa1100_h3600.c
-@@ -11,7 +11,7 @@
- #include <linux/interrupt.h>
- #include <linux/init.h>
- #include <linux/delay.h>
--#include <linux/gpio.h>
-+#include <linux/gpio/legacy.h>
- 
- #include <mach/hardware.h>
- #include <asm/irq.h>
-diff --git a/drivers/pcmcia/soc_common.c b/drivers/pcmcia/soc_common.c
-index 87aa3f667117..23585e3968e9 100644
---- a/drivers/pcmcia/soc_common.c
-+++ b/drivers/pcmcia/soc_common.c
-@@ -32,8 +32,8 @@
- 
- 
- #include <linux/cpufreq.h>
--#include <linux/gpio.h>
++#include <linux/gpio/consumer.h>
  #include <linux/gpio/consumer.h>
-+#include <linux/gpio/legacy.h>
  #include <linux/init.h>
  #include <linux/interrupt.h>
- #include <linux/io.h>
-diff --git a/drivers/pcmcia/xxs1500_ss.c b/drivers/pcmcia/xxs1500_ss.c
-index 8a8aae1843b5..ba1bd0f9d9f8 100644
---- a/drivers/pcmcia/xxs1500_ss.c
-+++ b/drivers/pcmcia/xxs1500_ss.c
-@@ -7,7 +7,7 @@
-  */
- 
+diff --git a/drivers/phy/rockchip/phy-rockchip-usbdp.c b/drivers/phy/rockchip/phy-rockchip-usbdp.c
+index fba35510d88c..d0d736a30d08 100644
+--- a/drivers/phy/rockchip/phy-rockchip-usbdp.c
++++ b/drivers/phy/rockchip/phy-rockchip-usbdp.c
+@@ -11,7 +11,7 @@
+ #include <linux/bits.h>
+ #include <linux/clk.h>
  #include <linux/delay.h>
 -#include <linux/gpio.h>
-+#include <linux/gpio/legacy.h>
- #include <linux/interrupt.h>
++#include <linux/gpio/consumer.h>
+ #include <linux/mfd/syscon.h>
+ #include <linux/mod_devicetable.h>
+ #include <linux/module.h>
+diff --git a/drivers/phy/ti/phy-j721e-wiz.c b/drivers/phy/ti/phy-j721e-wiz.c
+index 7531a8a04912..2233babc0078 100644
+--- a/drivers/phy/ti/phy-j721e-wiz.c
++++ b/drivers/phy/ti/phy-j721e-wiz.c
+@@ -11,7 +11,7 @@
+ #include <linux/slab.h>
+ #include <linux/clk.h>
+ #include <linux/clk-provider.h>
+-#include <linux/gpio.h>
++#include <linux/gpio/consumer.h>
+ #include <linux/gpio/consumer.h>
  #include <linux/io.h>
- #include <linux/ioport.h>
+ #include <linux/module.h>
 -- 
 2.39.5
 
