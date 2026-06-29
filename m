@@ -1,51 +1,51 @@
-Return-Path: <linux-mips+bounces-15304-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-15305-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id JlWiDDR3Qmp97wkAu9opvQ
-	(envelope-from <linux-mips+bounces-15304-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Mon, 29 Jun 2026 15:46:28 +0200
+	id cpoaBs91Qmrr7gkAu9opvQ
+	(envelope-from <linux-mips+bounces-15305-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Mon, 29 Jun 2026 15:40:31 +0200
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id B19116DB773
-	for <lists+linux-mips@lfdr.de>; Mon, 29 Jun 2026 15:46:27 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7BE866DB5D4
+	for <lists+linux-mips@lfdr.de>; Mon, 29 Jun 2026 15:40:30 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=kernel.org header.s=k20260515 header.b=l+Bjn0TW;
-	spf=pass (mail.lfdr.de: domain of "linux-mips+bounces-15304-lists+linux-mips=lfdr.de@vger.kernel.org" designates 2600:3c09:e001:a7::12fc:5321 as permitted sender) smtp.mailfrom="linux-mips+bounces-15304-lists+linux-mips=lfdr.de@vger.kernel.org";
+	dkim=pass header.d=kernel.org header.s=k20260515 header.b=h5AFqQi4;
+	spf=pass (mail.lfdr.de: domain of "linux-mips+bounces-15305-lists+linux-mips=lfdr.de@vger.kernel.org" designates 2600:3c04:e001:36c::12fc:5321 as permitted sender) smtp.mailfrom="linux-mips+bounces-15305-lists+linux-mips=lfdr.de@vger.kernel.org";
 	dmarc=pass (policy=quarantine) header.from=kernel.org;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 1875F314559C
-	for <lists+linux-mips@lfdr.de>; Mon, 29 Jun 2026 13:30:09 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 2CD2A30A5C7F
+	for <lists+linux-mips@lfdr.de>; Mon, 29 Jun 2026 13:30:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AE596409609;
-	Mon, 29 Jun 2026 13:28:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 10B26409613;
+	Mon, 29 Jun 2026 13:28:20 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0FEA400E15;
-	Mon, 29 Jun 2026 13:28:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB51636A366;
+	Mon, 29 Jun 2026 13:28:18 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782739692; cv=none; b=MbABMK7cZ+21HZrw5C0AjAneEhfuCiT5MHwXfaBeN+6d+7fHQhQNUNQKLlktihghtIGbbRJvrRkdnyxaxOR9L1Rork1lXGSFAU1kzh26ygNCEH7ZLBMF7MsEcCKljimyMkinybkpj7R7eNjB37AgVacTJlTyAmtboLAiFq3fMrk=
+	t=1782739699; cv=none; b=iyWCDobA2jUBdSKBsRorK79k1ZKPfeL/ThmS7BRO/Dw/sx1gVq2mkZPZy2z2zuxNo9JFR6a4DsKm20Jp+pueHNFsFQxlJCx0auuBHE6OzbI6ZtGQebJvPhp+05HLy9rGhsv+BDgOm/8Dp6q3E/3fnR25kCsob6VAxAeP4XgKhyQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782739692; c=relaxed/simple;
-	bh=GNKP1XlJXRKFJBUq6P1pWbPm0LmF/k3EOFPIlsHhd0M=;
+	s=arc-20240116; t=1782739699; c=relaxed/simple;
+	bh=j+Xq+qlf0aQy5fadHBX3DKpcoyWe26ABu8Ry5PWEXLM=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=h4cYT5HSllBTmooJA3O7zsScekmqDUXRrqoebvoYOOp/3XY2IR4XqTDzJwvv7suPKy0l967x6o7u9cLro7+DztKBe7fWcIJth4C8FbLY5w2KBewTFc/sLVv+Caxj4+UZiL9kk7dP+6qTUAe9R49LwgcIBEPMabwYq/foPqp/FAE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=l+Bjn0TW; arc=none smtp.client-ip=100.103.45.18
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 090611F000E9;
-	Mon, 29 Jun 2026 13:28:04 +0000 (UTC)
+	 MIME-Version; b=gZOZCEenL6dg3lhJx2agmm9T5YkZrbI2l+dGpQaYVK4dAgpKDa2X7s9SEmLT+4Phx7hn6r21OVId2aJyNRlv6vPpxXUIlXsqPg7npL5DHuBomc2k/cEDhC3RXhF31Kaepsdl6BtKhXgyxspfd4iuK0cXbS9abptwJ3g+qElETdM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=h5AFqQi4; arc=none smtp.client-ip=100.103.45.18
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 089BD1F00A3A;
+	Mon, 29 Jun 2026 13:28:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1782739691;
-	bh=AbxQxhI8jkWFpggqqu0BJxCVlmjNB8rVpnB3U/bG9/8=;
+	s=k20260515; t=1782739698;
+	bh=iYwaK59VeErRBhP0Q9iTMSGYiDgPnUNQAe6MLCdyQLw=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=l+Bjn0TWuJNScCkv2eF3hy4+9W/x+N/FOa0Y6J7K1PFzRKxbGv4SQUtde7aDOLy8B
-	 jZkrFSnHT6Vb61R5R/ETfTSspiaEh+nheFllga8qyHXfV3yUxDZSenK4zIhVp2ALI+
-	 nzRCJXHiieCva9BC4U/A20qdEbhgbI/dhbWcdg/Jt7oAcq2GDapzVbIFKbACjvCd9P
-	 uYVxIeyS3AcefXCPNeybaedPhtAmuQ8NxzQKp3Kq4z2cU2T7FaobBGokfDAJ0YP4jO
-	 D6rFiTomsxEP9rkITDZ/6mMxQ/dBT7Rjpc7U1oDKGDNycGwvTBYGhfgJLQfBm3ssL7
-	 lcm3OEdYqXtkw==
+	b=h5AFqQi4jStPxyTSP1+6Qa/JvBSIFtVgK0MNZzsiH6wjFRswa/RLrnQqFNHih/qjG
+	 EWv3fVYPKDKbBtHjWpFdO8cIy9X4E9hkJpPP6vBXA8/qsQylAAtt6v+NK73U7OXv92
+	 YB7mQNWAxRfG6dGtDgsPLk0YTrL8XMwVLZP0DiJLe31ovoUMss8UP/7D/l/j5xY8/E
+	 GWyr+Tst/J+V3i8q9C/i4YobqaQblCJhFZjTHY4YfQcFjDhwMaiBx0Ip4Lj1e9DE6L
+	 mM017Lryq9TQOfeRAPIp4At1UOUu2ZNtp0Xj6zezM1lXYTXWiO8CpisTNWLtJuCnOG
+	 JFsljvXoooevw==
 From: Arnd Bergmann <arnd@kernel.org>
 To: linux-gpio@vger.kernel.org
 Cc: Arnd Bergmann <arnd@arndb.de>,
@@ -81,9 +81,9 @@ Cc: Arnd Bergmann <arnd@arndb.de>,
 	linux-phy@lists.infradead.org,
 	linux-rockchip@lists.infradead.org,
 	linux-sound@vger.kernel.org
-Subject: [PATCH 12/13] gpib: gpio: replace linux/gpio.h inclusion
-Date: Mon, 29 Jun 2026 15:26:32 +0200
-Message-Id: <20260629132633.1300009-13-arnd@kernel.org>
+Subject: [PATCH 13/13] gpiolib: remove linux/gpio.h
+Date: Mon, 29 Jun 2026 15:26:33 +0200
+Message-Id: <20260629132633.1300009-14-arnd@kernel.org>
 X-Mailer: git-send-email 2.39.5
 In-Reply-To: <20260629132633.1300009-1-arnd@kernel.org>
 References: <20260629132633.1300009-1-arnd@kernel.org>
@@ -103,11 +103,11 @@ X-Spamd-Result: default: False [-2.16 / 15.00];
 	R_MISSING_CHARSET(0.50)[];
 	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
 	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20260515];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-15304-lists,linux-mips=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-15305-lists,linux-mips=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
 	FORGED_RECIPIENTS(0.00)[m:linux-gpio@vger.kernel.org,m:arnd@arndb.de,m:brgl@kernel.org,m:andrew@lunn.ch,m:sebastian.hesselbarth@gmail.com,m:gregory.clement@bootlin.com,m:Frank.Li@nxp.com,m:robert.jarzmik@free.fr,m:krzk@kernel.org,m:gerg@linux-m68k.org,m:tsbogend@alpha.franken.de,m:hauke@hauke-m.de,m:zajec5@gmail.com,m:ysato@users.sourceforge.jp,m:glaubitz@physik.fu-berlin.de,m:linusw@kernel.org,m:dmitry.torokhov@gmail.com,m:kuba@kernel.org,m:pabeni@redhat.com,m:linux@dominikbrodowski.net,m:linux-kernel@vger.kernel.org,m:linux-arm-kernel@lists.infradead.org,m:linux-samsung-soc@vger.kernel.org,m:patches@opensource.cirrus.com,m:linux-m68k@lists.linux-m68k.org,m:linux-mips@vger.kernel.org,m:linux-sh@vger.kernel.org,m:linux-input@vger.kernel.org,m:linux-media@vger.kernel.org,m:netdev@vger.kernel.org,m:linux-sunxi@lists.linux.dev,m:linux-phy@lists.infradead.org,m:linux-rockchip@lists.infradead.org,m:linux-sound@vger.kernel.org,m:sebastianhesselbarth@gmail.com,m:dmitrytorokhov@gmail.com,s:
  lists@lfdr.de];
@@ -128,34 +128,123 @@ X-Spamd-Result: default: False [-2.16 / 15.00];
 	TAGGED_RCPT(0.00)[linux-mips];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[vger.kernel.org:from_smtp,sto.lore.kernel.org:rdns,sto.lore.kernel.org:helo,arndb.de:email]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo,arndb.de:email,vger.kernel.org:from_smtp]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: B19116DB773
+X-Rspamd-Queue-Id: 7BE866DB5D4
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-linux/gpio.h is going away, so use linux/gpio/consumer.h instead.
+After all other drivers have converted to linux/gpio/consumer.h
+or linux/gpio/legacy.h, remove the final leftover bits here.
 
 Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
- drivers/gpib/gpio/gpib_bitbang.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ MAINTAINERS                   |  1 -
+ drivers/gpio/TODO             |  4 +---
+ drivers/gpio/gpiolib-cdev.c   |  2 +-
+ drivers/gpio/gpiolib-legacy.c |  3 +--
+ drivers/gpio/gpiolib.c        |  2 +-
+ include/linux/gpio.h          | 22 ----------------------
+ 6 files changed, 4 insertions(+), 30 deletions(-)
+ delete mode 100644 include/linux/gpio.h
 
-diff --git a/drivers/gpib/gpio/gpib_bitbang.c b/drivers/gpib/gpio/gpib_bitbang.c
-index 0e227980b493..2e8d895db06a 100644
---- a/drivers/gpib/gpio/gpib_bitbang.c
-+++ b/drivers/gpib/gpio/gpib_bitbang.c
-@@ -64,7 +64,7 @@
- #include <linux/gpio/consumer.h>
- #include <linux/gpio/driver.h>
- #include <linux/gpio/machine.h>
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 15011f5752a9..7f3f386b1d8c 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -11175,7 +11175,6 @@ F:	Documentation/devicetree/bindings/gpio/
+ F:	Documentation/driver-api/gpio/
+ F:	drivers/gpio/
+ F:	include/dt-bindings/gpio/
+-F:	include/linux/gpio.h
+ F:	include/linux/gpio/
+ K:	(devm_)?gpio_(request|free|direction|get|set)
+ K:	GPIOD_FLAGS_BIT_NONEXCLUSIVE
+diff --git a/drivers/gpio/TODO b/drivers/gpio/TODO
+index 7ce80fde1f17..894c7e1af252 100644
+--- a/drivers/gpio/TODO
++++ b/drivers/gpio/TODO
+@@ -52,9 +52,7 @@ Work items:
+   base can be made dynamic (set to -1) if CONFIG_GPIO_SYSFS is disabled.
+ 
+ - When this work is complete (will require some of the items in the
+-  following ongoing work as well) we can delete the old global
+-  numberspace accessors from <linux/gpio.h> and eventually delete
+-  <linux/gpio.h> altogether.
++  following ongoing work as well) we can delete <linux/gpio/lagacy.h>.
+ 
+ -------------------------------------------------------------------------------
+ 
+diff --git a/drivers/gpio/gpiolib-cdev.c b/drivers/gpio/gpiolib-cdev.c
+index 82f27db0b230..9b6a28819371 100644
+--- a/drivers/gpio/gpiolib-cdev.c
++++ b/drivers/gpio/gpiolib-cdev.c
+@@ -11,7 +11,7 @@
+ #include <linux/device.h>
+ #include <linux/err.h>
+ #include <linux/file.h>
 -#include <linux/gpio.h>
 +#include <linux/gpio/consumer.h>
- #include <linux/irq.h>
+ #include <linux/gpio/driver.h>
+ #include <linux/hte.h>
+ #include <linux/interrupt.h>
+diff --git a/drivers/gpio/gpiolib-legacy.c b/drivers/gpio/gpiolib-legacy.c
+index ef3f2ef30cf2..33e5a45e720b 100644
+--- a/drivers/gpio/gpiolib-legacy.c
++++ b/drivers/gpio/gpiolib-legacy.c
+@@ -7,8 +7,7 @@
  
- static int sn7516x_used = 1, sn7516x;
+ #include <linux/gpio/consumer.h>
+ #include <linux/gpio/driver.h>
+-
+-#include <linux/gpio.h>
++#include <linux/gpio/legacy.h>
+ 
+ #include "gpiolib.h"
+ 
+diff --git a/drivers/gpio/gpiolib.c b/drivers/gpio/gpiolib.c
+index e5fb60111151..1f498d6c8c68 100644
+--- a/drivers/gpio/gpiolib.c
++++ b/drivers/gpio/gpiolib.c
+@@ -29,7 +29,7 @@
+ #include <linux/string.h>
+ #include <linux/string_choices.h>
+ 
+-#include <linux/gpio.h>
++#include <linux/gpio/consumer.h>
+ #include <linux/gpio/driver.h>
+ #include <linux/gpio/machine.h>
+ 
+diff --git a/include/linux/gpio.h b/include/linux/gpio.h
+deleted file mode 100644
+index b0d4942a65de..000000000000
+--- a/include/linux/gpio.h
++++ /dev/null
+@@ -1,22 +0,0 @@
+-/* SPDX-License-Identifier: GPL-2.0 */
+-/*
+- * NOTE: This header *must not* be included.
+- *
+- * If you're implementing a GPIO driver, only include <linux/gpio/driver.h>
+- * If you're implementing a GPIO consumer, only include <linux/gpio/consumer.h>
+- * If you're using the legacy interfaces, include <linux/gpio/legacy.h>
+- */
+-
+-#ifndef __LINUX_GPIO_H
+-#define __LINUX_GPIO_H
+-
+-#include <linux/types.h>
+-#ifdef CONFIG_GPIOLIB
+-#include <linux/gpio/consumer.h>
+-#endif
+-
+-#ifdef CONFIG_GPIOLIB_LEGACY
+-#include <linux/gpio/legacy.h>
+-#endif /* CONFIG_GPIOLIB_LEGACY */
+-
+-#endif /* __LINUX_GPIO_H */
 -- 
 2.39.5
 
