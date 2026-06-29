@@ -1,51 +1,51 @@
-Return-Path: <linux-mips+bounces-15302-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-15303-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id meV9I691Qmrb7gkAu9opvQ
-	(envelope-from <linux-mips+bounces-15302-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Mon, 29 Jun 2026 15:39:59 +0200
+	id aTVhF7l1Qmrg7gkAu9opvQ
+	(envelope-from <linux-mips+bounces-15303-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Mon, 29 Jun 2026 15:40:09 +0200
 X-Original-To: lists+linux-mips@lfdr.de
 Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3B5C36DB5B4
-	for <lists+linux-mips@lfdr.de>; Mon, 29 Jun 2026 15:39:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id CEC476DB5BE
+	for <lists+linux-mips@lfdr.de>; Mon, 29 Jun 2026 15:40:08 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=kernel.org header.s=k20260515 header.b=TZSmSeEL;
-	spf=pass (mail.lfdr.de: domain of "linux-mips+bounces-15302-lists+linux-mips=lfdr.de@vger.kernel.org" designates 2600:3c04:e001:36c::12fc:5321 as permitted sender) smtp.mailfrom="linux-mips+bounces-15302-lists+linux-mips=lfdr.de@vger.kernel.org";
+	dkim=pass header.d=kernel.org header.s=k20260515 header.b=MdfFbWJ+;
+	spf=pass (mail.lfdr.de: domain of "linux-mips+bounces-15303-lists+linux-mips=lfdr.de@vger.kernel.org" designates 2600:3c04:e001:36c::12fc:5321 as permitted sender) smtp.mailfrom="linux-mips+bounces-15303-lists+linux-mips=lfdr.de@vger.kernel.org";
 	dmarc=pass (policy=quarantine) header.from=kernel.org;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 7FE2531379FE
-	for <lists+linux-mips@lfdr.de>; Mon, 29 Jun 2026 13:29:37 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 7560B308791C
+	for <lists+linux-mips@lfdr.de>; Mon, 29 Jun 2026 13:29:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1D9B7408624;
-	Mon, 29 Jun 2026 13:27:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BE9C040F8D6;
+	Mon, 29 Jun 2026 13:28:05 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0450F404BFA;
-	Mon, 29 Jun 2026 13:27:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB29A404BFA;
+	Mon, 29 Jun 2026 13:28:04 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782739679; cv=none; b=mu3mUTyuVaMG42bmWwEhIpCXP2NEWUg5FUknDPG+CvK6+wnDPTP5CkPsLTEJgHdiFdXmgE4s8sUa74EYAfQtk787fhwTyb/cNiKAZ9IyI+zpnrh8jERJ7VTPc14ArjHfxMxeV3AQAMySWUBnQi9yOUcixXb6Ns8j67hRgrSY8a0=
+	t=1782739685; cv=none; b=s5AryEiabCqIOR7IExhK0fa15larYkOIgTq6wT6yl0PofcunkV9b7LQ4rv7KA0N/XZOPWgfvR3vU1tF0vxZyM+kNykSKzRNqceZJpmBB72uN8DTjdaBrLbjPjYy7V+/Ij2oNyY/Gs0qvyNHOlM4PSM5a6mETbdaVnUI12VS6ocM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782739679; c=relaxed/simple;
-	bh=72uRd1AeE4T9AuRdko8PY70YVYhCdOP3faXv7Q9n66s=;
+	s=arc-20240116; t=1782739685; c=relaxed/simple;
+	bh=obNPcB+BaZsnpRHlcsBGxQCruLKZ5xXtfc+XJI2PSpg=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=lL3IwEGOmoQAXqzPrsszB+S3VezL+TH2I6X9AF9y/zB+CG7CHWDhTO95Hy0zLPGC7/PzFwSXGAOSxmp9jIXybEx+JqzwPUA3qSsNNigq7MWzf954PbAW90GhHxP2nVv+xccwghgFA6vAeZIhkZdImMpFzhSBm0C0r/MmFYX2GDI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TZSmSeEL; arc=none smtp.client-ip=100.103.45.18
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0B4591F000E9;
-	Mon, 29 Jun 2026 13:27:50 +0000 (UTC)
+	 MIME-Version; b=RKHn3sSA1kf6VI5uj1pt61I2upm6a4SsfUH9r4J+27vurV7dgF85KFZzFDdHwiF9JTcDUdRjY4aUhl40TxFfJVii8ev/hdOlcKXLEh7JarPFh9KTjDa56WeMMeuG7wQbf3ra+JlrCx8gKcZqV1nql9k/wRi0ZFYRdTfKpQXl6yk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MdfFbWJ+; arc=none smtp.client-ip=100.103.45.18
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 095261F00A3D;
+	Mon, 29 Jun 2026 13:27:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1782739677;
-	bh=0ZjvdwSdJ07ba044RbmZ4lMBBWJONpd196bqsB07784=;
+	s=k20260515; t=1782739684;
+	bh=NrdLJGMFs8wtvc4BJiEXLk7S18TXVPww8hdTab/uPp0=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=TZSmSeEL8sgvKsxzLVBT5TAIjiq50BaPGDH7s6aEVKHGJRfuuPn4I/iMdFZDjO53s
-	 jqFhtjgdtyqoLwVzS4xubyYSELpN36RhrBRpwJo8DQkOgWrrOPC+z26qkMypse9F5k
-	 JeSFvd8+QvoAjI4e1Adm9VOXH218T6FSYJ+f0PJr+Un77+NcEmdFFDtWjbIW0XjWJL
-	 HqFuYsCmeYlDnygLpo1DE4N4k7c710ECsxCTB4zSt8LxG2F8o5RGv1WoM63YONijSy
-	 V9+fsbUjy3dn8OowicDs5tvTDj4qE5Ymu09oumTTMON9uiDZ6FQY5x//Ts+fT2oR8n
-	 KW1WQ8U7hPrhg==
+	b=MdfFbWJ+eRFMBqPEa0RaoTx93bwz14wfILPGSeLWLBjlLfc3/sLoXDbWrIj5zm02+
+	 Cf2hMRjwSDX/HAe9LEvEYerCFkB4Bk3PXB3dCOCCjACDoUXoZNbg8bIRYUlO4u3fYA
+	 d+1jW1L/FhTyHKMjueY3fNJ+ZEn6tUHmVKdynuygFjwpm+i13U8Rgg7ESeNFEllxMf
+	 MEenB1SREnePNOyBX0VPdLwMnOs4/5gV6TKMZk/7FolVupBaKJWIqfsANDATpC5cz+
+	 GtYRhxo3yuIHrBGuNzZr02FwMfR28H0gTO6X9o6PxTogIxu8yfoYD9nvIRoXYg4F/d
+	 k2IOqV+EaupRw==
 From: Arnd Bergmann <arnd@kernel.org>
 To: linux-gpio@vger.kernel.org
 Cc: Arnd Bergmann <arnd@arndb.de>,
@@ -81,9 +81,9 @@ Cc: Arnd Bergmann <arnd@arndb.de>,
 	linux-phy@lists.infradead.org,
 	linux-rockchip@lists.infradead.org,
 	linux-sound@vger.kernel.org
-Subject: [PATCH 10/13] media: replace linux/gpio.h inclusions
-Date: Mon, 29 Jun 2026 15:26:30 +0200
-Message-Id: <20260629132633.1300009-11-arnd@kernel.org>
+Subject: [PATCH 11/13] Input: matrix_keyboard - replace linux/gpio.h inclusion
+Date: Mon, 29 Jun 2026 15:26:31 +0200
+Message-Id: <20260629132633.1300009-12-arnd@kernel.org>
 X-Mailer: git-send-email 2.39.5
 In-Reply-To: <20260629132633.1300009-1-arnd@kernel.org>
 References: <20260629132633.1300009-1-arnd@kernel.org>
@@ -107,7 +107,7 @@ X-Spamd-Result: default: False [-2.16 / 15.00];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-15302-lists,linux-mips=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-15303-lists,linux-mips=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
 	FORGED_RECIPIENTS(0.00)[m:linux-gpio@vger.kernel.org,m:arnd@arndb.de,m:brgl@kernel.org,m:andrew@lunn.ch,m:sebastian.hesselbarth@gmail.com,m:gregory.clement@bootlin.com,m:Frank.Li@nxp.com,m:robert.jarzmik@free.fr,m:krzk@kernel.org,m:gerg@linux-m68k.org,m:tsbogend@alpha.franken.de,m:hauke@hauke-m.de,m:zajec5@gmail.com,m:ysato@users.sourceforge.jp,m:glaubitz@physik.fu-berlin.de,m:linusw@kernel.org,m:dmitry.torokhov@gmail.com,m:kuba@kernel.org,m:pabeni@redhat.com,m:linux@dominikbrodowski.net,m:linux-kernel@vger.kernel.org,m:linux-arm-kernel@lists.infradead.org,m:linux-samsung-soc@vger.kernel.org,m:patches@opensource.cirrus.com,m:linux-m68k@lists.linux-m68k.org,m:linux-mips@vger.kernel.org,m:linux-sh@vger.kernel.org,m:linux-input@vger.kernel.org,m:linux-media@vger.kernel.org,m:netdev@vger.kernel.org,m:linux-sunxi@lists.linux.dev,m:linux-phy@lists.infradead.org,m:linux-rockchip@lists.infradead.org,m:linux-sound@vger.kernel.org,m:sebastianhesselbarth@gmail.com,m:dmitrytorokhov@gmail.com,s:
  lists@lfdr.de];
@@ -132,59 +132,30 @@ X-Spamd-Result: default: False [-2.16 / 15.00];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo,arndb.de:email,vger.kernel.org:from_smtp]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 3B5C36DB5B4
+X-Rspamd-Queue-Id: CEC476DB5BE
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-linux/gpio.h should no longer be used, convert these instead to
-either linux/gpio/consumer.h or linux/gpio/legacy.h as needed.
+linux/gpio.h is going away, so use linux/gpio/consumer.h instead.
 
 Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
- drivers/media/pci/ddbridge/ddbridge.h                 | 2 +-
- drivers/media/platform/samsung/s3c-camif/camif-core.c | 2 +-
- drivers/media/usb/em28xx/em28xx-dvb.c                 | 2 +-
- 3 files changed, 3 insertions(+), 3 deletions(-)
+ drivers/input/keyboard/matrix_keypad.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/media/pci/ddbridge/ddbridge.h b/drivers/media/pci/ddbridge/ddbridge.h
-index f01ecdb0b627..cf50898f9a92 100644
---- a/drivers/media/pci/ddbridge/ddbridge.h
-+++ b/drivers/media/pci/ddbridge/ddbridge.h
-@@ -14,7 +14,7 @@
- #include <linux/delay.h>
- #include <linux/device.h>
- #include <linux/dvb/ca.h>
+diff --git a/drivers/input/keyboard/matrix_keypad.c b/drivers/input/keyboard/matrix_keypad.c
+index e50a6fea9a60..98d0269a978f 100644
+--- a/drivers/input/keyboard/matrix_keypad.c
++++ b/drivers/input/keyboard/matrix_keypad.c
+@@ -16,7 +16,7 @@
+ #include <linux/interrupt.h>
+ #include <linux/jiffies.h>
+ #include <linux/module.h>
 -#include <linux/gpio.h>
 +#include <linux/gpio/consumer.h>
- #include <linux/i2c.h>
- #include <linux/init.h>
- #include <linux/interrupt.h>
-diff --git a/drivers/media/platform/samsung/s3c-camif/camif-core.c b/drivers/media/platform/samsung/s3c-camif/camif-core.c
-index 221e3c447f36..c3d059224844 100644
---- a/drivers/media/platform/samsung/s3c-camif/camif-core.c
-+++ b/drivers/media/platform/samsung/s3c-camif/camif-core.c
-@@ -12,7 +12,7 @@
- #include <linux/delay.h>
- #include <linux/device.h>
- #include <linux/errno.h>
--#include <linux/gpio.h>
-+#include <linux/gpio/consumer.h>
- #include <linux/i2c.h>
- #include <linux/interrupt.h>
- #include <linux/io.h>
-diff --git a/drivers/media/usb/em28xx/em28xx-dvb.c b/drivers/media/usb/em28xx/em28xx-dvb.c
-index 938f1980d448..8482fc4045ea 100644
---- a/drivers/media/usb/em28xx/em28xx-dvb.c
-+++ b/drivers/media/usb/em28xx/em28xx-dvb.c
-@@ -29,7 +29,7 @@
- #include <media/dmxdev.h>
- #include <media/tuner.h>
- #include "tuner-simple.h"
--#include <linux/gpio.h>
-+#include <linux/gpio/legacy.h>
- 
- #include "lgdt330x.h"
- #include "lgdt3305.h"
+ #include <linux/input/matrix_keypad.h>
+ #include <linux/slab.h>
+ #include <linux/of.h>
 -- 
 2.39.5
 
