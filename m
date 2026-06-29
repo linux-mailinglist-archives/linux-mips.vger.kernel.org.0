@@ -1,206 +1,318 @@
-Return-Path: <linux-mips+bounces-15291-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-15292-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id HhsOHPxxQmqy7QkAu9opvQ
-	(envelope-from <linux-mips+bounces-15291-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Mon, 29 Jun 2026 15:24:12 +0200
+	id E2I6J4x0Qmpp7gkAu9opvQ
+	(envelope-from <linux-mips+bounces-15292-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Mon, 29 Jun 2026 15:35:08 +0200
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 29C3D6DB27E
-	for <lists+linux-mips@lfdr.de>; Mon, 29 Jun 2026 15:24:12 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id EBCE76DB490
+	for <lists+linux-mips@lfdr.de>; Mon, 29 Jun 2026 15:35:07 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=huawei.com header.s=dkim header.b=n8efmFXZ;
-	spf=pass (mail.lfdr.de: domain of "linux-mips+bounces-15291-lists+linux-mips=lfdr.de@vger.kernel.org" designates 2600:3c04:e001:36c::12fc:5321 as permitted sender) smtp.mailfrom="linux-mips+bounces-15291-lists+linux-mips=lfdr.de@vger.kernel.org";
-	dmarc=pass (policy=quarantine) header.from=huawei.com;
+	dkim=pass header.d=kernel.org header.s=k20260515 header.b=KD4wn8FG;
+	spf=pass (mail.lfdr.de: domain of "linux-mips+bounces-15292-lists+linux-mips=lfdr.de@vger.kernel.org" designates 172.234.253.10 as permitted sender) smtp.mailfrom="linux-mips+bounces-15292-lists+linux-mips=lfdr.de@vger.kernel.org";
+	dmarc=pass (policy=quarantine) header.from=kernel.org;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 5560F31E89F9
-	for <lists+linux-mips@lfdr.de>; Mon, 29 Jun 2026 13:12:02 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 7EFAF321ED75
+	for <lists+linux-mips@lfdr.de>; Mon, 29 Jun 2026 13:26:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F3EA2408035;
-	Mon, 29 Jun 2026 13:08:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7BF33405852;
+	Mon, 29 Jun 2026 13:26:49 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
-Received: from canpmsgout12.his.huawei.com (canpmsgout12.his.huawei.com [113.46.200.227])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6D30405862;
-	Mon, 29 Jun 2026 13:07:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E488B403EB5;
+	Mon, 29 Jun 2026 13:26:47 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782738481; cv=none; b=M4vaYKxDNm6Q/mLC6L9iiPBY5kiZZ+JekMFXkVgWfK01ifoN1od7nfXfWASbu7cXWzbUKvmiB0B4+F9cawPEG6YDH9ApjNyDUmmRzJPPWUBT6eOTxh4JV4J9Rfjv9z5Ja+CkZPvR6tWD0U2ZbphIb7oHr/Z6A/y1qsZrsIGkM90=
+	t=1782739609; cv=none; b=XaIh+jDeGqeIw/ZVzWGxQoDAZ5r7S7qPGtQrdIxzojjLvbWssz9eYlmMcrqECuT3XBf/rCr/QClvr3/35noqp0QLfzNPbQNbu6ukoP0RMDaSzMZzzKUQa6YHgmw3zkbt59PJ68/66Yfvp9LU9HAKI6WSDfPcC+wOgDM3GBWjqgg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782738481; c=relaxed/simple;
-	bh=OdHSko/zczx8ujiWfn1DqHfqt0tTl02PWSTnINrpaRM=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=CSio+Reu0tZomNYgeaUC/HvIlMKPPCnzMRPJp9cDz4FC3Qp6KVrIPUF/iTbPdgDaI8gfNni0N+ftiTFxW1lw+4fu//6sarfeTGtq9cKl3+okhe4YZyhA9Wrtca/tdZHHdEg8PbaTXwwk18+birEoJ5ywqs8FfXXGMXXCgk+zqGk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=n8efmFXZ; arc=none smtp.client-ip=113.46.200.227
-dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
-	c=relaxed/relaxed; q=dns/txt;
-	h=From;
-	bh=nXlEqg7p36Jks1c4yuaOXWFRq7Kp2sLsUwczenqjsfU=;
-	b=n8efmFXZdzG/h0lZ6Y0o4MsHme01XM8L7okaKbD/TR5W3fhAEUiS3084Q2F4FbdJWy9onNHJn
-	NoyvX82wTsDRv9G5PxGTgVIRQ7Jcm5Hx10ZCpPXtHg6aMkk03hx8R8iCitsSqg5zLYEjQwsADbU
-	ewPWK6UfSGus42FOPWCcAkU=
-Received: from mail.maildlp.com (unknown [172.19.163.163])
-	by canpmsgout12.his.huawei.com (SkyGuard) with ESMTPS id 4gpmZ82YsKznTbW;
-	Mon, 29 Jun 2026 20:59:12 +0800 (CST)
-Received: from dggpemf500011.china.huawei.com (unknown [7.185.36.131])
-	by mail.maildlp.com (Postfix) with ESMTPS id 5D6CF40588;
-	Mon, 29 Jun 2026 21:07:53 +0800 (CST)
-Received: from huawei.com (10.90.53.73) by dggpemf500011.china.huawei.com
- (7.185.36.131) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Mon, 29 Jun
- 2026 21:07:49 +0800
-From: Jinjie Ruan <ruanjinjie@huawei.com>
-To: <oleg@redhat.com>, <richard.henderson@linaro.org>, <mattst88@gmail.com>,
-	<linmag7@gmail.com>, <linux@armlinux.org.uk>, <catalin.marinas@arm.com>,
-	<will@kernel.org>, <kees@kernel.org>, <guoren@kernel.org>,
-	<chenhuacai@kernel.org>, <kernel@xen0n.name>, <geert@linux-m68k.org>,
-	<tsbogend@alpha.franken.de>, <James.Bottomley@HansenPartnership.com>,
-	<deller@gmx.de>, <maddy@linux.ibm.com>, <mpe@ellerman.id.au>,
-	<npiggin@gmail.com>, <chleroy@kernel.org>, <pjw@kernel.org>,
-	<palmer@dabbelt.com>, <aou@eecs.berkeley.edu>, <alex@ghiti.fr>,
-	<hca@linux.ibm.com>, <gor@linux.ibm.com>, <agordeev@linux.ibm.com>,
-	<borntraeger@linux.ibm.com>, <svens@linux.ibm.com>,
-	<ysato@users.sourceforge.jp>, <dalias@libc.org>,
-	<glaubitz@physik.fu-berlin.de>, <richard@nod.at>,
-	<anton.ivanov@cambridgegreys.com>, <johannes@sipsolutions.net>,
-	<luto@kernel.org>, <tglx@kernel.org>, <mingo@redhat.com>, <bp@alien8.de>,
-	<dave.hansen@linux.intel.com>, <hpa@zytor.com>, <chris@zankel.net>,
-	<jcmvbkbc@gmail.com>, <peterz@infradead.org>, <wad@chromium.org>,
-	<ruanjinjie@huawei.com>, <thuth@redhat.com>, <mark.rutland@arm.com>,
-	<ada.coupriediaz@arm.com>, <kevin.brodsky@arm.com>, <linusw@kernel.org>,
-	<yeoreum.yun@arm.com>, <song@kernel.org>, <james.morse@arm.com>,
-	<anshuman.khandual@arm.com>, <broonie@kernel.org>, <liqiang01@kylinos.cn>,
-	<pengcan@kylinos.cn>, <ryan.roberts@arm.com>, <yangtiezhu@loongson.cn>,
-	<sshegde@linux.ibm.com>, <mchauras@linux.ibm.com>, <austin.kim@lge.com>,
-	<jchrist@linux.ibm.com>, <arnd@arndb.de>, <thomas.weissschuh@linutronix.de>,
-	<sohil.mehta@intel.com>, <andrew.cooper3@citrix.com>, <jgross@suse.com>,
-	<kas@kernel.org>, <x86@kernel.org>, <linux-alpha@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-	<linux-mm@kvack.org>, <linux-csky@vger.kernel.org>,
-	<loongarch@lists.linux.dev>, <linux-m68k@lists.linux-m68k.org>,
-	<linux-mips@vger.kernel.org>, <linux-parisc@vger.kernel.org>,
-	<linuxppc-dev@lists.ozlabs.org>, <linux-riscv@lists.infradead.org>,
-	<linux-s390@vger.kernel.org>, <linux-sh@vger.kernel.org>,
-	<linux-um@lists.infradead.org>
-Subject: [PATCH v16 18/18] arm64: vdso: Expose sigreturn address on vdso to the kernel
-Date: Mon, 29 Jun 2026 21:06:16 +0800
-Message-ID: <20260629130616.642022-19-ruanjinjie@huawei.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20260629130616.642022-1-ruanjinjie@huawei.com>
-References: <20260629130616.642022-1-ruanjinjie@huawei.com>
+	s=arc-20240116; t=1782739609; c=relaxed/simple;
+	bh=3I9zyzkVdbsSVB8VOhT5PsQ+7G+zS3OZld35IU7mR88=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=aXkwQ97vaYswg//aMcXXY8ektj2kdKlCzBtXw+T5wS8Y5PYct2dbACtBAYKz4Zt5UlwYJCj714pz/mkFJhw1KxzYH1JU4MGDgBYvq0IR0qAi+sDWc2QGhTCzi7I8dnLWtTRgW1arVrSFKKrU6HZoNCu3bKGaZ+Uit9+rVaNA8fc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KD4wn8FG; arc=none smtp.client-ip=100.103.45.18
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F74D1F000E9;
+	Mon, 29 Jun 2026 13:26:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1782739607;
+	bh=fhZO9CCgyPTpV3ZQrTdwjnuLM+E9OikVfMuSHmZTx2M=;
+	h=From:To:Cc:Subject:Date;
+	b=KD4wn8FGWGE30eCOOOA+dBSAHZGgiXwZF29kfKE4F2uQuFsP5YxhKF+kJLGZQW+xN
+	 c1FQZuucS/z/TV0fUUP3z4XSiOfaV3yT+/2dhnHni5ghGczyBnpiiVQ4ssE+H6KI6m
+	 MB5KQA2l+xKim04AISyQhaPf4EpWJZCa1m2px2f9EeLMQklyKDL02qd8dJNCvthmg8
+	 6PFfsK+SnbxyFSGpVQU5s9PrLcj+ipaSFtc1VHy+j8TWTBJDs/nEBBWvwVfu9LYai2
+	 5NMag8oZZwUnP9IBEXZ+74fbYASdIvn/nsUwGvCqlg0YWSzWL9DSAQY7zE04B/0xQI
+	 Auc5QmUPHo7UQ==
+From: Arnd Bergmann <arnd@kernel.org>
+To: linux-gpio@vger.kernel.org
+Cc: Arnd Bergmann <arnd@arndb.de>,
+	Bartosz Golaszewski <brgl@kernel.org>,
+	Andrew Lunn <andrew@lunn.ch>,
+	Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+	Gregory Clement <gregory.clement@bootlin.com>,
+	Frank Li <Frank.Li@nxp.com>,
+	Robert Jarzmik <robert.jarzmik@free.fr>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Greg Ungerer <gerg@linux-m68k.org>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Hauke Mehrtens <hauke@hauke-m.de>,
+	=?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <zajec5@gmail.com>,
+	Yoshinori Sato <ysato@users.sourceforge.jp>,
+	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+	Linus Walleij <linusw@kernel.org>,
+	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Dominik Brodowski <linux@dominikbrodowski.net>,
+	linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-samsung-soc@vger.kernel.org,
+	patches@opensource.cirrus.com,
+	linux-m68k@lists.linux-m68k.org,
+	linux-mips@vger.kernel.org,
+	linux-sh@vger.kernel.org,
+	linux-input@vger.kernel.org,
+	linux-media@vger.kernel.org,
+	netdev@vger.kernel.org,
+	linux-sunxi@lists.linux.dev,
+	linux-phy@lists.infradead.org,
+	linux-rockchip@lists.infradead.org,
+	linux-sound@vger.kernel.org
+Subject: [PATCH 00/13] treewide: replace linux/gpio.h
+Date: Mon, 29 Jun 2026 15:26:20 +0200
+Message-Id: <20260629132633.1300009-1-arnd@kernel.org>
+X-Mailer: git-send-email 2.39.5
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: kwepems500001.china.huawei.com (7.221.188.70) To
- dggpemf500011.china.huawei.com (7.185.36.131)
 X-Rspamd-Action: no action
-X-Spamd-Result: default: False [-7.66 / 15.00];
-	WHITELIST_DMARC(-7.00)[huawei.com:D:+];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+X-Spamd-Result: default: False [-2.66 / 15.00];
+	WHITELIST_SPF_DKIM(-3.00)[kernel.org:d:+,kernel.org:s:+];
+	SUSPICIOUS_RECIPS(1.50)[];
 	MID_CONTAINS_FROM(1.00)[];
-	DMARC_POLICY_ALLOW(-0.50)[huawei.com,quarantine];
-	R_MISSING_CHARSET(0.50)[];
-	R_DKIM_ALLOW(-0.20)[huawei.com:s=dkim];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20260515];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
+	RCPT_COUNT_TWELVE(0.00)[34];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-15291-lists,linux-mips=lfdr.de];
-	RCPT_COUNT_GT_50(0.00)[84];
-	FROM_NEQ_ENVFROM(0.00)[ruanjinjie@huawei.com,linux-mips@vger.kernel.org];
-	FROM_HAS_DN(0.00)[];
-	FREEMAIL_TO(0.00)[redhat.com,linaro.org,gmail.com,armlinux.org.uk,arm.com,kernel.org,xen0n.name,linux-m68k.org,alpha.franken.de,HansenPartnership.com,gmx.de,linux.ibm.com,ellerman.id.au,dabbelt.com,eecs.berkeley.edu,ghiti.fr,users.sourceforge.jp,libc.org,physik.fu-berlin.de,nod.at,cambridgegreys.com,sipsolutions.net,alien8.de,linux.intel.com,zytor.com,zankel.net,infradead.org,chromium.org,huawei.com,kylinos.cn,loongson.cn,lge.com,arndb.de,linutronix.de,intel.com,citrix.com,suse.com,vger.kernel.org,lists.infradead.org,kvack.org,lists.linux.dev,lists.linux-m68k.org,lists.ozlabs.org];
-	FORGED_SENDER(0.00)[ruanjinjie@huawei.com,linux-mips@vger.kernel.org];
-	FORGED_RECIPIENTS(0.00)[m:oleg@redhat.com,m:richard.henderson@linaro.org,m:mattst88@gmail.com,m:linmag7@gmail.com,m:linux@armlinux.org.uk,m:catalin.marinas@arm.com,m:will@kernel.org,m:kees@kernel.org,m:guoren@kernel.org,m:chenhuacai@kernel.org,m:kernel@xen0n.name,m:geert@linux-m68k.org,m:tsbogend@alpha.franken.de,m:James.Bottomley@HansenPartnership.com,m:deller@gmx.de,m:maddy@linux.ibm.com,m:mpe@ellerman.id.au,m:npiggin@gmail.com,m:chleroy@kernel.org,m:pjw@kernel.org,m:palmer@dabbelt.com,m:aou@eecs.berkeley.edu,m:alex@ghiti.fr,m:hca@linux.ibm.com,m:gor@linux.ibm.com,m:agordeev@linux.ibm.com,m:borntraeger@linux.ibm.com,m:svens@linux.ibm.com,m:ysato@users.sourceforge.jp,m:dalias@libc.org,m:glaubitz@physik.fu-berlin.de,m:richard@nod.at,m:anton.ivanov@cambridgegreys.com,m:johannes@sipsolutions.net,m:luto@kernel.org,m:tglx@kernel.org,m:mingo@redhat.com,m:bp@alien8.de,m:dave.hansen@linux.intel.com,m:hpa@zytor.com,m:chris@zankel.net,m:jcmvbkbc@gmail.com,m:peterz@infradead.org,m:wad@chromiu
- m.org,m:ruanjinjie@huawei.com,m:thuth@redhat.com,m:mark.rutland@arm.com,m:ada.coupriediaz@arm.com,m:kevin.brodsky@arm.com,m:linusw@kernel.org,m:yeoreum.yun@arm.com,m:song@kernel.org,m:james.morse@arm.com,m:anshuman.khandual@arm.com,m:broonie@kernel.org,m:liqiang01@kylinos.cn,m:pengcan@kylinos.cn,m:ryan.roberts@arm.com,m:yangtiezhu@loongson.cn,m:sshegde@linux.ibm.com,m:mchauras@linux.ibm.com,m:austin.kim@lge.com,m:jchrist@linux.ibm.com,m:arnd@arndb.de,m:thomas.weissschuh@linutronix.de,m:sohil.mehta@intel.com,m:andrew.cooper3@citrix.com,m:jgross@suse.com,m:kas@kernel.org,m:x86@kernel.org,m:linux-alpha@vger.kernel.org,m:linux-kernel@vger.kernel.org,m:linux-arm-kernel@lists.infradead.org,m:linux-mm@kvack.org,m:linux-csky@vger.kernel.org,m:loongarch@lists.linux.dev,m:linux-m68k@lists.linux-m68k.org,m:linux-mips@vger.kernel.org,m:linux-parisc@vger.kernel.org,m:linuxppc-dev@lists.ozlabs.org,m:linux-riscv@lists.infradead.org,m:linux-s390@vger.kernel.org,m:linux-sh@vger.kernel.org,m:linux-um
- @lists.infradead.org,s:lists@lfdr.de];
+	TAGGED_FROM(0.00)[bounces-15292-lists,linux-mips=lfdr.de];
+	FORGED_SENDER(0.00)[arnd@kernel.org,linux-mips@vger.kernel.org];
 	FORWARDED(0.00)[lists@lfdr.de];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	DKIM_TRACE(0.00)[huawei.com:+];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
-	FORGED_RECIPIENTS_FORWARDING(0.00)[];
-	TO_DN_NONE(0.00)[];
-	ALIAS_RESOLVED(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	TAGGED_RCPT(0.00)[linux-mips];
+	RCVD_COUNT_THREE(0.00)[4];
+	FORGED_RECIPIENTS(0.00)[m:linux-gpio@vger.kernel.org,m:arnd@arndb.de,m:brgl@kernel.org,m:andrew@lunn.ch,m:sebastian.hesselbarth@gmail.com,m:gregory.clement@bootlin.com,m:Frank.Li@nxp.com,m:robert.jarzmik@free.fr,m:krzk@kernel.org,m:gerg@linux-m68k.org,m:tsbogend@alpha.franken.de,m:hauke@hauke-m.de,m:zajec5@gmail.com,m:ysato@users.sourceforge.jp,m:glaubitz@physik.fu-berlin.de,m:linusw@kernel.org,m:dmitry.torokhov@gmail.com,m:kuba@kernel.org,m:pabeni@redhat.com,m:linux@dominikbrodowski.net,m:linux-kernel@vger.kernel.org,m:linux-arm-kernel@lists.infradead.org,m:linux-samsung-soc@vger.kernel.org,m:patches@opensource.cirrus.com,m:linux-m68k@lists.linux-m68k.org,m:linux-mips@vger.kernel.org,m:linux-sh@vger.kernel.org,m:linux-input@vger.kernel.org,m:linux-media@vger.kernel.org,m:netdev@vger.kernel.org,m:linux-sunxi@lists.linux.dev,m:linux-phy@lists.infradead.org,m:linux-rockchip@lists.infradead.org,m:linux-sound@vger.kernel.org,m:sebastianhesselbarth@gmail.com,m:dmitrytorokhov@gmail.com,s:
+ lists@lfdr.de];
 	MIME_TRACE(0.00)[0:+];
-	RCVD_COUNT_FIVE(0.00)[6];
+	FROM_HAS_DN(0.00)[];
+	TO_DN_SOME(0.00)[];
 	FORGED_SENDER_FORWARDING(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[huawei.com:dkim,huawei.com:email,huawei.com:mid,huawei.com:from_mime,cock.li:email,vger.kernel.org:from_smtp,tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo,arm.com:email]
+	ALIAS_RESOLVED(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[arnd@kernel.org,linux-mips@vger.kernel.org];
+	FREEMAIL_CC(0.00)[arndb.de,kernel.org,lunn.ch,gmail.com,bootlin.com,nxp.com,free.fr,linux-m68k.org,alpha.franken.de,hauke-m.de,users.sourceforge.jp,physik.fu-berlin.de,redhat.com,dominikbrodowski.net,vger.kernel.org,lists.infradead.org,opensource.cirrus.com,lists.linux-m68k.org,lists.linux.dev];
+	FORGED_RECIPIENTS_FORWARDING(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DKIM_TRACE(0.00)[kernel.org:+];
+	TAGGED_RCPT(0.00)[linux-mips];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 29C3D6DB27E
+X-Rspamd-Queue-Id: EBCE76DB490
 
-Syscall User Dispatch (SUD) requires the signal trampoline code to not be
-intercepted. This is necessary to support returning with a locked selector
-while avoiding infinite recursion back into the signal handler.
+From: Arnd Bergmann <arnd@arndb.de>
 
-Implement arch_syscall_is_vdso_sigreturn() for arm64 to support this
-exclusion mechanism. For native 64-bit tasks, it checks whether the current
-PC matches the 'svc #0' instruction inside the vDSO sigreturn trampoline.
+The linux/gpio.h header used to be the global definition for the gpio
+interfaces, with 1100 users back in linux-3.17. In linux-7.2, only about
+130 of those remain, so this series cleans out the rest.
 
-	SYM_CODE_START(__kernel_rt_sigreturn)
-	        mov     x8, #__NR_rt_sigreturn
-	        svc     #0
-	SYM_CODE_END(__kernel_rt_sigreturn)
+In each subsystem, we can replace the header either with
+linux/gpio/consumer.h for users of the modern gpio descriptor interface,
+or linux/gpio/legacy.h for the few remaining users of the old number
+based interface.
 
-For COMPAT tasks, it verifies if the instruction falls within
-the architecture's 'sigpage' range, allowing the kernel to safely bypass
-dispatching syscalls originating from these areas back to userspace.
+All patches in this series can get applied independently, so my
+preference would be for each subsystem maintainer to apply these
+directly, with the rest going into the gpio tree at some point.
 
-Suggested-by: Kevin Brodsky <kevin.brodsky@arm.com>
-Suggested-by: kemal <kmal@cock.li>
-Signed-off-by: Jinjie Ruan <ruanjinjie@huawei.com>
----
- arch/arm64/include/asm/elf.h |  1 +
- arch/arm64/kernel/vdso.c     | 16 ++++++++++++++++
- 2 files changed, 17 insertions(+)
+The final patch here obviously needs to wait for all the others
+to get merged first.
 
-diff --git a/arch/arm64/include/asm/elf.h b/arch/arm64/include/asm/elf.h
-index d2779d604c7b..f43d4dea916a 100644
---- a/arch/arm64/include/asm/elf.h
-+++ b/arch/arm64/include/asm/elf.h
-@@ -185,6 +185,7 @@ do {									\
- struct linux_binprm;
- extern int arch_setup_additional_pages(struct linux_binprm *bprm,
- 				       int uses_interp);
-+extern bool arch_syscall_is_vdso_sigreturn(struct pt_regs *regs);
- 
- /* 1GB of VA */
- #ifdef CONFIG_COMPAT
-diff --git a/arch/arm64/kernel/vdso.c b/arch/arm64/kernel/vdso.c
-index 592dd8668de4..5a0314a3c26e 100644
---- a/arch/arm64/kernel/vdso.c
-+++ b/arch/arm64/kernel/vdso.c
-@@ -343,3 +343,19 @@ int arch_setup_additional_pages(struct linux_binprm *bprm, int uses_interp)
- 
- 	return ret;
- }
-+
-+bool arch_syscall_is_vdso_sigreturn(struct pt_regs *regs)
-+{
-+	unsigned long sigtramp;
-+
-+#ifdef CONFIG_COMPAT
-+	if (is_compat_task()) {
-+		unsigned long sigpage = (unsigned long)current->mm->context.sigpage;
-+
-+		return regs->pc >= sigpage && regs->pc < (sigpage + PAGE_SIZE);
-+	}
-+#endif
-+	sigtramp = (unsigned long)VDSO_SYMBOL(current->mm->context.vdso, sigtramp);
-+
-+	return regs->pc == (sigtramp + 8);
-+}
+      Arnd
+
+Arnd Bergmann (13):
+  ARM: replace linux/gpio.h inclusions
+  m68k/coldfire: replace linux/gpio.h inclusions
+  mips: replace linux/gpio.h inclusions
+  sh: replace linux/gpio.h inclusions
+  mfd: replace linux/gpio.h inclusions
+  [net-next] net: replace linux/gpio.h inclusions
+  ASoC: replace linux/gpio.h inclusions
+  pcmcia: replace linux/gpio.h inclusions
+  phy: replace linux/gpio.h inclusions
+  media: replace linux/gpio.h inclusions
+  Input: matrix_keyboard - replace linux/gpio.h inclusion
+  gpib: gpio: replace linux/gpio.h inclusion
+  gpiolib: remove linux/gpio.h
+
+ MAINTAINERS                                   |  1 -
+ arch/arm/mach-davinci/da850.c                 |  2 +-
+ arch/arm/mach-dove/mpp.c                      |  2 +-
+ arch/arm/mach-mv78xx0/buffalo-wxl-setup.c     |  2 +-
+ arch/arm/mach-mv78xx0/irq.c                   |  2 +-
+ arch/arm/mach-mv78xx0/mpp.c                   |  2 +-
+ arch/arm/mach-mvebu/pm.c                      |  2 +-
+ arch/arm/mach-mxs/mach-mxs.c                  |  2 +-
+ arch/arm/mach-orion5x/board-d2net.c           |  2 +-
+ arch/arm/mach-orion5x/board-rd88f5182.c       |  2 +-
+ arch/arm/mach-orion5x/dns323-setup.c          |  2 +-
+ arch/arm/mach-orion5x/irq.c                   |  2 +-
+ arch/arm/mach-orion5x/kurobox_pro-setup.c     |  2 +-
+ arch/arm/mach-orion5x/mv2120-setup.c          |  2 +-
+ arch/arm/mach-orion5x/net2big-setup.c         |  2 +-
+ .../arm/mach-orion5x/terastation_pro2-setup.c |  2 +-
+ arch/arm/mach-orion5x/ts209-setup.c           |  2 +-
+ arch/arm/mach-orion5x/ts409-setup.c           |  2 +-
+ arch/arm/mach-pxa/am200epd.c                  |  2 +-
+ arch/arm/mach-pxa/am300epd.c                  |  2 +-
+ arch/arm/mach-pxa/generic.c                   |  2 +-
+ arch/arm/mach-pxa/gumstix.c                   |  2 +-
+ arch/arm/mach-pxa/mfp-pxa2xx.c                |  2 +-
+ arch/arm/mach-pxa/pxa25x.c                    |  2 +-
+ arch/arm/mach-pxa/pxa27x.c                    |  2 +-
+ arch/arm/mach-pxa/reset.c                     |  2 +-
+ arch/arm/mach-pxa/sharpsl_pm.c                |  2 +-
+ arch/arm/mach-pxa/spitz.c                     |  2 +-
+ arch/arm/mach-pxa/spitz_pm.c                  |  2 +-
+ arch/arm/mach-s3c/dev-audio-s3c64xx.c         |  2 +-
+ arch/arm/mach-s3c/devs.c                      |  2 +-
+ arch/arm/mach-s3c/mach-crag6410.c             |  2 +-
+ arch/arm/mach-s3c/pm-gpio.c                   |  2 +-
+ arch/arm/mach-s3c/pm-s3c64xx.c                |  2 +-
+ arch/arm/mach-s3c/setup-fb-24bpp-s3c64xx.c    |  2 +-
+ arch/arm/mach-s3c/setup-i2c0-s3c64xx.c        |  2 +-
+ arch/arm/mach-s3c/setup-i2c1-s3c64xx.c        |  2 +-
+ arch/arm/mach-s3c/setup-keypad-s3c64xx.c      |  2 +-
+ arch/arm/mach-s3c/setup-sdhci-gpio-s3c64xx.c  |  2 +-
+ arch/arm/mach-s3c/setup-spi-s3c64xx.c         |  2 +-
+ arch/arm/mach-sa1100/collie.c                 |  2 +-
+ arch/arm/mach-sa1100/generic.c                |  2 +-
+ arch/arm/mach-sa1100/h3600.c                  |  2 +-
+ arch/arm/mach-sa1100/h3xxx.c                  |  2 +-
+ arch/arm/plat-orion/mpp.c                     |  2 +-
+ arch/m68k/coldfire/device.c                   |  2 +-
+ arch/m68k/include/asm/mcfgpio.h               |  2 +-
+ arch/mips/alchemy/board-xxs1500.c             |  2 +-
+ arch/mips/alchemy/devboards/db1000.c          |  2 +-
+ arch/mips/alchemy/devboards/db1200.c          |  2 +-
+ arch/mips/alchemy/devboards/db1550.c          |  2 +-
+ arch/mips/bcm47xx/workarounds.c               |  2 +-
+ arch/mips/bcm63xx/boards/board_bcm963xx.c     |  1 +
+ .../include/asm/mach-bcm63xx/board_bcm963xx.h |  2 +-
+ arch/mips/txx9/rbtx4927/setup.c               |  2 +-
+ arch/sh/boards/board-magicpanelr2.c           |  2 +-
+ arch/sh/boards/board-sh7757lcr.c              |  2 +-
+ arch/sh/boards/board-urquell.c                |  2 +-
+ arch/sh/boards/mach-ap325rxa/setup.c          |  2 +-
+ arch/sh/boards/mach-ecovec24/setup.c          |  2 +-
+ .../boards/mach-highlander/pinmux-r7785rp.c   |  2 +-
+ arch/sh/boards/mach-kfr2r09/lcd_wqvga.c       |  2 +-
+ arch/sh/boards/mach-kfr2r09/setup.c           |  2 +-
+ arch/sh/boards/mach-migor/lcd_qvga.c          |  2 +-
+ arch/sh/boards/mach-migor/setup.c             |  2 +-
+ arch/sh/boards/mach-rsk/devices-rsk7203.c     |  2 +-
+ arch/sh/boards/mach-rsk/devices-rsk7269.c     |  1 -
+ arch/sh/boards/mach-se/7724/setup.c           |  2 +-
+ .../include/mach-common/mach/magicpanelr2.h   |  2 --
+ arch/sh/kernel/cpu/sh4a/setup-shx3.c          |  2 +-
+ drivers/gpib/gpio/gpib_bitbang.c              |  2 +-
+ drivers/gpio/TODO                             |  4 +---
+ drivers/gpio/gpiolib-cdev.c                   |  2 +-
+ drivers/gpio/gpiolib-legacy.c                 |  3 +--
+ drivers/gpio/gpiolib.c                        |  2 +-
+ drivers/input/keyboard/matrix_keypad.c        |  2 +-
+ drivers/media/pci/ddbridge/ddbridge.h         |  2 +-
+ .../platform/samsung/s3c-camif/camif-core.c   |  2 +-
+ drivers/media/usb/em28xx/em28xx-dvb.c         |  2 +-
+ drivers/mfd/aat2870-core.c                    |  2 +-
+ drivers/mfd/arizona-irq.c                     |  2 +-
+ drivers/mfd/lp3943.c                          |  2 +-
+ drivers/mfd/si476x-cmd.c                      |  2 +-
+ drivers/mfd/si476x-i2c.c                      |  2 +-
+ drivers/mfd/sm501.c                           |  2 +-
+ drivers/mfd/tps6105x.c                        |  2 +-
+ drivers/mfd/tps65911-comparator.c             |  2 +-
+ drivers/mfd/wm8994-irq.c                      |  2 +-
+ drivers/net/dsa/b53/b53_priv.h                |  3 ++-
+ drivers/net/dsa/microchip/ksz8.c              |  2 +-
+ drivers/net/ethernet/allwinner/sun4i-emac.c   |  2 +-
+ .../net/ethernet/apm/xgene/xgene_enet_main.c  |  2 +-
+ .../ethernet/oki-semi/pch_gbe/pch_gbe_main.c  |  2 +-
+ drivers/net/phy/mdio_device.c                 |  2 +-
+ drivers/pcmcia/bcm63xx_pcmcia.c               |  2 +-
+ drivers/pcmcia/db1xxx_ss.c                    |  2 +-
+ drivers/pcmcia/sa1100_h3600.c                 |  2 +-
+ drivers/pcmcia/soc_common.c                   |  2 +-
+ drivers/pcmcia/xxs1500_ss.c                   |  2 +-
+ drivers/phy/broadcom/phy-bcm-ns2-usbdrd.c     |  2 +-
+ drivers/phy/rockchip/phy-rockchip-usbdp.c     |  2 +-
+ drivers/phy/ti/phy-j721e-wiz.c                |  2 +-
+ include/linux/gpio.h                          | 22 -------------------
+ include/linux/mfd/lp3943.h                    |  2 +-
+ include/linux/mfd/ti-lmu.h                    |  2 +-
+ include/linux/mfd/tps65910.h                  |  2 +-
+ include/linux/mfd/ucb1x00.h                   |  2 +-
+ sound/soc/codecs/cs42l84.c                    |  2 +-
+ sound/soc/codecs/cx2072x.c                    |  2 +-
+ sound/soc/codecs/dmic.c                       |  2 +-
+ 110 files changed, 107 insertions(+), 134 deletions(-)
+ delete mode 100644 include/linux/gpio.h
+
 -- 
-2.34.1
+2.39.5
 
+Cc: Bartosz Golaszewski <brgl@kernel.org>
+Cc: Andrew Lunn <andrew@lunn.ch>
+Cc: Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>
+Cc: Gregory Clement <gregory.clement@bootlin.com>
+Cc: Frank Li <Frank.Li@nxp.com>
+Cc: Robert Jarzmik <robert.jarzmik@free.fr>
+Cc: Krzysztof Kozlowski <krzk@kernel.org>
+Cc: Greg Ungerer <gerg@linux-m68k.org>
+Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: Hauke Mehrtens <hauke@hauke-m.de>
+Cc: "Rafał Miłecki" <zajec5@gmail.com>
+Cc: Yoshinori Sato <ysato@users.sourceforge.jp>
+Cc: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+Cc: Linus Walleij <linusw@kernel.org>
+Cc: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc: Jakub Kicinski <kuba@kernel.org>
+Cc: Paolo Abeni <pabeni@redhat.com>
+Cc: Dominik Brodowski <linux@dominikbrodowski.net>
+Cc: linux-kernel@vger.kernel.org
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: linux-samsung-soc@vger.kernel.org
+Cc: patches@opensource.cirrus.com
+Cc: linux-m68k@lists.linux-m68k.org
+Cc: linux-mips@vger.kernel.org
+Cc: linux-sh@vger.kernel.org
+Cc: linux-gpio@vger.kernel.org
+Cc: linux-input@vger.kernel.org
+Cc: linux-media@vger.kernel.org
+Cc: netdev@vger.kernel.org
+Cc: linux-sunxi@lists.linux.dev
+Cc: linux-phy@lists.infradead.org
+Cc: linux-rockchip@lists.infradead.org
+Cc: linux-sound@vger.kernel.org
 
