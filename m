@@ -1,183 +1,228 @@
-Return-Path: <linux-mips+bounces-15343-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-15344-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id A7fVJOJgQ2qGXgoAu9opvQ
-	(envelope-from <linux-mips+bounces-15343-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Tue, 30 Jun 2026 08:23:30 +0200
+	id fPocJ4NyQ2otYgoAu9opvQ
+	(envelope-from <linux-mips+bounces-15344-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Tue, 30 Jun 2026 09:38:43 +0200
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 322C96E0B77
-	for <lists+linux-mips@lfdr.de>; Tue, 30 Jun 2026 08:23:30 +0200 (CEST)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 337D36E139B
+	for <lists+linux-mips@lfdr.de>; Tue, 30 Jun 2026 09:38:43 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=kernel.org header.s=k20260515 header.b=AOZ2LkPO;
-	spf=pass (mail.lfdr.de: domain of "linux-mips+bounces-15343-lists+linux-mips=lfdr.de@vger.kernel.org" designates 172.234.253.10 as permitted sender) smtp.mailfrom="linux-mips+bounces-15343-lists+linux-mips=lfdr.de@vger.kernel.org";
-	dmarc=pass (policy=quarantine) header.from=kernel.org;
+	dkim=pass header.d=linutronix.de header.s=2020 header.b="eOCI/CT9";
+	dkim=pass header.d=linutronix.de header.s=2020e header.b=Btvx2I53;
+	spf=pass (mail.lfdr.de: domain of "linux-mips+bounces-15344-lists+linux-mips=lfdr.de@vger.kernel.org" designates 2600:3c09:e001:a7::12fc:5321 as permitted sender) smtp.mailfrom="linux-mips+bounces-15344-lists+linux-mips=lfdr.de@vger.kernel.org";
+	dmarc=pass (policy=none) header.from=linutronix.de;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 3D26B303B7FA
-	for <lists+linux-mips@lfdr.de>; Tue, 30 Jun 2026 06:22:30 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id A1656300678E
+	for <lists+linux-mips@lfdr.de>; Tue, 30 Jun 2026 07:38:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 631813E638E;
-	Tue, 30 Jun 2026 06:22:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7436439478D;
+	Tue, 30 Jun 2026 07:38:40 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B66C370D55;
-	Tue, 30 Jun 2026 06:22:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5FAB28C86C;
+	Tue, 30 Jun 2026 07:38:38 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782800539; cv=none; b=iSsrzw710ZKDlqMpwF/QY0FCMp3lyHBLoUrAfYJSsvL6Yov5/eta6u5UbZvXCIKPxay2yLy6SRYBWvbFoZV6l88x2Am6MKIuGrATw8yGWc5wrU2iCbpG1qb/HkvbpxSBL4/smjLNsARPQphTwe+6mEuok17Tt/qFNMiFJrntyKg=
+	t=1782805120; cv=none; b=mkcEo2TYjoPJk7+8r4EFEIkU5G31JpeY64W5w/jix3gBlkh+B2WJw/ei/kra83+bTJZbabwDvqZoLUjjWIPv0PDZxyNh9Cr17jJXmbVrPSI7/rUo8zDOjf+ZOEuoouqh5nd6tjGzuD2f8tUJeOFdXFyrGbiIDZnaVAcDvVOptSY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782800539; c=relaxed/simple;
-	bh=RGyMdqNytEpEgUaFV5Se/rYWeE5rfZg7vmZjpJEr8Iw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=eJb+T/UonTCYxwcedobsACZfp6J2D6biBI0JubslZtnQnA8EUqm8fVHa2o9iJGQqjtPNnHOFPtOt5Et6xya6mwm6lWOhQO4kgmLpgo/IA1k4WSIeTcqJibQeEi7HY3xZw5p41Z6zLr2JgBzR7GDAZ4ayuQ8/LV+q/xPdhQWwbGo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AOZ2LkPO; arc=none smtp.client-ip=100.103.45.18
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 104AE1F00A3D;
-	Tue, 30 Jun 2026 06:22:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1782800536;
-	bh=N9sVQgkbOfiThVXjaJ4LhvYdhIVzMO8gt6AUByFIZ+A=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=AOZ2LkPOc1zEjYkhUJx3UNTNuuEhwi49bJW/wbpqOxehVX0NXldS2cksO6+5BDz8S
-	 ajDZINz25hbuju7xg3VCbe9rcxWDLnh/t9k+gfAy6/pc5w33jp3/7gUwM1WtH56He7
-	 L3+YTagsWAuUr7sYFxA71KUM9PfooG/zUWR9m43vXDnJ44Ciwz7b+B4Y7aTS/LYGkz
-	 A7wGLJQSRio8RG9qcBYJY1uiNh39b9rhIQlHJWHpV2swSr5fLolrBjBOG0pBWMqLVD
-	 ESKXDXPIjRwBgxXixc83JDgWFhQUs4wtd0LIvrvZZvSCyu1ZRj+fPHMm1ouVI7DIkw
-	 S/xAG+302oaMw==
-Date: Tue, 30 Jun 2026 08:22:12 +0200
-From: Krzysztof Kozlowski <krzk@kernel.org>
-To: Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>
-Cc: Bjorn Andersson <andersson@kernel.org>, 
-	Konrad Dybcio <konradybcio@kernel.org>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
-	Paolo Abeni <pabeni@redhat.com>, Maxime Coquelin <mcoquelin.stm32@gmail.com>, 
-	Alexandre Torgue <alexandre.torgue@foss.st.com>, Vinod Koul <vkoul@kernel.org>, 
-	Giuseppe Cavallaro <peppe.cavallaro@st.com>, Chen-Yu Tsai <wens@kernel.org>, 
-	Jernej Skrabec <jernej.skrabec@gmail.com>, Neil Armstrong <neil.armstrong@linaro.org>, 
-	Kevin Hilman <khilman@baylibre.com>, Jerome Brunet <jbrunet@baylibre.com>, 
-	Shawn Guo <shawnguo@kernel.org>, Fabio Estevam <festevam@gmail.com>, 
-	Jan Petrous <jan.petrous@oss.nxp.com>, s32@nxp.com, Mohd Ayaan Anwar <mohd.anwar@oss.qualcomm.com>, 
-	Romain Gantois <romain.gantois@bootlin.com>, Geert Uytterhoeven <geert+renesas@glider.be>, 
-	Magnus Damm <magnus.damm@gmail.com>, Maxime Ripard <mripard@kernel.org>, 
-	Christophe Roullier <christophe.roullier@foss.st.com>, Bartosz Golaszewski <brgl@kernel.org>, 
-	Radu Rendec <rrendec@redhat.com>, linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, netdev@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com, 
-	linux-arm-kernel@lists.infradead.org, Drew Fustini <dfustini@tenstorrent.com>, 
-	linux-sunxi@lists.linux.dev, linux-amlogic@lists.infradead.org, linux-mips@vger.kernel.org, 
-	imx@lists.linux.dev, linux-renesas-soc@vger.kernel.org, 
-	linux-rockchip@lists.infradead.org, sophgo@lists.linux.dev, linux-riscv@lists.infradead.org, 
-	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Subject: Re: [PATCH net-next v11 1/7] dt-bindings: phy: document the serdes
- PHY on sa8255p
-Message-ID: <20260630-exuberant-dramatic-bustard-068bf8@quoll>
-References: <20260629-qcom-sa8255p-emac-v11-0-1b7fb95b51f9@oss.qualcomm.com>
- <20260629-qcom-sa8255p-emac-v11-1-1b7fb95b51f9@oss.qualcomm.com>
+	s=arc-20240116; t=1782805120; c=relaxed/simple;
+	bh=m2BcXDvYAEp5y0PpYqR0UFKrjTCsaqAcLwRl/QjXAqE=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=dxoc8QoLzamt+gLUPqlaghy8XeVhWne34rptMftU3d7ZNLX4j80Uq2h7OewA8HIfmKv2xcqH7+0d1IzVoXZr0p9n2Q5kgk94cHHn/2JfE7RV0DNdagPFG68MSCNCi+uH/MlfumY0KJ/u5madMDKoqrUn/12xBz5na1elN0xX7mk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=eOCI/CT9; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=Btvx2I53; arc=none smtp.client-ip=193.142.43.55
+From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1782805117;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=NdrwOPwwg5sl/G/VlKLy2BfD96hcOiYwx38KP81p2To=;
+	b=eOCI/CT9Al8F9+zzbCaSRdLDNuKZdO0uWTKoB2tZnMKpW1yRESHHgZD76EC03YhgbvMlmi
+	C/n2LhQNqFCMC/bxvchp20eA9IqpSqZDnBvD0VhQ3jrlrliiSBJK8TN9LGDK3c7+oUCUyH
+	JQHBtevBRk+3re8OHUO/TRxNx/+CQrdChPFl1jCUdTrl7YimwZ87ITGoC7febatJzajsny
+	jxXixUhadxsuYrlw+AoXiXfzMWLHxR+n4MXrkfjQy6UmrrFpIkIR6VulXnsXF5xEKJTkZV
+	JkefOTZCE6s85sFs5lbc8HYEZ/jFZqxqDfzv1zm2+ctf23qBxLCLRwxs8w4bbg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1782805117;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=NdrwOPwwg5sl/G/VlKLy2BfD96hcOiYwx38KP81p2To=;
+	b=Btvx2I53nZX8nXAICG9CUa/B6i7cJ363iMeh2cME3M8TJhPuIOpoqqppMxRTzXXToY8W+x
+	ya7jeQWHyt9zVQBQ==
+Subject: [PATCH v2 0/9] vDSO: Respect COMPAT_32BIT_TIME
+Date: Tue, 30 Jun 2026 09:38:29 +0200
+Message-Id: <20260630-vdso-compat_32bit_time-v2-0-520d194640dd@linutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20260629-qcom-sa8255p-emac-v11-1-1b7fb95b51f9@oss.qualcomm.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/3WNwQqDMBAFf0VybkqygcT21P8oIlHXulATSdJgE
+ f+9qT33OANv3sYiBsLIrtXGAmaK5F0BOFWsn6x7IKehMAMBWkipeB6i572fF5taBR2lNtGMHGt
+ RG63wYrRlZbwEHGk9wvem8EQx+fA+frL82l8SwPxLZskFV6OAWlvT2V7dnuReKXhH63lA1uz7/
+ gHqMwZqwAAAAA==
+X-Change-ID: 20260113-vdso-compat_32bit_time-e808763e976a
+To: Andy Lutomirski <luto@kernel.org>, Thomas Gleixner <tglx@kernel.org>, 
+ Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+ Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+ "H. Peter Anvin" <hpa@zytor.com>, Russell King <linux@armlinux.org.uk>, 
+ Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
+ Madhavan Srinivasan <maddy@linux.ibm.com>, 
+ Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>, 
+ "Christophe Leroy (CS GROUP)" <chleroy@kernel.org>, 
+ Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
+ Vincenzo Frascino <vincenzo.frascino@arm.com>, 
+ John Stultz <jstultz@google.com>, Stephen Boyd <sboyd@kernel.org>, 
+ "David S. Miller" <davem@davemloft.net>, 
+ Andreas Larsson <andreas@gaisler.com>
+Cc: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>, 
+ linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+ linuxppc-dev@lists.ozlabs.org, linux-mips@vger.kernel.org, 
+ Arnd Bergmann <arnd@arndb.de>, linux-api@vger.kernel.org, 
+ sparclinux@vger.kernel.org
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1782805116; l=3999;
+ i=thomas.weissschuh@linutronix.de; s=20240209; h=from:subject:message-id;
+ bh=m2BcXDvYAEp5y0PpYqR0UFKrjTCsaqAcLwRl/QjXAqE=;
+ b=MmLqPk6DUhP7wmz102JYzJAuqPgG4TQxTMFC0bnmH6DgjsgVPzlCAJG/20f/m5qxrZq2ldo9i
+ GdipLSy/PXsD0YkIipY0BiFwCqtAP78WuzVzlQnXVwNuMroRwsWymi+
+X-Developer-Key: i=thomas.weissschuh@linutronix.de; a=ed25519;
+ pk=pfvxvpFUDJV2h2nY0FidLUml22uGLSjByFbM6aqQQws=
 X-Rspamd-Action: no action
-X-Spamd-Result: default: False [-3.16 / 15.00];
-	WHITELIST_SPF_DKIM(-3.00)[kernel.org:d:+,kernel.org:s:+];
-	SUSPICIOUS_RECIPS(1.50)[];
+X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	MID_RHS_NOT_FQDN(0.50)[];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20260515];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	DMARC_POLICY_ALLOW(-0.50)[linutronix.de,none];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
+	R_DKIM_ALLOW(-0.20)[linutronix.de:s=2020,linutronix.de:s=2020e];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_COUNT_THREE(0.00)[4];
 	RCVD_TLS_LAST(0.00)[];
+	FORGED_RECIPIENTS(0.00)[m:luto@kernel.org,m:tglx@kernel.org,m:mingo@redhat.com,m:bp@alien8.de,m:dave.hansen@linux.intel.com,m:x86@kernel.org,m:hpa@zytor.com,m:linux@armlinux.org.uk,m:catalin.marinas@arm.com,m:will@kernel.org,m:maddy@linux.ibm.com,m:mpe@ellerman.id.au,m:npiggin@gmail.com,m:chleroy@kernel.org,m:tsbogend@alpha.franken.de,m:vincenzo.frascino@arm.com,m:jstultz@google.com,m:sboyd@kernel.org,m:davem@davemloft.net,m:andreas@gaisler.com,m:thomas.weissschuh@linutronix.de,m:linux-kernel@vger.kernel.org,m:linux-arm-kernel@lists.infradead.org,m:linuxppc-dev@lists.ozlabs.org,m:linux-mips@vger.kernel.org,m:arnd@arndb.de,m:linux-api@vger.kernel.org,m:sparclinux@vger.kernel.org,s:lists@lfdr.de];
+	RCVD_COUNT_THREE(0.00)[3];
+	FORGED_SENDER(0.00)[thomas.weissschuh@linutronix.de,linux-mips@vger.kernel.org];
+	TAGGED_FROM(0.00)[bounces-15344-lists,linux-mips=lfdr.de];
+	RCPT_COUNT_TWELVE(0.00)[28];
+	FREEMAIL_TO(0.00)[kernel.org,redhat.com,alien8.de,linux.intel.com,zytor.com,armlinux.org.uk,arm.com,linux.ibm.com,ellerman.id.au,gmail.com,alpha.franken.de,google.com,davemloft.net,gaisler.com];
 	MIME_TRACE(0.00)[0:+];
-	RCPT_COUNT_TWELVE(0.00)[48];
-	FORWARDED(0.00)[lists@lfdr.de];
-	FORGED_RECIPIENTS(0.00)[m:bartosz.golaszewski@oss.qualcomm.com,m:andersson@kernel.org,m:konradybcio@kernel.org,m:robh@kernel.org,m:krzk+dt@kernel.org,m:conor+dt@kernel.org,m:andrew+netdev@lunn.ch,m:davem@davemloft.net,m:edumazet@google.com,m:kuba@kernel.org,m:pabeni@redhat.com,m:mcoquelin.stm32@gmail.com,m:alexandre.torgue@foss.st.com,m:vkoul@kernel.org,m:peppe.cavallaro@st.com,m:wens@kernel.org,m:jernej.skrabec@gmail.com,m:neil.armstrong@linaro.org,m:khilman@baylibre.com,m:jbrunet@baylibre.com,m:shawnguo@kernel.org,m:festevam@gmail.com,m:jan.petrous@oss.nxp.com,m:s32@nxp.com,m:mohd.anwar@oss.qualcomm.com,m:romain.gantois@bootlin.com,m:geert+renesas@glider.be,m:magnus.damm@gmail.com,m:mripard@kernel.org,m:christophe.roullier@foss.st.com,m:brgl@kernel.org,m:rrendec@redhat.com,m:linux-arm-msm@vger.kernel.org,m:devicetree@vger.kernel.org,m:linux-kernel@vger.kernel.org,m:netdev@vger.kernel.org,m:linux-stm32@st-md-mailman.stormreply.com,m:linux-arm-kernel@lists.infradead.org,m:dfustini@t
- enstorrent.com,m:linux-sunxi@lists.linux.dev,m:linux-amlogic@lists.infradead.org,m:linux-mips@vger.kernel.org,m:imx@lists.linux.dev,m:linux-renesas-soc@vger.kernel.org,m:linux-rockchip@lists.infradead.org,m:sophgo@lists.linux.dev,m:linux-riscv@lists.infradead.org,m:bartosz.golaszewski@linaro.org,m:krzk@kernel.org,m:conor@kernel.org,m:andrew@lunn.ch,m:mcoquelinstm32@gmail.com,m:jernejskrabec@gmail.com,m:geert@glider.be,m:magnusdamm@gmail.com,s:lists@lfdr.de];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-15343-lists,linux-mips=lfdr.de];
-	FORGED_SENDER(0.00)[krzk@kernel.org,linux-mips@vger.kernel.org];
+	FORWARDED(0.00)[lists@lfdr.de];
 	FROM_HAS_DN(0.00)[];
-	DKIM_TRACE(0.00)[kernel.org:+];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	TO_DN_SOME(0.00)[];
 	FORGED_SENDER_FORWARDING(0.00)[];
 	ALIAS_RESOLVED(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[krzk@kernel.org,linux-mips@vger.kernel.org];
-	FREEMAIL_CC(0.00)[kernel.org,lunn.ch,davemloft.net,google.com,redhat.com,gmail.com,foss.st.com,st.com,linaro.org,baylibre.com,oss.nxp.com,nxp.com,oss.qualcomm.com,bootlin.com,glider.be,vger.kernel.org,st-md-mailman.stormreply.com,lists.infradead.org,tenstorrent.com,lists.linux.dev];
+	FROM_NEQ_ENVFROM(0.00)[thomas.weissschuh@linutronix.de,linux-mips@vger.kernel.org];
+	DKIM_TRACE(0.00)[linutronix.de:+];
+	MID_RHS_MATCH_FROM(0.00)[];
+	TAGGED_RCPT(0.00)[linux-mips];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	TAGGED_RCPT(0.00)[linux-mips,dt,netdev,renesas];
 	MISSING_XM_UA(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[qualcomm.com:email,vger.kernel.org:from_smtp,quoll:mid,devicetree.org:url,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo]
+	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:rdns,sto.lore.kernel.org:helo]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 322C96E0B77
+X-Rspamd-Queue-Id: 337D36E139B
 
-On Mon, Jun 29, 2026 at 01:28:47PM +0200, Bartosz Golaszewski wrote:
-> Describe the SGMII/SerDes PHY present on the Qualcomm sa8255p platforms.
-> This is essentially the same hardware as sa8775p rev3 but the PHY is
-> managed by firmware over SCMI.
-> 
-> Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>
-> ---
->  .../bindings/phy/qcom,sa8255p-dwmac-sgmii-phy.yaml | 51 ++++++++++++++++++++++
->  1 file changed, 51 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/phy/qcom,sa8255p-dwmac-sgmii-phy.yaml b/Documentation/devicetree/bindings/phy/qcom,sa8255p-dwmac-sgmii-phy.yaml
-> new file mode 100644
-> index 0000000000000000000000000000000000000000..4cea6926d1c28872ea7b7aad53088dbbcb74fa99
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/phy/qcom,sa8255p-dwmac-sgmii-phy.yaml
-> @@ -0,0 +1,51 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/phy/qcom,sa8255p-dwmac-sgmii-phy.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Qualcomm SerDes/SGMII ethernet PHY controller (firmware managed)
-> +
-> +maintainers:
-> +  - Bartosz Golaszewski <brgl@kernel.org>
-> +
-> +description:
-> +  The SerDes PHY sits between the MAC and the external PHY and provides
-> +  separate Rx Tx lines.
-> +
-> +properties:
-> +  compatible:
-> +    const: qcom,sa8255p-dwmac-sgmii-phy
-> +
-> +  reg:
-> +    items:
-> +      - description: serdes
-> +
-> +  power-domains:
-> +    maxItems: 1
-> +
-> +  power-domain-names:
-> +    items:
-> +      - const: serdes
+If CONFIG_COMPAT_32BIT_TIME is disabled then the vDSO should not
+provide any 32-bit time related functionality. This is the intended
+effect of the kconfig option and also the fallback system calls would
+also not be implemented.
 
-Drop names. Not useful if it repeats the device block name.
+Currently the kconfig option does not affect the gettimeofday() syscall,
+so also keep that in the vDSO.
 
-With this:
+I also tried to introduce some helpers to avoid much of the ifdeffery,
+but due to the high variance in the architecture-specific glue code
+these would need to handle they ended up being worse than the current
+proposal.
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
+As a side-effect this will make the self-tests more reliable,
+as there is now always a matching syscall available for each vDSO function.
+
+clock_gettime_time64() was only introduced in v6.19, so libc implementations
+are likely not using it yet.
+
+Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
+---
+Changes in v2:
+- Also handle SPARC.
+- Drop MIPS cleanup patches.
+- Also handle gettimeofday().
+- Add more static validations.
+- Rebase on v7.2-rc1.
+- Link to v1: https://lore.kernel.org/r/20260227-vdso-compat_32bit_time-v1-0-3f0286a7bac3@linutronix.de
+
+To: Andy Lutomirski <luto@kernel.org>
+To: Thomas Gleixner <tglx@kernel.org>
+To: Ingo Molnar <mingo@redhat.com>
+To: Borislav Petkov <bp@alien8.de>
+To: Dave Hansen <dave.hansen@linux.intel.com>
+To: x86@kernel.org
+To: H. Peter Anvin <hpa@zytor.com>
+To: Russell King <linux@armlinux.org.uk>
+To: Catalin Marinas <catalin.marinas@arm.com>
+To: Will Deacon <will@kernel.org>
+To: Madhavan Srinivasan <maddy@linux.ibm.com>
+To: Michael Ellerman <mpe@ellerman.id.au>
+To: Nicholas Piggin <npiggin@gmail.com>
+To: Christophe Leroy (CS GROUP) <chleroy@kernel.org>
+To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To: Vincenzo Frascino <vincenzo.frascino@arm.com>
+To: John Stultz <jstultz@google.com>
+To: Stephen Boyd <sboyd@kernel.org>
+To: "David S. Miller" <davem@davemloft.net>
+To: Andreas Larsson <andreas@gaisler.com>
+Cc: linux-kernel@vger.kernel.org
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: linuxppc-dev@lists.ozlabs.org
+Cc: linux-mips@vger.kernel.org
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: linux-api@vger.kernel.org
+Cc: sparclinux@vger.kernel.org
+
+---
+Thomas Weißschuh (9):
+      time: Respect COMPAT_32BIT_TIME for old time type functions
+      vdso/gettimeofday: Validate system call existence for time() and gettimeofday()
+      x86/vdso: Respect COMPAT_32BIT_TIME
+      arm64: vdso32: Respect COMPAT_32BIT_TIME
+      ARM: VDSO: Respect COMPAT_32BIT_TIME
+      powerpc/vdso: Respect COMPAT_32BIT_TIME
+      MIPS: VDSO: Respect COMPAT_32BIT_TIME
+      sparc: vdso: Respect COMPAT_32BIT_TIME
+      vdso/gettimeofday: Verify COMPAT_32BIT_TIME interactions
+
+ arch/arm/vdso/vdso.lds.S                    |  2 ++
+ arch/arm/vdso/vgettimeofday.c               | 14 ++++++++------
+ arch/arm64/kernel/vdso32/vdso.lds.S         |  2 ++
+ arch/arm64/kernel/vdso32/vgettimeofday.c    | 14 ++++++++------
+ arch/mips/vdso/vdso.lds.S                   |  2 ++
+ arch/mips/vdso/vgettimeofday.c              |  3 +++
+ arch/powerpc/kernel/vdso/gettimeofday.S     |  8 ++++++++
+ arch/powerpc/kernel/vdso/vdso32.lds.S       | 10 ++++++----
+ arch/powerpc/kernel/vdso/vgettimeofday.c    | 16 ++++++++++------
+ arch/sparc/vdso/vclock_gettime.c            |  4 ++++
+ arch/sparc/vdso/vdso32/vdso32.lds.S         |  6 ++++--
+ arch/x86/entry/vdso/common/vclock_gettime.c | 20 ++++++++++++--------
+ arch/x86/entry/vdso/vdso32/vdso32.lds.S     |  2 ++
+ kernel/sys_ni.c                             |  4 ++++
+ kernel/time/time.c                          | 24 ++++++++++++++++++++----
+ lib/vdso/gettimeofday.c                     | 20 ++++++++++++++++++++
+ 16 files changed, 115 insertions(+), 36 deletions(-)
+---
+base-commit: e6da2429169af9b33f3629b69905d89bb5ee9e64
+change-id: 20260113-vdso-compat_32bit_time-e808763e976a
 
 Best regards,
-Krzysztof
+--  
+Thomas Weißschuh (Schneider Electric) <thomas.weissschuh@linutronix.de>
 
 
