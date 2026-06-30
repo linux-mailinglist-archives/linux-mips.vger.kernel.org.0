@@ -1,261 +1,161 @@
-Return-Path: <linux-mips+bounces-15354-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-15355-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id /qVuOBxzQ2ptYgoAu9opvQ
-	(envelope-from <linux-mips+bounces-15354-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Tue, 30 Jun 2026 09:41:16 +0200
+	id p4fXBLN3Q2rcYwoAu9opvQ
+	(envelope-from <linux-mips+bounces-15355-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Tue, 30 Jun 2026 10:00:51 +0200
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id DF52B6E1472
-	for <lists+linux-mips@lfdr.de>; Tue, 30 Jun 2026 09:41:15 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7338E6E17C0
+	for <lists+linux-mips@lfdr.de>; Tue, 30 Jun 2026 10:00:49 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=kernel.org header.s=k20260515 header.b=fDaf4ZqW;
-	spf=pass (mail.lfdr.de: domain of "linux-mips+bounces-15354-lists+linux-mips=lfdr.de@vger.kernel.org" designates 104.64.211.4 as permitted sender) smtp.mailfrom="linux-mips+bounces-15354-lists+linux-mips=lfdr.de@vger.kernel.org";
+	dkim=pass header.d=kernel.org header.s=k20260515 header.b=SzEeikn2;
+	spf=pass (mail.lfdr.de: domain of "linux-mips+bounces-15355-lists+linux-mips=lfdr.de@vger.kernel.org" designates 2600:3c0a:e001:db::12fc:5321 as permitted sender) smtp.mailfrom="linux-mips+bounces-15355-lists+linux-mips=lfdr.de@vger.kernel.org";
 	dmarc=pass (policy=quarantine) header.from=kernel.org;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id E1DF63018E92
-	for <lists+linux-mips@lfdr.de>; Tue, 30 Jun 2026 07:39:49 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 5A9ED303372F
+	for <lists+linux-mips@lfdr.de>; Tue, 30 Jun 2026 07:53:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 73A163E3150;
-	Tue, 30 Jun 2026 07:39:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F01183E5EE1;
+	Tue, 30 Jun 2026 07:53:51 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C309C3DDDBB;
-	Tue, 30 Jun 2026 07:39:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA8973E44E0
+	for <linux-mips@vger.kernel.org>; Tue, 30 Jun 2026 07:53:50 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782805159; cv=none; b=CwC6rpGfSwVswnEfzptLP/rGkR4PbE5aENsd/warvrH3LN5Omy0wJk19IQyni5GumdNVOYJ/8Wpwp7A3EiWefMXmAUvu+EZ3eqFyXKr+kV7TzEvteBnBOSBV+UapkKwGDKStP1ZmB0JpvaYVrX7EqwD1DmP3wfBsVwfvM+jY/ZQ=
+	t=1782806031; cv=none; b=NygsavM+rr0g12Ad6OrnddeBpckCZch8h+h4bWnTotIx9FZ1PDIO4wrn3NmNHZhTKeWtF/UyzM2p3H4Sy6WOE1E+bSR7vbvs7ROPdgUeuMi6JWd5Uy2fXzegeMTU39234cKSjP8i669RsqSW4w7CD4pWE5FgYRU8E4nJwlWLPds=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782805159; c=relaxed/simple;
-	bh=lvjAdPL/53pFYItQkwcVoVpd0+EC0h2230TPbhE1lZQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=HmSpzoSYxrc4H5ztsmq6lCNMe1UnwxMnCR6alLswoUBlxALPDtcz9XI4vOhxpZZI+6+wzjuvcin7O/PEafze9SLaaJMMufggJK3GI+Tk2WUKOpUDSa0gNDa/G9QkNqlN1ict13FNuALj8TYZM44J5QoNM0tpvdCM1tK3gNL5rGY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fDaf4ZqW; arc=none smtp.client-ip=100.103.45.18
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A8F3C1F00A3D;
-	Tue, 30 Jun 2026 07:38:58 +0000 (UTC)
+	s=arc-20240116; t=1782806031; c=relaxed/simple;
+	bh=DKWuHMD8ADL0zKU3qzM6I+0+Ls324mTKAtUCV8uTQCo=;
+	h=From:In-Reply-To:MIME-Version:References:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=aXNhXFoE+HlscYc04hS83v4duW7qsNpTS7pL+2GEqE28VP1RrslnNnjCmSpYEZiMIOsvO2UAFXtpUQzHFN+xDXAmelsTHRrkNb7GRUkTVNcfJ2b3/khASJz7C9msyscLRxYVUDp2VOsDY6B5ubM0FKzVXoV8YPqIB5jQHkFtzfs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SzEeikn2; arc=none smtp.client-ip=100.103.45.18
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7D4051F00ADF
+	for <linux-mips@vger.kernel.org>; Tue, 30 Jun 2026 07:53:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1782805156;
-	bh=QFTirDmiRXM2E2UxDPivyHpH5WU8vmAPSC3LpjlrT8o=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=fDaf4ZqW3PD9fY8acsrJCsXc7pOEzc4lLsW2jgJhfYGl7NXG5KcVo4Pxek2Uz+Nla
-	 tOcu2NuZHwmic0JpBPUEEgMmuaTGNKExmRCbT0ES7+8QhHL9YqeimbRUf62O0HtMfs
-	 LYny1udM2eWLdF0sRgHD+bBsvogcyV+srg+CrLasOfuUZDDcJr8dZlygrFZBfDoggP
-	 p2mllhEamdnPs77YGrH3WGaXXIkqv4Xgyt7g+R7YVqHEf/NFyfi55aJUF3SRsQX/b0
-	 NUbVhpaMaUvlKWWtDdlDlkLmrVKracrOVgHvCwNbE5g49j/+vG6Xvy5Wxh+acQ6BjY
-	 MYjz8K0OvlQ3A==
-Date: Tue, 30 Jun 2026 08:38:51 +0100
-From: Lorenzo Stoakes <ljs@kernel.org>
-To: Zi Yan <ziy@nvidia.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>, 
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, Madhavan Srinivasan <maddy@linux.ibm.com>, 
-	Michael Ellerman <mpe@ellerman.id.au>, Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
-	Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, 
-	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
-	Lucas Stach <l.stach@pengutronix.de>, Inki Dae <inki.dae@samsung.com>, 
-	Seung-Woo Kim <sw0312.kim@samsung.com>, Kyungmin Park <kyungmin.park@samsung.com>, 
-	Krzysztof Kozlowski <krzk@kernel.org>, Peter Griffin <peter.griffin@linaro.org>, 
-	Jani Nikula <jani.nikula@linux.intel.com>, Joonas Lahtinen <joonas.lahtinen@linux.intel.com>, 
-	Rodrigo Vivi <rodrigo.vivi@intel.com>, Tvrtko Ursulin <tursulin@ursulin.net>, 
-	Rob Clark <robin.clark@oss.qualcomm.com>, Dmitry Baryshkov <lumag@kernel.org>, 
-	Lyude Paul <lyude@redhat.com>, Danilo Krummrich <dakr@kernel.org>, 
-	Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>, Sandy Huang <hjc@rock-chips.com>, 
-	Heiko =?utf-8?Q?St=C3=BCbner?= <heiko@sntech.de>, Andy Yan <andy.yan@rock-chips.com>, 
-	Thierry Reding <thierry.reding@kernel.org>, Mikko Perttunen <mperttunen@nvidia.com>, 
-	Jonathan Hunter <jonathanh@nvidia.com>, Gerd Hoffmann <kraxel@redhat.com>, 
-	Dmitry Osipenko <dmitry.osipenko@collabora.com>, Zack Rusin <zack.rusin@broadcom.com>, 
-	Matthew Brost <matthew.brost@intel.com>, Thomas Hellstrom <thomas.hellstrom@linux.intel.com>, 
-	Oleksandr Andrushchenko <oleksandr_andrushchenko@epam.com>, Helge Deller <deller@gmx.de>, Benjamin LaHaise <bcrl@kvack.org>, 
-	Alexander Viro <viro@zeniv.linux.org.uk>, Christian Brauner <brauner@kernel.org>, 
-	Muchun Song <muchun.song@linux.dev>, Oscar Salvador <osalvador@suse.de>, 
-	David Hildenbrand <david@kernel.org>, Baolin Wang <baolin.wang@linux.alibaba.com>, 
-	"Liam R . Howlett" <liam@infradead.org>, Nico Pache <npache@redhat.com>, 
-	Ryan Roberts <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>, Barry Song <baohua@kernel.org>, 
-	Lance Yang <lance.yang@linux.dev>, Hugh Dickins <hughd@google.com>, 
-	Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>, 
-	Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>, Jann Horn <jannh@google.com>, 
-	Pedro Falcato <pfalcato@suse.de>, Kees Cook <kees@kernel.org>, Jaroslav Kysela <perex@perex.cz>, 
-	Takashi Iwai <tiwai@suse.com>, linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linuxppc-dev@lists.ozlabs.org, dri-devel@lists.freedesktop.org, etnaviv@lists.freedesktop.org, 
-	linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org, 
-	intel-gfx@lists.freedesktop.org, linux-arm-msm@vger.kernel.org, freedreno@lists.freedesktop.org, 
-	nouveau@lists.freedesktop.org, linux-rockchip@lists.infradead.org, linux-tegra@vger.kernel.org, 
-	virtualization@lists.linux.dev, intel-xe@lists.freedesktop.org, xen-devel@lists.xenproject.org, 
-	linux-fbdev@vger.kernel.org, linux-aio@kvack.org, linux-fsdevel@vger.kernel.org, 
-	linux-mm@kvack.org, linux-sound@vger.kernel.org
-Subject: Re: [PATCH 01/13] mm: introduce vma_flags_can_grow() and
- vma_can_grow()
-Message-ID: <akNucoP3eaDN2_Vz@lucifer>
-References: <cover.1782760670.git.ljs@kernel.org>
- <f2e8c32515d328db62279cc8bab8398ea278d74f.1782760670.git.ljs@kernel.org>
- <DJLTDCPWMXDL.4ICZ77A1LPZZ@nvidia.com>
+	s=k20260515; t=1782806030;
+	bh=QLk1TuOjiNPuCpTV4xCdDTaOjHQTK3QruyZKcZY7x1Q=;
+	h=From:In-Reply-To:References:Date:Subject:To:Cc;
+	b=SzEeikn298ntM12mqrr6eeAuWBznUx8HGeKI8OO6J1rAXqZe+DG8eH3kpdxS2Qwc/
+	 BEgTe/7fHp8h71X6sCGG3fIihS5C6QKcHYkMaNYrgPUk3rcaSPmJDnw8ZoM5yrlTQE
+	 KvW3inqTRly1yX4cupxJ6KIIy4QWzwTYakuwLMqpuMM/p2OaqREIyxEYDMqln50mnE
+	 C1NSCn+lHyKd79yClTWWWIpGeXloq0qHFR7J5NJc/x4YvTZ2+1E8CMWE8qqPT9V+G8
+	 G9xFlM4DvUB/S9Qvyumv8uzp49Hn1jyEjfrRcGIK8Lu7u5c1SmS6vDV9TdRuWHIBZh
+	 32YpQJymIWJ5Q==
+Received: by mail-lj1-f176.google.com with SMTP id 38308e7fff4ca-39b19e7d6fcso8747031fa.1
+        for <linux-mips@vger.kernel.org>; Tue, 30 Jun 2026 00:53:50 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AHgh+Ro9UjN91BEosEx5WbfzM5a4IJWkNgQg46m080ZH2eKeY/WKK8a2FEqmxC5RroaIhod9Fh2vfbILygaP@vger.kernel.org
+X-Gm-Message-State: AOJu0YxOI9ZUrx73cLLRXTXSGIooRueLMzvj7TXbuDKuVy7bBUhbyouw
+	7sKmDGFfZBbhUj8Iyinfcle4y8Rq2xoemcw/ElktvACcQemT38AsoJy/TEQMCUaqg5GyCqeIgEm
+	PqjhDf/G4qcXb3BWIqFH96m/VhXg40ONzploEkKyWNQ==
+X-Received: by 2002:a05:651c:2203:b0:39b:d0:e992 with SMTP id
+ 38308e7fff4ca-39b1da26188mr5158341fa.4.1782806029201; Tue, 30 Jun 2026
+ 00:53:49 -0700 (PDT)
+Received: from 969154062570 named unknown by gmailapi.google.com with
+ HTTPREST; Tue, 30 Jun 2026 00:53:46 -0700
+Received: from 969154062570 named unknown by gmailapi.google.com with
+ HTTPREST; Tue, 30 Jun 2026 00:53:46 -0700
+From: Bartosz Golaszewski <brgl@kernel.org>
+In-Reply-To: <20260629132633.1300009-1-arnd@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <DJLTDCPWMXDL.4ICZ77A1LPZZ@nvidia.com>
+References: <20260629132633.1300009-1-arnd@kernel.org>
+Date: Tue, 30 Jun 2026 00:53:46 -0700
+X-Gmail-Original-Message-ID: <CAMRc=McnpZK+XeMcVfrBeh8SWa44UsVSJD0GJ1pXYhiFqzdpaQ@mail.gmail.com>
+X-Gm-Features: AVVi8CcPrvp2PMd39-Ep5NDuNXP5lZT9A5toOBbKSjeAVmB0_7rIggX2JLATmJ0
+Message-ID: <CAMRc=McnpZK+XeMcVfrBeh8SWa44UsVSJD0GJ1pXYhiFqzdpaQ@mail.gmail.com>
+Subject: Re: [PATCH 00/13] treewide: replace linux/gpio.h
+To: Arnd Bergmann <arnd@kernel.org>
+Cc: linux-gpio@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>, 
+	Bartosz Golaszewski <brgl@kernel.org>, Andrew Lunn <andrew@lunn.ch>, 
+	Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>, 
+	Gregory Clement <gregory.clement@bootlin.com>, Frank Li <Frank.Li@nxp.com>, 
+	Robert Jarzmik <robert.jarzmik@free.fr>, Krzysztof Kozlowski <krzk@kernel.org>, 
+	Greg Ungerer <gerg@linux-m68k.org>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
+	Hauke Mehrtens <hauke@hauke-m.de>, =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>, 
+	Yoshinori Sato <ysato@users.sourceforge.jp>, 
+	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>, Linus Walleij <linusw@kernel.org>, 
+	Dmitry Torokhov <dmitry.torokhov@gmail.com>, Jakub Kicinski <kuba@kernel.org>, 
+	Paolo Abeni <pabeni@redhat.com>, Dominik Brodowski <linux@dominikbrodowski.net>, 
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	linux-samsung-soc@vger.kernel.org, patches@opensource.cirrus.com, 
+	linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org, 
+	linux-sh@vger.kernel.org, linux-input@vger.kernel.org, 
+	linux-media@vger.kernel.org, netdev@vger.kernel.org, 
+	linux-sunxi@lists.linux.dev, linux-phy@lists.infradead.org, 
+	linux-rockchip@lists.infradead.org, linux-sound@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 X-Rspamd-Action: no action
-X-Spamd-Result: default: False [-4.66 / 15.00];
+X-Spamd-Result: default: False [-3.66 / 15.00];
 	WHITELIST_SPF_DKIM(-3.00)[kernel.org:d:+,kernel.org:s:+];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_RHS_NOT_FQDN(0.50)[];
 	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20260515];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-15354-lists,linux-mips=lfdr.de];
-	RCVD_COUNT_THREE(0.00)[4];
-	FREEMAIL_CC(0.00)[linux-foundation.org,alpha.franken.de,linux.ibm.com,ellerman.id.au,linux.intel.com,kernel.org,suse.de,gmail.com,ffwll.ch,pengutronix.de,samsung.com,linaro.org,intel.com,ursulin.net,oss.qualcomm.com,redhat.com,ideasonboard.com,rock-chips.com,sntech.de,nvidia.com,collabora.com,broadcom.com,epam.com,gmx.de,kvack.org,zeniv.linux.org.uk,linux.dev,linux.alibaba.com,infradead.org,arm.com,google.com,suse.com,perex.cz,vger.kernel.org,lists.ozlabs.org,lists.freedesktop.org,lists.infradead.org,lists.linux.dev,lists.xenproject.org];
 	MIME_TRACE(0.00)[0:+];
-	FORGED_RECIPIENTS(0.00)[m:ziy@nvidia.com,m:akpm@linux-foundation.org,m:tsbogend@alpha.franken.de,m:maddy@linux.ibm.com,m:mpe@ellerman.id.au,m:maarten.lankhorst@linux.intel.com,m:mripard@kernel.org,m:tzimmermann@suse.de,m:airlied@gmail.com,m:simona@ffwll.ch,m:l.stach@pengutronix.de,m:inki.dae@samsung.com,m:sw0312.kim@samsung.com,m:kyungmin.park@samsung.com,m:krzk@kernel.org,m:peter.griffin@linaro.org,m:jani.nikula@linux.intel.com,m:joonas.lahtinen@linux.intel.com,m:rodrigo.vivi@intel.com,m:tursulin@ursulin.net,m:robin.clark@oss.qualcomm.com,m:lumag@kernel.org,m:lyude@redhat.com,m:dakr@kernel.org,m:tomi.valkeinen@ideasonboard.com,m:hjc@rock-chips.com,m:heiko@sntech.de,m:andy.yan@rock-chips.com,m:thierry.reding@kernel.org,m:mperttunen@nvidia.com,m:jonathanh@nvidia.com,m:kraxel@redhat.com,m:dmitry.osipenko@collabora.com,m:zack.rusin@broadcom.com,m:matthew.brost@intel.com,m:thomas.hellstrom@linux.intel.com,m:oleksandr_andrushchenko@epam.com,m:deller@gmx.de,m:bcrl@kvack.org,m:viro@zeniv.l
- inux.org.uk,m:brauner@kernel.org,m:muchun.song@linux.dev,m:osalvador@suse.de,m:david@kernel.org,m:baolin.wang@linux.alibaba.com,m:liam@infradead.org,m:npache@redhat.com,m:ryan.roberts@arm.com,m:dev.jain@arm.com,m:baohua@kernel.org,m:lance.yang@linux.dev,m:hughd@google.com,m:vbabka@kernel.org,m:rppt@kernel.org,m:surenb@google.com,m:mhocko@suse.com,m:jannh@google.com,m:pfalcato@suse.de,m:kees@kernel.org,m:perex@perex.cz,m:tiwai@suse.com,m:linux-mips@vger.kernel.org,m:linux-kernel@vger.kernel.org,m:linuxppc-dev@lists.ozlabs.org,m:dri-devel@lists.freedesktop.org,m:etnaviv@lists.freedesktop.org,m:linux-arm-kernel@lists.infradead.org,m:linux-samsung-soc@vger.kernel.org,m:intel-gfx@lists.freedesktop.org,m:linux-arm-msm@vger.kernel.org,m:freedreno@lists.freedesktop.org,m:nouveau@lists.freedesktop.org,m:linux-rockchip@lists.infradead.org,m:linux-tegra@vger.kernel.org,m:virtualization@lists.linux.dev,m:intel-xe@lists.freedesktop.org,m:xen-devel@lists.xenproject.org,m:linux-fbdev@vger.kernel.o
- rg,m:linux-aio@kvack.org,m:linux-fsdevel@vger.kernel.org,m:linux-mm@kvack.org,m:linux-sound@vger.kernel.org,s:lists@lfdr.de];
-	FORWARDED(0.00)[lists@lfdr.de];
-	FORGED_SENDER(0.00)[ljs@kernel.org,linux-mips@vger.kernel.org];
+	RCPT_COUNT_TWELVE(0.00)[35];
+	RCVD_TLS_LAST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-15355-lists,linux-mips=lfdr.de];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	FROM_HAS_DN(0.00)[];
+	FORGED_RECIPIENTS(0.00)[m:arnd@kernel.org,m:linux-gpio@vger.kernel.org,m:arnd@arndb.de,m:brgl@kernel.org,m:andrew@lunn.ch,m:sebastian.hesselbarth@gmail.com,m:gregory.clement@bootlin.com,m:Frank.Li@nxp.com,m:robert.jarzmik@free.fr,m:krzk@kernel.org,m:gerg@linux-m68k.org,m:tsbogend@alpha.franken.de,m:hauke@hauke-m.de,m:zajec5@gmail.com,m:ysato@users.sourceforge.jp,m:glaubitz@physik.fu-berlin.de,m:linusw@kernel.org,m:dmitry.torokhov@gmail.com,m:kuba@kernel.org,m:pabeni@redhat.com,m:linux@dominikbrodowski.net,m:linux-kernel@vger.kernel.org,m:linux-arm-kernel@lists.infradead.org,m:linux-samsung-soc@vger.kernel.org,m:patches@opensource.cirrus.com,m:linux-m68k@lists.linux-m68k.org,m:linux-mips@vger.kernel.org,m:linux-sh@vger.kernel.org,m:linux-input@vger.kernel.org,m:linux-media@vger.kernel.org,m:netdev@vger.kernel.org,m:linux-sunxi@lists.linux.dev,m:linux-phy@lists.infradead.org,m:linux-rockchip@lists.infradead.org,m:linux-sound@vger.kernel.org,m:sebastianhesselbarth@gmail.com,m:dmitrytor
+ okhov@gmail.com,s:lists@lfdr.de];
+	FORWARDED(0.00)[lists@lfdr.de];
+	FORGED_SENDER(0.00)[brgl@kernel.org,linux-mips@vger.kernel.org];
+	FREEMAIL_CC(0.00)[vger.kernel.org,arndb.de,kernel.org,lunn.ch,gmail.com,bootlin.com,nxp.com,free.fr,linux-m68k.org,alpha.franken.de,hauke-m.de,users.sourceforge.jp,physik.fu-berlin.de,redhat.com,dominikbrodowski.net,lists.infradead.org,opensource.cirrus.com,lists.linux-m68k.org,lists.linux.dev];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[mail.gmail.com:mid,qualcomm.com:email,arndb.de:email,vger.kernel.org:from_smtp,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	TO_DN_SOME(0.00)[];
-	FORGED_SENDER_FORWARDING(0.00)[];
-	RCPT_COUNT_GT_50(0.00)[82];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[ljs@kernel.org,linux-mips@vger.kernel.org];
+	FORGED_SENDER_FORWARDING(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[brgl@kernel.org,linux-mips@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
 	DKIM_TRACE(0.00)[kernel.org:+];
 	ALIAS_RESOLVED(0.00)[];
 	TAGGED_RCPT(0.00)[linux-mips];
 	MISSING_XM_UA(0.00)[];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:rdns,sin.lore.kernel.org:helo,lucifer:mid,vger.kernel.org:from_smtp]
+	RCVD_COUNT_SEVEN(0.00)[7]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: DF52B6E1472
+X-Rspamd-Queue-Id: 7338E6E17C0
 
-On Mon, Jun 29, 2026 at 04:26:18PM -0400, Zi Yan wrote:
-> On Mon Jun 29, 2026 at 3:25 PM EDT, Lorenzo Stoakes wrote:
-> > These test whether the VMA has stack sematics, i.e. is able to grow upwards
-> > or downwards depending on the architecture.
-> >
-> > In order to account for arches which do not support upward-growing stacks,
-> > introduce VMA_GROWSUP whose definition depends on the architecture
-> > supporting it, and use vma_flags_test_single_mask() in vma_flags_can_grow()
-> > to account for this.
-> >
-> > Update the VMA userland tests to reflect the changes
-> >
-> > No functional change intended.
-> >
-> > Signed-off-by: Lorenzo Stoakes <ljs@kernel.org>
-> > ---
-> >  include/linux/mm.h              | 21 ++++++++++++++++++---
-> >  tools/testing/vma/include/dup.h |  4 ++++
-> >  2 files changed, 22 insertions(+), 3 deletions(-)
-> >
-> > diff --git a/include/linux/mm.h b/include/linux/mm.h
-> > index 868b2334bff3..cf7df1569052 100644
-> > --- a/include/linux/mm.h
-> > +++ b/include/linux/mm.h
-> > @@ -472,6 +472,7 @@ enum {
-> >  #define VM_SAO		INIT_VM_FLAG(SAO)
-> >  #elif defined(CONFIG_PARISC)
-> >  #define VM_GROWSUP	INIT_VM_FLAG(GROWSUP)
-> > +#define VMA_GROWSUP	mk_vma_flags(VMA_GROWSUP_BIT)
-> >  #elif defined(CONFIG_SPARC64)
-> >  #define VM_SPARC_ADI	INIT_VM_FLAG(SPARC_ADI)
-> >  #define VM_ARCH_CLEAR	INIT_VM_FLAG(ARCH_CLEAR)
-> > @@ -483,6 +484,7 @@ enum {
-> >  #endif
-> >  #ifndef VM_GROWSUP
-> >  #define VM_GROWSUP	VM_NONE
-> > +#define VMA_GROWSUP	EMPTY_VMA_FLAGS
-> >  #endif
-> >  #ifdef CONFIG_ARM64_MTE
-> >  #define VM_MTE		INIT_VM_FLAG(MTE)
-> > @@ -1563,11 +1565,24 @@ static inline bool vma_is_initial_stack(const struct vm_area_struct *vma)
-> >  		vma->vm_end >= vma->vm_mm->start_stack;
-> >  }
-> >
-> > -static inline bool vma_is_temporary_stack(const struct vm_area_struct *vma)
-> > +static inline bool vma_flags_can_grow(const vma_flags_t *flags)
-> >  {
-> > -	int maybe_stack = vma->vm_flags & (VM_GROWSDOWN | VM_GROWSUP);
-> > +	if (vma_flags_test_single_mask(flags, VMA_GROWSUP))
-> > +		return true;
-> > +	if (vma_flags_test(flags, VMA_GROWSDOWN_BIT))
-> > +		return true;
-> > +
-> > +	return false;
-> > +}
-> >
-> > -	if (!maybe_stack)
-> > +static inline bool vma_can_grow(const struct vm_area_struct *vma)
-> > +{
-> > +	return vma_flags_can_grow(&vma->flags);
+On Mon, 29 Jun 2026 15:26:20 +0200, Arnd Bergmann <arnd@kernel.org> said:
+> From: Arnd Bergmann <arnd@arndb.de>
 >
-> Would it save vma_flags_can_grow() if we do below?
+> The linux/gpio.h header used to be the global definition for the gpio
+> interfaces, with 1100 users back in linux-3.17. In linux-7.2, only about
+> 130 of those remain, so this series cleans out the rest.
 >
-> return vma_test(vma, VMA_GROWSDOWN_BIT) || vma_test_single_mask(vma, VMA_GROWSUP);
+> In each subsystem, we can replace the header either with
+> linux/gpio/consumer.h for users of the modern gpio descriptor interface,
+> or linux/gpio/legacy.h for the few remaining users of the old number
+> based interface.
 >
-> I find these two functions when I am reading mm.h.
+> All patches in this series can get applied independently, so my
+> preference would be for each subsystem maintainer to apply these
+> directly, with the rest going into the gpio tree at some point.
+>
+> The final patch here obviously needs to wait for all the others
+> to get merged first.
+>
+>       Arnd
 
-Yeah but we require vma_flags_can_grow() for code in mmap.c, the majority of
-checks of this have only vma_flags_t to work with not a VMA :)
+Thanks for doing this Arnd!
 
->
-> > +}
-> > +
-> > +static inline bool vma_is_temporary_stack(const struct vm_area_struct *vma)
-> > +{
-> > +	if (!vma_can_grow(vma))
-> >  		return false;
-> >
-> >  	if ((vma->vm_flags & VM_STACK_INCOMPLETE_SETUP) ==
-> > diff --git a/tools/testing/vma/include/dup.h b/tools/testing/vma/include/dup.h
-> > index 5d7d0afd7765..6f5bcd7fbcd8 100644
-> > --- a/tools/testing/vma/include/dup.h
-> > +++ b/tools/testing/vma/include/dup.h
-> > @@ -245,8 +245,10 @@ enum {
-> >  #define VM_STACK	INIT_VM_FLAG(STACK)
-> >  #ifdef CONFIG_STACK_GROWS_UP
-> >  #define VM_STACK_EARLY	INIT_VM_FLAG(STACK_EARLY)
-> > +#define VMA_STACK_EARLY mk_vma_flags(VMA_STACK_EARLY_BIT)
-> >  #else
-> >  #define VM_STACK_EARLY	VM_NONE
-> > +#define VMA_STACK_EARLY EMPTY_VMA_FLAGS
-> >  #endif
-> >  #ifdef CONFIG_ARCH_HAS_PKEYS
-> >  #define VM_PKEY_SHIFT ((__force int)VMA_HIGH_ARCH_0_BIT)
-> > @@ -315,6 +317,8 @@ enum {
-> >
-> >  /* Bits set in the VMA until the stack is in its final location */
-> >  #define VM_STACK_INCOMPLETE_SETUP (VM_RAND_READ | VM_SEQ_READ | VM_STACK_EARLY)
-> > +#define VMA_STACK_INCOMPLETE_SETUP append_vma_flags(		\
-> > +	VMA_STACK_EARLY, VMA_RAND_READ_BIT, VMA_SEQ_READ_BIT)
-> >
-> >  #define TASK_EXEC_BIT ((current->personality & READ_IMPLIES_EXEC) ? \
-> >  		       VM_EXEC_BIT : VM_READ_BIT)
->
-> Why are VMA_STACK_EARLY and VMA_STACK_INCOMPLETE_SETUP added here but
-> not in mm.h?
+For the series:
 
-Yeah urgh oops my bad. It doesn't really break anything but I'll fix it if a
-respin is needed...
-
->
->
-> --
-> Best Regards,
-> Yan, Zi
->
-
-Thanks, Lorenzo
+Acked-by: Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>
 
