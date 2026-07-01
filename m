@@ -1,186 +1,178 @@
-Return-Path: <linux-mips+bounces-15393-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-15394-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id pUS1MHDoRGq42woAu9opvQ
-	(envelope-from <linux-mips+bounces-15393-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Wed, 01 Jul 2026 12:14:08 +0200
+	id bEp7BunuRGrv3QoAu9opvQ
+	(envelope-from <linux-mips+bounces-15394-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Wed, 01 Jul 2026 12:41:45 +0200
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3F8366EBF97
-	for <lists+linux-mips@lfdr.de>; Wed, 01 Jul 2026 12:14:08 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 560A16EC4B3
+	for <lists+linux-mips@lfdr.de>; Wed, 01 Jul 2026 12:41:44 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=none;
-	dmarc=none;
-	spf=pass (mail.lfdr.de: domain of "linux-mips+bounces-15393-lists+linux-mips=lfdr.de@vger.kernel.org" designates 2600:3c09:e001:a7::12fc:5321 as permitted sender) smtp.mailfrom="linux-mips+bounces-15393-lists+linux-mips=lfdr.de@vger.kernel.org";
+	dkim=pass header.d=kernel.org header.s=k20260515 header.b=CvmIMQlp;
+	spf=pass (mail.lfdr.de: domain of "linux-mips+bounces-15394-lists+linux-mips=lfdr.de@vger.kernel.org" designates 2600:3c04:e001:36c::12fc:5321 as permitted sender) smtp.mailfrom="linux-mips+bounces-15394-lists+linux-mips=lfdr.de@vger.kernel.org";
+	dmarc=pass (policy=quarantine) header.from=kernel.org;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 21667304594E
-	for <lists+linux-mips@lfdr.de>; Wed,  1 Jul 2026 10:13:00 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 3ED983038754
+	for <lists+linux-mips@lfdr.de>; Wed,  1 Jul 2026 10:39:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BE85B405C5D;
-	Wed,  1 Jul 2026 10:12:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CE0BD421F10;
+	Wed,  1 Jul 2026 10:39:09 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01F2F403146;
-	Wed,  1 Jul 2026 10:12:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9DE1C4192F2
+	for <linux-mips@vger.kernel.org>; Wed,  1 Jul 2026 10:39:08 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782900737; cv=none; b=dwRLx3OYIlAO+yOShJSXnaqTCXlG+B1f+pa0OOv99qsqKAKRJgOOr1sWU8yzpUKctpCjoYmLUrN6+g6Egq0Kf/Ln9J3hE0/Swwh8hCMql33zWBFEM4v7ryyzi8LhUjC6Wa7VcmSbF5NRXRVA+QC2O5oXKsI01em8SKwWVQSQiSA=
+	t=1782902349; cv=none; b=Ko9RNRAIm5c1IzUG7o7qd/IiSE+Vk0gKTXMd9da+s6qtl/5/NoZQVtKGacWAM9D1TPY8mA55ENMbSmkvK8RpVTV6WsanTRCe+KAVMzkzLDN+WnLNjxB2LIwbtfhD0lFLx6D2fRISEkeWFteKeppup0t4Yt81XKKb6FuX4YqvLqY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782900737; c=relaxed/simple;
-	bh=xw/RjGvq8tAT7TeUTa28eWuEeizoLodGiK1EzfMqbUM=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=AH0N+dPNFokd/sCCiHCOsFgyI4RcXV8iQlmrSHoN13ML5VugY9BwvmjLUTY9SkRIV87sG567nVwfFNNGr5h4FgdpNOCod9267TMt+oRe3nSGc9SyQPcoHrlLmE8q5LIqUY+B3DIB/lMBp1Xn1264HFxrunJSJCVOMFr6A2oClJE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9EBEC1F00A3A;
-	Wed,  1 Jul 2026 10:12:13 +0000 (UTC)
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	Linus Walleij <linusw@kernel.org>,
-	Bartosz Golaszewski <brgl@kernel.org>,
-	Arnd Bergmann <arnd@arndb.de>
-Cc: linux-mips@vger.kernel.org,
-	linux-gpio@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Geert Uytterhoeven <geert@linux-m68k.org>,
-	Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>,
-	=?UTF-8?q?Philippe=20Mathieu-Daud=C3=A9?= <philmd@oss.qualcomm.com>
-Subject: [PATCH v2 9/9] MIPS: TXX9: Clean up txx9_iocled_init()
-Date: Wed,  1 Jul 2026 12:11:44 +0200
-Message-ID: <fd58225121892960c6a9c45b742288863ab872d2.1782900491.git.geert@linux-m68k.org>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <cover.1782900491.git.geert@linux-m68k.org>
-References: <cover.1782900491.git.geert@linux-m68k.org>
+	s=arc-20240116; t=1782902349; c=relaxed/simple;
+	bh=b9vuwMyD1HJfB1Gx1jfRWFDVOFEuo0lYXOfJPkGdUSI=;
+	h=From:In-Reply-To:MIME-Version:References:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Fg9p+3OWA0YZVKLybw+urpYY2juXi6ZkbHqpipvpUzT8mc3eRd1mAxTCOJlpAapb+ajqBxRC41X+FB72qRrPyMYQ7SiNLKGzVJ9AyHxS0npPMvSOA6420mofk8H88lxPqgR0OG0XdfMcLxAyL0/IyFKJpGg3jEcgJTbeiEYM7Kw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CvmIMQlp; arc=none smtp.client-ip=100.103.45.18
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 69DD81F01563
+	for <linux-mips@vger.kernel.org>; Wed,  1 Jul 2026 10:39:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1782902348;
+	bh=q4Mw1ewD/jb3yXkm243uxaRWKqoUXL01sdFnsTQHgvY=;
+	h=From:In-Reply-To:References:Date:Subject:To:Cc;
+	b=CvmIMQlpDPun8oKUF6snfTgD5R960tQ39+Ad7gri+Glzo8M3xcUmIR/X/ChVXo/NM
+	 LoBkt8GTKKxOJnKW8icgGzjR+KTlrxKeiu1OZOpzSQ9BahiOOvwcXZ6Uz2w8/KYIqt
+	 5VJj7HSvLi0ub+uEPGKsvoJQROh/cFbWhe+FazUqVutSc5DVw944YTwxbbd7aZB3z4
+	 2JWwgkQM538t/UZSdLP8CHDFRFmJw/hlH1T3TwFf1xJSvK8HsTtarZ2Y0umGA0QNZc
+	 v4REPnfaTuzUCQABmQV4nHd2lj6bZ8npdl9tiDVtlygmu9uuzv8Jy9bVpHCYrzBRSQ
+	 +5m7bRYHZ8lOA==
+Received: by mail-lf1-f50.google.com with SMTP id 2adb3069b0e04-5aebba706b3so448601e87.0
+        for <linux-mips@vger.kernel.org>; Wed, 01 Jul 2026 03:39:08 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AHgh+RqDxdLz+rm+eByz7o0/vIpl487ebjkC0WnEB2kmN41fXI0E9lNwlpV98EiFLtsZuxm49FTU2cwb8KdT@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz5YEuIlMXfuvG0LY3/BEq21U2m8HV91GlLGQc8eQIJYH9Mgbin
+	np4u/FzLn1CR4/g6Sc2s0aPeiDYYxiHCg4I96kHG8XHPuLl7FQLuWxwDWlLN2fb6g7An5V6sH/s
+	nJEfpYh2mO2SBOi5y3oLbtn4Mi92l25smFvD/KCjo+A==
+X-Received: by 2002:ac2:568a:0:b0:5ae:9fb4:6740 with SMTP id
+ 2adb3069b0e04-5aec742dcbemr246886e87.46.1782902347033; Wed, 01 Jul 2026
+ 03:39:07 -0700 (PDT)
+Received: from 969154062570 named unknown by gmailapi.google.com with
+ HTTPREST; Wed, 1 Jul 2026 05:39:04 -0500
+Received: from 969154062570 named unknown by gmailapi.google.com with
+ HTTPREST; Wed, 1 Jul 2026 05:39:04 -0500
+From: Bartosz Golaszewski <brgl@kernel.org>
+In-Reply-To: <CAMRc=MfgAB8bc6PD-6jw_KR0uNBfH+PO2XtCeL1SUF2nCiT0xg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+References: <20260629-qcom-sa8255p-emac-v11-0-1b7fb95b51f9@oss.qualcomm.com>
+ <20260629-qcom-sa8255p-emac-v11-1-1b7fb95b51f9@oss.qualcomm.com>
+ <CAMuHMdXen+E-Ai51aWBa_KV9W8Fz2cQPpT-FG_kQ7akhrrYa_A@mail.gmail.com>
+ <CAMRc=Me3jaZXiXa1sFXr=8Do4sCd+XN1pKTcWC8-0j78SjCkKA@mail.gmail.com>
+ <CAMuHMdVUBgG0EFB16OxHisbxx-sBvDKvBPNZdpyDnmBrnX4ptQ@mail.gmail.com>
+ <akOZFIowVvprnAMf@vaman> <CAMRc=MfgAB8bc6PD-6jw_KR0uNBfH+PO2XtCeL1SUF2nCiT0xg@mail.gmail.com>
+Date: Wed, 1 Jul 2026 05:39:04 -0500
+X-Gmail-Original-Message-ID: <CAMRc=MfA3OuuUUb063hAaN-0Byt=ToEf+uLtcR2DoqED6dZ+Nw@mail.gmail.com>
+X-Gm-Features: AVVi8CdM4YB1YNAKK21RhumfGngKAr8KUFWynreeOPd7b_5_r_J6FsxJ2sTmC58
+Message-ID: <CAMRc=MfA3OuuUUb063hAaN-0Byt=ToEf+uLtcR2DoqED6dZ+Nw@mail.gmail.com>
+Subject: Re: [PATCH net-next v11 1/7] dt-bindings: phy: document the serdes
+ PHY on sa8255p
+To: Bartosz Golaszewski <brgl@kernel.org>
+Cc: Geert Uytterhoeven <geert@linux-m68k.org>, Bjorn Andersson <andersson@kernel.org>, 
+	Konrad Dybcio <konradybcio@kernel.org>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller" <davem@davemloft.net>, 
+	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	Maxime Coquelin <mcoquelin.stm32@gmail.com>, Alexandre Torgue <alexandre.torgue@foss.st.com>, 
+	Giuseppe Cavallaro <peppe.cavallaro@st.com>, Chen-Yu Tsai <wens@kernel.org>, 
+	Jernej Skrabec <jernej.skrabec@gmail.com>, Neil Armstrong <neil.armstrong@linaro.org>, 
+	Kevin Hilman <khilman@baylibre.com>, Jerome Brunet <jbrunet@baylibre.com>, 
+	Shawn Guo <shawnguo@kernel.org>, Fabio Estevam <festevam@gmail.com>, 
+	Jan Petrous <jan.petrous@oss.nxp.com>, s32@nxp.com, 
+	Mohd Ayaan Anwar <mohd.anwar@oss.qualcomm.com>, Romain Gantois <romain.gantois@bootlin.com>, 
+	Magnus Damm <magnus.damm@gmail.com>, Maxime Ripard <mripard@kernel.org>, 
+	Christophe Roullier <christophe.roullier@foss.st.com>, Radu Rendec <rrendec@redhat.com>, 
+	linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, netdev@vger.kernel.org, 
+	linux-stm32@st-md-mailman.stormreply.com, 
+	linux-arm-kernel@lists.infradead.org, Drew Fustini <dfustini@tenstorrent.com>, 
+	linux-sunxi@lists.linux.dev, linux-amlogic@lists.infradead.org, 
+	linux-mips@vger.kernel.org, imx@lists.linux.dev, 
+	linux-renesas-soc@vger.kernel.org, linux-rockchip@lists.infradead.org, 
+	sophgo@lists.linux.dev, linux-riscv@lists.infradead.org, 
+	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>, 
+	Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>, Vinod Koul <vkoul@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 X-Rspamd-Action: no action
-X-Spamd-Result: default: False [-0.46 / 15.00];
-	MID_CONTAINS_FROM(1.00)[];
+X-Spamd-Result: default: False [-3.66 / 15.00];
+	WHITELIST_SPF_DKIM(-3.00)[kernel.org:d:+,kernel.org:s:+];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20260515];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-15393-lists,linux-mips=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
-	DMARC_NA(0.00)[linux-m68k.org];
-	FROM_HAS_DN(0.00)[];
-	FORGED_RECIPIENTS(0.00)[m:tsbogend@alpha.franken.de,m:linusw@kernel.org,m:brgl@kernel.org,m:arnd@arndb.de,m:linux-mips@vger.kernel.org,m:linux-gpio@vger.kernel.org,m:linux-kernel@vger.kernel.org,m:geert@linux-m68k.org,m:bartosz.golaszewski@oss.qualcomm.com,m:philmd@oss.qualcomm.com,s:lists@lfdr.de];
-	FORGED_SENDER(0.00)[geert@linux-m68k.org,linux-mips@vger.kernel.org];
 	MIME_TRACE(0.00)[0:+];
-	RCVD_COUNT_THREE(0.00)[4];
-	FORWARDED(0.00)[lists@lfdr.de];
+	RCPT_COUNT_TWELVE(0.00)[48];
+	RCVD_TLS_LAST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-15394-lists,linux-mips=lfdr.de];
 	FORGED_SENDER_MAILLIST(0.00)[];
+	FORGED_RECIPIENTS(0.00)[m:brgl@kernel.org,m:geert@linux-m68k.org,m:andersson@kernel.org,m:konradybcio@kernel.org,m:robh@kernel.org,m:krzk+dt@kernel.org,m:conor+dt@kernel.org,m:andrew+netdev@lunn.ch,m:davem@davemloft.net,m:edumazet@google.com,m:kuba@kernel.org,m:pabeni@redhat.com,m:mcoquelin.stm32@gmail.com,m:alexandre.torgue@foss.st.com,m:peppe.cavallaro@st.com,m:wens@kernel.org,m:jernej.skrabec@gmail.com,m:neil.armstrong@linaro.org,m:khilman@baylibre.com,m:jbrunet@baylibre.com,m:shawnguo@kernel.org,m:festevam@gmail.com,m:jan.petrous@oss.nxp.com,m:s32@nxp.com,m:mohd.anwar@oss.qualcomm.com,m:romain.gantois@bootlin.com,m:magnus.damm@gmail.com,m:mripard@kernel.org,m:christophe.roullier@foss.st.com,m:rrendec@redhat.com,m:linux-arm-msm@vger.kernel.org,m:devicetree@vger.kernel.org,m:linux-kernel@vger.kernel.org,m:netdev@vger.kernel.org,m:linux-stm32@st-md-mailman.stormreply.com,m:linux-arm-kernel@lists.infradead.org,m:dfustini@tenstorrent.com,m:linux-sunxi@lists.linux.dev,m:linux-amlogic@
+ lists.infradead.org,m:linux-mips@vger.kernel.org,m:imx@lists.linux.dev,m:linux-renesas-soc@vger.kernel.org,m:linux-rockchip@lists.infradead.org,m:sophgo@lists.linux.dev,m:linux-riscv@lists.infradead.org,m:bartosz.golaszewski@linaro.org,m:bartosz.golaszewski@oss.qualcomm.com,m:vkoul@kernel.org,m:krzk@kernel.org,m:conor@kernel.org,m:andrew@lunn.ch,m:mcoquelinstm32@gmail.com,m:jernejskrabec@gmail.com,m:magnusdamm@gmail.com,s:lists@lfdr.de];
+	FORWARDED(0.00)[lists@lfdr.de];
+	FORGED_SENDER(0.00)[brgl@kernel.org,linux-mips@vger.kernel.org];
+	FREEMAIL_CC(0.00)[linux-m68k.org,kernel.org,lunn.ch,davemloft.net,google.com,redhat.com,gmail.com,foss.st.com,st.com,linaro.org,baylibre.com,oss.nxp.com,nxp.com,oss.qualcomm.com,bootlin.com,vger.kernel.org,st-md-mailman.stormreply.com,lists.infradead.org,tenstorrent.com,lists.linux.dev];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[mail.gmail.com:mid,vger.kernel.org:from_smtp,tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
 	TO_DN_SOME(0.00)[];
-	FORGED_SENDER_FORWARDING(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[geert@linux-m68k.org,linux-mips@vger.kernel.org];
-	FORGED_RECIPIENTS_FORWARDING(0.00)[];
+	FORGED_SENDER_FORWARDING(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[brgl@kernel.org,linux-mips@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	DKIM_TRACE(0.00)[kernel.org:+];
 	ALIAS_RESOLVED(0.00)[];
-	RCPT_COUNT_SEVEN(0.00)[10];
-	R_DKIM_NA(0.00)[];
+	TAGGED_RCPT(0.00)[linux-mips,dt,netdev];
+	MISSING_XM_UA(0.00)[];
+	FORGED_RECIPIENTS_FORWARDING(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[linux-mips];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[vger.kernel.org:from_smtp,sto.lore.kernel.org:rdns,sto.lore.kernel.org:helo,linux-m68k.org:email,linux-m68k.org:mid,linux-m68k.org:from_mime,qualcomm.com:email]
+	RCVD_COUNT_SEVEN(0.00)[7]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 3F8366EBF97
+X-Rspamd-Queue-Id: 560A16EC4B3
 
-The sole caller already uses dynamic GPIO base allocation, so drop
-support for static allocation.
-While at it, drop the no longer used "lowactive" parameter.
+On Tue, 30 Jun 2026 15:44:16 +0200, Bartosz Golaszewski <brgl@kernel.org> said:
+> On Tue, 30 Jun 2026 12:23:16 +0200, Vinod Koul <vkoul@kernel.org> said:
+>> On 29-06-26, 16:51, Geert Uytterhoeven wrote:
+>>> > Russell King asked me to put the PHY logic for SCMI pm domains into the PHY
+>>> > driver instead of the MAC driver where it was previously. Instead of cramming
+>>> > both HLOS and firmware handling into the same driver, I figured it makes more
+>>> > sense to have a dedicated, cleaner driver as the two share very little code (if
+>>> > any).
+>>>
+>>> I think you are mixing up DT bindings and driver implementation?
+>>
+>> Should the bindings change if we have different driver and firmware
+>> implementations? Isn't binding supposed to be agnostic of
+>> implementations..?
+>>
+>
+> The way sa8255p implements SCMI is with SMC exclusively but - since even base
+> support is not yet upstream -  maybe it would be possible to expose SCMI clocks
+> like some platforms do and reuse the same binding.
+>
+> Would it make sense?
+>
+> Bart
+>
 
-Signed-off-by: Geert Uytterhoeven <geert@linux-m68k.org>
-Reviewed-by: Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>
-Reviewed-by: Philippe Mathieu-Daudé <philmd@oss.qualcomm.com>
-Reviewed-by: Linus Walleij <linusw@kernel.org>
----
-v2:
-  - Add Reviewed-by.
----
- arch/mips/include/asm/txx9/generic.h |  3 +--
- arch/mips/txx9/generic/setup.c       | 12 ++++--------
- arch/mips/txx9/rbtx4927/setup.c      |  2 +-
- 3 files changed, 6 insertions(+), 11 deletions(-)
+Scratch that. The firmware on sa8255p does not expose SCMI clock protocol, we
+can only use devfs with this PHY so it's either the same binding document with
+different properties depending on compatible or two separate bindings. I prefer
+the latter because it's cleaner.
 
-diff --git a/arch/mips/include/asm/txx9/generic.h b/arch/mips/include/asm/txx9/generic.h
-index 5ce5b8579a444ec3..653315fb6ca559a7 100644
---- a/arch/mips/include/asm/txx9/generic.h
-+++ b/arch/mips/include/asm/txx9/generic.h
-@@ -79,8 +79,7 @@ static inline unsigned int __fls8(unsigned char x)
- 	return r;
- }
- 
--void txx9_iocled_init(unsigned long baseaddr,
--		      int basenum, unsigned int num, int lowactive,
-+void txx9_iocled_init(unsigned long baseaddr, unsigned int num,
- 		      const char *color, char **deftriggers);
- 
- void __init txx9_aclc_init(unsigned long baseaddr, int irq,
-diff --git a/arch/mips/txx9/generic/setup.c b/arch/mips/txx9/generic/setup.c
-index 32246f5f78f5070c..5f66236038c8f468 100644
---- a/arch/mips/txx9/generic/setup.c
-+++ b/arch/mips/txx9/generic/setup.c
-@@ -625,8 +625,7 @@ static struct gpiod_lookup_table txx9_iocled_table = {
- 	},
- };
- 
--void __init txx9_iocled_init(unsigned long baseaddr,
--			     int basenum, unsigned int num, int lowactive,
-+void __init txx9_iocled_init(unsigned long baseaddr, unsigned int num,
- 			     const char *color, char **deftriggers)
- {
- 	struct txx9_iocled_data *iocled;
-@@ -652,14 +651,12 @@ void __init txx9_iocled_init(unsigned long baseaddr,
- 	iocled->chip.direction_input = txx9_iocled_dir_in;
- 	iocled->chip.direction_output = txx9_iocled_dir_out;
- 	iocled->chip.label = "iocled";
--	iocled->chip.base = basenum;
-+	iocled->chip.base = -1;
- 	iocled->chip.ngpio = num;
- 	if (gpiochip_add_data(&iocled->chip, iocled))
- 		goto out_unmap;
--	if (basenum < 0)
--		basenum = iocled->chip.base;
- 
--	pdev = platform_device_alloc("leds-gpio", basenum);
-+	pdev = platform_device_alloc("leds-gpio", iocled->chip.base);
- 	if (!pdev)
- 		goto out_gpio;
- 	iocled->pdata.num_leds = num;
-@@ -689,8 +686,7 @@ void __init txx9_iocled_init(unsigned long baseaddr,
- 	kfree(iocled);
- }
- #else /* CONFIG_LEDS_GPIO */
--void __init txx9_iocled_init(unsigned long baseaddr,
--			     int basenum, unsigned int num, int lowactive,
-+void __init txx9_iocled_init(unsigned long baseaddr, unsigned int num,
- 			     const char *color, char **deftriggers)
- {
- }
-diff --git a/arch/mips/txx9/rbtx4927/setup.c b/arch/mips/txx9/rbtx4927/setup.c
-index e904217a5fb20102..223889c031866ca3 100644
---- a/arch/mips/txx9/rbtx4927/setup.c
-+++ b/arch/mips/txx9/rbtx4927/setup.c
-@@ -373,7 +373,7 @@ static void __init rbtx4927_device_init(void)
- 		tx4938_aclc_init();
- 	}
- 	platform_device_register_simple("txx9aclc-generic", -1, NULL, 0);
--	txx9_iocled_init(RBTX4927_LED_ADDR - IO_BASE, -1, 3, 1, "green", NULL);
-+	txx9_iocled_init(RBTX4927_LED_ADDR - IO_BASE, 3, "green", NULL);
- 	rbtx4927_gpioled_init();
- }
- 
--- 
-2.43.0
-
+Bartosz
 
