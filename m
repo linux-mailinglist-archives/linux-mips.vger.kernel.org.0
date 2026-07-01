@@ -1,160 +1,142 @@
-Return-Path: <linux-mips+bounces-15383-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-15384-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id fJv+LpzSRGq91QoAu9opvQ
-	(envelope-from <linux-mips+bounces-15383-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Wed, 01 Jul 2026 10:41:00 +0200
+	id DlLhF0vpRGrm2woAu9opvQ
+	(envelope-from <linux-mips+bounces-15384-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Wed, 01 Jul 2026 12:17:47 +0200
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5ACEF6EB33F
-	for <lists+linux-mips@lfdr.de>; Wed, 01 Jul 2026 10:41:00 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id A148B6EC027
+	for <lists+linux-mips@lfdr.de>; Wed, 01 Jul 2026 12:17:46 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=linutronix.de header.s=2020 header.b=shJRu5vD;
-	dkim=pass header.d=linutronix.de header.s=2020e header.b=g0vhUs9W;
-	spf=pass (mail.lfdr.de: domain of "linux-mips+bounces-15383-lists+linux-mips=lfdr.de@vger.kernel.org" designates 172.232.135.74 as permitted sender) smtp.mailfrom="linux-mips+bounces-15383-lists+linux-mips=lfdr.de@vger.kernel.org";
-	dmarc=pass (policy=none) header.from=linutronix.de;
+	dkim=none;
+	dmarc=none;
+	spf=pass (mail.lfdr.de: domain of "linux-mips+bounces-15384-lists+linux-mips=lfdr.de@vger.kernel.org" designates 2600:3c0a:e001:db::12fc:5321 as permitted sender) smtp.mailfrom="linux-mips+bounces-15384-lists+linux-mips=lfdr.de@vger.kernel.org";
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 9E08030254A7
-	for <lists+linux-mips@lfdr.de>; Wed,  1 Jul 2026 08:40:42 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 2223E302FB70
+	for <lists+linux-mips@lfdr.de>; Wed,  1 Jul 2026 10:11:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 82C033E024D;
-	Wed,  1 Jul 2026 08:40:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C4B8A3F4824;
+	Wed,  1 Jul 2026 10:11:54 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7E693B9929;
-	Wed,  1 Jul 2026 08:40:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C13033BB9F4;
+	Wed,  1 Jul 2026 10:11:53 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782895241; cv=none; b=K+oGLwADb2XJ8tVyJImnTgccFOy3Ibq7aM9bc4PSg0JtoCxmcDltjRuB6uNSbAYzbSdh6bJQL/IeqjecnI8XkuUv7uhbYlFMJuiXuRMCuv/pT5FCh39gttowWg8P9vyUjbaIjh9e0DlW5Qa+TrnHhqm8KslmBxxTcHt7F4sBFnM=
+	t=1782900714; cv=none; b=aNHktMOpSi1+1XcqVMrs1Gg4EERPsa6+Uhn+C1Z3ZC6R6jysaDzuvwDllDbXDIcW0cxd4gwvhEaHd39P63JJmsNSCSd1ikXNA3ORvojt4Vg6crsJiWY/GeICCeaLPA96GtORMhOUkB0GdWpIJmZJ/rf3clAxNJJlC1ex6mZCzeM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782895241; c=relaxed/simple;
-	bh=N5gW74owmvvVkscIHB7+zHUMJCcLLGEn0Qp9Nh06thk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=E5p/MDgsIzxqUUmEJoeftAKgTOpzUXwKP3nGS5bCagiAsBzMw8f8sOeeRkdK7Mf5skc3+52Tgq4kUXkgoV7TQi+s5sNVGiaOJXoVAZdzYpLPl3I/ZCtywcxtLXvMC49nGaZW9mEk1thOJODXOhIIXFAeeNTpl1q0OGqF9V258XU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=shJRu5vD; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=g0vhUs9W; arc=none smtp.client-ip=193.142.43.55
-Date: Wed, 1 Jul 2026 10:40:30 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1782895232;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=dzaTPoH0/Jbz15YM7OdwlqoyPsJkrqrtqSoCOmHvtKA=;
-	b=shJRu5vDUP7ZDKQSHsK+hm5YzMgosdS81oqGJoO7WyU/KYkL+sjeEnqx02Vf7vGu0x43Ry
-	uv6fAueFoRpJ4Xm9fSuHL9YZ7rkYM4cHiFQyvecXnQY0kyodiLeLDYy0hJhNzEafujjp1V
-	4VPvIVU8ENW3zH8WQmLPMJWXGjv3azZz4S7EcH9XIzvV8SgR9veRJvvUkBalD1CoSrGzoV
-	LUCKXOnXTb6ujHmRmax4+2WJA6Xfad6AmRnq70bALY+fNfyXQpi6N0l1bc4wGICwqzsR7f
-	4PF/coqct+vO1K0YDcsduOPh91BO43A+uz4vYcgsqDb3FgEpWf9orTC78wUw0g==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1782895232;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=dzaTPoH0/Jbz15YM7OdwlqoyPsJkrqrtqSoCOmHvtKA=;
-	b=g0vhUs9WNGqHZUgF7RfmzHiuDSnx9FCObdSlzDF54pp2Ic5gy6Dobr2Cf6z2yhnU/uvjVU
-	UB1UH3naQir8cmAA==
-From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-To: Arnd Bergmann <arnd@arndb.de>
-Cc: Andy Lutomirski <luto@kernel.org>, Thomas Gleixner <tglx@kernel.org>, 
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>, 
-	Russell King <linux@armlinux.org.uk>, Catalin Marinas <catalin.marinas@arm.com>, 
-	Will Deacon <will@kernel.org>, Madhavan Srinivasan <maddy@linux.ibm.com>, 
-	Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>, 
-	Christophe Leroy <chleroy@kernel.org>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
-	Vincenzo Frascino <vincenzo.frascino@arm.com>, John Stultz <jstultz@google.com>, 
-	Stephen Boyd <sboyd@kernel.org>, "David S . Miller" <davem@davemloft.net>, 
-	Andreas Larsson <andreas@gaisler.com>, linux-kernel@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linuxppc-dev@lists.ozlabs.org, linux-mips@vger.kernel.org, 
-	linux-api@vger.kernel.org, sparclinux@vger.kernel.org
-Subject: Re: [PATCH v2 1/9] time: Respect COMPAT_32BIT_TIME for old time type
- functions
-Message-ID: <20260701102912-ea8f3291-7bba-407b-9a7d-7c367a4c9398@linutronix.de>
-References: <20260630-vdso-compat_32bit_time-v2-0-520d194640dd@linutronix.de>
- <20260630-vdso-compat_32bit_time-v2-1-520d194640dd@linutronix.de>
- <0cda7366-2eb9-4ecb-b76a-b3b68ee10043@app.fastmail.com>
+	s=arc-20240116; t=1782900714; c=relaxed/simple;
+	bh=sFgbP+8cNs1jFmYsv4mgYmT414JAgsOLk6tvEQ8o6c8=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=P4bjZPdnQIMe0yNiLhHeeVR2GAMWQ7UNXuuB3F7IS1FRyv/38xMRjunfBrRQiqHPivn2KimYqBAfRl7qdk3kY+W258Yk01p8hL4uTnixlTyVBlIR3jEoJs9ZfP+iULN3/le/bIwBRZqxF2Bu79yQ8PKvcfxi8fYapgBWJOtLYXQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 954181F000E9;
+	Wed,  1 Jul 2026 10:11:51 +0000 (UTC)
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Linus Walleij <linusw@kernel.org>,
+	Bartosz Golaszewski <brgl@kernel.org>,
+	Arnd Bergmann <arnd@arndb.de>
+Cc: linux-mips@vger.kernel.org,
+	linux-gpio@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Geert Uytterhoeven <geert@linux-m68k.org>
+Subject: [PATCH v2 0/9] MIPS: TXX9: Legacy GPIO interfaces cleanup
+Date: Wed,  1 Jul 2026 12:11:35 +0200
+Message-ID: <cover.1782900491.git.geert@linux-m68k.org>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <0cda7366-2eb9-4ecb-b76a-b3b68ee10043@app.fastmail.com>
 X-Rspamd-Action: no action
-X-Spamd-Result: default: False [-2.16 / 15.00];
+X-Spamd-Result: default: False [-0.46 / 15.00];
+	MID_CONTAINS_FROM(1.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[linutronix.de,none];
-	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
-	R_DKIM_ALLOW(-0.20)[linutronix.de:s=2020,linutronix.de:s=2020e];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-15383-lists,linux-mips=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-15384-lists,linux-mips=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[3];
-	FORGED_SENDER(0.00)[thomas.weissschuh@linutronix.de,linux-mips@vger.kernel.org];
-	FREEMAIL_CC(0.00)[kernel.org,redhat.com,alien8.de,linux.intel.com,zytor.com,armlinux.org.uk,arm.com,linux.ibm.com,ellerman.id.au,gmail.com,alpha.franken.de,google.com,davemloft.net,gaisler.com,vger.kernel.org,lists.infradead.org,lists.ozlabs.org];
-	RCPT_COUNT_TWELVE(0.00)[27];
-	FORGED_RECIPIENTS(0.00)[m:arnd@arndb.de,m:luto@kernel.org,m:tglx@kernel.org,m:mingo@redhat.com,m:bp@alien8.de,m:dave.hansen@linux.intel.com,m:x86@kernel.org,m:hpa@zytor.com,m:linux@armlinux.org.uk,m:catalin.marinas@arm.com,m:will@kernel.org,m:maddy@linux.ibm.com,m:mpe@ellerman.id.au,m:npiggin@gmail.com,m:chleroy@kernel.org,m:tsbogend@alpha.franken.de,m:vincenzo.frascino@arm.com,m:jstultz@google.com,m:sboyd@kernel.org,m:davem@davemloft.net,m:andreas@gaisler.com,m:linux-kernel@vger.kernel.org,m:linux-arm-kernel@lists.infradead.org,m:linuxppc-dev@lists.ozlabs.org,m:linux-mips@vger.kernel.org,m:linux-api@vger.kernel.org,m:sparclinux@vger.kernel.org,s:lists@lfdr.de];
-	MIME_TRACE(0.00)[0:+];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	FORWARDED(0.00)[lists@lfdr.de];
+	DMARC_NA(0.00)[linux-m68k.org];
 	FROM_HAS_DN(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
+	FORGED_SENDER(0.00)[geert@linux-m68k.org,linux-mips@vger.kernel.org];
+	MIME_TRACE(0.00)[0:+];
+	FORGED_RECIPIENTS(0.00)[m:tsbogend@alpha.franken.de,m:linusw@kernel.org,m:brgl@kernel.org,m:arnd@arndb.de,m:linux-mips@vger.kernel.org,m:linux-gpio@vger.kernel.org,m:linux-kernel@vger.kernel.org,m:geert@linux-m68k.org,s:lists@lfdr.de];
+	FORWARDED(0.00)[lists@lfdr.de];
+	FORGED_SENDER_MAILLIST(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
 	TO_DN_SOME(0.00)[];
 	FORGED_SENDER_FORWARDING(0.00)[];
-	ALIAS_RESOLVED(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[thomas.weissschuh@linutronix.de,linux-mips@vger.kernel.org];
-	DKIM_TRACE(0.00)[linutronix.de:+];
-	MID_RHS_MATCH_FROM(0.00)[];
-	TAGGED_RCPT(0.00)[linux-mips];
+	FROM_NEQ_ENVFROM(0.00)[geert@linux-m68k.org,linux-mips@vger.kernel.org];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
-	MISSING_XM_UA(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:rdns,sto.lore.kernel.org:helo,sashiko.dev:url,linutronix.de:dkim,linutronix.de:mid,linutronix.de:from_mime,vger.kernel.org:from_smtp]
+	ALIAS_RESOLVED(0.00)[];
+	RCPT_COUNT_SEVEN(0.00)[8];
+	R_DKIM_NA(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TAGGED_RCPT(0.00)[linux-mips];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,vger.kernel.org:from_smtp,linux-m68k.org:email,linux-m68k.org:mid,linux-m68k.org:from_mime]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 5ACEF6EB33F
+X-Rspamd-Queue-Id: A148B6EC027
 
-On Tue, Jun 30, 2026 at 03:00:37PM +0200, Arnd Bergmann wrote:
-> On Tue, Jun 30, 2026, at 09:38, Thomas Weißschuh wrote:
-> > The "old" time types use 32-bit seconds which are not y2038-safe.
-> > Respect COMPAT_32BIT_TIME for functions using those types.
-> > time(), stime() and gettimeofday() are disabled completely.
-> 
-> Looks good, yes
+	Hi all,
 
-Sashiko found an issue [0], which I think is valid. I'll change that for v3.
+This patch series gets rid of legacy GPIO interface usage on the MIPS
+RBTX4927 development board, preceded and followed by some cleanups.
+No blinky LEDs were harmed during the production of this series.
 
-> > settimeofday() is kept as it is required to do the initial timewarping
-> > after boot. However the 'tv' argument will be rejected.
-> 
-> Not sure about this part, did we already discuss this last time?
+Changes compared to v1[1]:
+  - Add Reviewed-by,
+  - Return early on platform_device_add() failure.
 
-This is my interpretation of [1].
+Thanks for your comments!
 
-> I can see how keeping the timewarping functionality is the easy way
-> out, but completely disabling the settimeofday syscall the same
-> way we do on new architectures seems so much more consistent.
+[1] "[PATCH 0/9] MIPS: TXX9: Legacy GPIO interfaces cleanup"
+    https://lore.kernel.org/cover.1782389357.git.geert@linux-m68k.org
 
-Shouldn't we then do this completely? Irrespective of COMPAT_32BIT_TIME?
-And then remove all of the timewarping and kernel timezone bits.
+Geert Uytterhoeven (9):
+  MIPS: TXX9: Remove tx4938_spi_init() and txx9_spi_init()
+  MIPS: TXX9: Remove txx9_7segled_*() forward declarations
+  MIPS: TXX9: rbtx4927: Use GPIO lookup table for SIO DTR
+  MIPS: TXX9: rbtx4927: Use GPIO lookup table for TXx9 LEDs
+  MIPS: TXX9: Reduce TXX9_IOCLED_MAXLEDS to 3
+  MIPS: TXX9: Use GPIO lookup table for iocled LEDs
+  MIPS: TXX9: Drop GPIOLIB_LEGACY select
+  MIPS: TXX9: Convert gpio_txx9 to dynamic GPIO base allocation
+  MIPS: TXX9: Clean up txx9_iocled_init()
 
-It would be nice however if this series, and my other ones blocked behind it,
-are not blocked on that larger rework.
+ arch/mips/include/asm/txx9/generic.h  |  9 +-----
+ arch/mips/include/asm/txx9/tx4938.h   |  1 -
+ arch/mips/include/asm/txx9pio.h       |  3 +-
+ arch/mips/kernel/gpio_txx9.c          |  5 ++-
+ arch/mips/txx9/Kconfig                |  1 -
+ arch/mips/txx9/generic/setup.c        | 45 ++++++++++-----------------
+ arch/mips/txx9/generic/setup_tx4938.c |  6 ----
+ arch/mips/txx9/rbtx4927/setup.c       | 41 ++++++++++++++++++------
+ 8 files changed, 53 insertions(+), 58 deletions(-)
 
-(...)
+-- 
+2.43.0
 
-[0] https://sashiko.dev/#/patchset/20260630-vdso-compat_32bit_time-v2-0-520d194640dd%40linutronix.de?part=1
-[1] https://lore.kernel.org/all/e9487ebe-3730-438a-9c23-e45f75986ecc@app.fastmail.com/
+Gr{oetje,eeting}s,
 
+						Geert
 
-Thomas
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+							    -- Linus Torvalds
 
