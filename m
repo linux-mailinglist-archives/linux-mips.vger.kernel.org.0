@@ -1,54 +1,54 @@
-Return-Path: <linux-mips+bounces-15375-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-15376-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id ztAvIspYRGoNtQoAu9opvQ
-	(envelope-from <linux-mips+bounces-15375-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Wed, 01 Jul 2026 02:01:14 +0200
+	id gc1SEWVdRGpmtgoAu9opvQ
+	(envelope-from <linux-mips+bounces-15376-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Wed, 01 Jul 2026 02:20:53 +0200
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id D94F66E8BFF
-	for <lists+linux-mips@lfdr.de>; Wed, 01 Jul 2026 02:01:13 +0200 (CEST)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id DEA256E8E2B
+	for <lists+linux-mips@lfdr.de>; Wed, 01 Jul 2026 02:20:52 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=kernel.org header.s=k20260515 header.b=D2aridIB;
-	spf=pass (mail.lfdr.de: domain of "linux-mips+bounces-15375-lists+linux-mips=lfdr.de@vger.kernel.org" designates 2600:3c0a:e001:db::12fc:5321 as permitted sender) smtp.mailfrom="linux-mips+bounces-15375-lists+linux-mips=lfdr.de@vger.kernel.org";
+	dkim=pass header.d=kernel.org header.s=k20260515 header.b=X6x60UYS;
+	spf=pass (mail.lfdr.de: domain of "linux-mips+bounces-15376-lists+linux-mips=lfdr.de@vger.kernel.org" designates 172.232.135.74 as permitted sender) smtp.mailfrom="linux-mips+bounces-15376-lists+linux-mips=lfdr.de@vger.kernel.org";
 	dmarc=pass (policy=quarantine) header.from=kernel.org;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 665B330A4E10
-	for <lists+linux-mips@lfdr.de>; Wed,  1 Jul 2026 00:00:31 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 4688F304D2BA
+	for <lists+linux-mips@lfdr.de>; Wed,  1 Jul 2026 00:20:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1B44F336884;
-	Wed,  1 Jul 2026 00:00:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 75C5A200110;
+	Wed,  1 Jul 2026 00:20:34 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E8EFF3368BA;
-	Wed,  1 Jul 2026 00:00:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4EE04219FC;
+	Wed,  1 Jul 2026 00:20:33 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782864031; cv=none; b=kAmhrsAfXa2uhnckYz5DNAchoVcC3xbZzLhkn6nxhmDPK6bBDWEXxfUFe0ZDA47Heq8kqNbOLRsdcUc7xTbVtpsJSkrIQ/06q+SfbotZ/FDDfkYp52qMRAYdU404cIIPotnJqgaDhpmxqbC07i8hpbnr7Ey1epy98vAZl6tegTI=
+	t=1782865234; cv=none; b=Ak0kBMuBxfS39FP9OE8QORw6wgYRBvxPfs6VnI6+sB0XWq9oi1mYDH+zRzingWBKbkyrENkHcOiaVfXfq/KDlztPtj6nBaw1Ihb6mHpouOm8Avt0prvD/Cj7OovpTLpsS2McrumQ/jiL8evTE/bx6XrzwFPxCGlyOsUF+tcFDM4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782864031; c=relaxed/simple;
-	bh=aDd6xnbNXHwGM13+mfbTZqc1/QPJzS5RFcPsKU4bTP0=;
+	s=arc-20240116; t=1782865234; c=relaxed/simple;
+	bh=OxqYkdm5oukw/D3esIbkiVQa9chWlaRAg7W5RbvRH+s=;
 	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=ON6lalgqWpigkeE+34eEtYwKoVpDjGEUwiMsQRde93WjmswqazBCrM1J4s+KxX+dd3BGVI0ohp0yBXBq93Bof4kdff6g57vS78uAfBt91dTUu0HIs3A7fCNN8d+LrSdz6mvMCeyUjLAAkOjm00+L39weykoIsAzKOversISGP0s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=D2aridIB; arc=none smtp.client-ip=100.103.45.18
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8A0A91F000E9;
-	Wed,  1 Jul 2026 00:00:29 +0000 (UTC)
+	 In-Reply-To:To:Cc; b=U6Vt6pFAh8csUai9ii5ady9tuG/KAo9OIFqEkn/vSceyGPFcMSPKl4vbQzABhNc6A6JmrmjOYUSRuaNVuN3jNHbqZHwAuV7Sj2hZhjfn8wzcA+/FEz0md88dpvq/FyMGj5TmushY751fCxLeqySyDQbkiVOJl+mWPeBmE8jgcsA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=X6x60UYS; arc=none smtp.client-ip=100.103.45.18
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 10E981F000E9;
+	Wed,  1 Jul 2026 00:20:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1782864029;
-	bh=/q/M4iftPwXwOXkuB442nTPnYH/p2eAZGJdhwDTouz8=;
+	s=k20260515; t=1782865233;
+	bh=GDWm7UoY/GN1c2wmlf+OtBoCfI1+yNa848uEEQNmsW4=;
 	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=D2aridIB3ZeNJJR3QUrliEur8twz15o6NHQ3r4VfEqZ4ETR7iR4Pcmpw5QOls9KWg
-	 ltdTxZYZRZUW7G04XshPf1tQrDKzMzGzkUSCpoRrq01HHBFl6KI1ZNg+A0EihUDQ85
-	 Nn9/j5cFtBd93A8542gMmvRvLNPhVlsZlGm/unA5oSqjRfx0Sssw6SyErZ08s5sS0r
-	 wdXiV9NryfEhhimef0etZQj0seb/z8TTI9ZjY0OFngTzUGWG5UiWq5EZlaVgH5tvzo
-	 7uagUhv9ei4cRcZc7VrB0c2q7hSjQx6n5p1nbz8XvvSHDY8gNuo7YLSf228yTJeONP
-	 M3PWol6eIbbXA==
+	b=X6x60UYSAeIFQPpJNA3E3PDheiJwJNLv0DBAmXAWrURY2bT8oD+vEnUd6bdMLdGYR
+	 2O4k4b7M67h1RPvYcO1d6YnIDwE6f4Gbv4Jf44BdG1O/A7WY4zIfaT+qEBxR0ZMSB4
+	 yjC9Sa/9DtHygMvpbUBZmjH1DCy0uic3HWnlTrjJIK0GpZBFf9xum92IQCNe+Nw3Se
+	 SpFtDqlDqR9rMm5ugVMIqvdTA2R+JWXnHzsKCys2voAyJv5Pgo8mdJunFBrvaBQ4Ny
+	 Ej7Xz9mq5reOLUw3tyJUCc6gsF1iWTtlhnO2YK7pDCuF36btqj6zNiQHYIob9HoDCF
+	 vgW2Vt12r7MKA==
 Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 939E5393A963;
-	Wed,  1 Jul 2026 00:00:14 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 19AA6393A963;
+	Wed,  1 Jul 2026 00:20:18 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
@@ -57,114 +57,80 @@ List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH 00/13] treewide: replace linux/gpio.h
+Subject: Re: [PATCH net] net: sgi: ioc3-eth: fix split TX DMA mapping lengths
 From: patchwork-bot+netdevbpf@kernel.org
 Message-Id: 
- <178286401313.341356.16335263979724856348.git-patchwork-notify@kernel.org>
-Date: Wed, 01 Jul 2026 00:00:13 +0000
-References: <20260629132633.1300009-1-arnd@kernel.org>
-In-Reply-To: <20260629132633.1300009-1-arnd@kernel.org>
-To: Arnd Bergmann <arnd@kernel.org>
-Cc: linux-gpio@vger.kernel.org, arnd@arndb.de, brgl@kernel.org,
- andrew@lunn.ch, sebastian.hesselbarth@gmail.com, gregory.clement@bootlin.com,
- Frank.Li@nxp.com, robert.jarzmik@free.fr, krzk@kernel.org,
- gerg@linux-m68k.org, tsbogend@alpha.franken.de, hauke@hauke-m.de,
- zajec5@gmail.com, ysato@users.sourceforge.jp, glaubitz@physik.fu-berlin.de,
- linusw@kernel.org, dmitry.torokhov@gmail.com, kuba@kernel.org,
- pabeni@redhat.com, linux@dominikbrodowski.net, linux-kernel@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org,
- patches@opensource.cirrus.com, linux-m68k@lists.linux-m68k.org,
- linux-mips@vger.kernel.org, linux-sh@vger.kernel.org,
- linux-input@vger.kernel.org, linux-media@vger.kernel.org,
- netdev@vger.kernel.org, linux-sunxi@lists.linux.dev,
- linux-phy@lists.infradead.org, linux-rockchip@lists.infradead.org,
- linux-sound@vger.kernel.org
+ <178286521663.349616.4283880275529616693.git-patchwork-notify@kernel.org>
+Date: Wed, 01 Jul 2026 00:20:16 +0000
+References: <4E1486BC4536407E+20260629080623.908426-1-raoxu@uniontech.com>
+In-Reply-To: <4E1486BC4536407E+20260629080623.908426-1-raoxu@uniontech.com>
+To: Xu Rao <raoxu@uniontech.com>
+Cc: tsbogend@alpha.franken.de, andrew+netdev@lunn.ch, davem@davemloft.net,
+ edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+ linux-mips@vger.kernel.org, netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org, stable@vger.kernel.org
 X-Rspamd-Action: no action
 X-Spamd-Result: default: False [-3.66 / 15.00];
 	WHITELIST_SPF_DKIM(-3.00)[kernel.org:d:+,kernel.org:s:+];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20260515];
+	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FREEMAIL_CC(0.00)[vger.kernel.org,arndb.de,kernel.org,lunn.ch,gmail.com,bootlin.com,nxp.com,free.fr,linux-m68k.org,alpha.franken.de,hauke-m.de,users.sourceforge.jp,physik.fu-berlin.de,redhat.com,dominikbrodowski.net,lists.infradead.org,opensource.cirrus.com,lists.linux-m68k.org,lists.linux.dev];
+	TAGGED_FROM(0.00)[bounces-15376-lists,linux-mips=lfdr.de,netdevbpf];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-15375-lists,linux-mips=lfdr.de,netdevbpf];
-	RCPT_COUNT_TWELVE(0.00)[35];
+	FROM_NEQ_ENVFROM(0.00)[patchwork-bot@kernel.org,linux-mips@vger.kernel.org];
+	FORGED_RECIPIENTS(0.00)[m:raoxu@uniontech.com,m:tsbogend@alpha.franken.de,m:andrew+netdev@lunn.ch,m:davem@davemloft.net,m:edumazet@google.com,m:kuba@kernel.org,m:pabeni@redhat.com,m:linux-mips@vger.kernel.org,m:netdev@vger.kernel.org,m:linux-kernel@vger.kernel.org,m:stable@vger.kernel.org,m:andrew@lunn.ch,s:lists@lfdr.de];
 	FORGED_SENDER(0.00)[patchwork-bot@kernel.org,linux-mips@vger.kernel.org];
 	MIME_TRACE(0.00)[0:+];
+	DKIM_TRACE(0.00)[kernel.org:+];
 	FORWARDED(0.00)[lists@lfdr.de];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	FORGED_RECIPIENTS(0.00)[m:arnd@kernel.org,m:linux-gpio@vger.kernel.org,m:arnd@arndb.de,m:brgl@kernel.org,m:andrew@lunn.ch,m:sebastian.hesselbarth@gmail.com,m:gregory.clement@bootlin.com,m:Frank.Li@nxp.com,m:robert.jarzmik@free.fr,m:krzk@kernel.org,m:gerg@linux-m68k.org,m:tsbogend@alpha.franken.de,m:hauke@hauke-m.de,m:zajec5@gmail.com,m:ysato@users.sourceforge.jp,m:glaubitz@physik.fu-berlin.de,m:linusw@kernel.org,m:dmitry.torokhov@gmail.com,m:kuba@kernel.org,m:pabeni@redhat.com,m:linux@dominikbrodowski.net,m:linux-kernel@vger.kernel.org,m:linux-arm-kernel@lists.infradead.org,m:linux-samsung-soc@vger.kernel.org,m:patches@opensource.cirrus.com,m:linux-m68k@lists.linux-m68k.org,m:linux-mips@vger.kernel.org,m:linux-sh@vger.kernel.org,m:linux-input@vger.kernel.org,m:linux-media@vger.kernel.org,m:netdev@vger.kernel.org,m:linux-sunxi@lists.linux.dev,m:linux-phy@lists.infradead.org,m:linux-rockchip@lists.infradead.org,m:linux-sound@vger.kernel.org,m:sebastianhesselbarth@gmail.com,m:dmitrytor
- okhov@gmail.com,s:lists@lfdr.de];
-	FROM_NEQ_ENVFROM(0.00)[patchwork-bot@kernel.org,linux-mips@vger.kernel.org];
-	MISSING_XM_UA(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	ALIAS_RESOLVED(0.00)[];
-	MID_RHS_MATCH_FROM(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
-	PRECEDENCE_BULK(0.00)[];
-	FORGED_SENDER_FORWARDING(0.00)[];
-	DKIM_TRACE(0.00)[kernel.org:+];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TO_DN_SOME(0.00)[];
-	TAGGED_RCPT(0.00)[linux-mips];
+	RCVD_COUNT_FIVE(0.00)[5];
+	ALIAS_RESOLVED(0.00)[];
+	FORGED_SENDER_FORWARDING(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	MISSING_XM_UA(0.00)[];
+	RCPT_COUNT_SEVEN(0.00)[11];
+	TAGGED_RCPT(0.00)[linux-mips,netdev];
 	FROM_NO_DN(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,vger.kernel.org:from_smtp]
+	MID_RHS_MATCH_FROM(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:rdns,sto.lore.kernel.org:helo,vger.kernel.org:from_smtp,uniontech.com:email]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: D94F66E8BFF
+X-Rspamd-Queue-Id: DEA256E8E2B
 
 Hello:
 
-This series was applied to netdev/net-next.git (main)
+This patch was applied to netdev/net-next.git (main)
 by Jakub Kicinski <kuba@kernel.org>:
 
-On Mon, 29 Jun 2026 15:26:20 +0200 you wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
+On Mon, 29 Jun 2026 16:06:23 +0800 you wrote:
+> From: Xu Rao <raoxu@uniontech.com>
 > 
-> The linux/gpio.h header used to be the global definition for the gpio
-> interfaces, with 1100 users back in linux-3.17. In linux-7.2, only about
-> 130 of those remain, so this series cleans out the rest.
+> When a linear skb crosses a 16 KiB boundary, ioc3_start_xmit()
+> splits it into two buffers of lengths s1 and s2.  The descriptor
+> advertises those lengths through B1CNT and B2CNT.
 > 
-> In each subsystem, we can replace the header either with
-> linux/gpio/consumer.h for users of the modern gpio descriptor interface,
-> or linux/gpio/legacy.h for the few remaining users of the old number
-> based interface.
+> The first buffer is mapped with s1, but the second buffer is also
+> mapped with s1 even though the device is told to fetch s2 bytes from
+> it.  When the lengths differ, the DMA mapping does not cover the same
+> region as the second descriptor buffer, which can result in incorrect
+> cache maintenance or a DMA fault on implementations that enforce the
+> mapped range.
 > 
 > [...]
 
 Here is the summary with links:
-  - [01/13] ARM: replace linux/gpio.h inclusions
-    (no matching commit)
-  - [02/13] m68k/coldfire: replace linux/gpio.h inclusions
-    (no matching commit)
-  - [03/13] mips: replace linux/gpio.h inclusions
-    (no matching commit)
-  - [04/13] sh: replace linux/gpio.h inclusions
-    (no matching commit)
-  - [05/13] mfd: replace linux/gpio.h inclusions
-    (no matching commit)
-  - [06/13,net-next] net: replace linux/gpio.h inclusions
-    https://git.kernel.org/netdev/net-next/c/a53d1872f2be
-  - [07/13] ASoC: replace linux/gpio.h inclusions
-    (no matching commit)
-  - [08/13] pcmcia: replace linux/gpio.h inclusions
-    (no matching commit)
-  - [09/13] phy: replace linux/gpio.h inclusions
-    (no matching commit)
-  - [10/13] media: replace linux/gpio.h inclusions
-    (no matching commit)
-  - [11/13] Input: matrix_keyboard - replace linux/gpio.h inclusion
-    (no matching commit)
-  - [12/13] gpib: gpio: replace linux/gpio.h inclusion
-    (no matching commit)
-  - [13/13] gpiolib: remove linux/gpio.h
-    (no matching commit)
+  - [net] net: sgi: ioc3-eth: fix split TX DMA mapping lengths
+    https://git.kernel.org/netdev/net-next/c/cd066559a073
 
 You are awesome, thank you!
 -- 
