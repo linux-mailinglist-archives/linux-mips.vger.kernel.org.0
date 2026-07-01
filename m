@@ -1,41 +1,41 @@
-Return-Path: <linux-mips+bounces-15386-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-15387-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id RX05LhDoRGqj2woAu9opvQ
-	(envelope-from <linux-mips+bounces-15386-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Wed, 01 Jul 2026 12:12:32 +0200
+	id zXkGMFfqRGph3AoAu9opvQ
+	(envelope-from <linux-mips+bounces-15387-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Wed, 01 Jul 2026 12:22:15 +0200
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 533AD6EBF59
-	for <lists+linux-mips@lfdr.de>; Wed, 01 Jul 2026 12:12:32 +0200 (CEST)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id B539B6EC17B
+	for <lists+linux-mips@lfdr.de>; Wed, 01 Jul 2026 12:22:14 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
 	dkim=none;
 	dmarc=none;
-	spf=pass (mail.lfdr.de: domain of "linux-mips+bounces-15386-lists+linux-mips=lfdr.de@vger.kernel.org" designates 2600:3c09:e001:a7::12fc:5321 as permitted sender) smtp.mailfrom="linux-mips+bounces-15386-lists+linux-mips=lfdr.de@vger.kernel.org";
+	spf=pass (mail.lfdr.de: domain of "linux-mips+bounces-15387-lists+linux-mips=lfdr.de@vger.kernel.org" designates 104.64.211.4 as permitted sender) smtp.mailfrom="linux-mips+bounces-15387-lists+linux-mips=lfdr.de@vger.kernel.org";
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 1A224303048E
-	for <lists+linux-mips@lfdr.de>; Wed,  1 Jul 2026 10:12:10 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 223D73045081
+	for <lists+linux-mips@lfdr.de>; Wed,  1 Jul 2026 10:12:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D183C400DE8;
-	Wed,  1 Jul 2026 10:11:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4D64340683F;
+	Wed,  1 Jul 2026 10:12:02 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE95140683F;
-	Wed,  1 Jul 2026 10:11:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45D9B403B01;
+	Wed,  1 Jul 2026 10:12:01 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782900719; cv=none; b=O/s1fwTa7asZHtzw5cnVB3ixmIf6aMeTPE0BQAEwjn30789eVSKFlqtxmrh6IRfCb9GNTVaLIuXlz1W+Pvr9QEoRShlRDjVggz3T+6dEZb7EXIwwdAU/F3I9bMXW1HjGapubnbw5Wi/6nQoGxoq75CUIP4OFxZgGRk0EqJsg88s=
+	t=1782900722; cv=none; b=dz54eOt14hEv0j2q+OHDN263jctXwdotLc+ziQ4zdTBZ73BXd6fOARmWaRFX/zoie/D9SzATX1U+BNLfV0mf1GFW2xxVd1diM7dKB+T3cDWIay3xbLJ8ZA6Z+V2edBdCO8hGDv6nA22J+IdD3aMH2UMVFK7Q9Fk4IUMiyzmG7dc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782900719; c=relaxed/simple;
-	bh=MkliZcmVgulpT53/3oWLkOsbEh0iqn6szuH0HHkoJSg=;
+	s=arc-20240116; t=1782900722; c=relaxed/simple;
+	bh=ZYtyWqzUKLdTfhttyKRhmf+JVPdYhBGeiRxJttec8+4=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=N4PjCJlb/V/S/sTVRVEgOMoMhC9l1x94sfqWQH5P8cDFYbMswQSBTGTRWz+ZYwFnWkjHDwQ4oC7iJ6QWfJ3YwSjlLSS74JTEzMzjCoQc75UEE7SNzGgYue/AklyO/gPdGntlRIBgpXMwSk8m/37S48GapFb5R73kHNwu+FXb1d4=
+	 MIME-Version; b=YpALwmCPIHyU+hIXR/ZB9D5hJxE1zj+wjhpSI3IURFLAT3+APqRTrpNuW8idiZnHSUK06mhqmy+zqsgSJZkPTZAaD1/jC5DhklGGUgZksZn647DSXAblUfj4iazvpytSCQqroj5G6bswVUr92lr4eIAtqhBgnYar29OW+/u/adI=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D0E81F000E9;
-	Wed,  1 Jul 2026 10:11:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E9B9E1F00A3A;
+	Wed,  1 Jul 2026 10:11:58 +0000 (UTC)
 From: Geert Uytterhoeven <geert@linux-m68k.org>
 To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
 	Linus Walleij <linusw@kernel.org>,
@@ -45,11 +45,10 @@ Cc: linux-mips@vger.kernel.org,
 	linux-gpio@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	Geert Uytterhoeven <geert@linux-m68k.org>,
-	Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>,
-	=?UTF-8?q?Philippe=20Mathieu-Daud=C3=A9?= <philmd@oss.qualcomm.com>
-Subject: [PATCH v2 2/9] MIPS: TXX9: Remove txx9_7segled_*() forward declarations
-Date: Wed,  1 Jul 2026 12:11:37 +0200
-Message-ID: <eaf21b1094e8a89c3dcc0e5bffcf79d9502d2189.1782900491.git.geert@linux-m68k.org>
+	Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>
+Subject: [PATCH v2 3/9] MIPS: TXX9: rbtx4927: Use GPIO lookup table for SIO DTR
+Date: Wed,  1 Jul 2026 12:11:38 +0200
+Message-ID: <413c28068841aea76697dca9c2f910373c3dc8c7.1782900491.git.geert@linux-m68k.org>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <cover.1782900491.git.geert@linux-m68k.org>
 References: <cover.1782900491.git.geert@linux-m68k.org>
@@ -59,72 +58,91 @@ List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Rspamd-Action: no action
-X-Spamd-Result: default: False [-0.46 / 15.00];
-	MID_CONTAINS_FROM(1.00)[];
+X-Spamd-Result: default: False [0.04 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
+	MID_CONTAINS_FROM(1.00)[];
+	R_MISSING_CHARSET(0.50)[];
+	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-15386-lists,linux-mips=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
+	FORGED_RECIPIENTS(0.00)[m:tsbogend@alpha.franken.de,m:linusw@kernel.org,m:brgl@kernel.org,m:arnd@arndb.de,m:linux-mips@vger.kernel.org,m:linux-gpio@vger.kernel.org,m:linux-kernel@vger.kernel.org,m:geert@linux-m68k.org,m:bartosz.golaszewski@oss.qualcomm.com,s:lists@lfdr.de];
 	DMARC_NA(0.00)[linux-m68k.org];
-	FROM_HAS_DN(0.00)[];
-	FORGED_RECIPIENTS(0.00)[m:tsbogend@alpha.franken.de,m:linusw@kernel.org,m:brgl@kernel.org,m:arnd@arndb.de,m:linux-mips@vger.kernel.org,m:linux-gpio@vger.kernel.org,m:linux-kernel@vger.kernel.org,m:geert@linux-m68k.org,m:bartosz.golaszewski@oss.qualcomm.com,m:philmd@oss.qualcomm.com,s:lists@lfdr.de];
+	RCVD_COUNT_THREE(0.00)[4];
+	PRECEDENCE_BULK(0.00)[];
 	FORGED_SENDER(0.00)[geert@linux-m68k.org,linux-mips@vger.kernel.org];
 	MIME_TRACE(0.00)[0:+];
-	RCVD_COUNT_THREE(0.00)[4];
+	TAGGED_FROM(0.00)[bounces-15387-lists,linux-mips=lfdr.de];
 	FORWARDED(0.00)[lists@lfdr.de];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
-	TO_DN_SOME(0.00)[];
-	FORGED_SENDER_FORWARDING(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[geert@linux-m68k.org,linux-mips@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
-	ALIAS_RESOLVED(0.00)[];
-	RCPT_COUNT_SEVEN(0.00)[10];
+	FROM_NEQ_ENVFROM(0.00)[geert@linux-m68k.org,linux-mips@vger.kernel.org];
 	R_DKIM_NA(0.00)[];
+	ALIAS_RESOLVED(0.00)[];
+	FORGED_SENDER_FORWARDING(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCPT_COUNT_SEVEN(0.00)[9];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-mips];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[vger.kernel.org:from_smtp,linux-m68k.org:email,linux-m68k.org:mid,linux-m68k.org:from_mime,sto.lore.kernel.org:rdns,sto.lore.kernel.org:helo,qualcomm.com:email]
+	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
+	TO_DN_SOME(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[qualcomm.com:email,linux-m68k.org:email,linux-m68k.org:mid,linux-m68k.org:from_mime,vger.kernel.org:from_smtp,sin.lore.kernel.org:rdns,sin.lore.kernel.org:helo]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 533AD6EBF59
+X-Rspamd-Queue-Id: B539B6EC17B
 
-The actual implementation was removed in commit 5a8df9281b052ff3 ("MIPS:
-TXX9: Remove rbtx4939 board support").
+Convert SIO DTR handling from legacy GPIO calls to GPIO descriptors
+using a GPIO lookup table.
 
 Signed-off-by: Geert Uytterhoeven <geert@linux-m68k.org>
 Reviewed-by: Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>
-Reviewed-by: Philippe Mathieu-Daudé <philmd@oss.qualcomm.com>
 Reviewed-by: Linus Walleij <linusw@kernel.org>
 ---
 v2:
   - Add Reviewed-by.
 ---
- arch/mips/include/asm/txx9/generic.h | 5 -----
- 1 file changed, 5 deletions(-)
+ arch/mips/txx9/rbtx4927/setup.c | 16 +++++++++++++---
+ 1 file changed, 13 insertions(+), 3 deletions(-)
 
-diff --git a/arch/mips/include/asm/txx9/generic.h b/arch/mips/include/asm/txx9/generic.h
-index 3813ab9ccf717ada..5ce5b8579a444ec3 100644
---- a/arch/mips/include/asm/txx9/generic.h
-+++ b/arch/mips/include/asm/txx9/generic.h
-@@ -83,11 +83,6 @@ void txx9_iocled_init(unsigned long baseaddr,
- 		      int basenum, unsigned int num, int lowactive,
- 		      const char *color, char **deftriggers);
+diff --git a/arch/mips/txx9/rbtx4927/setup.c b/arch/mips/txx9/rbtx4927/setup.c
+index 31955c1d55550fd4..e57c409c318ca220 100644
+--- a/arch/mips/txx9/rbtx4927/setup.c
++++ b/arch/mips/txx9/rbtx4927/setup.c
+@@ -49,6 +49,7 @@
+ #include <linux/platform_device.h>
+ #include <linux/delay.h>
+ #include <linux/gpio.h>
++#include <linux/gpio/machine.h>
+ #include <linux/leds.h>
+ #include <asm/io.h>
+ #include <asm/reboot.h>
+@@ -157,11 +158,20 @@ static inline void tx4927_pci_setup(void) {}
+ static inline void tx4937_pci_setup(void) {}
+ #endif /* CONFIG_PCI */
  
--/* 7SEG LED */
--void txx9_7segled_init(unsigned int num,
--		       void (*putc)(unsigned int pos, unsigned char val));
--int txx9_7segled_putc(unsigned int pos, char c);
--
- void __init txx9_aclc_init(unsigned long baseaddr, int irq,
- 			   unsigned int dmac_id,
- 			   unsigned int dma_chan_out,
++/* TX4927-SIO DTR on (PIO[15]) */
++GPIO_LOOKUP_SINGLE(sio_gpio_table, NULL, "TXx9", 15, "sio-dtr",
++		   GPIO_ACTIVE_HIGH);
++
+ static void __init rbtx4927_gpio_init(void)
+ {
+-	/* TX4927-SIO DTR on (PIO[15]) */
+-	gpio_request(15, "sio-dtr");
+-	gpio_direction_output(15, 1);
++	struct gpio_desc *d;
++
++	gpiod_add_lookup_table(&sio_gpio_table);
++	d = gpiod_get(NULL, "sio-dtr", GPIOD_OUT_HIGH);
++	if (IS_ERR(d))
++		pr_err("Unable to get sio-dtr GPIO descriptor\n");
++	else
++		gpiod_put(d);
+ 
+ 	tx4927_sio_init(0, 0);
+ }
 -- 
 2.43.0
 
