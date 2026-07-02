@@ -1,50 +1,50 @@
-Return-Path: <linux-mips+bounces-15425-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-15426-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id 767kIz5lRmqRSgsAu9opvQ
-	(envelope-from <linux-mips+bounces-15425-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Thu, 02 Jul 2026 15:18:54 +0200
+	id abqgEHNmRmr7SgsAu9opvQ
+	(envelope-from <linux-mips+bounces-15426-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Thu, 02 Jul 2026 15:24:03 +0200
 X-Original-To: lists+linux-mips@lfdr.de
 Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id EA4086F83F7
-	for <lists+linux-mips@lfdr.de>; Thu, 02 Jul 2026 15:18:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 70B766F84BD
+	for <lists+linux-mips@lfdr.de>; Thu, 02 Jul 2026 15:24:02 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=linux.dev header.s=key1 header.b=jHDhEc6C;
-	spf=pass (mail.lfdr.de: domain of "linux-mips+bounces-15425-lists+linux-mips=lfdr.de@vger.kernel.org" designates 2600:3c04:e001:36c::12fc:5321 as permitted sender) smtp.mailfrom="linux-mips+bounces-15425-lists+linux-mips=lfdr.de@vger.kernel.org";
+	dkim=pass header.d=linux.dev header.s=key1 header.b=lItd+RyL;
+	spf=pass (mail.lfdr.de: domain of "linux-mips+bounces-15426-lists+linux-mips=lfdr.de@vger.kernel.org" designates 2600:3c04:e001:36c::12fc:5321 as permitted sender) smtp.mailfrom="linux-mips+bounces-15426-lists+linux-mips=lfdr.de@vger.kernel.org";
 	dmarc=pass (policy=none) header.from=linux.dev;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id E47B13028F4C
-	for <lists+linux-mips@lfdr.de>; Thu,  2 Jul 2026 13:13:20 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 864D03016BA3
+	for <lists+linux-mips@lfdr.de>; Thu,  2 Jul 2026 13:21:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1F7EF47DD45;
-	Thu,  2 Jul 2026 13:13:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 898C24A2E0F;
+	Thu,  2 Jul 2026 13:21:46 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
-Received: from out-170.mta0.migadu.com (out-170.mta0.migadu.com [91.218.175.170])
+Received: from out-181.mta0.migadu.com (out-181.mta0.migadu.com [91.218.175.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98AFB451076
-	for <linux-mips@vger.kernel.org>; Thu,  2 Jul 2026 13:13:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29F384A2E0D
+	for <linux-mips@vger.kernel.org>; Thu,  2 Jul 2026 13:21:42 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782998000; cv=none; b=FDAdSgUne/ay1xaW+YOYiPocJXX18bkaIkhnHFMphCDyMJEgmGJ+yZamUlzCiFFagqrbd17reAmpYgFRaSQ1XxcDlU31R2s6GvTdwRIFoIS2LhsMzyAAzaNWpUevwWbh+vD5pM4ZtfJXZidWVA+g4gNzScNP/W0sYRltHg7JDDQ=
+	t=1782998506; cv=none; b=HbvADDR74IFMQafKGoFr9DrRR/itLJJR2Z8Xg0UcdBiuqH+dVT4xdsSPK3EKb+sFcCtLO1mq/ekTV9cVKWbzmXQH4w70zza1h7VUcKNaVGIVxYTOJ0b/TJCKqFWEniis3Z4qkebI1IMqXk+Jr9elp8sBiCzkx1vs+8vzhxvDAfM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782998000; c=relaxed/simple;
-	bh=pTjKKHwaFHpnWuOGJj9sjtDsv7AR/wPgTwwTBWMLOoo=;
+	s=arc-20240116; t=1782998506; c=relaxed/simple;
+	bh=gXUrajB2To0IOz5KqeBKr9/Bg4kcYOdXZYimcIYSsyo=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=fgjZE5+J4ZR/7p3SAEtrmyfHh8qfmZG3AEYG6O0gKI5C17cPg05r+MY0++OwVNv5KRqcXIv+CtXiROaY5kaCeQ+FPqDGDvjx4Lel9tzEK5ptybv2bPZnbdyw/jDW+Uplcti4Zwztvq3AHoealuydSf1tMc7/LfuKIVB6J9zozwk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=jHDhEc6C; arc=none smtp.client-ip=91.218.175.170
+	 MIME-Version:Content-Type; b=NwKYa5yc3RpUabJZGIPizLoE2cCVyyMqpH3w8p0X/zKI8l3AnikVt9VQRL2ATwLA6K+cNwhw61+4FZ35Vdda2xctJRt8nm5XpvoEw4uOYUBx2OY2ITJ68iNuk4KfDXAIt4FrqzUirLNS7w5Euv60KACBtYuk8CaOG79WEXQqJgA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=lItd+RyL; arc=none smtp.client-ip=91.218.175.181
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1782997985;
+	t=1782998499;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=3WkYIESER5H1pxokBfEp6m9xEZZ5ghGe4TjZZy4BO5I=;
-	b=jHDhEc6CTiPftGqyHzVdl3xS/wEnOHSN4PeeVFnRX9fUml//8WA53GAPbsxSbJvWuzc/sf
-	tH1rSEqcTxDFS7qyJ0iIaX/a6tA48FPP/mFE4c/byOkvPcPlvJwYSUFubJkz9Jxs6S5ya/
-	AItLuFoisprFM8kvEpkf04Kk84Cg/T0=
+	bh=JUypSg4x3H5Npdac5Q/QNTHcczAl9LnBdMVXVWinEec=;
+	b=lItd+RyL3jRAHkpl0dxrPEWed2AY0HWUHX4RwICujMLfpbUgWjWjW+ARImTVfb6PHm9Sny
+	y6V8i67fWjOA8LCWLGCzxRy43+gvonIsLNLIP4rLaMNI+LWR2I1BadswAi+4/7c6z/eUrS
+	IlFVPIdu28UO/M5UjVs/++abx0FKfS4=
 From: Lance Yang <lance.yang@linux.dev>
 To: ljs@kernel.org
 Cc: akpm@linux-foundation.org,
@@ -129,11 +129,11 @@ Cc: akpm@linux-foundation.org,
 	linux-fsdevel@vger.kernel.org,
 	linux-mm@kvack.org,
 	linux-sound@vger.kernel.org
-Subject: Re: [PATCH 10/13] mm/vma: convert miscellaneous uses of VMA flags in core mm
-Date: Thu,  2 Jul 2026 21:12:33 +0800
-Message-Id: <20260702131233.59026-1-lance.yang@linux.dev>
-In-Reply-To: <1e7d834c887b6a65627d730addcff13d458c6268.1782760670.git.ljs@kernel.org>
-References: <1e7d834c887b6a65627d730addcff13d458c6268.1782760670.git.ljs@kernel.org>
+Subject: Re: [PATCH 11/13] mm/mlock: convert mlock code to use vma_flags_t
+Date: Thu,  2 Jul 2026 21:21:07 +0800
+Message-Id: <20260702132107.73727-1-lance.yang@linux.dev>
+In-Reply-To: <2db16db81538355ca65f778c246d2381c673cad4.1782760670.git.ljs@kernel.org>
+References: <2db16db81538355ca65f778c246d2381c673cad4.1782760670.git.ljs@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -155,7 +155,7 @@ X-Spamd-Result: default: False [-1.16 / 15.00];
 	HAS_LIST_UNSUB(-0.01)[];
 	FROM_HAS_DN(0.00)[];
 	FREEMAIL_CC(0.00)[linux-foundation.org,alpha.franken.de,linux.ibm.com,ellerman.id.au,linux.intel.com,kernel.org,suse.de,gmail.com,ffwll.ch,pengutronix.de,samsung.com,linaro.org,intel.com,ursulin.net,oss.qualcomm.com,redhat.com,ideasonboard.com,rock-chips.com,sntech.de,nvidia.com,collabora.com,broadcom.com,epam.com,gmx.de,kvack.org,zeniv.linux.org.uk,linux.dev,linux.alibaba.com,infradead.org,arm.com,google.com,suse.com,perex.cz,vger.kernel.org,lists.ozlabs.org,lists.freedesktop.org,lists.infradead.org,lists.linux.dev,lists.xenproject.org];
-	TAGGED_FROM(0.00)[bounces-15425-lists,linux-mips=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-15426-lists,linux-mips=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
 	RCVD_COUNT_THREE(0.00)[3];
 	FORGED_RECIPIENTS(0.00)[m:ljs@kernel.org,m:akpm@linux-foundation.org,m:tsbogend@alpha.franken.de,m:maddy@linux.ibm.com,m:mpe@ellerman.id.au,m:maarten.lankhorst@linux.intel.com,m:mripard@kernel.org,m:tzimmermann@suse.de,m:airlied@gmail.com,m:simona@ffwll.ch,m:l.stach@pengutronix.de,m:inki.dae@samsung.com,m:sw0312.kim@samsung.com,m:kyungmin.park@samsung.com,m:krzk@kernel.org,m:peter.griffin@linaro.org,m:jani.nikula@linux.intel.com,m:joonas.lahtinen@linux.intel.com,m:rodrigo.vivi@intel.com,m:tursulin@ursulin.net,m:robin.clark@oss.qualcomm.com,m:lumag@kernel.org,m:lyude@redhat.com,m:dakr@kernel.org,m:tomi.valkeinen@ideasonboard.com,m:hjc@rock-chips.com,m:heiko@sntech.de,m:andy.yan@rock-chips.com,m:thierry.reding@kernel.org,m:mperttunen@nvidia.com,m:jonathanh@nvidia.com,m:kraxel@redhat.com,m:dmitry.osipenko@collabora.com,m:zack.rusin@broadcom.com,m:matthew.brost@intel.com,m:thomas.hellstrom@linux.intel.com,m:oleksandr_andrushchenko@epam.com,m:deller@gmx.de,m:bcrl@kvack.org,m:viro@zeniv.l
@@ -178,52 +178,58 @@ X-Spamd-Result: default: False [-1.16 / 15.00];
 	TAGGED_RCPT(0.00)[linux-mips];
 	MIME_TRACE(0.00)[0:+]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: EA4086F83F7
+X-Rspamd-Queue-Id: 70B766F84BD
 
 
-On Mon, Jun 29, 2026 at 08:25:33PM +0100, Lorenzo Stoakes wrote:
->Update various uses of legacy flags in vma.c and mmap.c to the new
->vma_flags_t type, updating comments alongside them to be consistent.
+On Mon, Jun 29, 2026 at 08:25:34PM +0100, Lorenzo Stoakes wrote:
+>Replace use of the legacy vm_flags_t flags with vma_flags_t values
+>throughout the mlock logic.
 >
->Also update __install_special_mapping() to rearrange things slightly to
->accommodate the changes.
+>Additionally update comments to reflect the changes to be consistent.
+>
+>No functional change intended.
 >
 >Signed-off-by: Lorenzo Stoakes <ljs@kernel.org>
 >---
+
+Nothing scary jumped out at me. Just one tiny nit below ;)
+
 [...]
->diff --git a/mm/vma.c b/mm/vma.c
->index b81c05e67a61..ab2ef0f04420 100644
->--- a/mm/vma.c
->+++ b/mm/vma.c
->@@ -3417,23 +3417,27 @@ struct vm_area_struct *__install_special_mapping(
-> 	vm_flags_t vm_flags, void *priv,
-> 	const struct vm_operations_struct *ops)
+>@@ -466,24 +466,23 @@ static void mlock_vma_pages_range(struct vm_area_struct *vma,
+>  */
+> static int mlock_fixup(struct vma_iterator *vmi, struct vm_area_struct *vma,
+> 	       struct vm_area_struct **prev, unsigned long start,
+>-	       unsigned long end, vm_flags_t newflags)
+>+	       unsigned long end, vma_flags_t *new_vma_flags)
 > {
->-	int ret;
->+	vma_flags_t vma_flags = legacy_to_vma_flags(vm_flags);
-> 	struct vm_area_struct *vma;
->+	int ret;
+>-	vma_flags_t new_vma_flags = legacy_to_vma_flags(newflags);
+> 	const vma_flags_t old_vma_flags = vma->flags;
+> 	struct mm_struct *mm = vma->vm_mm;
+> 	int nr_pages;
+> 	int ret = 0;
 > 
-> 	vma = vm_area_alloc(mm);
->-	if (unlikely(vma == NULL))
->+	if (unlikely(!vma))
-> 		return ERR_PTR(-ENOMEM);
+>-	if (vma_flags_same_pair(&old_vma_flags, &new_vma_flags) ||
+>+	if (vma_flags_same_pair(&old_vma_flags, new_vma_flags) ||
+> 	    vma_is_secretmem(vma) || !vma_supports_mlock(vma)) {
+> 		/*
+>-		 * Don't set VM_LOCKED or VM_LOCKONFAULT and don't count.
+>+		 * Don't set VMA_LOCKED_BIT or VM_LOCKONFAULT and don't count.
+
+s/VM_LOCKONFAULT/VMA_LOCKONFAULT_BIT/
+
+Otherwise LGTM. Feel free to add:
+
+Reviewed-by: Lance Yang <lance.yang@linux.dev>
+
+> 		 * For secretmem, don't allow the memory to be unlocked.
+> 		 */
+> 		goto out;
+> 	}
 > 
->-	vma_set_range(vma, addr, addr + len, 0);
->-	vm_flags |= vma_flags_to_legacy(mm->def_vma_flags) | VM_DONTEXPAND;
->+	vma_flags_set_mask(&vma_flags, mm->def_vma_flags);
->+	vma_flags_set(&vma_flags, VMA_DONTEXPAND_BIT);
-> 	if (pgtable_supports_soft_dirty())
->-		vm_flags |= VM_SOFTDIRTY;
->-	vm_flags_init(vma, vm_flags & ~VM_LOCKED_MASK);
->+		vma_flags_set(&vma_flags, VMA_SOFTDIRTY_BIT);
->+	vma_flags_clear_mask(&vma_flags, VMA_LOCKED_MASK);
->+	vma->flags = vma_flags;
-
-Maybe worth a vma_flags_init() helper here to mirror vm_flags_init()?
-With this open-coded, we lose the soft-dirty WARN_ON_ONCE sanity check.
-
-Might be nicer to keep that check in one place ;)
-
+>-	vma = vma_modify_flags(vmi, *prev, vma, start, end, &new_vma_flags);
+>+	vma = vma_modify_flags(vmi, *prev, vma, start, end, new_vma_flags);
+> 	if (IS_ERR(vma)) {
+> 		ret = PTR_ERR(vma);
+> 		goto out;
 [...]
 
