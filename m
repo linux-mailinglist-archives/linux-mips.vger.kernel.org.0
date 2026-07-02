@@ -1,50 +1,50 @@
-Return-Path: <linux-mips+bounces-15421-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-15422-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id eI0TAiZZRmpSRQsAu9opvQ
-	(envelope-from <linux-mips+bounces-15421-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Thu, 02 Jul 2026 14:27:18 +0200
+	id nSSzJBBaRmrBRQsAu9opvQ
+	(envelope-from <linux-mips+bounces-15422-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Thu, 02 Jul 2026 14:31:12 +0200
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 799206F78F3
-	for <lists+linux-mips@lfdr.de>; Thu, 02 Jul 2026 14:27:17 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2CAAE6F79CC
+	for <lists+linux-mips@lfdr.de>; Thu, 02 Jul 2026 14:31:12 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=linux.dev header.s=key1 header.b=lN0+Boa2;
-	spf=pass (mail.lfdr.de: domain of "linux-mips+bounces-15421-lists+linux-mips=lfdr.de@vger.kernel.org" designates 2600:3c09:e001:a7::12fc:5321 as permitted sender) smtp.mailfrom="linux-mips+bounces-15421-lists+linux-mips=lfdr.de@vger.kernel.org";
+	dkim=pass header.d=linux.dev header.s=key1 header.b=b+ldrvkt;
+	spf=pass (mail.lfdr.de: domain of "linux-mips+bounces-15422-lists+linux-mips=lfdr.de@vger.kernel.org" designates 2600:3c04:e001:36c::12fc:5321 as permitted sender) smtp.mailfrom="linux-mips+bounces-15422-lists+linux-mips=lfdr.de@vger.kernel.org";
 	dmarc=pass (policy=none) header.from=linux.dev;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 0071030A503C
-	for <lists+linux-mips@lfdr.de>; Thu,  2 Jul 2026 12:22:09 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id D61983054E98
+	for <lists+linux-mips@lfdr.de>; Thu,  2 Jul 2026 12:25:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DD0DC47DD4A;
-	Thu,  2 Jul 2026 12:22:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D8BF347ECCC;
+	Thu,  2 Jul 2026 12:25:49 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
-Received: from out-183.mta0.migadu.com (out-183.mta0.migadu.com [91.218.175.183])
+Received: from out-172.mta0.migadu.com (out-172.mta0.migadu.com [91.218.175.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 821F947D95E
-	for <linux-mips@vger.kernel.org>; Thu,  2 Jul 2026 12:22:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E47947DF8F;
+	Thu,  2 Jul 2026 12:25:47 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782994925; cv=none; b=j4GrxmGXsPhs2PM2fxRSF+pW01bJEV/f5qPLVg9acXyAAIDk2dD0wPbxyP1jXyEcm4lT6flUn2CVoN203ot9NBDJJZFC7c2xLTlbMdpY/o+/vARPqW/yQTI+y1fg1U6uRnthxn//HLdPrIxpVi842wWUcDBRbMBeYSaxgypxJ9Y=
+	t=1782995149; cv=none; b=pjqZ0A4NOhfZvNfiGkDqrgycrmzCzu4rMgHwPe8jxc5WhD5ExALj359aRMB96APekr9xqDWTY8J7qAm1kwCCsVazRlcKB7znlGXH6bkW2EC27fY7rYxS5v9Yh+a6wf/j7Q9qv0TE/6TMvzRWZlf4jQuyFrrjjDak9fAu/zY/P/I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782994925; c=relaxed/simple;
-	bh=HAAT0DQ/UAvdNOs6dKZMzpAmDc0tMByxgXgKCu3IuzE=;
+	s=arc-20240116; t=1782995149; c=relaxed/simple;
+	bh=7Ko6g/fNv98hSurpFrjSC8unNT/smMh3pnGqTobbcqg=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=igy9pwyoZ4A6iTfdqu9zOdBshijf34XyI9jBeFSkQu9VCWe+Sr2UKgYI9kWS5zJvEjoNWPG1OMicqYO8lbzq05pRO0OSDjZP71WWE6kqrYgu0/mYQ/w6L8xd+R5odtpAAzuV48DtnvQ8elQIe0wYgqLMbwyUSr28BjF3fCILbiM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=lN0+Boa2; arc=none smtp.client-ip=91.218.175.183
+	 MIME-Version:Content-Type; b=BOLaqVoPoWiLkg/2UJ5URgjxP19d8Ij+0Fq+wib8IweadDwGKNZ+KVOtzRXHZIe8CqZ+RZYCzPVVbj1Z0D8bLPhcqcSmp5dHuurLeMCmesr/C1Gpuz0mdoE3A4Gvy3CN6XWK7e4Y5H6Q5Gt4cKcsQKpOwW5NWsyGX42jC2zvcmo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=b+ldrvkt; arc=none smtp.client-ip=91.218.175.172
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1782994911;
+	t=1782995144;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=flDoJiJgtgGf3x2zlQX9jaS5nhFTdBgmSXvfG9PiFjA=;
-	b=lN0+Boa2ASIcCLc47EPvtXVMZuYaw78VJ/wVLmRpCeGudutYAguuVxwIGwqQDa2oDibvGW
-	bIpbbgc5ew0Ij3QtFyyGuneAdXTOrpkXqfYfNRMzfKjFKxKgZCy8wM/iRDCenl6trdMYJz
-	+LOdf87J+2yAD0n3s3yNqonkzwm6x4w=
+	bh=7Ko6g/fNv98hSurpFrjSC8unNT/smMh3pnGqTobbcqg=;
+	b=b+ldrvkt8ZmJ+OrI3yxcQgFLnRxGCWHjhsFZZL3rVzLaxyNILjolYA01aJGr58GPqotONa
+	C0qfjyiCv0Ek1cqalMJ+/t7YCyD5CeARmY/TMOXt2of2lM3qjKi0LZINpNnLjdz9QLcCqu
+	OOzdaIK15Lm4UMi7JwMdKk4MKXYIZlw=
 From: Lance Yang <lance.yang@linux.dev>
 To: ljs@kernel.org
 Cc: akpm@linux-foundation.org,
@@ -129,11 +129,11 @@ Cc: akpm@linux-foundation.org,
 	linux-fsdevel@vger.kernel.org,
 	linux-mm@kvack.org,
 	linux-sound@vger.kernel.org
-Subject: Re: [PATCH 06/13] mm/vma: convert vm_pgprot_modify() to use vma_flags_t and rename
-Date: Thu,  2 Jul 2026 20:21:16 +0800
-Message-Id: <20260702122116.65642-1-lance.yang@linux.dev>
-In-Reply-To: <548ba81b2971734d4d2143237ad1465bd1b2f525.1782760670.git.ljs@kernel.org>
-References: <548ba81b2971734d4d2143237ad1465bd1b2f525.1782760670.git.ljs@kernel.org>
+Subject: Re: [PATCH 07/13] mm/vma: rename vma_get_page_prot to vma_flags_to_page_prot
+Date: Thu,  2 Jul 2026 20:25:15 +0800
+Message-Id: <20260702122515.74271-1-lance.yang@linux.dev>
+In-Reply-To: <fc8ac30d03d29d236e76542b36432bba315aca60.1782760670.git.ljs@kernel.org>
+References: <fc8ac30d03d29d236e76542b36432bba315aca60.1782760670.git.ljs@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -149,13 +149,13 @@ X-Spamd-Result: default: False [-1.16 / 15.00];
 	MID_CONTAINS_FROM(1.00)[];
 	DMARC_POLICY_ALLOW(-0.50)[linux.dev,none];
 	R_DKIM_ALLOW(-0.20)[linux.dev:s=key1];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	FROM_HAS_DN(0.00)[];
 	FREEMAIL_CC(0.00)[linux-foundation.org,alpha.franken.de,linux.ibm.com,ellerman.id.au,linux.intel.com,kernel.org,suse.de,gmail.com,ffwll.ch,pengutronix.de,samsung.com,linaro.org,intel.com,ursulin.net,oss.qualcomm.com,redhat.com,ideasonboard.com,rock-chips.com,sntech.de,nvidia.com,collabora.com,broadcom.com,epam.com,gmx.de,kvack.org,zeniv.linux.org.uk,linux.dev,linux.alibaba.com,infradead.org,arm.com,google.com,suse.com,perex.cz,vger.kernel.org,lists.ozlabs.org,lists.freedesktop.org,lists.infradead.org,lists.linux.dev,lists.xenproject.org];
-	TAGGED_FROM(0.00)[bounces-15421-lists,linux-mips=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-15422-lists,linux-mips=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
 	RCVD_COUNT_THREE(0.00)[3];
 	FORGED_RECIPIENTS(0.00)[m:ljs@kernel.org,m:akpm@linux-foundation.org,m:tsbogend@alpha.franken.de,m:maddy@linux.ibm.com,m:mpe@ellerman.id.au,m:maarten.lankhorst@linux.intel.com,m:mripard@kernel.org,m:tzimmermann@suse.de,m:airlied@gmail.com,m:simona@ffwll.ch,m:l.stach@pengutronix.de,m:inki.dae@samsung.com,m:sw0312.kim@samsung.com,m:kyungmin.park@samsung.com,m:krzk@kernel.org,m:peter.griffin@linaro.org,m:jani.nikula@linux.intel.com,m:joonas.lahtinen@linux.intel.com,m:rodrigo.vivi@intel.com,m:tursulin@ursulin.net,m:robin.clark@oss.qualcomm.com,m:lumag@kernel.org,m:lyude@redhat.com,m:dakr@kernel.org,m:tomi.valkeinen@ideasonboard.com,m:hjc@rock-chips.com,m:heiko@sntech.de,m:andy.yan@rock-chips.com,m:thierry.reding@kernel.org,m:mperttunen@nvidia.com,m:jonathanh@nvidia.com,m:kraxel@redhat.com,m:dmitry.osipenko@collabora.com,m:zack.rusin@broadcom.com,m:matthew.brost@intel.com,m:thomas.hellstrom@linux.intel.com,m:oleksandr_andrushchenko@epam.com,m:deller@gmx.de,m:bcrl@kvack.org,m:viro@zeniv.l
@@ -164,7 +164,7 @@ X-Spamd-Result: default: False [-1.16 / 15.00];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	FORGED_SENDER(0.00)[lance.yang@linux.dev,linux-mips@vger.kernel.org];
 	DKIM_TRACE(0.00)[linux.dev:+];
-	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
 	MISSING_XM_UA(0.00)[];
 	FORGED_SENDER_FORWARDING(0.00)[];
 	TO_DN_NONE(0.00)[];
@@ -178,50 +178,22 @@ X-Spamd-Result: default: False [-1.16 / 15.00];
 	TAGGED_RCPT(0.00)[linux-mips];
 	MIME_TRACE(0.00)[0:+]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 799206F78F3
+X-Rspamd-Queue-Id: 2CAAE6F79CC
 
 
-On Mon, Jun 29, 2026 at 08:25:29PM +0100, Lorenzo Stoakes wrote:
->Update vm_pgprot_modify() to use the new VMA flags type vma_flags_t, and
->rename to vma_pgprot_modify() accordingly.
+On Mon, Jun 29, 2026 at 08:25:30PM +0100, Lorenzo Stoakes wrote:
+>Having vma_get_page_prot() refer to VMA flags and vma_set_page_prot() refer
+>to a VMA is confusing.
 >
->This is part of the ongoing work to convert vm_flags_t to vma_flags_t, in
->order to eliminate the arbitrary limit of the number of bits in a system
->word on available VMA flags.
->
->Update VMA userland tests accordingly, updating vma_set_page_prot() to no
->longer inline vma_pgprot_modify(), rather we can simply define
->vma_pgprot_modify() as a static inline function and the tests will pick it
->up from vma.h.
+>Rename vma_get_page_prot() to vma_flags_to_page_prot() to resolve this
+>confusion.
 >
 >No functional change intended.
 >
 >Signed-off-by: Lorenzo Stoakes <ljs@kernel.org>
 >---
-[...]
->diff --git a/mm/vma.h b/mm/vma.h
->index bcf0c2773449..6a8abb8ae937 100644
->--- a/mm/vma.h
->+++ b/mm/vma.h
->@@ -522,9 +522,11 @@ static inline bool vma_wants_manual_pte_write_upgrade(struct vm_area_struct *vma
-> }
-> 
-> #ifdef CONFIG_MMU
->-static inline pgprot_t vm_pgprot_modify(pgprot_t oldprot, vm_flags_t vm_flags)
->+static inline pgprot_t vma_pgprot_modify(pgprot_t oldprot, vma_flags_t vma_flags)
-> {
->-	return pgprot_modify(oldprot, vm_get_page_prot(vm_flags));
->+	const pgprot_t prot = vma_get_page_prot(vma_flags);
->+
->+	return pgprot_modify(oldprot, prot);
 
-Nit: could this just stay as a single return? something like:
-
-return pgprot_modify(oldprot, vma_get_page_prot(vma_flags));
-
-Otherwise, LGTM, feel free to add: 
+straight rename, no stale callers that I can spot ;) Feel free to add:
 
 Reviewed-by: Lance Yang <lance.yang@linux.dev>
-
-[...]
 
