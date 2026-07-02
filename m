@@ -1,50 +1,50 @@
-Return-Path: <linux-mips+bounces-15419-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-15420-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id nwXAEF5QRmpKQgsAu9opvQ
-	(envelope-from <linux-mips+bounces-15419-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Thu, 02 Jul 2026 13:49:50 +0200
+	id OmNkK1BXRmqcRAsAu9opvQ
+	(envelope-from <linux-mips+bounces-15420-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Thu, 02 Jul 2026 14:19:28 +0200
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6239C6F7035
-	for <lists+linux-mips@lfdr.de>; Thu, 02 Jul 2026 13:49:49 +0200 (CEST)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 66E536F777F
+	for <lists+linux-mips@lfdr.de>; Thu, 02 Jul 2026 14:19:28 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=linux.dev header.s=key1 header.b=ElylzNP2;
-	spf=pass (mail.lfdr.de: domain of "linux-mips+bounces-15419-lists+linux-mips=lfdr.de@vger.kernel.org" designates 2600:3c0a:e001:db::12fc:5321 as permitted sender) smtp.mailfrom="linux-mips+bounces-15419-lists+linux-mips=lfdr.de@vger.kernel.org";
+	dkim=pass header.d=linux.dev header.s=key1 header.b=o2h14zEv;
+	spf=pass (mail.lfdr.de: domain of "linux-mips+bounces-15420-lists+linux-mips=lfdr.de@vger.kernel.org" designates 2600:3c09:e001:a7::12fc:5321 as permitted sender) smtp.mailfrom="linux-mips+bounces-15420-lists+linux-mips=lfdr.de@vger.kernel.org";
 	dmarc=pass (policy=none) header.from=linux.dev;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id BB4C630EEEF7
-	for <lists+linux-mips@lfdr.de>; Thu,  2 Jul 2026 11:42:38 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id B742730EEEE8
+	for <lists+linux-mips@lfdr.de>; Thu,  2 Jul 2026 12:11:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F028447277E;
-	Thu,  2 Jul 2026 11:42:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E7E0E477E58;
+	Thu,  2 Jul 2026 12:10:59 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
-Received: from out-179.mta0.migadu.com (out-179.mta0.migadu.com [91.218.175.179])
+Received: from out-186.mta0.migadu.com (out-186.mta0.migadu.com [91.218.175.186])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BD84477989;
-	Thu,  2 Jul 2026 11:42:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2110F431E5F;
+	Thu,  2 Jul 2026 12:10:58 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782992534; cv=none; b=SLteFbzMsId62GO4Gnlakvt+kUXZaBqXQJeO64ySDqCKxjR4ZMtxCmwWsdIeJFffehe4lnj4wb38gX/B+4WZfoGjMTMwPIcoMguDNE3Y58oFaZTajmBHy+KdAPrKGTVWcPjWWdITU+aEo7hBoMyn+Gds4gzsGOQ9elYZvFTcsAE=
+	t=1782994259; cv=none; b=IikpmcZOqTmpnxRC5ksE5ylyQ+iZe/z0g3ELUc5y8ayYkcYAak+Dp4WjgBhu7Re7/GJbRUXgUkrySiX8w6XWr1XcIFeAerVwldW5Fnz7sOojW9Nl1WTdA/VGKu/FxZ9CNkB5M8Kzol6Kh94IfBcTIpdsCZXjpM8C6Snr7YSwHmM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782992534; c=relaxed/simple;
-	bh=vPHtV6pxZdlKjLiAMh+TI96h/MjbfgTMGiJB5aRI1Dw=;
+	s=arc-20240116; t=1782994259; c=relaxed/simple;
+	bh=kq0EROHRAMyH30t9/IFYi2AfFSrm3TyBHx9kn2N5NhY=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=n4j839cl63dq5PcgJS7O51vge+yecy1R7PuhxdSD8Z/AB/XUCVOfhJqBxzb63EVvNgo6G78/dc6bP7quJTIbf+xCjhOQVoonGt8e/lHxkxNxWiwvdF1rWWMHWl3pglePCS73fgPZcZdfcGkXJ1W8CoMNCi5mB7MEplFiqypIIGk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=ElylzNP2; arc=none smtp.client-ip=91.218.175.179
+	 MIME-Version:Content-Type; b=lVVKxuhXUhd+2uS20j7MRF4zrgjupPROipEFKx0TAIHYL4b962w1QC2elqgtx6Y2FUPZDdEze0Si7687BMvfJqQSe+m0ExHFDoJPUw/3xt8ts37VCYmDMefZktTWck5FTRrbsMahJsN6fKU+9r98xpeYtrBgqyh4WnQnkpq3S+k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=o2h14zEv; arc=none smtp.client-ip=91.218.175.186
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1782992513;
+	t=1782994254;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=vPHtV6pxZdlKjLiAMh+TI96h/MjbfgTMGiJB5aRI1Dw=;
-	b=ElylzNP2HZvUF6FtGgLgsW4vT0OTcdy2XorLGs6M4jbsXqc3kVIN25VDlrp06Kwp+MnkF0
-	7eCUNpZQUAu53ooUNOnYLe8bcSqU2lbFmJuaAoucdQs+qEK4yKsjIpHuYOtBIHp/EvNPEl
-	ujU0zKbwsKGW+OA8vv+O0JU4vozY/FA=
+	bh=szYxJDyUXLwpHCPYtdT5QZRTamk7ohIwjDiVPC1pzUs=;
+	b=o2h14zEvKcQ49vaQ50LBNnbgHGGpFBTA0OsIFCWdpiUc7gYaraiUcJHgmdFM4mBzY7pBJH
+	3Nawgn9WkBzIHxRb3Nw1H0UdEQI7UMwMGIksMhfoUjYHvm6uqPS5csZAIdTgWkWJ0NxwiR
+	+fbu3PSBP2IvpsY/0wNqYNag0+1ZZPU=
 From: Lance Yang <lance.yang@linux.dev>
 To: ljs@kernel.org
 Cc: akpm@linux-foundation.org,
@@ -129,11 +129,11 @@ Cc: akpm@linux-foundation.org,
 	linux-fsdevel@vger.kernel.org,
 	linux-mm@kvack.org,
 	linux-sound@vger.kernel.org
-Subject: Re: [PATCH 04/13] mm: update generic_get_unmapped_area[_topdown]() to use vma_flags_t
-Date: Thu,  2 Jul 2026 19:41:35 +0800
-Message-Id: <20260702114135.4189-1-lance.yang@linux.dev>
-In-Reply-To: <cef55b19f86c110952f13829aefa4859db3a70ed.1782760670.git.ljs@kernel.org>
-References: <cef55b19f86c110952f13829aefa4859db3a70ed.1782760670.git.ljs@kernel.org>
+Subject: Re: [PATCH 05/13] mm: prefer mm->def_vma_flags in mm logic
+Date: Thu,  2 Jul 2026 20:10:22 +0800
+Message-Id: <20260702121022.49113-1-lance.yang@linux.dev>
+In-Reply-To: <3b4ccdc38819b42ddc79ee5a795831208ac7986c.1782760670.git.ljs@kernel.org>
+References: <3b4ccdc38819b42ddc79ee5a795831208ac7986c.1782760670.git.ljs@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -148,13 +148,13 @@ X-Spamd-Result: default: False [-1.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	MID_CONTAINS_FROM(1.00)[];
 	DMARC_POLICY_ALLOW(-0.50)[linux.dev,none];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
 	R_DKIM_ALLOW(-0.20)[linux.dev:s=key1];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	FREEMAIL_CC(0.00)[linux-foundation.org,alpha.franken.de,linux.ibm.com,ellerman.id.au,linux.intel.com,kernel.org,suse.de,gmail.com,ffwll.ch,pengutronix.de,samsung.com,linaro.org,intel.com,ursulin.net,oss.qualcomm.com,redhat.com,ideasonboard.com,rock-chips.com,sntech.de,nvidia.com,collabora.com,broadcom.com,epam.com,gmx.de,kvack.org,zeniv.linux.org.uk,linux.dev,linux.alibaba.com,infradead.org,arm.com,google.com,suse.com,perex.cz,vger.kernel.org,lists.ozlabs.org,lists.freedesktop.org,lists.infradead.org,lists.linux.dev,lists.xenproject.org];
-	TAGGED_FROM(0.00)[bounces-15419-lists,linux-mips=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-15420-lists,linux-mips=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
 	FROM_HAS_DN(0.00)[];
 	RCVD_COUNT_THREE(0.00)[3];
@@ -175,28 +175,52 @@ X-Spamd-Result: default: False [-1.16 / 15.00];
 	RCPT_COUNT_GT_50(0.00)[83];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
 	ALIAS_RESOLVED(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
 	TAGGED_RCPT(0.00)[linux-mips];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,vger.kernel.org:from_smtp,linux.dev:dkim,linux.dev:email,linux.dev:mid,linux.dev:from_mime]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[linux.dev:dkim,linux.dev:email,linux.dev:mid,linux.dev:from_mime,sto.lore.kernel.org:rdns,sto.lore.kernel.org:helo,vger.kernel.org:from_smtp]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 6239C6F7035
+X-Rspamd-Queue-Id: 66E536F777F
 
 
-On Mon, Jun 29, 2026 at 08:25:27PM +0100, Lorenzo Stoakes wrote:
->As part of the changes converting VMA flags from a system word size to a
->bitmap, extend this change to generic_get_unmapped_area() and
->generic_get_unmapped_area_topdown(), which also allows us to convert
->stack_guard_placement() as well.
+On Mon, Jun 29, 2026 at 08:25:28PM +0100, Lorenzo Stoakes wrote:
+>Currently mm->def_flags (of type vm_flags_t) is union'd with
+>mm->def_vma_flags (of type vma_flags_t).
 >
->We retain arch_get_unmapped_area() and arch_get_unmapped_area_topdown()
->as-is for now, using legacy_to_vma_flags() as necessary to do so.
+>As part of the effort to convert vm_flags_t usage to vma_flags_t (in order
+>to no longer be arbitrarily limited to a system word size for VMA flags),
+>prefer mm->def_vma_flags to mm->def_flags throughout the mm logic.
 >
 >No functional change intended.
 >
 >Signed-off-by: Lorenzo Stoakes <ljs@kernel.org>
 >---
+> mm/debug.c |  2 +-
+> mm/mlock.c | 13 +++++++------
+> mm/mmap.c  | 11 ++++++-----
+> mm/vma.c   |  4 ++--
+> 4 files changed, 16 insertions(+), 14 deletions(-)
+>
+>diff --git a/mm/debug.c b/mm/debug.c
+>index 497654b36f1a..f0a354a9496a 100644
+>--- a/mm/debug.c
+>+++ b/mm/debug.c
+>@@ -226,7 +226,7 @@ void dump_mm(const struct mm_struct *mm)
+> 		mm->numa_next_scan, mm->numa_scan_offset, mm->numa_scan_seq,
+> #endif
+> 		atomic_read(&mm->tlb_flush_pending),
+>-		mm->def_flags, &mm->def_flags
+>+		vma_flags_to_legacy(mm->def_vma_flags), &mm->def_vma_flags
+> 	);
 
-Nothing jumped out at me ;) Feel free to add:
+While at it, one thing for later: dump_mm() still assumes one-world VMA
+flags. That works today since vma_flags_t is one word. Maybe worth a
+BUILD_BUG_ON() here, before that stops being true?
+
+Not a big deal though. Feel free to add:
 
 Reviewed-by: Lance Yang <lance.yang@linux.dev>
+
+> }
+> EXPORT_SYMBOL(dump_mm);
+[...]
 
