@@ -1,53 +1,53 @@
-Return-Path: <linux-mips+bounces-15445-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-15446-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id w8ClLV+OR2qpbAAAu9opvQ
-	(envelope-from <linux-mips+bounces-15445-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Fri, 03 Jul 2026 12:26:39 +0200
+	id 2YEZGm+NR2pfbAAAu9opvQ
+	(envelope-from <linux-mips+bounces-15446-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Fri, 03 Jul 2026 12:22:39 +0200
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 136A370132E
-	for <lists+linux-mips@lfdr.de>; Fri, 03 Jul 2026 12:26:39 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 16A0F70126C
+	for <lists+linux-mips@lfdr.de>; Fri, 03 Jul 2026 12:22:39 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=kernel.org header.s=k20260515 header.b=F4S3Dy7v;
+	dkim=pass header.d=kernel.org header.s=k20260515 header.b=KkIcm4LL;
 	dmarc=pass (policy=quarantine) header.from=kernel.org;
-	spf=pass (mail.lfdr.de: domain of "linux-mips+bounces-15445-lists+linux-mips=lfdr.de@vger.kernel.org" designates 2600:3c0a:e001:db::12fc:5321 as permitted sender) smtp.mailfrom="linux-mips+bounces-15445-lists+linux-mips=lfdr.de@vger.kernel.org";
+	spf=pass (mail.lfdr.de: domain of "linux-mips+bounces-15446-lists+linux-mips=lfdr.de@vger.kernel.org" designates 2600:3c04:e001:36c::12fc:5321 as permitted sender) smtp.mailfrom="linux-mips+bounces-15446-lists+linux-mips=lfdr.de@vger.kernel.org";
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id DB90F30022BE
-	for <lists+linux-mips@lfdr.de>; Fri,  3 Jul 2026 10:21:01 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 9FB8B30128CD
+	for <lists+linux-mips@lfdr.de>; Fri,  3 Jul 2026 10:21:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C54553B47CB;
-	Fri,  3 Jul 2026 10:20:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 196FF23FC41;
+	Fri,  3 Jul 2026 10:21:46 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6CD2D38F945;
-	Fri,  3 Jul 2026 10:20:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F33CD38F945;
+	Fri,  3 Jul 2026 10:21:44 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783074058; cv=none; b=G/3nry/ZuXTrPhy9CMylW+lJyobCpCYjsM5ipL/xRQyPuOQmj9G8iK+2LCn14h3V4e/F+pPklW/cGLeIWwyguqNDeGiUNEgC9XcywgH4llVgBN4XLI8UOBKZ7b7dOMGfe8lrZmDG5YXyNpgQxynoAvkrGEFBFa6GabKrCtq3+W8=
+	t=1783074106; cv=none; b=ZMmzgmCrlDg8odUjicdo6nbs+KTBqsyMpuE67GN8XCrZjK2V7T1T/Od+RzM5U9DVBpmK/46gm3uI5g8sB2MjpXkP4t8WtRoM/aCMJV/TNLtoOIGJqUKf9IEoloQMqffIRLxXJsnPEPzsEKab93dYHcAt3C3PP4mut1qGA7S0PcI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783074058; c=relaxed/simple;
-	bh=pKuownZq9kfLorom+RLfVQZL74S7R5ciUeVpSSDDWDA=;
+	s=arc-20240116; t=1783074106; c=relaxed/simple;
+	bh=Nnxwlm91dxbSZQqohtk2qukgf/w10Sb01/ZOR0O+iLQ=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=OgoJoaYGm5u3mUGMv+OIemb1N9/8Vrl63w7mA5cJbiX45OUOOjg105AFfPnVzg9xogf6ppCtRQdYZTuxZkA6jgo1r2w+8Vkvm/PTlyezu1wmqQeQ346UOpjBvBqFZ6Obh1jpZjGC1PZhTwCQD8rOZ8Rlz4584vXAHEQPiNKPLQw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=F4S3Dy7v; arc=none smtp.client-ip=100.103.45.18
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 915EC1F000E9;
-	Fri,  3 Jul 2026 10:20:39 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=eAoNXTrjwAGsGOmxNKfNMOdL0hFZqULQtdRz6o781nAGjP23c5otmIlSrjIJhtV9IrNBh4PBYnW4FyeEegBL3LNXpbyspPIAsTkzhT7P068t3syXGYEy223emtFPm3rN18ciTxQXBFNyVrF9kPyDmf7QCVzZ6gH00udrRVcHu2U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KkIcm4LL; arc=none smtp.client-ip=100.103.45.18
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BB6181F000E9;
+	Fri,  3 Jul 2026 10:21:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1783074054;
-	bh=ZPRUjDwMrZAbF6fJGgjWgznfOUhgHM/af5VhyMMGGzQ=;
+	s=k20260515; t=1783074104;
+	bh=AU9ipdiKtSSheUdfxQE+uoCI7onY+7JIv+CgJmSkn4s=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=F4S3Dy7vLMZgBhj7UCqBvjp7mzSuBWMNBDq6Iviel9rIuDWstawXddpKaEjAyynL/
-	 6E76Th8kGRjDswvQ/XAxTl52xqhfcgDC6d0SkZpmznOxL4rfnWarCH45TXvcuGGNQS
-	 9kPgVNGCd7suDm7gWRv5W4AI4S9nQr42Bp7V97kKhuPYPaWa6fMlVOB51lsjZ1Wtqm
-	 7jwJK8WCVa6owazYnl+vd/Z0AVF3PquzNPskDcjbw/SRz4kBtBMRQV/H6603ty8CbO
-	 utuOMyWAZPx4kguiwDOKVdemHE9FSlnpLrSIAu/54ruHHaRVV0sOAk4Wj59KLq2tCU
-	 YYVkHhCodvNeQ==
-Message-ID: <9da51cde-cc89-405c-afb8-ccdc37879770@kernel.org>
-Date: Fri, 3 Jul 2026 12:20:35 +0200
+	b=KkIcm4LLntVxghboTdtO3MguHzwJfDma39wqKZaCfeAYH6+3jxHntCnu2hczHu9Kj
+	 h/I68QPcCpg0GdnC8k7NKXCZSDMAMgswafC+/hzJ2e/NPPGlUI+Z7hOhLc+ybCiczI
+	 Xuc8CgMVwEwPFZQ5nV9rQHkZw2PW2PFsRKD5I+pfxDMp5mFMVhkXRgei2UFatUfC4f
+	 0poeUqp1mF3stKuV9yrBAfVUa4xAo0t/ZyY48xJldva0Uqc2VHCoSdmUJif0HdF05F
+	 EWjEFL3Yn5TKZWlZ6B/U6o4Ntnqaa2TcafrIDhJaJIo+dqnQ8w2cBsGNJsnyJIx9wu
+	 9PkMXMcgPyhNw==
+Message-ID: <c83ca485-1e2e-46ba-bd15-1168aa8955d3@kernel.org>
+Date: Fri, 3 Jul 2026 12:21:27 +0200
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -57,8 +57,8 @@ MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH net-next v11 1/7] dt-bindings: phy: document the serdes
  PHY on sa8255p
-To: Geert Uytterhoeven <geert@linux-m68k.org>,
- Bartosz Golaszewski <brgl@kernel.org>
+To: Bartosz Golaszewski <brgl@kernel.org>,
+ Geert Uytterhoeven <geert@linux-m68k.org>
 Cc: Vinod Koul <vkoul@kernel.org>, Bjorn Andersson <andersson@kernel.org>,
  Konrad Dybcio <konradybcio@kernel.org>, Rob Herring <robh@kernel.org>,
  Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
@@ -96,6 +96,7 @@ References: <20260629-qcom-sa8255p-emac-v11-0-1b7fb95b51f9@oss.qualcomm.com>
  <akOZFIowVvprnAMf@vaman>
  <CAMRc=MfBcOhbj=ETxy2Xz9o_nyzykrEhKAc3jYi6V5_jMZEE3Q@mail.gmail.com>
  <CAMuHMdXNG=C=XcioQUEN1M7cQgKhO0AxUyg5X+TWb2rQ3-H3fw@mail.gmail.com>
+ <CAMRc=MfwB_51OLjX_19eagZ1m3UUM2iHny5rx6besR6+Np_A0g@mail.gmail.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -141,7 +142,7 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  K9bCVaboTA2T77QYkRcRJYSsO1alGX0ome/hMLD1daXlkrNUp1HWa3K4iytLRXjCSIorWiGs
  n+q3krnpXu3TFkA8qtOFZMdnIiFuiq1yLT8hptsV5xh1TA2nsVvSYiaCr3q4s4BKjS/KrLDb
  qoxzw8ISjdUp4pA85vb6YLCmb39NgidD+7PmAr65lBNveIFynTgsja1rRQ4=
-In-Reply-To: <CAMuHMdXNG=C=XcioQUEN1M7cQgKhO0AxUyg5X+TWb2rQ3-H3fw@mail.gmail.com>
+In-Reply-To: <CAMRc=MfwB_51OLjX_19eagZ1m3UUM2iHny5rx6besR6+Np_A0g@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Rspamd-Action: no action
@@ -151,14 +152,14 @@ X-Spamd-Result: default: False [-3.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
 	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20260515];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	MIME_TRACE(0.00)[0:+];
-	TAGGED_FROM(0.00)[bounces-15445-lists,linux-mips=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-15446-lists,linux-mips=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	FORGED_RECIPIENTS(0.00)[m:geert@linux-m68k.org,m:brgl@kernel.org,m:vkoul@kernel.org,m:andersson@kernel.org,m:konradybcio@kernel.org,m:robh@kernel.org,m:krzk+dt@kernel.org,m:conor+dt@kernel.org,m:andrew+netdev@lunn.ch,m:davem@davemloft.net,m:edumazet@google.com,m:kuba@kernel.org,m:pabeni@redhat.com,m:mcoquelin.stm32@gmail.com,m:alexandre.torgue@foss.st.com,m:peppe.cavallaro@st.com,m:wens@kernel.org,m:jernej.skrabec@gmail.com,m:neil.armstrong@linaro.org,m:khilman@baylibre.com,m:jbrunet@baylibre.com,m:shawnguo@kernel.org,m:festevam@gmail.com,m:jan.petrous@oss.nxp.com,m:s32@nxp.com,m:mohd.anwar@oss.qualcomm.com,m:romain.gantois@bootlin.com,m:magnus.damm@gmail.com,m:mripard@kernel.org,m:christophe.roullier@foss.st.com,m:rrendec@redhat.com,m:linux-arm-msm@vger.kernel.org,m:devicetree@vger.kernel.org,m:linux-kernel@vger.kernel.org,m:netdev@vger.kernel.org,m:linux-stm32@st-md-mailman.stormreply.com,m:linux-arm-kernel@lists.infradead.org,m:dfustini@tenstorrent.com,m:linux-sunxi@lists.linux.d
+	FORGED_RECIPIENTS(0.00)[m:brgl@kernel.org,m:geert@linux-m68k.org,m:vkoul@kernel.org,m:andersson@kernel.org,m:konradybcio@kernel.org,m:robh@kernel.org,m:krzk+dt@kernel.org,m:conor+dt@kernel.org,m:andrew+netdev@lunn.ch,m:davem@davemloft.net,m:edumazet@google.com,m:kuba@kernel.org,m:pabeni@redhat.com,m:mcoquelin.stm32@gmail.com,m:alexandre.torgue@foss.st.com,m:peppe.cavallaro@st.com,m:wens@kernel.org,m:jernej.skrabec@gmail.com,m:neil.armstrong@linaro.org,m:khilman@baylibre.com,m:jbrunet@baylibre.com,m:shawnguo@kernel.org,m:festevam@gmail.com,m:jan.petrous@oss.nxp.com,m:s32@nxp.com,m:mohd.anwar@oss.qualcomm.com,m:romain.gantois@bootlin.com,m:magnus.damm@gmail.com,m:mripard@kernel.org,m:christophe.roullier@foss.st.com,m:rrendec@redhat.com,m:linux-arm-msm@vger.kernel.org,m:devicetree@vger.kernel.org,m:linux-kernel@vger.kernel.org,m:netdev@vger.kernel.org,m:linux-stm32@st-md-mailman.stormreply.com,m:linux-arm-kernel@lists.infradead.org,m:dfustini@tenstorrent.com,m:linux-sunxi@lists.linux.d
  ev,m:linux-amlogic@lists.infradead.org,m:linux-mips@vger.kernel.org,m:imx@lists.linux.dev,m:linux-renesas-soc@vger.kernel.org,m:linux-rockchip@lists.infradead.org,m:sophgo@lists.linux.dev,m:linux-riscv@lists.infradead.org,m:bartosz.golaszewski@linaro.org,m:bartosz.golaszewski@oss.qualcomm.com,m:krzk@kernel.org,m:conor@kernel.org,m:andrew@lunn.ch,m:mcoquelinstm32@gmail.com,m:jernejskrabec@gmail.com,m:magnusdamm@gmail.com,s:lists@lfdr.de];
 	RCVD_COUNT_THREE(0.00)[4];
 	FORGED_SENDER(0.00)[krzk@kernel.org,linux-mips@vger.kernel.org];
@@ -177,45 +178,50 @@ X-Spamd-Result: default: False [-3.66 / 15.00];
 	TAGGED_RCPT(0.00)[linux-mips,dt,netdev];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,vger.kernel.org:from_smtp]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[vger.kernel.org:from_smtp,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 136A370132E
+X-Rspamd-Queue-Id: 16A0F70126C
 
-On 02/07/2026 11:16, Geert Uytterhoeven wrote:
-> Hi Bartosz,
-> 
-> On Thu, 2 Jul 2026 at 11:12, Bartosz Golaszewski <brgl@kernel.org> wrote:
->> On Tue, 30 Jun 2026 12:23:16 +0200, Vinod Koul <vkoul@kernel.org> said:
->>> On 29-06-26, 16:51, Geert Uytterhoeven wrote:
->>>>> Russell King asked me to put the PHY logic for SCMI pm domains into the PHY
->>>>> driver instead of the MAC driver where it was previously. Instead of cramming
->>>>> both HLOS and firmware handling into the same driver, I figured it makes more
->>>>> sense to have a dedicated, cleaner driver as the two share very little code (if
->>>>> any).
+On 02/07/2026 11:44, Bartosz Golaszewski wrote:
+> On Thu, 2 Jul 2026 11:16:22 +0200, Geert Uytterhoeven
+> <geert@linux-m68k.org> said:
+>> Hi Bartosz,
+>>
+>> On Thu, 2 Jul 2026 at 11:12, Bartosz Golaszewski <brgl@kernel.org> wrote:
+>>> On Tue, 30 Jun 2026 12:23:16 +0200, Vinod Koul <vkoul@kernel.org> said:
+>>>> On 29-06-26, 16:51, Geert Uytterhoeven wrote:
+>>>>>> Russell King asked me to put the PHY logic for SCMI pm domains into the PHY
+>>>>>> driver instead of the MAC driver where it was previously. Instead of cramming
+>>>>>> both HLOS and firmware handling into the same driver, I figured it makes more
+>>>>>> sense to have a dedicated, cleaner driver as the two share very little code (if
+>>>>>> any).
+>>>>>
+>>>>> I think you are mixing up DT bindings and driver implementation?
 >>>>
->>>> I think you are mixing up DT bindings and driver implementation?
+>>>> Should the bindings change if we have different driver and firmware
+>>>> implementations? Isn't binding supposed to be agnostic of
+>>>> implementations..?
 >>>
->>> Should the bindings change if we have different driver and firmware
->>> implementations? Isn't binding supposed to be agnostic of
->>> implementations..?
+>>> I've thought about it some more and I believe this question is philosophical in
+>>> nature.
+>>>
+>>> sa8775p and sa8255p are *the same* hardware. I can flash different firmware on
+>>> the same Lemans Ride board and it becomes one or the other. Yet they are not
+>>> described by the same DTS and the bindings differ as well. I don't see why we
+>>> wouldn't allow the same approach for the this PHY.
+>>>
+>>> We treat it as different HW variant when it's managed by firmware - just like
+>>> we do with the rest of the SoC.
 >>
->> I've thought about it some more and I believe this question is philosophical in
->> nature.
+>> DT describes hardware, not software policy.
 >>
->> sa8775p and sa8255p are *the same* hardware. I can flash different firmware on
->> the same Lemans Ride board and it becomes one or the other. Yet they are not
->> described by the same DTS and the bindings differ as well. I don't see why we
->> wouldn't allow the same approach for the this PHY.
->>
->> We treat it as different HW variant when it's managed by firmware - just like
->> we do with the rest of the SoC.
 > 
-> DT describes hardware, not software policy.
+> I'll defer to DT maintainers then for that particular case because it affects
 
-So everything is fine here. Bartosz described the hardware how it is
-available to the software (OS).
+I provided the review tag. It is still valid, also after reading the
+discussions here.
 
 Best regards,
 Krzysztof
