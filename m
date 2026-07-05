@@ -1,85 +1,85 @@
-Return-Path: <linux-mips+bounces-15494-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-15495-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id aT/lItPqSWrw8QAAu9opvQ
-	(envelope-from <linux-mips+bounces-15494-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Sun, 05 Jul 2026 07:25:39 +0200
+	id VMuiGsPqSWru8QAAu9opvQ
+	(envelope-from <linux-mips+bounces-15495-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Sun, 05 Jul 2026 07:25:23 +0200
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id DECC5709021
-	for <lists+linux-mips@lfdr.de>; Sun, 05 Jul 2026 07:25:38 +0200 (CEST)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id EE415709019
+	for <lists+linux-mips@lfdr.de>; Sun, 05 Jul 2026 07:25:22 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=gmail.com header.s=20251104 header.b=pyrQhfqJ;
+	dkim=pass header.d=gmail.com header.s=20251104 header.b=AErn8zdr;
 	dmarc=pass (policy=none) header.from=gmail.com;
-	spf=pass (mail.lfdr.de: domain of "linux-mips+bounces-15494-lists+linux-mips=lfdr.de@vger.kernel.org" designates 2600:3c0a:e001:db::12fc:5321 as permitted sender) smtp.mailfrom="linux-mips+bounces-15494-lists+linux-mips=lfdr.de@vger.kernel.org";
+	spf=pass (mail.lfdr.de: domain of "linux-mips+bounces-15495-lists+linux-mips=lfdr.de@vger.kernel.org" designates 2600:3c09:e001:a7::12fc:5321 as permitted sender) smtp.mailfrom="linux-mips+bounces-15495-lists+linux-mips=lfdr.de@vger.kernel.org";
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id E4AD23020006
-	for <lists+linux-mips@lfdr.de>; Sun,  5 Jul 2026 05:25:20 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 51E603008242
+	for <lists+linux-mips@lfdr.de>; Sun,  5 Jul 2026 05:25:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5AA243002DC;
-	Sun,  5 Jul 2026 05:25:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6980C30D417;
+	Sun,  5 Jul 2026 05:25:20 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-pj1-f41.google.com (mail-pj1-f41.google.com [209.85.216.41])
+Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E07A31DB356
-	for <linux-mips@vger.kernel.org>; Sun,  5 Jul 2026 05:25:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC1822D7DC6
+	for <linux-mips@vger.kernel.org>; Sun,  5 Jul 2026 05:25:18 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783229119; cv=none; b=nl27gIUVpi5sioXcZuVnoL9+isxnC4wJ/Y+YoqLw6364bga+OgRBCKg+D9SZVUZnSxTUo8NAPY0lZT9JkL03AAngfm3RhhJfUdpippYvyv3nDmRp28zug8eLkESoW9XPNdexzVo7AlRbaehmabmYgct97dOypR7ttQZn/Bi9SY0=
+	t=1783229120; cv=none; b=BQvdT5OO9yNdh+gevRd09ku0JuRpNdEmErcTOjiIlrH7361+bXJvomiY6vWJTnlZxVAYqe8mr7xqZDkNHsJlUWgj8IOWREeWxcKNgalNdExhklizxmYRxyuaY+SJY2AhFI3BfLFDOqKzoCVNC+a2655oOUT8DsY1LgU9/+Po1hE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783229119; c=relaxed/simple;
-	bh=epcP2Y/j/qqUXJpwk83s+qSfccDLBWVA4GyO1wOgzew=;
+	s=arc-20240116; t=1783229120; c=relaxed/simple;
+	bh=EkIaPqNh+A7KtxcuXYYBuR1mo8moLpnL3liz1A3UAYU=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=oafdTtDBiPqmiLkuubntCA+tmVvya4joat+9qkObFEAumWRR0klv4rxwwz//x2fbpmVw/JYHjlV/4K5A/d7Dxj84yueknoxC9x18LqfoVuh3FtEpxkc+BstTpF5gE6wvolChzR8JimVmaHo11OrDC8tI6BOdgWVlSrLKTYy5SDQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=pyrQhfqJ; arc=none smtp.client-ip=209.85.216.41
-Received: by mail-pj1-f41.google.com with SMTP id 98e67ed59e1d1-381065a7a03so1362194a91.0
-        for <linux-mips@vger.kernel.org>; Sat, 04 Jul 2026 22:25:17 -0700 (PDT)
+	 In-Reply-To:To:Cc; b=iafYQfQ2lLyMFfP7RpPRd8AEMczmXq/R/oBdMK3Hw2I6wVUne887MwU/qXo71QOU+CJqM7IpPDR7cWzWwYdsE/t9m8ts4XJCnfgPInofaMmF2oU4BENi0Mn5IT5c5uvclRjda8rEMJsQp0eqG8ufccjq1HhC5F0tlfOr/tGadBU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=AErn8zdr; arc=none smtp.client-ip=209.85.216.54
+Received: by mail-pj1-f54.google.com with SMTP id 98e67ed59e1d1-37df72c9984so1713064a91.3
+        for <linux-mips@vger.kernel.org>; Sat, 04 Jul 2026 22:25:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1783229117; x=1783833917; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1783229118; x=1783833918; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=4fRh+uNdepByk0NPdqaJV8dOCpgv8k5m3tE5twcjLoc=;
-        b=pyrQhfqJMyMOCvmQnHtla3xTXYia6ryYslwziTMSnUcJhZFssa2yVo/pz/bFa5Jbq/
-         TqIW9nUsWgZOOSPe9DuD8G1fKT0F4D4jWuGNISatfW22kMVN/eb73v389a0bEmTCNi7r
-         5bWjuzG8Q7WxUQz6a8v9gYidb2GSUPi6MX4mALurancQs9V19m10dENbjFZc7kLq4gyr
-         2yAeg8F/z20N2xc87EynJh+RyYclPODg4cB6ngh65voFSL6Jg4d1t4CYOJotExCV2XW4
-         Pkb7HMevVfGGj+tAAuDWlX9GZf0ZOmzqXKhCa9oSD2aWG3GAadp8MdEpV5sishzQEk94
-         hc7A==
+        bh=gR8JERLj/Sh2r4LCEipkmXCH5Vz1B+F1+s9p7kgrato=;
+        b=AErn8zdrAhYWAEi8cA/TKxWiOKFsJjxPOD8g3EBzuXpv8ZXRUe1Cr2wtdNqQ3Zsd+h
+         NSgzE9HWkDtwfsUp1+xhKaoKwmZjJxcFmXr1/fXFRrzccoHO7UKrIHNFJfY6e8j1v8Nu
+         rjd6UgeoVnyJDsetsgjFjlQ1XWUbTJSgZhyMj9Apid8+HEwY6FsCsMlXkz7Ure8hCHnf
+         D5E6ahe2EpM+yrQP9a92NB62cW2XMMPNI+G1nOu7OpqoZU7KP8/K+zoAhsofI5wQt/TI
+         umxPH74HT4ml++WOmyd5YLuEavKVx8FCyXR4BbNy1qVFmfigccVphqbn/EoZcDr6P7pV
+         osZg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783229117; x=1783833917;
+        d=1e100.net; s=20251104; t=1783229118; x=1783833918;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=4fRh+uNdepByk0NPdqaJV8dOCpgv8k5m3tE5twcjLoc=;
-        b=lQ4/YNutaU7zVBtNcEligAJj5+C5fLs3dYc/N5xJMBjugQq7++FpKr71j9bO8u/DXD
-         GEGpYeKvhdSxvwh3rbp8ZQGUH0rRKSImFgIXKg0dHwNmDFoKVrdCKel669CouFDuCGCd
-         QkF0Z8Of0jKBDGDGzteGgYvgziLjvEZHc7fTs0RcZ2pqWJHXzL/fu7gE3CvAjL9M9OvE
-         /eaKnw897S6i0BGnCO5LreJLZmh2Ngr3RZC2gvJ133SRMpbUnICRXvIHZpH/A12bFYu/
-         gCgO6gFpmnjT0uLrBWVEtJ42U7Irh3abSbZuF6+tlfq1Dhwi9spTFk/0L5X5F0XdDChi
-         Uh/A==
-X-Forwarded-Encrypted: i=1; AHgh+RolVEEVqp2eScr2EcyMbWYvu97ct5VDpv22RvVfF0BoPXcqQQlRifqBzLlhFWvIfIhBm8KZTXGT1zgw@vger.kernel.org
-X-Gm-Message-State: AOJu0YwpScv+BUQ3bFnBvZB+eRBwopenWLxOBr12lCySk8Pvz5Wjry5v
-	wBVdi9c3AwCUIhpVnqUgEKG7iIZG+W48iGiwCxGMS9tVwJ55wSvUM9Cf
-X-Gm-Gg: AfdE7cmadTrad66ZThsR+1jKgGdmyU6CThmqF2vaFLq3UbvnCRnBeYxCifxTU/FNZwh
-	2RodLKK/SI+vyPE6h8hHNuvaPps6EZU79/iM+akXtQxEfVs5zd6PEVC0M/vnBebp6qiSBiFu10b
-	nnE3sVDb4E8vVxHgZidnVR+HbjP+dQ+rLHRj6XQ5hc9M3zMax5CTI/z9eVw6Zy2ezFwqW4SGT8O
-	MSj1RssKVK4h4mb/f1YL8heDfAqGEYJQKoHs5YhSNQ0MOzBj13bK8CS+VaACYXdH3dY4ZVLmQyP
-	VFiGt5jFnbc3ydrO+rjfeydPhtbUPI1K+7Bc1UpmCzRM59v0jz9Mrk5k2iuS3t5eiKFilzc00wj
-	fbJ9UH4vCmkFPIM/SZoQhWTcHrG+ps5obhfDkDyseiNHfTpfVRLVBp7ip/rpE3IopZRQC0j1dI1
-	rzjiWmOdmbspgwPmqihRmqIpMYo5u6MbqeQtCfI5NqqeJGBKPqf5sg6xihmV4xUx2RUoMr30vdk
-	82w
-X-Received: by 2002:a17:90b:4b06:b0:368:ed26:15b2 with SMTP id 98e67ed59e1d1-382807af3c4mr5777064a91.8.1783229116575;
-        Sat, 04 Jul 2026 22:25:16 -0700 (PDT)
+        bh=gR8JERLj/Sh2r4LCEipkmXCH5Vz1B+F1+s9p7kgrato=;
+        b=hCKEUIdTpmneXBhXoHxC6DBPbhVO/RYdngMLirRyGtmg4eOhMcNK8HXotm8QJXHr0b
+         TwyJZJ0IYcC9yh2mmVOUedwEZsop6PHOadYdzjQ003NJl/rAx8TJhOAjaGEOECUf9dL2
+         ByXjoVZuqa3fBIYGQo982d+VCOiHYSw6fB/CrYx7oEyAcvyVxpajHCTxSCy6ZhrNCZ5J
+         xLcshiQz7U815Kqs5oA53sor5U+9MVVVkWLnprMujYmK5//YJT4i2KMsD+DmGVdOz/rN
+         kgNhps+HattqmpSzQGlsGhxgukv/8PpfySYzEBEvbmM4/mAsY/B1dlcP71c1AjcR17fA
+         wOig==
+X-Forwarded-Encrypted: i=1; AHgh+Ro01qJ4KuY18AbYlA/8tVJajk4Akq3UKfG5G8wiXptFSZyDeUwrSI1q0TdQIuDCdLadOnUWqKWAN1wO@vger.kernel.org
+X-Gm-Message-State: AOJu0YyKAaqRSI7ji+fpJ3R/ko3VY8NE9TvIqKzTnuwbGmdoSHLiLFB1
+	5tL2IQLa92tZhLE+qPoFRBbegw9+cbVEQgA2qcm5kdiUr4PMSB3dYCCh
+X-Gm-Gg: AfdE7clfeZnkMgyeKuRSLaIwDPI1RaYkaVlcwm0IWHDaNddXnekyZll64gU4d/AA3Wt
+	1xwAirXsa+3DMD0ooxkspW3skuORb8IJy7fX8xGh+a7kqvCqGF7dizGAV24Hem5f3tXMX3hIcQW
+	W8xPwB28iNcQJBco3m6dzFgDgiOXFdITkMj5IkeiK5fa0HliQfjWYmoz9NC/7sndDGOtiw4n28b
+	0Du/JVCV7D9ZSVjU7kimmbLr9GwreM4yYOC4BcIVBhoVOs9rww55J8ugZb1/fJX4j2GLJO0fx7o
+	IAm9oDcYu60uXA/eXODNmAvYLYESd/+QkGacekhLye5BQU3c86/+iMDeFCXGVwnPVUu41kc1gzb
+	5uHLMVVGHuOJxFeHVNSkFHJR7QohYxQ3E2I/PORjzor0Ap9ts6Z6FQg6ACir4RcSDikk3QNVp0w
+	2yYO/oIqPYzazpVRR2DTHYjeGz+AUVj3EsPsmCNBgjkFC7kR6NvKW0QxfTmsJOxrZY0v6yroTRu
+	RbH
+X-Received: by 2002:a17:90a:e288:b0:37f:9cdf:f0ac with SMTP id 98e67ed59e1d1-3829f9deb9fmr3699458a91.27.1783229117942;
+        Sat, 04 Jul 2026 22:25:17 -0700 (PDT)
 Received: from dtor-ws.sjc.corp.google.com ([2a00:79e0:2ebe:8:4560:aa1b:b33a:15b8])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-30f0b7b9a1bsm39035329eec.3.2026.07.04.22.25.15
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-30f0b7b9a1bsm39035329eec.3.2026.07.04.22.25.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 04 Jul 2026 22:25:15 -0700 (PDT)
+        Sat, 04 Jul 2026 22:25:17 -0700 (PDT)
 From: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Date: Sat, 04 Jul 2026 22:25:08 -0700
-Subject: [PATCH 1/3] bcma: gpio: Add and register software node for GPIO
+Date: Sat, 04 Jul 2026 22:25:09 -0700
+Subject: [PATCH 2/3] ssb: gpio: Add and register software node for GPIO
  controller
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
@@ -89,7 +89,7 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260704-b4-bcm47xx-swnode-v1-1-730d59340237@gmail.com>
+Message-Id: <20260704-b4-bcm47xx-swnode-v1-2-730d59340237@gmail.com>
 References: <20260704-b4-bcm47xx-swnode-v1-0-730d59340237@gmail.com>
 In-Reply-To: <20260704-b4-bcm47xx-swnode-v1-0-730d59340237@gmail.com>
 To: =?utf-8?q?Rafa=C5=82_Mi=C5=82ecki?= <zajec5@gmail.com>, 
@@ -104,12 +104,12 @@ X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
 	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-15494-lists,linux-mips=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-15495-lists,linux-mips=lfdr.de];
 	FORGED_RECIPIENTS(0.00)[m:zajec5@gmail.com,m:m@bues.ch,m:hauke@hauke-m.de,m:tsbogend@alpha.franken.de,m:brgl@kernel.org,m:arnd@arndb.de,m:linux-wireless@vger.kernel.org,m:linux-kernel@vger.kernel.org,m:linux-mips@vger.kernel.org,s:lists@lfdr.de];
 	FROM_HAS_DN(0.00)[];
 	FORGED_SENDER(0.00)[dmitrytorokhov@gmail.com,linux-mips@vger.kernel.org];
@@ -119,7 +119,7 @@ X-Spamd-Result: default: False [-2.16 / 15.00];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	FORWARDED(0.00)[lists@lfdr.de];
 	DKIM_TRACE(0.00)[gmail.com:+];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
 	FORGED_SENDER_FORWARDING(0.00)[];
 	RCVD_COUNT_FIVE(0.00)[5];
@@ -132,9 +132,9 @@ X-Spamd-Result: default: False [-2.16 / 15.00];
 	RCPT_COUNT_SEVEN(0.00)[9];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-mips];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,vger.kernel.org:from_smtp]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[vger.kernel.org:from_smtp,sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: DECC5709021
+X-Rspamd-Queue-Id: EE415709019
 
 We want to convert the legacy gpio-keys platform device on BCM47XX
 boards to use software nodes. To do this properly and allow
@@ -142,69 +142,98 @@ referencing the GPIO controller by address rather than relying on
 name-based matching (which is being removed from the gpiolib core),
 we need to associate the GPIO controller with a software node.
 
-Introduce bcma_gpio_swnode, register it if the device does not
-already have a firmware node, and associate it with the gpio_chip.
+Introduce ssb_gpio_swnode, register it, and associate it with the
+gpio_chip.
 
 Assisted-by: Antigravity:gemini-3.5-flash
 Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
 ---
- drivers/bcma/driver_gpio.c | 17 ++++++++++++++++-
- include/linux/bcma/bcma.h  |  3 +++
- 2 files changed, 19 insertions(+), 1 deletion(-)
+ drivers/ssb/driver_gpio.c | 27 ++++++++++++++++++++++++---
+ include/linux/ssb/ssb.h   |  3 +++
+ 2 files changed, 27 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/bcma/driver_gpio.c b/drivers/bcma/driver_gpio.c
-index 658c7e2ac8bf..0dad8d6dbe5a 100644
---- a/drivers/bcma/driver_gpio.c
-+++ b/drivers/bcma/driver_gpio.c
-@@ -19,6 +19,11 @@
+diff --git a/drivers/ssb/driver_gpio.c b/drivers/ssb/driver_gpio.c
+index 905657c925bc..8aebc4145454 100644
+--- a/drivers/ssb/driver_gpio.c
++++ b/drivers/ssb/driver_gpio.c
+@@ -15,8 +15,14 @@
+ #include <linux/interrupt.h>
+ #include <linux/irqdomain.h>
+ #include <linux/export.h>
++#include <linux/property.h>
+ #include <linux/ssb/ssb.h>
  
- #define BCMA_GPIO_MAX_PINS	32
- 
-+const struct software_node bcma_gpio_swnode = {
-+	.name = "bcma-gpio",
++const struct software_node ssb_gpio_swnode = {
++	.name = "ssb-gpio",
 +};
-+EXPORT_SYMBOL_GPL(bcma_gpio_swnode);
++EXPORT_SYMBOL_GPL(ssb_gpio_swnode);
 +
- static int bcma_gpio_get_value(struct gpio_chip *chip, unsigned gpio)
- {
- 	struct bcma_drv_cc *cc = gpiochip_get_data(chip);
-@@ -190,7 +195,15 @@ int bcma_gpio_init(struct bcma_drv_cc *cc)
- 	chip->direction_input	= bcma_gpio_direction_input;
- 	chip->direction_output	= bcma_gpio_direction_output;
- 	chip->parent		= bus->dev;
--	chip->fwnode		= dev_fwnode(&cc->core->dev);
-+
-+	if (!dev_fwnode(&cc->core->dev)) {
-+		err = software_node_register(&bcma_gpio_swnode);
-+		if (err)
-+			return err;
-+		chip->fwnode = software_node_fwnode(&bcma_gpio_swnode);
-+	} else {
-+		chip->fwnode = dev_fwnode(&cc->core->dev);
-+	}
  
- 	switch (bus->chipinfo.id) {
- 	case BCMA_CHIP_ID_BCM4707:
-@@ -234,5 +247,7 @@ int bcma_gpio_unregister(struct bcma_drv_cc *cc)
+ /**************************************************
+  * Shared
+@@ -232,6 +238,7 @@ static int ssb_gpio_chipco_init(struct ssb_bus *bus)
+ 	chip->to_irq		= ssb_gpio_to_irq;
+ #endif
+ 	chip->ngpio		= 16;
++	chip->fwnode		= software_node_fwnode(&ssb_gpio_swnode);
+ 	/* There is just one SoC in one device and its GPIO addresses should be
+ 	 * deterministic to address them more easily. The other buses could get
+ 	 * a random base number.
+@@ -429,6 +436,7 @@ static int ssb_gpio_extif_init(struct ssb_bus *bus)
+ 	chip->to_irq		= ssb_gpio_to_irq;
+ #endif
+ 	chip->ngpio		= 5;
++	chip->fwnode		= software_node_fwnode(&ssb_gpio_swnode);
+ 	/* There is just one SoC in one device and its GPIO addresses should be
+ 	 * deterministic to address them more easily. The other buses could get
+ 	 * a random base number.
+@@ -464,11 +472,23 @@ static int ssb_gpio_extif_init(struct ssb_bus *bus)
+ 
+ int ssb_gpio_init(struct ssb_bus *bus)
  {
- 	bcma_gpio_irq_exit(cc);
- 	gpiochip_remove(&cc->gpio);
-+	if (cc->gpio.fwnode && is_software_node(cc->gpio.fwnode))
-+		software_node_unregister(&bcma_gpio_swnode);
- 	return 0;
++	int err;
++
++	err = software_node_register(&ssb_gpio_swnode);
++	if (err)
++		return err;
++
+ 	if (ssb_chipco_available(&bus->chipco))
+-		return ssb_gpio_chipco_init(bus);
++		err = ssb_gpio_chipco_init(bus);
+ 	else if (ssb_extif_available(&bus->extif))
+-		return ssb_gpio_extif_init(bus);
+-	return -1;
++		err = ssb_gpio_extif_init(bus);
++	else
++		err = -1;
++
++	if (err)
++		software_node_unregister(&ssb_gpio_swnode);
++
++	return err;
  }
-diff --git a/include/linux/bcma/bcma.h b/include/linux/bcma/bcma.h
-index f02cb3909375..aa88c2d64bfb 100644
---- a/include/linux/bcma/bcma.h
-+++ b/include/linux/bcma/bcma.h
-@@ -486,4 +486,7 @@ extern u32 bcma_core_dma_translation(struct bcma_device *core);
  
- extern unsigned int bcma_core_irq(struct bcma_device *core, int num);
+ int ssb_gpio_unregister(struct ssb_bus *bus)
+@@ -476,6 +496,7 @@ int ssb_gpio_unregister(struct ssb_bus *bus)
+ 	if (ssb_chipco_available(&bus->chipco) ||
+ 	    ssb_extif_available(&bus->extif)) {
+ 		gpiochip_remove(&bus->gpio);
++		software_node_unregister(&ssb_gpio_swnode);
+ 		return 0;
+ 	}
+ 	return -1;
+diff --git a/include/linux/ssb/ssb.h b/include/linux/ssb/ssb.h
+index 7fee9afa9458..b2b265674a4a 100644
+--- a/include/linux/ssb/ssb.h
++++ b/include/linux/ssb/ssb.h
+@@ -671,4 +671,7 @@ int ssb_pcibios_plat_dev_init(struct pci_dev *dev);
+ int ssb_pcibios_map_irq(const struct pci_dev *dev, u8 slot, u8 pin);
+ #endif /* CONFIG_SSB_EMBEDDED */
  
 +struct software_node;
-+extern const struct software_node bcma_gpio_swnode;
++extern const struct software_node ssb_gpio_swnode;
 +
- #endif /* LINUX_BCMA_H_ */
+ #endif /* LINUX_SSB_H_ */
 
 -- 
 2.55.0.rc0.799.gd6f94ed593-goog
