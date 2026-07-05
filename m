@@ -1,246 +1,283 @@
-Return-Path: <linux-mips+bounces-15497-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-15498-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id JhxhEHxsSmphCwEAu9opvQ
-	(envelope-from <linux-mips+bounces-15497-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Sun, 05 Jul 2026 16:38:52 +0200
+	id 0u1iEf50SmrcDQEAu9opvQ
+	(envelope-from <linux-mips+bounces-15498-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Sun, 05 Jul 2026 17:15:10 +0200
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6031F70A555
-	for <lists+linux-mips@lfdr.de>; Sun, 05 Jul 2026 16:38:51 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1AFCB70A6EB
+	for <lists+linux-mips@lfdr.de>; Sun, 05 Jul 2026 17:15:05 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=redhat.com header.s=mimecast20190719 header.b=fJFiZ+vq;
-	dmarc=pass (policy=quarantine) header.from=redhat.com;
-	spf=pass (mail.lfdr.de: domain of "linux-mips+bounces-15497-lists+linux-mips=lfdr.de@vger.kernel.org" designates 172.234.253.10 as permitted sender) smtp.mailfrom="linux-mips+bounces-15497-lists+linux-mips=lfdr.de@vger.kernel.org";
+	dkim=pass header.d=baylibre.com header.s=google header.b=PD1I2V8A;
+	dmarc=none;
+	spf=pass (mail.lfdr.de: domain of "linux-mips+bounces-15498-lists+linux-mips=lfdr.de@vger.kernel.org" designates 2600:3c0a:e001:db::12fc:5321 as permitted sender) smtp.mailfrom="linux-mips+bounces-15498-lists+linux-mips=lfdr.de@vger.kernel.org";
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 53EC5300A622
-	for <lists+linux-mips@lfdr.de>; Sun,  5 Jul 2026 14:38:20 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 78B9D3013A91
+	for <lists+linux-mips@lfdr.de>; Sun,  5 Jul 2026 15:14:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EFF50380FDA;
-	Sun,  5 Jul 2026 14:38:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 18FF838A71B;
+	Sun,  5 Jul 2026 15:14:40 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52148233938
-	for <linux-mips@vger.kernel.org>; Sun,  5 Jul 2026 14:38:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A1B13815CC
+	for <linux-mips@vger.kernel.org>; Sun,  5 Jul 2026 15:14:35 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783262299; cv=none; b=pEv482O8bvgckBdnzZQwUixbUZ0nwlkIljXAxxogxarxcohHbSd5sPifKFJzu4Yhzwd2K0PMUR3CMadxz/fjgH2AbhUp3FXiRsXhY5rxHEXMBaNIgRqNzC3RUKbLJ/Kckv6UsqV3U7ZeEkWpNEi1c6jxj4N84RWooekk5+4pO1I=
+	t=1783264480; cv=none; b=qTkI8QukxHO1qlEu4W43R3Tt75WIY8b7YAmaFhbcXTgjZmVLo+yKrprfoan+A6g2Pw4f4Ir7fAJr6cjqzTJLx1E4Hd9uimwCibCZCFQK89iY6O58+jtMKD0K/KTLMNz8w8KPIhlXazFw1Zuez3f3Eg0LtHwUXiy2kElBNPpSJ2k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783262299; c=relaxed/simple;
-	bh=aPArtlUCrnwSwRu1vn5i6EhCuL/T47dKwXLsSUbOJ80=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Je4G3/2+x037vwJ1Nv/vpeu7/xkQpfK/NSK5c39O5gvsr70l1VvnnYhERINX3mSOyJ68O/6UYM/LwLZMqKSA6pjEuLKp+WLdTOQe2PhH9Dp2JVz7P+MYjnYj6gXtjTNubZ+M5cNVDP1l7zJD1DKKt5eUKgdLLn/HJEpwEtl2PRA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=fJFiZ+vq; arc=none smtp.client-ip=170.10.133.124
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1783262297;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=pGJwaa0imwMJYY5uUzpEPYmoINJAg8vBQDfV9XFieSI=;
-	b=fJFiZ+vqj6vRQm+ZMbCxpoxPK/6XbEmGjk8qLooTUIw9AMZ4iP6wSHTzC0FhNT4nUDYw64
-	/miETYcXZQ/DgQYUSQl5QYdR+zhD1OmtPdVVrSmL50RKbKV3qyy+QoE6C6aWl6jrMyRyc8
-	YTnNxO/KbQvIV3hSkJC2CwL9twOnAP8=
-Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-630-EG6Z_kZHPUyfopVsMPtgLg-1; Sun,
- 05 Jul 2026 10:38:13 -0400
-X-MC-Unique: EG6Z_kZHPUyfopVsMPtgLg-1
-X-Mimecast-MFC-AGG-ID: EG6Z_kZHPUyfopVsMPtgLg_1783262292
-Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 84AC118005AE;
-	Sun,  5 Jul 2026 14:38:11 +0000 (UTC)
-Received: from fedora (unknown [10.44.32.112])
-	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with SMTP id 57BD23000239;
-	Sun,  5 Jul 2026 14:38:06 +0000 (UTC)
-Received: by fedora (nbSMTP-1.00) for uid 1000
-	oleg@redhat.com; Sun,  5 Jul 2026 16:38:11 +0200 (CEST)
-Date: Sun, 5 Jul 2026 16:38:05 +0200
-From: Oleg Nesterov <oleg@redhat.com>
-To: Renzo Davoli <renzo@cs.unibo.it>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc: linux-kernel@vger.kernel.org, Andrew Morton <akpm@linux-foundation.org>,
-	Shuah Khan <shuah@kernel.org>, Alexey Gladkov <legion@kernel.org>,
-	Eugene Syromyatnikov <evgsyr@gmail.com>,
-	Davide Berardi <berardi.dav@gmail.com>,
-	strace-devel@lists.strace.io, "Dmitry V . Levin" <ldv@strace.io>,
-	"open list:MIPS" <linux-mips@vger.kernel.org>
-Subject: Re: [PATCH v2 1/2] ptrace: PTRACE_SET_SYSCALL_INFO syscall skipping
- support
-Message-ID: <akpsTT20F6M2QWND@redhat.com>
-References: <20260704142643.692754-1-renzo@cs.unibo.it>
- <20260704142643.692754-2-renzo@cs.unibo.it>
- <akn8g3ya85YFqcjV@cs.unibo.it>
+	s=arc-20240116; t=1783264480; c=relaxed/simple;
+	bh=/ARYZ3nMFNE4qw1dHISvtgGeE92jI229vSRxfVl732s=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=ncyU9JH+blgmq8sZ8mCSYxJ4em+dpuo6XVeu9l8uPbrDtOrKZaqNqkH1Xfz378sgFoIlMurtN5ya+JskergUV8pNX6NuCfYrvPkQmg0D+iwqv9bAtEJVdwZv2hBP98MtkXp8P+wqHrgOd40x8BOD1xL7852ftW/8jPjxd10Kt3A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre.com header.i=@baylibre.com header.b=PD1I2V8A; arc=none smtp.client-ip=209.85.128.44
+Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-493b61b52b6so13866625e9.1
+        for <linux-mips@vger.kernel.org>; Sun, 05 Jul 2026 08:14:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre.com; s=google; t=1783264474; x=1783869274; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:mime-version:message-id:date
+         :subject:cc:to:from:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=W1sbIzpLoPVOsWAp5a91/2b+hubQz3OERKvp78vmABs=;
+        b=PD1I2V8A5KdEME/1KcKwaX7YqOfPMzSF9mRgcdyyOh1GXWDyi3zuF3fIMgSb0q1DIa
+         oHXj6JhPq2mpatWUKIM5n4QcOZpC1WDsbLeEKe+7tIYiolbZf6IDGjIdEv64lOg2/UIc
+         PGX/0akQx+IdpOtb/WS9wReP0M/TwtyhcHsvcNaFkITYJnQ1mplUJhXtDSnfDseNufm9
+         VXvosP/HQKlTfWyzAaxxBEngTrcrdv4WgOnEHNe1u5PnExNBGsBj4M2gJI8TPX33IgOj
+         sDfZP2/Y8gPWC8m/Da9acriEbPg/5Sr2RZZOyhcKTEdlzpaQ/1npURWN9TamRtymV2oK
+         nr+A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1783264474; x=1783869274;
+        h=content-transfer-encoding:content-type:mime-version:message-id:date
+         :subject:cc:to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=W1sbIzpLoPVOsWAp5a91/2b+hubQz3OERKvp78vmABs=;
+        b=IXcA4b9qMIG/jx/w77HBkAqcSjmKOJrL2uQPGYIB7b3o+wlcPV0SIXF0G1ioAJejrt
+         7wRjWpfitXdPdvPCLX9sVvqXVMpUYHuAuCserlJwECzGFwkoRxVoP/G17oyEF7TiPdm4
+         EwGB8oLqAPinzaXyOxqZzEEvOqzhyJ7cR2CkF2E+bP71Ewcbwu5iNMRxMbWj9Owu9WGw
+         Ax4Pr+24kkjpySwUxmI0v/tJhorwMUzVV4neV4G6r/j0m1dm+LBFEq8bM2L3U4yQWtfN
+         Ovu+ftEd504DxNVNwIbvBfRBcCyJOIMHxr49f2AC32FJjI/9VS5RvMcZWsFkYX2kO3Zb
+         niZw==
+X-Forwarded-Encrypted: i=1; AFNElJ/5C2dX4i88RQcOOTke8Chh/sSdEMnOnlY9CGdcyRCcF14LnxGopcWPp2TF+/3Ec8mbmgjFw9Tnyfum@vger.kernel.org
+X-Gm-Message-State: AOJu0YyQUYnczeACQrndEo+8H1QcwTPlxt+eZs8m2mdkmktFYn8Ay+zO
+	9d0qNv5Dhz3jjpwG25n0r5mRjXXaiQ55D2bbfUpn+pmUbSXjFpqRYklSg4pSSOZKFi4=
+X-Gm-Gg: AfdE7cnsZrcAgMd2a0MCxPezHEnlu6EllY4iMhIoL22iUzeb+nBL5PPP9tKkQ2cqAEs
+	nyeR9baT9oQg5wf4ZuerzU8LG5ucTH323M7tluMfNYUz7jlNrQx0eDAoDr5p8FJGUxDpC33bBeG
+	XDaBdKF4bNPQt4mb3WvWXOA1xF+wKP3s5hKbxZTOeK0VgAlt9vVXzOeIkOS7d8ax3eB2tW+qN/L
+	6O4TKL1y262ZZ21lOf9n20Tg0vUDnRPcikqHpASeYazx+G5gVyDMnXh4qr4CQ7GlwgJledAD77B
+	LhxqxaUnlULwSrHuOrcKYqClBCDHfJh5+UxPIANaNDdbFeg4o0xFbAmTxlINXzflSej14DPY3/R
+	rLb1KxkVOVMUms4KLb/lEyzvlCYy9oWtDRu2FvMXgB9dMihX4KZfEYocYEMULs3ph9RIZWMQ8mX
+	iB/BFiI+ipKNMa3i5wjQ==
+X-Received: by 2002:a05:600c:8b61:b0:492:7084:32af with SMTP id 5b1f17b1804b1-493d11f4b80mr87345205e9.23.1783264473096;
+        Sun, 05 Jul 2026 08:14:33 -0700 (PDT)
+Received: from localhost ([2a02:8071:56d1:2de0:1d24:d58d:2b65:c291])
+        by smtp.gmail.com with UTF8SMTPSA id 5b1f17b1804b1-493c63b6f8csm262180195e9.11.2026.07.05.08.14.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 05 Jul 2026 08:14:32 -0700 (PDT)
+From: =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig=20=28The=20Capable=20Hub=29?= <u.kleine-koenig@baylibre.com>
+To: linux-pwm@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org,
+	Binbin Zhou <zhoubinbin@loongson.cn>,
+	Sven Peter <sven@kernel.org>,
+	Janne Grunau <j@jannau.net>,
+	Neal Gompa <neal@gompa.dev>,
+	Nicolas Ferre <nicolas.ferre@microchip.com>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Claudiu Beznea <claudiu.beznea@tuxon.dev>,
+	Ray Jui <rjui@broadcom.com>,
+	Scott Branden <sbranden@broadcom.com>,
+	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
+	Florian Fainelli <florian.fainelli@broadcom.com>,
+	Benson Leung <bleung@chromium.org>,
+	Guenter Roeck <groeck@chromium.org>,
+	Frank Li <Frank.Li@nxp.com>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
+	Fabio Estevam <festevam@gmail.com>,
+	Paul Cercueil <paul@crapouillou.net>,
+	Vladimir Zapolskiy <vz@mleia.com>,
+	Piotr Wojtaszczyk <piotr.wojtaszczyk@timesys.com>,
+	Neil Armstrong <neil.armstrong@linaro.org>,
+	Kevin Hilman <khilman@baylibre.com>,
+	Jerome Brunet <jbrunet@baylibre.com>,
+	Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+	Matthias Brugger <matthias.bgg@gmail.com>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	Geert Uytterhoeven <geert+renesas@glider.be>,
+	Magnus Damm <magnus.damm@gmail.com>,
+	Heiko Stuebner <heiko@sntech.de>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Peter Griffin <peter.griffin@linaro.org>,
+	Alim Akhtar <alim.akhtar@samsung.com>,
+	Paul Walmsley <pjw@kernel.org>,
+	Samuel Holland <samuel.holland@sifive.com>,
+	Michael Walle <mwalle@kernel.org>,
+	Chen Wang <chen.wang@linux.dev>,
+	Inochi Amaoto <inochiama@gmail.com>,
+	Orson Zhai <orsonzhai@gmail.com>,
+	Baolin Wang <baolin.wang@linux.alibaba.com>,
+	Chunyan Zhang <zhang.lyra@gmail.com>,
+	Fabrice Gasnier <fabrice.gasnier@foss.st.com>,
+	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+	Alexandre Torgue <alexandre.torgue@foss.st.com>,
+	Chen-Yu Tsai <wens@kernel.org>,
+	Jernej Skrabec <jernej.skrabec@gmail.com>,
+	Hammer Hsieh <hammerh0314@gmail.com>,
+	Nobuhiro Iwamatsu <nobuhiro.iwamatsu.x90@mail.toshiba>,
+	Alexey Charkov <alchark@gmail.com>,
+	Sean Anderson <sean.anderson@linux.dev>,
+	Michal Simek <michal.simek@amd.com>,
+	asahi@lists.linux.dev,
+	linux-arm-kernel@lists.infradead.org,
+	linux-rpi-kernel@lists.infradead.org,
+	chrome-platform@lists.linux.dev,
+	imx@lists.linux.dev,
+	linux-mips@vger.kernel.org,
+	linux-amlogic@lists.infradead.org,
+	linux-mediatek@lists.infradead.org,
+	linux-renesas-soc@vger.kernel.org,
+	linux-rockchip@lists.infradead.org,
+	linux-samsung-soc@vger.kernel.org,
+	linux-riscv@lists.infradead.org,
+	sophgo@lists.linux.dev,
+	linux-stm32@st-md-mailman.stormreply.com,
+	linux-sunxi@lists.linux.dev
+Subject: [PATCH v1 0/5] pwm: Unify arrays of various *_device_id
+Date: Sun,  5 Jul 2026 17:14:12 +0200
+Message-ID: <cover.1783263835.git.ukleinek@kernel.org>
+X-Mailer: git-send-email 2.55.0.11.g153666a7d9bb
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <akn8g3ya85YFqcjV@cs.unibo.it>
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
+Content-Type: text/plain; charset=UTF-8
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3597; i=u.kleine-koenig@baylibre.com; h=from:subject:message-id; bh=/ARYZ3nMFNE4qw1dHISvtgGeE92jI229vSRxfVl732s=; b=owEBbAGT/pANAwAKAY+A+1h9Ev5OAcsmYgBqSnTF02HXaqUpIDE1Mt23JzG4uWfnR2u11awWU 3umjMoAUj+JATIEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCakp0xQAKCRCPgPtYfRL+ TnxCB/i0tqSm4WRb5bStOYawCPIjfRWQcr4xSi/+9osjT9WCMkOFcdJIALH3OTjRDssO1bo27Lf HlxVL0NC+cyu2/kdQnTKxCwlN4Mr+K0ubzHhjQG0p5hKoo0E+ymyawDtJ372H29L5zSSYeZCvIo x4WE6N9MvkYqMFbIYzoBUakF9cYdVbu6ohyBqtXYSqr1ZwGjdHd4MWHija/sPCTtV/LrwSg4fhc gQCbrGPW2Y9VKehuNTAzHv2wje5Cu3eNO+c3uV15dBMdPgO9DfEp3EXIwH2ZR09Uaz5HwWXbYK9 FN+Z8CfZYziZ0D7HLlPGgse2ncweWpObjQ6pQzued8YQFKE=
+X-Developer-Key: i=u.kleine-koenig@baylibre.com; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
+Content-Transfer-Encoding: 8bit
 X-Rspamd-Action: no action
-X-Spamd-Result: default: False [-0.66 / 15.00];
+X-Spamd-Result: default: False [-0.16 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[redhat.com,quarantine];
-	R_DKIM_ALLOW(-0.20)[redhat.com:s=mimecast20190719];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_DKIM_ALLOW(-0.20)[baylibre.com:s=google];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FREEMAIL_CC(0.00)[vger.kernel.org,linux-foundation.org,kernel.org,gmail.com,lists.strace.io,strace.io];
-	TAGGED_FROM(0.00)[bounces-15497-lists,linux-mips=lfdr.de];
+	FROM_HAS_DN(0.00)[];
+	TAGGED_FROM(0.00)[bounces-15498-lists,linux-mips=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[vger.kernel.org:from_smtp,sashiko.dev:url,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns];
-	FORGED_SENDER(0.00)[oleg@redhat.com,linux-mips@vger.kernel.org];
+	RECEIVED_HELO_LOCALHOST(0.00)[];
+	FORGED_RECIPIENTS(0.00)[m:linux-pwm@vger.kernel.org,m:linux-kernel@vger.kernel.org,m:zhoubinbin@loongson.cn,m:sven@kernel.org,m:j@jannau.net,m:neal@gompa.dev,m:nicolas.ferre@microchip.com,m:alexandre.belloni@bootlin.com,m:claudiu.beznea@tuxon.dev,m:rjui@broadcom.com,m:sbranden@broadcom.com,m:bcm-kernel-feedback-list@broadcom.com,m:florian.fainelli@broadcom.com,m:bleung@chromium.org,m:groeck@chromium.org,m:Frank.Li@nxp.com,m:s.hauer@pengutronix.de,m:kernel@pengutronix.de,m:festevam@gmail.com,m:paul@crapouillou.net,m:vz@mleia.com,m:piotr.wojtaszczyk@timesys.com,m:neil.armstrong@linaro.org,m:khilman@baylibre.com,m:jbrunet@baylibre.com,m:martin.blumenstingl@googlemail.com,m:matthias.bgg@gmail.com,m:angelogioacchino.delregno@collabora.com,m:geert+renesas@glider.be,m:magnus.damm@gmail.com,m:heiko@sntech.de,m:krzk@kernel.org,m:peter.griffin@linaro.org,m:alim.akhtar@samsung.com,m:pjw@kernel.org,m:samuel.holland@sifive.com,m:mwalle@kernel.org,m:chen.wang@linux.dev,m:inochiama@gmail.com,m:ors
+ onzhai@gmail.com,m:baolin.wang@linux.alibaba.com,m:zhang.lyra@gmail.com,m:fabrice.gasnier@foss.st.com,m:mcoquelin.stm32@gmail.com,m:alexandre.torgue@foss.st.com,m:wens@kernel.org,m:jernej.skrabec@gmail.com,m:hammerh0314@gmail.com,m:nobuhiro.iwamatsu.x90@mail.toshiba,m:alchark@gmail.com,m:sean.anderson@linux.dev,m:michal.simek@amd.com,m:asahi@lists.linux.dev,m:linux-arm-kernel@lists.infradead.org,m:linux-rpi-kernel@lists.infradead.org,m:chrome-platform@lists.linux.dev,m:imx@lists.linux.dev,m:linux-mips@vger.kernel.org,m:linux-amlogic@lists.infradead.org,m:linux-mediatek@lists.infradead.org,m:linux-renesas-soc@vger.kernel.org,m:linux-rockchip@lists.infradead.org,m:linux-samsung-soc@vger.kernel.org,m:linux-riscv@lists.infradead.org,m:sophgo@lists.linux.dev,m:linux-stm32@st-md-mailman.stormreply.com,m:linux-sunxi@lists.linux.dev,m:martinblumenstingl@gmail.com,m:matthiasbgg@gmail.com,m:geert@glider.be,m:magnusdamm@gmail.com,s:lists@lfdr.de];
+	FORGED_SENDER(0.00)[u.kleine-koenig@baylibre.com,linux-mips@vger.kernel.org];
 	MIME_TRACE(0.00)[0:+];
-	FORGED_RECIPIENTS(0.00)[m:renzo@cs.unibo.it,m:tsbogend@alpha.franken.de,m:linux-kernel@vger.kernel.org,m:akpm@linux-foundation.org,m:shuah@kernel.org,m:legion@kernel.org,m:evgsyr@gmail.com,m:berardi.dav@gmail.com,m:strace-devel@lists.strace.io,m:ldv@strace.io,m:linux-mips@vger.kernel.org,m:berardidav@gmail.com,s:lists@lfdr.de];
+	DMARC_NA(0.00)[baylibre.com];
 	FORWARDED(0.00)[lists@lfdr.de];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	DKIM_TRACE(0.00)[redhat.com:+];
-	MISSING_XM_UA(0.00)[];
-	FORGED_RECIPIENTS_FORWARDING(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FORGED_SENDER_FORWARDING(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[oleg@redhat.com,linux-mips@vger.kernel.org];
-	FROM_HAS_DN(0.00)[];
+	FREEMAIL_CC(0.00)[vger.kernel.org,loongson.cn,kernel.org,jannau.net,gompa.dev,microchip.com,bootlin.com,tuxon.dev,broadcom.com,chromium.org,nxp.com,pengutronix.de,gmail.com,crapouillou.net,mleia.com,timesys.com,linaro.org,baylibre.com,googlemail.com,collabora.com,glider.be,sntech.de,samsung.com,sifive.com,linux.dev,linux.alibaba.com,foss.st.com,mail.toshiba,amd.com,lists.linux.dev,lists.infradead.org,st-md-mailman.stormreply.com];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	ALIAS_RESOLVED(0.00)[];
-	MID_RHS_MATCH_FROM(0.00)[];
 	TO_DN_SOME(0.00)[];
-	RCPT_COUNT_SEVEN(0.00)[11];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	TAGGED_RCPT(0.00)[linux-mips];
-	RCVD_COUNT_SEVEN(0.00)[7]
+	FORGED_SENDER_FORWARDING(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[5];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[u.kleine-koenig@baylibre.com,linux-mips@vger.kernel.org];
+	DKIM_TRACE(0.00)[baylibre.com:+];
+	RCPT_COUNT_GT_50(0.00)[67];
+	FORGED_RECIPIENTS_FORWARDING(0.00)[];
+	ALIAS_RESOLVED(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	TAGGED_RCPT(0.00)[linux-mips,renesas];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[baylibre.com:from_mime,baylibre.com:dkim,vger.kernel.org:from_smtp]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 6031F70A555
+X-Rspamd-Queue-Id: 1AFCB70A6EB
 
-Oh... I know nothing about mips.
+Hello,
 
-Add Thomas. Thomas could you help? See the question below.
+this series is part of a preparation for changing .driver_data (and
+similarily named members) of *_device_id to an anonymous union.
+See e.g.
+https://lore.kernel.org/all/cover.1780048925.git.u.kleine-koenig@baylibre.com/
+for the idea behind it. I also grabbed the opportunity to unify the
+coding style for all these arrays while going through these.
 
-OK, lets only allow the _SECCOMP -> _EXIT transition for now.
-But will it work on MIPS?
+The patch series is based on pwm/for-next + "pwm: pxa: Depend on OF and
+simplify accordingly" [1].
 
-grep, grep... So arch/mips/ has
+Best regards
+Uwe
 
-	static inline void syscall_set_return_value(struct task_struct *task,
-						    struct pt_regs *regs,
-						    int error, long val)
-	{
-		if (error) {
-			regs->regs[2] = -error;
-			regs->regs[7] = 1;
-		} else {
-			regs->regs[2] = val;
-			regs->regs[7] = 0;
-		}
-	}
+[1] https://lore.kernel.org/linux-pwm/20260705083910.3502207-2-u.kleine-koenig@baylibre.com
 
-	static inline void syscall_set_nr(struct task_struct *task,
-					  struct pt_regs *regs,
-					  int nr)
-	{
-		/*
-		 * New syscall number has to be assigned to regs[2] because
-		 * it is loaded from there unconditionally after return from
-		 * syscall_trace_enter() invocation.
-		 *
-		 * Consequently, if the syscall was indirect and nr != __NR_syscall,
-		 * then after this assignment the syscall will cease to be indirect.
-		 */
-		task_thread_info(task)->syscall = regs->regs[2] = nr;
-	}
+Uwe Kleine-König (The Capable Hub) (5):
+  pwm: pca9685: Drop unused assignment of acpi_device_id driver data
+  pwm: Use named initializers for arrays of acpi_device_id
+  pwm: Unify coding style of acpi_device_id arrays
+  pwm: Unify coding style of of_device_id arrays
+  pwm: lpss-pci: Unify coding style of pci_device_id array
 
-I have no idea. But at least ptrace_set_syscall_info_exit(skip => true)
-must do syscall_set_nr(-1) before syscall_set_return_value(), otherwise
-the value assigned to regs[2] will be lost.
+ drivers/pwm/pwm-apple.c           |  2 +-
+ drivers/pwm/pwm-argon-fan-hat.c   |  2 +-
+ drivers/pwm/pwm-atmel-hlcdc.c     | 15 ++++++---------
+ drivers/pwm/pwm-atmel-tcb.c       |  6 +++---
+ drivers/pwm/pwm-atmel.c           |  3 +--
+ drivers/pwm/pwm-bcm-iproc.c       |  2 +-
+ drivers/pwm/pwm-bcm-kona.c        |  2 +-
+ drivers/pwm/pwm-bcm2835.c         |  2 +-
+ drivers/pwm/pwm-berlin.c          |  2 +-
+ drivers/pwm/pwm-brcmstb.c         |  2 +-
+ drivers/pwm/pwm-clk.c             |  2 +-
+ drivers/pwm/pwm-clps711x.c        |  2 +-
+ drivers/pwm/pwm-cros-ec.c         |  2 +-
+ drivers/pwm/pwm-hibvt.c           |  2 +-
+ drivers/pwm/pwm-imx-tpm.c         |  2 +-
+ drivers/pwm/pwm-imx1.c            |  2 +-
+ drivers/pwm/pwm-imx27.c           |  2 +-
+ drivers/pwm/pwm-ipq.c             |  4 ++--
+ drivers/pwm/pwm-jz4740.c          |  2 +-
+ drivers/pwm/pwm-loongson.c        |  2 +-
+ drivers/pwm/pwm-lp3943.c          |  2 +-
+ drivers/pwm/pwm-lpc18xx-sct.c     |  2 +-
+ drivers/pwm/pwm-lpc32xx.c         |  2 +-
+ drivers/pwm/pwm-lpss-pci.c        |  2 +-
+ drivers/pwm/pwm-lpss-platform.c   | 10 +++++-----
+ drivers/pwm/pwm-mediatek.c        |  2 +-
+ drivers/pwm/pwm-meson.c           |  9 ++++-----
+ drivers/pwm/pwm-mtk-disp.c        |  8 ++++----
+ drivers/pwm/pwm-mxs.c             |  2 +-
+ drivers/pwm/pwm-omap-dmtimer.c    |  4 ++--
+ drivers/pwm/pwm-pca9685.c         |  6 +++---
+ drivers/pwm/pwm-pxa.c             |  8 ++++----
+ drivers/pwm/pwm-raspberrypi-poe.c |  2 +-
+ drivers/pwm/pwm-rcar.c            |  4 ++--
+ drivers/pwm/pwm-renesas-tpu.c     | 10 +++++-----
+ drivers/pwm/pwm-rockchip.c        |  8 ++++----
+ drivers/pwm/pwm-rzg2l-gpt.c       |  2 +-
+ drivers/pwm/pwm-samsung.c         |  2 +-
+ drivers/pwm/pwm-sifive.c          |  2 +-
+ drivers/pwm/pwm-sl28cpld.c        |  2 +-
+ drivers/pwm/pwm-sophgo-sg2042.c   |  7 +++----
+ drivers/pwm/pwm-sprd.c            |  4 ++--
+ drivers/pwm/pwm-sti.c             |  2 +-
+ drivers/pwm/pwm-stm32-lp.c        |  4 ++--
+ drivers/pwm/pwm-stm32.c           |  6 +++---
+ drivers/pwm/pwm-sun4i.c           |  2 +-
+ drivers/pwm/pwm-sunplus.c         |  4 ++--
+ drivers/pwm/pwm-tiecap.c          |  6 +++---
+ drivers/pwm/pwm-tiehrpwm.c        |  2 +-
+ drivers/pwm/pwm-twl-led.c         |  2 +-
+ drivers/pwm/pwm-twl.c             |  2 +-
+ drivers/pwm/pwm-visconti.c        |  2 +-
+ drivers/pwm/pwm-vt8500.c          |  2 +-
+ drivers/pwm/pwm-xilinx.c          |  4 ++--
+ 54 files changed, 96 insertions(+), 102 deletions(-)
 
--------------------------------------------------------------------------------
-Now the question. To simplify, suppose we need something like
 
-	void skip_syscall_and_set_return_value(task, regs, retval)
-	{
-		syscall_set_nr(task, regs, -1);
-		syscall_set_return_value(task, regs, 0, retval);
-	}
-
-which can be used by debugger when the tracee sleeps in ptrace_report_syscall_entry().
-
-However, arch/mips/kernel/ptrace.c:syscall_trace_enter() does:
-
-	ptrace_report_syscall_entry(regs);
-
-	if (current_thread_info()->syscall < 0)
-		syscall_set_return_value(current, regs, -ENOSYS, 0);
-
-and this means that this func won't work on MIPS. Is it possible to make it
-work somehow? May be we can abuse regs->regs[7] somehow to detect the case when
-syscall_set_return_value() was called by debugger and avoid the unconditional
--ENOSYS ?
-
-Oleg.
-
-On 07/05, Renzo Davoli wrote:
->
-> There is a problem on MIPS:
-> https://sashiko.dev/#/patchset/20260704142643.692754-1-renzo%40cs.unibo.it
->
-> It appears that on MIPS the feature of skipping a system call by setting its
-> number to -1 does not work correctly when transitioning from _ENTRY to _EXIT:
-> the system call return value is overwritten.
->
-> PTRACE_EVENT_SECCOMP, however, has an explicit UAPI specification stating that
-> setting the system call number to a negative value suppresses the system call.
->
-> Moreover, kernel/ptrace.c contains the following comment:
-> /*
->  * If the syscall number is set to -1, setting syscall arguments is not
->  * just pointless, it would also clobber the syscall return value on
->  * those architectures that share the same register both for the first
->  * argument of syscall and its return value.
->  */
-> Thus, PTRACE_EVENT_SECCOMP is explicitly designed to preserve the system call
-> return value when the system call is skipped.
->
-> By contrast, for PTRACE_SYSCALL syscall-entry stops, the man page only states
-> that the tracer may modify the system call number. It does not specify that
-> assigning a negative value must suppress the system call and preserve the
-> return value across all architectures, even though many architectures implement
-> exactly this behavior.
->
-> At this point I see two possible approaches:
->
-> * fix the MIPS implementation (and audit, and possibly fix, the other
->   architectures as well);
->
-> * revert to the original proposal and allow the "skip syscall" feature only for
->   PTRACE_EVENT_SECCOMP, i.e. permit PTRACE_SET_SYSCALL_INFO to transform only
->   PTRACE_SYSCALL_INFO_SECCOMP stops into PTRACE_SYSCALL_INFO_EXIT stops.
->
-> I would prefer the latter approach. I am concerned that changing the ptrace
-> implementation in each architecture may introduce subtle regressions or other
-> unintended side effects.
->
-> In my opinion, seccomp-based syscall tracing is also the more powerful and
-> flexible model compared to the traditional PTRACE_SYSCALL entry/exit mechanism.
->
-> Support for system call suppression from PTRACE_SYSCALL_INFO_ENTRY can always
-> be added later if and when a real use case arises. That would also provide an
-> opportunity to audit the behavior of all supported architectures and, if
-> necessary, make the semantics of negative system call numbers consistent across
-> architectures.
->
-> 	renzo
->
+base-commit: 1a4920940ebfd8d907858abd8f8dd09b13752946
+prerequisite-patch-id: b423a9d049b4520ef37b40635c95004363ecf692
+-- 
+2.55.0.11.g153666a7d9bb
 
 
