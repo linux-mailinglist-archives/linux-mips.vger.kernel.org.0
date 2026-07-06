@@ -1,52 +1,52 @@
-Return-Path: <linux-mips+bounces-15516-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-15517-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id NtwtJha0S2o6YwEAu9opvQ
-	(envelope-from <linux-mips+bounces-15516-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Mon, 06 Jul 2026 15:56:38 +0200
+	id pmTEE4+dS2ohXAEAu9opvQ
+	(envelope-from <linux-mips+bounces-15517-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Mon, 06 Jul 2026 14:20:31 +0200
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id ED9FF71191F
-	for <lists+linux-mips@lfdr.de>; Mon, 06 Jul 2026 15:56:37 +0200 (CEST)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id D71FE7106FF
+	for <lists+linux-mips@lfdr.de>; Mon, 06 Jul 2026 14:20:30 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=kernel.org header.s=k20260515 header.b=SxWIaI4l;
+	dkim=pass header.d=kernel.org header.s=k20260515 header.b=H+wcOuej;
 	dmarc=pass (policy=quarantine) header.from=kernel.org;
-	spf=pass (mail.lfdr.de: domain of "linux-mips+bounces-15516-lists+linux-mips=lfdr.de@vger.kernel.org" designates 2600:3c0a:e001:db::12fc:5321 as permitted sender) smtp.mailfrom="linux-mips+bounces-15516-lists+linux-mips=lfdr.de@vger.kernel.org";
+	spf=pass (mail.lfdr.de: domain of "linux-mips+bounces-15517-lists+linux-mips=lfdr.de@vger.kernel.org" designates 172.232.135.74 as permitted sender) smtp.mailfrom="linux-mips+bounces-15517-lists+linux-mips=lfdr.de@vger.kernel.org";
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 7A63D31B91CD
-	for <lists+linux-mips@lfdr.de>; Mon,  6 Jul 2026 12:17:53 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 19915302672A
+	for <lists+linux-mips@lfdr.de>; Mon,  6 Jul 2026 12:18:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 01F7F42A147;
-	Mon,  6 Jul 2026 12:17:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 835074252AB;
+	Mon,  6 Jul 2026 12:18:42 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADAFC4252BD;
-	Mon,  6 Jul 2026 12:17:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54EBA3A641D;
+	Mon,  6 Jul 2026 12:18:41 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783340270; cv=none; b=PZ37gIPlWjh8MxMWImcDKEj8uibF/xRBZYwNxoNM1TP0NACrCN9qNenwhw8j5FMSi4Ab4Fj8NM0bqQyvOI8sZMi2sKAYIQ2Yz5/DbZ1oiMp2znHR07xVvC0K/qBj1TtIdzNmwAM7Xt2AyxAH1ydn9H4//A2SIHgQWJvcJ22FaeI=
+	t=1783340322; cv=none; b=pnGNlb0rLTocz9hccONm4CbjR5Gbe9AMatdytTH3hyK8PmOS/x5iaZdTSpFt/KKP2lV6ZmIsZjkk01l+HHuBALwCKRUlYC/XtcvR9OoXM8VDfX550npwQTrKKDHzlVcy9+Gl3WSf5XCnHrDPwszIIA42oUbK25deXrY9T5TwR4g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783340270; c=relaxed/simple;
-	bh=84TtUv3R1XOpb9UxevytZgOBwDl2Vh2ZS8n56h4r5Ow=;
+	s=arc-20240116; t=1783340322; c=relaxed/simple;
+	bh=MY86G9XzL0JWxguLtQKmKUK0GZzH2psKPaq2VHkDCQc=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=kLnwkjJRX9ndVt/RPAhxYcseyrFACdD8VJjywBglR8Cl1O8flztOn/Vhd/lDjb+RQ/zJvGwn1KUaWMapmCsPkRTeLfhM+gV8GoZuCLdZmnkPLpKfNdveTJ3KHK2PuoYddiWRHkfiaolnBsokODGIZ5tLXgRQuuQbGy5zVmRcBtc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SxWIaI4l; arc=none smtp.client-ip=100.103.45.18
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 774691F000E9;
-	Mon,  6 Jul 2026 12:17:26 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=PgRrW2cw3yquu/lgCLR/rXDBsez9IArdJd7ptU5UKjgKunLwPm4XTx+JRZv8kE89jS1+SUkVwOZO1jORIPPFTkcHpbyrZkDyVvzBfXuIrqRHs57GRqmSALsT+rQVhhMDgS4F8UG6G2RcK67le773PqMqEHILvXtg8rU4JA6m5uY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=H+wcOuej; arc=none smtp.client-ip=100.103.45.18
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7B4A1F000E9;
+	Mon,  6 Jul 2026 12:18:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1783340262;
-	bh=84TtUv3R1XOpb9UxevytZgOBwDl2Vh2ZS8n56h4r5Ow=;
+	s=k20260515; t=1783340320;
+	bh=MY86G9XzL0JWxguLtQKmKUK0GZzH2psKPaq2VHkDCQc=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=SxWIaI4l0Wv1pa+MTjMSyW4ZXRR98NCEvytP9NUjPxeTHfKlkdsX4RQgYPla72+PI
-	 Fsjs0tx83IRHYIkG+oK7HTFcNde329XtL1MYCPCnw/GtShFVyfpVhrx/9Sd4LVy5Va
-	 jgbjsEQ9li0Oyu1yMwrwGbc95bS5IYnU0SMApmQV19FOk1f/ZIq/QvHu9nuRPcTDCA
-	 KrEUrR9j0MhZ/j35UzJRUaDkoLfra8bnz3OpZPI4F/87BT4VMsRgoR77PwAVxUK3NW
-	 xLu+mDvK/x4PsrSlKdiItdr+UbD+rocdUN7rtQultlc6JXpZOA1hZs1aTpn94IUPRG
-	 iBSVMnGPSM09w==
-Date: Mon, 6 Jul 2026 13:17:23 +0100
+	b=H+wcOuejfoGs1g7/UBudXSCcBq1ZKB1Y4xbzun3KVo0uIStHhpNbNXBm3cdbyrvVK
+	 g+A7YaYqjRALurYzk0CBuW2VsZw/cHAWIphnu+L1kfOQjlypFy/wAIHEUKbWufBWRz
+	 U+MLC7FVoU87DisdBzrM85GadTu+JSlnYSnrtfHZjTWHZE7VL60egCiUliYj0duoZu
+	 TqnLljxV1+dNVh5AOePOpb6Rdt4JpoDIG5DcfYU63HO+Hf6K7VilsnZNI7hxd6mef3
+	 J/uMYrqI+Z+kxkYlGCeyZL1AWpnMkpAtnZ4emJZjO9a4ae7kpzeCn8p4LKTQZR2m9o
+	 TQJfJT/7MCY4w==
+Date: Mon, 6 Jul 2026 13:18:22 +0100
 From: Mark Brown <broonie@kernel.org>
 To: Mukesh Ojha <mukesh.ojha@oss.qualcomm.com>
 Cc: Bjorn Andersson <andersson@kernel.org>,
@@ -123,9 +123,9 @@ Cc: Bjorn Andersson <andersson@kernel.org>,
 	linux-remoteproc@vger.kernel.org, linux-staging@lists.linux.dev,
 	linux-sound@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
 	imx@lists.linux.dev, sound-open-firmware@alsa-project.org
-Subject: Re: [PATCH 27/42] ASoC: mediatek: mt8183: Use
+Subject: Re: [PATCH 28/42] ASoC: mediatek: mt8189: Use
  devm_of_reserved_mem_device_init()
-Message-ID: <e0c0d4f5-533e-4625-b8ff-f2178e54a7f8@sirena.org.uk>
+Message-ID: <7108d4cb-1860-4f14-93f4-75666ad02bdc@sirena.org.uk>
 Mail-Followup-To: Mukesh Ojha <mukesh.ojha@oss.qualcomm.com>,
 	Bjorn Andersson <andersson@kernel.org>,
 	Konrad Dybcio <konradybcio@kernel.org>,
@@ -202,7 +202,7 @@ Mail-Followup-To: Mukesh Ojha <mukesh.ojha@oss.qualcomm.com>,
 	linux-sound@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
 	imx@lists.linux.dev, sound-open-firmware@alsa-project.org
 References: <20260703193855.110619-1-mukesh.ojha@oss.qualcomm.com>
- <20260703193855.110619-28-mukesh.ojha@oss.qualcomm.com>
+ <20260703193855.110619-29-mukesh.ojha@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -210,9 +210,9 @@ List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="gI2mM3XhbyEs6RmR"
+	protocol="application/pgp-signature"; boundary="giRhJRGIMdDU9FkY"
 Content-Disposition: inline
-In-Reply-To: <20260703193855.110619-28-mukesh.ojha@oss.qualcomm.com>
+In-Reply-To: <20260703193855.110619-29-mukesh.ojha@oss.qualcomm.com>
 X-Cookie: Did I do an INCORRECT THING??
 X-Rspamd-Action: no action
 X-Spamd-Result: default: False [-5.76 / 15.00];
@@ -222,13 +222,13 @@ X-Spamd-Result: default: False [-5.76 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
 	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20260515];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
 	MIME_GOOD(-0.20)[multipart/signed,text/plain];
 	MAILLIST(-0.15)[generic];
 	HAS_LIST_UNSUB(-0.01)[];
 	FREEMAIL_CC(0.00)[kernel.org,arm.com,linux.intel.com,suse.de,gmail.com,ffwll.ch,jms.id.au,codeconstruct.com.au,crapouillou.net,intel.com,sys-base.io,sholland.org,synopsys.com,ideasonboard.com,amd.com,linux.ibm.com,mediatek.com,collabora.com,nuvoton.com,nvidia.com,arndb.de,linuxfoundation.org,bst.ai,linaro.org,perex.cz,suse.com,nxp.com,pengutronix.de,linux.alibaba.com,cixtech.com,oss.qualcomm.com,bstai.top,linux.dev,vger.kernel.org,lists.freedesktop.org,lists.ozlabs.org,lists.infradead.org,lists.linux.dev,alsa-project.org];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-15516-lists,linux-mips=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-15517-lists,linux-mips=lfdr.de];
 	MIME_TRACE(0.00)[0:+,1:+,2:~];
 	FORGED_SENDER(0.00)[broonie@kernel.org,linux-mips@vger.kernel.org];
 	FORWARDED(0.00)[lists@lfdr.de];
@@ -249,39 +249,39 @@ X-Spamd-Result: default: False [-5.76 / 15.00];
 	TAGGED_RCPT(0.00)[linux-mips];
 	TO_DN_SOME(0.00)[];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sirena.org.uk:mid,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,vger.kernel.org:from_smtp]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[vger.kernel.org:from_smtp,sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,sirena.org.uk:mid]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: ED9FF71191F
+X-Rspamd-Queue-Id: D71FE7106FF
 
 
---gI2mM3XhbyEs6RmR
+--giRhJRGIMdDU9FkY
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-On Sat, Jul 04, 2026 at 01:08:40AM +0530, Mukesh Ojha wrote:
-> Replace the hand-rolled devm wrapper (mt8183_afe_release_reserved_mem +
+On Sat, Jul 04, 2026 at 01:08:41AM +0530, Mukesh Ojha wrote:
+> Replace the hand-rolled devm wrapper (mt8189_afe_release_reserved_mem +
 > devm_add_action_or_reset) with the standard
 > devm_of_reserved_mem_device_init(), letting the device resource manager
 > handle cleanup automatically.
 
 Acked-by: Mark Brown <broonie@kernel.org>
 
---gI2mM3XhbyEs6RmR
+--giRhJRGIMdDU9FkY
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmpLnNMACgkQJNaLcl1U
-h9DskQf9GhXzp9vEAYGZ4jdAHHof/S2RusXTeAwjV2KA+N3cPIrKmiBoRNlgJE6R
-k3Wyw/t4gLCe3h6z2QdkUxrHmSo4zwRULrIKMwL8gVp5COfs5IkPPcABUyIHeFCO
-aSUyfbcTEmebIHqnQpa3HlBa3afU4eelK4h7RXbrkb0DrK/9jxpZt+bPg1U0NvIu
-V/c0+Te+i2jhvxQzH+QpW6Mmz2BzENNfLFfy74GMZsq9Gv77D20Oe4sM+R8H5EVz
-ush1RoAVB4FpNWLggTInczXux3L+bSkpXkID816GHQtk23ihZOBfC6EHyrcSfs3Y
-MAk5DdJ76RisJ0bm0BpxgMTpFqlfgw==
-=6M5Z
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmpLnQ0ACgkQJNaLcl1U
+h9DpVwf/RyWlR/GhdduZHTaBvEersYmwe285MzLn+z13NE/Z/moz/C9cJUCOzmOo
+Q4ZhjP/ShDTF/HFZ693DW7MTowM8ausVmDd1aNfqpVJmmcWC8OLqi+SlDfR8Jbdv
+r0sMbARtVjC023pUYbGQKg8dlqaXJU+PALRzck4LBYWwyLd0Lc1SgD+BoQf6PCQK
+Z1garJzyHNvSwO+16Mwx8i4pvrfC7oGRs9mxjcLXoqgHdfg2e6z9x5qZQKVZRf1T
+ic9ZH8kiirKXNHMEjsBSvbl5FnA7BtGz6INW9kcxd151SjodJk4mSaILKo+CgQ0Z
+tPf4cpZPCR85SmcUBQe4aCeZv9rbUw==
+=RTvx
 -----END PGP SIGNATURE-----
 
---gI2mM3XhbyEs6RmR--
+--giRhJRGIMdDU9FkY--
 
