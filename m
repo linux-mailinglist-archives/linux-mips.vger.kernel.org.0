@@ -1,58 +1,58 @@
-Return-Path: <linux-mips+bounces-15550-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-15551-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id 8M0lDQzQS2rxagEAu9opvQ
-	(envelope-from <linux-mips+bounces-15550-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Mon, 06 Jul 2026 17:55:56 +0200
+	id ZRVpHLjJS2oVaQEAu9opvQ
+	(envelope-from <linux-mips+bounces-15551-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Mon, 06 Jul 2026 17:28:56 +0200
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id B0CF5712E0F
-	for <lists+linux-mips@lfdr.de>; Mon, 06 Jul 2026 17:55:55 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id F1481712984
+	for <lists+linux-mips@lfdr.de>; Mon, 06 Jul 2026 17:28:55 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=mailbox.org header.s=mail20150812 header.b=j5hgDtth;
+	dkim=pass header.d=mailbox.org header.s=mail20150812 header.b=uADD0ghB;
 	dmarc=pass (policy=reject) header.from=mailbox.org;
-	spf=pass (mail.lfdr.de: domain of "linux-mips+bounces-15550-lists+linux-mips=lfdr.de@vger.kernel.org" designates 172.234.253.10 as permitted sender) smtp.mailfrom="linux-mips+bounces-15550-lists+linux-mips=lfdr.de@vger.kernel.org";
+	spf=pass (mail.lfdr.de: domain of "linux-mips+bounces-15551-lists+linux-mips=lfdr.de@vger.kernel.org" designates 172.105.105.114 as permitted sender) smtp.mailfrom="linux-mips+bounces-15551-lists+linux-mips=lfdr.de@vger.kernel.org";
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 57C1436F58B6
-	for <lists+linux-mips@lfdr.de>; Mon,  6 Jul 2026 14:41:47 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id DCE32315FFF3
+	for <lists+linux-mips@lfdr.de>; Mon,  6 Jul 2026 14:49:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 45C6C432BD4;
-	Mon,  6 Jul 2026 14:39:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 85E3741611D;
+	Mon,  6 Jul 2026 14:49:23 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mout-p-102.mailbox.org (mout-p-102.mailbox.org [80.241.56.152])
+Received: from mout-p-101.mailbox.org (mout-p-101.mailbox.org [80.241.56.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 465A13FE369;
-	Mon,  6 Jul 2026 14:39:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3FD73DDDAA;
+	Mon,  6 Jul 2026 14:49:21 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783348776; cv=none; b=noxbZI1nrFuG780WPjI43f+AOHxt2wabmGYDWis5JA6mWxvGtO8yX3OhJTV6bMR7k09CE9x7SFTIAt1lhWScjG/9WLKlstD6aQdYxD1sQqoU5cH1Z6I90H6XZs9tx4qiSztflSoys0sdxp31S7yLpLsIBnAKAb5vbOuybcZ80Ho=
+	t=1783349363; cv=none; b=HKomYi4AlsNFdqv8k0uOTJPnsume83m4ZBysgBhcpE+R005RzqwqPIl+IQasV3HWZ+5dNHeajNjaDCd8qcJXQy9lASJesF7OTkJkkbIQv/4kGKlhOU5xeEsLJzSED13gpuvzM54wqh2VARyeC8kyEqztBrz50QjJAOKSVIa8BRM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783348776; c=relaxed/simple;
-	bh=XtbXxotRn4eonCuXI7S2La3x2DD6roUS8w7lR6Aocns=;
+	s=arc-20240116; t=1783349363; c=relaxed/simple;
+	bh=eulpyiUh0aznOlxmeBeXXDKWTgTsYGSGxJkchSqiGrM=;
 	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=lMdJJ2Iu67n4dpWr9NIE68p82Jgj5lM61GKlchI1pRPAfNOLddcgdu6ZN+qnXc2JSMwfEaPfcMxDaHaYNtd+k5CQ8ld4AaHZgA3gQoi/5A6SRzK3EGVObmBEw3zHyYppObiewBwo9QwOiAdyE2Vo00MMvXAuihGfLhZ38iO3PaM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mailbox.org; spf=pass smtp.mailfrom=mailbox.org; dkim=pass (2048-bit key) header.d=mailbox.org header.i=@mailbox.org header.b=j5hgDtth; arc=none smtp.client-ip=80.241.56.152
-Received: from smtp102.mailbox.org (smtp102.mailbox.org [IPv6:2001:67c:2050:b231:465::102])
+	 Content-Type:MIME-Version; b=cjCk2sXxzSIwpuf+/GRmY+L/kRCvw2c7pIW/bO5ZRnM9+INlJyp4Dg4FISwIY6ciBtJZMEDKAkTcIvWDRNhBLcrVKZU2MasARBTqPfzAURnl8NLwMVpUo5nV8pZvwV5jqzgIYnTHiIvz3pgbIAD0N0Dik/SncwcAhY0l3DUrtz8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mailbox.org; spf=pass smtp.mailfrom=mailbox.org; dkim=pass (2048-bit key) header.d=mailbox.org header.i=@mailbox.org header.b=uADD0ghB; arc=none smtp.client-ip=80.241.56.151
+Received: from smtp102.mailbox.org (smtp102.mailbox.org [10.196.197.102])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA512)
 	(No client certificate requested)
-	by mout-p-102.mailbox.org (Postfix) with ESMTPS id 4gv6Sc3JlwzKrrB;
-	Mon, 06 Jul 2026 16:39:28 +0200 (CEST)
+	by mout-p-101.mailbox.org (Postfix) with ESMTPS id 4gv6gr5jBTz8tvS;
+	Mon, 06 Jul 2026 16:49:12 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailbox.org; s=mail20150812;
-	t=1783348768;
+	t=1783349352;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=PTWGfLdwlWAV/LMkx8q6n+16+BLtwX+Uw6eFuSY1pwE=;
-	b=j5hgDtthz8XCNdelXgr2Njc2HaTruqIkCO//JWKxiT4W2gEybWyIlcK2aQ1bxIe+BwUJVp
-	sosZFgtgjTYiKegpajhDS7wAQRa5vbGhsdYsOBErEWcCcj6imJ3WhTyng3CLWaw/u/6S/u
-	Ia++ekOByRWNtL6C0p1KPkAMQ78opS9K6p4731SNIh3G/Gtr0smcjJ5LSbWseUhYMLmi5g
-	bSnkIEWLW+D0H8udCi/rtV6GiUxmmd3h/zBT1zxIEz9pUZOsZhePq4tVuE6vy2STKylPsN
-	pNYuSZntPPijS4W0+CuI8ZBjLVluSsSHTtbS9e6dlXfCM6eF2pFoZi1CDk9EnQ==
-Message-ID: <fbc50f89e0c3bb148656a3b8d96974f591576dec.camel@mailbox.org>
+	bh=eulpyiUh0aznOlxmeBeXXDKWTgTsYGSGxJkchSqiGrM=;
+	b=uADD0ghBygQ7hl7LTqSuQzNrT4pfxd3Nkk3nWvmf6IB3D+bbZ8Po9+rlsavnkGLJ4uZdnA
+	E6oxE7wja5lrQWqtmpkzyprJHhQUbkUKADwiXdWDyRW509f88ZfjFbVdsc2ylpT40fOOU1
+	WzrrRp/KWvzTBBzYRWZJPYm3J3L0aVGbHLts233EFpwatX6mIqHFWSxS8OKrpUaHqJgDM6
+	8q8JwEt/ImdukYWwmuJxsFdKcpthuzyLtn4uBC7Nb6yxlqQ9FZ9gTB4t5yU9FTpas5wHRe
+	7YWXY3JENVL6v02qurgwVxEoXonNX6ionzTbrhMb+kZ8bmbK2CqpjuhuTskBOw==
+Message-ID: <88ee8e5f9b87c202a563accccc224280800a8a64.camel@mailbox.org>
 Subject: Re: [PATCH v3 02/20] driver core: platform: provide
  platform_device_set_of_node()
 From: Manuel Ebner <manuelebner@mailbox.org>
@@ -94,10 +94,11 @@ Cc: brgl@kernel.org, linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
 	dri-devel@lists.freedesktop.org, linux-usb@vger.kernel.org, 
 	linux-mips@vger.kernel.org, platform-driver-x86@vger.kernel.org, 
 	mfd@lists.linux.dev
-Date: Mon, 06 Jul 2026 16:39:00 +0200
-In-Reply-To: <20260706-pdev-fwnode-ref-v3-2-1ff028e33779@oss.qualcomm.com>
+Date: Mon, 06 Jul 2026 16:48:48 +0200
+In-Reply-To: <fbc50f89e0c3bb148656a3b8d96974f591576dec.camel@mailbox.org>
 References: <20260706-pdev-fwnode-ref-v3-0-1ff028e33779@oss.qualcomm.com>
-	 <20260706-pdev-fwnode-ref-v3-2-1ff028e33779@oss.qualcomm.com>
+		 <20260706-pdev-fwnode-ref-v3-2-1ff028e33779@oss.qualcomm.com>
+	 <fbc50f89e0c3bb148656a3b8d96974f591576dec.camel@mailbox.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
@@ -106,20 +107,20 @@ List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MBO-RS-ID: ca569d00ad7df478929
-X-MBO-RS-META: 1q71yutefcf1nyjzwoom4gu47fi8rss3
+X-MBO-RS-ID: e7506a7c665f87bbeac
+X-MBO-RS-META: yfo5gat8zopp9bgmyshyyaocgtadhjyy
 X-Rspamd-Action: no action
 X-Spamd-Result: default: False [-0.66 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[mailbox.org,reject];
 	R_DKIM_ALLOW(-0.20)[mailbox.org:s=mail20150812];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	MIME_TRACE(0.00)[0:+];
-	TAGGED_FROM(0.00)[bounces-15550-lists,linux-mips=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-15551-lists,linux-mips=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
 	FORWARDED(0.00)[lists@lfdr.de];
 	FORGED_SENDER_MAILLIST(0.00)[];
@@ -140,113 +141,27 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
 	TO_DN_SOME(0.00)[];
 	MID_RHS_MATCH_FROM(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
 	TAGGED_RCPT(0.00)[linux-mips,netdev];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[qualcomm.com:email,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,intel.com:email,vger.kernel.org:from_smtp,mailbox.org:from_mime,mailbox.org:email,mailbox.org:mid,mailbox.org:dkim]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[mailbox.org:from_mime,mailbox.org:dkim,mailbox.org:mid,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,vger.kernel.org:from_smtp]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: B0CF5712E0F
+X-Rspamd-Queue-Id: F1481712984
 
-Hi Bartosz,
-
-On Mon, 2026-07-06 at 14:44 +0200, Bartosz Golaszewski wrote:
-> Encapsulate the reference counting logic for OF nodes assigned to
-> platform devices created with platform_device_alloc() in a helper
-> function. Make the kerneldoc state that this is the proper interface for
-> assigning OF nodes to dynamically allocated platform devices. This will
-> allow us to switch to counting the references of the device's firmware
-> nodes, not only the OF nodes.
+On Mon, 2026-07-06 at 16:39 +0200, Manuel Ebner wrote:
+> Hi Bartosz,
 >=20
-> Reviewed-by: Manuel Ebner <manuelebner@mailbox.org>
-> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>
-> ---
-> =C2=A0drivers/base/platform.c=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0 | 18 ++++++++++++++++++
-> =C2=A0include/linux/platform_device.h |=C2=A0 4 ++++
-> =C2=A02 files changed, 22 insertions(+)
->=20
-> diff --git a/drivers/base/platform.c b/drivers/base/platform.c
-> index fb9120b0bcfe0e7dd9dfc0d29b91e0ad40a01440..3188d5aba5f90622f821c6950=
-49cacda030204fb
-> 100644
-> --- a/drivers/base/platform.c
-> +++ b/drivers/base/platform.c
-> @@ -693,6 +693,24 @@ int platform_device_add_data(struct platform_device =
-*pdev, const
-> void *data,
-> =C2=A0}
-> =C2=A0EXPORT_SYMBOL_GPL(platform_device_add_data);
-> =C2=A0
-> +/**
-> + * platform_device_set_of_node - assign an OF node to device
-> + * @pdev: platform device to add the node for
-> + * @np: new device node
-> + *
-> + * Assign an OF node to this platform device. Internally keep track of t=
-he
-> + * reference count. Devices created with platform_device_alloc() must us=
-e this
-> + * function instead of assigning the node manually.
+> On Mon, 2026-07-06 at 14:44 +0200, Bartosz Golaszewski wrote:
+> >=20
+> > @@ -693,6 +693,24 @@ int platform_device_add_data(struct platform_devic=
+e *pdev, const
 
-I did some more pondering about this patch and concluded the right place
-for a warning would be the lines been read right before or after assigning
-a node manually.=20
-I think this would be in platform_device_alloc() (as I suggested in v2).
+Nevermind, I got confused because of @@ int platform_device_add_data() and
 
-BUT my knowledge in C isn't sound. So if it's good as is keep it. If it isn=
-'t
-add or move the remark.
+> @@ -619,6 +619,13 @@ static void platform_device_release_full(struct devi=
+ce *dev)
+in [PATCH v3 05/20] driver core: update kerneldoc for platform_device_alloc=
+()
 
-Either way Thanks and
- Reviewed-by Manuel Ebner.
-
----
-Note:
-I removed Mark Brown <broonie@opensource.wolfsonmicro.com> from recipients =
-because:
-=E2=80=9CRCPT TO <broonie@opensource.wolfsonmicro.com> failed:
-<broonie@opensource.wolfsonmicro.com>: Recipient address rejected: Domain n=
-ot found=E2=80=9D.
-
-
-> + */
-> +void platform_device_set_of_node(struct platform_device *pdev,
-> +				 struct device_node *np)
-> +{
-> +	of_node_put(pdev->dev.of_node);
-> +	pdev->dev.of_node =3D of_node_get(np);
-> +	pdev->dev.fwnode =3D of_fwnode_handle(np);
-> +}
-> +EXPORT_SYMBOL_GPL(platform_device_set_of_node);
-> +
-> =C2=A0/**
-> =C2=A0 * platform_device_add - add a platform device to device hierarchy
-> =C2=A0 * @pdev: platform device we're adding
-> diff --git a/include/linux/platform_device.h b/include/linux/platform_dev=
-ice.h
-> index 8c566f09d04efe420d85ffa046f92c44c6d08526..e9f7baceeb4c8269dbc0143c4=
-d8fc9d73ba024ca
-> 100644
-> --- a/include/linux/platform_device.h
-> +++ b/include/linux/platform_device.h
-> @@ -19,6 +19,8 @@
-> =C2=A0struct irq_affinity;
-> =C2=A0struct mfd_cell;
-> =C2=A0struct property_entry;
-> +struct platform_device_id;
-> +struct device_node;
-> =C2=A0
-> =C2=A0struct platform_device {
-> =C2=A0	const char	*name;
-> @@ -262,6 +264,8 @@ extern int platform_device_add_resources(struct platf=
-orm_device
-> *pdev,
-> =C2=A0					 unsigned int num);
-> =C2=A0extern int platform_device_add_data(struct platform_device *pdev,
-> =C2=A0				=C2=A0=C2=A0=C2=A0 const void *data, size_t size);
-> +void platform_device_set_of_node(struct platform_device *pdev,
-> +				 struct device_node *np);
-> =C2=A0extern int platform_device_add(struct platform_device *pdev);
-> =C2=A0extern void platform_device_del(struct platform_device *pdev);
-> =C2=A0extern void platform_device_put(struct platform_device *pdev);
+Sorry for the noise
+ Manuel
 
