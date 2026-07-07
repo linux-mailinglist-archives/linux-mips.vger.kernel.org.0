@@ -1,80 +1,130 @@
-Return-Path: <linux-mips+bounces-15578-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-15579-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id gUNmEzPYTGr7qgEAu9opvQ
-	(envelope-from <linux-mips+bounces-15578-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Tue, 07 Jul 2026 12:42:59 +0200
+	id wXGQFzznTGpBrwEAu9opvQ
+	(envelope-from <linux-mips+bounces-15579-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Tue, 07 Jul 2026 13:47:08 +0200
 X-Original-To: lists+linux-mips@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id B82C771A8C5
-	for <lists+linux-mips@lfdr.de>; Tue, 07 Jul 2026 12:42:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id A885371B15E
+	for <lists+linux-mips@lfdr.de>; Tue, 07 Jul 2026 13:47:07 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=kernel.org header.s=k20260515 header.b=b2EbRhZx;
-	dmarc=pass (policy=quarantine) header.from=kernel.org;
-	spf=pass (mail.lfdr.de: domain of "linux-mips+bounces-15578-lists+linux-mips=lfdr.de@vger.kernel.org" designates 172.234.253.10 as permitted sender) smtp.mailfrom="linux-mips+bounces-15578-lists+linux-mips=lfdr.de@vger.kernel.org";
+	dkim=pass header.d=arm.com header.s=foss header.b=Avei1K86;
+	dmarc=pass (policy=none) header.from=arm.com;
+	spf=pass (mail.lfdr.de: domain of "linux-mips+bounces-15579-lists+linux-mips=lfdr.de@vger.kernel.org" designates 172.234.253.10 as permitted sender) smtp.mailfrom="linux-mips+bounces-15579-lists+linux-mips=lfdr.de@vger.kernel.org";
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 2757E30166F8
-	for <lists+linux-mips@lfdr.de>; Tue,  7 Jul 2026 10:37:46 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 1C94930584B5
+	for <lists+linux-mips@lfdr.de>; Tue,  7 Jul 2026 11:41:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C01043ECBEB;
-	Tue,  7 Jul 2026 10:37:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EF3C33F929A;
+	Tue,  7 Jul 2026 11:41:38 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D39D3D904D;
-	Tue,  7 Jul 2026 10:37:44 +0000 (UTC)
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DB3643FA5CC
+	for <linux-mips@vger.kernel.org>; Tue,  7 Jul 2026 11:41:36 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783420665; cv=none; b=tLqse3Ffm4Cx03Y8GQqCdiYCUOV06DLMeqhbI2pdaTixSFGD6AyTUYvBDrlkEpIOkv79pUi6J7DSk0zlP3i6rTGoEhg6QkwclLhMkO80PMkqvY5wideOiTLHls1FPmTYpn0FNN7Ora7HUgJUZUGPJ7XyPyqnsGb9YKqDYvcC+qE=
+	t=1783424498; cv=none; b=JF0jXLlQpuKZEPnGQBwRG58fRIj4u9Hc+MESF0K6oO/aW+hL6QWz3qdPi9uOPXf+Md6f48gTBcuxz9/82UZ+iIzDhS9If/d6GjYAzBqP6s0V5rtztUF/1Jg1lVzxPwRmIigncUt9vVM/8LngjL7RMmAhNxK9U0tHHsuRobehwNw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783420665; c=relaxed/simple;
-	bh=DBW3+xmIkiA7bcVmsoLX7N9y5YIfu5fHR2J5CTKVG24=;
+	s=arc-20240116; t=1783424498; c=relaxed/simple;
+	bh=AXimq/rtIFwP4aD04kh/5vfPSxje93mi8aUhDJB2eB0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=SBcn3zhSTGHzjIAms9hNLbYzLxxmKs660dieFTD17o6PI1eaIcGQoIoZyzlzJa5m/Our4J9Gd79veBvzvKeq2Up3dgmC+MKpEGtzuNJWYjeMiKW1kQa5ll0TQLY+khIeyDkqCIVcQFmFe+Q4uM/kQ2SBuDJYYAIC3m6xBEMWQT8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=b2EbRhZx; arc=none smtp.client-ip=100.103.45.18
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1225A1F000E9;
-	Tue,  7 Jul 2026 10:37:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1783420664;
-	bh=M5O3kKa+EQ5uAjyG128pW8I8XY6LFNYAh7h21UFVGtY=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=b2EbRhZxTe2YotdF+J+gGbv+GMMbo+NMUuhwVDb4IEx+n1ieO+I0Nll2mMyqZbLFm
-	 yc5Kk5R1tBJuIsojhCKa/XTU1+H9veSADqcMUOdMce0HV3qOoUdVLULeUldzF6xuKd
-	 m92XRaz26xwKNhdQx+X+39ZkNcNCwVTgk1X/P4MkfXwMQZMMqeqF461M5iDfl6gIOk
-	 JgQQAfeYGq4Aeajc+6VeVuoyZUg0KqBLCI4fDS+UHeWZXH7eONhSspu9IF2Ru24bgU
-	 htXPRN9xcD4L0lR2wfLKiZZnk816LwEUcLQFaKUgDTDCC27G4h9dgzRd75upT+zD6Q
-	 0fK5uN7UZ9QUA==
-Date: Tue, 7 Jul 2026 11:37:32 +0100
-From: Will Deacon <will@kernel.org>
-To: Jinjie Ruan <ruanjinjie@huawei.com>
-Cc: catalin.marinas@arm.com, tsbogend@alpha.franken.de, tglx@kernel.org,
-	mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-	hpa@zytor.com, peterz@infradead.org, kees@kernel.org,
-	nathan@kernel.org, linusw@kernel.org, ojeda@kernel.org,
-	david.kaplan@amd.com, lukas.bulwahn@redhat.com,
-	ryan.roberts@arm.com, maz@kernel.org, timothy.hayes@arm.com,
-	lpieralisi@kernel.org, thuth@redhat.com, menglong8.dong@gmail.com,
-	oupton@kernel.org, yeoreum.yun@arm.com, miko.lenczewski@arm.com,
-	broonie@kernel.org, kevin.brodsky@arm.com, james.clark@linaro.org,
-	yangyicong@hisilicon.com, tabba@google.com, osandov@fb.com,
-	arnd@arndb.de, anshuman.khandual@arm.com, david@kernel.org,
-	akpm@linux-foundation.org, ljs@kernel.org, dev.jain@arm.com,
-	yang@os.amperecomputing.com, chaitanyas.prakash@arm.com,
-	kprateek.nayak@amd.com, chenl311@chinatelecom.cn,
-	sshegde@linux.ibm.com, thorsten.blum@linux.dev,
-	chang.seok.bae@intel.com, tim.c.chen@linux.intel.com,
-	x86@kernel.org, linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org
-Subject: Re: [PATCH v3 00/12] arm64: Add HOTPLUG_PARALLEL support for
- secondary CPUs
-Message-ID: <akzW7HrxNkj2DMas@willie-the-truck>
-References: <20260624092537.2916971-1-ruanjinjie@huawei.com>
- <ajvKkLw5bL-FT5JC@willie-the-truck>
- <32d41a67-cf37-4079-8218-bed2b73bbf14@huawei.com>
- <akvoN5vvQaW3MdmI@willie-the-truck>
- <3bf910b8-c7e8-4a22-8e1d-fa701694369f@huawei.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=dLRmKa8mJsr0daQmu1LJo3IdQfonFvG5eHM0SNLVmr0BUpdSO5VCSbNvGZDmokbo8Eq4pi0RRDNXNl9TFm8baO/5VnslkGmdPonuVKBeowrmIOs9x9NOUtv+cfSol2HDAoo9KV3SRi28sFPM8/U/VAXc+WS7tTEbP3T2Wz3tin8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=Avei1K86; arc=none smtp.client-ip=217.140.110.172
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E68B52680
+	for <linux-mips@vger.kernel.org>; Tue,  7 Jul 2026 04:41:31 -0700 (PDT)
+Received: from [192.168.0.1] (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 083F23F85F
+	for <linux-mips@vger.kernel.org>; Tue,  7 Jul 2026 04:41:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
+	t=1783424496; bh=AXimq/rtIFwP4aD04kh/5vfPSxje93mi8aUhDJB2eB0=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Avei1K86vpzfHMu7g8oE/WIlztrAVETk+1ANxphVlWPQxbTqU/8VnGf7Wb1MwQnTt
+	 cpKWWEchqmyKHPhzWv7lkUk6YVPq0dUtfRLSrgrp6QfWq9urOGjsq0fJ/f33KCVT0D
+	 oxXCkvWdqbyohelRF71gc7i8/YDs1wluGmhbokGg=
+Date: Tue, 7 Jul 2026 12:39:54 +0100
+From: Liviu Dudau <liviu.dudau@arm.com>
+To: Mukesh Ojha <mukesh.ojha@oss.qualcomm.com>
+Cc: Bjorn Andersson <andersson@kernel.org>,
+	Konrad Dybcio <konradybcio@kernel.org>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Maxime Ripard <mripard@kernel.org>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+	Joel Stanley <joel@jms.id.au>,
+	Andrew Jeffery <andrew@codeconstruct.com.au>,
+	Paul Cercueil <paul@crapouillou.net>,
+	Anitha Chrisanthus <anitha.chrisanthus@intel.com>,
+	Paul Kocialkowski <paulk@sys-base.io>,
+	Linus Walleij <linusw@kernel.org>, Chen-Yu Tsai <wens@kernel.org>,
+	Jernej Skrabec <jernej.skrabec@gmail.com>,
+	Samuel Holland <samuel@sholland.org>,
+	Alexey Brodkin <abrodkin@synopsys.com>,
+	Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+	Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
+	Michal Simek <michal.simek@amd.com>,
+	Daniel Scally <dan.scally@ideasonboard.com>,
+	Jacopo Mondi <jacopo.mondi@ideasonboard.com>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Eddie James <eajames@linux.ibm.com>,
+	Tiffany Lin <tiffany.lin@mediatek.com>,
+	Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
+	Yunfei Dong <yunfei.dong@mediatek.com>,
+	Minghsiu Tsai <minghsiu.tsai@mediatek.com>,
+	Houlong Wei <houlong.wei@mediatek.com>,
+	Matthias Brugger <matthias.bgg@gmail.com>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	Joseph Liu <kwliu@nuvoton.com>, Marvin Lin <kflin@nuvoton.com>,
+	Dmitry Osipenko <dmitry.osipenko@collabora.com>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Thierry Reding <thierry.reding@kernel.org>,
+	Jonathan Hunter <jonathanh@nvidia.com>,
+	Srinivas Kandagatla <srini@kernel.org>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Ge Gordon <gordon.ge@bst.ai>,
+	Adrian Hunter <adrian.hunter@intel.com>,
+	Ulf Hansson <ulfh@kernel.org>, Rob Herring <robh@kernel.org>,
+	Saravana Kannan <saravanak@kernel.org>,
+	Mathieu Poirier <mathieu.poirier@linaro.org>,
+	Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
+	Shengjiu Wang <shengjiu.wang@gmail.com>,
+	Xiubo Li <Xiubo.Lee@gmail.com>, Liam Girdwood <lgirdwood@gmail.com>,
+	Mark Brown <broonie@kernel.org>, Frank Li <Frank.Li@nxp.com>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	Peter Ujfalusi <peter.ujfalusi@linux.intel.com>,
+	Bard Liao <yung-chuan.liao@linux.intel.com>,
+	Daniel Baluta <daniel.baluta@nxp.com>,
+	Orson Zhai <orsonzhai@gmail.com>,
+	Baolin Wang <baolin.wang@linux.alibaba.com>,
+	Peter Chen <peter.chen@cixtech.com>,
+	Fugang Duan <fugang.duan@cixtech.com>,
+	Ekansh Gupta <ekansh.gupta@oss.qualcomm.com>,
+	BST Linux Kernel Upstream Group <bst-upstream@bstai.top>,
+	Fabio Estevam <festevam@gmail.com>,
+	Nicolin Chen <nicoleotsuka@gmail.com>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
+	Kai Vehmanen <kai.vehmanen@linux.intel.com>,
+	Pierre-Louis Bossart <pierre-louis.bossart@linux.dev>,
+	Vijendar Mukunda <Vijendar.Mukunda@amd.com>,
+	Chunyan Zhang <zhang.lyra@gmail.com>,
+	CIX Linux Kernel Upstream Group <cix-kernel-upstream@cixtech.com>,
+	linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+	dri-devel@lists.freedesktop.org, linux-aspeed@lists.ozlabs.org,
+	linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
+	linux-sunxi@lists.linux.dev, linux-media@vger.kernel.org,
+	openbmc@lists.ozlabs.org, linux-mediatek@lists.infradead.org,
+	kernel@collabora.com, linux-tegra@vger.kernel.org,
+	linux-mmc@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-remoteproc@vger.kernel.org, linux-staging@lists.linux.dev,
+	linux-sound@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+	imx@lists.linux.dev, sound-open-firmware@alsa-project.org
+Subject: Re: [PATCH 00/42] of: reserved_mem: Introduce devres helpers and
+ convert drivers
+Message-ID: <akzliqtjZVwNw594@e142607>
+References: <20260703193855.110619-1-mukesh.ojha@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -84,132 +134,175 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <3bf910b8-c7e8-4a22-8e1d-fa701694369f@huawei.com>
+In-Reply-To: <20260703193855.110619-1-mukesh.ojha@oss.qualcomm.com>
 X-Rspamd-Action: no action
-X-Spamd-Result: default: False [-3.16 / 15.00];
-	WHITELIST_SPF_DKIM(-3.00)[kernel.org:d:+,kernel.org:s:+];
+X-Spamd-Result: default: False [-0.16 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
 	MID_RHS_NOT_FQDN(0.50)[];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20260515];
+	DMARC_POLICY_ALLOW(-0.50)[arm.com,none];
 	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_DKIM_ALLOW(-0.20)[arm.com:s=foss];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_COUNT_THREE(0.00)[4];
+	FREEMAIL_CC(0.00)[kernel.org,linux.intel.com,suse.de,gmail.com,ffwll.ch,jms.id.au,codeconstruct.com.au,crapouillou.net,intel.com,sys-base.io,sholland.org,synopsys.com,ideasonboard.com,amd.com,linux.ibm.com,mediatek.com,collabora.com,nuvoton.com,nvidia.com,arndb.de,linuxfoundation.org,bst.ai,linaro.org,perex.cz,suse.com,nxp.com,pengutronix.de,linux.alibaba.com,cixtech.com,oss.qualcomm.com,bstai.top,linux.dev,vger.kernel.org,lists.freedesktop.org,lists.ozlabs.org,lists.infradead.org,lists.linux.dev,alsa-project.org];
+	TAGGED_FROM(0.00)[bounces-15579-lists,linux-mips=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	RCPT_COUNT_TWELVE(0.00)[48];
-	FORWARDED(0.00)[lists@lfdr.de];
-	FORGED_RECIPIENTS(0.00)[m:ruanjinjie@huawei.com,m:catalin.marinas@arm.com,m:tsbogend@alpha.franken.de,m:tglx@kernel.org,m:mingo@redhat.com,m:bp@alien8.de,m:dave.hansen@linux.intel.com,m:hpa@zytor.com,m:peterz@infradead.org,m:kees@kernel.org,m:nathan@kernel.org,m:linusw@kernel.org,m:ojeda@kernel.org,m:david.kaplan@amd.com,m:lukas.bulwahn@redhat.com,m:ryan.roberts@arm.com,m:maz@kernel.org,m:timothy.hayes@arm.com,m:lpieralisi@kernel.org,m:thuth@redhat.com,m:menglong8.dong@gmail.com,m:oupton@kernel.org,m:yeoreum.yun@arm.com,m:miko.lenczewski@arm.com,m:broonie@kernel.org,m:kevin.brodsky@arm.com,m:james.clark@linaro.org,m:yangyicong@hisilicon.com,m:tabba@google.com,m:osandov@fb.com,m:arnd@arndb.de,m:anshuman.khandual@arm.com,m:david@kernel.org,m:akpm@linux-foundation.org,m:ljs@kernel.org,m:dev.jain@arm.com,m:yang@os.amperecomputing.com,m:chaitanyas.prakash@arm.com,m:kprateek.nayak@amd.com,m:chenl311@chinatelecom.cn,m:sshegde@linux.ibm.com,m:thorsten.blum@linux.dev,m:chang.seok.bae@intel.c
- om,m:tim.c.chen@linux.intel.com,m:x86@kernel.org,m:linux-kernel@vger.kernel.org,m:linux-arm-kernel@lists.infradead.org,m:linux-mips@vger.kernel.org,m:menglong8dong@gmail.com,s:lists@lfdr.de];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-15578-lists,linux-mips=lfdr.de];
-	FORGED_SENDER(0.00)[will@kernel.org,linux-mips@vger.kernel.org];
 	FROM_HAS_DN(0.00)[];
-	DKIM_TRACE(0.00)[kernel.org:+];
+	FORGED_SENDER(0.00)[liviu.dudau@arm.com,linux-mips@vger.kernel.org];
+	MIME_TRACE(0.00)[0:+];
+	FORGED_RECIPIENTS(0.00)[m:mukesh.ojha@oss.qualcomm.com,m:andersson@kernel.org,m:konradybcio@kernel.org,m:maarten.lankhorst@linux.intel.com,m:mripard@kernel.org,m:tzimmermann@suse.de,m:airlied@gmail.com,m:simona@ffwll.ch,m:joel@jms.id.au,m:andrew@codeconstruct.com.au,m:paul@crapouillou.net,m:anitha.chrisanthus@intel.com,m:paulk@sys-base.io,m:linusw@kernel.org,m:wens@kernel.org,m:jernej.skrabec@gmail.com,m:samuel@sholland.org,m:abrodkin@synopsys.com,m:laurent.pinchart@ideasonboard.com,m:tomi.valkeinen@ideasonboard.com,m:michal.simek@amd.com,m:dan.scally@ideasonboard.com,m:jacopo.mondi@ideasonboard.com,m:mchehab@kernel.org,m:eajames@linux.ibm.com,m:tiffany.lin@mediatek.com,m:andrew-ct.chen@mediatek.com,m:yunfei.dong@mediatek.com,m:minghsiu.tsai@mediatek.com,m:houlong.wei@mediatek.com,m:matthias.bgg@gmail.com,m:angelogioacchino.delregno@collabora.com,m:kwliu@nuvoton.com,m:kflin@nuvoton.com,m:dmitry.osipenko@collabora.com,m:krzk@kernel.org,m:thierry.reding@kernel.org,m:jonathanh@nvidia.c
+ om,m:srini@kernel.org,m:arnd@arndb.de,m:gregkh@linuxfoundation.org,m:gordon.ge@bst.ai,m:adrian.hunter@intel.com,m:ulfh@kernel.org,m:robh@kernel.org,m:saravanak@kernel.org,m:mathieu.poirier@linaro.org,m:perex@perex.cz,m:tiwai@suse.com,m:shengjiu.wang@gmail.com,m:Xiubo.Lee@gmail.com,m:lgirdwood@gmail.com,m:broonie@kernel.org,m:Frank.Li@nxp.com,m:s.hauer@pengutronix.de,m:peter.ujfalusi@linux.intel.com,m:yung-chuan.liao@linux.intel.com,m:daniel.baluta@nxp.com,m:orsonzhai@gmail.com,m:baolin.wang@linux.alibaba.com,m:peter.chen@cixtech.com,m:fugang.duan@cixtech.com,m:ekansh.gupta@oss.qualcomm.com,m:bst-upstream@bstai.top,m:festevam@gmail.com,m:nicoleotsuka@gmail.com,m:kernel@pengutronix.de,m:kai.vehmanen@linux.intel.com,m:pierre-louis.bossart@linux.dev,m:Vijendar.Mukunda@amd.com,m:zhang.lyra@gmail.com,m:cix-kernel-upstream@cixtech.com,m:linux-arm-msm@vger.kernel.org,m:linux-kernel@vger.kernel.org,m:dri-devel@lists.freedesktop.org,m:linux-aspeed@lists.ozlabs.org,m:linux-arm-kernel@lists.inf
+ radead.org,m:linux-mips@vger.kernel.org,m:linux-sunxi@lists.linux.dev,m:linux-media@vger.kernel.org,m:openbmc@lists.ozlabs.org,m:linux-mediatek@lists.infradead.org,m:kernel@collabora.com,m:linux-tegra@vger.kernel.org,m:linux-mmc@vger.kernel.org,m:devicetree@vger.kernel.org,m:linux-remoteproc@vger.kernel.org,m:linux-staging@lists.linux.dev,m:linux-sound@vger.kernel.org,m:linuxppc-dev@lists.ozlabs.org,m:imx@lists.linux.dev,m:sound-open-firmware@alsa-project.org,s:lists@lfdr.de];
+	FORWARDED(0.00)[lists@lfdr.de];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	DKIM_TRACE(0.00)[arm.com:+];
+	MISSING_XM_UA(0.00)[];
 	TO_DN_SOME(0.00)[];
 	FORGED_SENDER_FORWARDING(0.00)[];
-	ALIAS_RESOLVED(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[will@kernel.org,linux-mips@vger.kernel.org];
-	FREEMAIL_CC(0.00)[arm.com,alpha.franken.de,kernel.org,redhat.com,alien8.de,linux.intel.com,zytor.com,infradead.org,amd.com,gmail.com,linaro.org,hisilicon.com,google.com,fb.com,arndb.de,linux-foundation.org,os.amperecomputing.com,chinatelecom.cn,linux.ibm.com,linux.dev,intel.com,vger.kernel.org,lists.infradead.org];
-	FORGED_RECIPIENTS_FORWARDING(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[liviu.dudau@arm.com,linux-mips@vger.kernel.org];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	TAGGED_RCPT(0.00)[linux-mips];
-	MISSING_XM_UA(0.00)[];
+	RCPT_COUNT_GT_50(0.00)[92];
+	FORGED_RECIPIENTS_FORWARDING(0.00)[];
 	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[vger.kernel.org:from_smtp,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,willie-the-truck:mid]
+	ALIAS_RESOLVED(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TAGGED_RCPT(0.00)[linux-mips];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,vger.kernel.org:from_smtp,arm.com:from_mime,arm.com:email,arm.com:dkim,e142607:mid]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: B82C771A8C5
+X-Rspamd-Queue-Id: A885371B15E
 
-On Tue, Jul 07, 2026 at 04:14:06PM +0800, Jinjie Ruan wrote:
+On Sat, Jul 04, 2026 at 01:08:13AM +0530, Mukesh Ojha wrote:
+> Drivers using of_reserved_mem_device_init() and its variants must
+> manually call of_reserved_mem_device_release() in their remove and
+> error-unwind paths. This is repetitive boilerplate that is easy to
+> get wrong, and several drivers have open-coded the teardown
+> inconsistently or skipped it entirely, leading to dangling reserved
+> memory references.
 > 
+> This series introduces devres-managed wrappers —
+> devm_of_reserved_mem_device_init(), devm_of_reserved_mem_device_init_by_idx(),
+> and devm_of_reserved_mem_device_init_by_name() — that tie the reserved
+> memory region lifetime to the device, releasing it automatically on
+> unbind. The remaining 40 patches convert drivers across the drm, media,
+> ASoC, remoteproc, firmware, mmc, memory and misc subsystems to use these
+> helpers, yielding a net reduction of ~90 lines of boilerplate.
 > 
-> On 7/7/2026 1:39 AM, Will Deacon wrote:
-> > Hi Jinjie,
-> > 
-> > On Thu, Jun 25, 2026 at 09:34:36AM +0800, Jinjie Ruan wrote:
-> >> On 6/24/2026 8:16 PM, Will Deacon wrote:
-> >>> Please just give me the time I asked for. If you want to help out in the
-> >>> meantime, there are plenty of patches that need reviewing...
-> >>
-> >> It was a mistake on my part, and I sincerely apologize for wasting
-> >> community review resources and disrupting your schedule.
-> >>
-> >> I will absolutely back off now and wait for your official series. Lesson
-> >> learned. Thanks for your patience and for calling me out on this.
-> > 
-> > So I've mostly got the old series back on its feet:
-> > 
-> >   https://git.kernel.org/pub/scm/linux/kernel/git/will/linux.git/log/?h=cpu-hotplug
+> This series depends on  https://lore.kernel.org/lkml/20260703164457.4040457-1-mukesh.ojha@oss.qualcomm.com/
 > 
-> Hi Will,
+> Konrad Dybcio (1):
+>   of: reserved_mem: Introduce devres-managed initialization functions
 > 
-> I tested the above-mentioned latest patch on v7.2-rc1 with error inject
-> on QEMU, which constructed the following errors:
-> 
-> 1、CPU4 does not support 52-bit VA
-> 
-> 2、CPU6 does not support 4K granule
-> 
-> 3、CPU16 and CPU17 call cpu_die_early() early in check_early_cpu_features().
-> 
-> 4、CPU18 call cpu_panic_kernel() early in check_early_cpu_features().
-> 
-> The error output is not correct especially for CPU4, CPU6, and CPU18 as
-> below, it seems that some error messages are overlapping on the same
-> CPU, and some errors are causing the CPU to be misidentified.:
-> 
-> (This leaves another blind spot where the 'failed to report alive state'
-> message is skipped for CPU16 and CPU17, as pointed out in
-> https://lore.kernel.org/all/bddf7a68-7789-4ec2-819c-aaaee8173c70@huawei.com/):
-> 
-> [    0.594323] CPU16: will not boot
-> [    0.605818] CPU17: will not boot
-> 
-> ...
-> 
-> [   11.052387] CPU4 failed to report alive state
-> [   11.059799] Parallel CPU bringup failed; consider passing
-> "cpuhp.parallel=off" for a more accurate diagnosis.
-> [   11.060179] CPU4 detected lack of support for 52-bit VAs
-> [   11.060426] CPU4 detected lack of support for 4K granules
-> 
-> [   11.061103] Kernel panic - not syncing: CPU4 detected unsupported
-> configuration
-> [   11.061534] CPU: 0 UID: 0 PID: 1 Comm: swapper/0 Not tainted
-> 7.2.0-rc1-00019-g52296829d92b #305 PREEMPT
-> [   11.062052] Hardware name: linux,dummy-virt (DT)
-> [   11.062230] Call trace:
-> [   11.062339]  show_stack+0x18/0x24 (C)
-> [   11.062528]  dump_stack_lvl+0x11c/0x168
-> [   11.062684]  dump_stack+0x18/0x24
-> [   11.062818]  vpanic+0x568/0x574
-> [   11.062947]  do_panic_on_target_cpu+0x0/0x1c
-> [   11.063111]  secondary_start_kernel+0x0/0x188
-> [   11.063276]  cpuhp_bringup_ap+0x244/0x254
-> [   11.063430]  cpuhp_invoke_callback+0x168/0x2ac
-> [   11.063594]  __cpuhp_invoke_callback_range+0x90/0x118
-> [   11.063776]  _cpu_up+0xec/0x1b8
-> [   11.063905]  cpu_up+0xcc/0x158
-> [   11.064032]  cpuhp_bringup_mask+0x9c/0xe0
-> [   11.064189]  bringup_nonboot_cpus+0x12c/0x14c
-> [   11.064352]  smp_init+0x30/0x8c
-> [   11.064481]  kernel_init_freeable+0x18c/0x40c
-> [   11.064645]  kernel_init+0x24/0x1dc
-> [   11.064785]  ret_from_fork+0x10/0x20
-> [   11.066612] SMP: stopping secondary CPUs
-> [   11.068198] ---[ end Kernel panic - not syncing: CPU4 detected
-> unsupported configuration ]---
+> Mukesh Ojha (41):
+>   of: reserved_mem: Add devm_of_reserved_mem_device_init_by_name()
+>   firmware: qcom: scm: Use devm_of_reserved_mem_device_init()
+>   remoteproc: da8xx: Use devm_of_reserved_mem_device_init()
+>   remoteproc: keystone: Use devm_of_reserved_mem_device_init()
+>   media: synopsys: hdmirx: Use devm_of_reserved_mem_device_init()
+>   remoteproc: omap: Use devm_of_reserved_mem_device_init()
+>   drm: logicvc: Use devm_of_reserved_mem_device_init()
+>   drm: hdlcd: Use devm_of_reserved_mem_device_init()
+>   drm: pl111: Use devm_of_reserved_mem_device_init()
+>   remoteproc: mtk_scp: Use devm_of_reserved_mem_device_init()
+>   media: aspeed: Use devm_of_reserved_mem_device_init()
+>   media: nuvoton: npcm-video: Use devm_of_reserved_mem_device_init()
+>   memory: tegra210-emc: Use devm_of_reserved_mem_device_init_by_name()
+>   drm: komeda: Use devm_of_reserved_mem_device_init()
+>   drm: malidp: Use devm_of_reserved_mem_device_init()
 
-I think this is actually working as intended. CPU4 has detected the
-problems and the system has panicked as expected. Systems like this are
-horribly broken anyway, so if you _really_ need to identify the CPUs
-causing problems, you can disable parallel onlining on the cmdline (as
-the diagnostic message above suggests).
+For the hdlcd, komeda and malidp drivers:
 
-Will
+Reviewed-by: Liviu Dudau <liviu.dudau@arm.com>
+
+Best regards,
+Liviu
+
+>   drm: ingenic: Use devm_of_reserved_mem_device_init()
+>   drm: kmb: Use devm_of_reserved_mem_device_init()
+>   drm: sun4i: Use devm_of_reserved_mem_device_init()
+>   drm: xlnx: zynqmp_dpsub: Use devm_of_reserved_mem_device_init()
+>   media: arm: mali-c55: Use devm_of_reserved_mem_device_init()
+>   media: mediatek: vpu: Use devm_of_reserved_mem_device_init()
+>   mmc: sdhci-of-bst: Use devm_of_reserved_mem_device_init_by_idx()
+>   remoteproc: ti_k3: Use devm_of_reserved_mem_device_init()
+>   ASoC: mediatek: mt8192: Use devm_of_reserved_mem_device_init()
+>   ASoC: mediatek: mt8196: Use devm_of_reserved_mem_device_init()
+>   ASoC: mediatek: mt8183: Use devm_of_reserved_mem_device_init()
+>   ASoC: mediatek: mt8189: Use devm_of_reserved_mem_device_init()
+>   ASoC: SOF: imx: Use devm_of_reserved_mem_device_init_by_name()
+>   staging: media: cedrus: Use devm_of_reserved_mem_device_init()
+>   ASoC: cix-ipbloq: Use devm_of_reserved_mem_device_init()
+>   drm: aspeed: Use devm_of_reserved_mem_device_init()
+>   drm: arcpgu: Use devm_of_reserved_mem_device_init()
+>   ASoC: mediatek: mt8173: Use devm_of_reserved_mem_device_init()
+>   ASoC: mediatek: mt8186: Use devm_of_reserved_mem_device_init()
+>   ASoC: mediatek: mt8188: Use devm_of_reserved_mem_device_init()
+>   ASoC: mediatek: mt8195: Use devm_of_reserved_mem_device_init()
+>   ASoC: SOF: mediatek: mt8186: Use devm_of_reserved_mem_device_init()
+>   ASoC: SOF: mediatek: mt8195: Use devm_of_reserved_mem_device_init()
+>   misc: fastrpc: Use devm_of_reserved_mem_device_init()
+>   ASoC: fsl: imx-rpmsg: Use devm_of_reserved_mem_device_init_by_idx()
+>   ASoC: sprd: Use devm_of_reserved_mem_device_init()
+> 
+>  drivers/firmware/qcom/qcom_scm.c              | 22 +++------
+>  .../gpu/drm/arm/display/komeda/komeda_dev.c   |  4 +-
+>  drivers/gpu/drm/arm/hdlcd_drv.c               |  6 +--
+>  drivers/gpu/drm/arm/malidp_drv.c              |  4 +-
+>  drivers/gpu/drm/aspeed/aspeed_gfx_drv.c       |  2 +-
+>  drivers/gpu/drm/ingenic/ingenic-drm-drv.c     | 13 +-----
+>  drivers/gpu/drm/kmb/kmb_drv.c                 | 12 +----
+>  drivers/gpu/drm/logicvc/logicvc_drm.c         | 21 ++++-----
+>  drivers/gpu/drm/pl111/pl111_drv.c             |  4 +-
+>  drivers/gpu/drm/sun4i/sun4i_drv.c             |  4 +-
+>  drivers/gpu/drm/tiny/arcpgu.c                 |  2 +-
+>  drivers/gpu/drm/xlnx/zynqmp_dpsub.c           |  4 +-
+>  .../platform/arm/mali-c55/mali-c55-core.c     | 12 ++---
+>  drivers/media/platform/aspeed/aspeed-video.c  | 12 ++---
+>  drivers/media/platform/mediatek/vpu/mtk_vpu.c |  3 +-
+>  drivers/media/platform/nuvoton/npcm-video.c   |  9 +---
+>  .../platform/synopsys/hdmirx/snps_hdmirx.c    | 16 +------
+>  drivers/memory/tegra/tegra210-emc-core.c      | 21 ++++-----
+>  drivers/misc/fastrpc.c                        |  2 +-
+>  drivers/mmc/host/sdhci-of-bst.c               |  7 +--
+>  drivers/of/of_reserved_mem.c                  | 41 +++++++++++++++++
+>  drivers/remoteproc/da8xx_remoteproc.c         | 10 +---
+>  drivers/remoteproc/keystone_remoteproc.c      | 16 +------
+>  drivers/remoteproc/mtk_scp.c                  |  3 +-
+>  drivers/remoteproc/omap_remoteproc.c          | 13 +-----
+>  drivers/remoteproc/ti_k3_common.c             | 13 +-----
+>  drivers/remoteproc/ti_k3_common.h             |  1 -
+>  .../staging/media/sunxi/cedrus/cedrus_hw.c    |  6 +--
+>  include/linux/of_reserved_mem.h               | 46 +++++++++++++++++++
+>  sound/hda/controllers/cix-ipbloq.c            |  2 +-
+>  sound/soc/fsl/imx-rpmsg.c                     |  2 +-
+>  sound/soc/mediatek/mt8173/mt8173-afe-pcm.c    |  2 +-
+>  sound/soc/mediatek/mt8183/mt8183-afe-pcm.c    | 13 +-----
+>  sound/soc/mediatek/mt8186/mt8186-afe-pcm.c    |  2 +-
+>  sound/soc/mediatek/mt8188/mt8188-afe-pcm.c    |  2 +-
+>  sound/soc/mediatek/mt8189/mt8189-afe-pcm.c    | 16 +------
+>  sound/soc/mediatek/mt8192/mt8192-afe-pcm.c    | 11 +----
+>  sound/soc/mediatek/mt8195/mt8195-afe-pcm.c    |  2 +-
+>  sound/soc/mediatek/mt8196/mt8196-afe-pcm.c    | 14 +-----
+>  sound/soc/sof/imx/imx-common.c                |  9 ++--
+>  sound/soc/sof/mediatek/mt8186/mt8186.c        |  2 +-
+>  sound/soc/sof/mediatek/mt8195/mt8195.c        |  2 +-
+>  sound/soc/sprd/sprd-pcm-dma.c                 |  3 +-
+>  43 files changed, 162 insertions(+), 249 deletions(-)
+> 
+> -- 
+> 2.53.0
+> 
+
+-- 
+====================
+| I would like to |
+| fix the world,  |
+| but they're not |
+| giving me the   |
+ \ source code!  /
+  ---------------
+    ¯\_(ツ)_/¯
 
