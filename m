@@ -1,53 +1,53 @@
-Return-Path: <linux-mips+bounces-15596-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-15597-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id Gpm3L/VOTWpDyAEAu9opvQ
-	(envelope-from <linux-mips+bounces-15596-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Tue, 07 Jul 2026 21:09:41 +0200
+	id ITJJB2NRTWo4yQEAu9opvQ
+	(envelope-from <linux-mips+bounces-15597-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Tue, 07 Jul 2026 21:20:03 +0200
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3D77D71EF09
-	for <lists+linux-mips@lfdr.de>; Tue, 07 Jul 2026 21:09:41 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9D36D71F227
+	for <lists+linux-mips@lfdr.de>; Tue, 07 Jul 2026 21:20:02 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=kernel.org header.s=k20260515 header.b="d68e/zkh";
+	dkim=pass header.d=kernel.org header.s=k20260515 header.b=h91mvxoS;
 	dmarc=pass (policy=quarantine) header.from=kernel.org;
-	spf=pass (mail.lfdr.de: domain of "linux-mips+bounces-15596-lists+linux-mips=lfdr.de@vger.kernel.org" designates 2600:3c04:e001:36c::12fc:5321 as permitted sender) smtp.mailfrom="linux-mips+bounces-15596-lists+linux-mips=lfdr.de@vger.kernel.org";
+	spf=pass (mail.lfdr.de: domain of "linux-mips+bounces-15597-lists+linux-mips=lfdr.de@vger.kernel.org" designates 172.234.253.10 as permitted sender) smtp.mailfrom="linux-mips+bounces-15597-lists+linux-mips=lfdr.de@vger.kernel.org";
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 6A76F3055797
-	for <lists+linux-mips@lfdr.de>; Tue,  7 Jul 2026 19:08:07 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 0A534307FC80
+	for <lists+linux-mips@lfdr.de>; Tue,  7 Jul 2026 19:08:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 37C6946AF08;
-	Tue,  7 Jul 2026 19:06:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EAB9C477E4B;
+	Tue,  7 Jul 2026 19:06:45 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 895AA436BCA;
-	Tue,  7 Jul 2026 19:06:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C606144D03E;
+	Tue,  7 Jul 2026 19:06:40 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783451202; cv=none; b=OeW2gyQJieQzoX7jR2yE91fca0HBDsBxUXA4wOg8Y8861ZR+RViDYmhVVuUP2GKGwk+XXpOZwzQrN3Vx5wGMbiJ1ZZ6VNpopk1kwWJmCYVnv0LHUVfzxLyBD7Jo4FZhDa5I77lXve3RWq/UA+E2tFQfMRiBCrC69Z4aF4EpCang=
+	t=1783451204; cv=none; b=qfgfk2fpSKKSRYB83bGjqbEUtxvMd166s9aF0xRDs/4Q+dmNQ7NdwjTdx3L4IeMq/WuY6ixcSMNuwtVRYq4phxh0Vjm27fFTZVkf3GwghG+yMiZMnwnAEEyx3KGXtMa8FJAJckD4fbAluiAQ+6Mw9I74Q3Po4oC1Um2a1o6iGsQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783451202; c=relaxed/simple;
-	bh=qREUyjIW8fgVFwf6mCuY/7+DaL+84ELoNQHCs1rFK8I=;
+	s=arc-20240116; t=1783451204; c=relaxed/simple;
+	bh=CbRs/wo8Df+GsVt72rPyMFgSfNKcvE6Ap7XL1kO3dI4=;
 	h=Date:Message-ID:From:To:Cc:Subject:References:MIME-Version:
-	 Content-Type; b=SUv5F0uhQpzTMh9VzevwyKKaOajTLMYNYbjC9uxDlZbNpIft0dJ7BN7RsBciA5BPBE+hiQzvhajJEQ2bryqVPfi/qr81bF9abSkvm4bMOuYEqTymylvQSa2HARDqLXbgNhjgZtDRA6r0X8M51TpxJJpKu2pEjrlbi6jPPfhGnxA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=d68e/zkh; arc=none smtp.client-ip=100.103.45.18
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C91BA1F000E9;
-	Tue,  7 Jul 2026 19:06:33 +0000 (UTC)
+	 Content-Type; b=G01qH6/MSG+ARm+YHu9qdwgJp9lEZFAsbmsrOWYMCQ1zVx4yOJyycYFzMTbTUxulswJfWBE4sCNFu+10XMxr1MYW7+8q+vCh3u3mhgQH3Csc49nrcjwvQuZGp5RI5N5LjXxUuIC/LSXu/5BkQygTu4h08Vi4f44gCDPYbVqIwmg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=h91mvxoS; arc=none smtp.client-ip=100.103.45.18
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E87121F00A3A;
+	Tue,  7 Jul 2026 19:06:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1783451194;
-	bh=Ko42Ry29jFPoMyPQLdlxYhg8S/68hEmUYQPkE8hHtRo=;
+	s=k20260515; t=1783451198;
+	bh=bOhoOM4hOcQqUzsvXhQz1H8YtW+B68Wkj0kvWsv9ysw=;
 	h=Date:From:To:Cc:Subject:References;
-	b=d68e/zkh5oU9ziZmyD8/j0zm+dms5mzI3QpxXDgS3beo+n+Xnv/2HSq+wH632V3sd
-	 8uTzG42LNfaK05lc2KYYdDujQ1J4Cgu9HUzFOHwcGxBUM8uoXWnE/1r5BSASo70M2/
-	 BeZM/CiOfzvrrk1xZNqIUAM6oN02Mkik+/OqqvpTFPpbyHqBCzcd+u7xOyvYG2DB/V
-	 bFMusVe8fZm0EviIlm2Cdc6bEcEu9PSgqO6pG/h8ekgyn42NUtvGGWIO67Mdyq29CY
-	 XsTesNZZfW6pwplIhbQXruHpmuALvlix8sPBSkJLCO72NF5LTVJjzfgWsBEq/Yvuwu
-	 cgcjZWz5+d1VQ==
-Date: Tue, 07 Jul 2026 21:06:32 +0200
-Message-ID: <20260707190254.132654198@kernel.org>
+	b=h91mvxoSmiGeQM8FkyaGYFZNxd9/IUcToDeSMIPvZRCL7a8UMwB0b0QBesp5xIbLU
+	 i7PsT94Sw2onA3+UmpAOBRZfRcPLnTsutjo1QPB6poAvdbvPFcNvVkGP1hB6jDLYDb
+	 RKWnZ0yte8HArLwcv9oJe3tjBUUeDOAyh5mMWkxYWu67e92T5hj3A/OUFslD9ZYdOb
+	 CoRjmiJVDNi/JotogxyAKQWnRnlRYa4L0e21jTcDihICBULLgdAZvlp5GRhmagJ2DT
+	 +Aa9ucQxYNr6w3TZVbEH8jmFMex+6xgUViSmWosj6uNAuMiuHhylsKUcB2NMwZIOYT
+	 B1ISbmvWG+Pgw==
+Date: Tue, 07 Jul 2026 21:06:36 +0200
+Message-ID: <20260707190254.181086755@kernel.org>
 User-Agent: quilt/0.69
 From: Thomas Gleixner <tglx@kernel.org>
 To: LKML <linux-kernel@vger.kernel.org>
@@ -102,7 +102,7 @@ Cc: Peter Zijlstra <peterz@infradead.org>,
  =?UTF-8?q?Michal=20Such=C3=A1nek?= <msuchanek@suse.de>,
  Jonathan Corbet <corbet@lwn.net>,
  linux-doc@vger.kernel.org
-Subject: [patch 09/18] entry: Remove syscall_enter_from_user_mode()
+Subject: [patch 10/18] entry: Use syscall number instead of rereading it
 References: <20260707181957.433213175@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
@@ -117,12 +117,12 @@ X-Spamd-Result: default: False [-5.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
 	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20260515];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	MIME_TRACE(0.00)[0:+];
-	TAGGED_FROM(0.00)[bounces-15596-lists,linux-mips=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-15597-lists,linux-mips=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
 	FORWARDED(0.00)[lists@lfdr.de];
 	FORGED_SENDER_MAILLIST(0.00)[];
@@ -132,7 +132,7 @@ X-Spamd-Result: default: False [-5.16 / 15.00];
 	FREEMAIL_CC(0.00)[infradead.org,ellerman.id.au,linux.ibm.com,lists.ozlabs.org,kernel.org,lists.linux.dev,dabbelt.com,lists.infradead.org,vger.kernel.org,arm.com,huawei.com,redhat.com,linaro.org,armlinux.org.uk,linux-m68k.org,alpha.franken.de,gmx.de,users.sourceforge.jp,nod.at,zankel.net,lists.linux-m68k.org,arndb.de,monstr.eu,davemloft.net,gaisler.com,suse.de,lwn.net];
 	RCVD_COUNT_THREE(0.00)[4];
 	FROM_HAS_DN(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	FORGED_SENDER_FORWARDING(0.00)[];
 	RCPT_COUNT_GT_50(0.00)[52];
@@ -145,143 +145,50 @@ X-Spamd-Result: default: False [-5.16 / 15.00];
 	MID_RHS_MATCH_FROM(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-mips];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,vger.kernel.org:from_smtp]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[vger.kernel.org:from_smtp,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 3D77D71EF09
+X-Rspamd-Queue-Id: 9D36D71F227
 
-All architecture use either:
-
-    nr = enter_from_user_mode_randomize_stack(regs, nr);
-
-or
-
-    enter_from_user_mode_randomize_stack(regs);
-    nr = syscall_enter_from_user_mode_work(regs, nr);
-
-Remove the now unused function.
+rseq_syscall_enter_work() is invoked before the syscall number can be
+modified. So there is no point in rereading it from pt_regs.
 
 Signed-off-by: Thomas Gleixner <tglx@kernel.org>
 ---
- Documentation/core-api/entry.rst |   17 +++++++++-------
- include/linux/entry-common.h     |   40 +++------------------------------------
- include/linux/irq-entry-common.h |    6 ++---
- 3 files changed, 17 insertions(+), 46 deletions(-)
+ include/linux/entry-common.h |    9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
 
---- a/Documentation/core-api/entry.rst
-+++ b/Documentation/core-api/entry.rst
-@@ -68,7 +68,7 @@ low-level C code must not be instrumente
-   noinstr void syscall(struct pt_regs *regs, int nr)
-   {
- 	arch_syscall_enter(regs);
--	nr = syscall_enter_from_user_mode(regs, nr);
-+	nr = syscall_enter_from_user_mode_randomize_stack(regs, nr);
- 
- 	instrumentation_begin();
- 	if (!invoke_syscall(regs, nr) && nr != -1)
-@@ -78,12 +78,14 @@ low-level C code must not be instrumente
- 	syscall_exit_to_user_mode(regs);
-   }
- 
--syscall_enter_from_user_mode() first invokes enter_from_user_mode() which
--establishes state in the following order:
-+syscall_enter_from_user_mode_randomize_stack() first invokes
-+enter_from_user_mode_randomize_stack() which establishes state in the
-+following order:
- 
-   * Lockdep
-   * RCU / Context tracking
-   * Tracing
-+  * Apply stack randomization
- 
- and then invokes the various entry work functions like ptrace, seccomp, audit,
- syscall tracing, etc. After all that is done, the instrumentable invoke_syscall
-@@ -99,10 +101,11 @@ that it invokes exit_to_user_mode() whic
-   * RCU / Context tracking
-   * Lockdep
- 
--syscall_enter_from_user_mode() and syscall_exit_to_user_mode() are also
--available as fine grained subfunctions in cases where the architecture code
--has to do extra work between the various steps. In such cases it has to
--ensure that enter_from_user_mode() is called first on entry and
-+syscall_enter_from_user_mode_randomize_stack() and
-+syscall_exit_to_user_mode() are also available as fine grained subfunctions
-+in cases where the architecture code has to do extra work between the
-+various steps. In such cases it has to ensure that
-+enter_from_user_mode_randomize_stack() is called first on entry and
- exit_to_user_mode() is called last on exit.
- 
- Do not nest syscalls. Nested syscalls will cause RCU and/or context tracking
 --- a/include/linux/entry-common.h
 +++ b/include/linux/entry-common.h
-@@ -19,7 +19,7 @@
- #endif
+@@ -70,9 +70,10 @@ static inline void syscall_enter_audit(s
+ 	}
+ }
  
- /*
-- * SYSCALL_WORK flags handled in syscall_enter_from_user_mode()
-+ * SYSCALL_WORK flags handled in syscall_enter_from_user_mode_work()
-  */
- #define SYSCALL_WORK_ENTER	(SYSCALL_WORK_SECCOMP |			\
- 				 SYSCALL_WORK_SYSCALL_TRACEPOINT |	\
-@@ -205,42 +205,10 @@ do {									\
- 	_ret;								\
- })
- 
--/**
-- * syscall_enter_from_user_mode - Establish state and check and handle work
-- *				  before invoking a syscall
-- * @regs:	Pointer to currents pt_regs
-- * @syscall:	The syscall number
-- *
-- * Invoked from architecture specific syscall entry code with interrupts
-- * disabled. The calling code has to be non-instrumentable. When the
-- * function returns all state is correct, interrupts are enabled and the
-- * subsequent functions can be instrumented.
-- *
-- * This is the combination of enter_from_user_mode() and
-- * syscall_enter_from_user_mode_work() to be used when there is no
-- * architecture specific work to be done between the two.
-- *
-- * Returns: The original or a modified syscall number. See
-- * syscall_enter_from_user_mode_work() for further explanation.
-- */
--static __always_inline long syscall_enter_from_user_mode(struct pt_regs *regs, long syscall)
--{
--	long ret;
--
--	enter_from_user_mode(regs);
--
--	instrumentation_begin();
--	local_irq_enable();
--	ret = syscall_enter_from_user_mode_work(regs, syscall);
--	instrumentation_end();
--
--	return ret;
--}
--
- /*
-- * If SYSCALL_EMU is set, then the only reason to report is when
-- * SINGLESTEP is set (i.e. PTRACE_SYSEMU_SINGLESTEP).  This syscall
-- * instruction has been already reported in syscall_enter_from_user_mode().
-+ * If SYSCALL_EMU is set, then the only reason to report is when SINGLESTEP is
-+ * set (i.e. PTRACE_SYSEMU_SINGLESTEP).  This syscall instruction has been
-+ * already reported in syscall_enter_from_user_mode_work().
-  */
- static __always_inline bool report_single_step(unsigned long work)
+-static __always_inline long syscall_trace_enter(struct pt_regs *regs, unsigned long work)
++static __always_inline long syscall_trace_enter(struct pt_regs *regs, unsigned long work,
++						long syscall)
  {
---- a/include/linux/irq-entry-common.h
-+++ b/include/linux/irq-entry-common.h
-@@ -49,9 +49,9 @@
-  * Defaults to an empty implementation. Can be replaced by architecture
-  * specific code.
-  *
-- * Invoked from syscall_enter_from_user_mode() in the non-instrumentable
-- * section. Use __always_inline so the compiler cannot push it out of line
-- * and make it instrumentable.
-+ * Invoked from enter_from_user_mode_syscall_and_randomize_stack() in the
-+ * non-instrumentable section. Use __always_inline so the compiler cannot push
-+ * it out of line and make it instrumentable.
-  */
- static __always_inline void arch_enter_from_user_mode(struct pt_regs *regs);
+-	long syscall, ret = 0;
++	long ret = 0;
  
+ 	/*
+ 	 * Handle Syscall User Dispatch.  This must comes first, since
+@@ -90,7 +91,7 @@ static __always_inline long syscall_trac
+ 	 * through hrtimer_interrupt().
+ 	 */
+ 	if (work & SYSCALL_WORK_SYSCALL_RSEQ_SLICE)
+-		rseq_syscall_enter_work(syscall_get_nr(current, regs));
++		rseq_syscall_enter_work(syscall);
+ 
+ 	/* Handle ptrace */
+ 	if (work & (SYSCALL_WORK_SYSCALL_TRACE | SYSCALL_WORK_SYSCALL_EMU)) {
+@@ -145,7 +146,7 @@ static __always_inline long syscall_ente
+ 	unsigned long work = READ_ONCE(current_thread_info()->syscall_work);
+ 
+ 	if (work & SYSCALL_WORK_ENTER)
+-		syscall = syscall_trace_enter(regs, work);
++		syscall = syscall_trace_enter(regs, work, syscall);
+ 
+ 	return syscall;
+ }
 
 
