@@ -1,60 +1,74 @@
-Return-Path: <linux-mips+bounces-15622-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-15623-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id Wd9VJAd5TmrnNQIAu9opvQ
-	(envelope-from <linux-mips+bounces-15622-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Wed, 08 Jul 2026 18:21:27 +0200
+	id RK2ZAed4TmrgNQIAu9opvQ
+	(envelope-from <linux-mips+bounces-15623-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Wed, 08 Jul 2026 18:20:55 +0200
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id E00B5728A24
-	for <lists+linux-mips@lfdr.de>; Wed, 08 Jul 2026 18:21:26 +0200 (CEST)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id 01FFD728A11
+	for <lists+linux-mips@lfdr.de>; Wed, 08 Jul 2026 18:20:54 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=none;
-	dmarc=fail reason="SPF not aligned (relaxed), No valid DKIM" header.from=suse.de (policy=none);
-	spf=pass (mail.lfdr.de: domain of "linux-mips+bounces-15622-lists+linux-mips=lfdr.de@vger.kernel.org" designates 2600:3c0a:e001:db::12fc:5321 as permitted sender) smtp.mailfrom="linux-mips+bounces-15622-lists+linux-mips=lfdr.de@vger.kernel.org";
+	dkim=pass header.d=redhat.com header.s=mimecast20190719 header.b=DXkP4w0r;
+	dmarc=pass (policy=quarantine) header.from=redhat.com;
+	spf=pass (mail.lfdr.de: domain of "linux-mips+bounces-15623-lists+linux-mips=lfdr.de@vger.kernel.org" designates 104.64.211.4 as permitted sender) smtp.mailfrom="linux-mips+bounces-15623-lists+linux-mips=lfdr.de@vger.kernel.org";
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 3EE0E30F937A
-	for <lists+linux-mips@lfdr.de>; Wed,  8 Jul 2026 15:52:53 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 86A6D304ECE1
+	for <lists+linux-mips@lfdr.de>; Wed,  8 Jul 2026 16:04:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7057F409293;
-	Wed,  8 Jul 2026 15:52:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2D3DA37998A;
+	Wed,  8 Jul 2026 16:04:53 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63AF0409272
-	for <linux-mips@vger.kernel.org>; Wed,  8 Jul 2026 15:52:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7142336F903
+	for <linux-mips@vger.kernel.org>; Wed,  8 Jul 2026 16:04:51 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783525968; cv=none; b=dMptTRWUhO+4XU902zwkzIf9YktHlptlSPJtlgIoEFq73irl58w1dzHmYrBZI+fMrEqX/Y67CNFpGoYo159OT2b8kkzsEt70llbk5+qtEZH35M0xlMnhClghdLqe3ih+qIY6StMiZHTZNM25SReFef1NancMyTZe3uf5oEMEPdw=
+	t=1783526692; cv=none; b=rEpLRtGWXrQNoXSkf1WDmgJiEzXNmZXEAw7j5jlGX+urCKwrtJNNqkNqWYEVdzk9q9N4i9fYpw8Ienrf2tKVKdaJmyLsZ1A+pfFzGDbc3Yt23jorQcw2ywEY4DMHtWwilyGj2q8v7ERWGL4MlfgIZ4251Sv51iKujel18QlL7+I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783525968; c=relaxed/simple;
-	bh=m2OZqoO4cKfu++qdZ7oxKivY75OzyGZodvLMx4WbbJo=;
+	s=arc-20240116; t=1783526692; c=relaxed/simple;
+	bh=rkZTTrKDp1fLIJPaNfi+EBow6fHXCvgjUtBGn831Gm0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=oX+9Ar4/amdZD23HtFia6pe0W+vezJbanyEoek+mZAq/bt6wpKSIjUdVg8lzMh+2MZOyJNifw5jv68tIHL6/Nb1elBjP3o8nqN+9wHdNsOgVYydaS15bJfiTZaETYxPh7OiXGtHuEzxonv2Y91FTPqmMQtaGXS1iYdsQv8OrRYA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; arc=none smtp.client-ip=195.135.223.131
-Received: from kunlun.suse.cz (unknown [IPv6:2a07:de40:b306:2000::2])
+	 Content-Type:Content-Disposition:In-Reply-To; b=quiXTsKayZmxlLwUTrETlKCDamDUagjZ/IWkzkgQ/ufekn18vconnI2m2GFc9Nbq4vAnjGE/JzWTQGjI5eVHbssgy9cEA467bVLUMvR7pb2+VIxS3GbQGdOmoRrIKGYhhCfA2eMvmOsFd2PZ5CPYIDxWS5Se4ttdWPHRWfIgmTo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=DXkP4w0r; arc=none smtp.client-ip=170.10.129.124
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1783526690;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=8P/ciXzD2S1KvjG8yWg06YK1HrAoM9H+3p3KtWGqU68=;
+	b=DXkP4w0rBXsaquakZkFNg378WjVFF11CDC/ygj7fE62vO3j7dkySjU/q2j+dBcG0UJ2rko
+	wA/l7apmXIWoiY1fcCnEH05AXzI2wFG7/8qoMDJ154bjTJsrGMtECmeZhCRQSvn4vdsyTh
+	hFmkJT1eAy6dgerv3b05nh6pO/AZPMw=
+Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-595-fn1pYKmRPGGlbjH-rSP4QA-1; Wed,
+ 08 Jul 2026 12:04:48 -0400
+X-MC-Unique: fn1pYKmRPGGlbjH-rSP4QA-1
+X-Mimecast-MFC-AGG-ID: fn1pYKmRPGGlbjH-rSP4QA_1783526682
+Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id C55F775A94;
-	Wed,  8 Jul 2026 15:52:43 +0000 (UTC)
-Date: Wed, 8 Jul 2026 17:52:42 +0200
-From: Michal =?iso-8859-1?Q?Such=E1nek?= <msuchanek@suse.de>
+	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 0E37718009D8;
+	Wed,  8 Jul 2026 16:04:40 +0000 (UTC)
+Received: from fedora (unknown [10.44.33.83])
+	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with SMTP id 1D1D21956040;
+	Wed,  8 Jul 2026 16:04:21 +0000 (UTC)
+Received: by fedora (nbSMTP-1.00) for uid 1000
+	oleg@redhat.com; Wed,  8 Jul 2026 18:04:39 +0200 (CEST)
+Date: Wed, 8 Jul 2026 18:04:19 +0200
+From: Oleg Nesterov <oleg@redhat.com>
 To: Thomas Gleixner <tglx@kernel.org>
-Cc: LKML <linux-kernel@vger.kernel.org>,
+Cc: Jinjie Ruan <ruanjinjie@huawei.com>,
+	LKML <linux-kernel@vger.kernel.org>,
 	Peter Zijlstra <peterz@infradead.org>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Shrikanth Hegde <sshegde@linux.ibm.com>,
-	linuxppc-dev@lists.ozlabs.org, Kees Cook <kees@kernel.org>,
-	Huacai Chen <chenhuacai@kernel.org>, loongarch@lists.linux.dev,
-	Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>,
-	linux-riscv@lists.infradead.org,
-	Sven Schnelle <svens@linux.ibm.com>, linux-s390@vger.kernel.org,
-	x86@kernel.org, Mark Rutland <mark.rutland@arm.com>,
-	Jinjie Ruan <ruanjinjie@huawei.com>,
-	Andy Lutomirski <luto@kernel.org>, Oleg Nesterov <oleg@redhat.com>,
+	Mark Rutland <mark.rutland@arm.com>, Kees Cook <kees@kernel.org>,
+	Andy Lutomirski <luto@kernel.org>,
 	Richard Henderson <richard.henderson@linaro.org>,
 	Russell King <linux@armlinux.org.uk>,
 	Catalin Marinas <catalin.marinas@arm.com>,
@@ -69,19 +83,31 @@ Cc: LKML <linux-kernel@vger.kernel.org>,
 	linux-csky@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
 	linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
 	linux-sh@vger.kernel.org, linux-um@lists.infradead.org,
-	Arnd Bergmann <arnd@arndb.de>, Vineet Gupta <vgupta@kernel.org>,
-	Will Deacon <will@kernel.org>, Brian Cain <bcain@kernel.org>,
-	Michal Simek <monstr@monstr.eu>, Dinh Nguyen <dinguyen@kernel.org>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Shrikanth Hegde <sshegde@linux.ibm.com>,
+	linuxppc-dev@lists.ozlabs.org, Huacai Chen <chenhuacai@kernel.org>,
+	loongarch@lists.linux.dev, Paul Walmsley <pjw@kernel.org>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	linux-riscv@lists.infradead.org,
+	Sven Schnelle <svens@linux.ibm.com>, linux-s390@vger.kernel.org,
+	x86@kernel.org, Arnd Bergmann <arnd@arndb.de>,
+	Vineet Gupta <vgupta@kernel.org>, Will Deacon <will@kernel.org>,
+	Brian Cain <bcain@kernel.org>, Michal Simek <monstr@monstr.eu>,
+	Dinh Nguyen <dinguyen@kernel.org>,
 	"David S. Miller" <davem@davemloft.net>,
 	Andreas Larsson <andreas@gaisler.com>,
 	linux-snps-arc@lists.infradead.org, linux-hexagon@vger.kernel.org,
 	linux-openrisc@vger.kernel.org, sparclinux@vger.kernel.org,
-	linux-arch@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
-	linux-doc@vger.kernel.org
-Subject: Re: [patch 13/18] entry: Make trace_syscall_enter() return type bool
-Message-ID: <ak5ySpil83TNWxeq@kunlun.suse.cz>
+	linux-arch@vger.kernel.org,
+	Michal =?iso-8859-1?Q?Such=E1nek?= <msuchanek@suse.de>,
+	Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org
+Subject: Re: [patch 11/18] seccomp, treewide: Rename and convert
+ __secure_computing() to return boolean
+Message-ID: <ak51A77h1YRIl5tz@redhat.com>
 References: <20260707181957.433213175@kernel.org>
- <20260707190254.338083894@kernel.org>
+ <20260707190254.230735780@kernel.org>
+ <2e6ed364-ce8f-4b4b-8675-acd07f140f4f@huawei.com>
+ <871pddsuzl.ffs@fw13>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -90,144 +116,65 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260707190254.338083894@kernel.org>
-X-Rspamd-Pre-Result: action=no action;
-	module=replies;
-	Message is reply to one we originated
-X-Spam-Flag: NO
-X-Spam-Score: -2.00
-X-Spam-Level: 
-X-Rspamd-Pre-Result: action=no action;
-	module=replies;
-	Message is reply to one we originated
+In-Reply-To: <871pddsuzl.ffs@fw13>
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
 X-Rspamd-Action: no action
-X-Spamd-Result: default: False [-1.36 / 15.00];
+X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	DMARC_POLICY_ALLOW(-0.50)[redhat.com,quarantine];
+	R_DKIM_ALLOW(-0.20)[redhat.com:s=mimecast20190719];
+	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
-	DMARC_POLICY_SOFTFAIL(0.10)[suse.de : SPF not aligned (relaxed), No valid DKIM,none];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-15622-lists,linux-mips=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	FORGED_RECIPIENTS(0.00)[m:tglx@kernel.org,m:linux-kernel@vger.kernel.org,m:peterz@infradead.org,m:mpe@ellerman.id.au,m:sshegde@linux.ibm.com,m:linuxppc-dev@lists.ozlabs.org,m:kees@kernel.org,m:chenhuacai@kernel.org,m:loongarch@lists.linux.dev,m:pjw@kernel.org,m:palmer@dabbelt.com,m:linux-riscv@lists.infradead.org,m:svens@linux.ibm.com,m:linux-s390@vger.kernel.org,m:x86@kernel.org,m:mark.rutland@arm.com,m:ruanjinjie@huawei.com,m:luto@kernel.org,m:oleg@redhat.com,m:richard.henderson@linaro.org,m:linux@armlinux.org.uk,m:catalin.marinas@arm.com,m:guoren@kernel.org,m:geert@linux-m68k.org,m:tsbogend@alpha.franken.de,m:deller@gmx.de,m:ysato@users.sourceforge.jp,m:richard@nod.at,m:chris@zankel.net,m:linux-arm-kernel@lists.infradead.org,m:linux-alpha@vger.kernel.org,m:linux-csky@vger.kernel.org,m:linux-m68k@lists.linux-m68k.org,m:linux-mips@vger.kernel.org,m:linux-parisc@vger.kernel.org,m:linux-sh@vger.kernel.org,m:linux-um@lists.infradead.org,m:arnd@arndb.de,m:vgupta@kernel.org,m:will@kerne
- l.org,m:bcain@kernel.org,m:monstr@monstr.eu,m:dinguyen@kernel.org,m:davem@davemloft.net,m:andreas@gaisler.com,m:linux-snps-arc@lists.infradead.org,m:linux-hexagon@vger.kernel.org,m:linux-openrisc@vger.kernel.org,m:sparclinux@vger.kernel.org,m:linux-arch@vger.kernel.org,m:corbet@lwn.net,m:linux-doc@vger.kernel.org,s:lists@lfdr.de];
-	RCVD_COUNT_THREE(0.00)[4];
+	TAGGED_FROM(0.00)[bounces-15623-lists,linux-mips=lfdr.de];
+	FREEMAIL_CC(0.00)[huawei.com,vger.kernel.org,infradead.org,arm.com,kernel.org,linaro.org,armlinux.org.uk,linux-m68k.org,alpha.franken.de,gmx.de,users.sourceforge.jp,nod.at,zankel.net,lists.infradead.org,lists.linux-m68k.org,ellerman.id.au,linux.ibm.com,lists.ozlabs.org,lists.linux.dev,dabbelt.com,arndb.de,monstr.eu,davemloft.net,gaisler.com,suse.de,lwn.net];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,vger.kernel.org:from_smtp];
+	FORGED_RECIPIENTS(0.00)[m:tglx@kernel.org,m:ruanjinjie@huawei.com,m:linux-kernel@vger.kernel.org,m:peterz@infradead.org,m:mark.rutland@arm.com,m:kees@kernel.org,m:luto@kernel.org,m:richard.henderson@linaro.org,m:linux@armlinux.org.uk,m:catalin.marinas@arm.com,m:guoren@kernel.org,m:geert@linux-m68k.org,m:tsbogend@alpha.franken.de,m:deller@gmx.de,m:ysato@users.sourceforge.jp,m:richard@nod.at,m:chris@zankel.net,m:linux-arm-kernel@lists.infradead.org,m:linux-alpha@vger.kernel.org,m:linux-csky@vger.kernel.org,m:linux-m68k@lists.linux-m68k.org,m:linux-mips@vger.kernel.org,m:linux-parisc@vger.kernel.org,m:linux-sh@vger.kernel.org,m:linux-um@lists.infradead.org,m:mpe@ellerman.id.au,m:sshegde@linux.ibm.com,m:linuxppc-dev@lists.ozlabs.org,m:chenhuacai@kernel.org,m:loongarch@lists.linux.dev,m:pjw@kernel.org,m:palmer@dabbelt.com,m:linux-riscv@lists.infradead.org,m:svens@linux.ibm.com,m:linux-s390@vger.kernel.org,m:x86@kernel.org,m:arnd@arndb.de,m:vgupta@kernel.org,m:will@kernel.org,m:bcain@kern
+ el.org,m:monstr@monstr.eu,m:dinguyen@kernel.org,m:davem@davemloft.net,m:andreas@gaisler.com,m:linux-snps-arc@lists.infradead.org,m:linux-hexagon@vger.kernel.org,m:linux-openrisc@vger.kernel.org,m:sparclinux@vger.kernel.org,m:linux-arch@vger.kernel.org,m:msuchanek@suse.de,m:corbet@lwn.net,m:linux-doc@vger.kernel.org,s:lists@lfdr.de];
 	MIME_TRACE(0.00)[0:+];
-	FREEMAIL_CC(0.00)[vger.kernel.org,infradead.org,ellerman.id.au,linux.ibm.com,lists.ozlabs.org,kernel.org,lists.linux.dev,dabbelt.com,lists.infradead.org,arm.com,huawei.com,redhat.com,linaro.org,armlinux.org.uk,linux-m68k.org,alpha.franken.de,gmx.de,users.sourceforge.jp,nod.at,zankel.net,lists.linux-m68k.org,arndb.de,monstr.eu,davemloft.net,gaisler.com,lwn.net];
+	DKIM_TRACE(0.00)[redhat.com:+];
 	FORWARDED(0.00)[lists@lfdr.de];
-	FORGED_SENDER(0.00)[msuchanek@suse.de,linux-mips@vger.kernel.org];
+	FORGED_SENDER(0.00)[oleg@redhat.com,linux-mips@vger.kernel.org];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	MISSING_XM_UA(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
 	TO_DN_SOME(0.00)[];
-	FORGED_SENDER_FORWARDING(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[msuchanek@suse.de,linux-mips@vger.kernel.org];
-	FORGED_RECIPIENTS_FORWARDING(0.00)[];
+	FORGED_SENDER_FORWARDING(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[oleg@redhat.com,linux-mips@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	MISSING_XM_UA(0.00)[];
 	RCPT_COUNT_GT_50(0.00)[52];
-	R_DKIM_NA(0.00)[];
+	MID_RHS_MATCH_FROM(0.00)[];
 	ALIAS_RESOLVED(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
 	TAGGED_RCPT(0.00)[linux-mips];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,vger.kernel.org:from_smtp,suse.de:from_mime,kunlun.suse.cz:mid]
+	FORGED_RECIPIENTS_FORWARDING(0.00)[];
+	RCVD_COUNT_SEVEN(0.00)[7]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: E00B5728A24
+X-Rspamd-Queue-Id: 01FFD728A11
 
-Hello,
+On 07/08, Thomas Gleixner wrote:
+>
+> On Wed, Jul 08 2026 at 09:43, Jinjie Ruan wrote:
+> >
+> > The return value of __seccomp_filter is checked in the wrong way, check
+> > -1 should be replaced with check false, maybe:
+> >
+> > -               if (__seccomp_filter(this_syscall, true))
+> > -                       return -1;
+> > +               if (!__seccomp_filter(this_syscall, true))
+> > +                       return false;
 
-On Tue, Jul 07, 2026 at 09:06:48PM +0200, Thomas Gleixner wrote:
-> In preparation of converting the return value of
-> syscall_enter_from_user_mode[_work]() bool, rework trace_syscall_enter() to
-> 
->  - update the syscall number via a pointer argument
-> 
->  - Return True if the syscall number is != -1, False otherwise
+Or simply
 
-This does not achieve the goal of the initial RFC: To detangle the
-return value of syscall_enter_from_user_mode from the syscall number.
+	return __seccomp_filter(this_syscall, true);
 
-This still conflates them, making it impossible to tell if the syscall
-was rejected or syscall number was -1 to start with. Now also obfuscated
-by performing the check deeper inside the common code.
+and remove "return true" below ?
 
-> That aligns with ptrace_report_syscall_permit_enter() and
-> seccomp_permit_syscall().
-> 
-> The only difference is that this also returns False, when the syscall
-> number was already -1 to begin with, but there is not much which can be
-> done about that. As the architecture has to preset the return value to
-> -ENOSYS anyway, that results in the correct return value for such an
-> invalid syscall.
+Either way, I personally like this change, I was always confused by these -1's.
 
-That's not possible to do for architectures where the syscall number and
-the syscall return value are in the same register.
+Acked-by: Oleg Nesterov <oleg@redhat.com>
 
-You suggested that it is possible to not write the return value into an
-actual register but use an additional field for that, and have the exit
-code write the register.
-
-However, that's not what is documented, nor what is currently done.
-
-While this is an improvement in some respects the goal to have clear and
-intelligible API around the generic entry is not acheived.
-
-Thanks
-
-Michal
-
-> 
-> Signed-off-by: Thomas Gleixner <tglx@kernel.org>
-> ---
->  include/linux/entry-common.h  |    8 +++++---
->  kernel/entry/syscall-common.c |    7 ++++---
->  2 files changed, 9 insertions(+), 6 deletions(-)
-> 
-> --- a/include/linux/entry-common.h
-> +++ b/include/linux/entry-common.h
-> @@ -58,7 +58,7 @@ static __always_inline bool arch_ptrace_
->  #endif
->  
->  bool syscall_user_dispatch(struct pt_regs *regs);
-> -long trace_syscall_enter(struct pt_regs *regs, long syscall);
-> +bool trace_syscall_enter(struct pt_regs *regs, long *syscall);
->  void trace_syscall_exit(struct pt_regs *regs, long ret);
->  
->  static inline void syscall_enter_audit(struct pt_regs *regs, long syscall)
-> @@ -108,8 +108,10 @@ static __always_inline long syscall_trac
->  	/* Either of the above might have changed the syscall number */
->  	syscall = syscall_get_nr(current, regs);
->  
-> -	if (unlikely(work & SYSCALL_WORK_SYSCALL_TRACEPOINT))
-> -		syscall = trace_syscall_enter(regs, syscall);
-> +	if (unlikely(work & SYSCALL_WORK_SYSCALL_TRACEPOINT)) {
-> +		if (!trace_syscall_enter(regs, &syscall))
-> +			return -1L;
-> +	}
->  
->  	syscall_enter_audit(regs, syscall);
->  
-> --- a/kernel/entry/syscall-common.c
-> +++ b/kernel/entry/syscall-common.c
-> @@ -7,14 +7,15 @@
->  
->  /* Out of line to prevent tracepoint code duplication */
->  
-> -long trace_syscall_enter(struct pt_regs *regs, long syscall)
-> +bool trace_syscall_enter(struct pt_regs *regs, long *syscall)
->  {
-> -	trace_sys_enter(regs, syscall);
-> +	trace_sys_enter(regs, *syscall);
->  	/*
->  	 * Probes or BPF hooks in the tracepoint may have changed the
->  	 * system call number. Reread it.
->  	 */
-> -	return syscall_get_nr(current, regs);
-> +	*syscall = syscall_get_nr(current, regs);
-> +	return *syscall != -1L;
->  }
->  
->  void trace_syscall_exit(struct pt_regs *regs, long ret)
-> 
 
