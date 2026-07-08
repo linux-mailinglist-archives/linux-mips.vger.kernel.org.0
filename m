@@ -1,55 +1,55 @@
-Return-Path: <linux-mips+bounces-15633-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-15634-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id tWy/K9a/TmrBTQIAu9opvQ
-	(envelope-from <linux-mips+bounces-15633-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Wed, 08 Jul 2026 23:23:34 +0200
+	id nnKGHqfETmrUTgIAu9opvQ
+	(envelope-from <linux-mips+bounces-15634-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Wed, 08 Jul 2026 23:44:07 +0200
 X-Original-To: lists+linux-mips@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3204572A814
-	for <lists+linux-mips@lfdr.de>; Wed, 08 Jul 2026 23:23:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 011AC72A9E6
+	for <lists+linux-mips@lfdr.de>; Wed, 08 Jul 2026 23:44:06 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=rendec.net header.s=default header.b=H73P2hvf;
+	dkim=pass header.d=rendec.net header.s=default header.b=Vxaj5QTr;
 	dmarc=pass (policy=reject) header.from=rendec.net;
-	spf=pass (mail.lfdr.de: domain of "linux-mips+bounces-15633-lists+linux-mips=lfdr.de@vger.kernel.org" designates 2600:3c0a:e001:db::12fc:5321 as permitted sender) smtp.mailfrom="linux-mips+bounces-15633-lists+linux-mips=lfdr.de@vger.kernel.org";
+	spf=pass (mail.lfdr.de: domain of "linux-mips+bounces-15634-lists+linux-mips=lfdr.de@vger.kernel.org" designates 2600:3c0a:e001:db::12fc:5321 as permitted sender) smtp.mailfrom="linux-mips+bounces-15634-lists+linux-mips=lfdr.de@vger.kernel.org";
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 16C67308E61D
-	for <lists+linux-mips@lfdr.de>; Wed,  8 Jul 2026 21:21:55 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 776E9305AB38
+	for <lists+linux-mips@lfdr.de>; Wed,  8 Jul 2026 21:40:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 165193F54DD;
-	Wed,  8 Jul 2026 21:21:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3AAD33F7885;
+	Wed,  8 Jul 2026 21:40:22 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
 Received: from mail.mindbit.ro (xs1.mindbit.ro [80.86.107.70])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D4D63F39D3;
-	Wed,  8 Jul 2026 21:21:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABBDD3F0AA9;
+	Wed,  8 Jul 2026 21:40:20 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783545712; cv=none; b=u/gO+z4qePqq5xo28Gb4af6A83kgyDleUIrBSB5jaRG8s9rzVigEwqFx1cb8RzcvKiyipNrqmWuXl7jyE3th7B4pU7HLbyUt1/EfrS+FJbfHSqbTbKgkbyvUOH4icwiAJv3r4zJ5cmxidMEpquuDINtNhSsCFF17D/mQgmKZn8Q=
+	t=1783546822; cv=none; b=ZNuopx4u6yfIC37WJotDX6CqR0iuRSLKeKpLdcVOOUD3Xv1KJAoiXTOtXr7It/0mu38j0psdB2zb0vio7LiA3vFNh7KRTWTVSEJ7ARqByPlehikTBDcMjzqLd5nk0JWAFBiTn+vvyFL35yQUMFp5GDwoh6xUfwBkZV7NxwGEBQM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783545712; c=relaxed/simple;
-	bh=gA90Ha6tpVTtSvyChMKd7EA+UzPuD3ZxiiumMcmVt04=;
+	s=arc-20240116; t=1783546822; c=relaxed/simple;
+	bh=06X0wts/VWiidyiW7nEPWVVzTkue+gIEbtnmzGNDpCM=;
 	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=n3I+6c3wzlboWQvrTup4gNdWrkLGWfQVMLi3yxVNWqKU7Sigtkw4SSKyCYecj0H+1r2dPt2xK+JLByuBQplhB7U9ezD0TtJ5gGgJq8vkP3Il2dOEH3HQ2cLO0ZnLetK3HB7woRpiQGkKz/a62/o5B0nQbGf7NJYulmKMmvrOBTs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=rendec.net; spf=pass smtp.mailfrom=rendec.net; dkim=pass (2048-bit key) header.d=rendec.net header.i=@rendec.net header.b=H73P2hvf; arc=none smtp.client-ip=80.86.107.70
+	 Content-Type:MIME-Version; b=rDEzU7iXzJPw60qMH7JuBQDc+qS1ktyZa7v0mXeSriYFYGSDMVKeTN1pljCr5bRSQd8eoYzk7l2TD4PDWtIPh/TlKyBMvZ/MyM1yqBWNxk1dtAecO/XRzwzGWAotU0akzcf8ta/uM2PXNdXFY87DrCUKX9S/uzeBExXmQXE5W3s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=rendec.net; spf=pass smtp.mailfrom=rendec.net; dkim=pass (2048-bit key) header.d=rendec.net header.i=@rendec.net header.b=Vxaj5QTr; arc=none smtp.client-ip=80.86.107.70
 Received: from bat.kanata.rendec.net (unknown [24.114.111.125])
-	by mail.mindbit.ro (Postfix) with ESMTPSA id 861B2C343F;
-	Thu,  9 Jul 2026 00:21:24 +0300 (EEST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.mindbit.ro 861B2C343F
+	by mail.mindbit.ro (Postfix) with ESMTPSA id 362D5C2A88;
+	Thu,  9 Jul 2026 00:39:55 +0300 (EEST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.mindbit.ro 362D5C2A88
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=rendec.net;
-	s=default; t=1783545706;
-	bh=kcBzFv6UQNpvLv0B/9fxsmBCsaF3luDIfOX4WPfJ0LI=;
+	s=default; t=1783546818;
+	bh=vh8LzxdSEB6LZ5YWToq98HafI55oS8+SMbKFy7UAtCc=;
 	h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-	b=H73P2hvfJZwIoqeJMs+L8qKs84L6aXmcpvOfF+kp0m/siC+vpb3dmh5/rQGzQvZb1
-	 KAdLUM9HsIAVBSvQjur23GoqyvDR1vgkeRT+zXhGdund4eNITGlrejtsuhMxfFKCAR
-	 IZ2RR1YudeVpqiP4/BJTXsJStEaItfFAHRrFL/MeBdH47TYEEwHpIXXyM29AJ0RJba
-	 vDIsPAjX9g3lfxQFYB1UHQ6gSu4bIZDX60YvEcwW27AO+k2CzGxaM5EC7xOeYYIbCf
-	 SQX7lGJfXcy7EYovUwRvpU/bXxv/k8y5ltB87qAr3f6aIyyUbl73d4R/VmW3qRZE22
-	 yV9hYRdOWZEFg==
-Message-ID: <28fb0a8fd840bbf5223c60fea156584cb0f0f208.camel@rendec.net>
-Subject: Re: [patch 09/18] entry: Remove syscall_enter_from_user_mode()
+	b=Vxaj5QTrZmnMb8kgo0DAnYKLpgF1VNrrEnZhf9ONVOiUDzl0XehMr6So/mzP7wSyL
+	 f/bqBaPzsa1UU5XOryNPd/7wb5rGQ7IwzXh6waI3HHJA4HLb35t2X+7MMwejCU49/V
+	 wyf2N0EPqZ3qOvz85kyJv8Z4VVG4eamp/AsyfiC+iferCPdwrWRhhI2Gihi8EYWMG6
+	 w9oTc7WxIT/1nxUO9bTb5BDnYHc4NJdQoeD9M4hXia3YTHnUvNPgR3MY/vwUlZnDJN
+	 KsGLwDIHTElRb68oeRo724l+p50zYouaHMInNxEVvF4Rx2YclHGHsHkUSx9MW9gMJA
+	 BLbx/jCYTxmsw==
+Message-ID: <0f3a6ccaadc1d330215416d9cec13263d71b685e.camel@rendec.net>
+Subject: Re: [patch 10/18] entry: Use syscall number instead of rereading it
 From: Radu Rendec <radu@rendec.net>
 To: Thomas Gleixner <tglx@kernel.org>, LKML <linux-kernel@vger.kernel.org>
 Cc: Peter Zijlstra <peterz@infradead.org>, Michael Ellerman
@@ -80,10 +80,10 @@ Cc: Peter Zijlstra <peterz@infradead.org>, Michael Ellerman
 	linux-arch@vger.kernel.org, Michal =?ISO-8859-1?Q?Such=E1nek?=	
  <msuchanek@suse.de>, Jonathan Corbet <corbet@lwn.net>, 
 	linux-doc@vger.kernel.org
-Date: Wed, 08 Jul 2026 17:21:19 -0400
-In-Reply-To: <20260707190254.132654198@kernel.org>
+Date: Wed, 08 Jul 2026 17:39:50 -0400
+In-Reply-To: <20260707190254.181086755@kernel.org>
 References: <20260707181957.433213175@kernel.org>
-	 <20260707190254.132654198@kernel.org>
+	 <20260707190254.181086755@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 User-Agent: Evolution 3.58.3 (3.58.3-1.fc43) 
@@ -102,7 +102,7 @@ X-Spamd-Result: default: False [-2.16 / 15.00];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-15633-lists,linux-mips=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-15634-lists,linux-mips=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
 	FREEMAIL_CC(0.00)[infradead.org,ellerman.id.au,linux.ibm.com,lists.ozlabs.org,kernel.org,lists.linux.dev,dabbelt.com,lists.infradead.org,vger.kernel.org,arm.com,huawei.com,redhat.com,linaro.org,armlinux.org.uk,linux-m68k.org,alpha.franken.de,gmx.de,users.sourceforge.jp,nod.at,zankel.net,lists.linux-m68k.org,arndb.de,monstr.eu,davemloft.net,gaisler.com,suse.de,lwn.net];
 	FROM_HAS_DN(0.00)[];
@@ -126,173 +126,57 @@ X-Spamd-Result: default: False [-2.16 / 15.00];
 	MID_RHS_MATCH_FROM(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-mips];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,vger.kernel.org:from_smtp,rendec.net:from_mime,rendec.net:dkim,rendec.net:mid]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,vger.kernel.org:from_smtp,rendec.net:from_mime,rendec.net:email,rendec.net:mid,rendec.net:dkim]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 3204572A814
+X-Rspamd-Queue-Id: 011AC72A9E6
 
 On Tue, 2026-07-07 at 21:06 +0200, Thomas Gleixner wrote:
-> All architecture use either:
->=20
-> =C2=A0=C2=A0=C2=A0 nr =3D enter_from_user_mode_randomize_stack(regs, nr);
-
-You probably mean syscall_enter_from_user_mode_randomize_stack.
-
->=20
-> or
->=20
-> =C2=A0=C2=A0=C2=A0 enter_from_user_mode_randomize_stack(regs);
-> =C2=A0=C2=A0=C2=A0 nr =3D syscall_enter_from_user_mode_work(regs, nr);
->=20
-> Remove the now unused function.
+> rseq_syscall_enter_work() is invoked before the syscall number can be
+> modified. So there is no point in rereading it from pt_regs.
 >=20
 > Signed-off-by: Thomas Gleixner <tglx@kernel.org>
 > ---
-> =C2=A0Documentation/core-api/entry.rst |=C2=A0=C2=A0 17 +++++++++-------
-> =C2=A0include/linux/entry-common.h=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0=C2=A0 =
-40 +++------------------------------------
-> =C2=A0include/linux/irq-entry-common.h |=C2=A0=C2=A0=C2=A0 6 ++---
-> =C2=A03 files changed, 17 insertions(+), 46 deletions(-)
+> =C2=A0include/linux/entry-common.h |=C2=A0=C2=A0=C2=A0 9 +++++----
+> =C2=A01 file changed, 5 insertions(+), 4 deletions(-)
 >=20
-> --- a/Documentation/core-api/entry.rst
-> +++ b/Documentation/core-api/entry.rst
-> @@ -68,7 +68,7 @@ low-level C code must not be instrumente
-> =C2=A0=C2=A0 noinstr void syscall(struct pt_regs *regs, int nr)
-> =C2=A0=C2=A0 {
-> =C2=A0	arch_syscall_enter(regs);
-> -	nr =3D syscall_enter_from_user_mode(regs, nr);
-> +	nr =3D syscall_enter_from_user_mode_randomize_stack(regs, nr);
-> =C2=A0
-> =C2=A0	instrumentation_begin();
-> =C2=A0	if (!invoke_syscall(regs, nr) && nr !=3D -1)
-> @@ -78,12 +78,14 @@ low-level C code must not be instrumente
-> =C2=A0	syscall_exit_to_user_mode(regs);
-> =C2=A0=C2=A0 }
-> =C2=A0
-> -syscall_enter_from_user_mode() first invokes enter_from_user_mode() whic=
-h
-> -establishes state in the following order:
-> +syscall_enter_from_user_mode_randomize_stack() first invokes
-> +enter_from_user_mode_randomize_stack() which establishes state in the
-> +following order:
-> =C2=A0
-> =C2=A0=C2=A0 * Lockdep
-> =C2=A0=C2=A0 * RCU / Context tracking
-> =C2=A0=C2=A0 * Tracing
-> +=C2=A0 * Apply stack randomization
-> =C2=A0
-> =C2=A0and then invokes the various entry work functions like ptrace, secc=
-omp, audit,
-> =C2=A0syscall tracing, etc. After all that is done, the instrumentable in=
-voke_syscall
-> @@ -99,10 +101,11 @@ that it invokes exit_to_user_mode() whic
-> =C2=A0=C2=A0 * RCU / Context tracking
-> =C2=A0=C2=A0 * Lockdep
-> =C2=A0
-> -syscall_enter_from_user_mode() and syscall_exit_to_user_mode() are also
-> -available as fine grained subfunctions in cases where the architecture c=
-ode
-> -has to do extra work between the various steps. In such cases it has to
-> -ensure that enter_from_user_mode() is called first on entry and
-> +syscall_enter_from_user_mode_randomize_stack() and
-> +syscall_exit_to_user_mode() are also available as fine grained subfuncti=
-ons
-> +in cases where the architecture code has to do extra work between the
-> +various steps. In such cases it has to ensure that
-> +enter_from_user_mode_randomize_stack() is called first on entry and
-> =C2=A0exit_to_user_mode() is called last on exit.
-> =C2=A0
-> =C2=A0Do not nest syscalls. Nested syscalls will cause RCU and/or context=
- tracking
 > --- a/include/linux/entry-common.h
 > +++ b/include/linux/entry-common.h
-> @@ -19,7 +19,7 @@
-> =C2=A0#endif
+> @@ -70,9 +70,10 @@ static inline void syscall_enter_audit(s
+> =C2=A0	}
+> =C2=A0}
 > =C2=A0
-> =C2=A0/*
-> - * SYSCALL_WORK flags handled in syscall_enter_from_user_mode()
-> + * SYSCALL_WORK flags handled in syscall_enter_from_user_mode_work()
-> =C2=A0 */
-> =C2=A0#define SYSCALL_WORK_ENTER	(SYSCALL_WORK_SECCOMP |			\
-> =C2=A0				 SYSCALL_WORK_SYSCALL_TRACEPOINT |	\
-> @@ -205,42 +205,10 @@ do {									\
-> =C2=A0	_ret;								\
-> =C2=A0})
-> =C2=A0
-> -/**
-> - * syscall_enter_from_user_mode - Establish state and check and handle w=
-ork
-> - *				=C2=A0 before invoking a syscall
-> - * @regs:	Pointer to currents pt_regs
-> - * @syscall:	The syscall number
-> - *
-> - * Invoked from architecture specific syscall entry code with interrupts
-> - * disabled. The calling code has to be non-instrumentable. When the
-> - * function returns all state is correct, interrupts are enabled and the
-> - * subsequent functions can be instrumented.
-> - *
-> - * This is the combination of enter_from_user_mode() and
-> - * syscall_enter_from_user_mode_work() to be used when there is no
-> - * architecture specific work to be done between the two.
-> - *
-> - * Returns: The original or a modified syscall number. See
-> - * syscall_enter_from_user_mode_work() for further explanation.
-> - */
-> -static __always_inline long syscall_enter_from_user_mode(struct pt_regs =
-*regs, long syscall)
-> -{
-> -	long ret;
-> -
-> -	enter_from_user_mode(regs);
-> -
-> -	instrumentation_begin();
-> -	local_irq_enable();
-> -	ret =3D syscall_enter_from_user_mode_work(regs, syscall);
-> -	instrumentation_end();
-> -
-> -	return ret;
-> -}
-> -
-> =C2=A0/*
-> - * If SYSCALL_EMU is set, then the only reason to report is when
-> - * SINGLESTEP is set (i.e. PTRACE_SYSEMU_SINGLESTEP).=C2=A0 This syscall
-> - * instruction has been already reported in syscall_enter_from_user_mode=
-().
-> + * If SYSCALL_EMU is set, then the only reason to report is when SINGLES=
-TEP is
-> + * set (i.e. PTRACE_SYSEMU_SINGLESTEP).=C2=A0 This syscall instruction h=
-as been
-> + * already reported in syscall_enter_from_user_mode_work().
-> =C2=A0 */
-> =C2=A0static __always_inline bool report_single_step(unsigned long work)
+> -static __always_inline long syscall_trace_enter(struct pt_regs *regs, un=
+signed long work)
+> +static __always_inline long syscall_trace_enter(struct pt_regs *regs, un=
+signed long work,
+> +						long syscall)
 > =C2=A0{
-> --- a/include/linux/irq-entry-common.h
-> +++ b/include/linux/irq-entry-common.h
-> @@ -49,9 +49,9 @@
-> =C2=A0 * Defaults to an empty implementation. Can be replaced by architec=
-ture
-> =C2=A0 * specific code.
-> =C2=A0 *
-> - * Invoked from syscall_enter_from_user_mode() in the non-instrumentable
-> - * section. Use __always_inline so the compiler cannot push it out of li=
-ne
-> - * and make it instrumentable.
-> + * Invoked from enter_from_user_mode_syscall_and_randomize_stack() in th=
-e
-                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-Probably syscall_enter_from_user_mode_randomize_stack()? But the
-reality is it's only ever invoked from enter_from_user_mode(), which is
-below in the same file (include/linux/irq-entry-common.h).
-
-Granted, that's an always inline function, and it's used by both macros
-you added (since the second one uses the first one).
-
-> + * non-instrumentable section. Use __always_inline so the compiler canno=
-t push
-> + * it out of line and make it instrumentable.
-> =C2=A0 */
-> =C2=A0static __always_inline void arch_enter_from_user_mode(struct pt_reg=
-s *regs);
+> -	long syscall, ret =3D 0;
+> +	long ret =3D 0;
 > =C2=A0
+> =C2=A0	/*
+> =C2=A0	 * Handle Syscall User Dispatch.=C2=A0 This must comes first, sinc=
+e
+> @@ -90,7 +91,7 @@ static __always_inline long syscall_trac
+> =C2=A0	 * through hrtimer_interrupt().
+> =C2=A0	 */
+> =C2=A0	if (work & SYSCALL_WORK_SYSCALL_RSEQ_SLICE)
+> -		rseq_syscall_enter_work(syscall_get_nr(current, regs));
+> +		rseq_syscall_enter_work(syscall);
+> =C2=A0
+> =C2=A0	/* Handle ptrace */
+> =C2=A0	if (work & (SYSCALL_WORK_SYSCALL_TRACE | SYSCALL_WORK_SYSCALL_EMU)=
+) {
+> @@ -145,7 +146,7 @@ static __always_inline long syscall_ente
+> =C2=A0	unsigned long work =3D READ_ONCE(current_thread_info()->syscall_wo=
+rk);
+> =C2=A0
+> =C2=A0	if (work & SYSCALL_WORK_ENTER)
+> -		syscall =3D syscall_trace_enter(regs, work);
+> +		syscall =3D syscall_trace_enter(regs, work, syscall);
+> =C2=A0
+> =C2=A0	return syscall;
+> =C2=A0}
 
+Reviewed-by: Radu Rendec <radu@rendec.net>
 
