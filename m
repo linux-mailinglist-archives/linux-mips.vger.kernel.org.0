@@ -1,58 +1,53 @@
-Return-Path: <linux-mips+bounces-15666-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-15667-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id cvyeHyZDT2pidAIAu9opvQ
-	(envelope-from <linux-mips+bounces-15666-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Thu, 09 Jul 2026 08:43:50 +0200
+	id Xag8Ft5FT2o6dQIAu9opvQ
+	(envelope-from <linux-mips+bounces-15667-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Thu, 09 Jul 2026 08:55:26 +0200
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 79D0472D4B2
-	for <lists+linux-mips@lfdr.de>; Thu, 09 Jul 2026 08:43:49 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id A1E7A72D62F
+	for <lists+linux-mips@lfdr.de>; Thu, 09 Jul 2026 08:55:25 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=huawei.com header.s=dkim header.b=ktnvhwnt;
-	dmarc=pass (policy=quarantine) header.from=huawei.com;
-	spf=pass (mail.lfdr.de: domain of "linux-mips+bounces-15666-lists+linux-mips=lfdr.de@vger.kernel.org" designates 2600:3c15:e001:75::12fc:5321 as permitted sender) smtp.mailfrom="linux-mips+bounces-15666-lists+linux-mips=lfdr.de@vger.kernel.org";
+	dkim=pass header.d=kernel.org header.s=k20260515 header.b="eve+Ku/b";
+	dmarc=pass (policy=quarantine) header.from=kernel.org;
+	spf=pass (mail.lfdr.de: domain of "linux-mips+bounces-15667-lists+linux-mips=lfdr.de@vger.kernel.org" designates 2600:3c0a:e001:db::12fc:5321 as permitted sender) smtp.mailfrom="linux-mips+bounces-15667-lists+linux-mips=lfdr.de@vger.kernel.org";
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 5442730046BB
-	for <lists+linux-mips@lfdr.de>; Thu,  9 Jul 2026 06:37:23 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 7757E301E5BD
+	for <lists+linux-mips@lfdr.de>; Thu,  9 Jul 2026 06:54:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 446CD3D6662;
-	Thu,  9 Jul 2026 06:37:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1A9813D3012;
+	Thu,  9 Jul 2026 06:54:06 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
-Received: from canpmsgout06.his.huawei.com (canpmsgout06.his.huawei.com [113.46.200.221])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D6513D6673;
-	Thu,  9 Jul 2026 06:37:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E73BB3D5226;
+	Thu,  9 Jul 2026 06:54:04 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783579039; cv=none; b=tM5AnYJ8JgmSn9kvcKIQR2PICnizbU3b5SPSMd74nyULgelOnQbDEh10/6OhXhC/lmfq95k1tAOHRSXosLSJVmrqIsgWPIcUkBBQVLumVXtfFcbQtuBIiOMwNbdIn/A79rA6lEU6DaDyF0svhOtBc6TmO5vqAFHbdvtElq/uScw=
+	t=1783580046; cv=none; b=Cqf0D45r08bD75L6ZaraFf5SDSdd65ItPrvZHsbkFj+mG5Ei3ZQpsicu5HfKRebatZxLScCflP/gwkpQtKoTDyXa8H2GLWnrmla3V/+p3kdBvsEmcaMcvI8JbEEMvWAOHxRpNcO+99C5IbkkEDVhAGGPjtdoka28UVnSaDpYGWk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783579039; c=relaxed/simple;
-	bh=ZGZSufB/FTVHL/6/3ZAoa3duk4z4JeP6OXQqkwhGhx0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=SXinZSPEBlE+qdUZDugDHQQLFY+W3gqxCfZeS66vinspUwnurkX/XrsA4oRkv7DIp8f98piGmkIdX8coH/rwvvJOki+tytTaPwDvyIUA4G76KLvKEJElfnk6EKqNfwi6uyRhFo6LBTjV+yIyLwI2lTpIcoV0lxf6J+iaGBJjoxw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=ktnvhwnt; arc=none smtp.client-ip=113.46.200.221
-dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
-	c=relaxed/relaxed; q=dns/txt;
-	h=From;
-	bh=nx9uTIIpEYlLKn/TlkCDaDRFao/mdFBZNp54PrQsjPw=;
-	b=ktnvhwntGgaRfWEAoNl4nP/eMAv3WF40w6U+rHuISN9Agz4HcuqKVmp7oYolkH1rs7mUNfj74
-	gCHhpWuGxUwoXRpbuDGJzqHbbuU4k1jP4vTX4mO+NAfGMKawslgm9u9z/t6vpBkLBD6GuiT0hg5
-	ivGaNCxTDm241yTFRway9Ns=
-Received: from mail.maildlp.com (unknown [172.19.162.197])
-	by canpmsgout06.his.huawei.com (SkyGuard) with ESMTPS id 4gwlQ654XpzRhRh;
-	Thu,  9 Jul 2026 14:27:58 +0800 (CST)
-Received: from dggpemf500011.china.huawei.com (unknown [7.185.36.131])
-	by mail.maildlp.com (Postfix) with ESMTPS id ED73340579;
-	Thu,  9 Jul 2026 14:37:11 +0800 (CST)
-Received: from [10.67.109.254] (10.67.109.254) by
- dggpemf500011.china.huawei.com (7.185.36.131) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.11; Thu, 9 Jul 2026 14:37:07 +0800
-Message-ID: <21875fb4-434b-480d-b68b-e2ffd5fff5ae@huawei.com>
-Date: Thu, 9 Jul 2026 14:37:05 +0800
+	s=arc-20240116; t=1783580046; c=relaxed/simple;
+	bh=ydBjedsFlM5zE7n02K5dZMnmI4uwth9M252K9flBJwo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ajqGTCrWAdtE0LoTemWrIgGYjIBj6Ib/vk9o833NzBRCXpufK/Soh7LlKtpwGb8NtpnuUaY07ZpHu8hUPEi85DlxjGjXfmW3nRpjNCeErMDOaKDlHf5ffoXIt3aLDNBF87fdhsuYq+uiKp9uQr+ZdNGsMoMFAChvlfNTLxpfyxQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eve+Ku/b; arc=none smtp.client-ip=100.103.45.18
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CA18F1F000E9;
+	Thu,  9 Jul 2026 06:53:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1783580044;
+	bh=Umjxh1wdEigWfrDYfCtSPiAZ4y/Nii4EbVro+PImADI=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=eve+Ku/buy7nr9gkUgllmP30UOO+QyApAmLGK6h4Qn42Nr4HNLucG+pYmO07Wtxmk
+	 DWtBcDkCybkjMlqjaJAwd+FunPhP/l5E8qcTL2xsPlkrRQwgTqcC58b15eC4WZCrNW
+	 fy+PA4ct/pREL/oK75G/cagLF2JMP2E0x1x6qNQGOEUW/edqJPbb3eXflbtPImj6rr
+	 6mU9S7lgocbnzdZMe07a8786qBJXU0lxf05aRXoxRuFJMsGDl2iAXDkYuqhNkARf4s
+	 MxPTFY6X9AF2y/gnXEoGeobYHJvx5MR4EWTe2hp42in/8iWVNNdGaLMqCpALPbiZyj
+	 rFX4rJG1dpVLQ==
+Message-ID: <9320a573-ebf8-459b-a313-3a8b73a6180b@kernel.org>
+Date: Thu, 9 Jul 2026 08:53:54 +0200
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -60,165 +55,179 @@ List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v16 18/18] arm64: vdso: Expose sigreturn address on vdso
- to the kernel
-To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-CC: <oleg@redhat.com>, <richard.henderson@linaro.org>, <mattst88@gmail.com>,
-	<linmag7@gmail.com>, <linux@armlinux.org.uk>, <catalin.marinas@arm.com>,
-	<will@kernel.org>, <kees@kernel.org>, <guoren@kernel.org>,
-	<chenhuacai@kernel.org>, <kernel@xen0n.name>, <geert@linux-m68k.org>,
-	<tsbogend@alpha.franken.de>, <James.Bottomley@hansenpartnership.com>,
-	<deller@gmx.de>, <maddy@linux.ibm.com>, <mpe@ellerman.id.au>,
-	<npiggin@gmail.com>, <chleroy@kernel.org>, <pjw@kernel.org>,
-	<palmer@dabbelt.com>, <aou@eecs.berkeley.edu>, <alex@ghiti.fr>,
-	<hca@linux.ibm.com>, <gor@linux.ibm.com>, <agordeev@linux.ibm.com>,
-	<borntraeger@linux.ibm.com>, <svens@linux.ibm.com>,
-	<ysato@users.sourceforge.jp>, <dalias@libc.org>,
-	<glaubitz@physik.fu-berlin.de>, <richard@nod.at>,
-	<anton.ivanov@cambridgegreys.com>, <johannes@sipsolutions.net>,
-	<luto@kernel.org>, <tglx@kernel.org>, <mingo@redhat.com>, <bp@alien8.de>,
-	<dave.hansen@linux.intel.com>, <hpa@zytor.com>, <chris@zankel.net>,
-	<jcmvbkbc@gmail.com>, <peterz@infradead.org>, <wad@chromium.org>,
-	<thuth@redhat.com>, <mark.rutland@arm.com>, <ada.coupriediaz@arm.com>,
-	<kevin.brodsky@arm.com>, <linusw@kernel.org>, <yeoreum.yun@arm.com>,
-	<song@kernel.org>, <james.morse@arm.com>, <anshuman.khandual@arm.com>,
-	<broonie@kernel.org>, <liqiang01@kylinos.cn>, <pengcan@kylinos.cn>,
-	<ryan.roberts@arm.com>, <yangtiezhu@loongson.cn>, <sshegde@linux.ibm.com>,
-	<mchauras@linux.ibm.com>, <austin.kim@lge.com>, <jchrist@linux.ibm.com>,
-	<arnd@arndb.de>, <sohil.mehta@intel.com>, <andrew.cooper3@citrix.com>,
-	<jgross@suse.com>, <kas@kernel.org>, <x86@kernel.org>,
-	<linux-alpha@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<linux-arm-kernel@lists.infradead.org>, <linux-mm@kvack.org>,
-	<linux-csky@vger.kernel.org>, <loongarch@lists.linux.dev>,
-	<linux-m68k@lists.linux-m68k.org>, <linux-mips@vger.kernel.org>,
-	<linux-parisc@vger.kernel.org>, <linuxppc-dev@lists.ozlabs.org>,
-	<linux-riscv@lists.infradead.org>, <linux-s390@vger.kernel.org>,
-	<linux-sh@vger.kernel.org>, <linux-um@lists.infradead.org>
-References: <20260629130616.642022-1-ruanjinjie@huawei.com>
- <20260629130616.642022-19-ruanjinjie@huawei.com>
- <20260630172619-6c78c2e2-c2d3-44be-88e6-6c82de12baf4@linutronix.de>
-From: Jinjie Ruan <ruanjinjie@huawei.com>
-In-Reply-To: <20260630172619-6c78c2e2-c2d3-44be-88e6-6c82de12baf4@linutronix.de>
-Content-Type: text/plain; charset="UTF-8"
+Subject: Re: [PATCH 0/6] tty: serial: propagate errors from uart_ops.pm
+ callback
+To: Praveen Talari <praveen.talari@oss.qualcomm.com>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+ Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+ Matthias Brugger <matthias.bgg@gmail.com>,
+ AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+ Richard Genoud <richard.genoud@bootlin.com>,
+ Nicolas Ferre <nicolas.ferre@microchip.com>,
+ Alexandre Belloni <alexandre.belloni@bootlin.com>,
+ Claudiu Beznea <claudiu.beznea@tuxon.dev>,
+ Krzysztof Kozlowski <krzk@kernel.org>,
+ Peter Griffin <peter.griffin@linaro.org>,
+ Alim Akhtar <alim.akhtar@samsung.com>, Orson Zhai <orsonzhai@gmail.com>,
+ Baolin Wang <baolin.wang@linux.alibaba.com>,
+ Chunyan Zhang <zhang.lyra@gmail.com>,
+ Patrice Chotard <patrice.chotard@foss.st.com>,
+ Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+ Alexandre Torgue <alexandre.torgue@foss.st.com>,
+ Peter Korsgaard <jacmet@sunsite.dk>, Michal Simek <michal.simek@amd.com>,
+ Aaro Koskinen <aaro.koskinen@iki.fi>,
+ Janusz Krzysztofik <jmkrzyszt@gmail.com>, Tony Lindgren <tony@atomide.com>,
+ Russell King <linux@armlinux.org.uk>,
+ Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+ bjorn.andersson@oss.qualcomm.com,
+ Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+Cc: linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org,
+ linux-arm-msm@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+ linux-stm32@st-md-mailman.stormreply.com, linux-omap@vger.kernel.org,
+ linux-mips@vger.kernel.org,
+ Mukesh Kumar Savaliya <mukesh.savaliya@oss.qualcomm.com>,
+ aniket.randive@oss.qualcomm.com, chandana.chiluveru@oss.qualcomm.com
+References: <20260709-add_return_check_for_uart_change_pm-v1-0-e85c6ffa8ec4@oss.qualcomm.com>
+Content-Language: en-US
+From: Jiri Slaby <jirislaby@kernel.org>
+Autocrypt: addr=jirislaby@kernel.org; keydata=
+ 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
+In-Reply-To: <20260709-add_return_check_for_uart_change_pm-v1-0-e85c6ffa8ec4@oss.qualcomm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: kwepems100002.china.huawei.com (7.221.188.206) To
- dggpemf500011.china.huawei.com (7.185.36.131)
 X-Rspamd-Action: no action
-X-Spamd-Result: default: False [-9.16 / 15.00];
-	WHITELIST_DMARC(-7.00)[huawei.com:D:+];
+X-Spamd-Result: default: False [-3.66 / 15.00];
+	WHITELIST_SPF_DKIM(-3.00)[kernel.org:d:+,kernel.org:s:+];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[huawei.com,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
-	R_DKIM_ALLOW(-0.20)[huawei.com:s=dkim];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20260515];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
+	FORGED_RECIPIENTS(0.00)[m:praveen.talari@oss.qualcomm.com,m:gregkh@linuxfoundation.org,m:ilpo.jarvinen@linux.intel.com,m:andriy.shevchenko@linux.intel.com,m:matthias.bgg@gmail.com,m:angelogioacchino.delregno@collabora.com,m:richard.genoud@bootlin.com,m:nicolas.ferre@microchip.com,m:alexandre.belloni@bootlin.com,m:claudiu.beznea@tuxon.dev,m:krzk@kernel.org,m:peter.griffin@linaro.org,m:alim.akhtar@samsung.com,m:orsonzhai@gmail.com,m:baolin.wang@linux.alibaba.com,m:zhang.lyra@gmail.com,m:patrice.chotard@foss.st.com,m:mcoquelin.stm32@gmail.com,m:alexandre.torgue@foss.st.com,m:jacmet@sunsite.dk,m:michal.simek@amd.com,m:aaro.koskinen@iki.fi,m:jmkrzyszt@gmail.com,m:tony@atomide.com,m:linux@armlinux.org.uk,m:tsbogend@alpha.franken.de,m:bjorn.andersson@oss.qualcomm.com,m:konrad.dybcio@oss.qualcomm.com,m:linux-kernel@vger.kernel.org,m:linux-serial@vger.kernel.org,m:linux-arm-kernel@lists.infradead.org,m:linux-mediatek@lists.infradead.org,m:linux-arm-msm@vger.kernel.org,m:linux-samsung-soc@vge
+ r.kernel.org,m:linux-stm32@st-md-mailman.stormreply.com,m:linux-omap@vger.kernel.org,m:linux-mips@vger.kernel.org,m:mukesh.savaliya@oss.qualcomm.com,m:aniket.randive@oss.qualcomm.com,m:chandana.chiluveru@oss.qualcomm.com,m:matthiasbgg@gmail.com,m:zhanglyra@gmail.com,m:mcoquelinstm32@gmail.com,s:lists@lfdr.de];
+	RCVD_TLS_LAST(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
+	FROM_HAS_DN(0.00)[];
+	FORGED_SENDER(0.00)[jirislaby@kernel.org,linux-mips@vger.kernel.org];
+	RCPT_COUNT_TWELVE(0.00)[40];
+	FREEMAIL_TO(0.00)[oss.qualcomm.com,linuxfoundation.org,linux.intel.com,gmail.com,collabora.com,bootlin.com,microchip.com,tuxon.dev,kernel.org,linaro.org,samsung.com,linux.alibaba.com,foss.st.com,sunsite.dk,amd.com,iki.fi,atomide.com,armlinux.org.uk,alpha.franken.de];
+	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	FORWARDED(0.00)[lists@lfdr.de];
-	MIME_TRACE(0.00)[0:+];
-	FREEMAIL_CC(0.00)[redhat.com,linaro.org,gmail.com,armlinux.org.uk,arm.com,kernel.org,xen0n.name,linux-m68k.org,alpha.franken.de,hansenpartnership.com,gmx.de,linux.ibm.com,ellerman.id.au,dabbelt.com,eecs.berkeley.edu,ghiti.fr,users.sourceforge.jp,libc.org,physik.fu-berlin.de,nod.at,cambridgegreys.com,sipsolutions.net,alien8.de,linux.intel.com,zytor.com,zankel.net,infradead.org,chromium.org,kylinos.cn,loongson.cn,lge.com,arndb.de,intel.com,citrix.com,suse.com,vger.kernel.org,lists.infradead.org,kvack.org,lists.linux.dev,lists.linux-m68k.org,lists.ozlabs.org];
-	TAGGED_FROM(0.00)[bounces-15666-lists,linux-mips=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
-	FORGED_SENDER(0.00)[ruanjinjie@huawei.com,linux-mips@vger.kernel.org];
-	FORGED_RECIPIENTS(0.00)[m:thomas.weissschuh@linutronix.de,m:oleg@redhat.com,m:richard.henderson@linaro.org,m:mattst88@gmail.com,m:linmag7@gmail.com,m:linux@armlinux.org.uk,m:catalin.marinas@arm.com,m:will@kernel.org,m:kees@kernel.org,m:guoren@kernel.org,m:chenhuacai@kernel.org,m:kernel@xen0n.name,m:geert@linux-m68k.org,m:tsbogend@alpha.franken.de,m:James.Bottomley@hansenpartnership.com,m:deller@gmx.de,m:maddy@linux.ibm.com,m:mpe@ellerman.id.au,m:npiggin@gmail.com,m:chleroy@kernel.org,m:pjw@kernel.org,m:palmer@dabbelt.com,m:aou@eecs.berkeley.edu,m:alex@ghiti.fr,m:hca@linux.ibm.com,m:gor@linux.ibm.com,m:agordeev@linux.ibm.com,m:borntraeger@linux.ibm.com,m:svens@linux.ibm.com,m:ysato@users.sourceforge.jp,m:dalias@libc.org,m:glaubitz@physik.fu-berlin.de,m:richard@nod.at,m:anton.ivanov@cambridgegreys.com,m:johannes@sipsolutions.net,m:luto@kernel.org,m:tglx@kernel.org,m:mingo@redhat.com,m:bp@alien8.de,m:dave.hansen@linux.intel.com,m:hpa@zytor.com,m:chris@zankel.net,m:jcmvbkbc@gmail.com,m:
- peterz@infradead.org,m:wad@chromium.org,m:thuth@redhat.com,m:mark.rutland@arm.com,m:ada.coupriediaz@arm.com,m:kevin.brodsky@arm.com,m:linusw@kernel.org,m:yeoreum.yun@arm.com,m:song@kernel.org,m:james.morse@arm.com,m:anshuman.khandual@arm.com,m:broonie@kernel.org,m:liqiang01@kylinos.cn,m:pengcan@kylinos.cn,m:ryan.roberts@arm.com,m:yangtiezhu@loongson.cn,m:sshegde@linux.ibm.com,m:mchauras@linux.ibm.com,m:austin.kim@lge.com,m:jchrist@linux.ibm.com,m:arnd@arndb.de,m:sohil.mehta@intel.com,m:andrew.cooper3@citrix.com,m:jgross@suse.com,m:kas@kernel.org,m:x86@kernel.org,m:linux-alpha@vger.kernel.org,m:linux-kernel@vger.kernel.org,m:linux-arm-kernel@lists.infradead.org,m:linux-mm@kvack.org,m:linux-csky@vger.kernel.org,m:loongarch@lists.linux.dev,m:linux-m68k@lists.linux-m68k.org,m:linux-mips@vger.kernel.org,m:linux-parisc@vger.kernel.org,m:linuxppc-dev@lists.ozlabs.org,m:linux-riscv@lists.infradead.org,m:linux-s390@vger.kernel.org,m:linux-sh@vger.kernel.org,m:linux-um@lists.infradead.org,s:l
- ists@lfdr.de];
-	DKIM_TRACE(0.00)[huawei.com:+];
+	TAGGED_FROM(0.00)[bounces-15667-lists,linux-mips=lfdr.de];
+	DKIM_TRACE(0.00)[kernel.org:+];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	TO_DN_SOME(0.00)[];
 	FORGED_SENDER_FORWARDING(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[6];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[ruanjinjie@huawei.com,linux-mips@vger.kernel.org];
-	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
-	RCPT_COUNT_GT_50(0.00)[83];
-	MID_RHS_MATCH_FROM(0.00)[];
 	ALIAS_RESOLVED(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[jirislaby@kernel.org,linux-mips@vger.kernel.org];
+	TO_DN_SOME(0.00)[];
+	MID_RHS_MATCH_FROM(0.00)[];
 	TAGGED_RCPT(0.00)[linux-mips];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[vger.kernel.org:from_smtp,arm.com:email,sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,cock.li:email,huawei.com:from_mime,huawei.com:email,huawei.com:mid,huawei.com:dkim]
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,vger.kernel.org:from_smtp,uart_ops.pm:url]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 79D0472D4B2
+X-Rspamd-Queue-Id: A1E7A72D62F
 
-
-
-On 6/30/2026 11:32 PM, Thomas Weißschuh wrote:
-> On Mon, Jun 29, 2026 at 09:06:16PM +0800, Jinjie Ruan wrote:
->> Syscall User Dispatch (SUD) requires the signal trampoline code to not be
->> intercepted. This is necessary to support returning with a locked selector
->> while avoiding infinite recursion back into the signal handler.
->>
->> Implement arch_syscall_is_vdso_sigreturn() for arm64 to support this
->> exclusion mechanism. For native 64-bit tasks, it checks whether the current
->> PC matches the 'svc #0' instruction inside the vDSO sigreturn trampoline.
->>
->> 	SYM_CODE_START(__kernel_rt_sigreturn)
->> 	        mov     x8, #__NR_rt_sigreturn
->> 	        svc     #0
->> 	SYM_CODE_END(__kernel_rt_sigreturn)
->>
->> For COMPAT tasks, it verifies if the instruction falls within
->> the architecture's 'sigpage' range, allowing the kernel to safely bypass
->> dispatching syscalls originating from these areas back to userspace.
->>
->> Suggested-by: Kevin Brodsky <kevin.brodsky@arm.com>
->> Suggested-by: kemal <kmal@cock.li>
->> Signed-off-by: Jinjie Ruan <ruanjinjie@huawei.com>
->> ---
->>  arch/arm64/include/asm/elf.h |  1 +
->>  arch/arm64/kernel/vdso.c     | 16 ++++++++++++++++
->>  2 files changed, 17 insertions(+)
->>
->> diff --git a/arch/arm64/include/asm/elf.h b/arch/arm64/include/asm/elf.h
->> index d2779d604c7b..f43d4dea916a 100644
->> --- a/arch/arm64/include/asm/elf.h
->> +++ b/arch/arm64/include/asm/elf.h
->> @@ -185,6 +185,7 @@ do {									\
->>  struct linux_binprm;
->>  extern int arch_setup_additional_pages(struct linux_binprm *bprm,
->>  				       int uses_interp);
->> +extern bool arch_syscall_is_vdso_sigreturn(struct pt_regs *regs);
+On 09. 07. 26, 8:25, Praveen Talari wrote:
+> The uart_ops.pm callback has been declared void since its introduction,
+> which means any error from a driver's power management implementation is
+> silently discarded by uart_change_pm(). Beyond losing the error
+> information, uart_change_pm() unconditionally updates state->pm_state
+> even when the underlying hardware transition failed. This causes the
+> serial core to track a power state that does not reflect reality:
+> subsequent calls to uart_change_pm() see the stale cached state as
+> matching the requested state and skip the callback entirely, leaving the
+> hardware permanently stuck with no further recovery attempt.
 > 
-> A header for that?
-
-Sure, it need a cleanup, as currently, there is no syscall_user_dispatch
-header file related to the architecture.
-
+> On modern platforms where the .pm callback performs real work —
+> enabling clock trees, interacting with runtime PM, asserting voltage
+> regulators — this is a correctness gap. Failures are invisible to the
+> PM framework, the port proceeds to call ops->startup() on potentially
+> unpowered hardware, and suspend/resume errors are hidden from the core
+> that needs to handle them.
 > 
->>  /* 1GB of VA */
->>  #ifdef CONFIG_COMPAT
->> diff --git a/arch/arm64/kernel/vdso.c b/arch/arm64/kernel/vdso.c
->> index 592dd8668de4..5a0314a3c26e 100644
->> --- a/arch/arm64/kernel/vdso.c
->> +++ b/arch/arm64/kernel/vdso.c
->> @@ -343,3 +343,19 @@ int arch_setup_additional_pages(struct linux_binprm *bprm, int uses_interp)
->>  
->>  	return ret;
->>  }
->> +
->> +bool arch_syscall_is_vdso_sigreturn(struct pt_regs *regs)
->> +{
->> +	unsigned long sigtramp;
->> +
->> +#ifdef CONFIG_COMPAT
->> +	if (is_compat_task()) {
->> +		unsigned long sigpage = (unsigned long)current->mm->context.sigpage;
->> +
->> +		return regs->pc >= sigpage && regs->pc < (sigpage + PAGE_SIZE);
->> +	}
->> +#endif
->> +	sigtramp = (unsigned long)VDSO_SYMBOL(current->mm->context.vdso, sigtramp);
->> +
->> +	return regs->pc == (sigtramp + 8);
+> This series fixes the problem in four steps:
 > 
-> Instead of hardcoding 'sigtramp + 8' you could add a new label to the 'svc #0'
-> instruction and use that with VDSO_SYMBOL().
+>    Patch 1 changes the uart_ops.pm callback signature from void to int,
+>    updates uart_change_pm() to propagate errors and only commit
+>    state->pm_state on success, and handles the return value at every
+>    call site in serial_core.c with appropriate policy per context
+>    (propagate, log, or skip-on-failure).
 
-It seems that the modification of __kernel_rt_sigreturn() is not recommended
+So does this break build without the below applied? IOW: breaks 
+bisectability?
 
+>    Patch 2 updates the 8250 driver family: serial8250_do_pm() and
+>    serial8250_pm() are updated to return int (with the exported symbol
+>    declaration updated in serial_8250.h), and the 8250 sub-driver
+>    pm callbacks are updated to return 0.
 > 
+>    Patch 3 updates the remaining non-8250 serial drivers. All .pm
+>    implementations are updated to return 0. The sh-sci forward
+>    declaration shared with rsci is also updated.
 > 
-> Thomas
+>    Patch 4 updates arch-level implementations: SA1100 (assabet, h3xxx),
+>    OMAP1/ams-delta (modem_pm, now propagates regulator errors), and
+>    MIPS/Alchemy (alchemy_8250_pm).
+> 
+> All existing .pm implementations return 0, so there is no functional
+> change for any current driver. The series purely adds the infrastructure
+> for drivers to report errors going forward, with the serial core ready
+> to handle them correctly.
 
+OK, now I miss the rationale behind the patchset. Neither there is a 
+possible code path to actually test this?
+
+thanks,
+-- 
+js
+suse labs
 
