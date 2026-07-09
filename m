@@ -1,252 +1,218 @@
-Return-Path: <linux-mips+bounces-15675-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-15676-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id bYk8DsZOT2o8eAIAu9opvQ
-	(envelope-from <linux-mips+bounces-15675-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Thu, 09 Jul 2026 09:33:26 +0200
+	id bZsLF6VPT2q4eAIAu9opvQ
+	(envelope-from <linux-mips+bounces-15676-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Thu, 09 Jul 2026 09:37:09 +0200
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8EEE172DC03
-	for <lists+linux-mips@lfdr.de>; Thu, 09 Jul 2026 09:33:25 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id AB7A472DD05
+	for <lists+linux-mips@lfdr.de>; Thu, 09 Jul 2026 09:37:08 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=linutronix.de header.s=2020 header.b=ky9qAtWU;
-	dkim=pass header.d=linutronix.de header.s=2020e header.b=aNFlUwkC;
-	dmarc=pass (policy=none) header.from=linutronix.de;
-	spf=pass (mail.lfdr.de: domain of "linux-mips+bounces-15675-lists+linux-mips=lfdr.de@vger.kernel.org" designates 172.105.105.114 as permitted sender) smtp.mailfrom="linux-mips+bounces-15675-lists+linux-mips=lfdr.de@vger.kernel.org";
+	dkim=pass header.d=intel.com header.s=Intel header.b="Nizz2/0P";
+	dmarc=pass (policy=none) header.from=intel.com;
+	spf=pass (mail.lfdr.de: domain of "linux-mips+bounces-15676-lists+linux-mips=lfdr.de@vger.kernel.org" designates 2600:3c04:e001:36c::12fc:5321 as permitted sender) smtp.mailfrom="linux-mips+bounces-15676-lists+linux-mips=lfdr.de@vger.kernel.org";
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 3D87E30B396C
-	for <lists+linux-mips@lfdr.de>; Thu,  9 Jul 2026 07:29:17 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 0C83930EAD89
+	for <lists+linux-mips@lfdr.de>; Thu,  9 Jul 2026 07:31:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 620AB3E3DB4;
-	Thu,  9 Jul 2026 07:28:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 82F323E6DC6;
+	Thu,  9 Jul 2026 07:31:23 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5742A3E16A9;
-	Thu,  9 Jul 2026 07:28:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37DCB3E3148;
+	Thu,  9 Jul 2026 07:31:20 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783582137; cv=none; b=d0vxSqxHcLeadW+oUs/4L9LZ0s4pjRyR6G+gt580KnHmpaQh/sytWGxLZMtrLsgw/kD62TyNzCJhxPDsNvneXvAlJofLj1VyutWSdRPg8KTorl2I1HpnoJcXLnvS9anu8AbUGmY07HTBHa6qKZ5/l0TmBOdnuY3TGY3IzOqv4hc=
+	t=1783582283; cv=none; b=SevxZGuHBOYh/ccKvj2zokNAEqfS7z37QL6lIWo/uylzyzldFkB+lKjOv9Bdvg5u8/a42vwPkx55nk7T1KADjplEQiJ6aY2ANSuN9qcOJArwC0PKU6kQU6ehQDaTKwTkm4KgjD4ugDXEq+s7v7jUmJM/mgOeZL3HRfSaNRVzZKc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783582137; c=relaxed/simple;
-	bh=UHTG1jcsc/HiIsOHMkDLSLm+vixbkiNBDSonjkotVgs=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=IGzg603CgMVYAkOcHCfPBMrxgm6QjOwSREAvBjAp8nEMsLaOnRi/vHFaeQhhKfAfoDy0/2clPLySdcfsy8W7Kns+NZypccHb1tVyCCjw3SBVLAoHgHnCXJmop0j3Xx7bRkuBrKBwVayA1CwRSwa5pNep1UwNjjMzLojVuPJkNDA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=ky9qAtWU; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=aNFlUwkC; arc=none smtp.client-ip=193.142.43.55
-From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1783582133;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=QdEC/fMKLKjG29/RNQxvh9LLmnU6JqfDPZs2E6JVHJU=;
-	b=ky9qAtWUl4G4krAYpYF9bxT0k0e9FjJjCCj6RRRmSB4YiTKnrhsQK8nMYow9nTWiKOZqR2
-	4slqbYeFRJDM8vDTe1hFFDmmen7kM2WLmfLqGHTljNMgRtlnB1AVArdxJvBlo2aeJ0rq1r
-	WnO6glWr8Nvwn0l+QoO5WuGgUjzVuhECdCjO6oYsGG/knW4ziKlBrATdXh234kTH2O3Avb
-	4WOlO5OyPOxa2LIY9Lk+0WA/Ml9lD4dhxZgvGEdo7TT1i3zaORaQBN3rtkJbpCqK440eY0
-	QgxFW3j3pUH1BoTSsa0EcJ26oCfeFPtOJnZaA0d0rz+zIkwrsiXMBetZV8qGug==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1783582133;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=QdEC/fMKLKjG29/RNQxvh9LLmnU6JqfDPZs2E6JVHJU=;
-	b=aNFlUwkCl3djG0rc6PlBNzYx62EJ+hvxQZ6OsGrfXQLXIApzZ3EN/BshEjr/5mhICHz4ma
-	5B58jHOfVqKc2IBQ==
-Date: Thu, 09 Jul 2026 09:28:42 +0200
-Subject: [PATCH 6/6] vDSO: Rename HAVE_GENERIC_VDSO to VDSO_DATASTORE
+	s=arc-20240116; t=1783582283; c=relaxed/simple;
+	bh=cjMXLnfC6g6dIxN+DHVrz3kfjIpPNwD3v2Vrk7OqkFQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=b/yGN6Syq9hqIwT7Iwfl9Z8RaC67OancZQzmCXD16KEddaEKXrz6k2bReMxTq4bjCYTlGOfYSRtbODn/seXomFKkfh5WIPVXLA6uO2/Hn6/kJAYB/0Em9IVkJ+8Dm7lKDmwDYt/A5SDoQU+EhB05ND4zc1Q3uS9zCx6aLmk3c9A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Nizz2/0P; arc=none smtp.client-ip=198.175.65.18
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1783582281; x=1815118281;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=cjMXLnfC6g6dIxN+DHVrz3kfjIpPNwD3v2Vrk7OqkFQ=;
+  b=Nizz2/0PBf3aedaBgxqwxsdMNU/2Y9Q05O+R52Br3rQBYKvmbtSocW70
+   9cZu0wpDGGChdypm5AulaLyy8ku5Y+ohPZIMqMmjw6tMXZMnNy3aPMuln
+   xgee1C6ugz5wnHaGb0gP9I5249hRYZeicOaMXmv+Ndny0PXs6u3mVZv80
+   MPXZzarvIm9xMChRKtXbfUT3P5Z4e83jB8nCWMIZw7u73U14QVo9Y1yn5
+   dPuIrLeJ65NqFjsILJEIHtbYWMmVPcduYrtZq4oLYYlUnN0iR46UHDZzO
+   knJeNlKJUeTfd/nYr1Oi658QsuoGRudV/pd14/UlT+l30axtf7+8QVqc2
+   w==;
+X-CSE-ConnectionGUID: 7rpYzFpFReiPt5X/igFexQ==
+X-CSE-MsgGUID: bEiFxh60QzOOWr5yzr7Zfg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11841"; a="84356458"
+X-IronPort-AV: E=Sophos;i="6.25,154,1779174000"; 
+   d="scan'208";a="84356458"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jul 2026 00:31:18 -0700
+X-CSE-ConnectionGUID: l77jRguWS0KUZDhOEz0AwA==
+X-CSE-MsgGUID: c8A8Itj8SOiqwX6JveJBLA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.25,154,1779174000"; 
+   d="scan'208";a="277729305"
+Received: from ettammin-mobl3.ger.corp.intel.com (HELO localhost) ([10.245.245.235])
+  by fmviesa002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jul 2026 00:31:10 -0700
+Date: Thu, 9 Jul 2026 10:31:08 +0300
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: Praveen Talari <praveen.talari@oss.qualcomm.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Jiri Slaby <jirislaby@kernel.org>,
+	Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+	Matthias Brugger <matthias.bgg@gmail.com>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	Richard Genoud <richard.genoud@bootlin.com>,
+	Nicolas Ferre <nicolas.ferre@microchip.com>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Claudiu Beznea <claudiu.beznea@tuxon.dev>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Peter Griffin <peter.griffin@linaro.org>,
+	Alim Akhtar <alim.akhtar@samsung.com>,
+	Orson Zhai <orsonzhai@gmail.com>,
+	Baolin Wang <baolin.wang@linux.alibaba.com>,
+	Chunyan Zhang <zhang.lyra@gmail.com>,
+	Patrice Chotard <patrice.chotard@foss.st.com>,
+	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+	Alexandre Torgue <alexandre.torgue@foss.st.com>,
+	Peter Korsgaard <jacmet@sunsite.dk>,
+	Michal Simek <michal.simek@amd.com>,
+	Aaro Koskinen <aaro.koskinen@iki.fi>,
+	Janusz Krzysztofik <jmkrzyszt@gmail.com>,
+	Tony Lindgren <tony@atomide.com>,
+	Russell King <linux@armlinux.org.uk>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	bjorn.andersson@oss.qualcomm.com,
+	Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>,
+	linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
+	linux-samsung-soc@vger.kernel.org,
+	linux-stm32@st-md-mailman.stormreply.com,
+	linux-omap@vger.kernel.org, linux-mips@vger.kernel.org,
+	Mukesh Kumar Savaliya <mukesh.savaliya@oss.qualcomm.com>,
+	aniket.randive@oss.qualcomm.com,
+	chandana.chiluveru@oss.qualcomm.com
+Subject: Re: [PATCH 0/6] tty: serial: propagate errors from uart_ops.pm
+ callback
+Message-ID: <ak9OPNcVAhkfxHvZ@ashevche-desk.local>
+References: <20260709-add_return_check_for_uart_change_pm-v1-0-e85c6ffa8ec4@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-Message-Id: <20260709-vdso-have_generic_vdso-v1-6-d2e1061f268b@linutronix.de>
-References: <20260709-vdso-have_generic_vdso-v1-0-d2e1061f268b@linutronix.de>
-In-Reply-To: <20260709-vdso-have_generic_vdso-v1-0-d2e1061f268b@linutronix.de>
-To: Andy Lutomirski <luto@kernel.org>, Thomas Gleixner <tglx@kernel.org>, 
- Vincenzo Frascino <vincenzo.frascino@arm.com>, 
- Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc: linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org, 
- =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1783582129; l=4451;
- i=thomas.weissschuh@linutronix.de; s=20240209; h=from:subject:message-id;
- bh=UHTG1jcsc/HiIsOHMkDLSLm+vixbkiNBDSonjkotVgs=;
- b=9UMNFia3CYsRgBso+G6IBbLhz8ltxGQmRZS9PGROL4pUs7mDYjgLRY/FhuoR5bqZCfC5ZHD2y
- 3iH80lek9akD8BwmGF5+P71k6bbSUQG05ZRkaU9kt/nVHp0SpZMaUIE
-X-Developer-Key: i=thomas.weissschuh@linutronix.de; a=ed25519;
- pk=pfvxvpFUDJV2h2nY0FidLUml22uGLSjByFbM6aqQQws=
+In-Reply-To: <20260709-add_return_check_for_uart_change_pm-v1-0-e85c6ffa8ec4@oss.qualcomm.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6
+ krs, Bertel Jungin Aukio 5, 02600 Espoo
 X-Rspamd-Action: no action
-X-Spamd-Result: default: False [-2.16 / 15.00];
+X-Spamd-Result: default: False [-3.66 / 15.00];
+	WHITELIST_SPF_DKIM(-3.00)[intel.com:d:+,kernel.org:s:+];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[linutronix.de,none];
-	R_DKIM_ALLOW(-0.20)[linutronix.de:s=2020,linutronix.de:s=2020e];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
+	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-15675-lists,linux-mips=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	RCVD_COUNT_THREE(0.00)[3];
-	FORGED_SENDER(0.00)[thomas.weissschuh@linutronix.de,linux-mips@vger.kernel.org];
 	MIME_TRACE(0.00)[0:+];
-	FORGED_RECIPIENTS(0.00)[m:luto@kernel.org,m:tglx@kernel.org,m:vincenzo.frascino@arm.com,m:tsbogend@alpha.franken.de,m:linux-kernel@vger.kernel.org,m:linux-mips@vger.kernel.org,m:thomas.weissschuh@linutronix.de,s:lists@lfdr.de];
+	RCPT_COUNT_TWELVE(0.00)[40];
+	RCVD_TLS_LAST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-15676-lists,linux-mips=lfdr.de];
 	FORWARDED(0.00)[lists@lfdr.de];
+	FORGED_RECIPIENTS(0.00)[m:praveen.talari@oss.qualcomm.com,m:gregkh@linuxfoundation.org,m:jirislaby@kernel.org,m:ilpo.jarvinen@linux.intel.com,m:matthias.bgg@gmail.com,m:angelogioacchino.delregno@collabora.com,m:richard.genoud@bootlin.com,m:nicolas.ferre@microchip.com,m:alexandre.belloni@bootlin.com,m:claudiu.beznea@tuxon.dev,m:krzk@kernel.org,m:peter.griffin@linaro.org,m:alim.akhtar@samsung.com,m:orsonzhai@gmail.com,m:baolin.wang@linux.alibaba.com,m:zhang.lyra@gmail.com,m:patrice.chotard@foss.st.com,m:mcoquelin.stm32@gmail.com,m:alexandre.torgue@foss.st.com,m:jacmet@sunsite.dk,m:michal.simek@amd.com,m:aaro.koskinen@iki.fi,m:jmkrzyszt@gmail.com,m:tony@atomide.com,m:linux@armlinux.org.uk,m:tsbogend@alpha.franken.de,m:bjorn.andersson@oss.qualcomm.com,m:konrad.dybcio@oss.qualcomm.com,m:linux-kernel@vger.kernel.org,m:linux-serial@vger.kernel.org,m:linux-arm-kernel@lists.infradead.org,m:linux-mediatek@lists.infradead.org,m:linux-arm-msm@vger.kernel.org,m:linux-samsung-soc@vger.kernel.org,
+ m:linux-stm32@st-md-mailman.stormreply.com,m:linux-omap@vger.kernel.org,m:linux-mips@vger.kernel.org,m:mukesh.savaliya@oss.qualcomm.com,m:aniket.randive@oss.qualcomm.com,m:chandana.chiluveru@oss.qualcomm.com,m:matthiasbgg@gmail.com,m:zhanglyra@gmail.com,m:mcoquelinstm32@gmail.com,s:lists@lfdr.de];
+	HAS_ORG_HEADER(0.00)[];
+	FORGED_SENDER(0.00)[andriy.shevchenko@linux.intel.com,linux-mips@vger.kernel.org];
+	FREEMAIL_CC(0.00)[linuxfoundation.org,kernel.org,linux.intel.com,gmail.com,collabora.com,bootlin.com,microchip.com,tuxon.dev,linaro.org,samsung.com,linux.alibaba.com,foss.st.com,sunsite.dk,amd.com,iki.fi,atomide.com,armlinux.org.uk,alpha.franken.de,oss.qualcomm.com,vger.kernel.org,lists.infradead.org,st-md-mailman.stormreply.com];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	DKIM_TRACE(0.00)[linutronix.de:+];
-	MISSING_XM_UA(0.00)[];
-	FORGED_RECIPIENTS_FORWARDING(0.00)[];
-	FORGED_SENDER_FORWARDING(0.00)[];
-	ALIAS_RESOLVED(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[thomas.weissschuh@linutronix.de,linux-mips@vger.kernel.org];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCPT_COUNT_SEVEN(0.00)[7];
-	TAGGED_RCPT(0.00)[linux-mips];
-	MID_RHS_MATCH_FROM(0.00)[];
 	TO_DN_SOME(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[linutronix.de:from_mime,linutronix.de:email,linutronix.de:mid,linutronix.de:dkim,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,vger.kernel.org:from_smtp]
+	PRECEDENCE_BULK(0.00)[];
+	FORGED_SENDER_FORWARDING(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[andriy.shevchenko@linux.intel.com,linux-mips@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	DKIM_TRACE(0.00)[intel.com:+];
+	RCVD_COUNT_FIVE(0.00)[5];
+	FORGED_RECIPIENTS_FORWARDING(0.00)[];
+	MISSING_XM_UA(0.00)[];
+	ALIAS_RESOLVED(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	TAGGED_RCPT(0.00)[linux-mips];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[linux.intel.com:from_mime,intel.com:dkim,uart_ops.pm:url,ashevche-desk.local:mid,vger.kernel.org:from_smtp,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,bitbucket.org:url]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 8EEE172DC03
+X-Rspamd-Queue-Id: AB7A472DD05
 
-Over time the meaning of HAVE_GENERIC_VDSO has become off.
-Today it only controls the availability of the vDSO datastore.
+On Thu, Jul 09, 2026 at 11:55:12AM +0530, Praveen Talari wrote:
+> The uart_ops.pm callback has been declared void since its introduction,
+> which means any error from a driver's power management implementation is
+> silently discarded by uart_change_pm(). Beyond losing the error
+> information, uart_change_pm() unconditionally updates state->pm_state
+> even when the underlying hardware transition failed. This causes the
+> serial core to track a power state that does not reflect reality:
+> subsequent calls to uart_change_pm() see the stale cached state as
+> matching the requested state and skip the callback entirely, leaving the
+> hardware permanently stuck with no further recovery attempt.
+> 
+> On modern platforms where the .pm callback performs real work —
+> enabling clock trees, interacting with runtime PM, asserting voltage
+> regulators — this is a correctness gap. Failures are invisible to the
+> PM framework, the port proceeds to call ops->startup() on potentially
+> unpowered hardware, and suspend/resume errors are hidden from the core
+> that needs to handle them.
+> 
+> This series fixes the problem in four steps:
+> 
+>   Patch 1 changes the uart_ops.pm callback signature from void to int,
+>   updates uart_change_pm() to propagate errors and only commit
+>   state->pm_state on success, and handles the return value at every
+>   call site in serial_core.c with appropriate policy per context
+>   (propagate, log, or skip-on-failure).
+> 
+>   Patch 2 updates the 8250 driver family: serial8250_do_pm() and
+>   serial8250_pm() are updated to return int (with the exported symbol
+>   declaration updated in serial_8250.h), and the 8250 sub-driver
+>   pm callbacks are updated to return 0.
+> 
+>   Patch 3 updates the remaining non-8250 serial drivers. All .pm
+>   implementations are updated to return 0. The sh-sci forward
+>   declaration shared with rsci is also updated.
+> 
+>   Patch 4 updates arch-level implementations: SA1100 (assabet, h3xxx),
+>   OMAP1/ams-delta (modem_pm, now propagates regulator errors), and
+>   MIPS/Alchemy (alchemy_8250_pm).
+> 
+> All existing .pm implementations return 0, so there is no functional
+> change for any current driver. The series purely adds the infrastructure
+> for drivers to report errors going forward, with the serial core ready
+> to handle them correctly.
 
-Rename the symbol to match its function.
+Just no, please just properly implement runtime PM. The .pm() must die completely.
+I used to have the PoC for that long time ago [1], but due to lack of time and
+other priorities it went abandoned. Also Atlassian made a brain damages move to
+limit repository to 1Gb, so I haven't able to update it for a few years.
 
-Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
----
- arch/loongarch/Kconfig         | 2 +-
- arch/powerpc/Kconfig           | 2 +-
- arch/riscv/Kconfig             | 2 +-
- include/linux/vdso_datastore.h | 6 +++---
- lib/vdso/Kconfig               | 6 +++---
- lib/vdso/Makefile              | 2 +-
- 6 files changed, 10 insertions(+), 10 deletions(-)
+Note, that Tony (you have him in the Cc list) did a lot for some corner cases
+with that and we still have them IIRC. Tony, do you know what is the state of
+affairs with runtime PM for UART?
 
-diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
-index d8d252325017..41ed648fcec9 100644
---- a/arch/loongarch/Kconfig
-+++ b/arch/loongarch/Kconfig
-@@ -153,7 +153,6 @@ config LOONGARCH
- 	select HAVE_FUNCTION_GRAPH_TRACER
- 	select HAVE_FUNCTION_TRACER
- 	select HAVE_GCC_PLUGINS
--	select HAVE_GENERIC_VDSO
- 	select HAVE_HW_BREAKPOINT if PERF_EVENTS
- 	select HAVE_IOREMAP_PROT
- 	select HAVE_IRQ_EXIT_ON_IRQ_STACK
-@@ -213,6 +212,7 @@ config LOONGARCH
- 	select TRACE_IRQFLAGS_SUPPORT
- 	select USE_PERCPU_NUMA_NODE_ID
- 	select USER_STACKTRACE_SUPPORT
-+	select VDSO_DATASTORE
- 	select VDSO_GETRANDOM
- 	select ZONE_DMA32 if 64BIT
- 
-diff --git a/arch/powerpc/Kconfig b/arch/powerpc/Kconfig
-index f7ce5fff81f0..c6bc2cd6cc83 100644
---- a/arch/powerpc/Kconfig
-+++ b/arch/powerpc/Kconfig
-@@ -256,7 +256,6 @@ config PPC
- 	select HAVE_FUNCTION_GRAPH_TRACER
- 	select HAVE_FUNCTION_TRACER		if !COMPILE_TEST && (PPC64 || (PPC32 && CC_IS_GCC))
- 	select HAVE_GCC_PLUGINS
--	select HAVE_GENERIC_VDSO
- 	select HAVE_HARDLOCKUP_DETECTOR_ARCH	if PPC_BOOK3S_64 && SMP
- 	select HAVE_HARDLOCKUP_DETECTOR_PERF	if PERF_EVENTS && HAVE_PERF_EVENTS_NMI
- 	select HAVE_HW_BREAKPOINT		if PERF_EVENTS && (PPC_BOOK3S || PPC_8xx)
-@@ -328,6 +327,7 @@ config PPC
- 	select SYSCTL_EXCEPTION_TRACE
- 	select THREAD_INFO_IN_TASK
- 	select TRACE_IRQFLAGS_SUPPORT
-+	select VDSO_DATASTORE
- 	select VDSO_GETRANDOM
- 	#
- 	# Please keep this list sorted alphabetically.
-diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-index 9aa8c4df0cd8..019fb4799943 100644
---- a/arch/riscv/Kconfig
-+++ b/arch/riscv/Kconfig
-@@ -171,7 +171,6 @@ config RISCV
- 	select HAVE_FUNCTION_ARG_ACCESS_API
- 	select HAVE_FUNCTION_ERROR_INJECTION
- 	select HAVE_GCC_PLUGINS
--	select HAVE_GENERIC_VDSO if MMU
- 	select HAVE_IRQ_TIME_ACCOUNTING
- 	select HAVE_KERNEL_BZIP2 if !EFI_ZBOOT
- 	select HAVE_KERNEL_GZIP if !EFI_ZBOOT
-@@ -227,6 +226,7 @@ config RISCV
- 	select THREAD_INFO_IN_TASK
- 	select TRACE_IRQFLAGS_SUPPORT
- 	select UACCESS_MEMCPY if !MMU
-+	select VDSO_DATASTORE if MMU
- 	select VDSO_GETRANDOM if MMU && 64BIT
- 	select USER_STACKTRACE_SUPPORT
- 	select ZONE_DMA32 if 64BIT
-diff --git a/include/linux/vdso_datastore.h b/include/linux/vdso_datastore.h
-index 3dfba9502d78..13b01baf3497 100644
---- a/include/linux/vdso_datastore.h
-+++ b/include/linux/vdso_datastore.h
-@@ -7,10 +7,10 @@
- extern const struct vm_special_mapping vdso_vvar_mapping;
- struct vm_area_struct *vdso_install_vvar_mapping(struct mm_struct *mm, unsigned long addr);
- 
--#ifdef CONFIG_HAVE_GENERIC_VDSO
-+#ifdef CONFIG_VDSO_DATASTORE
- void __init vdso_setup_data_pages(void);
--#else /* !CONFIG_HAVE_GENERIC_VDSO */
-+#else /* !CONFIG_VDSO_DATASTORE */
- static inline void vdso_setup_data_pages(void) { }
--#endif /* CONFIG_HAVE_GENERIC_VDSO */
-+#endif /* CONFIG_VDSO_DATASTORE */
- 
- #endif /* _LINUX_VDSO_DATASTORE_H */
-diff --git a/lib/vdso/Kconfig b/lib/vdso/Kconfig
-index eedb04974fd5..597f5f0f9681 100644
---- a/lib/vdso/Kconfig
-+++ b/lib/vdso/Kconfig
-@@ -1,11 +1,11 @@
- # SPDX-License-Identifier: GPL-2.0
- 
--config HAVE_GENERIC_VDSO
-+config VDSO_DATASTORE
- 	bool
- 
- config GENERIC_GETTIMEOFDAY
- 	bool
--	select HAVE_GENERIC_VDSO
-+	select VDSO_DATASTORE
- 	help
- 	  This is a generic implementation of gettimeofday vdso.
- 	  Each architecture that enables this feature has to
-@@ -20,6 +20,6 @@ config GENERIC_VDSO_OVERFLOW_PROTECT
- 
- config VDSO_GETRANDOM
- 	bool
--	select HAVE_GENERIC_VDSO
-+	select VDSO_DATASTORE
- 	help
- 	  Selected by architectures that support vDSO getrandom().
-diff --git a/lib/vdso/Makefile b/lib/vdso/Makefile
-index 405f743253d7..ac304def42d6 100644
---- a/lib/vdso/Makefile
-+++ b/lib/vdso/Makefile
-@@ -1,3 +1,3 @@
- # SPDX-License-Identifier: GPL-2.0-only
- 
--obj-$(CONFIG_HAVE_GENERIC_VDSO) += datastore.o
-+obj-$(CONFIG_VDSO_DATASTORE) += datastore.o
+[1]: https://bitbucket.org/andy-shev/linux/branch/topic/uart/rpm-plus
 
 -- 
-2.55.0
+With Best Regards,
+Andy Shevchenko
+
 
 
