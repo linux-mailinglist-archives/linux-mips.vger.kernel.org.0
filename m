@@ -1,132 +1,195 @@
-Return-Path: <linux-mips+bounces-15743-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-15744-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id aT9LIazkUGrt7wIAu9opvQ
-	(envelope-from <linux-mips+bounces-15743-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Fri, 10 Jul 2026 14:25:16 +0200
+	id I3R4AlvmUGqd8AIAu9opvQ
+	(envelope-from <linux-mips+bounces-15744-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Fri, 10 Jul 2026 14:32:27 +0200
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id C74DE73ABEA
-	for <lists+linux-mips@lfdr.de>; Fri, 10 Jul 2026 14:25:15 +0200 (CEST)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id BFE1773ACCC
+	for <lists+linux-mips@lfdr.de>; Fri, 10 Jul 2026 14:32:26 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=linuxfoundation.org header.s=korg header.b=DKWqmm7T;
-	dmarc=pass (policy=none) header.from=linuxfoundation.org;
-	spf=pass (mail.lfdr.de: domain of "linux-mips+bounces-15743-lists+linux-mips=lfdr.de@vger.kernel.org" designates 2600:3c0a:e001:db::12fc:5321 as permitted sender) smtp.mailfrom="linux-mips+bounces-15743-lists+linux-mips=lfdr.de@vger.kernel.org";
+	dkim=none;
+	dmarc=fail reason="SPF not aligned (relaxed), No valid DKIM" header.from=suse.de (policy=none);
+	spf=pass (mail.lfdr.de: domain of "linux-mips+bounces-15744-lists+linux-mips=lfdr.de@vger.kernel.org" designates 2600:3c09:e001:a7::12fc:5321 as permitted sender) smtp.mailfrom="linux-mips+bounces-15744-lists+linux-mips=lfdr.de@vger.kernel.org";
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 9A45F301C3C6
-	for <lists+linux-mips@lfdr.de>; Fri, 10 Jul 2026 12:25:14 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id E01B33008D71
+	for <lists+linux-mips@lfdr.de>; Fri, 10 Jul 2026 12:32:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1002340928A;
-	Fri, 10 Jul 2026 12:25:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A6B083E3DAB;
+	Fri, 10 Jul 2026 12:32:23 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8D043F44C4;
-	Fri, 10 Jul 2026 12:25:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F2F24266B2
+	for <linux-mips@vger.kernel.org>; Fri, 10 Jul 2026 12:32:17 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783686314; cv=none; b=k1YZzvd0I5WXpiV8+8HIOcf26owjk5WznTuWk2uQgFJNwBVXrKFBl8W1QpGjxZL2DDdnur56MLCDbs8rBrVIFECWhcWwlOVmmukS+s61KCFLUM5yLdpzejDyqgwmS3+fQZ3pHN3t8fPZGI4YOuDOR/PH+9WaiNb7KmstqckkaRI=
+	t=1783686742; cv=none; b=s05uVSq4xMoYGJ4xK1JuWiNknUG2eht48BX0VyzHAZYjiLg9qayAmmDAcpHQAjXg5fMzGA5WNSjFiReDRcw9CvVOOdsZo5xfF9qmj7bIHi4qw7sIQf4O9ftIikKv8liQVlwkB40MpuRSbX2WJXuc98PJXH6EpM58iktoPZEuyxE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783686314; c=relaxed/simple;
-	bh=Ywc0hoaRqszboCN/Z9m0DI47pAZdqyg4FIYiBaqt80A=;
+	s=arc-20240116; t=1783686742; c=relaxed/simple;
+	bh=ys9eY4ViqB4VHoA/lZua2Zw3TzyK+DqDveJx1YabTEI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=rCaD4PYUxRfCqUfj0tFcfXYqa99AK+4dzM+dECedH2MpBuR/zD6LuooJFWWz+/fQRIeabGwQVHamstPzErZ6/MzIR9GPNh95yUvIvBoY4VNRMqV5tzQ2i4I7xbn9/w1S+bH73PCs953ir9wtfrNRqUhTNmy683Ar+WKpsMNU66E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=DKWqmm7T; arc=none smtp.client-ip=100.103.45.18
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF11D1F000E9;
-	Fri, 10 Jul 2026 12:25:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linuxfoundation.org;
-	s=korg; t=1783686312;
-	bh=dG8jX7Oq1V64nFRLbfGoJRFM1EbkDsvO0MqXzpKh9pY=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=DKWqmm7TO4l1qP8D2wfHS9E53zbCLUD3+0NcoRj+e3QX5spSv+ZYip61g7Bs+S5V1
-	 TaP7bM1G7vTGSBbOvtYqsZOiNdH5B4MG1OsGP7iL8W0cMq4a/vYFeGabQk1+lotlRZ
-	 lveDich9ilARP0P6Rz2tJ11FyNcV7N+cTW58Y5x4=
-Date: Fri, 10 Jul 2026 14:25:08 +0200
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: "Maciej W. Rozycki" <macro@orcam.me.uk>
-Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	Jiri Slaby <jirislaby@kernel.org>,
-	Elena Reshetova <elena.reshetova@intel.com>,
-	David Windsor <dwindsor@gmail.com>, Kees Cook <kees@kernel.org>,
-	Hans Liljestrand <ishkamiel@gmail.com>, linux-mips@vger.kernel.org,
-	linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 3/6] serial: sb1250-duart: Convert to use a platform
- device
-Message-ID: <2026071045-turmoil-daytime-f8f8@gregkh>
-References: <alpine.DEB.2.21.2605241602220.1450@angie.orcam.me.uk>
- <alpine.DEB.2.21.2605241625180.1450@angie.orcam.me.uk>
+	 Content-Type:Content-Disposition:In-Reply-To; b=OtgQ9/mGEOdlLvAP1ZY1SK25ukEOWevaP2qgsB4DzQQNME1IJoyvBQrZrYYXY0hwLmjsP3fDxhpVTOIkykBzaIzL4dkfw77lZDfpjS4MbD1uhL7jeRhcbHmAoDPIbakKz+Gg6nh41x0ml7N7N4RjB4nuj5HabDAsZ4endpkKUTk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; arc=none smtp.client-ip=195.135.223.131
+Received: from kunlun.suse.cz (unknown [IPv6:2a07:de40:b306:2000::2])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out2.suse.de (Postfix) with ESMTPS id AE9AB764C1;
+	Fri, 10 Jul 2026 12:32:14 +0000 (UTC)
+Date: Fri, 10 Jul 2026 14:32:13 +0200
+From: Michal =?iso-8859-1?Q?Such=E1nek?= <msuchanek@suse.de>
+To: Oleg Nesterov <oleg@redhat.com>
+Cc: Thomas Gleixner <tglx@kernel.org>, LKML <linux-kernel@vger.kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Shrikanth Hegde <sshegde@linux.ibm.com>,
+	linuxppc-dev@lists.ozlabs.org, Kees Cook <kees@kernel.org>,
+	Huacai Chen <chenhuacai@kernel.org>, loongarch@lists.linux.dev,
+	Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>,
+	linux-riscv@lists.infradead.org,
+	Sven Schnelle <svens@linux.ibm.com>, linux-s390@vger.kernel.org,
+	x86@kernel.org, Mark Rutland <mark.rutland@arm.com>,
+	Jinjie Ruan <ruanjinjie@huawei.com>,
+	Andy Lutomirski <luto@kernel.org>,
+	Richard Henderson <richard.henderson@linaro.org>,
+	Russell King <linux@armlinux.org.uk>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Guo Ren <guoren@kernel.org>,
+	Geert Uytterhoeven <geert@linux-m68k.org>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Helge Deller <deller@gmx.de>,
+	Yoshinori Sato <ysato@users.sourceforge.jp>,
+	Richard Weinberger <richard@nod.at>,
+	Chris Zankel <chris@zankel.net>,
+	linux-arm-kernel@lists.infradead.org, linux-alpha@vger.kernel.org,
+	linux-csky@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+	linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+	linux-sh@vger.kernel.org, linux-um@lists.infradead.org,
+	Arnd Bergmann <arnd@arndb.de>, Vineet Gupta <vgupta@kernel.org>,
+	Will Deacon <will@kernel.org>, Brian Cain <bcain@kernel.org>,
+	Michal Simek <monstr@monstr.eu>, Dinh Nguyen <dinguyen@kernel.org>,
+	"David S. Miller" <davem@davemloft.net>,
+	Andreas Larsson <andreas@gaisler.com>,
+	linux-snps-arc@lists.infradead.org, linux-hexagon@vger.kernel.org,
+	linux-openrisc@vger.kernel.org, sparclinux@vger.kernel.org,
+	linux-arch@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+	linux-doc@vger.kernel.org
+Subject: Re: [patch 13/18] entry: Make trace_syscall_enter() return type bool
+Message-ID: <alDmTcgzMlKiio9H@kunlun.suse.cz>
+References: <20260707181957.433213175@kernel.org>
+ <20260707190254.338083894@kernel.org>
+ <ak5ySpil83TNWxeq@kunlun.suse.cz>
+ <87se5tqkyp.ffs@fw13>
+ <alDQ7isUKJFl8Va4@kunlun.suse.cz>
+ <alDaOw8t-e3rxIPm@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <alpine.DEB.2.21.2605241625180.1450@angie.orcam.me.uk>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <alDaOw8t-e3rxIPm@redhat.com>
+X-Rspamd-Pre-Result: action=no action;
+	module=replies;
+	Message is reply to one we originated
+X-Rspamd-Pre-Result: action=no action;
+	module=replies;
+	Message is reply to one we originated
+X-Spam-Flag: NO
+X-Spam-Score: -2.00
+X-Spam-Level: 
 X-Rspamd-Action: no action
-X-Spamd-Result: default: False [2.34 / 15.00];
-	MID_END_EQ_FROM_USER_PART(4.00)[];
+X-Spamd-Result: default: False [-1.36 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[linuxfoundation.org,none];
-	MID_RHS_NOT_FQDN(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
-	R_DKIM_ALLOW(-0.20)[linuxfoundation.org:s=korg];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
+	DMARC_POLICY_SOFTFAIL(0.10)[suse.de : SPF not aligned (relaxed), No valid DKIM,none];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-15743-lists,linux-mips=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-15744-lists,linux-mips=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	FREEMAIL_CC(0.00)[alpha.franken.de,kernel.org,intel.com,gmail.com,vger.kernel.org];
-	MIME_TRACE(0.00)[0:+];
-	FORGED_RECIPIENTS(0.00)[m:macro@orcam.me.uk,m:tsbogend@alpha.franken.de,m:jirislaby@kernel.org,m:elena.reshetova@intel.com,m:dwindsor@gmail.com,m:kees@kernel.org,m:ishkamiel@gmail.com,m:linux-mips@vger.kernel.org,m:linux-serial@vger.kernel.org,m:linux-kernel@vger.kernel.org,s:lists@lfdr.de];
-	FORWARDED(0.00)[lists@lfdr.de];
-	FORGED_SENDER(0.00)[gregkh@linuxfoundation.org,linux-mips@vger.kernel.org];
-	FORGED_SENDER_MAILLIST(0.00)[];
 	FROM_HAS_DN(0.00)[];
-	MISSING_XM_UA(0.00)[];
+	FORGED_RECIPIENTS(0.00)[m:oleg@redhat.com,m:tglx@kernel.org,m:linux-kernel@vger.kernel.org,m:peterz@infradead.org,m:mpe@ellerman.id.au,m:sshegde@linux.ibm.com,m:linuxppc-dev@lists.ozlabs.org,m:kees@kernel.org,m:chenhuacai@kernel.org,m:loongarch@lists.linux.dev,m:pjw@kernel.org,m:palmer@dabbelt.com,m:linux-riscv@lists.infradead.org,m:svens@linux.ibm.com,m:linux-s390@vger.kernel.org,m:x86@kernel.org,m:mark.rutland@arm.com,m:ruanjinjie@huawei.com,m:luto@kernel.org,m:richard.henderson@linaro.org,m:linux@armlinux.org.uk,m:catalin.marinas@arm.com,m:guoren@kernel.org,m:geert@linux-m68k.org,m:tsbogend@alpha.franken.de,m:deller@gmx.de,m:ysato@users.sourceforge.jp,m:richard@nod.at,m:chris@zankel.net,m:linux-arm-kernel@lists.infradead.org,m:linux-alpha@vger.kernel.org,m:linux-csky@vger.kernel.org,m:linux-m68k@lists.linux-m68k.org,m:linux-mips@vger.kernel.org,m:linux-parisc@vger.kernel.org,m:linux-sh@vger.kernel.org,m:linux-um@lists.infradead.org,m:arnd@arndb.de,m:vgupta@kernel.org,m:will@kerne
+ l.org,m:bcain@kernel.org,m:monstr@monstr.eu,m:dinguyen@kernel.org,m:davem@davemloft.net,m:andreas@gaisler.com,m:linux-snps-arc@lists.infradead.org,m:linux-hexagon@vger.kernel.org,m:linux-openrisc@vger.kernel.org,m:sparclinux@vger.kernel.org,m:linux-arch@vger.kernel.org,m:corbet@lwn.net,m:linux-doc@vger.kernel.org,s:lists@lfdr.de];
+	RCVD_COUNT_THREE(0.00)[4];
+	MIME_TRACE(0.00)[0:+];
+	FREEMAIL_CC(0.00)[kernel.org,vger.kernel.org,infradead.org,ellerman.id.au,linux.ibm.com,lists.ozlabs.org,lists.linux.dev,dabbelt.com,lists.infradead.org,arm.com,huawei.com,linaro.org,armlinux.org.uk,linux-m68k.org,alpha.franken.de,gmx.de,users.sourceforge.jp,nod.at,zankel.net,lists.linux-m68k.org,arndb.de,monstr.eu,davemloft.net,gaisler.com,lwn.net];
+	FORWARDED(0.00)[lists@lfdr.de];
+	FORGED_SENDER(0.00)[msuchanek@suse.de,linux-mips@vger.kernel.org];
+	FORGED_SENDER_MAILLIST(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	FORGED_SENDER_FORWARDING(0.00)[];
-	ALIAS_RESOLVED(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[gregkh@linuxfoundation.org,linux-mips@vger.kernel.org];
-	DKIM_TRACE(0.00)[linuxfoundation.org:+];
-	RCPT_COUNT_SEVEN(0.00)[10];
-	TAGGED_RCPT(0.00)[linux-mips];
+	MISSING_XM_UA(0.00)[];
 	TO_DN_SOME(0.00)[];
+	FORGED_SENDER_FORWARDING(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[msuchanek@suse.de,linux-mips@vger.kernel.org];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[vger.kernel.org:from_smtp,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,gregkh:mid,linuxfoundation.org:from_mime,linuxfoundation.org:dkim]
+	RCPT_COUNT_GT_50(0.00)[52];
+	R_DKIM_NA(0.00)[];
+	ALIAS_RESOLVED(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
+	TAGGED_RCPT(0.00)[linux-mips];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,vger.kernel.org:from_smtp,suse.de:from_mime,kunlun.suse.cz:mid]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: C74DE73ABEA
+X-Rspamd-Queue-Id: BFE1773ACCC
 
-On Mon, May 25, 2026 at 12:12:19AM +0100, Maciej W. Rozycki wrote:
-> Conversely only starting the console port so late lets the reset code
-> fully utilise our delay handlers, so switch from udelay() to fsleep()
-> for transmitter draining so as to avoid busy-waiting for an excessive
-> amount of time.
-
-That's a different thing than "convert to a platform device" why are you
-mixing this up?
-
-> Since there is one way only remaining to reach sbd_init_port() now, drop 
-> the port initialisation marker as no longer needed and go through the 
-> channel resets unconditionally.
+On Fri, Jul 10, 2026 at 01:40:43PM +0200, Oleg Nesterov wrote:
+> On 07/10, Michal Suchánek wrote:
+> >
+> > On Wed, Jul 08, 2026 at 10:34:38PM +0200, Thomas Gleixner wrote:
+> > >
+> > >   1) The set in stone rule is that if the entry code returns -1L as the
+> > >      syscall number then the architecture code has to skip the syscall
+> > >      invocation _and_ is not supposed to change the return value.
+> >
+> > Which stone?
+> >
+> > Pics or it did not happen.
+> >
+> > >
+> > >   2) There is no guarantee and never has been that any of the involved
+> > >      mechanisms (ptrace, seccomp, tracing) will change the return value
+> > >      when it sets the syscall number to -1L.
+> >
+> > For ptrace to correctly emulate a syscall it needs to set the syscall nr
+> > to an invalid value on entry, and the desired result if the syscall on
+> > exit AFAICT.
 > 
-> Fixes: 84a9582fd203 ("serial: core: Start managing serial controllers to enable runtime PM")
-> Signed-off-by: Maciej W. Rozycki <macro@orcam.me.uk>
-> Cc: stable@vger.kernel.org # needs to use .remove_new for <= 6.10
+> I can only say that ptrace users do want to skip the syscall and set the
+> return value on entry.
+> 
+> See
+> 	[PATCH v5 1/2] ptrace: add PTRACE_SET_SYSCALL_INFO syscall skipping support
+> 	https://lore.kernel.org/all/20260709100949.94345-2-renzo@cs.unibo.it/
+> 
+> The changelog explains that currently this doesn't work because
+> among the arches which define HAVE_ARCH_TRACEHOOK (at least) arch/mips is
+> broken in this regard.
 
-The first 3 patches in this series are cc: stable, the rest not, which
-is a mix I don't really know how to handle.  Please break things up into
-series that can go for this release, and those that can wait for the
-next onen (i.e. fsleep() stuff).
+Or it could be documented that setting the return value has to be done
+in the exit trace, and that would than work on any architecture AFAICT.
 
-thanks,
+With ppc and s390 using the same register for the syscall number and
+syscall return value it's very much impossible to poke the return value
+on entry into a register using the generic register access function. As
+of now there is no place to store the value ot of the return value
+outside of the registers, either.
 
-greg k-h
+And the current PTRACE_SET_SYSCALL_INFO indeed sets the syscall nr and
+arguments on entry and the syscall return value on exit, that
+disctincion is implemented.
+
+Not sure how the patchset you point out is relevant, it only adds
+changes in the exit case.
+
+Thanks
+
+Michal
 
