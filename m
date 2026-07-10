@@ -1,51 +1,51 @@
-Return-Path: <linux-mips+bounces-15756-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-15757-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id 6CNiBJ1jUWoLDwMAu9opvQ
-	(envelope-from <linux-mips+bounces-15756-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Fri, 10 Jul 2026 23:26:53 +0200
+	id WQK4Gc9jUWooDwMAu9opvQ
+	(envelope-from <linux-mips+bounces-15757-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Fri, 10 Jul 2026 23:27:43 +0200
 X-Original-To: lists+linux-mips@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 906E873EDCB
-	for <lists+linux-mips@lfdr.de>; Fri, 10 Jul 2026 23:26:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id CCA8873EE1F
+	for <lists+linux-mips@lfdr.de>; Fri, 10 Jul 2026 23:27:42 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=kernel.org header.s=k20260515 header.b=lDOo6Jf8;
+	dkim=pass header.d=kernel.org header.s=k20260515 header.b=lut8zTAS;
 	dmarc=pass (policy=quarantine) header.from=kernel.org;
-	spf=pass (mail.lfdr.de: domain of "linux-mips+bounces-15756-lists+linux-mips=lfdr.de@vger.kernel.org" designates 172.234.253.10 as permitted sender) smtp.mailfrom="linux-mips+bounces-15756-lists+linux-mips=lfdr.de@vger.kernel.org";
+	spf=pass (mail.lfdr.de: domain of "linux-mips+bounces-15757-lists+linux-mips=lfdr.de@vger.kernel.org" designates 172.234.253.10 as permitted sender) smtp.mailfrom="linux-mips+bounces-15757-lists+linux-mips=lfdr.de@vger.kernel.org";
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 39B8330A8449
-	for <lists+linux-mips@lfdr.de>; Fri, 10 Jul 2026 21:20:35 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 864C6304E579
+	for <lists+linux-mips@lfdr.de>; Fri, 10 Jul 2026 21:20:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 761073B775A;
-	Fri, 10 Jul 2026 21:20:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E845E3B777F;
+	Fri, 10 Jul 2026 21:20:40 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1A6B3B6C1C;
-	Fri, 10 Jul 2026 21:20:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E9193B6BE4;
+	Fri, 10 Jul 2026 21:20:39 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783718434; cv=none; b=rWumMAC2vaq5UhrQZtYURB/kDcW+dHNI7iUClryIGzn1zmdgO9ZPqm1Mx0qclrr4J9KCL/BJ+3cLmFoM1cnRyNUNDQT0hnQKsyF9V8x3y1OLeEoB34KugAnv9ktS2530mipGLqzlVgc50C/Yf4a6noNvZV6/IYSbx9UmpXwK0bE=
+	t=1783718440; cv=none; b=OeV3TiYlabNULfusgd395fNEjxSONdZ4Ccp1nQE0nhFKlQWwsFR/VK/geOnjqum0qp16MbGP/5LuYd3I71l3b4gMEHsCuRF5kUjJ70Wc8+3TXKk8jub4DGhGKo9/+jOM/rxmGWNCAUqNERYTP1N9rfMf/wZ6ZdD0RcM61s4Vb0g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783718434; c=relaxed/simple;
-	bh=kIoMmTDnr5f5Iv83sSFhjZ8qyezZ2fUIMRXoNAjtW48=;
+	s=arc-20240116; t=1783718440; c=relaxed/simple;
+	bh=292VIJ2LihgJ0EQU/3QbVK6wqLiDB5ykcHROMizb7ek=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=EL2AnJE2YscQQ07W2WgBGQvWHbQDy/CFOT6eC39jF/7E86SY9nFR8Oi5KckWFqzQ4eOXK9VRRkrjt332lenSrMZ7jAOck1KITvmcxiJ0jBUSdFkVWD3Pq5mjhtd8Sa22p347Ju4nyBVAik/MjWKafFZahOexAJ6MCBhEOmM93is=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lDOo6Jf8; arc=none smtp.client-ip=100.103.45.18
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DF4C01F000E9;
-	Fri, 10 Jul 2026 21:20:26 +0000 (UTC)
+	 MIME-Version; b=dugta0OfASw/Ewy1U9GIvYpbJiYcO2Qe2yznjs8vV3WLsv1mgrmTreXCty4+3xU2zyBPl+IkKwi3IcI9hJZ8bs9bCMIz0sfF6rfAmJ+j3EiJDUAbvESIn/QVlXxp7hZa60krbO+Mp5dqOtCQgjjCsFXjLvPSH+TGCunVQc+oHck=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lut8zTAS; arc=none smtp.client-ip=100.103.45.18
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 446B11F00A3A;
+	Fri, 10 Jul 2026 21:20:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1783718432;
-	bh=iHaxYR8uYLYMNA8T8Jycn/gvWhZHlEeoyZp5eI0Ar2I=;
+	s=k20260515; t=1783718439;
+	bh=tdLIqalcMEOZBg/bM0yU/0NBuCbKNme7aUYy7Hid3os=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=lDOo6Jf82DGy8XB0G5ZO8iEgoubZqabz86Ifx3inaY/2S1Ivqr9xD7O/+1PtxS69I
-	 FfKwXL24AYnnQfRiLLMCqf0CUpexPdf9bCQZBqtc8+l4x61N68iFX8ABxGUGdBV5gX
-	 N2tyy5HdPQUtvg+uduqhX5PsJTVfPsKXtCCIu/FXtHh2i5zE+LVo7dWbrHIuIQkq8H
-	 91mzt33MUCHuEOUc/HdZU0W37l6VuE+AoX/uvIIVBIyj8APw9EA9dDUTCRLWHh8Z5o
-	 Ea5Hv5w+l5GSHQfIXLAg2bFWPtp/gxqLfIb3dlhZ5e1MlxIM1tGXbaJRhsryhAl/ls
-	 6dP3+asLYecdQ==
+	b=lut8zTASosxrlt8T45mCREPv2M5skq9tHOje83agiXohT41XM5hekM1jQa/eC/3yW
+	 DUrVs8k68G3IvmdRPiQOowYWXXInx+UGLYl5iyVKwp4317WdIzMHPuHnk++MlNVi/4
+	 vAsQzL+2dBPB8RNWmvidNh2Fvk4hkFtlaPIYF6HHQIVZYNT7mU4jFdGoCxIbiSSCOd
+	 yoizbR5yWKLgVPWkN13Xj7BIs9FHwhSQCAhIvSbReX6eaLsXu4HsGxxPlNFIS+WFy3
+	 mhAsI/jnVpCd8l509/+CyXuJam+TPzGa0evoMYIGu8monMeKjWeZoUh+pxP2Ofo/C8
+	 m2LbsoisN+7lg==
 From: Arnd Bergmann <arnd@kernel.org>
 To: linux-gpio@vger.kernel.org,
 	Linus Walleij <linusw@kernel.org>,
@@ -78,9 +78,9 @@ Cc: Arnd Bergmann <arnd@arndb.de>,
 	linux-rockchip@lists.infradead.org,
 	linux-sound@vger.kernel.org,
 	Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>
-Subject: [PATCH v2 04/10] sh: replace linux/gpio.h inclusions
-Date: Fri, 10 Jul 2026 23:19:49 +0200
-Message-Id: <20260710211954.1373336-5-arnd@kernel.org>
+Subject: [PATCH v2 05/10] mfd: replace linux/gpio.h inclusions
+Date: Fri, 10 Jul 2026 23:19:50 +0200
+Message-Id: <20260710211954.1373336-6-arnd@kernel.org>
 X-Mailer: git-send-email 2.39.5
 In-Reply-To: <20260710211954.1373336-1-arnd@kernel.org>
 References: <20260710211954.1373336-1-arnd@kernel.org>
@@ -104,7 +104,7 @@ X-Spamd-Result: default: False [-2.16 / 15.00];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-15756-lists,linux-mips=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-15757-lists,linux-mips=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
 	FORGED_RECIPIENTS(0.00)[m:linux-gpio@vger.kernel.org,m:linusw@kernel.org,m:brgl@kernel.org,m:arnd@arndb.de,m:andrew@lunn.ch,m:sebastian.hesselbarth@gmail.com,m:gregory.clement@bootlin.com,m:Frank.Li@nxp.com,m:robert.jarzmik@free.fr,m:krzk@kernel.org,m:gerg@linux-m68k.org,m:tsbogend@alpha.franken.de,m:hauke@hauke-m.de,m:zajec5@gmail.com,m:ysato@users.sourceforge.jp,m:glaubitz@physik.fu-berlin.de,m:dmitry.torokhov@gmail.com,m:linux@dominikbrodowski.net,m:linux-kernel@vger.kernel.org,m:linux-arm-kernel@lists.infradead.org,m:linux-samsung-soc@vger.kernel.org,m:patches@opensource.cirrus.com,m:linux-m68k@lists.linux-m68k.org,m:linux-mips@vger.kernel.org,m:linux-sh@vger.kernel.org,m:linux-input@vger.kernel.org,m:linux-sunxi@lists.linux.dev,m:linux-phy@lists.infradead.org,m:linux-rockchip@lists.infradead.org,m:linux-sound@vger.kernel.org,m:bartosz.golaszewski@oss.qualcomm.com,m:sebastianhesselbarth@gmail.com,m:dmitrytorokhov@gmail.com,s:lists@lfdr.de];
 	RCPT_COUNT_TWELVE(0.00)[31];
@@ -126,230 +126,173 @@ X-Spamd-Result: default: False [-2.16 / 15.00];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
 	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,vger.kernel.org:from_smtp,qualcomm.com:email,arndb.de:email]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,arndb.de:email,vger.kernel.org:from_smtp,qualcomm.com:email]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 906E873EDCB
+X-Rspamd-Queue-Id: CCA8873EE1F
 
 From: Arnd Bergmann <arnd@arndb.de>
 
 linux/gpio.h should no longer be used, convert these instead to
-linux/gpio/legacy.h for the sh boards using the legacy interfaces,
-or remove it where it is not needed at all.
+either linux/gpio/consumer.h or linux/gpio/legacy.h as needed.
 
 Acked-by: Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>
 Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
- arch/sh/boards/board-magicpanelr2.c             | 2 +-
- arch/sh/boards/board-sh7757lcr.c                | 2 +-
- arch/sh/boards/board-urquell.c                  | 2 +-
- arch/sh/boards/mach-ap325rxa/setup.c            | 2 +-
- arch/sh/boards/mach-ecovec24/setup.c            | 2 +-
- arch/sh/boards/mach-highlander/pinmux-r7785rp.c | 2 +-
- arch/sh/boards/mach-kfr2r09/lcd_wqvga.c         | 2 +-
- arch/sh/boards/mach-kfr2r09/setup.c             | 2 +-
- arch/sh/boards/mach-migor/lcd_qvga.c            | 2 +-
- arch/sh/boards/mach-migor/setup.c               | 2 +-
- arch/sh/boards/mach-rsk/devices-rsk7203.c       | 2 +-
- arch/sh/boards/mach-rsk/devices-rsk7269.c       | 1 -
- arch/sh/boards/mach-se/7724/setup.c             | 2 +-
- arch/sh/include/mach-common/mach/magicpanelr2.h | 2 --
- arch/sh/kernel/cpu/sh4a/setup-shx3.c            | 2 +-
- 15 files changed, 13 insertions(+), 16 deletions(-)
+ drivers/mfd/aat2870-core.c        | 2 +-
+ drivers/mfd/arizona-irq.c         | 2 +-
+ drivers/mfd/lp3943.c              | 2 +-
+ drivers/mfd/sm501.c               | 2 +-
+ drivers/mfd/tps6105x.c            | 2 +-
+ drivers/mfd/tps65911-comparator.c | 2 +-
+ drivers/mfd/wm8994-irq.c          | 2 +-
+ include/linux/mfd/lp3943.h        | 2 +-
+ include/linux/mfd/ti-lmu.h        | 1 -
+ include/linux/mfd/tps65910.h      | 2 +-
+ include/linux/mfd/ucb1x00.h       | 2 +-
+ 11 files changed, 10 insertions(+), 11 deletions(-)
 
-diff --git a/arch/sh/boards/board-magicpanelr2.c b/arch/sh/boards/board-magicpanelr2.c
-index 75de893152af..3f14118a1015 100644
---- a/arch/sh/boards/board-magicpanelr2.c
-+++ b/arch/sh/boards/board-magicpanelr2.c
-@@ -10,7 +10,7 @@
- #include <linux/irq.h>
- #include <linux/platform_device.h>
- #include <linux/delay.h>
--#include <linux/gpio.h>
-+#include <linux/gpio/legacy.h>
- #include <linux/regulator/fixed.h>
- #include <linux/regulator/machine.h>
- #include <linux/smsc911x.h>
-diff --git a/arch/sh/boards/board-sh7757lcr.c b/arch/sh/boards/board-sh7757lcr.c
-index bca54e489e11..6d18f59ef261 100644
---- a/arch/sh/boards/board-sh7757lcr.c
-+++ b/arch/sh/boards/board-sh7757lcr.c
-@@ -7,7 +7,7 @@
- 
- #include <linux/init.h>
- #include <linux/platform_device.h>
--#include <linux/gpio.h>
-+#include <linux/gpio/legacy.h>
- #include <linux/irq.h>
- #include <linux/regulator/fixed.h>
- #include <linux/regulator/machine.h>
-diff --git a/arch/sh/boards/board-urquell.c b/arch/sh/boards/board-urquell.c
-index dad2b3b40735..1f73c04d341f 100644
---- a/arch/sh/boards/board-urquell.c
-+++ b/arch/sh/boards/board-urquell.c
-@@ -14,7 +14,7 @@
- #include <linux/smc91x.h>
- #include <linux/mtd/physmap.h>
- #include <linux/delay.h>
--#include <linux/gpio.h>
-+#include <linux/gpio/legacy.h>
- #include <linux/irq.h>
- #include <linux/clk.h>
- #include <linux/sh_intc.h>
-diff --git a/arch/sh/boards/mach-ap325rxa/setup.c b/arch/sh/boards/mach-ap325rxa/setup.c
-index bb5004a8ac02..17c3f568d92e 100644
---- a/arch/sh/boards/mach-ap325rxa/setup.c
-+++ b/arch/sh/boards/mach-ap325rxa/setup.c
-@@ -17,7 +17,7 @@
- #include <linux/clkdev.h>
- #include <linux/delay.h>
- #include <linux/device.h>
--#include <linux/gpio.h>
-+#include <linux/gpio/legacy.h>
- #include <linux/gpio/consumer.h>
- #include <linux/gpio/machine.h>
+diff --git a/drivers/mfd/aat2870-core.c b/drivers/mfd/aat2870-core.c
+index 34d66ba9646a..0d56cd6fbc6a 100644
+--- a/drivers/mfd/aat2870-core.c
++++ b/drivers/mfd/aat2870-core.c
+@@ -13,7 +13,7 @@
+ #include <linux/uaccess.h>
  #include <linux/i2c.h>
-diff --git a/arch/sh/boards/mach-ecovec24/setup.c b/arch/sh/boards/mach-ecovec24/setup.c
-index a641e26f8fdf..ca4b4dd1ddef 100644
---- a/arch/sh/boards/mach-ecovec24/setup.c
-+++ b/arch/sh/boards/mach-ecovec24/setup.c
-@@ -20,7 +20,7 @@
- #include <linux/mmc/host.h>
- #include <linux/platform_data/sh_mmcif.h>
- #include <linux/mtd/physmap.h>
+ #include <linux/delay.h>
 -#include <linux/gpio.h>
 +#include <linux/gpio/legacy.h>
- #include <linux/gpio/machine.h>
- #include <linux/platform_data/gpio_backlight.h>
- #include <linux/platform_data/tmio.h>
-diff --git a/arch/sh/boards/mach-highlander/pinmux-r7785rp.c b/arch/sh/boards/mach-highlander/pinmux-r7785rp.c
-index 689bd8732d9e..3a1057ee9ace 100644
---- a/arch/sh/boards/mach-highlander/pinmux-r7785rp.c
-+++ b/arch/sh/boards/mach-highlander/pinmux-r7785rp.c
-@@ -3,7 +3,7 @@
-  * Copyright (C) 2008 Paul Mundt
+ #include <linux/mfd/core.h>
+ #include <linux/mfd/aat2870.h>
+ #include <linux/regulator/machine.h>
+diff --git a/drivers/mfd/arizona-irq.c b/drivers/mfd/arizona-irq.c
+index 544016d420fe..14f9cb2c4b67 100644
+--- a/drivers/mfd/arizona-irq.c
++++ b/drivers/mfd/arizona-irq.c
+@@ -8,7 +8,7 @@
   */
- #include <linux/init.h>
--#include <linux/gpio.h>
-+#include <linux/gpio/legacy.h>
- #include <cpu/sh7785.h>
- #include <mach/highlander.h>
  
-diff --git a/arch/sh/boards/mach-kfr2r09/lcd_wqvga.c b/arch/sh/boards/mach-kfr2r09/lcd_wqvga.c
-index f6bbac106d13..68716660de34 100644
---- a/arch/sh/boards/mach-kfr2r09/lcd_wqvga.c
-+++ b/arch/sh/boards/mach-kfr2r09/lcd_wqvga.c
-@@ -14,7 +14,7 @@
- #include <linux/init.h>
- #include <linux/kernel.h>
- #include <linux/module.h>
--#include <linux/gpio.h>
-+#include <linux/gpio/legacy.h>
- #include <video/sh_mobile_lcdc.h>
- #include <mach/kfr2r09.h>
- #include <cpu/sh7724.h>
-diff --git a/arch/sh/boards/mach-kfr2r09/setup.c b/arch/sh/boards/mach-kfr2r09/setup.c
-index 70236859919d..30dd7dae7906 100644
---- a/arch/sh/boards/mach-kfr2r09/setup.c
-+++ b/arch/sh/boards/mach-kfr2r09/setup.c
-@@ -14,7 +14,7 @@
- 
- #include <linux/clkdev.h>
  #include <linux/delay.h>
 -#include <linux/gpio.h>
 +#include <linux/gpio/legacy.h>
- #include <linux/gpio/machine.h>
+ #include <linux/interrupt.h>
+ #include <linux/irq.h>
+ #include <linux/irqdomain.h>
+diff --git a/drivers/mfd/lp3943.c b/drivers/mfd/lp3943.c
+index 6764553147e4..1918b5c7a5e7 100644
+--- a/drivers/mfd/lp3943.c
++++ b/drivers/mfd/lp3943.c
+@@ -28,7 +28,7 @@
+  */
+ 
+ #include <linux/err.h>
+-#include <linux/gpio.h>
++#include <linux/gpio/consumer.h>
  #include <linux/i2c.h>
+ #include <linux/mfd/core.h>
+ #include <linux/mfd/lp3943.h>
+diff --git a/drivers/mfd/sm501.c b/drivers/mfd/sm501.c
+index b5bda477ebfc..9d5bb67e8084 100644
+--- a/drivers/mfd/sm501.c
++++ b/drivers/mfd/sm501.c
+@@ -35,7 +35,7 @@ struct sm501_device {
+ struct sm501_gpio;
+ 
+ #ifdef CONFIG_MFD_SM501_GPIO
+-#include <linux/gpio.h>
++#include <linux/gpio/consumer.h>
+ 
+ struct sm501_gpio_chip {
+ 	struct gpio_chip	gpio;
+diff --git a/drivers/mfd/tps6105x.c b/drivers/mfd/tps6105x.c
+index e2f6858d101e..b11cd2c03311 100644
+--- a/drivers/mfd/tps6105x.c
++++ b/drivers/mfd/tps6105x.c
+@@ -16,7 +16,7 @@
  #include <linux/init.h>
-diff --git a/arch/sh/boards/mach-migor/lcd_qvga.c b/arch/sh/boards/mach-migor/lcd_qvga.c
-index 4ebf130510bc..f72934e370fd 100644
---- a/arch/sh/boards/mach-migor/lcd_qvga.c
-+++ b/arch/sh/boards/mach-migor/lcd_qvga.c
+ #include <linux/i2c.h>
+ #include <linux/regmap.h>
+-#include <linux/gpio.h>
++#include <linux/gpio/consumer.h>
+ #include <linux/spinlock.h>
+ #include <linux/slab.h>
+ #include <linux/err.h>
+diff --git a/drivers/mfd/tps65911-comparator.c b/drivers/mfd/tps65911-comparator.c
+index 7098712ea008..cc8545a972bc 100644
+--- a/drivers/mfd/tps65911-comparator.c
++++ b/drivers/mfd/tps65911-comparator.c
 @@ -14,7 +14,7 @@
- #include <linux/init.h>
+ #include <linux/err.h>
+ #include <linux/platform_device.h>
+ #include <linux/debugfs.h>
+-#include <linux/gpio.h>
++#include <linux/gpio/consumer.h>
+ #include <linux/mfd/tps65910.h>
+ 
+ #define COMP1					0
+diff --git a/drivers/mfd/wm8994-irq.c b/drivers/mfd/wm8994-irq.c
+index a46cea948763..a15483489b9d 100644
+--- a/drivers/mfd/wm8994-irq.c
++++ b/drivers/mfd/wm8994-irq.c
+@@ -9,7 +9,7 @@
+ 
  #include <linux/kernel.h>
  #include <linux/module.h>
 -#include <linux/gpio.h>
-+#include <linux/gpio/legacy.h>
- #include <video/sh_mobile_lcdc.h>
- #include <cpu/sh7722.h>
- #include <mach/migor.h>
-diff --git a/arch/sh/boards/mach-migor/setup.c b/arch/sh/boards/mach-migor/setup.c
-index 1853e6319a66..b0198e7cb9ab 100644
---- a/arch/sh/boards/mach-migor/setup.c
-+++ b/arch/sh/boards/mach-migor/setup.c
-@@ -22,7 +22,7 @@
- #include <linux/smc91x.h>
- #include <linux/delay.h>
- #include <linux/clk.h>
--#include <linux/gpio.h>
-+#include <linux/gpio/legacy.h>
- #include <linux/gpio/machine.h>
- #include <linux/videodev2.h>
- #include <linux/sh_intc.h>
-diff --git a/arch/sh/boards/mach-rsk/devices-rsk7203.c b/arch/sh/boards/mach-rsk/devices-rsk7203.c
-index e6b05d4588b7..eb56b57812bd 100644
---- a/arch/sh/boards/mach-rsk/devices-rsk7203.c
-+++ b/arch/sh/boards/mach-rsk/devices-rsk7203.c
++#include <linux/gpio/consumer.h>
+ #include <linux/i2c.h>
+ #include <linux/irq.h>
+ #include <linux/mfd/core.h>
+diff --git a/include/linux/mfd/lp3943.h b/include/linux/mfd/lp3943.h
+index 402f01078fcc..5d2d172d3598 100644
+--- a/include/linux/mfd/lp3943.h
++++ b/include/linux/mfd/lp3943.h
 @@ -10,7 +10,7 @@
- #include <linux/interrupt.h>
- #include <linux/smsc911x.h>
- #include <linux/input.h>
--#include <linux/gpio.h>
-+#include <linux/gpio/legacy.h>
- #include <linux/gpio_keys.h>
- #include <linux/leds.h>
- #include <asm/machvec.h>
-diff --git a/arch/sh/boards/mach-rsk/devices-rsk7269.c b/arch/sh/boards/mach-rsk/devices-rsk7269.c
-index 4b1e386b51dd..54edd9958eca 100644
---- a/arch/sh/boards/mach-rsk/devices-rsk7269.c
-+++ b/arch/sh/boards/mach-rsk/devices-rsk7269.c
-@@ -11,7 +11,6 @@
- #include <linux/interrupt.h>
- #include <linux/input.h>
- #include <linux/smsc911x.h>
--#include <linux/gpio.h>
- #include <asm/machvec.h>
- #include <asm/io.h>
- 
-diff --git a/arch/sh/boards/mach-se/7724/setup.c b/arch/sh/boards/mach-se/7724/setup.c
-index e500feb91053..bed8f44fcecb 100644
---- a/arch/sh/boards/mach-se/7724/setup.c
-+++ b/arch/sh/boards/mach-se/7724/setup.c
-@@ -15,7 +15,7 @@
- 
- #include <linux/delay.h>
- #include <linux/device.h>
--#include <linux/gpio.h>
-+#include <linux/gpio/legacy.h>
- #include <linux/init.h>
- #include <linux/input.h>
- #include <linux/input/sh_keysc.h>
-diff --git a/arch/sh/include/mach-common/mach/magicpanelr2.h b/arch/sh/include/mach-common/mach/magicpanelr2.h
-index c2d218cea74b..29d86dd21b7b 100644
---- a/arch/sh/include/mach-common/mach/magicpanelr2.h
-+++ b/arch/sh/include/mach-common/mach/magicpanelr2.h
-@@ -10,8 +10,6 @@
- #ifndef __ASM_SH_MAGICPANELR2_H
- #define __ASM_SH_MAGICPANELR2_H
+ #ifndef __MFD_LP3943_H__
+ #define __MFD_LP3943_H__
  
 -#include <linux/gpio.h>
--
- #define __IO_PREFIX mpr2
- #include <asm/io_generic.h>
++#include <linux/gpio/consumer.h>
+ #include <linux/regmap.h>
  
-diff --git a/arch/sh/kernel/cpu/sh4a/setup-shx3.c b/arch/sh/kernel/cpu/sh4a/setup-shx3.c
-index 7014d6d199b3..60be8dca54f6 100644
---- a/arch/sh/kernel/cpu/sh4a/setup-shx3.c
-+++ b/arch/sh/kernel/cpu/sh4a/setup-shx3.c
+ /* Registers */
+diff --git a/include/linux/mfd/ti-lmu.h b/include/linux/mfd/ti-lmu.h
+index 0bc0e8199798..2089ec5124e8 100644
+--- a/include/linux/mfd/ti-lmu.h
++++ b/include/linux/mfd/ti-lmu.h
+@@ -10,7 +10,6 @@
+ #ifndef __MFD_TI_LMU_H__
+ #define __MFD_TI_LMU_H__
+ 
+-#include <linux/gpio.h>
+ #include <linux/notifier.h>
+ #include <linux/regmap.h>
+ #include <linux/gpio/consumer.h>
+diff --git a/include/linux/mfd/tps65910.h b/include/linux/mfd/tps65910.h
+index f67ef0a4e041..3813fc9c2b55 100644
+--- a/include/linux/mfd/tps65910.h
++++ b/include/linux/mfd/tps65910.h
+@@ -12,7 +12,7 @@
+ #ifndef __LINUX_MFD_TPS65910_H
+ #define __LINUX_MFD_TPS65910_H
+ 
+-#include <linux/gpio.h>
++#include <linux/gpio/consumer.h>
+ #include <linux/regmap.h>
+ 
+ /* TPS chip id list */
+diff --git a/include/linux/mfd/ucb1x00.h b/include/linux/mfd/ucb1x00.h
+index ede237384723..4ad54e22ed33 100644
+--- a/include/linux/mfd/ucb1x00.h
++++ b/include/linux/mfd/ucb1x00.h
 @@ -9,7 +9,7 @@
- #include <linux/serial.h>
- #include <linux/serial_sci.h>
- #include <linux/io.h>
+ 
+ #include <linux/device.h>
+ #include <linux/mfd/mcp.h>
 -#include <linux/gpio.h>
-+#include <linux/gpio/legacy.h>
- #include <linux/sh_timer.h>
- #include <linux/sh_intc.h>
- #include <cpu/shx3.h>
++#include <linux/gpio/consumer.h>
+ #include <linux/gpio/driver.h>
+ #include <linux/mutex.h>
+ 
 -- 
 2.39.5
 
