@@ -1,203 +1,336 @@
-Return-Path: <linux-mips+bounces-15746-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-15747-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id ZXNeBlftUGpl8gIAu9opvQ
-	(envelope-from <linux-mips+bounces-15746-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Fri, 10 Jul 2026 15:02:15 +0200
+	id TTWNEG3vUGr18gIAu9opvQ
+	(envelope-from <linux-mips+bounces-15747-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Fri, 10 Jul 2026 15:11:09 +0200
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0167873B035
-	for <lists+linux-mips@lfdr.de>; Fri, 10 Jul 2026 15:02:14 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 83BDB73B1B0
+	for <lists+linux-mips@lfdr.de>; Fri, 10 Jul 2026 15:11:08 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=redhat.com header.s=mimecast20190719 header.b="N/y7Bwyk";
-	dmarc=pass (policy=quarantine) header.from=redhat.com;
-	spf=pass (mail.lfdr.de: domain of "linux-mips+bounces-15746-lists+linux-mips=lfdr.de@vger.kernel.org" designates 172.234.253.10 as permitted sender) smtp.mailfrom="linux-mips+bounces-15746-lists+linux-mips=lfdr.de@vger.kernel.org";
-	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
+	dkim=pass header.d=qualcomm.com header.s=qcppdkim1 header.b=PQbhMoe3;
+	dkim=pass header.d=oss.qualcomm.com header.s=google header.b="E/jXkmeA";
+	dmarc=pass (policy=reject) header.from=qualcomm.com;
+	spf=pass (mail.lfdr.de: domain of "linux-mips+bounces-15747-lists+linux-mips=lfdr.de@vger.kernel.org" designates 2600:3c0a:e001:db::12fc:5321 as permitted sender) smtp.mailfrom="linux-mips+bounces-15747-lists+linux-mips=lfdr.de@vger.kernel.org";
+	arc=pass ("subspace.kernel.org:s=arc-20240116:i=2")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id BD45230356D7
-	for <lists+linux-mips@lfdr.de>; Fri, 10 Jul 2026 12:54:31 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 1EED43014BC5
+	for <lists+linux-mips@lfdr.de>; Fri, 10 Jul 2026 13:08:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 404114279E4;
-	Fri, 10 Jul 2026 12:54:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A82CA42CB0E;
+	Fri, 10 Jul 2026 13:08:51 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA194426D3F
-	for <linux-mips@vger.kernel.org>; Fri, 10 Jul 2026 12:54:28 +0000 (UTC)
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783688070; cv=none; b=JaIIx2h56Qen8vON4BDdaKhL4Y6nTxqa/AY795oqVNqTDXScezTrWb3v6lXP/MvhQ3qQSSi2sXVsZVjrMM360O5spKP3S+CdC/PvUxV00FZjT0nKv4sPIBTlDLeUfANawW+mXyATxOWdpJPanQxL3hAe2OJOrNi1gLNgtYdsrwk=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783688070; c=relaxed/simple;
-	bh=sxv6a13OPgrK6TOsUQ/kBJYeYtA4hSsjpL/QVUw8MJI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Kd8cK9tyfj9uMcoNiP6L1U+lbK8M5FfsS+RepXFGcfP0E7Ph4cVjNd+E39gF1YZMnmy6YM2NvkNkIR9D2u0ZtAbA+2H7OfN0wzydvGSQsNYCMS+RumhlvaS/9bucKYpQlZwb7m+YDLFAt2hMlP4gdUp0DuYYEJQal1WJ1zWqTts=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=N/y7Bwyk; arc=none smtp.client-ip=170.10.129.124
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1783688067;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=XTxMckJ71iKdcnC625lbZ9WJQgTp+gyXuVTaxsSZYeA=;
-	b=N/y7BwykZYq1G+GFKH8L5ofuNBuDQoBUYObf2JoEgUM4UrF8zXUbHwNwLZbSTjyQySzDCy
-	XSI/bZlYFTugtM26DUf4R+5T8+EkGjvYOjUU4lko/MyqWmYff7AontBg0ToB0zD0tIzeMg
-	/ax+fV3Myt4SCwt6Q7Nal5d98b0rbCE=
-Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-640-duefXCb_NOaqJcpTJsNlCw-1; Fri,
- 10 Jul 2026 08:53:17 -0400
-X-MC-Unique: duefXCb_NOaqJcpTJsNlCw-1
-X-Mimecast-MFC-AGG-ID: duefXCb_NOaqJcpTJsNlCw_1783687991
-Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id AAE061801379;
-	Fri, 10 Jul 2026 12:53:07 +0000 (UTC)
-Received: from fedora (unknown [10.44.49.164])
-	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with SMTP id 8AEF2180029C;
-	Fri, 10 Jul 2026 12:52:47 +0000 (UTC)
-Received: by fedora (nbSMTP-1.00) for uid 1000
-	oleg@redhat.com; Fri, 10 Jul 2026 14:53:07 +0200 (CEST)
-Date: Fri, 10 Jul 2026 14:52:40 +0200
-From: Oleg Nesterov <oleg@redhat.com>
-To: Michal =?iso-8859-1?Q?Such=E1nek?= <msuchanek@suse.de>
-Cc: Thomas Gleixner <tglx@kernel.org>, LKML <linux-kernel@vger.kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Shrikanth Hegde <sshegde@linux.ibm.com>,
-	linuxppc-dev@lists.ozlabs.org, Kees Cook <kees@kernel.org>,
-	Huacai Chen <chenhuacai@kernel.org>, loongarch@lists.linux.dev,
-	Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>,
-	linux-riscv@lists.infradead.org,
-	Sven Schnelle <svens@linux.ibm.com>, linux-s390@vger.kernel.org,
-	x86@kernel.org, Mark Rutland <mark.rutland@arm.com>,
-	Jinjie Ruan <ruanjinjie@huawei.com>,
-	Andy Lutomirski <luto@kernel.org>,
-	Richard Henderson <richard.henderson@linaro.org>,
-	Russell King <linux@armlinux.org.uk>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Guo Ren <guoren@kernel.org>,
-	Geert Uytterhoeven <geert@linux-m68k.org>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	Helge Deller <deller@gmx.de>,
-	Yoshinori Sato <ysato@users.sourceforge.jp>,
-	Richard Weinberger <richard@nod.at>,
-	Chris Zankel <chris@zankel.net>,
-	linux-arm-kernel@lists.infradead.org, linux-alpha@vger.kernel.org,
-	linux-csky@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-	linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-	linux-sh@vger.kernel.org, linux-um@lists.infradead.org,
-	Arnd Bergmann <arnd@arndb.de>, Vineet Gupta <vgupta@kernel.org>,
-	Will Deacon <will@kernel.org>, Brian Cain <bcain@kernel.org>,
-	Michal Simek <monstr@monstr.eu>, Dinh Nguyen <dinguyen@kernel.org>,
-	"David S. Miller" <davem@davemloft.net>,
-	Andreas Larsson <andreas@gaisler.com>,
-	linux-snps-arc@lists.infradead.org, linux-hexagon@vger.kernel.org,
-	linux-openrisc@vger.kernel.org, sparclinux@vger.kernel.org,
-	linux-arch@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
-	linux-doc@vger.kernel.org
-Subject: Re: [patch 13/18] entry: Make trace_syscall_enter() return type bool
-Message-ID: <alDrGBMdTuoLcVyy@redhat.com>
-References: <20260707181957.433213175@kernel.org>
- <20260707190254.338083894@kernel.org>
- <ak5ySpil83TNWxeq@kunlun.suse.cz>
- <87se5tqkyp.ffs@fw13>
- <alDQ7isUKJFl8Va4@kunlun.suse.cz>
- <alDaOw8t-e3rxIPm@redhat.com>
- <alDmTcgzMlKiio9H@kunlun.suse.cz>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DFACA42A7B4
+	for <linux-mips@vger.kernel.org>; Fri, 10 Jul 2026 13:08:48 +0000 (UTC)
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1783688931; cv=pass; b=fo+BhoeRExJPQlAGyn5n/HDfemo85xYCa0a0DbaYPji7wo7IqesUfKXYXcNNLGLOtdl0FORvgS0kbFC/c/mM681Xayy5PQHi6hRcD+r6J+cFvVH2AYjsAfFmOZfGdwm1BRtvIrAlGxz5QTWUinLlsM7aDEL19EViWBliRKgD2vs=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1783688931; c=relaxed/simple;
+	bh=ps29wYiABii6l1raYJPu8jGO+QY9Y08lyWKo6XlwVyw=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=cHOPAukRjk600ewArPT+TkMwGC7nnlODqsgZn98Ti8QzebRlXsdt0CziXdhEx4q6iqR7BlNPg7vfgjmPdVQysESJyd8i76tX8FqEb5XGaDpWHdSat+9084V+l/udVc08+zF4So2UqHfTuGQQrsJnboRzshiL8qEwDUdAFgaCa/k=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=PQbhMoe3; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=E/jXkmeA; arc=pass smtp.client-ip=205.220.180.131
+Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 66AD6SDi874093
+	for <linux-mips@vger.kernel.org>; Fri, 10 Jul 2026 13:08:48 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	N5Cka933m4keuHC9q+ty9VLjOYV17gugYbjBnwJv6Bo=; b=PQbhMoe3PoBcb3Hs
+	/DihV9aYD7N2odD9vazHqRjsDv89h5rZHGphaH+tpWhsa7+af5rBKTPuJdW8LPZn
+	Mk39Wieqo6Mw60r42dLUd2Gxgi7p8bxjZpLshjrj7AzbL34A0DXvPUZmVUH4NX0g
+	MgtJWs+BKx0AJ2Ezx5aSRboaeoiSWTe52rVeK8zpfzJ0RAwKpEqAfSYiOKp5qRRf
+	EsdJxs0bExnyDS3qhxtop/v2dbSfVm0i9jaV/APL5yQgCnzY8s/Y1+SDeOsMMPGn
+	F/+wgSzwHMID5UrcvHdiCAnKRs1pvv9gBeLt9XKdfGXLhg0wmyfSh8mZwn6Udt4N
+	ZKZX0A==
+Received: from mail-yx1-f71.google.com (mail-yx1-f71.google.com [74.125.224.71])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4fax5f8rg6-1
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
+	for <linux-mips@vger.kernel.org>; Fri, 10 Jul 2026 13:08:47 +0000 (GMT)
+Received: by mail-yx1-f71.google.com with SMTP id 956f58d0204a3-667971437c2so1169506d50.1
+        for <linux-mips@vger.kernel.org>; Fri, 10 Jul 2026 06:08:47 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1783688927; cv=none;
+        d=google.com; s=arc-20260327;
+        b=WVbqcDeu+1RCJ6arAeNDLD3AK91BufWjcuf4SYLU4lPIuqa5TDbKJ6LhvZbP6y1Ybw
+         9qWnXz1YPhC5PMqd7H3to/4KEZtbJexqcuVDQA0PhDXtUwgy3lhNeSXA26H1SS8ewQlz
+         6bfR6SHXgzHw/kvgV72hT2HLZa17VtakkK41hOY0XYX1JcQTEot3lfcFeMg/2Eu2mPks
+         NUyp99Q2lwBj0HO4NuGo5TG8j2qsFlI3nJAmhocAxDpt6PFqMpZYzSVEGgM87kAHl6+6
+         F46QkmsazDfk7cwkiZfosebs+OF2lgpb7TPuLan61nttcc1a9MjHeRBxlNIQOK5mf6fC
+         pllA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=N5Cka933m4keuHC9q+ty9VLjOYV17gugYbjBnwJv6Bo=;
+        fh=ieqVg8fPPcozs5c8HFVzATjzLFYwIilGNt/Gd9MloHk=;
+        b=Mj8llNL3rA07zImJiqsPRcUpMnVNBH1vr9AHJPeYJ14f/8wJonL8foo+GrK1sqwPNe
+         zgy/jjyo8ip7lTRg+lwkcC9DPsoCRB9ePxeHSP2iKPiT+hDNyy3o+dDu5VnwlxmpQsBf
+         UZlRVBtcJcCANiWOKKhaNrfpdBaqNAqVqWYqQK/BzDr0mKXSY5iraaYErdD7gVMA+7GF
+         tzW0LL5dyJiq6nDUrS7EGekhJ2b4Mv9SCyEbalyKJhsz8oUNPNIm5MAEQbJgGJ48gD3K
+         a/Rp6ntPAC5y7bKyDB6C2Cg63JEFA0UFy1F9Q1BExduMM5A2KZHHllt1/stKoCwHAtFL
+         yz5w==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=oss.qualcomm.com; s=google; t=1783688927; x=1784293727; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=N5Cka933m4keuHC9q+ty9VLjOYV17gugYbjBnwJv6Bo=;
+        b=E/jXkmeAELPdpcsB5FAYtysw0V0m75uaNGlZczuE8t6cMDWaLn+c3GD6ANWg+CwEtW
+         oBaBOuvxNivvTWWmvf1tECkRUK+La/a0NLK5nfPVbjQXDdcpN7hBe2jL7fb7q17Ux9JL
+         4bu3ys+/mel3WOzcQxUtzSRJ3JMD4z6d5fPJ61mkY4d2RSZweS0mfRVMTg8Ig8+TMZYT
+         pvANgz+GtJ0d/RM9TGRtUh7vgTSJesuRsd10yesKY77gSXqQPL/vVMvwWYyXzw1/VBwL
+         V8EIP6aHxEpRQhAfVje+1FDH4ToWwmtmOm0qFvQ0AyazUGsdC3EKUoqSeQs27tcyJYut
+         h1UQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1783688927; x=1784293727;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=N5Cka933m4keuHC9q+ty9VLjOYV17gugYbjBnwJv6Bo=;
+        b=E5+TNjzdcf0pdpI6yPPJSlipeqomZVHQ0C7bX6EMIoETw0o7FNlvo/dnJMw6AUh9Bb
+         0vLo0hLoRhSWZOPUgbeLmrwT7hAyAN2if5kKfr99n6Z/MQKyi0fpm+nBi/9Vy7GD9oVG
+         j10IJ3aA6VpBLUu2ahWbn16wWjummNuBRhv+u+jVCWMm//AKnCVCCbS907xTVRD1Iq9/
+         JmhXTIXYDQS+8lAIYuN57Mq+m6XtvsiWMXcb6BT2adjs6iQhHOaxOAsO1LBxkPvVzaDs
+         0s+qDgTSlcU288XCwa5I3AEKOglNUY3jSmV5eQo4S9TGyGMFp6mTb6NBlw3K87gS0irp
+         hI7w==
+X-Forwarded-Encrypted: i=1; AHgh+Ronk8NFn9skgM2UspriGWDZqNQeQEW8LV+SYxpknpDc1vxrIq+rZLJXwjVbQcYgscEwYkI6CJXLVYGv@vger.kernel.org
+X-Gm-Message-State: AOJu0YyMkJiwwnyy3gYFnUaAOQuldxi3hrTTJBsORagvQllDEBgdSikK
+	1pfslHzxYRu4C+myQc7MdOJ7hD8YZRfW5fnQDbziaocuVsSpEB7kPWsd1Esfx5fvIiRBhMkmzh+
+	ZhwoCb/8euZnPsgNcuU+XO+Iy64Zj42+69QiI5Qha5B1os1eHqO74GGOLRSZVctrrvQAhBppoRX
+	95JN8JucByGy3OyW3O1OMz/V7KviBOMNWUkZvPCYk=
+X-Gm-Gg: AfdE7cliRnC+Re07Hlsl8j1pvpL0TSZ8tPTL9ud8H3EiS+9xh/N48xTkg2af30ulH7o
+	8hw8x27KKuxmTWd6XPi7QIrlcyvtTw3L2kN76OvHf2M6HIDiXB00lEzd+XYMvRdTyY/UsUeFoid
+	ybRtSxLTGn/lx9EFODQQBkS8A3daccWgXS7GUVm5kVmTeptdZNMsqiq05OXIYmG0V16fRu
+X-Received: by 2002:a53:bd08:0:b0:667:8b91:242d with SMTP id 956f58d0204a3-6679f245672mr5946026d50.92.1783688927292;
+        Fri, 10 Jul 2026 06:08:47 -0700 (PDT)
+X-Received: by 2002:a53:bd08:0:b0:667:8b91:242d with SMTP id
+ 956f58d0204a3-6679f245672mr5945969d50.92.1783688926691; Fri, 10 Jul 2026
+ 06:08:46 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <alDmTcgzMlKiio9H@kunlun.suse.cz>
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
+References: <20260703193855.110619-1-mukesh.ojha@oss.qualcomm.com> <20260703193855.110619-24-mukesh.ojha@oss.qualcomm.com>
+In-Reply-To: <20260703193855.110619-24-mukesh.ojha@oss.qualcomm.com>
+From: Ulf Hansson <ulf.hansson@oss.qualcomm.com>
+Date: Fri, 10 Jul 2026 15:08:34 +0200
+X-Gm-Features: AVVi8CefhojPUiWasaXCCjZmJBb6K9Qzlv92c3u5BPoEMYadIduP2fyzpl9La3Q
+Message-ID: <CAPx+jO-hkYQoEOj1Jrp7sn5HXYTDbfAG4U5rpNBW2Wue2TZxhQ@mail.gmail.com>
+Subject: Re: [PATCH 23/42] mmc: sdhci-of-bst: Use devm_of_reserved_mem_device_init_by_idx()
+To: Mukesh Ojha <mukesh.ojha@oss.qualcomm.com>
+Cc: Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konradybcio@kernel.org>,
+        Liviu Dudau <liviu.dudau@arm.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+        Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@codeconstruct.com.au>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Anitha Chrisanthus <anitha.chrisanthus@intel.com>,
+        Paul Kocialkowski <paulk@sys-base.io>,
+        Linus Walleij <linusw@kernel.org>, Chen-Yu Tsai <wens@kernel.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Alexey Brodkin <abrodkin@synopsys.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
+        Michal Simek <michal.simek@amd.com>,
+        Daniel Scally <dan.scally@ideasonboard.com>,
+        Jacopo Mondi <jacopo.mondi@ideasonboard.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Eddie James <eajames@linux.ibm.com>,
+        Tiffany Lin <tiffany.lin@mediatek.com>,
+        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
+        Yunfei Dong <yunfei.dong@mediatek.com>,
+        Minghsiu Tsai <minghsiu.tsai@mediatek.com>,
+        Houlong Wei <houlong.wei@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+        Joseph Liu <kwliu@nuvoton.com>, Marvin Lin <kflin@nuvoton.com>,
+        Dmitry Osipenko <dmitry.osipenko@collabora.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Thierry Reding <thierry.reding@kernel.org>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Srinivas Kandagatla <srini@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Ge Gordon <gordon.ge@bst.ai>, Adrian Hunter <adrian.hunter@intel.com>,
+        Ulf Hansson <ulfh@kernel.org>, Rob Herring <robh@kernel.org>,
+        Saravana Kannan <saravanak@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
+        Shengjiu Wang <shengjiu.wang@gmail.com>,
+        Xiubo Li <Xiubo.Lee@gmail.com>, Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>, Frank Li <Frank.Li@nxp.com>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Peter Ujfalusi <peter.ujfalusi@linux.intel.com>,
+        Bard Liao <yung-chuan.liao@linux.intel.com>,
+        Daniel Baluta <daniel.baluta@nxp.com>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Peter Chen <peter.chen@cixtech.com>,
+        Fugang Duan <fugang.duan@cixtech.com>,
+        Ekansh Gupta <ekansh.gupta@oss.qualcomm.com>,
+        BST Linux Kernel Upstream Group <bst-upstream@bstai.top>,
+        Fabio Estevam <festevam@gmail.com>,
+        Nicolin Chen <nicoleotsuka@gmail.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.dev>,
+        Vijendar Mukunda <Vijendar.Mukunda@amd.com>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        CIX Linux Kernel Upstream Group <cix-kernel-upstream@cixtech.com>,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-aspeed@lists.ozlabs.org,
+        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
+        linux-sunxi@lists.linux.dev, linux-media@vger.kernel.org,
+        openbmc@lists.ozlabs.org, linux-mediatek@lists.infradead.org,
+        kernel@collabora.com, linux-tegra@vger.kernel.org,
+        linux-mmc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-remoteproc@vger.kernel.org, linux-staging@lists.linux.dev,
+        linux-sound@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        imx@lists.linux.dev, sound-open-firmware@alsa-project.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Authority-Analysis: v=2.4 cv=Ab2B2XXG c=1 sm=1 tr=0 ts=6a50eedf cx=c_pps
+ a=ngMg22mHWrP7m7pwYf9JkA==:117 a=IkcTkHD0fZMA:10 a=RAioF0-LDSMA:10
+ a=s4-Qcg_JpJYA:10 a=VkNPw1HP01LnGYTKEx00:22 a=u7WPNUs3qKkmUXheDGA7:22
+ a=gowsoOTTUOVcmtlkKump:22 a=EUspDBNiAAAA:8 a=VwQbUJbxAAAA:8
+ a=z_eSG8vRrt57AjWXvbkA:9 a=QEXdDO2ut3YA:10 a=yHXA93iunegOHmWoMUFd:22
+X-Proofpoint-ORIG-GUID: nBHYCuSXddAeNOnqdgSSmo-lMetEj_dZ
+X-Proofpoint-GUID: nBHYCuSXddAeNOnqdgSSmo-lMetEj_dZ
+X-Proofpoint-Spam-Info: AW1haW4tMjYwNzEwMDEzMCBTYWx0ZWRfX2pSU5usfh92t
+ 5vp1YVvzhz+6JqMlReop3EpyN7yvqoja6RmKho9y0ljsA2w/iEiVffY2CzZ+Idpf7mugOAbZ5Md
+ dyCfEu6ymsDkZDC7KV1P4rdSQ1fK2jU=
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNzEwMDEzMCBTYWx0ZWRfXzB7ORqOPVyn+
+ 1wan5QMTWG1yV6F6NivLJDdMCZDPzoNJKxbMBTZAFVnP+/hQzYGH2S89ux77se2g4QUidzlHaVV
+ Ko6ql1ZUfwVTB4Hbwr+DX9ZvnciYWbVx9ED61tCy3HnKhFbeq5If3vFXc5mJ9BzRi+77SnvSdJi
+ Pp5h6NMues3DbtXzMql6YLou4xT4n2DUGzjetcrm68RlEB05EO7kJs+3Tx4QsWIHyGdRBJjiXME
+ vWkVX1k4l1vKoVhjRSFmccQPaMgC5gD2wZTRO5VEFJD3I7/4LhzvMIJ82T0hlMrzZfyKeSzi+NN
+ oxV0aMUzbofJYOfseXZ85Zrj7DN+gRK7icmTZ1h4ToCGe59LGdPDzA65gATOpxyrA+hWh3hcc3x
+ SlabQILXp7SG12iQSJprB949my9bhKWw9Opl5gqHepl07LgoVMV7lw6m8HFWJiDlEjZB7iLiRM0
+ qZqY3h7tT+AhPx57l8A==
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.134,FMLib:17.12.100.49
+ definitions=2026-07-10_03,2026-07-10_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ adultscore=0 clxscore=1015 malwarescore=0 phishscore=0 bulkscore=0
+ suspectscore=0 impostorscore=0 lowpriorityscore=0 priorityscore=1501
+ spamscore=0 classifier=typeunknown authscore=0 authtc= authcc= route=outbound
+ adjust=0 reason=mlx scancount=1 engine=8.22.0-2606150000
+ definitions=main-2607100130
 X-Rspamd-Action: no action
-X-Spamd-Result: default: False [-2.16 / 15.00];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[redhat.com,quarantine];
-	R_DKIM_ALLOW(-0.20)[redhat.com:s=mimecast20190719];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+X-Spamd-Result: default: False [-0.66 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
+	DMARC_POLICY_ALLOW(-0.50)[qualcomm.com,reject];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_DKIM_ALLOW(-0.20)[qualcomm.com:s=qcppdkim1,oss.qualcomm.com:s=google];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
+	FREEMAIL_CC(0.00)[kernel.org,arm.com,linux.intel.com,suse.de,gmail.com,ffwll.ch,jms.id.au,codeconstruct.com.au,crapouillou.net,intel.com,sys-base.io,sholland.org,synopsys.com,ideasonboard.com,amd.com,linux.ibm.com,mediatek.com,collabora.com,nuvoton.com,nvidia.com,arndb.de,linuxfoundation.org,bst.ai,linaro.org,perex.cz,suse.com,nxp.com,pengutronix.de,linux.alibaba.com,cixtech.com,oss.qualcomm.com,bstai.top,linux.dev,vger.kernel.org,lists.freedesktop.org,lists.ozlabs.org,lists.infradead.org,lists.linux.dev,alsa-project.org];
+	TAGGED_FROM(0.00)[bounces-15747-lists,linux-mips=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-15746-lists,linux-mips=lfdr.de];
-	FREEMAIL_CC(0.00)[kernel.org,vger.kernel.org,infradead.org,ellerman.id.au,linux.ibm.com,lists.ozlabs.org,lists.linux.dev,dabbelt.com,lists.infradead.org,arm.com,huawei.com,linaro.org,armlinux.org.uk,linux-m68k.org,alpha.franken.de,gmx.de,users.sourceforge.jp,nod.at,zankel.net,lists.linux-m68k.org,arndb.de,monstr.eu,davemloft.net,gaisler.com,lwn.net];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[vger.kernel.org:from_smtp];
-	FORGED_RECIPIENTS(0.00)[m:msuchanek@suse.de,m:tglx@kernel.org,m:linux-kernel@vger.kernel.org,m:peterz@infradead.org,m:mpe@ellerman.id.au,m:sshegde@linux.ibm.com,m:linuxppc-dev@lists.ozlabs.org,m:kees@kernel.org,m:chenhuacai@kernel.org,m:loongarch@lists.linux.dev,m:pjw@kernel.org,m:palmer@dabbelt.com,m:linux-riscv@lists.infradead.org,m:svens@linux.ibm.com,m:linux-s390@vger.kernel.org,m:x86@kernel.org,m:mark.rutland@arm.com,m:ruanjinjie@huawei.com,m:luto@kernel.org,m:richard.henderson@linaro.org,m:linux@armlinux.org.uk,m:catalin.marinas@arm.com,m:guoren@kernel.org,m:geert@linux-m68k.org,m:tsbogend@alpha.franken.de,m:deller@gmx.de,m:ysato@users.sourceforge.jp,m:richard@nod.at,m:chris@zankel.net,m:linux-arm-kernel@lists.infradead.org,m:linux-alpha@vger.kernel.org,m:linux-csky@vger.kernel.org,m:linux-m68k@lists.linux-m68k.org,m:linux-mips@vger.kernel.org,m:linux-parisc@vger.kernel.org,m:linux-sh@vger.kernel.org,m:linux-um@lists.infradead.org,m:arnd@arndb.de,m:vgupta@kernel.org,m:will@ker
- nel.org,m:bcain@kernel.org,m:monstr@monstr.eu,m:dinguyen@kernel.org,m:davem@davemloft.net,m:andreas@gaisler.com,m:linux-snps-arc@lists.infradead.org,m:linux-hexagon@vger.kernel.org,m:linux-openrisc@vger.kernel.org,m:sparclinux@vger.kernel.org,m:linux-arch@vger.kernel.org,m:corbet@lwn.net,m:linux-doc@vger.kernel.org,s:lists@lfdr.de];
-	MIME_TRACE(0.00)[0:+];
-	DKIM_TRACE(0.00)[redhat.com:+];
-	FORWARDED(0.00)[lists@lfdr.de];
-	FORGED_SENDER(0.00)[oleg@redhat.com,linux-mips@vger.kernel.org];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	TO_DN_SOME(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FORGED_SENDER_FORWARDING(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[oleg@redhat.com,linux-mips@vger.kernel.org];
 	FROM_HAS_DN(0.00)[];
+	FORGED_SENDER(0.00)[ulf.hansson@oss.qualcomm.com,linux-mips@vger.kernel.org];
+	MIME_TRACE(0.00)[0:+];
+	FORGED_RECIPIENTS(0.00)[m:mukesh.ojha@oss.qualcomm.com,m:andersson@kernel.org,m:konradybcio@kernel.org,m:liviu.dudau@arm.com,m:maarten.lankhorst@linux.intel.com,m:mripard@kernel.org,m:tzimmermann@suse.de,m:airlied@gmail.com,m:simona@ffwll.ch,m:joel@jms.id.au,m:andrew@codeconstruct.com.au,m:paul@crapouillou.net,m:anitha.chrisanthus@intel.com,m:paulk@sys-base.io,m:linusw@kernel.org,m:wens@kernel.org,m:jernej.skrabec@gmail.com,m:samuel@sholland.org,m:abrodkin@synopsys.com,m:laurent.pinchart@ideasonboard.com,m:tomi.valkeinen@ideasonboard.com,m:michal.simek@amd.com,m:dan.scally@ideasonboard.com,m:jacopo.mondi@ideasonboard.com,m:mchehab@kernel.org,m:eajames@linux.ibm.com,m:tiffany.lin@mediatek.com,m:andrew-ct.chen@mediatek.com,m:yunfei.dong@mediatek.com,m:minghsiu.tsai@mediatek.com,m:houlong.wei@mediatek.com,m:matthias.bgg@gmail.com,m:angelogioacchino.delregno@collabora.com,m:kwliu@nuvoton.com,m:kflin@nuvoton.com,m:dmitry.osipenko@collabora.com,m:krzk@kernel.org,m:thierry.reding@kernel.or
+ g,m:jonathanh@nvidia.com,m:srini@kernel.org,m:arnd@arndb.de,m:gregkh@linuxfoundation.org,m:gordon.ge@bst.ai,m:adrian.hunter@intel.com,m:ulfh@kernel.org,m:robh@kernel.org,m:saravanak@kernel.org,m:mathieu.poirier@linaro.org,m:perex@perex.cz,m:tiwai@suse.com,m:shengjiu.wang@gmail.com,m:Xiubo.Lee@gmail.com,m:lgirdwood@gmail.com,m:broonie@kernel.org,m:Frank.Li@nxp.com,m:s.hauer@pengutronix.de,m:peter.ujfalusi@linux.intel.com,m:yung-chuan.liao@linux.intel.com,m:daniel.baluta@nxp.com,m:orsonzhai@gmail.com,m:baolin.wang@linux.alibaba.com,m:peter.chen@cixtech.com,m:fugang.duan@cixtech.com,m:ekansh.gupta@oss.qualcomm.com,m:bst-upstream@bstai.top,m:festevam@gmail.com,m:nicoleotsuka@gmail.com,m:kernel@pengutronix.de,m:kai.vehmanen@linux.intel.com,m:pierre-louis.bossart@linux.dev,m:Vijendar.Mukunda@amd.com,m:zhang.lyra@gmail.com,m:cix-kernel-upstream@cixtech.com,m:linux-arm-msm@vger.kernel.org,m:linux-kernel@vger.kernel.org,m:dri-devel@lists.freedesktop.org,m:linux-aspeed@lists.ozlabs.org,m:linu
+ x-arm-kernel@lists.infradead.org,m:linux-mips@vger.kernel.org,m:linux-sunxi@lists.linux.dev,m:linux-media@vger.kernel.org,m:openbmc@lists.ozlabs.org,m:linux-mediatek@lists.infradead.org,m:kernel@collabora.com,m:linux-tegra@vger.kernel.org,m:linux-mmc@vger.kernel.org,m:devicetree@vger.kernel.org,m:linux-remoteproc@vger.kernel.org,m:linux-staging@lists.linux.dev,m:linux-sound@vger.kernel.org,m:linuxppc-dev@lists.ozlabs.org,m:imx@lists.linux.dev,m:sound-open-firmware@alsa-project.org,s:lists@lfdr.de];
+	FORWARDED(0.00)[lists@lfdr.de];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	DKIM_TRACE(0.00)[qualcomm.com:+,oss.qualcomm.com:+];
 	MISSING_XM_UA(0.00)[];
-	RCPT_COUNT_GT_50(0.00)[52];
-	MID_RHS_MATCH_FROM(0.00)[];
-	ALIAS_RESOLVED(0.00)[];
-	TAGGED_RCPT(0.00)[linux-mips];
+	TO_DN_SOME(0.00)[];
+	FORGED_SENDER_FORWARDING(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[6];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[ulf.hansson@oss.qualcomm.com,linux-mips@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCPT_COUNT_GT_50(0.00)[93];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
-	RCVD_COUNT_SEVEN(0.00)[7]
+	ALIAS_RESOLVED(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	TAGGED_RCPT(0.00)[linux-mips];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,vger.kernel.org:from_smtp,mail.gmail.com:mid,qualcomm.com:email,qualcomm.com:dkim,oss.qualcomm.com:from_mime,oss.qualcomm.com:dkim]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 0167873B035
+X-Rspamd-Queue-Id: 83BDB73B1B0
 
-On 07/10, Michal Suchánek wrote:
+On Fri, Jul 3, 2026 at 9:48=E2=80=AFPM Mukesh Ojha <mukesh.ojha@oss.qualcom=
+m.com> wrote:
 >
-> On Fri, Jul 10, 2026 at 01:40:43PM +0200, Oleg Nesterov wrote:
-> >
-> > I can only say that ptrace users do want to skip the syscall and set the
-> > return value on entry.
-> >
-> > See
-> > 	[PATCH v5 1/2] ptrace: add PTRACE_SET_SYSCALL_INFO syscall skipping support
-> > 	https://lore.kernel.org/all/20260709100949.94345-2-renzo@cs.unibo.it/
-> >
-> > The changelog explains that currently this doesn't work because
-> > among the arches which define HAVE_ARCH_TRACEHOOK (at least) arch/mips is
-> > broken in this regard.
+> Use the devres-managed devm_of_reserved_mem_device_init_by_idx() instead
+> of the manual of_reserved_mem_device_init_by_idx()/
+> of_reserved_mem_device_release() pair, letting the device resource
+> manager handle cleanup automatically.
 >
-> Or it could be documented that setting the return value has to be done
-> in the exit trace, and that would than work on any architecture AFAICT.
+> Signed-off-by: Mukesh Ojha <mukesh.ojha@oss.qualcomm.com>
 
-Well, ptrace users know the problem. And this what they have to do
-currently.
+Acked-by: Ulf Hansson <ulfh@kernel.org>
 
-> With ppc and s390 using the same register for the syscall number and
-> syscall return value it's very much impossible to poke the return value
-> on entry into a register using the generic register access function. As
-> of now there is no place to store the value ot of the return value
-> outside of the registers, either.
+Kind regards
+Uffe
 
-I know nothing about ppc and s390. Can't comment right now.
-
-> And the current PTRACE_SET_SYSCALL_INFO indeed sets the syscall nr and
-> arguments on entry and the syscall return value on exit, that
-> disctincion is implemented.
+> ---
+>  drivers/mmc/host/sdhci-of-bst.c | 7 ++-----
+>  1 file changed, 2 insertions(+), 5 deletions(-)
 >
-> Not sure how the patchset you point out is relevant, it only adds
-> changes in the exit case.
-
-No. It allows to skip-and-set-retval on PTRACE_EVENT_SECCOMP.
-
-But ENTRY -> EXIT transition is not yet allowed due to the problems
-above.
-
-Oleg.
-
+> diff --git a/drivers/mmc/host/sdhci-of-bst.c b/drivers/mmc/host/sdhci-of-=
+bst.c
+> index f8d3df715e1a..304554ced690 100644
+> --- a/drivers/mmc/host/sdhci-of-bst.c
+> +++ b/drivers/mmc/host/sdhci-of-bst.c
+> @@ -405,7 +405,6 @@ static void sdhci_bst_free_bounce_buffer(struct sdhci=
+_host *host)
+>                                   host->bounce_buffer, host->bounce_addr)=
+;
+>                 host->bounce_buffer =3D NULL;
+>         }
+> -       of_reserved_mem_device_release(mmc_dev(host->mmc));
+>  }
+>
+>  static int sdhci_bst_alloc_bounce_buffer(struct sdhci_host *host)
+> @@ -417,7 +416,7 @@ static int sdhci_bst_alloc_bounce_buffer(struct sdhci=
+_host *host)
+>         /* Fixed SRAM bounce size to 32KB: verified config under 32-bit D=
+MA addressing limit */
+>         bounce_size =3D SZ_32K;
+>
+> -       ret =3D of_reserved_mem_device_init_by_idx(mmc_dev(mmc), mmc_dev(=
+mmc)->of_node, 0);
+> +       ret =3D devm_of_reserved_mem_device_init_by_idx(mmc_dev(mmc), mmc=
+_dev(mmc)->of_node, 0);
+>         if (ret) {
+>                 dev_err(mmc_dev(mmc), "Failed to initialize reserved memo=
+ry\n");
+>                 return ret;
+> @@ -425,10 +424,8 @@ static int sdhci_bst_alloc_bounce_buffer(struct sdhc=
+i_host *host)
+>
+>         host->bounce_buffer =3D dma_alloc_coherent(mmc_dev(mmc), bounce_s=
+ize,
+>                                                  &host->bounce_addr, GFP_=
+KERNEL);
+> -       if (!host->bounce_buffer) {
+> -               of_reserved_mem_device_release(mmc_dev(mmc));
+> +       if (!host->bounce_buffer)
+>                 return -ENOMEM;
+> -       }
+>
+>         host->bounce_buffer_size =3D bounce_size;
+>
+> --
+> 2.53.0
+>
 
