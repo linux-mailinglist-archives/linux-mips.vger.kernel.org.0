@@ -1,170 +1,124 @@
-Return-Path: <linux-mips+bounces-15766-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-15767-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id I54/LAfyUWrpKgMAu9opvQ
-	(envelope-from <linux-mips+bounces-15766-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Sat, 11 Jul 2026 09:34:31 +0200
+	id 6XGGEywZUmrvLwMAu9opvQ
+	(envelope-from <linux-mips+bounces-15767-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Sat, 11 Jul 2026 12:21:32 +0200
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4F95F740BD1
-	for <lists+linux-mips@lfdr.de>; Sat, 11 Jul 2026 09:34:31 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0B82E741358
+	for <lists+linux-mips@lfdr.de>; Sat, 11 Jul 2026 12:21:32 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=gmail.com header.s=20251104 header.b=AVUYdWB3;
-	dmarc=pass (policy=none) header.from=gmail.com;
-	spf=pass (mail.lfdr.de: domain of "linux-mips+bounces-15766-lists+linux-mips=lfdr.de@vger.kernel.org" designates 172.232.135.74 as permitted sender) smtp.mailfrom="linux-mips+bounces-15766-lists+linux-mips=lfdr.de@vger.kernel.org";
+	dkim=pass header.d=kernel.org header.s=k20260515 header.b=llwCZDfR;
+	dmarc=pass (policy=quarantine) header.from=kernel.org;
+	spf=pass (mail.lfdr.de: domain of "linux-mips+bounces-15767-lists+linux-mips=lfdr.de@vger.kernel.org" designates 2600:3c0a:e001:db::12fc:5321 as permitted sender) smtp.mailfrom="linux-mips+bounces-15767-lists+linux-mips=lfdr.de@vger.kernel.org";
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id BBA893014364
-	for <lists+linux-mips@lfdr.de>; Sat, 11 Jul 2026 07:34:30 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 0F4D3301A39D
+	for <lists+linux-mips@lfdr.de>; Sat, 11 Jul 2026 10:21:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2E01D3769E2;
-	Sat, 11 Jul 2026 07:34:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D2E0F3ACA46;
+	Sat, 11 Jul 2026 10:21:04 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-lj1-f177.google.com (mail-lj1-f177.google.com [209.85.208.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B7CF35AC1C
-	for <linux-mips@vger.kernel.org>; Sat, 11 Jul 2026 07:34:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D80439EF25;
+	Sat, 11 Jul 2026 10:21:02 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783755270; cv=none; b=RgDNeAmT4Tg1E76zOl3sJJK4EVNA6GNWQKcktrPMFF40dA8EvSUWSTWbX3pL0zJJ6sbxQEYYV8v3//hbqByYaDW3bQQWF5s8MW5z5pWYOvSq1d0aQ0htF212RFsl0S+eijVhXXZiGLmOO4Hy97YHWPr4VaUZvi5j+CbgSAXRj14=
+	t=1783765264; cv=none; b=Sq6U2fl5o99oH27NxGk8g7nbbYNTci0s3N4lxAheTLMH6pvw02DmIqKfiWEBaU61bHGXMJ/mxlkwLD4w9Sz4BJsJfkRRLQ/gloYKMIXLOCU0v8uVL8NJkSWtrkFcU/HbSQ7FLQKSheWzAiMPJSp0JTYb7bbljsziOzyxg+7bLzI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783755270; c=relaxed/simple;
-	bh=gUnPJvqa+6hCH/9HCtTO8STc6X6BWHZ70c5H6AKWsOg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=GalytsIwOyOy5xR/1nmyeTV74il1oe6TCS/FilFvegCRjlBLt8tPxVXsHdDnQko7mew8mgqGJG6dyMvGZM96SmPVW6MSglfaRrhmBxWihNbm3UzIWU2aF7kV/X2gHkzsIae2LtrPaEhoOGsFCtA5EfH0Du9Kk7PKNPBqz7uywcE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=AVUYdWB3; arc=none smtp.client-ip=209.85.208.177
-Received: by mail-lj1-f177.google.com with SMTP id 38308e7fff4ca-39c9452243cso15134571fa.3
-        for <linux-mips@vger.kernel.org>; Sat, 11 Jul 2026 00:34:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1783755265; x=1784360065; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=aBafLctpeA1AoyzErbEa9EGgxzwRbfKFWoPKc6c7bv4=;
-        b=AVUYdWB3WfvWD9/jCidP0U7zRkAI7QnX4kmNcHjB6Nosq4CWaZlW0hNhy2LM6kgpWe
-         TWeOEWd21tnxJAl6DPVycHqgm9166I3BafNhzXVO9hS6LEulcv+AlPncKAl7GvVrR03Q
-         iCvt2f7qMPGyswDv6RE6LdZAC8T7nBCACNeECjWvasy2/IQ6mcUH99GfG+odlxT5vxDc
-         faI4NAbgRuPvGxueHmF2X4sAqU7TBPz2sj2hy41Y3HsZaAYU2w0jJYHYvY8gACqUio0A
-         PKN2hjadzNTtEb4X+/A4fXYRXB4crD0SpHGqL5UMuZ2Is9WMaTouNVWbOrjTDz6nyty1
-         dqQQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783755265; x=1784360065;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=aBafLctpeA1AoyzErbEa9EGgxzwRbfKFWoPKc6c7bv4=;
-        b=ifozlt3Sv/rCGJc68FXIU6EBwJtfy7WSwfbWJk6XPXrxwAcN+GJqLJhnZtxaBdts75
-         uG1++0cnVhNy9cNj/Q2RWYvoi8bB/0aDcOorB0ePZBRRHtT/ynyZQ9K73+HubjPjj/uo
-         3Yl1ij64k9GRWcLGaeEuha2wqBA1oxT5G3KiYyYbLu5dR5zFfHpWXlB1jh4FmeQ7T3DP
-         cAHUTOnmROGQm5Om6Rx/NRnDnt4cUvqMTZZ/b0MFvCGogWmuKOVTRIBr8yVLAHaCyJT2
-         YqqQUtBOYTYP3MezpuDovvpJ7NXidRjBw88oN0LlEVsgfyIozUr/xd3tZDbdOFzDHQdw
-         2Xfg==
-X-Forwarded-Encrypted: i=1; AHgh+RpVU4MDa713BPiXP0eLmjkg65kOZL7jZI7wuI9AlrrfTpYe7FMtTDfdqF9frL6BvTvH+VqzxoK3Etrh@vger.kernel.org
-X-Gm-Message-State: AOJu0YxuJ/j5KB/HQ+UpeBu3hS+eRwTujZmk7M8z1MKUXOWp/+QAdawi
-	tlKYLqr3wIJYLoSygnfuEd5xvs9jl2akafoStFannESy9FJ55k0+fsvr
-X-Gm-Gg: AfdE7cnwpWX1FDwAwz+I+MzksAgOVJ7YAb7cdM5gP0KbnBcYegwxVuEdWFGNP469jgy
-	ECNGp40OMzCTX/74nf1Qg3Fi4o805nVb6DEaCuxeNjclU22amrXDU0g3LxyAPzr0kT0j4gDXknG
-	SOERWmE530VOiEQ/CzarF7FjUDcQOzQwVS4sb0g2exZNk7XhCIjpPJogrEEl5ZzjVf71hNs4JdL
-	9KHZwh3eafZBSDFwFrurHoZb3m01CHueszAxUP0C5DI/gqFZLzY4IU2idNR041/o8O2V+EfZqgf
-	jv95XCM2pPP8d8FQryjdWL2LVr/s99YZ0Uo46+ybYD31cLh9MluTagVLGfyLeZXGGZS4HnYS1QB
-	ukFqo+k1ocqxSAML0C856AhATOxTFsfK7wokbgJha9p9IGMJ8ysfpYfQS+6q3JnI/+lbD/9JJ8f
-	ElV3dfZJlz214howthTh3bhCN7OVXREyPOJbT+UJZnNtxb13+CYWYnLU92ZuYRz9Xx/KaF5Q==
-X-Received: by 2002:a05:6512:3f8:b0:5ae:bf45:e3be with SMTP id 2adb3069b0e04-5b0236689cdmr321070e87.21.1783755264967;
-        Sat, 11 Jul 2026 00:34:24 -0700 (PDT)
-Received: from ?IPV6:2a00:1fa0:4322:18e2:4e2b:60a6:4ce2:33fb? ([2a00:1fa0:4322:18e2:4e2b:60a6:4ce2:33fb])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5b01ca9dd41sm1117527e87.48.2026.07.11.00.34.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 11 Jul 2026 00:34:23 -0700 (PDT)
-Message-ID: <de1d491e-159e-41c2-b145-4d09db091031@gmail.com>
-Date: Sat, 11 Jul 2026 10:34:19 +0300
+	s=arc-20240116; t=1783765264; c=relaxed/simple;
+	bh=dEHl9N2W+Y3yvK+K2EyyGXc4h70OKQlEhr0rRbekom0=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=PI10IuMfj/P9SBG3CAOo0uUT+dlgnDBfn7h0WhpMlck+U/Qg4LuUlJKcEVOUen4tg8kZdLHQqgLbJHStLmXBDBwQGquqzEDROofKRS5LGIElSZfwudoEStM/frxhgkVW65fhIoVL7oooxIOeXXBYU8bKyS1qeOYHLJb4J4PQGdE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=llwCZDfR; arc=none smtp.client-ip=100.103.45.18
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4457E1F00A3D;
+	Sat, 11 Jul 2026 10:21:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1783765261;
+	bh=Y5aJ+Qm0JJUYPvStiI2zNIiRrGLRCpzpQqL3fvDD7L4=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=llwCZDfRI6L9DGkjO/QyBPXsnvmdDJGsDFjTZaXpX6jyKl86ER65OqWneo1Gq5Xno
+	 lEKBIImLJWRUm/rh5toWqMGBpGkPNak38Of5ABK8L4kR8R76mjmMIVvZ7IuLhbkMw6
+	 n5Amf1F3WKYQ8LG6wPIqHhqgx7YmmEQ0ky0od75QmGD/MWyrJD8tedkxyhyWfr1nZl
+	 O0kOcppziScsm9UnpdqXtmCNhZ8CtUgERReRJUDdizgIEfj5JL5t9WRnDeTJhLU2jm
+	 7V7CZzXeBNyiqPB9gyUYFijl+BHrO1/Iflwp5NTQ/kLIFfSz3glSkGvZi7cznOUSY9
+	 q9M2YDcXUBa6A==
+From: Sasha Levin <sashal@kernel.org>
+To: stable@vger.kernel.org
+Cc: Sasha Levin <sashal@kernel.org>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+	Thomas Gleixner <tglx@kernel.org>,
+	Jiayuan Chen <jiayuan.chen@linux.dev>,
+	linux-mips@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Jonas Jelonek <jelonek.jonas@gmail.com>
+Subject: Re: [PATCH 6.6.y] MIPS: smp: report dying CPU to RCU in stop_this_cpu()
+Date: Sat, 11 Jul 2026 06:20:56 -0400
+Message-ID: <20260711061631.agent5-0002@kernel.org>
+X-Mailer: git-send-email 2.53.0
+In-Reply-To: <20260710223627.5860-1-jelonek.jonas@gmail.com>
+References: <20260710223627.5860-1-jelonek.jonas@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 06/10] ASoC: replace linux/gpio.h inclusions
-To: Arnd Bergmann <arnd@kernel.org>, linux-gpio@vger.kernel.org,
- Linus Walleij <linusw@kernel.org>, Bartosz Golaszewski <brgl@kernel.org>
-Cc: Arnd Bergmann <arnd@arndb.de>, Andrew Lunn <andrew@lunn.ch>,
- Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
- Gregory Clement <gregory.clement@bootlin.com>, Frank Li <Frank.Li@nxp.com>,
- Robert Jarzmik <robert.jarzmik@free.fr>,
- Krzysztof Kozlowski <krzk@kernel.org>, Greg Ungerer <gerg@linux-m68k.org>,
- Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
- Hauke Mehrtens <hauke@hauke-m.de>, =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?=
- <zajec5@gmail.com>, Yoshinori Sato <ysato@users.sourceforge.jp>,
- John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
- Dmitry Torokhov <dmitry.torokhov@gmail.com>,
- Dominik Brodowski <linux@dominikbrodowski.net>,
- linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-samsung-soc@vger.kernel.org, patches@opensource.cirrus.com,
- linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
- linux-sh@vger.kernel.org, linux-input@vger.kernel.org,
- linux-sunxi@lists.linux.dev, linux-phy@lists.infradead.org,
- linux-rockchip@lists.infradead.org, linux-sound@vger.kernel.org,
- Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>
-References: <20260710211954.1373336-1-arnd@kernel.org>
- <20260710211954.1373336-7-arnd@kernel.org>
-Content-Language: en-US
-From: Sergey Shtylyov <sergei.shtylyov@gmail.com>
-In-Reply-To: <20260710211954.1373336-7-arnd@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Rspamd-Action: no action
-X-Spamd-Result: default: False [-0.66 / 15.00];
+X-Spamd-Result: default: False [-3.16 / 15.00];
+	WHITELIST_SPF_DKIM(-3.00)[kernel.org:d:+,kernel.org:s:+];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
-	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
-	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
+	R_MISSING_CHARSET(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20260515];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-15766-lists,linux-mips=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
-	FORGED_RECIPIENTS(0.00)[m:arnd@kernel.org,m:linux-gpio@vger.kernel.org,m:linusw@kernel.org,m:brgl@kernel.org,m:arnd@arndb.de,m:andrew@lunn.ch,m:sebastian.hesselbarth@gmail.com,m:gregory.clement@bootlin.com,m:Frank.Li@nxp.com,m:robert.jarzmik@free.fr,m:krzk@kernel.org,m:gerg@linux-m68k.org,m:tsbogend@alpha.franken.de,m:hauke@hauke-m.de,m:zajec5@gmail.com,m:ysato@users.sourceforge.jp,m:glaubitz@physik.fu-berlin.de,m:dmitry.torokhov@gmail.com,m:linux@dominikbrodowski.net,m:linux-kernel@vger.kernel.org,m:linux-arm-kernel@lists.infradead.org,m:linux-samsung-soc@vger.kernel.org,m:patches@opensource.cirrus.com,m:linux-m68k@lists.linux-m68k.org,m:linux-mips@vger.kernel.org,m:linux-sh@vger.kernel.org,m:linux-input@vger.kernel.org,m:linux-sunxi@lists.linux.dev,m:linux-phy@lists.infradead.org,m:linux-rockchip@lists.infradead.org,m:linux-sound@vger.kernel.org,m:bartosz.golaszewski@oss.qualcomm.com,m:sebastianhesselbarth@gmail.com,m:dmitrytorokhov@gmail.com,s:lists@lfdr.de];
-	FORGED_SENDER(0.00)[sergeishtylyov@gmail.com,linux-mips@vger.kernel.org];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	FREEMAIL_FROM(0.00)[gmail.com];
-	FREEMAIL_CC(0.00)[arndb.de,lunn.ch,gmail.com,bootlin.com,nxp.com,free.fr,kernel.org,linux-m68k.org,alpha.franken.de,hauke-m.de,users.sourceforge.jp,physik.fu-berlin.de,dominikbrodowski.net,vger.kernel.org,lists.infradead.org,opensource.cirrus.com,lists.linux-m68k.org,lists.linux.dev,oss.qualcomm.com];
-	RCPT_COUNT_TWELVE(0.00)[32];
-	FORWARDED(0.00)[lists@lfdr.de];
+	RCVD_COUNT_THREE(0.00)[4];
+	TAGGED_FROM(0.00)[bounces-15767-lists,linux-mips=lfdr.de];
 	MIME_TRACE(0.00)[0:+];
-	FROM_HAS_DN(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	TO_DN_SOME(0.00)[];
-	FORGED_SENDER_FORWARDING(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[sergeishtylyov@gmail.com,linux-mips@vger.kernel.org];
-	DKIM_TRACE(0.00)[gmail.com:+];
-	ALIAS_RESOLVED(0.00)[];
+	FREEMAIL_CC(0.00)[kernel.org,alpha.franken.de,linutronix.de,linux.dev,vger.kernel.org,linuxfoundation.org,gmail.com];
+	FORWARDED(0.00)[lists@lfdr.de];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	FORGED_SENDER(0.00)[sashal@kernel.org,linux-mips@vger.kernel.org];
+	FORGED_RECIPIENTS(0.00)[m:stable@vger.kernel.org,m:sashal@kernel.org,m:tsbogend@alpha.franken.de,m:bigeasy@linutronix.de,m:tglx@kernel.org,m:jiayuan.chen@linux.dev,m:linux-mips@vger.kernel.org,m:linux-kernel@vger.kernel.org,m:gregkh@linuxfoundation.org,m:jelonek.jonas@gmail.com,m:jelonekjonas@gmail.com,s:lists@lfdr.de];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
-	MID_RHS_MATCH_FROM(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	FORGED_SENDER_FORWARDING(0.00)[];
+	ALIAS_RESOLVED(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[sashal@kernel.org,linux-mips@vger.kernel.org];
+	DKIM_TRACE(0.00)[kernel.org:+];
+	RCPT_COUNT_SEVEN(0.00)[10];
 	TAGGED_RCPT(0.00)[linux-mips];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[qualcomm.com:email,vger.kernel.org:from_smtp,sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns]
+	TO_DN_SOME(0.00)[];
+	MID_RHS_MATCH_FROM(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,vger.kernel.org:from_smtp]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 4F95F740BD1
+X-Rspamd-Queue-Id: 0B82E741358
 
-On 7/11/26 12:19 AM, Arnd Bergmann wrote:
+> commit 9f3f3bdc6d9dac1a5a8262ee7ad0f2ff1527a7e7 upstream.
+>
+> smp_send_stop() parks all secondary CPUs in stop_this_cpu(). The function
+> marks the CPU offline for the scheduler via set_cpu_online(false) but
+> never informs RCU, so RCU keeps expecting a quiescent state from CPUs
+> that are now spinning forever with interrupts disabled.
 
-> From: Arnd Bergmann <arnd@arndb.de>
-> 
-> linux/gpio.h is going away,s o use linux/gpio/consumer.h instead.
+Queued for 6.6, thanks.
 
-   s/s o/ so/?
-
-> 
-> Acked-by: Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>[...]
-
-MBR, Sergey
-
+-- 
+Thanks,
+Sasha
 
