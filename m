@@ -1,54 +1,55 @@
-Return-Path: <linux-mips+bounces-15783-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-15784-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id ugm+DcuPUmrhQwMAu9opvQ
-	(envelope-from <linux-mips+bounces-15783-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Sat, 11 Jul 2026 20:47:39 +0200
+	id l+2NG+yPUmrtQwMAu9opvQ
+	(envelope-from <linux-mips+bounces-15784-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Sat, 11 Jul 2026 20:48:12 +0200
 X-Original-To: lists+linux-mips@lfdr.de
 Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9F10A742915
-	for <lists+linux-mips@lfdr.de>; Sat, 11 Jul 2026 20:47:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id D47C274293A
+	for <lists+linux-mips@lfdr.de>; Sat, 11 Jul 2026 20:48:11 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=kernel.org header.s=k20260515 header.b=Oj2bbZq2;
+	dkim=pass header.d=kernel.org header.s=k20260515 header.b=cWfdCojd;
 	dmarc=pass (policy=quarantine) header.from=kernel.org;
-	spf=pass (mail.lfdr.de: domain of "linux-mips+bounces-15783-lists+linux-mips=lfdr.de@vger.kernel.org" designates 2600:3c04:e001:36c::12fc:5321 as permitted sender) smtp.mailfrom="linux-mips+bounces-15783-lists+linux-mips=lfdr.de@vger.kernel.org";
+	spf=pass (mail.lfdr.de: domain of "linux-mips+bounces-15784-lists+linux-mips=lfdr.de@vger.kernel.org" designates 2600:3c04:e001:36c::12fc:5321 as permitted sender) smtp.mailfrom="linux-mips+bounces-15784-lists+linux-mips=lfdr.de@vger.kernel.org";
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 24328300DA48
-	for <lists+linux-mips@lfdr.de>; Sat, 11 Jul 2026 18:47:30 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id A1D4E300D715
+	for <lists+linux-mips@lfdr.de>; Sat, 11 Jul 2026 18:47:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F2E1830C354;
-	Sat, 11 Jul 2026 18:47:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E5E1430CDBC;
+	Sat, 11 Jul 2026 18:47:49 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91938233956;
-	Sat, 11 Jul 2026 18:47:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8BFFD30C162;
+	Sat, 11 Jul 2026 18:47:48 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783795648; cv=none; b=nkXtGi5VtqSJXouf87RhAEUAMCRZYGPBGc+1s/Vcg9hcrKmM06B2vz4GFNqNG2ZmYCz7GSnurSt0RTaXmourcZm+EKpJ2cK+Y0/8TKd9Tox8rZ3DsFfz9Huv/9nUuITLt4bO912AKhGkNHPUegxdXB2FXsWP+s4+PWYInSoaXWY=
+	t=1783795669; cv=none; b=REs1n73x+hI0hOZRWnJP3LTbpTLXM7OmAtxVEPbhxE4QPbOIOlD+r0EwTGZYDnGfbA3wJt+HtDfPjDt8gZkO3rAEJNKAY3U4Lqnn/YO8+kOhBZF+g2CXfmff9Qd+NRC0B7wNyRPnwkHost0i7Zh+RoLjVbf9Edw6IbHu6WhN4Gc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783795648; c=relaxed/simple;
-	bh=znvD/86roRelXlsxkkyvLX6yQAgqFWtP++AzhbmZe7g=;
+	s=arc-20240116; t=1783795669; c=relaxed/simple;
+	bh=zyqVv3UzBLKq1hjuUUCPSl3cGoER1z2LvGWjiRKvzK0=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=ErZkbxsFezn86ovyxeKChQibLlYHr0LGkDpCMl0UK0/ezrQ824coerjh4SVAUIJi3L8ptw51Oc7unRErdZMDxwNqhD5UXl+7K60xN+hlyVGYZ5z/hqZnxyr/1iFD4RD6MV50XX6t/6zV4s/oZJgxpMuZGRh2HybPY9QK++LLFAo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Oj2bbZq2; arc=none smtp.client-ip=100.103.45.18
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C9E271F00A3A;
-	Sat, 11 Jul 2026 18:47:06 +0000 (UTC)
+	 In-Reply-To:To:Cc; b=tyd6msqNIX4Qu6yRHU9peBG/8f8LmtVa3uvw/Sg1k+OZD/3Xbf1pscy1Jc86OmRaBq/3UK0s8ASfIraD9BkwRUviFplhYXAr0k5rHI+0Q9IsbtSEALZbPwrzB93E+Re0Sgu+xcAB+aVY6A2RrBWv/2463xhH9waQUWpJimb1wQI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cWfdCojd; arc=none smtp.client-ip=100.103.45.18
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AF4801F000E9;
+	Sat, 11 Jul 2026 18:47:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1783795647;
-	bh=4YSWAKth/DAZEc/MzMRhpX5OSIdEQ/yxeUWHtpyMER8=;
+	s=k20260515; t=1783795668;
+	bh=mLC9P7bLR/Uoa69VZ1d0HzztKwzCdHVcxkdSF4M05FQ=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc;
-	b=Oj2bbZq2ueyXMY7p77+CFk7KQGuguV+50w4ZIUQ3vDaeafeKSyr0+ZYcJDubPtLNZ
-	 sJRwgYlEz100fbFYljWUFkR/aPeb1rLheG84FTwtN8ZRUfctoXXsBHdSy8qI71UJOJ
-	 dg/wbxCPU7ZbHdmLXYfyUofuSsmh6hs/WTMBZ7ZZw8n0FLFgvBmCyQthypfFVSbSNO
-	 yHJjuwm/P2LYqsxijaLaLepajZ099PPnEwDe01Ij8FEmBIB/uvMIEuvsz6Cp7HYgSB
-	 88rYybISb+jVWxJ0M5ETwHbF/oOafId49qQKlqekjyCWQccGO/6+cbQyFvdid/L/wa
-	 7g5Vp/gB+SANw==
+	b=cWfdCojd9BEVdJixJem5fW1yN2WMCBSqX49JBrY8VEVdZfJU2N7N3Nxjti2dd1PAY
+	 jHUCK8DxeZrKYnvyB+RT9x7Cp2M5SoYFjZcIsDmFeaH1lqF767UeNHIIBPY+Sng5Fp
+	 MK+9v3J7Qa9RSE25T4WS2oSi8fTCtKzWW6Odi2CaiQPPbEjTa8vRRaWJWdUuMUts4O
+	 cA9jeJjD4VBwS0DTGUMhgeHN9UmX28wOStoae3Af6e7oQlz0+Dgt1jAYXhFRrvXj3V
+	 aDj9iQonQd8MmaaAgMBdzyflHOa0sh1Ocs8CIFYwiYPnS5VCh7VghyS+RJDWLO0kSW
+	 ijUTjw6rx6hTw==
 From: Lorenzo Stoakes <ljs@kernel.org>
-Date: Sat, 11 Jul 2026 19:45:02 +0100
-Subject: [PATCH v2 05/13] mm: prefer mm->def_vma_flags in mm logic
+Date: Sat, 11 Jul 2026 19:45:03 +0100
+Subject: [PATCH v2 06/13] mm/vma: convert vm_pgprot_modify() to use
+ vma_flags_t and rename
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -57,7 +58,7 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260711-b4-vma-flags-mm-v2-5-0fa2357d5431@kernel.org>
+Message-Id: <20260711-b4-vma-flags-mm-v2-6-0fa2357d5431@kernel.org>
 References: <20260711-b4-vma-flags-mm-v2-0-0fa2357d5431@kernel.org>
 In-Reply-To: <20260711-b4-vma-flags-mm-v2-0-0fa2357d5431@kernel.org>
 To: Andrew Morton <akpm@linux-foundation.org>, 
@@ -129,12 +130,12 @@ Cc: Lorenzo Stoakes <ljs@kernel.org>, linux-mm@kvack.org,
  intel-xe@lists.freedesktop.org, xen-devel@lists.xenproject.org, 
  linux-fbdev@vger.kernel.org, linux-sound@vger.kernel.org
 X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=4997; i=ljs@kernel.org;
- h=from:subject:message-id; bh=znvD/86roRelXlsxkkyvLX6yQAgqFWtP++AzhbmZe7g=;
- b=owGbwMvMwCV2fu7ZrsZH9SKMp9WSGLKC+i31WndfM+frXN4sPvuH9w6+orV5IQ9e9ZyfL3g4f
- rWG7aetHaUsDGJcDLJiiizPv4jvDxIJm9d5wd8NZg4rE8gQBi5OAZiItyUjw6sjzxQ4DtU+eKxS
- vvH1lgeXZAX7sk8X3267Whxu8rz8fB3D/8oZYmmbF/D99t5rvYvDWH/z7caXj3f8bt538lfH7D1
- yenwA
+X-Developer-Signature: v=1; a=openpgp-sha256; l=4379; i=ljs@kernel.org;
+ h=from:subject:message-id; bh=zyqVv3UzBLKq1hjuUUCPSl3cGoER1z2LvGWjiRKvzK0=;
+ b=owGbwMvMwCV2fu7ZrsZH9SKMp9WSGLKC+i1XKLHOjEnRP75gpcyaV01nzvXnrX6+LO73lGlC/
+ +aJsv8/0VHKwiDGxSArpsjy/Iv4/iCRsHmdF/zdYOawMoEMYeDiFICJBNoyMuzw9q5WXt7gt/vl
+ TK3NR7uCs2/mFnmo127Y8Mp28h/pyrmMDPe0ts0S3/2Ix3jO9zPB+xdkc/g3qqdk5hRZZBpk9Qb
+ 58QMA
 X-Developer-Key: i=ljs@kernel.org; a=openpgp;
  fpr=E7F417BF5214569E89D04F46CF9DCD8A81E27F14
 X-Rspamd-Action: no action
@@ -149,7 +150,7 @@ X-Spamd-Result: default: False [-3.66 / 15.00];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-15783-lists,linux-mips=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-15784-lists,linux-mips=lfdr.de];
 	FORGED_RECIPIENTS(0.00)[m:akpm@linux-foundation.org,m:david@kernel.org,m:liam@infradead.org,m:vbabka@kernel.org,m:rppt@kernel.org,m:surenb@google.com,m:mhocko@suse.com,m:tsbogend@alpha.franken.de,m:bcrl@kvack.org,m:viro@zeniv.linux.org.uk,m:brauner@kernel.org,m:jack@suse.cz,m:hughd@google.com,m:baolin.wang@linux.alibaba.com,m:jannh@google.com,m:pfalcato@suse.de,m:muchun.song@linux.dev,m:osalvador@suse.de,m:ziy@nvidia.com,m:npache@redhat.com,m:ryan.roberts@arm.com,m:dev.jain@arm.com,m:baohua@kernel.org,m:lance.yang@linux.dev,m:usama.arif@linux.dev,m:maddy@linux.ibm.com,m:mpe@ellerman.id.au,m:npiggin@gmail.com,m:chleroy@kernel.org,m:maarten.lankhorst@linux.intel.com,m:mripard@kernel.org,m:tzimmermann@suse.de,m:airlied@gmail.com,m:simona@ffwll.ch,m:l.stach@pengutronix.de,m:linux+etnaviv@armlinux.org.uk,m:christian.gmeiner@gmail.com,m:inki.dae@samsung.com,m:sw0312.kim@samsung.com,m:kyungmin.park@samsung.com,m:krzk@kernel.org,m:peter.griffin@linaro.org,m:alim.akhtar@samsung.com,m:jani.ni
  kula@linux.intel.com,m:joonas.lahtinen@linux.intel.com,m:rodrigo.vivi@intel.com,m:tursulin@ursulin.net,m:robin.clark@oss.qualcomm.com,m:lumag@kernel.org,m:abhinav.kumar@linux.dev,m:jesszhan0024@gmail.com,m:sean@poorly.run,m:marijn.suijten@somainline.org,m:lyude@redhat.com,m:dakr@kernel.org,m:tomi.valkeinen@ideasonboard.com,m:hjc@rock-chips.com,m:heiko@sntech.de,m:andy.yan@rock-chips.com,m:thierry.reding@kernel.org,m:mperttunen@nvidia.com,m:jonathanh@nvidia.com,m:kraxel@redhat.com,m:dmitry.osipenko@collabora.com,m:gurchetansingh@chromium.org,m:olvaffe@gmail.com,m:zack.rusin@broadcom.com,m:bcm-kernel-feedback-list@broadcom.com,m:matthew.brost@intel.com,m:thomas.hellstrom@linux.intel.com,m:oleksandr_andrushchenko@epam.com,m:deller@gmx.de,m:kees@kernel.org,m:perex@perex.cz,m:tiwai@suse.com,m:boris.brezillon@collabora.com,m:steven.price@arm.com,m:liviu.dudau@arm.com,m:ljs@kernel.org,m:linux-mm@kvack.org,m:linux-kernel@vger.kernel.org,m:linux-mips@vger.kernel.org,m:linux-aio@kvack.org,m:l
  inux-fsdevel@vger.kernel.org,m:linuxppc-dev@lists.ozlabs.org,m:dri-devel@lists.freedesktop.org,m:etnaviv@lists.freedesktop.org,m:linux-arm-kernel@lists.infradead.org,m:linux-samsung-soc@vger.kernel.org,m:intel-gfx@lists.freedesktop.org,m:linux-arm-msm@vger.kernel.org,m:freedreno@lists.freedesktop.org,m:nouveau@lists.freedesktop.org,m:linux-rockchip@lists.infradead.org,m:linux-tegra@vger.kernel.org,m:virtualization@lists.linux.dev,m:intel-xe@lists.freedesktop.org,m:xen-devel@lists.xenproject.org,m:linux-fbdev@vger.kernel.org,s:lists@lfdr.de];
@@ -173,20 +174,21 @@ X-Spamd-Result: default: False [-3.66 / 15.00];
 	MID_RHS_MATCH_FROM(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-mips,etnaviv];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[vger.kernel.org:from_smtp,linux.dev:email,nvidia.com:email,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,linux.dev:email,nvidia.com:email,vger.kernel.org:from_smtp]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 9F10A742915
+X-Rspamd-Queue-Id: D47C274293A
 
-Currently mm->def_flags (of type vm_flags_t) is union'd with
-mm->def_vma_flags (of type vma_flags_t).
+Update vm_pgprot_modify() to use the new VMA flags type vma_flags_t, and
+rename to vma_pgprot_modify() accordingly.
 
-As part of the effort to convert vm_flags_t usage to vma_flags_t (in order
-to no longer be arbitrarily limited to a system word size for VMA flags),
-prefer mm->def_vma_flags to mm->def_flags throughout the mm logic.
+This is part of the ongoing work to convert vm_flags_t to vma_flags_t, in
+order to eliminate the arbitrary limit of the number of bits in a system
+word on available VMA flags.
 
-We update dump_mm() to use the %*pb format which means we make no
-assumption about the number of VMA flag bits on output when outputting
-default VMA flags.
+Update VMA userland tests accordingly, updating vma_set_page_prot() to no
+longer inline vma_pgprot_modify(), rather we can simply define
+vma_pgprot_modify() as a static inline function and the tests will pick it
+up from vma.h.
 
 No functional change intended.
 
@@ -194,128 +196,95 @@ Reviewed-by: Lance Yang <lance.yang@linux.dev>
 Reviewed-by: Zi Yan <ziy@nvidia.com>
 Signed-off-by: Lorenzo Stoakes <ljs@kernel.org>
 ---
- mm/debug.c |  5 +++--
- mm/mlock.c | 13 +++++++------
- mm/mmap.c  | 11 ++++++-----
- mm/vma.c   |  2 +-
- 4 files changed, 17 insertions(+), 14 deletions(-)
+ mm/mmap.c                       |  8 ++++----
+ mm/vma.c                        |  2 +-
+ mm/vma.h                        |  6 ++++--
+ tools/testing/vma/include/dup.h | 12 +++++-------
+ 4 files changed, 14 insertions(+), 14 deletions(-)
 
-diff --git a/mm/debug.c b/mm/debug.c
-index 497654b36f1a..9a0297b3988d 100644
---- a/mm/debug.c
-+++ b/mm/debug.c
-@@ -197,7 +197,7 @@ void dump_mm(const struct mm_struct *mm)
- 		"numa_next_scan %lu numa_scan_offset %lu numa_scan_seq %d\n"
- #endif
- 		"tlb_flush_pending %d\n"
--		"def_flags: %#lx(%pGv)\n",
-+		"def_flags: %*pb(%pGv)\n",
- 
- 		mm, mm->task_size,
- 		mm->mmap_base, mm->mmap_legacy_base,
-@@ -226,7 +226,8 @@ void dump_mm(const struct mm_struct *mm)
- 		mm->numa_next_scan, mm->numa_scan_offset, mm->numa_scan_seq,
- #endif
- 		atomic_read(&mm->tlb_flush_pending),
--		mm->def_flags, &mm->def_flags
-+		NUM_VMA_FLAG_BITS, mm->def_vma_flags.__vma_flags,
-+		&mm->def_vma_flags
- 	);
- }
- EXPORT_SYMBOL(dump_mm);
-diff --git a/mm/mlock.c b/mm/mlock.c
-index 97e49038d8d3..34ffa954006f 100644
---- a/mm/mlock.c
-+++ b/mm/mlock.c
-@@ -699,26 +699,27 @@ SYSCALL_DEFINE2(munlock, unsigned long, start, size_t, len)
- 
- /*
-  * Take the MCL_* flags passed into mlockall (or 0 if called from munlockall)
-- * and translate into the appropriate modifications to mm->def_flags and/or the
-- * flags for all current VMAs.
-+ * and translate into the appropriate modifications to mm->def_vma_flags and/or
-+ * the flags for all current VMAs.
-  *
-  * There are a couple of subtleties with this.  If mlockall() is called multiple
-  * times with different flags, the values do not necessarily stack.  If mlockall
-  * is called once including the MCL_FUTURE flag and then a second time without
-- * it, VM_LOCKED and VM_LOCKONFAULT will be cleared from mm->def_flags.
-+ * it, VM_LOCKED and VM_LOCKONFAULT will be cleared from mm->def_vma_flags.
-  */
- static int apply_mlockall_flags(int flags)
- {
- 	VMA_ITERATOR(vmi, current->mm, 0);
-+	struct mm_struct *mm = current->mm;
- 	struct vm_area_struct *vma, *prev = NULL;
- 	vm_flags_t to_add = 0;
- 
--	current->mm->def_flags &= ~VM_LOCKED_MASK;
-+	vma_flags_clear_mask(&mm->def_vma_flags, VMA_LOCKED_MASK);
- 	if (flags & MCL_FUTURE) {
--		current->mm->def_flags |= VM_LOCKED;
-+		vma_flags_set(&mm->def_vma_flags, VMA_LOCKED_BIT);
- 
- 		if (flags & MCL_ONFAULT)
--			current->mm->def_flags |= VM_LOCKONFAULT;
-+			vma_flags_set(&mm->def_vma_flags, VMA_LOCKONFAULT_BIT);
- 
- 		if (!(flags & MCL_CURRENT))
- 			goto out;
 diff --git a/mm/mmap.c b/mm/mmap.c
-index 39d33f3a55c2..ae9a5018e20e 100644
+index ae9a5018e20e..2076c70e7700 100644
 --- a/mm/mmap.c
 +++ b/mm/mmap.c
-@@ -102,15 +102,16 @@ void vma_set_page_prot(struct vm_area_struct *vma)
-  */
- static int check_brk_limits(unsigned long addr, unsigned long len)
+@@ -80,13 +80,13 @@ core_param(ignore_rlimit_data, ignore_rlimit_data, bool, 0644);
+ /* Update vma->vm_page_prot to reflect vma->vm_flags. */
+ void vma_set_page_prot(struct vm_area_struct *vma)
  {
-+	const struct mm_struct *mm = current->mm;
-+	const bool is_def_locked =
-+		vma_flags_test(&mm->def_vma_flags, VMA_LOCKED_BIT);
- 	unsigned long mapped_addr;
+-	vm_flags_t vm_flags = vma->vm_flags;
++	vma_flags_t vma_flags = vma->flags;
+ 	pgprot_t vm_page_prot;
  
- 	mapped_addr = get_unmapped_area(NULL, addr, len, 0, MAP_FIXED);
- 	if (IS_ERR_VALUE(mapped_addr))
- 		return mapped_addr;
- 
--	return mlock_future_ok(current->mm,
--			      current->mm->def_flags & VM_LOCKED, len)
--		? 0 : -EAGAIN;
-+	return mlock_future_ok(mm, is_def_locked, len) ? 0 : -EAGAIN;
- }
- 
- SYSCALL_DEFINE1(brk, unsigned long, brk)
-@@ -197,7 +198,7 @@ SYSCALL_DEFINE1(brk, unsigned long, brk)
- 		goto out;
- 
- 	mm->brk = brk;
--	if (mm->def_flags & VM_LOCKED)
-+	if (vma_flags_test(&mm->def_vma_flags, VMA_LOCKED_BIT))
- 		populate = true;
- 
- success:
-@@ -1247,7 +1248,7 @@ int vm_brk_flags(unsigned long addr, unsigned long request, bool is_exec)
- 
- 	vma = vma_prev(&vmi);
- 	ret = do_brk_flags(&vmi, vma, addr, len, vma_flags);
--	populate = ((mm->def_flags & VM_LOCKED) != 0);
-+	populate = vma_flags_test(&mm->def_vma_flags, VMA_LOCKED_BIT);
- 	mmap_write_unlock(mm);
- 	userfaultfd_unmap_complete(mm, &uf);
- 	if (populate && !ret)
+-	vm_page_prot = vm_pgprot_modify(vma->vm_page_prot, vm_flags);
++	vm_page_prot = vma_pgprot_modify(vma->vm_page_prot, vma_flags);
+ 	if (vma_wants_writenotify(vma, vm_page_prot)) {
+-		vm_flags &= ~VM_SHARED;
+-		vm_page_prot = vm_pgprot_modify(vm_page_prot, vm_flags);
++		vma_flags_clear(&vma_flags, VMA_SHARED_BIT);
++		vm_page_prot = vma_pgprot_modify(vm_page_prot, vma_flags);
+ 	}
+ 	/* remove_protection_ptes reads vma->vm_page_prot without mmap_lock */
+ 	WRITE_ONCE(vma->vm_page_prot, vm_page_prot);
 diff --git a/mm/vma.c b/mm/vma.c
-index 70b08c76ea2f..1f443d979a7d 100644
+index 1f443d979a7d..a74a0e467c63 100644
 --- a/mm/vma.c
 +++ b/mm/vma.c
-@@ -3426,7 +3426,7 @@ struct vm_area_struct *__install_special_mapping(
- 	if (unlikely(vma == NULL))
- 		return ERR_PTR(-ENOMEM);
+@@ -2176,7 +2176,7 @@ bool vma_wants_writenotify(struct vm_area_struct *vma, pgprot_t vm_page_prot)
+ 	/* The open routine did something to the protections that pgprot_modify
+ 	 * won't preserve? */
+ 	if (pgprot_val(vm_page_prot) !=
+-	    pgprot_val(vm_pgprot_modify(vm_page_prot, vma->vm_flags)))
++	    pgprot_val(vma_pgprot_modify(vm_page_prot, vma->flags)))
+ 		return false;
  
--	vm_flags |= mm->def_flags | VM_DONTEXPAND;
-+	vm_flags |= vma_flags_to_legacy(mm->def_vma_flags) | VM_DONTEXPAND;
- 	if (pgtable_supports_soft_dirty())
- 		vm_flags |= VM_SOFTDIRTY;
- 	vm_flags_init(vma, vm_flags & ~VM_LOCKED_MASK);
+ 	/*
+diff --git a/mm/vma.h b/mm/vma.h
+index 4eb85b4a6adc..8ca6e7e8ae28 100644
+--- a/mm/vma.h
++++ b/mm/vma.h
+@@ -541,9 +541,11 @@ static inline bool vma_wants_manual_pte_write_upgrade(struct vm_area_struct *vma
+ }
+ 
+ #ifdef CONFIG_MMU
+-static inline pgprot_t vm_pgprot_modify(pgprot_t oldprot, vm_flags_t vm_flags)
++static inline pgprot_t vma_pgprot_modify(pgprot_t oldprot, vma_flags_t vma_flags)
+ {
+-	return pgprot_modify(oldprot, vm_get_page_prot(vm_flags));
++	const pgprot_t prot = vma_get_page_prot(vma_flags);
++
++	return pgprot_modify(oldprot, prot);
+ }
+ #endif
+ 
+diff --git a/tools/testing/vma/include/dup.h b/tools/testing/vma/include/dup.h
+index 773e23303e26..24955a1e318a 100644
+--- a/tools/testing/vma/include/dup.h
++++ b/tools/testing/vma/include/dup.h
+@@ -1424,20 +1424,18 @@ struct vm_area_struct *vma_iter_next_range(struct vma_iterator *vmi)
+ }
+ 
+ bool vma_wants_writenotify(struct vm_area_struct *vma, pgprot_t vm_page_prot);
++static inline pgprot_t vma_pgprot_modify(pgprot_t oldprot, vma_flags_t vma_flags);
+ 
+ /* Update vma->vm_page_prot to reflect vma->vm_flags. */
+ static inline void vma_set_page_prot(struct vm_area_struct *vma)
+ {
+-	vm_flags_t vm_flags = vma->vm_flags;
++	vma_flags_t vma_flags = vma->flags;
+ 	pgprot_t vm_page_prot;
+ 
+-	/* testing: we inline vm_pgprot_modify() to avoid clash with vma.h. */
+-	vm_page_prot = pgprot_modify(vma->vm_page_prot, vm_get_page_prot(vm_flags));
+-
++	vm_page_prot = vma_pgprot_modify(vma->vm_page_prot, vma_flags);
+ 	if (vma_wants_writenotify(vma, vm_page_prot)) {
+-		vm_flags &= ~VM_SHARED;
+-		/* testing: we inline vm_pgprot_modify() to avoid clash with vma.h. */
+-		vm_page_prot = pgprot_modify(vm_page_prot, vm_get_page_prot(vm_flags));
++		vma_flags_clear(&vma_flags, VMA_SHARED_BIT);
++		vm_page_prot = vma_pgprot_modify(vm_page_prot, vma_flags);
+ 	}
+ 	/* remove_protection_ptes reads vma->vm_page_prot without mmap_lock */
+ 	WRITE_ONCE(vma->vm_page_prot, vm_page_prot);
 
 -- 
 2.55.0
