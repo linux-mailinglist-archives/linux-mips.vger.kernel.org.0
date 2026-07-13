@@ -1,49 +1,49 @@
-Return-Path: <linux-mips+bounces-15828-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-15829-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id QlZbCubyVGpQhwAAu9opvQ
-	(envelope-from <linux-mips+bounces-15828-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Mon, 13 Jul 2026 16:15:02 +0200
+	id 9H9FMMHxVGrhhgAAu9opvQ
+	(envelope-from <linux-mips+bounces-15829-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Mon, 13 Jul 2026 16:10:09 +0200
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1834174C3C6
-	for <lists+linux-mips@lfdr.de>; Mon, 13 Jul 2026 16:15:01 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 15EC374C28B
+	for <lists+linux-mips@lfdr.de>; Mon, 13 Jul 2026 16:10:09 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=arm.com header.s=foss header.b=YkNMk2du;
-	spf=pass (mail.lfdr.de: domain of "linux-mips+bounces-15828-lists+linux-mips=lfdr.de@vger.kernel.org" designates 104.64.211.4 as permitted sender) smtp.mailfrom="linux-mips+bounces-15828-lists+linux-mips=lfdr.de@vger.kernel.org";
+	dkim=pass header.d=arm.com header.s=foss header.b=MpXGh2dy;
+	spf=pass (mail.lfdr.de: domain of "linux-mips+bounces-15829-lists+linux-mips=lfdr.de@vger.kernel.org" designates 172.234.253.10 as permitted sender) smtp.mailfrom="linux-mips+bounces-15829-lists+linux-mips=lfdr.de@vger.kernel.org";
 	dmarc=pass (policy=none) header.from=arm.com;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id D4B15310F489
-	for <lists+linux-mips@lfdr.de>; Mon, 13 Jul 2026 13:59:41 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id D2CB2304379A
+	for <lists+linux-mips@lfdr.de>; Mon, 13 Jul 2026 14:00:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9A7C443B4A4;
-	Mon, 13 Jul 2026 13:58:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9E173437478;
+	Mon, 13 Jul 2026 13:59:01 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F3194437474;
-	Mon, 13 Jul 2026 13:58:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 396EB43713C;
+	Mon, 13 Jul 2026 13:59:00 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783951129; cv=none; b=lGT1Hh66cE9JQNye9dCC2eebxlXlbXesUkkQvueaoz9oA9uopd/JrtMCC+xeQItcfCu3yGINojFrcheNJ6G5Mw4BmEu62vCiKv9T5c+0jr4exrpYomp2PY1sSA+K4lH2ukHklh/NBCgMEtsLFDwYv6uQloBa8t48J4Z/hhWPdcA=
+	t=1783951141; cv=none; b=CTWtBvOBoNEDj02t5iU1CYrjBpqTRKk1Hup1jVsVvBAlx2W2GZR6zEVqayO3o9AZmYH5O1l81SDjN0yp/UBv7OJUXY77bfacW0B/h3+9LwdoOgtfbwD1bP9yQHr5PWU47kjcwMCT8GNN6pD+FQ+UUc0U8fdnoQBoDmMOJaeeXjk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783951129; c=relaxed/simple;
-	bh=uqt0YCzTdiYk9CWaJTOcbu4/zhkZINw0+fy6QeqfMrM=;
+	s=arc-20240116; t=1783951141; c=relaxed/simple;
+	bh=iWSMe0u/TmUpLGP78SOxYHheokckyiOAtAWUlz/N+7I=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=qI1CbE0MDYTS6iIW7WAFahGhmn4Bp4AHHSglrwpnOKBX9osBgHAD93qdOsD1/2Di0+g/tDWrahMm5ZwejgDAzyYuCMFWRCwtzEdcmqBExqoN819zYm7WsLwo6weBEnMXkSAbRBwkZKx/H+VVHH0SEHV7D64EY0H2WHOp+ic5M9g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=YkNMk2du; arc=none smtp.client-ip=217.140.110.172
+	 MIME-Version; b=JHq1+X0+WzJaI4mRLCzB7wxMqDCgGHTYXYA8lo+UcnnacvWDLiNdKG77OtmDuQ5hDnQRMxbFncaNcqIC+tbl1nAolm+p14LTeh1QQRxz3cMaYJ7fG1fP2WJm21y9DVpaQsRAYzj+RdtSiRhCy7oG6BBTswD5D5iunsEMbUO8kM4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=MpXGh2dy; arc=none smtp.client-ip=217.140.110.172
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id EBC211AC1;
-	Mon, 13 Jul 2026 06:58:42 -0700 (PDT)
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7CBB81AC1;
+	Mon, 13 Jul 2026 06:58:55 -0700 (PDT)
 Received: from e129823.cambridge.arm.com (e129823.arm.com [10.2.213.3])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id F144A3F7B4;
-	Mon, 13 Jul 2026 06:58:34 -0700 (PDT)
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 8AFC43F7B4;
+	Mon, 13 Jul 2026 06:58:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
-	t=1783951127; bh=uqt0YCzTdiYk9CWaJTOcbu4/zhkZINw0+fy6QeqfMrM=;
+	t=1783951139; bh=iWSMe0u/TmUpLGP78SOxYHheokckyiOAtAWUlz/N+7I=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=YkNMk2duo++wV39RQ3zQsSkBtiXGMU8KXH8jVFl7fKMdTT/xjjvp60qA2AMoxmk68
-	 Eg4fUEaPBaK2tL00GYQTBSmmhplTwjTD2k3y608RG1C/j/Fh8LekoiysZImaxes3aD
-	 i+drxBJLKGmYBW0HKqOEYeyxcBZniTS0k9lWnbXQ=
+	b=MpXGh2dyKISR6DmyGzWLFiY1IubdGLMwywplIn/5NLWuhRoCFqF14/61QWrYnPFyH
+	 8ENXFrrXM9IQ0feMBLfAuZQ3uSqYQ1VDKgmK0iw41OdetVs+/OFNb0scNIwAyRexPn
+	 9DlDOmF0ValnVz1+/8RvKCkBlm7zW0w6IsMcimeQ=
 From: Yeoreum Yun <yeoreum.yun@arm.com>
 To: linux-arm-kernel@lists.infradead.org,
 	linux-kernel@vger.kernel.org,
@@ -140,9 +140,9 @@ Cc: david@kernel.org,
 	jonas@southpole.se,
 	stefan.kristiansson@saunalahti.fi,
 	Yeoreum Yun <yeoreum.yun@arm.com>
-Subject: [RFC PATCH 11/34] mm: vmscan: remove stack copy address of pud pass in wallk_pud_range()
-Date: Mon, 13 Jul 2026 14:55:50 +0100
-Message-ID: <20260713135614.1618183-12-yeoreum.yun@arm.com>
+Subject: [RFC PATCH 12/34] arm64: mm: use proper set_pXd() for generic compile-time folded patable in kasan_early_init()
+Date: Mon, 13 Jul 2026 14:55:51 +0100
+Message-ID: <20260713135614.1618183-13-yeoreum.yun@arm.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20260713135614.1618183-1-yeoreum.yun@arm.com>
 References: <20260713135614.1618183-1-yeoreum.yun@arm.com>
@@ -161,12 +161,12 @@ X-Spamd-Result: default: False [0.84 / 15.00];
 	DMARC_POLICY_ALLOW(-0.50)[arm.com,none];
 	R_MISSING_CHARSET(0.50)[];
 	R_DKIM_ALLOW(-0.20)[arm.com:s=foss];
-	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	FREEMAIL_CC(0.00)[kernel.org,armlinux.org.uk,linux-foundation.org,oracle.com,gmail.com,xen0n.name,loongson.cn,aosc.io,alpha.franken.de,ziepe.ca,arm.com,arndb.de,soleen.com,linux.ibm.com,linux.alibaba.com,brainfault.org,linux.dev,dabbelt.com,eecs.berkeley.edu,ghiti.fr,linux.intel.com,infradead.org,redhat.com,alien8.de,zytor.com,cmpxchg.org,tencent.com,google.com,os.amperecomputing.com,zeniv.linux.org.uk,siemens-energy.com,iscas.ac.cn,pigmoral.tech,linutronix.de,intel.com,huawei.com,gaisler.com,suse.com,linux-m68k.org,southpole.se,saunalahti.fi];
-	TAGGED_FROM(0.00)[bounces-15828-lists,linux-mips=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-15829-lists,linux-mips=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
 	FORGED_SENDER(0.00)[yeoreum.yun@arm.com,linux-mips@vger.kernel.org];
 	MIME_TRACE(0.00)[0:+];
@@ -176,7 +176,7 @@ X-Spamd-Result: default: False [0.84 / 15.00];
 	FORWARDED(0.00)[lists@lfdr.de];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	DKIM_TRACE(0.00)[arm.com:+];
-	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
 	TO_DN_SOME(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
 	FORGED_SENDER_FORWARDING(0.00)[];
@@ -189,35 +189,64 @@ X-Spamd-Result: default: False [0.84 / 15.00];
 	RCPT_COUNT_GT_50(0.00)[95];
 	TAGGED_RCPT(0.00)[linux-mips];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,vger.kernel.org:from_smtp,arm.com:from_mime,arm.com:mid,arm.com:email,arm.com:dkim]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,arm.com:from_mime,arm.com:mid,arm.com:email,arm.com:dkim,vger.kernel.org:from_smtp]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 1834174C3C6
+X-Rspamd-Queue-Id: 15EC374C28B
 
-We want to change how pXdp_get() works with generic compile-time folded
-page tables. To prepare for that, replace passing the address of a stack
-copy of a pXd to walk_pmd_range() with pud pointer directly so that
-the ignoring the value of folded entries.
+We want to rework how set_pXd() behaves for generic compile-time folded
+page tables by disallowing its use and triggering a compile-time error
+when it is used improperly, ensuring that the actual first-level set_pXd()
+function is used instead.
+
+Therefore, call the proper set_pXd() in case of folded pgtable
+to setup early kasan first-level pgtable with pXd_present()
 
 There should be no functional change.
 
 Signed-off-by: Yeoreum Yun <yeoreum.yun@arm.com>
 ---
- mm/vmscan.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/arm64/mm/kasan_init.c | 26 ++++++++++++++++++++++++--
+ 1 file changed, 24 insertions(+), 2 deletions(-)
 
-diff --git a/mm/vmscan.c b/mm/vmscan.c
-index 986dde8e7429f..61470223d8213 100644
---- a/mm/vmscan.c
-+++ b/mm/vmscan.c
-@@ -3725,7 +3725,7 @@ static int walk_pud_range(p4d_t *p4d, unsigned long start, unsigned long end,
- 		if (!pud_present(val) || WARN_ON_ONCE(pud_leaf(val)))
- 			continue;
+diff --git a/arch/arm64/mm/kasan_init.c b/arch/arm64/mm/kasan_init.c
+index 3fcad956fdf7c..c77ba4ab643b5 100644
+--- a/arch/arm64/mm/kasan_init.c
++++ b/arch/arm64/mm/kasan_init.c
+@@ -216,10 +216,32 @@ asmlinkage void __init kasan_early_init(void)
+ 		 */
+ 		static pte_t tbl[PTRS_PER_PTE] __bss_pgtbl;
+ 		pgd_t *pgdp = pgd_offset_k(KASAN_SHADOW_START);
+-
+-		set_pgd(pgdp, __pgd(__pa_symbol(tbl) | PGD_TYPE_TABLE));
++		p4d_t *p4dp;
++		pud_t *pudp;
++		pmd_t *pmdp;
++
++		if (CONFIG_PGTABLE_LEVELS == 5 && pgtable_l5_enabled()) {
++			set_pgd(pgdp, __pgd(__pa_symbol(tbl) | PGD_TYPE_TABLE));
++			goto populate;
++		}
++
++		p4dp = p4d_offset(pgdp, KASAN_SHADOW_START);
++		if (CONFIG_PGTABLE_LEVELS >= 4 && pgtable_l4_enabled()) {
++			set_p4d(p4dp, __p4d(__pa_symbol(tbl) | P4D_TYPE_TABLE));
++			goto populate;
++		}
++
++		pudp = pud_offset(p4dp, KASAN_SHADOW_START);
++		if (CONFIG_PGTABLE_LEVELS >= 3) {
++			set_pud(pudp, __pud(__pa_symbol(tbl) | PUD_TYPE_TABLE));
++			goto populate;
++		}
++
++		pmdp = pmd_offset(pudp, KASAN_SHADOW_START);
++		set_pmd(pmdp, __pmd(__pa_symbol(tbl) | PMD_TYPE_TABLE));
+ 	}
  
--		walk_pmd_range(&val, addr, next, args);
-+		walk_pmd_range(pud + i, addr, next, args);
- 
- 		if (need_resched() || walk->batched >= MAX_LRU_BATCH) {
- 			end = (addr | ~PUD_MASK) + 1;
++populate:
+ 	kasan_pgd_populate(KASAN_SHADOW_START, KASAN_SHADOW_END, NUMA_NO_NODE,
+ 			   true);
+ }
 -- 
 LEVI:{C3F47F37-75D8-414A-A8BA-3980EC8A46D7}
 
