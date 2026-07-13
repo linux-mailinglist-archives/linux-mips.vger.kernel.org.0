@@ -1,49 +1,49 @@
-Return-Path: <linux-mips+bounces-15840-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-15841-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id Zfj1AyP3VGptiAAAu9opvQ
-	(envelope-from <linux-mips+bounces-15840-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Mon, 13 Jul 2026 16:33:07 +0200
+	id A7lULq30VGrThwAAu9opvQ
+	(envelope-from <linux-mips+bounces-15841-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Mon, 13 Jul 2026 16:22:37 +0200
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id F1FA074C6E9
-	for <lists+linux-mips@lfdr.de>; Mon, 13 Jul 2026 16:33:05 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 102F974C53A
+	for <lists+linux-mips@lfdr.de>; Mon, 13 Jul 2026 16:22:37 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=arm.com header.s=foss header.b=GAoyiDy3;
-	spf=pass (mail.lfdr.de: domain of "linux-mips+bounces-15840-lists+linux-mips=lfdr.de@vger.kernel.org" designates 104.64.211.4 as permitted sender) smtp.mailfrom="linux-mips+bounces-15840-lists+linux-mips=lfdr.de@vger.kernel.org";
+	dkim=pass header.d=arm.com header.s=foss header.b=IVRIV9T1;
+	spf=pass (mail.lfdr.de: domain of "linux-mips+bounces-15841-lists+linux-mips=lfdr.de@vger.kernel.org" designates 2600:3c0a:e001:db::12fc:5321 as permitted sender) smtp.mailfrom="linux-mips+bounces-15841-lists+linux-mips=lfdr.de@vger.kernel.org";
 	dmarc=pass (policy=none) header.from=arm.com;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id D1E70307559E
-	for <lists+linux-mips@lfdr.de>; Mon, 13 Jul 2026 14:02:42 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id E6FDD331D7DB
+	for <lists+linux-mips@lfdr.de>; Mon, 13 Jul 2026 14:02:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D0F23437475;
-	Mon, 13 Jul 2026 14:01:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 79E37282F09;
+	Mon, 13 Jul 2026 14:01:32 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 77F2142DA2E;
-	Mon, 13 Jul 2026 14:01:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E71A442DA52;
+	Mon, 13 Jul 2026 14:01:30 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783951279; cv=none; b=MmEaIIcAxTdyvAAaBt4uCVK0DLA3D68JD7DIrPMRGPCJpO121+EvMcyqNimtVzb9ajCx8pxEETOi7ULQmtXOqSZ4wYCnk9h1/7T8+KYYj0XHWBODBG+ZiuD3hWMfWjK/zRrO58Pul/jiPR+eMGiAex85K9ubqFh7dxBS40zv1hU=
+	t=1783951292; cv=none; b=ScIkspAadzBjeK7Vm5klm6pDYDJU3mVml4sp87/4H19WSO20K3GkJ67q25IKNsD04SVGMJ/g7fpXX5koVFK9eRBP2RqCUydsWv1TwlmUw9PbkVZ07H/8aso/PFy2vjchyybynN+AWlGiWBAW07+AIgH9e73A2wonAtZ1Bwb9loY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783951279; c=relaxed/simple;
-	bh=fo69NRGTbHPdRvMyzMnGDIUWtNXuhxqOSbA3GBc5Vfk=;
+	s=arc-20240116; t=1783951292; c=relaxed/simple;
+	bh=rrBwQUNghxkMeytXEUNPpto8wZMFntDlW0SzsHEzoAk=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=aW1zjPJ2TNulI1Mo9vp9y8twHiycAwn4JmohGuHS1TodjaM84luahKQFIObksr8qyfyeCY/yY8jDQ3VQwSetr93GWT/v4h/cKGUGAs0P/J3hvLVa+IOiFpU/Sw6n5eQF7lZwpzUE8mPMKdbNmU2OA3/cjIebD7o1dcBTfO8QyD4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=GAoyiDy3; arc=none smtp.client-ip=217.140.110.172
+	 MIME-Version; b=A5QyHeDPQAuQVrI2lqxGI6Lvh/FDRdsap3pzYKpVYoDR4U+bHuKuunXRqtkQWGxF1olNCHtiiUJEsYoxLq6WgIIEvwnQROGol93elAM8TPVWN27hR3TpqKt1XtEP26Wf+I1nGXeDldmMPMwlWGMiE0XBCecYlWo56y+AzNWgAeg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=IVRIV9T1; arc=none smtp.client-ip=217.140.110.172
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 870EA2050;
-	Mon, 13 Jul 2026 07:01:13 -0700 (PDT)
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1A01A2050;
+	Mon, 13 Jul 2026 07:01:26 -0700 (PDT)
 Received: from e129823.cambridge.arm.com (e129823.arm.com [10.2.213.3])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 9427A3F7B4;
-	Mon, 13 Jul 2026 07:01:05 -0700 (PDT)
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 25E193F7B4;
+	Mon, 13 Jul 2026 07:01:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
-	t=1783951277; bh=fo69NRGTbHPdRvMyzMnGDIUWtNXuhxqOSbA3GBc5Vfk=;
+	t=1783951290; bh=rrBwQUNghxkMeytXEUNPpto8wZMFntDlW0SzsHEzoAk=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=GAoyiDy3vQ1X7bdgWU7XAqeF1NKi8cZXbh0Pcm7PEb8ix60O+FJhN+xRdssvSqs1z
-	 QUdqoUMHf+/1uEN0SYPKe9v1SzW67hzTIIH7Bt1jnn7qbYXsKmfGK0AWyBU4GfbNGV
-	 9+KtfQlIc1qITAsw0F6XCnotwh3TKW8ydrkXRCY0=
+	b=IVRIV9T1flpA0gOrme1V1eRRplwrh4TOVZQ26715JQXP4QS1CmEmFLuEQckZtZvv4
+	 4p+gq0ht2Chb+NH1sjxzNiEzIZeyEPeVbwJ1KM74ZeocLv5XHo0v7Uh1Lze0qxAo+P
+	 JXkmUcVeya83Vz4L/uprN4mXjJ5dFsFizk8SHMNA=
 From: Yeoreum Yun <yeoreum.yun@arm.com>
 To: linux-arm-kernel@lists.infradead.org,
 	linux-kernel@vger.kernel.org,
@@ -140,9 +140,9 @@ Cc: david@kernel.org,
 	jonas@southpole.se,
 	stefan.kristiansson@saunalahti.fi,
 	Yeoreum Yun <yeoreum.yun@arm.com>
-Subject: [RFC PATCH 23/34] x86: mm: skip pud setup when using generic compile-time folded pagetable
-Date: Mon, 13 Jul 2026 14:56:02 +0100
-Message-ID: <20260713135614.1618183-24-yeoreum.yun@arm.com>
+Subject: [RFC PATCH 24/34] x86: mm: call try_to_free_pmd_page() when CONFIG_PGTABLE_LEVELS > 2
+Date: Mon, 13 Jul 2026 14:56:03 +0100
+Message-ID: <20260713135614.1618183-25-yeoreum.yun@arm.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20260713135614.1618183-1-yeoreum.yun@arm.com>
 References: <20260713135614.1618183-1-yeoreum.yun@arm.com>
@@ -161,12 +161,12 @@ X-Spamd-Result: default: False [0.84 / 15.00];
 	DMARC_POLICY_ALLOW(-0.50)[arm.com,none];
 	R_MISSING_CHARSET(0.50)[];
 	R_DKIM_ALLOW(-0.20)[arm.com:s=foss];
-	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	FREEMAIL_CC(0.00)[kernel.org,armlinux.org.uk,linux-foundation.org,oracle.com,gmail.com,xen0n.name,loongson.cn,aosc.io,alpha.franken.de,ziepe.ca,arm.com,arndb.de,soleen.com,linux.ibm.com,linux.alibaba.com,brainfault.org,linux.dev,dabbelt.com,eecs.berkeley.edu,ghiti.fr,linux.intel.com,infradead.org,redhat.com,alien8.de,zytor.com,cmpxchg.org,tencent.com,google.com,os.amperecomputing.com,zeniv.linux.org.uk,siemens-energy.com,iscas.ac.cn,pigmoral.tech,linutronix.de,intel.com,huawei.com,gaisler.com,suse.com,linux-m68k.org,southpole.se,saunalahti.fi];
-	TAGGED_FROM(0.00)[bounces-15840-lists,linux-mips=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-15841-lists,linux-mips=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
 	FORGED_SENDER(0.00)[yeoreum.yun@arm.com,linux-mips@vger.kernel.org];
 	MIME_TRACE(0.00)[0:+];
@@ -176,7 +176,7 @@ X-Spamd-Result: default: False [0.84 / 15.00];
 	FORWARDED(0.00)[lists@lfdr.de];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	DKIM_TRACE(0.00)[arm.com:+];
-	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
 	TO_DN_SOME(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
 	FORGED_SENDER_FORWARDING(0.00)[];
@@ -189,48 +189,47 @@ X-Spamd-Result: default: False [0.84 / 15.00];
 	RCPT_COUNT_GT_50(0.00)[95];
 	TAGGED_RCPT(0.00)[linux-mips];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[arm.com:from_mime,arm.com:mid,arm.com:email,arm.com:dkim,sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,vger.kernel.org:from_smtp]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[vger.kernel.org:from_smtp,arm.com:from_mime,arm.com:mid,arm.com:email,arm.com:dkim,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: F1FA074C6E9
+X-Rspamd-Queue-Id: 102F974C53A
 
-We want to rework how set_pXd() behaves for generic compile-time folded
-page tables by disallowing its use and triggering a compile-time error
-when it is used improperly, ensuring that the actual first-level set_pXd()
-function is used instead.
+We want to rework how pgd_page_vaddr() behaves for generic compile-time
+folded page tables by disallowing its use and triggering a compile-time
+error when it is used improperly, ensuring that the actual
+first-level pXd_pgtable() function is used instead.
 
-Therefore, skip collapse_pud_page() and populate_pud() according to
-CONFIG_PGTABLE_LEVELS.
+The try_to_free_pmd_page() wouldn't need to call when
+CONFIG_PGTABLE_LEVELS=2. therefore call it when CONFIG_PGTABLE_LEVELS > 2.
 
 There should be no functional change.
 
 Signed-off-by: Yeoreum Yun <yeoreum.yun@arm.com>
 ---
- arch/x86/mm/pat/set_memory.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ arch/x86/mm/pat/set_memory.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/arch/x86/mm/pat/set_memory.c b/arch/x86/mm/pat/set_memory.c
-index d023a40a1e034..cffb1cef869cc 100644
+index cffb1cef869cc..2137174b733ae 100644
 --- a/arch/x86/mm/pat/set_memory.c
 +++ b/arch/x86/mm/pat/set_memory.c
-@@ -1326,7 +1326,7 @@ static int collapse_pud_page(pud_t *pud, unsigned long addr,
- 	pmd_t *pmd, first;
- 	int i;
- 
--	if (!direct_gbpages)
-+	if (CONFIG_PGTABLE_LEVELS == 2 || !direct_gbpages)
- 		return 0;
- 
- 	addr &= PUD_MASK;
-@@ -1710,7 +1710,8 @@ static int populate_pud(struct cpa_data *cpa, unsigned long start, p4d_t *p4d,
+@@ -1452,7 +1452,7 @@ static bool unmap_pte_range(pmd_t *pmd, unsigned long start, unsigned long end)
+ static void __unmap_pmd_range(pud_t *pud, pmd_t *pmd,
+ 			      unsigned long start, unsigned long end)
+ {
+-	if (unmap_pte_range(pmd, start, end))
++	if (unmap_pte_range(pmd, start, end) && CONFIG_PGTABLE_LEVELS > 2)
+ 		if (try_to_free_pmd_page(pud_pgtable(*pud)))
+ 			pud_clear(pud);
+ }
+@@ -1496,7 +1496,7 @@ static void unmap_pmd_range(pud_t *pud, unsigned long start, unsigned long end)
  	/*
- 	 * Map everything starting from the Gb boundary, possibly with 1G pages
+ 	 * Try again to free the PMD page if haven't succeeded above.
  	 */
--	while (boot_cpu_has(X86_FEATURE_GBPAGES) && end - start >= PUD_SIZE) {
-+	while (CONFIG_PGTABLE_LEVELS > 3 && boot_cpu_has(X86_FEATURE_GBPAGES) &&
-+	       end - start >= PUD_SIZE) {
- 		set_pud(pud, pud_mkhuge(pfn_pud(cpa->pfn,
- 				   canon_pgprot(pud_pgprot))));
- 
+-	if (!pud_none(*pud))
++	if (!pud_none(*pud) && CONFIG_PGTABLE_LEVELS > 2)
+ 		if (try_to_free_pmd_page(pud_pgtable(*pud)))
+ 			pud_clear(pud);
+ }
 -- 
 LEVI:{C3F47F37-75D8-414A-A8BA-3980EC8A46D7}
 
