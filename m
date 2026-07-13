@@ -1,217 +1,186 @@
-Return-Path: <linux-mips+bounces-15869-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-15870-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id eqfIEVhbVWounQAAu9opvQ
-	(envelope-from <linux-mips+bounces-15869-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Mon, 13 Jul 2026 23:40:40 +0200
+	id +ippFYlfVWoNngAAu9opvQ
+	(envelope-from <linux-mips+bounces-15870-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Mon, 13 Jul 2026 23:58:33 +0200
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9133C74F4F2
-	for <lists+linux-mips@lfdr.de>; Mon, 13 Jul 2026 23:40:39 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9C57474F5F9
+	for <lists+linux-mips@lfdr.de>; Mon, 13 Jul 2026 23:58:32 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=intel.com header.s=Intel header.b=UymcwPwT;
-	spf=pass (mail.lfdr.de: domain of "linux-mips+bounces-15869-lists+linux-mips=lfdr.de@vger.kernel.org" designates 2600:3c0a:e001:db::12fc:5321 as permitted sender) smtp.mailfrom="linux-mips+bounces-15869-lists+linux-mips=lfdr.de@vger.kernel.org";
-	dmarc=pass (policy=none) header.from=intel.com;
+	dkim=pass header.d=gmail.com header.s=20251104 header.b=tG9nqy6y;
+	spf=pass (mail.lfdr.de: domain of "linux-mips+bounces-15870-lists+linux-mips=lfdr.de@vger.kernel.org" designates 172.234.253.10 as permitted sender) smtp.mailfrom="linux-mips+bounces-15870-lists+linux-mips=lfdr.de@vger.kernel.org";
+	dmarc=pass (policy=none) header.from=gmail.com;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 1C2CF3021E78
-	for <lists+linux-mips@lfdr.de>; Mon, 13 Jul 2026 21:40:25 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 1A8A23034568
+	for <lists+linux-mips@lfdr.de>; Mon, 13 Jul 2026 21:58:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 02CE8360EC3;
-	Mon, 13 Jul 2026 21:40:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DFC0236A358;
+	Mon, 13 Jul 2026 21:58:29 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1899435F162;
-	Mon, 13 Jul 2026 21:40:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A24D4365A1D
+	for <linux-mips@vger.kernel.org>; Mon, 13 Jul 2026 21:58:28 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783978823; cv=none; b=OLc364wkMh/LTbFM2y7JMHyg/K4nfVhBT6XPHmun4nCph0WW9QayDc0VwHFD1Uj/3J2Uh3STwV1HnAXb/ICpvdoBXyDN7PWawquw6W/tmXUuxQuP7OHqVzPqvAyZ07jvFvyd598p5sbEuW3rlFkvhRyoylgJOkNi167aMLhPyoU=
+	t=1783979909; cv=none; b=ZgQXH+tcb9QwTd3ISzh7UhMryae/dtxHplKABf6XvnVgmEiyasFTn1dS+YKwz7KjCbC9r6tHKZG4QDoM3OkiV3wg2uML0Eg7w5PhTOsrvCR01dpIZkapJS1xvCu/kzKj7Au0Wdpml8mydWJcjZe1+KcrtclQyLgEZb/oRuPspP8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783978823; c=relaxed/simple;
-	bh=bTce3NANGkMxQwl5/BPNI0R4Y8vE5s2I+Fl2WAV2VZU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=JyBCyHGa4JW4lUIAc4LvT2B1vwK/tBX/LANhFQnmw4Nk2T3bCd0HyCuObFEFEMhTK+ugymdOk3TgRHPqvxGOj/0+OKidkC52jKKKBU9O+rRpo7Yh33NYB+I3gajTOotyiF3XibZaDf7yPOaHw9OmGebm5mb43DE6cqvsbuf+nqs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=UymcwPwT; arc=none smtp.client-ip=198.175.65.17
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1783978822; x=1815514822;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=bTce3NANGkMxQwl5/BPNI0R4Y8vE5s2I+Fl2WAV2VZU=;
-  b=UymcwPwT4fk+ndFiIN4vBBVQWeDkcwBN2wd+x4Ew6AciGmecAeRpbav1
-   4v7zlJBjQd1bcFpmzO1Nm559+3FQq8PusLcUoPzN/bsBxtFJQqM+kavi9
-   b1b4ehunKFKA9cDNdRpDqpwQW1Jku02HRA7xLBGNkhJaltP6Ia1FoxFkZ
-   n/YeC/0sJo1JQe8lSUxuzdiFX3cqHdJkZu0tcNR04LOWY8WEqI03AlRQK
-   AQ52w2WJvPQCmEPkXmfkx96cWPH8PVAboIutSFhYmyScVsl/zv0j7Sy9G
-   7V3zDGwOjr7ap4Md1VXjAFqYk/9VzJm0o2nv6AhJoXmUlT25ib8pyaZ4r
-   w==;
-X-CSE-ConnectionGUID: ni8c7gUmTCO6zotJSnOmkQ==
-X-CSE-MsgGUID: 4WNN6YXuRsK8R5wkycAm+w==
-X-IronPort-AV: E=McAfee;i="6800,10657,11841"; a="84613456"
-X-IronPort-AV: E=Sophos;i="6.25,154,1779174000"; 
-   d="scan'208";a="84613456"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jul 2026 14:40:21 -0700
-X-CSE-ConnectionGUID: zjSlVSWlTm2TZi8lRy7/jQ==
-X-CSE-MsgGUID: Ohjm+R33SxugWQdGgvdrlA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.25,154,1779174000"; 
-   d="scan'208";a="253927987"
-Received: from smithj1-mobl2.amr.corp.intel.com (HELO [10.125.108.83]) ([10.125.108.83])
-  by orviesa006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jul 2026 14:40:18 -0700
-Message-ID: <14e250db-1641-4085-8d13-02f819657d5f@intel.com>
-Date: Mon, 13 Jul 2026 14:40:18 -0700
+	s=arc-20240116; t=1783979909; c=relaxed/simple;
+	bh=rvtLKiUTx8JU87qPeh1zFP/g9VJHkoaTb8XhvmeuwVM=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=BHR9MIDXqNSUysiQayRDmgGGm937EreHs/2buXJwLVMNT/3dkNAUb+tdIbQqc7eh/HFve4ecC/EYd/wdnbR3FuLWXL0Xdj1Z4aJV4vlC92F6P6t//8c6XM2oSNDvu0PNMGajo/d8DwkaaICF28AqE7jbxreUcBjdogNmcAsZnYY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=tG9nqy6y; arc=none smtp.client-ip=209.85.216.44
+Received: by mail-pj1-f44.google.com with SMTP id 98e67ed59e1d1-381216921aaso3992520a91.1
+        for <linux-mips@vger.kernel.org>; Mon, 13 Jul 2026 14:58:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1783979908; x=1784584708; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:content-type:mime-version
+         :message-id:date:subject:from:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=AhUPfC1ZGiOKf60pIcQbBz514ywJlA6acyUZE/li0u8=;
+        b=tG9nqy6ytYfDhBxja30vXn7kKrDo2isMemReEs6VAjse+KfSENPL1wDHRZKjm5UBiu
+         LO8/2U0XoD3vKUMadIHSyNiFjqizWwojoPI0mzTx5NJpGe46y+4SCnq4oovrq+cO9q8b
+         ANmTS1UfvAsyMw25aCtb+WaDh5KvDFkgqpz/a0i9IADPuIix0Y4VUYDibNRgH3vq1MHW
+         snBPQB3eqyR5gpNXACmpzwOiuRidfN9uixf1pA5Y9Si0FZu2rA79aUIs8+oxxV/MmWks
+         6Hoeik7+8ZuDdPZ5UjTiAx6DMhQYU2SqqNKIfRyVlXdvgS2suqkeZLMDBF7vSn0WCD1H
+         AaFA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1783979908; x=1784584708;
+        h=cc:to:content-transfer-encoding:content-type:mime-version
+         :message-id:date:subject:from:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=AhUPfC1ZGiOKf60pIcQbBz514ywJlA6acyUZE/li0u8=;
+        b=FN1DYxmQN3+V/pmZ57+l6KAOug0Rdst6LCtOt7GBzgSsUZ/r3PAuCgbwg8UWX03M7Y
+         f5oCNQd0zsbNBgtQ9TnTpoYoMcDkEVenQ9zacDeRV7IQubD4v6OWp1i6e3SFDZXkdOER
+         aBY/F/IOTOpQp++hFaIauQNiJUFVCRh7e14X0WBZ9ETNNvw8+FjOcpjfMaV/5EsQkbH1
+         1o0Rmd7NgoCxwtvtDiq6UNDh+QM46+GLCcEAQi6gE/92/HOETUDjQCSDybn8Gao7Dlz8
+         7o/rzrSBOiyqbPrI+34l5Spxp5wjqlLQ7fq0pEupzzzoDaDZwh2qab8aOZXDwApJX0uM
+         UvOg==
+X-Forwarded-Encrypted: i=1; AHgh+Rof8K6k5S5gXZMU9zqSLVdZRusxO/zjH5FoOU3I2C1e3hrB972c7LyJzQFSggd4MpFqrrhb1/gthIiy@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx7tx1X32KvSer3o74Ee0m6mqSOfc8zeXXcv7HU+WSidmOy5cZC
+	Ffj7rkIf6QPu0EPFljl1CPqYH7BaT4T6d4qbrDO1zvGmJGrJn4sIs2vK
+X-Gm-Gg: AfdE7ckHOlxeMAhb0Ey2lxeR/pi70FuwcgxI/fc97kAPApH38g3vW0I1uL065NZ/mYl
+	fSXHw6NjxyQLp7+t16HljUzm8GH3pgmd1Dyivq4dbj7V+cUE44jdRkGZAZZGE53SjieYZMNXQY3
+	9skZheG2hVxOWaTNvU98wd7Zg9jFJaJ0nYOd2xF+dz8YO6kLdv5vWk1u+uhGH2+/FTFDgANnWbD
+	UOvOqAOdeVt7sv6oxCiPzuwYFv77Joiu+lZZA5YEr54J2zb2K3vVzxzubullm8hefTjdx+ASbXL
+	4uTdv3aaovEFGLoO1YE1Q7vyPaH9YM7M4w3Oz5LYpJxCGxvecX+KvqpZxQAhsBPGvRB0h0EKfGh
+	HdpC9FOyW0Qu1kBDsJgEmsNmzxi+gV6nmEVievsnjLURbJuNOqYa5UnIrwCJAaF8vNW531L+SR0
+	ftiVt01B/URWP2sMcjGjRLzmdjtc6Fh+aG9SJ6uRaHG36aSxTmjLqLdCNp+3m50hFDDAIyvfc18
+	Bre
+X-Received: by 2002:a05:6a20:2d22:b0:3bf:ba48:ca88 with SMTP id adf61e73a8af0-3c1107650dbmr12735116637.15.1783979907832;
+        Mon, 13 Jul 2026 14:58:27 -0700 (PDT)
+Received: from dtor-ws.sjc.corp.google.com ([2a00:79e0:2ebe:8:e15f:5d5f:580b:f2e9])
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-13b8a5992c9sm28371487c88.4.2026.07.13.14.58.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Jul 2026 14:58:27 -0700 (PDT)
+From: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Subject: [PATCH v2 0/3] MIPS: BCM47XX: convert buttons to software nodes
+Date: Mon, 13 Jul 2026 14:58:21 -0700
+Message-Id: <20260713-b4-bcm47xx-swnode-v2-0-2b879f0c193c@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH 10/34] x86: mm: carve out the generic compile-time
- folded pgtable case in effective_prot()
-To: "David Hildenbrand (Arm)" <david@kernel.org>,
- Yeoreum Yun <yeoreum.yun@arm.com>, linux-arm-kernel@lists.infradead.org,
- linux-kernel@vger.kernel.org, loongarch@lists.linux.dev,
- linux-mips@vger.kernel.org, linux-arch@vger.kernel.org,
- kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
- x86@kernel.org, linux-mm@kvack.org, kasan-dev@googlegroups.com,
- linux-csky@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
- linux-openrisc@vger.kernel.org
-Cc: linux@armlinux.org.uk, akpm@linux-foundation.org,
- ankur.a.arora@oracle.com, rppt@kernel.org, linmag7@gmail.com,
- chleroy@kernel.org, klarasmodin@gmail.com, chenhuacai@kernel.org,
- kernel@xen0n.name, kas@kernel.org, zhangtianyang@loongson.cn,
- wangyuli@aosc.io, tsbogend@alpha.franken.de, ljs@kernel.org, jgg@ziepe.ca,
- catalin.marinas@arm.com, will@kernel.org, arnd@arndb.de,
- ryan.roberts@arm.com, pasha.tatashin@soleen.com, rmclure@linux.ibm.com,
- baolin.wang@linux.alibaba.com, tj@kernel.org, kevin.brodsky@arm.com,
- anup@brainfault.org, atish.patra@linux.dev, pjw@kernel.org,
- palmer@dabbelt.com, aou@eecs.berkeley.edu, alex@ghiti.fr,
- dave.hansen@linux.intel.com, luto@kernel.org, peterz@infradead.org,
- tglx@kernel.org, mingo@redhat.com, bp@alien8.de, hpa@zytor.com,
- hannes@cmpxchg.org, mhocko@kernel.org, qi.zheng@linux.dev,
- shakeel.butt@linux.dev, kasong@tencent.com, baohua@kernel.org,
- axelrasmussen@google.com, yuanchu@google.com, weixugc@google.com,
- ryabinin.a.a@gmail.com, glider@google.com, andreyknvl@gmail.com,
- dvyukov@google.com, vincenzo.frascino@arm.com, anshuman.khandual@arm.com,
- yang@os.amperecomputing.com, chaitanyas.prakash@arm.com, ardb@kernel.org,
- guoren@kernel.org, yang.li85200@gmail.com, viro@zeniv.linux.org.uk,
- dinguyen@kernel.org, schuster.simon@siemens-energy.com,
- wangruikang@iscas.ac.cn, junhui.liu@pigmoral.tech, muchun.song@linux.dev,
- vishal.moola@gmail.com, namcao@linutronix.de, pavel@kernel.org,
- djbw@kernel.org, yu-cheng.yu@intel.com, baolu.lu@linux.intel.com,
- Jonathan.Cameron@huawei.com, coxu@redhat.com, andreas@gaisler.com,
- liam@infradead.org, vbabka@kernel.org, surenb@google.com, mhocko@suse.com,
- geert@linux-m68k.org, shorne@gmail.com, jonas@southpole.se,
- stefan.kristiansson@saunalahti.fi
-References: <20260713135614.1618183-1-yeoreum.yun@arm.com>
- <20260713135614.1618183-11-yeoreum.yun@arm.com>
- <c3edfb13-08ec-419c-bc05-8f3f64186b24@intel.com>
- <ac365196-8ccc-4d8b-83d7-28fec763e75c@kernel.org>
- <710b7eb0-8e0c-4f07-991c-2285c77e1beb@intel.com>
- <6007625e-c3f9-4ad6-99a8-61396bccbcec@kernel.org>
- <32d459d1-ad19-4baf-bbb1-0565458001d2@intel.com>
- <3ea30f8a-bb29-4bf5-8400-1c4840d46a88@kernel.org>
- <7e84b200-25eb-43a6-b5e2-5f27f2d82a77@intel.com>
- <31988089-095a-4eed-b5e2-c677c70f79f6@kernel.org>
-From: Dave Hansen <dave.hansen@intel.com>
-Content-Language: en-US
-Autocrypt: addr=dave.hansen@intel.com; keydata=
- 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
-In-Reply-To: <31988089-095a-4eed-b5e2-c677c70f79f6@kernel.org>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAH1fVWoC/22Nyw6CMBBFf8XM2jGlLa248j8MCygjjBFqWkQM4
+ d/lsXV5knPPnSBSYIpwOUwQaODIvltAHg/gmqKrCblaGKSQRhhpsdRYulbbccT46XxFmGVnZSh
+ NZWIMLLtXoDuPW/OW7xzf5YNcv4ZWo+HY+/DdTodk9fa+FfpPf0hQoFWiSjOlhVT2WrcFP0/Ot
+ 5DP8/wDrOxvz8QAAAA=
+X-Change-ID: 20260627-b4-bcm47xx-swnode-99836e552166
+To: =?utf-8?q?Rafa=C5=82_Mi=C5=82ecki?= <zajec5@gmail.com>, 
+ Michael Buesch <m@bues.ch>, Hauke Mehrtens <hauke@hauke-m.de>, 
+ Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: Bartosz Golaszewski <brgl@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
+ linux-wireless@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-mips@vger.kernel.org, 
+ Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>
+X-Mailer: b4 0.16-dev-b242f
 X-Rspamd-Action: no action
-X-Spamd-Result: default: False [-3.66 / 15.00];
-	WHITELIST_SPF_DKIM(-3.00)[intel.com:d:+,kernel.org:s:+];
-	SUSPICIOUS_RECIPS(1.50)[];
+X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
-	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-15869-lists,linux-mips=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	FORGED_RECIPIENTS(0.00)[m:david@kernel.org,m:yeoreum.yun@arm.com,m:linux-arm-kernel@lists.infradead.org,m:linux-kernel@vger.kernel.org,m:loongarch@lists.linux.dev,m:linux-mips@vger.kernel.org,m:linux-arch@vger.kernel.org,m:kvm-riscv@lists.infradead.org,m:linux-riscv@lists.infradead.org,m:x86@kernel.org,m:linux-mm@kvack.org,m:kasan-dev@googlegroups.com,m:linux-csky@vger.kernel.org,m:linux-m68k@lists.linux-m68k.org,m:linux-openrisc@vger.kernel.org,m:linux@armlinux.org.uk,m:akpm@linux-foundation.org,m:ankur.a.arora@oracle.com,m:rppt@kernel.org,m:linmag7@gmail.com,m:chleroy@kernel.org,m:klarasmodin@gmail.com,m:chenhuacai@kernel.org,m:kernel@xen0n.name,m:kas@kernel.org,m:zhangtianyang@loongson.cn,m:wangyuli@aosc.io,m:tsbogend@alpha.franken.de,m:ljs@kernel.org,m:jgg@ziepe.ca,m:catalin.marinas@arm.com,m:will@kernel.org,m:arnd@arndb.de,m:ryan.roberts@arm.com,m:pasha.tatashin@soleen.com,m:rmclure@linux.ibm.com,m:baolin.wang@linux.alibaba.com,m:tj@kernel.org,m:kevin.brodsky@arm.com,m:anup@bra
- infault.org,m:atish.patra@linux.dev,m:pjw@kernel.org,m:palmer@dabbelt.com,m:aou@eecs.berkeley.edu,m:alex@ghiti.fr,m:dave.hansen@linux.intel.com,m:luto@kernel.org,m:peterz@infradead.org,m:tglx@kernel.org,m:mingo@redhat.com,m:bp@alien8.de,m:hpa@zytor.com,m:hannes@cmpxchg.org,m:mhocko@kernel.org,m:qi.zheng@linux.dev,m:shakeel.butt@linux.dev,m:kasong@tencent.com,m:baohua@kernel.org,m:axelrasmussen@google.com,m:yuanchu@google.com,m:weixugc@google.com,m:ryabinin.a.a@gmail.com,m:glider@google.com,m:andreyknvl@gmail.com,m:dvyukov@google.com,m:vincenzo.frascino@arm.com,m:anshuman.khandual@arm.com,m:yang@os.amperecomputing.com,m:chaitanyas.prakash@arm.com,m:ardb@kernel.org,m:guoren@kernel.org,m:yang.li85200@gmail.com,m:viro@zeniv.linux.org.uk,m:dinguyen@kernel.org,m:schuster.simon@siemens-energy.com,m:wangruikang@iscas.ac.cn,m:junhui.liu@pigmoral.tech,m:muchun.song@linux.dev,m:vishal.moola@gmail.com,m:namcao@linutronix.de,m:pavel@kernel.org,m:djbw@kernel.org,m:yu-cheng.yu@intel.com,m:baolu.lu
- @linux.intel.com,m:Jonathan.Cameron@huawei.com,m:coxu@redhat.com,m:andreas@gaisler.com,m:liam@infradead.org,m:vbabka@kernel.org,m:surenb@google.com,m:mhocko@suse.com,m:geert@linux-m68k.org,m:shorne@gmail.com,m:jonas@southpole.se,m:stefan.kristiansson@saunalahti.fi,s:lists@lfdr.de];
-	FORGED_SENDER(0.00)[dave.hansen@intel.com,linux-mips@vger.kernel.org];
-	MIME_TRACE(0.00)[0:+];
-	FREEMAIL_CC(0.00)[armlinux.org.uk,linux-foundation.org,oracle.com,kernel.org,gmail.com,xen0n.name,loongson.cn,aosc.io,alpha.franken.de,ziepe.ca,arm.com,arndb.de,soleen.com,linux.ibm.com,linux.alibaba.com,brainfault.org,linux.dev,dabbelt.com,eecs.berkeley.edu,ghiti.fr,linux.intel.com,infradead.org,redhat.com,alien8.de,zytor.com,cmpxchg.org,tencent.com,google.com,os.amperecomputing.com,zeniv.linux.org.uk,siemens-energy.com,iscas.ac.cn,pigmoral.tech,linutronix.de,intel.com,huawei.com,gaisler.com,suse.com,linux-m68k.org,southpole.se,saunalahti.fi];
-	FORWARDED(0.00)[lists@lfdr.de];
-	FORGED_SENDER_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-15870-lists,linux-mips=lfdr.de];
+	FORGED_RECIPIENTS(0.00)[m:zajec5@gmail.com,m:m@bues.ch,m:hauke@hauke-m.de,m:tsbogend@alpha.franken.de,m:brgl@kernel.org,m:arnd@arndb.de,m:linux-wireless@vger.kernel.org,m:linux-kernel@vger.kernel.org,m:linux-mips@vger.kernel.org,m:bartosz.golaszewski@oss.qualcomm.com,s:lists@lfdr.de];
 	FROM_HAS_DN(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	FORGED_SENDER(0.00)[dmitrytorokhov@gmail.com,linux-mips@vger.kernel.org];
+	TO_DN_SOME(0.00)[];
+	FREEMAIL_TO(0.00)[gmail.com,bues.ch,hauke-m.de,alpha.franken.de];
+	MIME_TRACE(0.00)[0:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	FORWARDED(0.00)[lists@lfdr.de];
+	DKIM_TRACE(0.00)[gmail.com:+];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	FORGED_RECIPIENTS_FORWARDING(0.00)[];
 	FORGED_SENDER_FORWARDING(0.00)[];
 	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[dave.hansen@intel.com,linux-mips@vger.kernel.org];
-	DKIM_TRACE(0.00)[intel.com:+];
-	RCPT_COUNT_GT_50(0.00)[95];
-	MID_RHS_MATCH_FROM(0.00)[];
-	TO_DN_SOME(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[dmitrytorokhov@gmail.com,linux-mips@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	ALIAS_RESOLVED(0.00)[];
+	MID_RHS_MATCH_FROM(0.00)[];
+	FREEMAIL_FROM(0.00)[gmail.com];
+	RCPT_COUNT_SEVEN(0.00)[10];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-mips];
-	FORGED_RECIPIENTS_FORWARDING(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,vger.kernel.org:from_smtp,intel.com:from_mime,intel.com:dkim,intel.com:mid]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[vger.kernel.org:from_smtp,msgid.link:url,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 9133C74F4F2
+X-Rspamd-Queue-Id: 9C57474F5F9
 
-On 7/13/26 14:17, David Hildenbrand (Arm) wrote:
->> To me, the double READ_ONCE() is a non-issue.
-> To other arch maintainers, it is!
+This series converts the legacy gpio-keys platform device on BCM47XX
+boards to use software nodes and static properties.
 
-Ahh, so it seems like Christophe in ppc32 land was looking at this more
-like a regression that needed to get fixed.
+To do this properly without relying on legacy name-based matching
+(which is being removed from gpiolib), we introduce and register
+software nodes for the underlying GPIO controllers (BCMA and SSB)
+and reference them in the button properties.
 
-Christophe, just out of curiosity, was this something that was causing
-you practical problems like measurable performance regressions, or was
-it really just insane code generation that seems unacceptably suboptimal?
+The first two patches add the software nodes to bcma-gpio and
+ssb-gpio respectively. The third patch performs the conversion
+for the BCM47XX buttons.
+
+Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+---
+As Johannes mentioned on v1 this best should go through MIPS tree.
+
+Changes in v2:
+- Restrict software node registration to host SoC devices in both ssb
+  and bcma drivers to avoid conflicts when secondary buses (e.g. PCI
+  wireless cards) are present
+- Fix dangling pointer panic in buttons driver by allocating software
+  node references on the heap instead of stack
+- Link to v1: https://patch.msgid.link/20260704-b4-bcm47xx-swnode-v1-0-730d59340237@gmail.com
+
+---
+Dmitry Torokhov (3):
+      bcma: gpio: Add and register software node for GPIO controller
+      ssb: gpio: Add and register software node for GPIO controller
+      MIPS: BCM47XX: Convert buttons to software nodes
+
+ arch/mips/bcm47xx/buttons.c | 442 +++++++++++++++++++++++++-------------------
+ drivers/bcma/driver_gpio.c  |  43 ++++-
+ drivers/ssb/driver_gpio.c   |  48 ++++-
+ include/linux/bcma/bcma.h   |   2 +
+ include/linux/ssb/ssb.h     |   2 +
+ 5 files changed, 337 insertions(+), 200 deletions(-)
+---
+base-commit: 49362394dad7df66c274c867a271394c10ca2bb8
+change-id: 20260627-b4-bcm47xx-swnode-99836e552166
+
+Thanks.
+
+-- 
+Dmitry
+
 
