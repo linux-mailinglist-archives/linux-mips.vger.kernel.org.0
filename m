@@ -1,49 +1,49 @@
-Return-Path: <linux-mips+bounces-15850-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-15851-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id qMxrHPD0VGrhhwAAu9opvQ
-	(envelope-from <linux-mips+bounces-15850-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Mon, 13 Jul 2026 16:23:44 +0200
+	id 775RA6jyVGo6hwAAu9opvQ
+	(envelope-from <linux-mips+bounces-15851-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Mon, 13 Jul 2026 16:14:00 +0200
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 58A1174C574
-	for <lists+linux-mips@lfdr.de>; Mon, 13 Jul 2026 16:23:43 +0200 (CEST)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id 99DD674C37A
+	for <lists+linux-mips@lfdr.de>; Mon, 13 Jul 2026 16:13:59 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=arm.com header.s=foss header.b=kFAmuy6H;
-	spf=pass (mail.lfdr.de: domain of "linux-mips+bounces-15850-lists+linux-mips=lfdr.de@vger.kernel.org" designates 2600:3c15:e001:75::12fc:5321 as permitted sender) smtp.mailfrom="linux-mips+bounces-15850-lists+linux-mips=lfdr.de@vger.kernel.org";
+	dkim=pass header.d=arm.com header.s=foss header.b=nFe7xAlP;
+	spf=pass (mail.lfdr.de: domain of "linux-mips+bounces-15851-lists+linux-mips=lfdr.de@vger.kernel.org" designates 172.232.135.74 as permitted sender) smtp.mailfrom="linux-mips+bounces-15851-lists+linux-mips=lfdr.de@vger.kernel.org";
 	dmarc=pass (policy=none) header.from=arm.com;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id F134530E5540
-	for <lists+linux-mips@lfdr.de>; Mon, 13 Jul 2026 14:05:23 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 9FE5130664A6
+	for <lists+linux-mips@lfdr.de>; Mon, 13 Jul 2026 14:05:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 49D0443801C;
-	Mon, 13 Jul 2026 14:03:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CAE28437102;
+	Mon, 13 Jul 2026 14:03:37 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BCCAA437448;
-	Mon, 13 Jul 2026 14:03:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 53EAD43440F;
+	Mon, 13 Jul 2026 14:03:36 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783951405; cv=none; b=I9og3vkfzVt+HSFdxXRAgTMXOvIVo6OzAV55yDUSH6LyuvDUHV0L2pIOkZJghCvtG6zMu41idNOeAIcfypmCjTJNgbJCU0a9sh/NNoZgOAluOUrOZ3K+qHVbUY0p5cZY4V/hXHG/ABY4sEZlOV1NeaFjVD5LgvrrjEP7CvAAeSI=
+	t=1783951417; cv=none; b=kmkhzIVSIil+0BMGtd/pP9s08xfX5u6ta0GvznKpDpz1h061aWuZE3oG6NBdENzsJfzsDOkeOXl3wyFg48cJafL5Is68T5Q9ryetKKqGiZbYgAfdKBlfpcgQQ+d4HgRU07oEWflOLAV7zmQdGDqeSnt2txkcHxryzDIowp0F4U4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783951405; c=relaxed/simple;
-	bh=gAIMmlF71mzMP0yYJWwgqqjvoec5KnaBkukv+jUXMrU=;
+	s=arc-20240116; t=1783951417; c=relaxed/simple;
+	bh=QAL4GYmN8cF0pmxGGh9bWrEOsYJOq6TzQh5SyXgApoA=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=tK/avvfUo4iHOipKur/IbL/mdgnnesFQCKyTfoXlWN4hXHkBoPCODNHfJSV6GTu/7BEMVl/+7PW+Cm1rX9IsxzKPmXyue0Ug97qlBC5MOgbC4mgVt4XQFeqZAtWvHEZaNc1Ik1SWKp9LBbWybniJrmgfOqy677RgTL8n48nDVpo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=kFAmuy6H; arc=none smtp.client-ip=217.140.110.172
+	 MIME-Version; b=XamWiigeduuKWi4fawwqqiYUYTUwCUaANlQ6oCJT1hs377vM4LjXirjR3Uua4zB46Dg1eHr4G/fTqXOKitlztkQS+8SSgWlPOSMhjhFyTgMZ+nml0WX0Rs1/OGYCGB1UMATvFrWOJ1Rz2bt2M6x9EAQIZn6vuoJ5UjV0NRE6KYY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=nFe7xAlP; arc=none smtp.client-ip=217.140.110.172
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 19BE32309;
-	Mon, 13 Jul 2026 07:03:19 -0700 (PDT)
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9D6A62309;
+	Mon, 13 Jul 2026 07:03:31 -0700 (PDT)
 Received: from e129823.cambridge.arm.com (e129823.arm.com [10.2.213.3])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 2BAB13F7B4;
-	Mon, 13 Jul 2026 07:03:11 -0700 (PDT)
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id AF31A3F7B4;
+	Mon, 13 Jul 2026 07:03:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
-	t=1783951403; bh=gAIMmlF71mzMP0yYJWwgqqjvoec5KnaBkukv+jUXMrU=;
+	t=1783951415; bh=QAL4GYmN8cF0pmxGGh9bWrEOsYJOq6TzQh5SyXgApoA=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=kFAmuy6HCrMZ6tSuvjtTYo85hlb7PNx9Wx6sIRts9SRAquBqiQgqOfIlCRlJ9B4Tp
-	 d3jU1pzNDXQyK6LYap+DEJjC3rZKNQjaAN3bou87+5KbSGg+CkVydZQYAug8b2BRDO
-	 wVSck9EvYickuztkf+XvT3t4Mi2M0L8sZriC0bvI=
+	b=nFe7xAlP2LDvWkRo0KA0ExYj7kOvwZ3/PeBr/ZxemEskfg5Bkh306EL0w/W9x9JIN
+	 6Rx+rn4+oXKAD3tpAI7lV/BuzB2WGkXK7sBpbgChBd8nXbW9Icfb0KCMOKBYCtCIox
+	 XMYIO7XpJyV2WpqTO0aUkz0XGFIpt8zutTPK0j+A=
 From: Yeoreum Yun <yeoreum.yun@arm.com>
 To: linux-arm-kernel@lists.infradead.org,
 	linux-kernel@vger.kernel.org,
@@ -140,9 +140,9 @@ Cc: david@kernel.org,
 	jonas@southpole.se,
 	stefan.kristiansson@saunalahti.fi,
 	Yeoreum Yun <yeoreum.yun@arm.com>
-Subject: [RFC PATCH 33/34] mm/pgtable: catch abuse of folded dummy pgd_t/p4d_t/pud_t
-Date: Mon, 13 Jul 2026 14:56:12 +0100
-Message-ID: <20260713135614.1618183-34-yeoreum.yun@arm.com>
+Subject: [RFC PATCH 34/34] arm64: pgtable: convert pte_present() from macro to static inline
+Date: Mon, 13 Jul 2026 14:56:13 +0100
+Message-ID: <20260713135614.1618183-35-yeoreum.yun@arm.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20260713135614.1618183-1-yeoreum.yun@arm.com>
 References: <20260713135614.1618183-1-yeoreum.yun@arm.com>
@@ -161,12 +161,12 @@ X-Spamd-Result: default: False [0.84 / 15.00];
 	DMARC_POLICY_ALLOW(-0.50)[arm.com,none];
 	R_MISSING_CHARSET(0.50)[];
 	R_DKIM_ALLOW(-0.20)[arm.com:s=foss];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	FREEMAIL_CC(0.00)[kernel.org,armlinux.org.uk,linux-foundation.org,oracle.com,gmail.com,xen0n.name,loongson.cn,aosc.io,alpha.franken.de,ziepe.ca,arm.com,arndb.de,soleen.com,linux.ibm.com,linux.alibaba.com,brainfault.org,linux.dev,dabbelt.com,eecs.berkeley.edu,ghiti.fr,linux.intel.com,infradead.org,redhat.com,alien8.de,zytor.com,cmpxchg.org,tencent.com,google.com,os.amperecomputing.com,zeniv.linux.org.uk,siemens-energy.com,iscas.ac.cn,pigmoral.tech,linutronix.de,intel.com,huawei.com,gaisler.com,suse.com,linux-m68k.org,southpole.se,saunalahti.fi];
-	TAGGED_FROM(0.00)[bounces-15850-lists,linux-mips=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-15851-lists,linux-mips=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
 	FORGED_SENDER(0.00)[yeoreum.yun@arm.com,linux-mips@vger.kernel.org];
 	MIME_TRACE(0.00)[0:+];
@@ -176,7 +176,7 @@ X-Spamd-Result: default: False [0.84 / 15.00];
 	FORWARDED(0.00)[lists@lfdr.de];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	DKIM_TRACE(0.00)[arm.com:+];
-	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
+	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
 	TO_DN_SOME(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
 	FORGED_SENDER_FORWARDING(0.00)[];
@@ -189,180 +189,99 @@ X-Spamd-Result: default: False [0.84 / 15.00];
 	RCPT_COUNT_GT_50(0.00)[95];
 	TAGGED_RCPT(0.00)[linux-mips];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,vger.kernel.org:from_smtp,arm.com:from_mime,arm.com:mid,arm.com:email,arm.com:dkim]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,vger.kernel.org:from_smtp,arm.com:from_mime,arm.com:mid,arm.com:email,arm.com:dkim]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 58A1174C574
+X-Rspamd-Queue-Id: 99DD674C37A
 
-From: "David Hildenbrand (Arm)" <david@kernel.org>
+pte_present() is used as the basis for both pmd_present() and pud_present().
+It is currently implemented as a macro composed of pte_val() and
+pte_present_invalid().
 
-Let's catch and prevent all abuse with dummy values on the stack
-similar to:
+When pte_present() or its higher-level variants are used directly with
+ptep_get() or pXdp_get(), for example:
 
-	pud_t pud = pudp_get(pudp);
-	pmd_t *pmdp = pud_offset(*pud, addr);
+  pte_present(ptep_get(pte));
+  pmd_present(pmdp_get(pmd));
+  pud_present(pudp_get(pud));
 
-While this approach relies on the compiler propagating constants, it
-should catch most of the issues in practice. It would have caught all
-the issues we found through manual inspection.
+the macro expansion causes the compiler to evaluate the argument twice,
+resulting in redundant loads. For example, pte_present() expands to:
 
-To avoid build issues particularly on x86, where pgd_val() might not be
-around in some inclusion paths, perform the new checks from wrapper
-macros.
+  !pte_val(READ_ONCE(*pte) || pte_present_invalid(READ_ONCE(*pte))
 
-Signed-off-by: David Hildenbrand (Arm) <david@kernel.org>
+A typical example is pud_free_pmd_page(), where the expansion of
+pmd_present() generates:
+    ...
+    /* pmd_present() (x20 = pmdp) */
+    1b88: f9400288     ldr	x8, [x20]        // read pmdp.
+    1b8c: f9000fa8     str	x8, [x29, #0x18]
+    1b90: 3707fec8     tbnz	w8, #0x0, 0x1b68 <pud_free_pmd_page+0xd0>
+    1b94: f9400288     ldr	x8, [x20]        // redundant read of pmdp.
+    1b98: 8a170109     and	x9, x8, x23
+    1b9c: f9000fa8     str	x8, [x29, #0x18]
+    1ba0: f120013f     cmp	x9, #0x800
+    1ba4: 54fffe20     b.eq	0x1b68 <pud_free_pmd_page+0xd0>
+    1ba8: 17fffff4     b	0x1b78 <pud_free_pmd_page+0xe0>
+    ...
+
+Convert pte_present() to static inline function so that prevent the
+generation of redundant code and move pte_valid() and
+pte_present_invalid() further up so the inline function can use them.
+
+After this change, the generated code becomes:
+    ...
+    /* pmd_present() (x20 = pmdp) */
+    1a30: f9400288     ldr	x8, [x20]
+    1a34: 8a170109     and	x9, x8, x23
+    1a38: f9000fa8     str	x8, [x29, #0x18]
+    1a3c: f120013f     cmp	x9, #0x800
+    1a40: 54fffe80     b.eq	0x1a10 <pud_free_pmd_page+0xd0>
+    1a44: 3607fee8     tbz	w8, #0x0, 0x1a20 <pud_free_pmd_page+0xe0>
+    1a48: 17fffff2     b	0x1a10 <pud_free_pmd_page+0xd0>
+    ...
+
+This eliminates the redundant load and also reduces code size at
+call sites using this pattern. For example, pud_free_pmd_page() shrinks
+from 7,500 bytes to 7,148 bytes, a reduction of approximately 4.7%.
+
 Signed-off-by: Yeoreum Yun <yeoreum.yun@arm.com>
 ---
- include/asm-generic/pgtable-nop4d.h | 23 ++++++++++++++++++-----
- include/asm-generic/pgtable-nopmd.h | 24 ++++++++++++++++++------
- include/asm-generic/pgtable-nopud.h | 24 ++++++++++++++++++------
- 3 files changed, 54 insertions(+), 17 deletions(-)
+ arch/arm64/include/asm/pgtable.h | 12 ++++++++----
+ 1 file changed, 8 insertions(+), 4 deletions(-)
 
-diff --git a/include/asm-generic/pgtable-nop4d.h b/include/asm-generic/pgtable-nop4d.h
-index 84a529df27ee3..fcd86aabc592c 100644
---- a/include/asm-generic/pgtable-nop4d.h
-+++ b/include/asm-generic/pgtable-nop4d.h
-@@ -31,7 +31,7 @@ static inline bool pgd_leaf(pgd_t pgd)		{ return false; }
+diff --git a/arch/arm64/include/asm/pgtable.h b/arch/arm64/include/asm/pgtable.h
+index 6185fc291fd7d..aaae3d14895f6 100644
+--- a/arch/arm64/include/asm/pgtable.h
++++ b/arch/arm64/include/asm/pgtable.h
+@@ -140,10 +140,17 @@ static inline pteval_t __phys_to_pte_val(phys_addr_t phys)
+ #define pte_none(pte)		(!pte_val(pte))
+ #define pte_page(pte)		(pfn_to_page(pte_pfn(pte)))
  
- #define set_pgd(pgdptr, pgdval)			BUILD_BUG()
- 
--static inline pgd_t pgdp_get(pgd_t *p4dp)
-+static __always_inline pgd_t pgdp_get(pgd_t *p4dp)
- {
- 	pgd_t dummy = { 0 };
- 
-@@ -39,17 +39,30 @@ static inline pgd_t pgdp_get(pgd_t *p4dp)
- }
- #define pgdp_get pgdp_get
- 
--static inline p4d_t *p4d_offset(pgd_t *pgd, unsigned long address)
-+#define pgd_check_dummy(pgd) BUILD_BUG_ON(__builtin_constant_p(pgd_val(pgd)))
++#define pte_valid(pte)		(!!(pte_val(pte) & PTE_VALID))
++#define pte_present_invalid(pte) \
++	((pte_val(pte) & (PTE_VALID | PTE_PRESENT_INVALID)) == PTE_PRESENT_INVALID)
 +
-+static __always_inline p4d_t *__p4d_offset(pgd_t *pgdp, unsigned long address)
- {
--	return (p4d_t *)pgd;
-+	return (p4d_t *)pgdp;
- }
+ /*
+  * The following only work if pte_present(). Undefined behaviour otherwise.
+  */
+-#define pte_present(pte)	(pte_valid(pte) || pte_present_invalid(pte))
++static __always_inline bool pte_present(pte_t pte)
++{
++	return pte_valid(pte) || pte_present_invalid(pte);
++}
+ #define pte_young(pte)		(!!(pte_val(pte) & PTE_AF))
+ #define pte_special(pte)	(!!(pte_val(pte) & PTE_SPECIAL))
+ #define pte_write(pte)		(!!(pte_val(pte) & PTE_WRITE))
+@@ -168,9 +175,6 @@ static inline pteval_t __phys_to_pte_val(phys_addr_t phys)
+ #define pte_sw_dirty(pte)	(!!(pte_val(pte) & PTE_DIRTY))
+ #define pte_dirty(pte)		(pte_sw_dirty(pte) || pte_hw_dirty(pte))
  
--static inline p4d_t *p4d_offset_lockless(pgd_t *pgdp, pgd_t pgd,
-+#define p4d_offset(pgdp, address)					\
-+({									\
-+	pgd_check_dummy(*(pgdp));					\
-+	__p4d_offset(pgdp, address);					\
-+})
-+
-+static __always_inline p4d_t *__p4d_offset_lockless(pgd_t *pgdp, pgd_t pgd,
- 		unsigned long address)
- {
- 	return (p4d_t *)pgdp;
- }
--#define p4d_offset_lockless p4d_offset_lockless
-+
-+#define p4d_offset_lockless(pgdp, pgd, address)				\
-+({									\
-+	pgd_check_dummy(*(pgdp));					\
-+	__p4d_offset_lockless(pgdp, pgd, address);			\
-+})
- 
- #define p4d_val(x)				(pgd_val((x).pgd))
- #define __p4d(x)				((p4d_t) { __pgd(x) })
-diff --git a/include/asm-generic/pgtable-nopmd.h b/include/asm-generic/pgtable-nopmd.h
-index 96f3fccd22fda..ef6dd5895e7ba 100644
---- a/include/asm-generic/pgtable-nopmd.h
-+++ b/include/asm-generic/pgtable-nopmd.h
-@@ -40,7 +40,7 @@ static inline void pud_clear(pud_t *pud)	{ }
- 
- #define set_pud(pudptr, pudval)			BUILD_BUG()
- 
--static inline pud_t pudp_get(pud_t *pudp)
-+static __always_inline pud_t pudp_get(pud_t *pudp)
- {
- 	pud_t dummy = { 0 };
- 
-@@ -48,18 +48,30 @@ static inline pud_t pudp_get(pud_t *pudp)
- }
- #define pudp_get pudp_get
- 
--static inline pmd_t * pmd_offset(pud_t * pud, unsigned long address)
-+#define pud_check_dummy(pud) BUILD_BUG_ON(__builtin_constant_p(pud_val(pud)))
-+
-+static __always_inline pmd_t *__pmd_offset(pud_t *pudp, unsigned long address)
- {
--	return (pmd_t *)pud;
-+	return (pmd_t *)pudp;
- }
--#define pmd_offset pmd_offset
- 
--static inline pmd_t *pmd_offset_lockless(pud_t *pudp, pud_t pud,
-+#define pmd_offset(pudp, address)					\
-+({									\
-+	pud_check_dummy(*(pudp));					\
-+	__pmd_offset(pudp, address);					\
-+})
-+
-+static __always_inline pmd_t *__pmd_offset_lockless(pud_t *pudp, pud_t pud,
- 		unsigned long address)
- {
- 	return (pmd_t *)pudp;
- }
--#define pmd_offset_lockless pmd_offset_lockless
-+
-+#define pmd_offset_lockless(pudp, pud, address)				\
-+({									\
-+	pud_check_dummy(*(pudp));					\
-+	__pmd_offset_lockless(pudp, pud, address);			\
-+})
- 
- #define pmd_val(x)				(pud_val((x).pud))
- #define __pmd(x)				((pmd_t) { __pud(x) } )
-diff --git a/include/asm-generic/pgtable-nopud.h b/include/asm-generic/pgtable-nopud.h
-index faa0233bcde80..873940f9d3f9b 100644
---- a/include/asm-generic/pgtable-nopud.h
-+++ b/include/asm-generic/pgtable-nopud.h
-@@ -38,7 +38,7 @@ static inline bool p4d_leaf(p4d_t p4d)		{ return false; }
- 
- #define set_p4d(p4dptr, p4dval)			BUILD_BUG()
- 
--static inline p4d_t p4dp_get(p4d_t *p4dp)
-+static __always_inline p4d_t p4dp_get(p4d_t *p4dp)
- {
- 	p4d_t dummy = { 0 };
- 
-@@ -46,18 +46,30 @@ static inline p4d_t p4dp_get(p4d_t *p4dp)
- }
- #define p4dp_get p4dp_get
- 
--static inline pud_t *pud_offset(p4d_t *p4d, unsigned long address)
-+#define p4d_check_dummy(p4d) BUILD_BUG_ON(__builtin_constant_p(p4d_val(p4d)))
-+
-+static __always_inline pud_t *__pud_offset(p4d_t *p4dp, unsigned long address)
- {
--	return (pud_t *)p4d;
-+	return (pud_t *)p4dp;
- }
--#define pud_offset pud_offset
- 
--static inline pud_t *pud_offset_lockless(p4d_t *p4dp, p4d_t p4d,
-+#define pud_offset(p4dp, address)					\
-+({									\
-+	p4d_check_dummy(*(p4dp));					\
-+	__pud_offset(p4dp, address);					\
-+})
-+
-+static __always_inline pud_t *__pud_offset_lockless(p4d_t *p4dp, p4d_t p4d,
- 		unsigned long address)
- {
- 	return (pud_t *)p4dp;
- }
--#define pud_offset_lockless pud_offset_lockless
-+
-+#define pud_offset_lockless(p4dp, p4d, address)				\
-+({									\
-+	p4d_check_dummy(*(p4dp));					\
-+	__pud_offset_lockless(p4dp, p4d, address);			\
-+})
- 
- #define pud_val(x)				(p4d_val((x).p4d))
- #define __pud(x)				((pud_t) { __p4d(x) })
+-#define pte_valid(pte)		(!!(pte_val(pte) & PTE_VALID))
+-#define pte_present_invalid(pte) \
+-	((pte_val(pte) & (PTE_VALID | PTE_PRESENT_INVALID)) == PTE_PRESENT_INVALID)
+ /*
+  * Execute-only user mappings do not have the PTE_USER bit set. All valid
+  * kernel mappings have the PTE_UXN bit set.
 -- 
 LEVI:{C3F47F37-75D8-414A-A8BA-3980EC8A46D7}
 
