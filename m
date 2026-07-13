@@ -1,49 +1,49 @@
-Return-Path: <linux-mips+bounces-15847-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-15848-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id YDXZBvj0VGrihwAAu9opvQ
-	(envelope-from <linux-mips+bounces-15847-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Mon, 13 Jul 2026 16:23:52 +0200
+	id TX2aO6H3VGqIiAAAu9opvQ
+	(envelope-from <linux-mips+bounces-15848-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Mon, 13 Jul 2026 16:35:14 +0200
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6B48674C577
-	for <lists+linux-mips@lfdr.de>; Mon, 13 Jul 2026 16:23:51 +0200 (CEST)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id EF6F774C737
+	for <lists+linux-mips@lfdr.de>; Mon, 13 Jul 2026 16:35:12 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=arm.com header.s=foss header.b=WULz4y4Y;
-	spf=pass (mail.lfdr.de: domain of "linux-mips+bounces-15847-lists+linux-mips=lfdr.de@vger.kernel.org" designates 2600:3c0a:e001:db::12fc:5321 as permitted sender) smtp.mailfrom="linux-mips+bounces-15847-lists+linux-mips=lfdr.de@vger.kernel.org";
+	dkim=pass header.d=arm.com header.s=foss header.b="tWYyPQT/";
+	spf=pass (mail.lfdr.de: domain of "linux-mips+bounces-15848-lists+linux-mips=lfdr.de@vger.kernel.org" designates 104.64.211.4 as permitted sender) smtp.mailfrom="linux-mips+bounces-15848-lists+linux-mips=lfdr.de@vger.kernel.org";
 	dmarc=pass (policy=none) header.from=arm.com;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 3B60B343DFE9
-	for <lists+linux-mips@lfdr.de>; Mon, 13 Jul 2026 14:04:21 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 55ACB300F7BA
+	for <lists+linux-mips@lfdr.de>; Mon, 13 Jul 2026 14:04:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EAFF543802C;
-	Mon, 13 Jul 2026 14:02:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0E6E223AB88;
+	Mon, 13 Jul 2026 14:03:01 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 20FE413D8B1;
-	Mon, 13 Jul 2026 14:02:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D52ED2D7DE9;
+	Mon, 13 Jul 2026 14:02:58 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783951367; cv=none; b=J9RBB/+TTaVcs7/QB/FMWcMBpdBZ2Lc/LbmED4hWZ1rQk4/miGDPALBdNDcqK+EXE90sYyav2Wyiy0bd1bB5Tv+8VfxHDMiinYiK6lshrmL+TZ2GFelPR+U2FHiHG/SsPpjIcGRVaD6OLwjLQ3uoYM0rYnzEm3x6egdFWdao9xg=
+	t=1783951380; cv=none; b=IYC0QF2T7XmCzGJFgEgGGuO0TK3oigwkd9z7HpozPMcCOZbsthlTOLHxN6WQ4ByFbhGJPJl7OrDAhtea23g9HpHqJfWUZCfJxNo/0zn7F6qYxvzxsXqZUT/TNNVyKiS6ZN15CMD8igOpAox2BRHKUwmM6IK9FNaOGLmZ8owbKo0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783951367; c=relaxed/simple;
-	bh=bIKoPb0bNMxSfp09kSEpc6GfFg6xieua9pE2L9NCvH0=;
+	s=arc-20240116; t=1783951380; c=relaxed/simple;
+	bh=Wb3EDgPFs5yteOunBQrcCkQDf3F9lsz4u6v0rE/RQe8=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=DP1rrEqsGfqkRLDNKujYR/PsxR+mAIeaplLgMMWw9lAV+h0sDxj5xfy8gorudkijhVrqMo3uuioy9NXLAht1g2N5WtCt0LWO7jCRV4/zYAjsXj9lUC8FWLqv03ACQUlsid85jgVUPX0UIB+OzT5e/8d638qxRsOoMsF6BG2V0KA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=WULz4y4Y; arc=none smtp.client-ip=217.140.110.172
+	 MIME-Version; b=ne2IfOYBw6RshuRJk6ltOM4DvWeOGLzCe+EX+7L4c1CF+y5AJO9wvZJwKRsDzndPc+0kUgee+lZnUe/FyCByk9VKvi1Un34TEp4iCqOH689OJfJeNS/lF0Q1PGJEDHN5HFKz8ndKWIe4GcRw37/xMxVJWvvDdwk+TUGIhSWpICM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=tWYyPQT/; arc=none smtp.client-ip=217.140.110.172
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 6B7FD2308;
-	Mon, 13 Jul 2026 07:02:41 -0700 (PDT)
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id F40312309;
+	Mon, 13 Jul 2026 07:02:53 -0700 (PDT)
 Received: from e129823.cambridge.arm.com (e129823.arm.com [10.2.213.3])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 6F3783F7B4;
-	Mon, 13 Jul 2026 07:02:33 -0700 (PDT)
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 0A2613F7B4;
+	Mon, 13 Jul 2026 07:02:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
-	t=1783951365; bh=bIKoPb0bNMxSfp09kSEpc6GfFg6xieua9pE2L9NCvH0=;
+	t=1783951378; bh=Wb3EDgPFs5yteOunBQrcCkQDf3F9lsz4u6v0rE/RQe8=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=WULz4y4YGBEo8OxYiDQxjd3ysksN4y37aXjVMj1APMpW6oYyyzlT2yQ9xycWe8eq1
-	 JbXFkQQYvjUOrSyYV49ZYubVKBtMB+ARWadXw+OMlzoS2V4DZrO9+UJT10fnE4iycW
-	 mu1W2yH62wJX/KyaBePfncLl5wroe1c443crwqTc=
+	b=tWYyPQT/4oiojuix1Q3/fWMtFxNunqtzs/ViWRtTeS8smwkUIPeAKI7T5PLwKwHNU
+	 p/T/N5uvmTUBna5JDgL/6rvh2pM3O8oZ1iX8Z2vBH1HHz5yRfhmDcE0pm/IMf9wibZ
+	 XCsJzbBdBmYW60FV78EgDKmG1puDET54+GkAgMO8=
 From: Yeoreum Yun <yeoreum.yun@arm.com>
 To: linux-arm-kernel@lists.infradead.org,
 	linux-kernel@vger.kernel.org,
@@ -140,9 +140,9 @@ Cc: david@kernel.org,
 	jonas@southpole.se,
 	stefan.kristiansson@saunalahti.fi,
 	Yeoreum Yun <yeoreum.yun@arm.com>
-Subject: [RFC PATCH 30/34] mm/pgtable: disallow calling folded (pgd|p4d|pud)_page, pgd_page_vaddr() and (p4d|pud)_pgtable
-Date: Mon, 13 Jul 2026 14:56:09 +0100
-Message-ID: <20260713135614.1618183-31-yeoreum.yun@arm.com>
+Subject: [RFC PATCH 31/34] mm/pgtable: optimize pmdp_get() and friends for folded pagetable levels
+Date: Mon, 13 Jul 2026 14:56:10 +0100
+Message-ID: <20260713135614.1618183-32-yeoreum.yun@arm.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20260713135614.1618183-1-yeoreum.yun@arm.com>
 References: <20260713135614.1618183-1-yeoreum.yun@arm.com>
@@ -161,12 +161,12 @@ X-Spamd-Result: default: False [0.84 / 15.00];
 	DMARC_POLICY_ALLOW(-0.50)[arm.com,none];
 	R_MISSING_CHARSET(0.50)[];
 	R_DKIM_ALLOW(-0.20)[arm.com:s=foss];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	FREEMAIL_CC(0.00)[kernel.org,armlinux.org.uk,linux-foundation.org,oracle.com,gmail.com,xen0n.name,loongson.cn,aosc.io,alpha.franken.de,ziepe.ca,arm.com,arndb.de,soleen.com,linux.ibm.com,linux.alibaba.com,brainfault.org,linux.dev,dabbelt.com,eecs.berkeley.edu,ghiti.fr,linux.intel.com,infradead.org,redhat.com,alien8.de,zytor.com,cmpxchg.org,tencent.com,google.com,os.amperecomputing.com,zeniv.linux.org.uk,siemens-energy.com,iscas.ac.cn,pigmoral.tech,linutronix.de,intel.com,huawei.com,gaisler.com,suse.com,linux-m68k.org,southpole.se,saunalahti.fi];
-	TAGGED_FROM(0.00)[bounces-15847-lists,linux-mips=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-15848-lists,linux-mips=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
 	FORGED_SENDER(0.00)[yeoreum.yun@arm.com,linux-mips@vger.kernel.org];
 	MIME_TRACE(0.00)[0:+];
@@ -176,7 +176,7 @@ X-Spamd-Result: default: False [0.84 / 15.00];
 	FORWARDED(0.00)[lists@lfdr.de];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	DKIM_TRACE(0.00)[arm.com:+];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
 	TO_DN_SOME(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
 	FORGED_SENDER_FORWARDING(0.00)[];
@@ -189,71 +189,147 @@ X-Spamd-Result: default: False [0.84 / 15.00];
 	RCPT_COUNT_GT_50(0.00)[95];
 	TAGGED_RCPT(0.00)[linux-mips];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,vger.kernel.org:from_smtp,arm.com:from_mime,arm.com:mid,arm.com:email,arm.com:dkim]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,vger.kernel.org:from_smtp,arm.com:from_mime,arm.com:mid,arm.com:email,arm.com:dkim]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 6B48674C577
+X-Rspamd-Queue-Id: EF6F774C737
 
 From: "David Hildenbrand (Arm)" <david@kernel.org>
 
-These helpers that silently fallback to the folded level
-are dangerous, especially with some upcoming changes.
+Using pmdp_get() and friends in common code on a kernel config with
+folded page tables is suboptimal: they default to a READ_ONCE(), forcing
+the compiler to actually read that value even though it will not actually
+be used afterwards.
 
-We made all code compile-out any calls to these helpers. So let's make the
-compiler complain if these helpers are abused in wrong context.
+This was recently reported by Christophe Leroy [1] and block conversion
+of more common code to pmdp_get() and friends.
+
+(using pgdp_get() as one example)
+
+Most of the code ignores the result from pgdp_get() on configs with
+folded page tables entirely, as we hardcode:
+
+        pgd_present()==1 && pgd_leaf()==false
+
+Common code will just treat it as a "this is a page table" and call
+p4d_offset() or p4d_offset_lockless() for the next lower level, where
+we just ignore the obtained pgdp_get() result entirely.
+
+So we can just return a dummy value and avoid any memory reads.
+
+There is a catch, though:
+
+1) If code calls pgd_val() and somehow relies on the data, it would now
+   see dummy values. The code really must be aware of folded page table
+   levels. Fortunately, code usually ignores pgd_val() completely for
+   page tables (with ptdump being one exception when calculating
+   effective permissions). We checked + fixed the x86 ptdump mechanism.
+
+2) If code passes the pgd_t to a function that would work on the result,
+   it would now see dummy values. The only concern is really passing
+   the pgd_t on the stack as a pointer to p4d_offset(). Most code that
+   would do that, should actually use p4d_offset_lockless(), which
+   handles this properly. We checked + fixed problematic instances.
+
+As an example, this is the generated code for perf_get_page_size() with
+PGTABLE_LEVELS=3 on arm64:
+
+Before:
+00000000000052a0 <perf_get_page_size>:
+    ...
+    52dc: d53b4234      mrs     x20, DAIF
+    52e0: d50343df      msr     DAIFSet, #0x3
+    ...
+    52fc: d35e9a69      ubfx    x9, x19, #30, #9        /* pud_offset_lockless() */
+    5300: f9403508      ldr     x8, [x8, #0x68]
+    5304: f869790a      ldr     x10, [x8, x9, lsl #3]   /* pudp_get() */
+    5308: f90007ea      str     x10, [sp, #0x8]
+    530c: f8697908      ldr     x8, [x8, x9, lsl #3]    /* pudp_get() */
+    ...
+    5360: 90000009      adrp    x9, 0x5000 <perf_prepare_sample+0x548>
+    5364: 92746908      and     x8, x8, #0x7ffffff000
+    5368: d3557675      ubfx    x21, x19, #21, #9       /* pmd_offset_lockless() */
+    ...
+    5394: f8757ac8      ldr     x8, [x22, x21, lsl #3]  /* pmdp_get() */
+
+After:
+0000000000052a0 <perf_get_page_size>:
+    ...
+    52dc: d53b4234      mrs     x20, DAIF
+    52e0: d50343df      msr     DAIFSet, #0x3
+    ...                                                 /* no pud_offset_lockless() and pudp_get() */
+    5318: 90000009      adrp    x9, 0x5000 <perf_prepare_sample+0x548>
+    531c: 92746908      and     x8, x8, #0x7ffffff000
+    5320: d3557675      ubfx    x21, x19, #21, #9       /* pmd_offset_lockless() */
+    ...
+    5334: f8757ac8      ldr     x8, [x22, x21, lsl #3]  /* pmdp_get() */
+
+[1] https://lore.kernel.org/all/0019d675-ce3d-4a5c-89ed-f126c45145c9@kernel.org/
 
 Signed-off-by: David Hildenbrand (Arm) <david@kernel.org>
 Signed-off-by: Yeoreum Yun <yeoreum.yun@arm.com>
 ---
- include/asm-generic/pgtable-nop4d.h | 4 ++--
- include/asm-generic/pgtable-nopmd.h | 4 ++--
- include/asm-generic/pgtable-nopud.h | 4 ++--
- 3 files changed, 6 insertions(+), 6 deletions(-)
+ include/asm-generic/pgtable-nop4d.h | 8 ++++++++
+ include/asm-generic/pgtable-nopmd.h | 8 ++++++++
+ include/asm-generic/pgtable-nopud.h | 8 ++++++++
+ 3 files changed, 24 insertions(+)
 
 diff --git a/include/asm-generic/pgtable-nop4d.h b/include/asm-generic/pgtable-nop4d.h
-index 0f3b56deaa165..25c26a587b512 100644
+index 25c26a587b512..84a529df27ee3 100644
 --- a/include/asm-generic/pgtable-nop4d.h
 +++ b/include/asm-generic/pgtable-nop4d.h
-@@ -46,8 +46,8 @@ static inline p4d_t *p4d_offset_lockless(pgd_t *pgdp, pgd_t pgd,
- #define p4d_val(x)				(pgd_val((x).pgd))
- #define __p4d(x)				((p4d_t) { __pgd(x) })
+@@ -31,6 +31,14 @@ static inline bool pgd_leaf(pgd_t pgd)		{ return false; }
  
--#define pgd_page(pgd)				(p4d_page((p4d_t){ pgd }))
--#define pgd_page_vaddr(pgd)			((unsigned long)(p4d_pgtable((p4d_t){ pgd })))
-+#define pgd_page(pgd)				({ BUILD_BUG(); (struct page *)NULL; })
-+#define pgd_page_vaddr(pgd)			({ BUILD_BUG(); 0UL; })
+ #define set_pgd(pgdptr, pgdval)			BUILD_BUG()
  
- /*
-  * allocating and freeing a p4d is trivial: the 1-entry p4d is
++static inline pgd_t pgdp_get(pgd_t *p4dp)
++{
++	pgd_t dummy = { 0 };
++
++	return dummy;
++}
++#define pgdp_get pgdp_get
++
+ static inline p4d_t *p4d_offset(pgd_t *pgd, unsigned long address)
+ {
+ 	return (p4d_t *)pgd;
 diff --git a/include/asm-generic/pgtable-nopmd.h b/include/asm-generic/pgtable-nopmd.h
-index 9d854211a55a5..75650fa9111cd 100644
+index 75650fa9111cd..96f3fccd22fda 100644
 --- a/include/asm-generic/pgtable-nopmd.h
 +++ b/include/asm-generic/pgtable-nopmd.h
-@@ -56,8 +56,8 @@ static inline pmd_t *pmd_offset_lockless(pud_t *pudp, pud_t pud,
- #define pmd_val(x)				(pud_val((x).pud))
- #define __pmd(x)				((pmd_t) { __pud(x) } )
+@@ -40,6 +40,14 @@ static inline void pud_clear(pud_t *pud)	{ }
  
--#define pud_page(pud)				(pmd_page((pmd_t){ pud }))
--#define pud_pgtable(pud)			((pmd_t *)(pmd_page_vaddr((pmd_t){ pud })))
-+#define pud_page(pud)				({ BUILD_BUG(); (struct page *)NULL; })
-+#define pud_pgtable(pud)			({ BUILD_BUG(); NULL; })
+ #define set_pud(pudptr, pudval)			BUILD_BUG()
  
- /*
-  * allocating and freeing a pmd is trivial: the 1-entry pmd is
++static inline pud_t pudp_get(pud_t *pudp)
++{
++	pud_t dummy = { 0 };
++
++	return dummy;
++}
++#define pudp_get pudp_get
++
+ static inline pmd_t * pmd_offset(pud_t * pud, unsigned long address)
+ {
+ 	return (pmd_t *)pud;
 diff --git a/include/asm-generic/pgtable-nopud.h b/include/asm-generic/pgtable-nopud.h
-index aa8a6ce139e47..b592fff18887a 100644
+index b592fff18887a..faa0233bcde80 100644
 --- a/include/asm-generic/pgtable-nopud.h
 +++ b/include/asm-generic/pgtable-nopud.h
-@@ -54,8 +54,8 @@ static inline pud_t *pud_offset_lockless(p4d_t *p4dp, p4d_t p4d,
- #define pud_val(x)				(p4d_val((x).p4d))
- #define __pud(x)				((pud_t) { __p4d(x) })
+@@ -38,6 +38,14 @@ static inline bool p4d_leaf(p4d_t p4d)		{ return false; }
  
--#define p4d_page(p4d)				(pud_page((pud_t){ p4d }))
--#define p4d_pgtable(p4d)			((pud_t *)(pud_pgtable((pud_t){ p4d })))
-+#define p4d_page(p4d)				({ BUILD_BUG(); (struct page *)NULL; })
-+#define p4d_pgtable(p4d)			({ BUILD_BUG(); NULL; })
+ #define set_p4d(p4dptr, p4dval)			BUILD_BUG()
  
- /*
-  * allocating and freeing a pud is trivial: the 1-entry pud is
++static inline p4d_t p4dp_get(p4d_t *p4dp)
++{
++	p4d_t dummy = { 0 };
++
++	return dummy;
++}
++#define p4dp_get p4dp_get
++
+ static inline pud_t *pud_offset(p4d_t *p4d, unsigned long address)
+ {
+ 	return (pud_t *)p4d;
 -- 
 LEVI:{C3F47F37-75D8-414A-A8BA-3980EC8A46D7}
 
