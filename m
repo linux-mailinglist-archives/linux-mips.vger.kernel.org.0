@@ -1,49 +1,49 @@
-Return-Path: <linux-mips+bounces-15835-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-15836-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id 2fwfFi7xVGq2hgAAu9opvQ
-	(envelope-from <linux-mips+bounces-15835-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Mon, 13 Jul 2026 16:07:42 +0200
+	id ZQ9tFj/xVGq9hgAAu9opvQ
+	(envelope-from <linux-mips+bounces-15836-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Mon, 13 Jul 2026 16:07:59 +0200
 X-Original-To: lists+linux-mips@lfdr.de
 Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0EC7F74C205
-	for <lists+linux-mips@lfdr.de>; Mon, 13 Jul 2026 16:07:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id D9D3E74C21A
+	for <lists+linux-mips@lfdr.de>; Mon, 13 Jul 2026 16:07:58 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=arm.com header.s=foss header.b=f7EldcMF;
-	spf=pass (mail.lfdr.de: domain of "linux-mips+bounces-15835-lists+linux-mips=lfdr.de@vger.kernel.org" designates 172.232.135.74 as permitted sender) smtp.mailfrom="linux-mips+bounces-15835-lists+linux-mips=lfdr.de@vger.kernel.org";
+	dkim=pass header.d=arm.com header.s=foss header.b=pGt+wVwX;
+	spf=pass (mail.lfdr.de: domain of "linux-mips+bounces-15836-lists+linux-mips=lfdr.de@vger.kernel.org" designates 172.232.135.74 as permitted sender) smtp.mailfrom="linux-mips+bounces-15836-lists+linux-mips=lfdr.de@vger.kernel.org";
 	dmarc=pass (policy=none) header.from=arm.com;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 63DF43047090
-	for <lists+linux-mips@lfdr.de>; Mon, 13 Jul 2026 14:01:16 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 896663083501
+	for <lists+linux-mips@lfdr.de>; Mon, 13 Jul 2026 14:01:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7520743B4AF;
-	Mon, 13 Jul 2026 14:00:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A292740BCB7;
+	Mon, 13 Jul 2026 14:00:29 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C85CE437469;
-	Mon, 13 Jul 2026 14:00:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 30278246762;
+	Mon, 13 Jul 2026 14:00:28 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783951217; cv=none; b=BECfyUtU2KNVnk7asEIRjZrS+K+os5tynZKrWH2nb1Xz/l0sib5yYT5GPJ1cOQMx233hrEM6m9on+CH5tHdvjOSUl/XY8zr7X84MtZQnEic7uMJ0XHtERHftrSdvNtlCaEmSAxIQTcqo+5GUJaRnXUm74VwhFCz9wsg6XRSoSo0=
+	t=1783951229; cv=none; b=cO51tqk2x/G9/rcp3oUrRoAxqGvFOjHNbpcOa6D9Rg8ben2SmKnX7P7tVB0YeiMmhbt1Sdn7lE9dLYbIIbbWJbAm5GvSkwLaCs3Z0xqrmfrYVPVUtZYaLp6SnwR9mpd5skoRZk0HKp1mWqIMYeOov+FYK8QpnZpmzkxXskLMM2I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783951217; c=relaxed/simple;
-	bh=Paq3n4cO8HdYy4FFfkUp6FGCvWu1boCvdBHEQkzpEzo=;
+	s=arc-20240116; t=1783951229; c=relaxed/simple;
+	bh=LTSOz6r8IXywEsuWgl9722tiR9WcqjiHFXGXDRX3spM=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=J7wOGVpcMnkKQ3ej12ulYcfuYm9HHA6++zuAMuthspMwGLjRaXZrA5aQBiB9TOidxJAI3czqqR2EaZFVPZ9tDn0j6O7+unZ7T3C1vsNEGB+I02F/uqNSrwGQ6mjRRgr/Q9jxH/En9edf77ERTu3lgFF+SnG1HHFwuF1n6aQeGiU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=f7EldcMF; arc=none smtp.client-ip=217.140.110.172
+	 MIME-Version; b=Xcb1GhkqlIwbJQZ3JH7vvlxi/wxDhNlE2F/fsidahuRls7d7Ox4AzxnbsbIm4R0UjNQL3CenSQUKksMYHtwT90J3bpmv4oTjG4aONmfByO/5nwfnGp0x8pf9jQiC00Ho6nIZOzZXKC2IhhERanUmkjnLNdNPrcip7m5byJSfLiw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=pGt+wVwX; arc=none smtp.client-ip=217.140.110.172
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C824B202C;
-	Mon, 13 Jul 2026 07:00:10 -0700 (PDT)
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 5F1DC2103;
+	Mon, 13 Jul 2026 07:00:23 -0700 (PDT)
 Received: from e129823.cambridge.arm.com (e129823.arm.com [10.2.213.3])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id CD5DA3F7B4;
-	Mon, 13 Jul 2026 07:00:02 -0700 (PDT)
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 651783F7B4;
+	Mon, 13 Jul 2026 07:00:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
-	t=1783951215; bh=Paq3n4cO8HdYy4FFfkUp6FGCvWu1boCvdBHEQkzpEzo=;
+	t=1783951227; bh=LTSOz6r8IXywEsuWgl9722tiR9WcqjiHFXGXDRX3spM=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=f7EldcMFAotp2m+ZhFGMuVYzDzUE1W3xYD2M61Z32+4Lp6LM2uG0bFpTaMxAUabky
-	 GXRnAFeDJZQABUA65JAt+2/I+UMycHxGaMD0oKMyNfBY1Wx5aC0cEO7Fj/aGoXMZAY
-	 tYNv5K6voYS794ZDDPyqysxYS3g7IcY1aTIJ4qUY=
+	b=pGt+wVwXPP9bqbNiSoGoTQf7vUj9+h+rjcGEu7v6x9h5jUGGL61je/MuOfCB0IGbL
+	 MCwtdgvHi9xbeiGHPrEgzoOWMgwuAwIORymTP+QSMvNXbWLSJ5lnVb/8rcQcLGe2HS
+	 V32gOsFvzZEGe9nESYJjvb3kHILH3HN1uCBfzjGg=
 From: Yeoreum Yun <yeoreum.yun@arm.com>
 To: linux-arm-kernel@lists.infradead.org,
 	linux-kernel@vger.kernel.org,
@@ -140,9 +140,9 @@ Cc: david@kernel.org,
 	jonas@southpole.se,
 	stefan.kristiansson@saunalahti.fi,
 	Yeoreum Yun <yeoreum.yun@arm.com>
-Subject: [RFC PATCH 18/34] riscv: mm: use proper set_pXd() for generic compile-time folded patable in setup_vm_final()
-Date: Mon, 13 Jul 2026 14:55:57 +0100
-Message-ID: <20260713135614.1618183-19-yeoreum.yun@arm.com>
+Subject: [RFC PATCH 19/34] x86: power: use proper set_pXd() for generic compile-time folded patable in resume_one_md_table_init()
+Date: Mon, 13 Jul 2026 14:55:58 +0100
+Message-ID: <20260713135614.1618183-20-yeoreum.yun@arm.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20260713135614.1618183-1-yeoreum.yun@arm.com>
 References: <20260713135614.1618183-1-yeoreum.yun@arm.com>
@@ -161,12 +161,12 @@ X-Spamd-Result: default: False [0.84 / 15.00];
 	DMARC_POLICY_ALLOW(-0.50)[arm.com,none];
 	R_MISSING_CHARSET(0.50)[];
 	R_DKIM_ALLOW(-0.20)[arm.com:s=foss];
-	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
+	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	FREEMAIL_CC(0.00)[kernel.org,armlinux.org.uk,linux-foundation.org,oracle.com,gmail.com,xen0n.name,loongson.cn,aosc.io,alpha.franken.de,ziepe.ca,arm.com,arndb.de,soleen.com,linux.ibm.com,linux.alibaba.com,brainfault.org,linux.dev,dabbelt.com,eecs.berkeley.edu,ghiti.fr,linux.intel.com,infradead.org,redhat.com,alien8.de,zytor.com,cmpxchg.org,tencent.com,google.com,os.amperecomputing.com,zeniv.linux.org.uk,siemens-energy.com,iscas.ac.cn,pigmoral.tech,linutronix.de,intel.com,huawei.com,gaisler.com,suse.com,linux-m68k.org,southpole.se,saunalahti.fi];
-	TAGGED_FROM(0.00)[bounces-15835-lists,linux-mips=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-15836-lists,linux-mips=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
 	FORGED_SENDER(0.00)[yeoreum.yun@arm.com,linux-mips@vger.kernel.org];
 	MIME_TRACE(0.00)[0:+];
@@ -191,41 +191,68 @@ X-Spamd-Result: default: False [0.84 / 15.00];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
 	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,arm.com:from_mime,arm.com:mid,arm.com:email,arm.com:dkim,vger.kernel.org:from_smtp]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 0EC7F74C205
+X-Rspamd-Queue-Id: D9D3E74C21A
 
 We want to rework how set_pXd() behaves for generic compile-time folded
 page tables by disallowing its use and triggering a compile-time error
-when it is used improperly, ensuring that the actual first-level
-set_pXd() function is used instead.
+when it is used improperly, ensuring that the actual first-level set_pXd()
+function is used instead.
 
-Therefore, replace set_pgd() with set_pmd() to setup swapper_pg_dir
-in setup_vm_final() since PGTABLE_LEVELS is always 2 in CONFIG_32BIT.
+Therefore, replace set_pgd() with set_pud() to setup first-level pgtable
+in case of X86_PAE.
 
 There should be no functional change.
 
 Signed-off-by: Yeoreum Yun <yeoreum.yun@arm.com>
 ---
- arch/riscv/mm/init.c | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+ arch/x86/power/hibernate_32.c | 14 +++++---------
+ 1 file changed, 5 insertions(+), 9 deletions(-)
 
-diff --git a/arch/riscv/mm/init.c b/arch/riscv/mm/init.c
-index 5b1b3c88b4d13..78017edf7c343 100644
---- a/arch/riscv/mm/init.c
-+++ b/arch/riscv/mm/init.c
-@@ -1264,7 +1264,12 @@ static void __init setup_vm_final(void)
- 	 */
- 	unsigned long idx = pgd_index(__fix_to_virt(FIX_FDT));
+diff --git a/arch/x86/power/hibernate_32.c b/arch/x86/power/hibernate_32.c
+index 223d5bca29b86..ab5a203b45cb3 100644
+--- a/arch/x86/power/hibernate_32.c
++++ b/arch/x86/power/hibernate_32.c
+@@ -29,8 +29,7 @@ pgd_t *resume_pg_dir;
+  */
+ static pmd_t *resume_one_md_table_init(pgd_t *pgd)
+ {
+-	p4d_t *p4d;
+-	pud_t *pud;
++	pud_t *pud = pud_offset(p4d_offset(pgd, 0), 0);
+ 	pmd_t *pmd_table;
  
--	set_pgd(&swapper_pg_dir[idx], early_pg_dir[idx]);
-+	BUILD_BUG_ON (CONFIG_PGTABLE_LEVELS != 2);
-+
-+	pmd_t *pmdp_s = (void *)&swapper_pg_dir[idx];
-+	pmd_t *pmdp = (void *)&early_pg_dir[idx];
-+
-+	set_pmd(pmdp_s, pmdp_get(pmdp));
+ #ifdef CONFIG_X86_PAE
+@@ -38,14 +37,10 @@ static pmd_t *resume_one_md_table_init(pgd_t *pgd)
+ 	if (!pmd_table)
+ 		return NULL;
+ 
+-	set_pgd(pgd, __pgd(__pa(pmd_table) | _PAGE_PRESENT));
+-	p4d = p4d_offset(pgd, 0);
+-	pud = pud_offset(p4d, 0);
++	set_pud(pud, __pud(__pa(pmd_table) | _PAGE_PRESENT));
+ 
+ 	BUG_ON(pmd_table != pmd_offset(pud, 0));
+ #else
+-	p4d = p4d_offset(pgd, 0);
+-	pud = pud_offset(p4d, 0);
+ 	pmd_table = pmd_offset(pud, 0);
  #endif
- 	create_pgd_mapping(swapper_pg_dir, FIXADDR_START,
- 			   __pa_symbol(fixmap_pgd_next),
+ 
+@@ -134,11 +129,12 @@ static inline void resume_init_first_level_page_table(pgd_t *pg_dir)
+ {
+ #ifdef CONFIG_X86_PAE
+ 	int i;
++	pud_t *pud = pud_offset(p4d_offset(pg_dir, 0), 0);
+ 
+ 	/* Init entries of the first-level page table to the zero page */
+ 	for (i = 0; i < PTRS_PER_PGD; i++)
+-		set_pgd(pg_dir + i,
+-			__pgd(__pa(empty_zero_page) | _PAGE_PRESENT));
++		set_pud(pud + i,
++			__pud(__pa(empty_zero_page) | _PAGE_PRESENT));
+ #endif
+ }
+ 
 -- 
 LEVI:{C3F47F37-75D8-414A-A8BA-3980EC8A46D7}
 
