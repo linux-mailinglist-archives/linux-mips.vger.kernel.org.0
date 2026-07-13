@@ -1,49 +1,49 @@
-Return-Path: <linux-mips+bounces-15825-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-15826-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id WB2yNXjyVGoqhwAAu9opvQ
-	(envelope-from <linux-mips+bounces-15825-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Mon, 13 Jul 2026 16:13:12 +0200
+	id 3hZsMt3vVGpGhgAAu9opvQ
+	(envelope-from <linux-mips+bounces-15826-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Mon, 13 Jul 2026 16:02:05 +0200
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id CC8ED74C350
-	for <lists+linux-mips@lfdr.de>; Mon, 13 Jul 2026 16:13:11 +0200 (CEST)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7547D74C0B0
+	for <lists+linux-mips@lfdr.de>; Mon, 13 Jul 2026 16:02:05 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=arm.com header.s=foss header.b=DdR3X9Wl;
-	spf=pass (mail.lfdr.de: domain of "linux-mips+bounces-15825-lists+linux-mips=lfdr.de@vger.kernel.org" designates 104.64.211.4 as permitted sender) smtp.mailfrom="linux-mips+bounces-15825-lists+linux-mips=lfdr.de@vger.kernel.org";
+	dkim=pass header.d=arm.com header.s=foss header.b=Dz8TsGvo;
+	spf=pass (mail.lfdr.de: domain of "linux-mips+bounces-15826-lists+linux-mips=lfdr.de@vger.kernel.org" designates 2600:3c09:e001:a7::12fc:5321 as permitted sender) smtp.mailfrom="linux-mips+bounces-15826-lists+linux-mips=lfdr.de@vger.kernel.org";
 	dmarc=pass (policy=none) header.from=arm.com;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 911A5300F271
-	for <lists+linux-mips@lfdr.de>; Mon, 13 Jul 2026 13:58:27 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 88CAA304C6D4
+	for <lists+linux-mips@lfdr.de>; Mon, 13 Jul 2026 13:58:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D3990437457;
-	Mon, 13 Jul 2026 13:58:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8F55B438000;
+	Mon, 13 Jul 2026 13:58:24 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 05C10437127;
-	Mon, 13 Jul 2026 13:58:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D7299437478;
+	Mon, 13 Jul 2026 13:58:22 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783951091; cv=none; b=UaL2OCu395UlzLBToQyBIlml88CGmy/JHZLyoKVWChNWRM0DiS4xk3SDANblzgKK+3ptnj0yRqgxNA9YDyGrwJscSMq//YtbDcG2tp0ryHOKG735s69GU9ybc16VZiZaX8lCMtkRmHOEbIi6qVwhfz1+EuFVy8KCVB+28cyhHQo=
+	t=1783951104; cv=none; b=h8JfVhqDLu3jentUP6DHHjNDAwe/2y9C+g5I60A4GHXHkVdDwMpvRvrQ0kAcDZtUc4PAvBWHUzYYHkJmseGBeVX3ogkgQvjRhyWEyrVWcmmzYJdaKInS5cUucCVLjPKKsxHP/MUNNPXdC9n/1MN83UCVS9s3wbsRiWkK0Qlx7xY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783951091; c=relaxed/simple;
-	bh=mBLNA1RE5nPCRMeMUYy6R3x/DliVq4xqj6BcbDOXlgY=;
+	s=arc-20240116; t=1783951104; c=relaxed/simple;
+	bh=BGsfhjHwglNJ8takg97xfz6u1VYDa2ALCLHL7YdtZVY=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Z1N4gZMVZDcsJR5GLF2VH2amkRsmDPSsl+EvdlgA7KZT50M/twytvd68E6YV9Y5wHJeUMZkX2eLAfWMJjpsuwwQkUNATnGRLXUr1kC/TqtWUw4kytFZFX03ret5FwdpXIMWFZEQQeABnyxQC78t9c2qkSVHZRtqWRs/JXHq3lF4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=DdR3X9Wl; arc=none smtp.client-ip=217.140.110.172
+	 MIME-Version; b=an7kApbpF07Adu3v4ynyIATPwxvIPgh6r/R5mns5ldfC8ZD2j8iiucWIGBzid6uXZklpw5VLPu7lqkqUSsBILi5RaeljVywnphzVxhNum44cuP/Fid8UCK+QsKmDNwhT6jdfXPGG56Xj/plxgJRqr6rbtkRCzak8HiCSNVoFqyA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=Dz8TsGvo; arc=none smtp.client-ip=217.140.110.172
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4FCE11AC1;
-	Mon, 13 Jul 2026 06:58:05 -0700 (PDT)
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D47DD1AC1;
+	Mon, 13 Jul 2026 06:58:17 -0700 (PDT)
 Received: from e129823.cambridge.arm.com (e129823.arm.com [10.2.213.3])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 5ED463F7B4;
-	Mon, 13 Jul 2026 06:57:57 -0700 (PDT)
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id E1DC73F7B4;
+	Mon, 13 Jul 2026 06:58:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
-	t=1783951089; bh=mBLNA1RE5nPCRMeMUYy6R3x/DliVq4xqj6BcbDOXlgY=;
+	t=1783951102; bh=BGsfhjHwglNJ8takg97xfz6u1VYDa2ALCLHL7YdtZVY=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=DdR3X9WlWDBXQwBp9CVeqesFty3i4K5sZKZNlRdOz5UoLB9G7ZsZnElI8UvLgmr7z
-	 LQoj/SHrsI4Iu0SVJkfyZL8I3gCj8zhHB623W1Cp5BARJIHJEcYjK1lMJfqALKP6Tz
-	 EmINtx38d14EKEwmKPBLuaizTFavA4hWgv4Uhow8=
+	b=Dz8TsGvoiFCjSE9z1oywYVBzDQTRnVTBd1MrzH3foNMVyPE9dAvo6/Vmp2r1CP3Iq
+	 dYS8FrDpbH32e1UYPU6fcNuLmNE0xLD77xr5QXu44Aa9wPIPj4v7t5wmVOLYCmlFUF
+	 JVFxTL7j0+jeFL2ci92qPOtagM5QvVFicmyJBbgs=
 From: Yeoreum Yun <yeoreum.yun@arm.com>
 To: linux-arm-kernel@lists.infradead.org,
 	linux-kernel@vger.kernel.org,
@@ -140,9 +140,9 @@ Cc: david@kernel.org,
 	jonas@southpole.se,
 	stefan.kristiansson@saunalahti.fi,
 	Yeoreum Yun <yeoreum.yun@arm.com>
-Subject: [RFC PATCH 08/34] loongarch: kvm: remove stack copy address of pXd in pXd_offset()
-Date: Mon, 13 Jul 2026 14:55:47 +0100
-Message-ID: <20260713135614.1618183-9-yeoreum.yun@arm.com>
+Subject: [RFC PATCH 09/34] riscv: kvm: remove stack copy address of pXd in pXd_offset()
+Date: Mon, 13 Jul 2026 14:55:48 +0100
+Message-ID: <20260713135614.1618183-10-yeoreum.yun@arm.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20260713135614.1618183-1-yeoreum.yun@arm.com>
 References: <20260713135614.1618183-1-yeoreum.yun@arm.com>
@@ -161,12 +161,12 @@ X-Spamd-Result: default: False [0.84 / 15.00];
 	DMARC_POLICY_ALLOW(-0.50)[arm.com,none];
 	R_MISSING_CHARSET(0.50)[];
 	R_DKIM_ALLOW(-0.20)[arm.com:s=foss];
-	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	FREEMAIL_CC(0.00)[kernel.org,armlinux.org.uk,linux-foundation.org,oracle.com,gmail.com,xen0n.name,loongson.cn,aosc.io,alpha.franken.de,ziepe.ca,arm.com,arndb.de,soleen.com,linux.ibm.com,linux.alibaba.com,brainfault.org,linux.dev,dabbelt.com,eecs.berkeley.edu,ghiti.fr,linux.intel.com,infradead.org,redhat.com,alien8.de,zytor.com,cmpxchg.org,tencent.com,google.com,os.amperecomputing.com,zeniv.linux.org.uk,siemens-energy.com,iscas.ac.cn,pigmoral.tech,linutronix.de,intel.com,huawei.com,gaisler.com,suse.com,linux-m68k.org,southpole.se,saunalahti.fi];
-	TAGGED_FROM(0.00)[bounces-15825-lists,linux-mips=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-15826-lists,linux-mips=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
 	FORGED_SENDER(0.00)[yeoreum.yun@arm.com,linux-mips@vger.kernel.org];
 	MIME_TRACE(0.00)[0:+];
@@ -176,7 +176,7 @@ X-Spamd-Result: default: False [0.84 / 15.00];
 	FORWARDED(0.00)[lists@lfdr.de];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	DKIM_TRACE(0.00)[arm.com:+];
-	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
+	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
 	TO_DN_SOME(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
 	FORGED_SENDER_FORWARDING(0.00)[];
@@ -189,12 +189,12 @@ X-Spamd-Result: default: False [0.84 / 15.00];
 	RCPT_COUNT_GT_50(0.00)[95];
 	TAGGED_RCPT(0.00)[linux-mips];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[arm.com:from_mime,arm.com:mid,arm.com:email,arm.com:dkim,vger.kernel.org:from_smtp,sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[arm.com:from_mime,arm.com:mid,arm.com:email,arm.com:dkim,vger.kernel.org:from_smtp,sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: CC8ED74C350
+X-Rspamd-Queue-Id: 7547D74C0B0
 
 We want to change how pXdp_get() works with generic compile-time folded
-page tables. To prepare for that, rework host_pfn_mapping_level() to avoid
+page tables. To prepare for that, rework get_hva_mapping_size() to avoid
 use of a stack copy of a pXd and pass it as argument to pXd_offset() so that
 the folded entries value is ignored.
 
@@ -203,16 +203,16 @@ and there should be no functional change.
 
 Signed-off-by: Yeoreum Yun <yeoreum.yun@arm.com>
 ---
- arch/loongarch/kvm/mmu.c | 20 ++++++++++++--------
+ arch/riscv/kvm/mmu.c | 20 ++++++++++++--------
  1 file changed, 12 insertions(+), 8 deletions(-)
 
-diff --git a/arch/loongarch/kvm/mmu.c b/arch/loongarch/kvm/mmu.c
-index e104897aa5328..837b40bb694f4 100644
---- a/arch/loongarch/kvm/mmu.c
-+++ b/arch/loongarch/kvm/mmu.c
-@@ -669,10 +669,10 @@ static int host_pfn_mapping_level(struct kvm *kvm, gfn_t gfn,
- 	int level = 0;
- 	unsigned long hva;
+diff --git a/arch/riscv/kvm/mmu.c b/arch/riscv/kvm/mmu.c
+index 082f9b2617338..6d6042b81d790 100644
+--- a/arch/riscv/kvm/mmu.c
++++ b/arch/riscv/kvm/mmu.c
+@@ -362,10 +362,10 @@ static int get_hva_mapping_size(struct kvm *kvm,
+ {
+ 	int size = PAGE_SIZE;
  	unsigned long flags;
 -	pgd_t pgd;
 -	p4d_t p4d;
@@ -224,8 +224,8 @@ index e104897aa5328..837b40bb694f4 100644
 +	pmd_t *pmdp, pmd;
  
  	/*
- 	 * Note, using the already-retrieved memslot and __gfn_to_hva_memslot()
-@@ -698,19 +698,23 @@ static int host_pfn_mapping_level(struct kvm *kvm, gfn_t gfn,
+ 	 * Disable IRQs to prevent concurrent tear down of host page tables,
+@@ -381,15 +381,18 @@ static int get_hva_mapping_size(struct kvm *kvm,
  	 * value) and then p*d_offset() walks into the target huge page instead
  	 * of the old page table (sees the new value).
  	 */
@@ -246,6 +246,10 @@ index e104897aa5328..837b40bb694f4 100644
 +	pud = pudp_get(pudp);
  	if (pud_none(pud) || !pud_present(pud))
  		goto out;
+ 
+@@ -398,7 +401,8 @@ static int get_hva_mapping_size(struct kvm *kvm,
+ 		goto out;
+ 	}
  
 -	pmd = pmdp_get(pmd_offset(&pud, hva));
 +	pmdp = pmd_offset_lockless(pudp, pud, hva);
