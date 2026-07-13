@@ -1,49 +1,49 @@
-Return-Path: <linux-mips+bounces-15837-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-15838-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id 4lQfF1fxVGrHhgAAu9opvQ
-	(envelope-from <linux-mips+bounces-15837-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Mon, 13 Jul 2026 16:08:23 +0200
+	id KhXGI3fxVGrOhgAAu9opvQ
+	(envelope-from <linux-mips+bounces-15838-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Mon, 13 Jul 2026 16:08:55 +0200
 X-Original-To: lists+linux-mips@lfdr.de
 Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3FDC874C239
-	for <lists+linux-mips@lfdr.de>; Mon, 13 Jul 2026 16:08:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 3B1C674C250
+	for <lists+linux-mips@lfdr.de>; Mon, 13 Jul 2026 16:08:55 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=arm.com header.s=foss header.b="MOz3M/no";
-	spf=pass (mail.lfdr.de: domain of "linux-mips+bounces-15837-lists+linux-mips=lfdr.de@vger.kernel.org" designates 172.232.135.74 as permitted sender) smtp.mailfrom="linux-mips+bounces-15837-lists+linux-mips=lfdr.de@vger.kernel.org";
+	dkim=pass header.d=arm.com header.s=foss header.b=WVe8Kgnz;
+	spf=pass (mail.lfdr.de: domain of "linux-mips+bounces-15838-lists+linux-mips=lfdr.de@vger.kernel.org" designates 172.232.135.74 as permitted sender) smtp.mailfrom="linux-mips+bounces-15838-lists+linux-mips=lfdr.de@vger.kernel.org";
 	dmarc=pass (policy=none) header.from=arm.com;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id A55BA3049377
-	for <lists+linux-mips@lfdr.de>; Mon, 13 Jul 2026 14:01:37 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 90B4B3088BBF
+	for <lists+linux-mips@lfdr.de>; Mon, 13 Jul 2026 14:01:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4C735438014;
-	Mon, 13 Jul 2026 14:00:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EF2B443849B;
+	Mon, 13 Jul 2026 14:00:54 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DD2E1437440;
-	Mon, 13 Jul 2026 14:00:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5DFC83CFF44;
+	Mon, 13 Jul 2026 14:00:53 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783951242; cv=none; b=pKtkPQ7/qUFQ/LCqWxpJiWTsaNzf1liSgIYh+81oLXwL6Rq5Y7zRcRoMQMcUIkOox4GCdpy7v4XCK0aqa6jxoM5Xul+Nau794dAmBUTbhDXOENb5CTpb92vtdhfjHOTw4ND7piDvmhcNcnh0WCBtNeSV03niKWctqk/NHygmJh4=
+	t=1783951254; cv=none; b=OEfRAR+2cR2CkMHFo6fHS5wEn7cDwE5VHuA6bcDH0yWc3G5Dr5ennU5zGVBHnRr5/hby+AJ3Gf6mnVbMc2Bpu3MnoKfNEjz3p363Q+KZxpPPsplvzZqdZk9Hcaf6vWMyTYmXE50wyy2lpVPzAo5gnDJmWsXPuQZtaLwSioWzYd0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783951242; c=relaxed/simple;
-	bh=va0q48sXcle/0V8qWAZnWr4Xakv6qUZD5loRZgnhZRY=;
+	s=arc-20240116; t=1783951254; c=relaxed/simple;
+	bh=zdjn+EW1ROhTZfts/8Ej8q/66MoM0Wrm75ll8cq/xrc=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=hMk08axsCHIUrd4GvXA/QtDvKdmus9hEvbbQRPhy3O/eA05OsjGTLWhhtSSndryniM76u3FzE0itWV34daM/WP+KHhHlejkvoQS342qGDcxPXOyWM1Qyy6DJKsnXrBiEgCuOX0Tw7wxzP15xSuYnQ0uNChllZACTydDc1lFRt/I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=MOz3M/no; arc=none smtp.client-ip=217.140.110.172
+	 MIME-Version; b=MOqUG9o+ix2VtuvW4wbGCG290E6/6vVi+KGbAxIYsi5JmsTXUmhOohrluGshX1aRP3YyDL7m8zvtT+S4t/+b0GiMiaHV8fY2cseINnJ5I4y25q75z/7hzLKTG58a+k83/+Jn8/voq4uDS174+o8NChQXHHoy+kHIE41xXX690iI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=WVe8Kgnz; arc=none smtp.client-ip=217.140.110.172
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E365722C7;
-	Mon, 13 Jul 2026 07:00:35 -0700 (PDT)
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 971C51FC7;
+	Mon, 13 Jul 2026 07:00:48 -0700 (PDT)
 Received: from e129823.cambridge.arm.com (e129823.arm.com [10.2.213.3])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id F00E63F7B4;
-	Mon, 13 Jul 2026 07:00:27 -0700 (PDT)
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 7F9D83F7B4;
+	Mon, 13 Jul 2026 07:00:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
-	t=1783951240; bh=va0q48sXcle/0V8qWAZnWr4Xakv6qUZD5loRZgnhZRY=;
+	t=1783951252; bh=zdjn+EW1ROhTZfts/8Ej8q/66MoM0Wrm75ll8cq/xrc=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=MOz3M/no7GPM/RnhkzFTAVpZxS2ERKQvlXCwbsNiVRL2yYzWglw+94qjOt1vYID/N
-	 vyPd1NMFFKbOMm+vDptBUDLnohT7IckowlWYW8T/UQ7ot7g+j7Fi6uF15Cuk4eUFdO
-	 qI5ngs3cD0CTMXkzBMuGvFfPsf6DqKwnnjUpXmno=
+	b=WVe8KgnzPlTqjaFSNOJggiBlZUKA4QzXTglCdSnJ8z0qtfTC+2NauNkQ9xF6xK0T8
+	 Q6suiP8pQXc7vC+GC4uQ3umZoj/pzGbV50HTuH8+YBS6SgTUORLDFjNvq2Ef8jXD0U
+	 YvN50Q+z9X5WyBym+Du0GGc3K2jSEmPZ/vnr64EM=
 From: Yeoreum Yun <yeoreum.yun@arm.com>
 To: linux-arm-kernel@lists.infradead.org,
 	linux-kernel@vger.kernel.org,
@@ -140,9 +140,9 @@ Cc: david@kernel.org,
 	jonas@southpole.se,
 	stefan.kristiansson@saunalahti.fi,
 	Yeoreum Yun <yeoreum.yun@arm.com>
-Subject: [RFC PATCH 20/34] x86: kexec: use proper set_pXd() for generic compile-time folded patable in machine_kexec_page_table_set_one()
-Date: Mon, 13 Jul 2026 14:55:59 +0100
-Message-ID: <20260713135614.1618183-21-yeoreum.yun@arm.com>
+Subject: [RFC PATCH 21/34] x86: platform: use proper set_pXd() for generic compile-time folded patable in setup_olpc_ofw_pgd()
+Date: Mon, 13 Jul 2026 14:56:00 +0100
+Message-ID: <20260713135614.1618183-22-yeoreum.yun@arm.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20260713135614.1618183-1-yeoreum.yun@arm.com>
 References: <20260713135614.1618183-1-yeoreum.yun@arm.com>
@@ -166,7 +166,7 @@ X-Spamd-Result: default: False [0.84 / 15.00];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	FREEMAIL_CC(0.00)[kernel.org,armlinux.org.uk,linux-foundation.org,oracle.com,gmail.com,xen0n.name,loongson.cn,aosc.io,alpha.franken.de,ziepe.ca,arm.com,arndb.de,soleen.com,linux.ibm.com,linux.alibaba.com,brainfault.org,linux.dev,dabbelt.com,eecs.berkeley.edu,ghiti.fr,linux.intel.com,infradead.org,redhat.com,alien8.de,zytor.com,cmpxchg.org,tencent.com,google.com,os.amperecomputing.com,zeniv.linux.org.uk,siemens-energy.com,iscas.ac.cn,pigmoral.tech,linutronix.de,intel.com,huawei.com,gaisler.com,suse.com,linux-m68k.org,southpole.se,saunalahti.fi];
-	TAGGED_FROM(0.00)[bounces-15837-lists,linux-mips=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-15838-lists,linux-mips=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
 	FORGED_SENDER(0.00)[yeoreum.yun@arm.com,linux-mips@vger.kernel.org];
 	MIME_TRACE(0.00)[0:+];
@@ -191,44 +191,45 @@ X-Spamd-Result: default: False [0.84 / 15.00];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
 	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,arm.com:from_mime,arm.com:mid,arm.com:email,arm.com:dkim,vger.kernel.org:from_smtp]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 3FDC874C239
+X-Rspamd-Queue-Id: 3B1C674C250
 
 We want to rework how set_pXd() behaves for generic compile-time folded
 page tables by disallowing its use and triggering a compile-time error
-when it is used improperly, ensuring that the actual first-level set_pXd()
-function is used instead.
+when it is used improperly, ensuring that the actual first-level
+set_pXd() function is used instead.
 
-Therefore, replace set_pgd() with set_pud() to setup first-level pgtable
-in case of X86_PAE.
+Therefore, replace set_pgd() with set_pmd() when CONFIG_PGTABLE_LEVELS=2.
 
 There should be no functional change.
 
 Signed-off-by: Yeoreum Yun <yeoreum.yun@arm.com>
 ---
- arch/x86/kernel/machine_kexec_32.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ arch/x86/platform/olpc/olpc_ofw.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/arch/x86/kernel/machine_kexec_32.c b/arch/x86/kernel/machine_kexec_32.c
-index 1f325304c4a84..a36321ee9f24f 100644
---- a/arch/x86/kernel/machine_kexec_32.c
-+++ b/arch/x86/kernel/machine_kexec_32.c
-@@ -84,12 +84,12 @@ static void machine_kexec_page_table_set_one(
- 	pud_t *pud;
+diff --git a/arch/x86/platform/olpc/olpc_ofw.c b/arch/x86/platform/olpc/olpc_ofw.c
+index 6bab0f0aa8f3e..d709534d48373 100644
+--- a/arch/x86/platform/olpc/olpc_ofw.c
++++ b/arch/x86/platform/olpc/olpc_ofw.c
+@@ -25,6 +25,8 @@ void __init setup_olpc_ofw_pgd(void)
+ {
+ 	pgd_t *base, *ofw_pde;
  
- 	pgd += pgd_index(vaddr);
--#ifdef CONFIG_X86_PAE
--	if (!(pgd_val(*pgd) & _PAGE_PRESENT))
--		set_pgd(pgd, __pgd(__pa(pmd) | _PAGE_PRESENT));
--#endif
- 	p4d = p4d_offset(pgd, vaddr);
- 	pud = pud_offset(p4d, vaddr);
-+#ifdef CONFIG_X86_PAE
-+	if (!(pud_val(*pud) & _PAGE_PRESENT))
-+		set_pud(pud, __pud(__pa(pmd) | _PAGE_PRESENT));
-+#endif
- 	pmd = pmd_offset(pud, vaddr);
- 	if (!(pmd_val(*pmd) & _PAGE_PRESENT))
- 		set_pmd(pmd, __pmd(__pa(pte) | _PAGE_TABLE));
++	BUILD_BUG_ON(CONFIG_PGTABLE_LEVELS != 2);
++
+ 	if (!olpc_ofw_cif)
+ 		return;
+ 
+@@ -38,7 +40,8 @@ void __init setup_olpc_ofw_pgd(void)
+ 	ofw_pde = &base[OLPC_OFW_PDE_NR];
+ 
+ 	/* install OFW's PDE permanently into the kernel's pgtable */
+-	set_pgd(&swapper_pg_dir[OLPC_OFW_PDE_NR], *ofw_pde);
++	set_pmd((pmd_t *)&swapper_pg_dir[OLPC_OFW_PDE_NR],
++		*(pmd_t *)ofw_pde);
+ 	/* implicit optimization barrier here due to uninline function return */
+ 
+ 	early_iounmap(base, sizeof(olpc_ofw_pgd) * PTRS_PER_PGD);
 -- 
 LEVI:{C3F47F37-75D8-414A-A8BA-3980EC8A46D7}
 
