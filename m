@@ -1,49 +1,49 @@
-Return-Path: <linux-mips+bounces-15824-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-15825-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id T4QHOGnwVGp/hgAAu9opvQ
-	(envelope-from <linux-mips+bounces-15824-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Mon, 13 Jul 2026 16:04:25 +0200
+	id WB2yNXjyVGoqhwAAu9opvQ
+	(envelope-from <linux-mips+bounces-15825-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Mon, 13 Jul 2026 16:13:12 +0200
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8576F74C158
-	for <lists+linux-mips@lfdr.de>; Mon, 13 Jul 2026 16:04:25 +0200 (CEST)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id CC8ED74C350
+	for <lists+linux-mips@lfdr.de>; Mon, 13 Jul 2026 16:13:11 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=arm.com header.s=foss header.b=dWHgmUWY;
-	spf=pass (mail.lfdr.de: domain of "linux-mips+bounces-15824-lists+linux-mips=lfdr.de@vger.kernel.org" designates 2600:3c0a:e001:db::12fc:5321 as permitted sender) smtp.mailfrom="linux-mips+bounces-15824-lists+linux-mips=lfdr.de@vger.kernel.org";
+	dkim=pass header.d=arm.com header.s=foss header.b=DdR3X9Wl;
+	spf=pass (mail.lfdr.de: domain of "linux-mips+bounces-15825-lists+linux-mips=lfdr.de@vger.kernel.org" designates 104.64.211.4 as permitted sender) smtp.mailfrom="linux-mips+bounces-15825-lists+linux-mips=lfdr.de@vger.kernel.org";
 	dmarc=pass (policy=none) header.from=arm.com;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id ADFDB3035B49
-	for <lists+linux-mips@lfdr.de>; Mon, 13 Jul 2026 13:58:18 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 911A5300F271
+	for <lists+linux-mips@lfdr.de>; Mon, 13 Jul 2026 13:58:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 02CB1437465;
-	Mon, 13 Jul 2026 13:57:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D3990437457;
+	Mon, 13 Jul 2026 13:58:11 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9DBD1437139;
-	Mon, 13 Jul 2026 13:57:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 05C10437127;
+	Mon, 13 Jul 2026 13:58:10 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783951078; cv=none; b=ghGjwEqjwo7V7Je300D26Dff+J/Ap3HuqpMpKNvu3he1hoVLGJDycmJiQqZojKYhdVRnzcFH21d7RM3WB/y+i8ki5aNKWuoLUJaVLMmO7TNVcy4i7Z8XOKzjI0cf5Oscob31YzbzpUDzvOBCZqSC1JwjYrsXkSOb80629jicS4M=
+	t=1783951091; cv=none; b=UaL2OCu395UlzLBToQyBIlml88CGmy/JHZLyoKVWChNWRM0DiS4xk3SDANblzgKK+3ptnj0yRqgxNA9YDyGrwJscSMq//YtbDcG2tp0ryHOKG735s69GU9ybc16VZiZaX8lCMtkRmHOEbIi6qVwhfz1+EuFVy8KCVB+28cyhHQo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783951078; c=relaxed/simple;
-	bh=Kej26z+gBagG9HQ6WbTine/W5VcGxHGbASgZAOow16A=;
+	s=arc-20240116; t=1783951091; c=relaxed/simple;
+	bh=mBLNA1RE5nPCRMeMUYy6R3x/DliVq4xqj6BcbDOXlgY=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=KKo4EwVQ5ky6zCp2hI0/zkhr/wyKnX22qCiq0Xdt/D+oNf3Oc0B7i3cuImBLAklw0IqTp7Ce3XSXEbCc+udRxOL3fBan0YHdxVsRq1VCVMT5/RVstw8/bmpUgHUeoCtyHpYzSd0ApuKHIhGCyZ3Nr4cxDEMzYRXu02JHGBTxyM0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=dWHgmUWY; arc=none smtp.client-ip=217.140.110.172
+	 MIME-Version; b=Z1N4gZMVZDcsJR5GLF2VH2amkRsmDPSsl+EvdlgA7KZT50M/twytvd68E6YV9Y5wHJeUMZkX2eLAfWMJjpsuwwQkUNATnGRLXUr1kC/TqtWUw4kytFZFX03ret5FwdpXIMWFZEQQeABnyxQC78t9c2qkSVHZRtqWRs/JXHq3lF4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=DdR3X9Wl; arc=none smtp.client-ip=217.140.110.172
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C2AF719F6;
-	Mon, 13 Jul 2026 06:57:52 -0700 (PDT)
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4FCE11AC1;
+	Mon, 13 Jul 2026 06:58:05 -0700 (PDT)
 Received: from e129823.cambridge.arm.com (e129823.arm.com [10.2.213.3])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id CE6973F7B4;
-	Mon, 13 Jul 2026 06:57:44 -0700 (PDT)
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 5ED463F7B4;
+	Mon, 13 Jul 2026 06:57:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
-	t=1783951077; bh=Kej26z+gBagG9HQ6WbTine/W5VcGxHGbASgZAOow16A=;
+	t=1783951089; bh=mBLNA1RE5nPCRMeMUYy6R3x/DliVq4xqj6BcbDOXlgY=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=dWHgmUWYOHd4ghoMSrk0Xlu1ZLiyieBUVrKIzBFBNoEXXlquVPK8mzC3CvwKKIamc
-	 aUt3VH6A7Jp04fkfcylTei7ubrfjcTRqPGsZmZCBL6ATbvAZy9tqUe1ecybQrYrSYV
-	 A0sH2EH+D2P8v0DRt072FUB07yWqdhKRW9iEyhPU=
+	b=DdR3X9WlWDBXQwBp9CVeqesFty3i4K5sZKZNlRdOz5UoLB9G7ZsZnElI8UvLgmr7z
+	 LQoj/SHrsI4Iu0SVJkfyZL8I3gCj8zhHB623W1Cp5BARJIHJEcYjK1lMJfqALKP6Tz
+	 EmINtx38d14EKEwmKPBLuaizTFavA4hWgv4Uhow8=
 From: Yeoreum Yun <yeoreum.yun@arm.com>
 To: linux-arm-kernel@lists.infradead.org,
 	linux-kernel@vger.kernel.org,
@@ -140,9 +140,9 @@ Cc: david@kernel.org,
 	jonas@southpole.se,
 	stefan.kristiansson@saunalahti.fi,
 	Yeoreum Yun <yeoreum.yun@arm.com>
-Subject: [RFC PATCH 07/34] mm/pgtable: define (pgd|p4d|pud)_offset_lockless() for folded page tables
-Date: Mon, 13 Jul 2026 14:55:46 +0100
-Message-ID: <20260713135614.1618183-8-yeoreum.yun@arm.com>
+Subject: [RFC PATCH 08/34] loongarch: kvm: remove stack copy address of pXd in pXd_offset()
+Date: Mon, 13 Jul 2026 14:55:47 +0100
+Message-ID: <20260713135614.1618183-9-yeoreum.yun@arm.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20260713135614.1618183-1-yeoreum.yun@arm.com>
 References: <20260713135614.1618183-1-yeoreum.yun@arm.com>
@@ -161,12 +161,12 @@ X-Spamd-Result: default: False [0.84 / 15.00];
 	DMARC_POLICY_ALLOW(-0.50)[arm.com,none];
 	R_MISSING_CHARSET(0.50)[];
 	R_DKIM_ALLOW(-0.20)[arm.com:s=foss];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	FREEMAIL_CC(0.00)[kernel.org,armlinux.org.uk,linux-foundation.org,oracle.com,gmail.com,xen0n.name,loongson.cn,aosc.io,alpha.franken.de,ziepe.ca,arm.com,arndb.de,soleen.com,linux.ibm.com,linux.alibaba.com,brainfault.org,linux.dev,dabbelt.com,eecs.berkeley.edu,ghiti.fr,linux.intel.com,infradead.org,redhat.com,alien8.de,zytor.com,cmpxchg.org,tencent.com,google.com,os.amperecomputing.com,zeniv.linux.org.uk,siemens-energy.com,iscas.ac.cn,pigmoral.tech,linutronix.de,intel.com,huawei.com,gaisler.com,suse.com,linux-m68k.org,southpole.se,saunalahti.fi];
-	TAGGED_FROM(0.00)[bounces-15824-lists,linux-mips=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-15825-lists,linux-mips=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
 	FORGED_SENDER(0.00)[yeoreum.yun@arm.com,linux-mips@vger.kernel.org];
 	MIME_TRACE(0.00)[0:+];
@@ -176,7 +176,7 @@ X-Spamd-Result: default: False [0.84 / 15.00];
 	FORWARDED(0.00)[lists@lfdr.de];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	DKIM_TRACE(0.00)[arm.com:+];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
 	TO_DN_SOME(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
 	FORGED_SENDER_FORWARDING(0.00)[];
@@ -189,80 +189,69 @@ X-Spamd-Result: default: False [0.84 / 15.00];
 	RCPT_COUNT_GT_50(0.00)[95];
 	TAGGED_RCPT(0.00)[linux-mips];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,arm.com:from_mime,arm.com:mid,arm.com:email,arm.com:dkim,vger.kernel.org:from_smtp]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[arm.com:from_mime,arm.com:mid,arm.com:email,arm.com:dkim,vger.kernel.org:from_smtp,sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 8576F74C158
+X-Rspamd-Queue-Id: CC8ED74C350
 
-From: "David Hildenbrand (Arm)" <david@kernel.org>
+We want to change how pXdp_get() works with generic compile-time folded
+page tables. To prepare for that, rework host_pfn_mapping_level() to avoid
+use of a stack copy of a pXd and pass it as argument to pXd_offset() so that
+the folded entries value is ignored.
 
-The default helpers fallback to pud_offset(), passing a pointer to the
-stack value.
+Replace direct uses of stack-based pXd values with pXd_offset_lockless()
+and there should be no functional change.
 
-Let's provide variants that do exactly what (pgd|p4d|pud)_offset() do,
-but ignore the passed pgd_t/p4d_t/pud_t, consequently not working on a
-pointer to the stack value like the default handlers would.
-
-Signed-off-by: David Hildenbrand (Arm) <david@kernel.org>
 Signed-off-by: Yeoreum Yun <yeoreum.yun@arm.com>
 ---
- include/asm-generic/pgtable-nop4d.h | 7 +++++++
- include/asm-generic/pgtable-nopmd.h | 7 +++++++
- include/asm-generic/pgtable-nopud.h | 7 +++++++
- 3 files changed, 21 insertions(+)
+ arch/loongarch/kvm/mmu.c | 20 ++++++++++++--------
+ 1 file changed, 12 insertions(+), 8 deletions(-)
 
-diff --git a/include/asm-generic/pgtable-nop4d.h b/include/asm-generic/pgtable-nop4d.h
-index c6a5a43899b50..019c3f074b771 100644
---- a/include/asm-generic/pgtable-nop4d.h
-+++ b/include/asm-generic/pgtable-nop4d.h
-@@ -39,6 +39,13 @@ static inline p4d_t *p4d_offset(pgd_t *pgd, unsigned long address)
- 	return (p4d_t *)pgd;
- }
+diff --git a/arch/loongarch/kvm/mmu.c b/arch/loongarch/kvm/mmu.c
+index e104897aa5328..837b40bb694f4 100644
+--- a/arch/loongarch/kvm/mmu.c
++++ b/arch/loongarch/kvm/mmu.c
+@@ -669,10 +669,10 @@ static int host_pfn_mapping_level(struct kvm *kvm, gfn_t gfn,
+ 	int level = 0;
+ 	unsigned long hva;
+ 	unsigned long flags;
+-	pgd_t pgd;
+-	p4d_t p4d;
+-	pud_t pud;
+-	pmd_t pmd;
++	pgd_t *pgdp, pgd;
++	p4d_t *p4dp, p4d;
++	pud_t *pudp, pud;
++	pmd_t *pmdp, pmd;
  
-+static inline p4d_t *p4d_offset_lockless(pgd_t *pgdp, pgd_t pgd,
-+		unsigned long address)
-+{
-+	return (p4d_t *)pgdp;
-+}
-+#define p4d_offset_lockless p4d_offset_lockless
-+
- #define p4d_val(x)				(pgd_val((x).pgd))
- #define __p4d(x)				((p4d_t) { __pgd(x) })
+ 	/*
+ 	 * Note, using the already-retrieved memslot and __gfn_to_hva_memslot()
+@@ -698,19 +698,23 @@ static int host_pfn_mapping_level(struct kvm *kvm, gfn_t gfn,
+ 	 * value) and then p*d_offset() walks into the target huge page instead
+ 	 * of the old page table (sees the new value).
+ 	 */
+-	pgd = pgdp_get(pgd_offset(kvm->mm, hva));
++	pgdp = pgd_offset(kvm->mm, hva);
++	pgd = pgdp_get(pgdp);
+ 	if (pgd_none(pgd))
+ 		goto out;
  
-diff --git a/include/asm-generic/pgtable-nopmd.h b/include/asm-generic/pgtable-nopmd.h
-index dbd38b4c3a056..ae2eff44889ac 100644
---- a/include/asm-generic/pgtable-nopmd.h
-+++ b/include/asm-generic/pgtable-nopmd.h
-@@ -50,6 +50,13 @@ static inline pmd_t * pmd_offset(pud_t * pud, unsigned long address)
- }
- #define pmd_offset pmd_offset
+-	p4d = p4dp_get(p4d_offset(&pgd, hva));
++	p4dp = p4d_offset_lockless(pgdp, pgd, hva);
++	p4d = p4dp_get(p4dp);
+ 	if (p4d_none(p4d) || !p4d_present(p4d))
+ 		goto out;
  
-+static inline pmd_t *pmd_offset_lockless(pud_t *pudp, pud_t pud,
-+		unsigned long address)
-+{
-+	return (pmd_t *)pudp;
-+}
-+#define pmd_offset_lockless pmd_offset_lockless
-+
- #define pmd_val(x)				(pud_val((x).pud))
- #define __pmd(x)				((pmd_t) { __pud(x) } )
+-	pud = pudp_get(pud_offset(&p4d, hva));
++	pudp = pud_offset_lockless(p4dp, p4d, hva);
++	pud = pudp_get(pudp);
+ 	if (pud_none(pud) || !pud_present(pud))
+ 		goto out;
  
-diff --git a/include/asm-generic/pgtable-nopud.h b/include/asm-generic/pgtable-nopud.h
-index 6c9bca78047c4..5a2b0a81ae197 100644
---- a/include/asm-generic/pgtable-nopud.h
-+++ b/include/asm-generic/pgtable-nopud.h
-@@ -47,6 +47,13 @@ static inline pud_t *pud_offset(p4d_t *p4d, unsigned long address)
- }
- #define pud_offset pud_offset
- 
-+static inline pud_t *pud_offset_lockless(p4d_t *p4dp, p4d_t p4d,
-+		unsigned long address)
-+{
-+	return (pud_t *)p4dp;
-+}
-+#define pud_offset_lockless pud_offset_lockless
-+
- #define pud_val(x)				(p4d_val((x).p4d))
- #define __pud(x)				((pud_t) { __p4d(x) })
+-	pmd = pmdp_get(pmd_offset(&pud, hva));
++	pmdp = pmd_offset_lockless(pudp, pud, hva);
++	pmd = pmdp_get(pmdp);
+ 	if (pmd_none(pmd) || !pmd_present(pmd))
+ 		goto out;
  
 -- 
 LEVI:{C3F47F37-75D8-414A-A8BA-3980EC8A46D7}
