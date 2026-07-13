@@ -1,49 +1,49 @@
-Return-Path: <linux-mips+bounces-15830-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-15831-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id jRSaHcnxVGrkhgAAu9opvQ
-	(envelope-from <linux-mips+bounces-15830-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Mon, 13 Jul 2026 16:10:17 +0200
+	id aZiGKcX2VGpUiAAAu9opvQ
+	(envelope-from <linux-mips+bounces-15831-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Mon, 13 Jul 2026 16:31:33 +0200
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 19CD774C294
-	for <lists+linux-mips@lfdr.de>; Mon, 13 Jul 2026 16:10:17 +0200 (CEST)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id BD99574C6B3
+	for <lists+linux-mips@lfdr.de>; Mon, 13 Jul 2026 16:31:32 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=arm.com header.s=foss header.b=gePevjeD;
-	spf=pass (mail.lfdr.de: domain of "linux-mips+bounces-15830-lists+linux-mips=lfdr.de@vger.kernel.org" designates 2600:3c0a:e001:db::12fc:5321 as permitted sender) smtp.mailfrom="linux-mips+bounces-15830-lists+linux-mips=lfdr.de@vger.kernel.org";
+	dkim=pass header.d=arm.com header.s=foss header.b=jDXnfQY+;
+	spf=pass (mail.lfdr.de: domain of "linux-mips+bounces-15831-lists+linux-mips=lfdr.de@vger.kernel.org" designates 104.64.211.4 as permitted sender) smtp.mailfrom="linux-mips+bounces-15831-lists+linux-mips=lfdr.de@vger.kernel.org";
 	dmarc=pass (policy=none) header.from=arm.com;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 4D2AE31FE5BC
-	for <lists+linux-mips@lfdr.de>; Mon, 13 Jul 2026 14:00:27 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id D91683080431
+	for <lists+linux-mips@lfdr.de>; Mon, 13 Jul 2026 14:00:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2682443800D;
-	Mon, 13 Jul 2026 13:59:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AE232438016;
+	Mon, 13 Jul 2026 13:59:26 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BCB02435EFA;
-	Mon, 13 Jul 2026 13:59:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4775E437455;
+	Mon, 13 Jul 2026 13:59:25 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783951154; cv=none; b=N3pWU8ExlDWP3QEczmtRwdKmRzuJIceS5fpMsge+l4jDew0klzHc7dOHhFbBwBm4DMg9RB1E3BSjrsWyzkdH+gG+IMFVrHVS9UyBkrWEIQf+zi1NtCIw5oTp172otyB46owE1VniRVKrOQrERTeljYfp9uCwjxiETbdgYbuGvkA=
+	t=1783951166; cv=none; b=gjbW2e66DClaWoHmDN2/EXelZJg15uUdiO2W4NEOj9/UF9sh6HHnkXIDFATjNweFMPt2n8r9iPCJHpoLB/jaM6IuNJ7WeNO1++oAQwYt/A2Dfdh8lKWpUkzpcjEtLtC3Y9yflj+7rjsttJ7AIMrI3+vS3AvHS/2BMG33oG3gvnE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783951154; c=relaxed/simple;
-	bh=+q1+jVG4qiXP8+QAW/pUXiKb/SEJWzXOaTflpzs0DZc=;
+	s=arc-20240116; t=1783951166; c=relaxed/simple;
+	bh=fdM8eSOX1vnuRDMyBnXZwm7qppeDWgURrDmpSOBVWR0=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=c0dcC2Ze3NMVKxKt9oVlRwE2X0Qu/4rbOhPHcFQ7vV9t/Dl2bn0AyreTW+P8f3IZTQ5637ADB+s0cnNwiUZhQ2otQrZbP4Mbage+i6bqyLP7G2tS8oAuKpAQbtR2R6yihsW54aG6uup4DyBEn6VXILy0v+esO4mphZ+reCqJLlQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=gePevjeD; arc=none smtp.client-ip=217.140.110.172
+	 MIME-Version; b=YfyA5KCgOobVAmmjMm1CL/4jeRP6jJ64tJn0/pJSc315KOz2viEs+wkR19aA1pHzHG6fFjcw2vTAuAXtMg51hwu3a/ZXLyGBOyLhojjalDTRomrGRWCGLY6raMsf1NMRJS+6PV4udRBeUEdggzHv2iH+o/53cksx7RSN0Rfpqc4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=jDXnfQY+; arc=none smtp.client-ip=217.140.110.172
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0C33E1C01;
-	Mon, 13 Jul 2026 06:59:08 -0700 (PDT)
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9058F1CE0;
+	Mon, 13 Jul 2026 06:59:20 -0700 (PDT)
 Received: from e129823.cambridge.arm.com (e129823.arm.com [10.2.213.3])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 1A7FD3F7B4;
-	Mon, 13 Jul 2026 06:58:59 -0700 (PDT)
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 9EAB63F7B4;
+	Mon, 13 Jul 2026 06:59:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
-	t=1783951152; bh=+q1+jVG4qiXP8+QAW/pUXiKb/SEJWzXOaTflpzs0DZc=;
+	t=1783951164; bh=fdM8eSOX1vnuRDMyBnXZwm7qppeDWgURrDmpSOBVWR0=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=gePevjeDuKLoRMZmfzHjYkzWSKoEGuVpmgjzflwig2lWsm15B2lGzrzuukWVG7sID
-	 cbx3Drp/v+dDpqd8T5PLNJBiZyLiQAZB9lO2Q7lXawJekgjfljVLChVm5B9o+4Of6+
-	 29N01/WeRa4WzJeB2s2Oht7oYvLM1S/H6/T24fIo=
+	b=jDXnfQY+Em6qUw19QR+A2ZpcQLw1YaP4AJnqCk8v0z4XvE4pF7ZqjOYmqZLgAzlmW
+	 J9+MQcHN/tAismdmH0XnV6rUl+JUh5fFUDrudzYvzY6voWv4q0XV1xax1IvfrdY41C
+	 KqRnsffjQ/7q71iySWPSNMiArk3b5UNcIT3kGQag=
 From: Yeoreum Yun <yeoreum.yun@arm.com>
 To: linux-arm-kernel@lists.infradead.org,
 	linux-kernel@vger.kernel.org,
@@ -140,9 +140,9 @@ Cc: david@kernel.org,
 	jonas@southpole.se,
 	stefan.kristiansson@saunalahti.fi,
 	Yeoreum Yun <yeoreum.yun@arm.com>
-Subject: [RFC PATCH 13/34] arm64: mm: define pud_set_huge() when __PGTABLE_PMD_FOLDED not defined
-Date: Mon, 13 Jul 2026 14:55:52 +0100
-Message-ID: <20260713135614.1618183-14-yeoreum.yun@arm.com>
+Subject: [RFC PATCH 14/34] csky: mm: use proper set_pXd() for generic compile-time folded patable in vmalloc_fault()
+Date: Mon, 13 Jul 2026 14:55:53 +0100
+Message-ID: <20260713135614.1618183-15-yeoreum.yun@arm.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20260713135614.1618183-1-yeoreum.yun@arm.com>
 References: <20260713135614.1618183-1-yeoreum.yun@arm.com>
@@ -161,12 +161,12 @@ X-Spamd-Result: default: False [0.84 / 15.00];
 	DMARC_POLICY_ALLOW(-0.50)[arm.com,none];
 	R_MISSING_CHARSET(0.50)[];
 	R_DKIM_ALLOW(-0.20)[arm.com:s=foss];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	FREEMAIL_CC(0.00)[kernel.org,armlinux.org.uk,linux-foundation.org,oracle.com,gmail.com,xen0n.name,loongson.cn,aosc.io,alpha.franken.de,ziepe.ca,arm.com,arndb.de,soleen.com,linux.ibm.com,linux.alibaba.com,brainfault.org,linux.dev,dabbelt.com,eecs.berkeley.edu,ghiti.fr,linux.intel.com,infradead.org,redhat.com,alien8.de,zytor.com,cmpxchg.org,tencent.com,google.com,os.amperecomputing.com,zeniv.linux.org.uk,siemens-energy.com,iscas.ac.cn,pigmoral.tech,linutronix.de,intel.com,huawei.com,gaisler.com,suse.com,linux-m68k.org,southpole.se,saunalahti.fi];
-	TAGGED_FROM(0.00)[bounces-15830-lists,linux-mips=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-15831-lists,linux-mips=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
 	FORGED_SENDER(0.00)[yeoreum.yun@arm.com,linux-mips@vger.kernel.org];
 	MIME_TRACE(0.00)[0:+];
@@ -176,7 +176,7 @@ X-Spamd-Result: default: False [0.84 / 15.00];
 	FORWARDED(0.00)[lists@lfdr.de];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	DKIM_TRACE(0.00)[arm.com:+];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
 	TO_DN_SOME(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
 	FORGED_SENDER_FORWARDING(0.00)[];
@@ -189,46 +189,86 @@ X-Spamd-Result: default: False [0.84 / 15.00];
 	RCPT_COUNT_GT_50(0.00)[95];
 	TAGGED_RCPT(0.00)[linux-mips];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,arm.com:from_mime,arm.com:mid,arm.com:email,arm.com:dkim,vger.kernel.org:from_smtp]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,vger.kernel.org:from_smtp,arm.com:from_mime,arm.com:mid,arm.com:email,arm.com:dkim]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 19CD774C294
+X-Rspamd-Queue-Id: BD99574C6B3
 
-We want to rework how set_pXd() behaves for generic compile-time folded
-page tables by disallowing its use and triggering a compile-time error
-when it is used improperly, ensuring that the actual first-level set_pXd()
-function is used instead.
+We want to rework how set_pXd() behaves for generic compile-time
+folded page tables by disallowing its use and triggering a
+compile-time error when it is used improperly, ensuring that the actual
+first-level set_pXd() function is used instead.
 
-As using set_pud() is invalid when __PGTABLE_PMD_FOLDED,
-pud_set_huge() is also invalid. Therefore, define it when
-__PGTABLE_PMD_FOLDED is not defined.
+Since csky's PGTABLE_LEVELS always is 2, use set_pmd() instead of
+set_pgd() to handle vmalloc_fault().
 
 There should be no functional change.
 
 Signed-off-by: Yeoreum Yun <yeoreum.yun@arm.com>
 ---
- arch/arm64/mm/mmu.c | 2 ++
- 1 file changed, 2 insertions(+)
+ arch/csky/mm/fault.c | 35 +++++++++++------------------------
+ 1 file changed, 11 insertions(+), 24 deletions(-)
 
-diff --git a/arch/arm64/mm/mmu.c b/arch/arm64/mm/mmu.c
-index f2be501468ce5..194b62c528de9 100644
---- a/arch/arm64/mm/mmu.c
-+++ b/arch/arm64/mm/mmu.c
-@@ -1807,6 +1807,7 @@ void vmemmap_free(unsigned long start, unsigned long end,
- }
- #endif /* CONFIG_MEMORY_HOTPLUG */
+diff --git a/arch/csky/mm/fault.c b/arch/csky/mm/fault.c
+index 7ff4011089850..1467ea963806c 100644
+--- a/arch/csky/mm/fault.c
++++ b/arch/csky/mm/fault.c
+@@ -114,12 +114,12 @@ static inline void bad_area_nosemaphore(struct pt_regs *regs, struct mm_struct *
  
-+#ifndef __PAGETABLE_PMD_FOLDED
- int pud_set_huge(pud_t *pudp, phys_addr_t phys, pgprot_t prot)
+ static inline void vmalloc_fault(struct pt_regs *regs, int code, unsigned long addr)
  {
- 	pud_t new_pud = pfn_pud(__phys_to_pfn(phys), mk_pud_sect_prot(prot));
-@@ -1820,6 +1821,7 @@ int pud_set_huge(pud_t *pudp, phys_addr_t phys, pgprot_t prot)
- 	set_pud(pudp, new_pud);
- 	return 1;
- }
-+#endif
+-	pgd_t *pgd, *pgd_k;
+-	pud_t *pud, *pud_k;
+-	pmd_t *pmd, *pmd_k;
+-	pte_t *pte_k;
++	pmd_t *pmdp, *pmdp_k, pmd_k;
++	pte_t *ptep_k;
+ 	int offset;
  
- int pmd_set_huge(pmd_t *pmdp, phys_addr_t phys, pgprot_t prot)
- {
++	BUILD_BUG_ON(CONFIG_PGTABLE_LEVELS != 2);
++
+ 	/* User mode accesses just cause a SIGSEGV */
+ 	if (user_mode(regs)) {
+ 		do_trap(regs, SIGSEGV, code, addr);
+@@ -135,32 +135,19 @@ static inline void vmalloc_fault(struct pt_regs *regs, int code, unsigned long a
+ 	 */
+ 	offset = pgd_index(addr);
+ 
+-	pgd = get_pgd() + offset;
+-	pgd_k = init_mm.pgd + offset;
+-
+-	if (!pgd_present(*pgd_k)) {
+-		no_context(regs, addr);
+-		return;
+-	}
+-	set_pgd(pgd, *pgd_k);
++	pmdp = (pmd_t *)(get_pgd() + offset);
++	pmdp_k = (pmd_t *)(init_mm.pgd + offset);
+ 
+-	pud = (pud_t *)pgd;
+-	pud_k = (pud_t *)pgd_k;
+-	if (!pud_present(*pud_k)) {
++	pmd_k = *pmdp_k;
++	if (!pmd_present(pmd_k)) {
+ 		no_context(regs, addr);
+ 		return;
+ 	}
+ 
+-	pmd = pmd_offset(pud, addr);
+-	pmd_k = pmd_offset(pud_k, addr);
+-	if (!pmd_present(*pmd_k)) {
+-		no_context(regs, addr);
+-		return;
+-	}
+-	set_pmd(pmd, *pmd_k);
++	set_pmd(pmdp, pmd_k);
+ 
+-	pte_k = pte_offset_kernel(pmd_k, addr);
+-	if (!pte_present(*pte_k)) {
++	ptep_k = pte_offset_kernel(pmdp_k, addr);
++	if (!pte_present(*ptep_k)) {
+ 		no_context(regs, addr);
+ 		return;
+ 	}
 -- 
 LEVI:{C3F47F37-75D8-414A-A8BA-3980EC8A46D7}
 
