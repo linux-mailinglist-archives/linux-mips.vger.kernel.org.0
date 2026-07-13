@@ -1,49 +1,49 @@
-Return-Path: <linux-mips+bounces-15829-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-15830-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id 9H9FMMHxVGrhhgAAu9opvQ
-	(envelope-from <linux-mips+bounces-15829-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Mon, 13 Jul 2026 16:10:09 +0200
+	id jRSaHcnxVGrkhgAAu9opvQ
+	(envelope-from <linux-mips+bounces-15830-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Mon, 13 Jul 2026 16:10:17 +0200
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 15EC374C28B
-	for <lists+linux-mips@lfdr.de>; Mon, 13 Jul 2026 16:10:09 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 19CD774C294
+	for <lists+linux-mips@lfdr.de>; Mon, 13 Jul 2026 16:10:17 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=arm.com header.s=foss header.b=MpXGh2dy;
-	spf=pass (mail.lfdr.de: domain of "linux-mips+bounces-15829-lists+linux-mips=lfdr.de@vger.kernel.org" designates 172.234.253.10 as permitted sender) smtp.mailfrom="linux-mips+bounces-15829-lists+linux-mips=lfdr.de@vger.kernel.org";
+	dkim=pass header.d=arm.com header.s=foss header.b=gePevjeD;
+	spf=pass (mail.lfdr.de: domain of "linux-mips+bounces-15830-lists+linux-mips=lfdr.de@vger.kernel.org" designates 2600:3c0a:e001:db::12fc:5321 as permitted sender) smtp.mailfrom="linux-mips+bounces-15830-lists+linux-mips=lfdr.de@vger.kernel.org";
 	dmarc=pass (policy=none) header.from=arm.com;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id D2CB2304379A
-	for <lists+linux-mips@lfdr.de>; Mon, 13 Jul 2026 14:00:18 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 4D2AE31FE5BC
+	for <lists+linux-mips@lfdr.de>; Mon, 13 Jul 2026 14:00:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9E173437478;
-	Mon, 13 Jul 2026 13:59:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2682443800D;
+	Mon, 13 Jul 2026 13:59:14 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 396EB43713C;
-	Mon, 13 Jul 2026 13:59:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BCB02435EFA;
+	Mon, 13 Jul 2026 13:59:12 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783951141; cv=none; b=CTWtBvOBoNEDj02t5iU1CYrjBpqTRKk1Hup1jVsVvBAlx2W2GZR6zEVqayO3o9AZmYH5O1l81SDjN0yp/UBv7OJUXY77bfacW0B/h3+9LwdoOgtfbwD1bP9yQHr5PWU47kjcwMCT8GNN6pD+FQ+UUc0U8fdnoQBoDmMOJaeeXjk=
+	t=1783951154; cv=none; b=N3pWU8ExlDWP3QEczmtRwdKmRzuJIceS5fpMsge+l4jDew0klzHc7dOHhFbBwBm4DMg9RB1E3BSjrsWyzkdH+gG+IMFVrHVS9UyBkrWEIQf+zi1NtCIw5oTp172otyB46owE1VniRVKrOQrERTeljYfp9uCwjxiETbdgYbuGvkA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783951141; c=relaxed/simple;
-	bh=iWSMe0u/TmUpLGP78SOxYHheokckyiOAtAWUlz/N+7I=;
+	s=arc-20240116; t=1783951154; c=relaxed/simple;
+	bh=+q1+jVG4qiXP8+QAW/pUXiKb/SEJWzXOaTflpzs0DZc=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=JHq1+X0+WzJaI4mRLCzB7wxMqDCgGHTYXYA8lo+UcnnacvWDLiNdKG77OtmDuQ5hDnQRMxbFncaNcqIC+tbl1nAolm+p14LTeh1QQRxz3cMaYJ7fG1fP2WJm21y9DVpaQsRAYzj+RdtSiRhCy7oG6BBTswD5D5iunsEMbUO8kM4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=MpXGh2dy; arc=none smtp.client-ip=217.140.110.172
+	 MIME-Version; b=c0dcC2Ze3NMVKxKt9oVlRwE2X0Qu/4rbOhPHcFQ7vV9t/Dl2bn0AyreTW+P8f3IZTQ5637ADB+s0cnNwiUZhQ2otQrZbP4Mbage+i6bqyLP7G2tS8oAuKpAQbtR2R6yihsW54aG6uup4DyBEn6VXILy0v+esO4mphZ+reCqJLlQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=gePevjeD; arc=none smtp.client-ip=217.140.110.172
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7CBB81AC1;
-	Mon, 13 Jul 2026 06:58:55 -0700 (PDT)
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0C33E1C01;
+	Mon, 13 Jul 2026 06:59:08 -0700 (PDT)
 Received: from e129823.cambridge.arm.com (e129823.arm.com [10.2.213.3])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 8AFC43F7B4;
-	Mon, 13 Jul 2026 06:58:47 -0700 (PDT)
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 1A7FD3F7B4;
+	Mon, 13 Jul 2026 06:58:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
-	t=1783951139; bh=iWSMe0u/TmUpLGP78SOxYHheokckyiOAtAWUlz/N+7I=;
+	t=1783951152; bh=+q1+jVG4qiXP8+QAW/pUXiKb/SEJWzXOaTflpzs0DZc=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=MpXGh2dyKISR6DmyGzWLFiY1IubdGLMwywplIn/5NLWuhRoCFqF14/61QWrYnPFyH
-	 8ENXFrrXM9IQ0feMBLfAuZQ3uSqYQ1VDKgmK0iw41OdetVs+/OFNb0scNIwAyRexPn
-	 9DlDOmF0ValnVz1+/8RvKCkBlm7zW0w6IsMcimeQ=
+	b=gePevjeDuKLoRMZmfzHjYkzWSKoEGuVpmgjzflwig2lWsm15B2lGzrzuukWVG7sID
+	 cbx3Drp/v+dDpqd8T5PLNJBiZyLiQAZB9lO2Q7lXawJekgjfljVLChVm5B9o+4Of6+
+	 29N01/WeRa4WzJeB2s2Oht7oYvLM1S/H6/T24fIo=
 From: Yeoreum Yun <yeoreum.yun@arm.com>
 To: linux-arm-kernel@lists.infradead.org,
 	linux-kernel@vger.kernel.org,
@@ -140,9 +140,9 @@ Cc: david@kernel.org,
 	jonas@southpole.se,
 	stefan.kristiansson@saunalahti.fi,
 	Yeoreum Yun <yeoreum.yun@arm.com>
-Subject: [RFC PATCH 12/34] arm64: mm: use proper set_pXd() for generic compile-time folded patable in kasan_early_init()
-Date: Mon, 13 Jul 2026 14:55:51 +0100
-Message-ID: <20260713135614.1618183-13-yeoreum.yun@arm.com>
+Subject: [RFC PATCH 13/34] arm64: mm: define pud_set_huge() when __PGTABLE_PMD_FOLDED not defined
+Date: Mon, 13 Jul 2026 14:55:52 +0100
+Message-ID: <20260713135614.1618183-14-yeoreum.yun@arm.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20260713135614.1618183-1-yeoreum.yun@arm.com>
 References: <20260713135614.1618183-1-yeoreum.yun@arm.com>
@@ -161,12 +161,12 @@ X-Spamd-Result: default: False [0.84 / 15.00];
 	DMARC_POLICY_ALLOW(-0.50)[arm.com,none];
 	R_MISSING_CHARSET(0.50)[];
 	R_DKIM_ALLOW(-0.20)[arm.com:s=foss];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	FREEMAIL_CC(0.00)[kernel.org,armlinux.org.uk,linux-foundation.org,oracle.com,gmail.com,xen0n.name,loongson.cn,aosc.io,alpha.franken.de,ziepe.ca,arm.com,arndb.de,soleen.com,linux.ibm.com,linux.alibaba.com,brainfault.org,linux.dev,dabbelt.com,eecs.berkeley.edu,ghiti.fr,linux.intel.com,infradead.org,redhat.com,alien8.de,zytor.com,cmpxchg.org,tencent.com,google.com,os.amperecomputing.com,zeniv.linux.org.uk,siemens-energy.com,iscas.ac.cn,pigmoral.tech,linutronix.de,intel.com,huawei.com,gaisler.com,suse.com,linux-m68k.org,southpole.se,saunalahti.fi];
-	TAGGED_FROM(0.00)[bounces-15829-lists,linux-mips=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-15830-lists,linux-mips=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
 	FORGED_SENDER(0.00)[yeoreum.yun@arm.com,linux-mips@vger.kernel.org];
 	MIME_TRACE(0.00)[0:+];
@@ -176,7 +176,7 @@ X-Spamd-Result: default: False [0.84 / 15.00];
 	FORWARDED(0.00)[lists@lfdr.de];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	DKIM_TRACE(0.00)[arm.com:+];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
 	TO_DN_SOME(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
 	FORGED_SENDER_FORWARDING(0.00)[];
@@ -191,62 +191,44 @@ X-Spamd-Result: default: False [0.84 / 15.00];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
 	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,arm.com:from_mime,arm.com:mid,arm.com:email,arm.com:dkim,vger.kernel.org:from_smtp]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 15EC374C28B
+X-Rspamd-Queue-Id: 19CD774C294
 
 We want to rework how set_pXd() behaves for generic compile-time folded
 page tables by disallowing its use and triggering a compile-time error
 when it is used improperly, ensuring that the actual first-level set_pXd()
 function is used instead.
 
-Therefore, call the proper set_pXd() in case of folded pgtable
-to setup early kasan first-level pgtable with pXd_present()
+As using set_pud() is invalid when __PGTABLE_PMD_FOLDED,
+pud_set_huge() is also invalid. Therefore, define it when
+__PGTABLE_PMD_FOLDED is not defined.
 
 There should be no functional change.
 
 Signed-off-by: Yeoreum Yun <yeoreum.yun@arm.com>
 ---
- arch/arm64/mm/kasan_init.c | 26 ++++++++++++++++++++++++--
- 1 file changed, 24 insertions(+), 2 deletions(-)
+ arch/arm64/mm/mmu.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/arch/arm64/mm/kasan_init.c b/arch/arm64/mm/kasan_init.c
-index 3fcad956fdf7c..c77ba4ab643b5 100644
---- a/arch/arm64/mm/kasan_init.c
-+++ b/arch/arm64/mm/kasan_init.c
-@@ -216,10 +216,32 @@ asmlinkage void __init kasan_early_init(void)
- 		 */
- 		static pte_t tbl[PTRS_PER_PTE] __bss_pgtbl;
- 		pgd_t *pgdp = pgd_offset_k(KASAN_SHADOW_START);
--
--		set_pgd(pgdp, __pgd(__pa_symbol(tbl) | PGD_TYPE_TABLE));
-+		p4d_t *p4dp;
-+		pud_t *pudp;
-+		pmd_t *pmdp;
-+
-+		if (CONFIG_PGTABLE_LEVELS == 5 && pgtable_l5_enabled()) {
-+			set_pgd(pgdp, __pgd(__pa_symbol(tbl) | PGD_TYPE_TABLE));
-+			goto populate;
-+		}
-+
-+		p4dp = p4d_offset(pgdp, KASAN_SHADOW_START);
-+		if (CONFIG_PGTABLE_LEVELS >= 4 && pgtable_l4_enabled()) {
-+			set_p4d(p4dp, __p4d(__pa_symbol(tbl) | P4D_TYPE_TABLE));
-+			goto populate;
-+		}
-+
-+		pudp = pud_offset(p4dp, KASAN_SHADOW_START);
-+		if (CONFIG_PGTABLE_LEVELS >= 3) {
-+			set_pud(pudp, __pud(__pa_symbol(tbl) | PUD_TYPE_TABLE));
-+			goto populate;
-+		}
-+
-+		pmdp = pmd_offset(pudp, KASAN_SHADOW_START);
-+		set_pmd(pmdp, __pmd(__pa_symbol(tbl) | PMD_TYPE_TABLE));
- 	}
- 
-+populate:
- 	kasan_pgd_populate(KASAN_SHADOW_START, KASAN_SHADOW_END, NUMA_NO_NODE,
- 			   true);
+diff --git a/arch/arm64/mm/mmu.c b/arch/arm64/mm/mmu.c
+index f2be501468ce5..194b62c528de9 100644
+--- a/arch/arm64/mm/mmu.c
++++ b/arch/arm64/mm/mmu.c
+@@ -1807,6 +1807,7 @@ void vmemmap_free(unsigned long start, unsigned long end,
  }
+ #endif /* CONFIG_MEMORY_HOTPLUG */
+ 
++#ifndef __PAGETABLE_PMD_FOLDED
+ int pud_set_huge(pud_t *pudp, phys_addr_t phys, pgprot_t prot)
+ {
+ 	pud_t new_pud = pfn_pud(__phys_to_pfn(phys), mk_pud_sect_prot(prot));
+@@ -1820,6 +1821,7 @@ int pud_set_huge(pud_t *pudp, phys_addr_t phys, pgprot_t prot)
+ 	set_pud(pudp, new_pud);
+ 	return 1;
+ }
++#endif
+ 
+ int pmd_set_huge(pmd_t *pmdp, phys_addr_t phys, pgprot_t prot)
+ {
 -- 
 LEVI:{C3F47F37-75D8-414A-A8BA-3980EC8A46D7}
 
