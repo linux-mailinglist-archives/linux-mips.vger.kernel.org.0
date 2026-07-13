@@ -1,49 +1,49 @@
-Return-Path: <linux-mips+bounces-15849-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-15850-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id EpahEY/yVGowhwAAu9opvQ
-	(envelope-from <linux-mips+bounces-15849-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Mon, 13 Jul 2026 16:13:35 +0200
+	id qMxrHPD0VGrhhwAAu9opvQ
+	(envelope-from <linux-mips+bounces-15850-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Mon, 13 Jul 2026 16:23:44 +0200
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id EB87C74C368
-	for <lists+linux-mips@lfdr.de>; Mon, 13 Jul 2026 16:13:34 +0200 (CEST)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 58A1174C574
+	for <lists+linux-mips@lfdr.de>; Mon, 13 Jul 2026 16:23:43 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=arm.com header.s=foss header.b=YTUUB7fF;
-	spf=pass (mail.lfdr.de: domain of "linux-mips+bounces-15849-lists+linux-mips=lfdr.de@vger.kernel.org" designates 2600:3c09:e001:a7::12fc:5321 as permitted sender) smtp.mailfrom="linux-mips+bounces-15849-lists+linux-mips=lfdr.de@vger.kernel.org";
+	dkim=pass header.d=arm.com header.s=foss header.b=kFAmuy6H;
+	spf=pass (mail.lfdr.de: domain of "linux-mips+bounces-15850-lists+linux-mips=lfdr.de@vger.kernel.org" designates 2600:3c15:e001:75::12fc:5321 as permitted sender) smtp.mailfrom="linux-mips+bounces-15850-lists+linux-mips=lfdr.de@vger.kernel.org";
 	dmarc=pass (policy=none) header.from=arm.com;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id BB78C301C2CE
-	for <lists+linux-mips@lfdr.de>; Mon, 13 Jul 2026 14:05:09 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id F134530E5540
+	for <lists+linux-mips@lfdr.de>; Mon, 13 Jul 2026 14:05:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E068243F4C2;
-	Mon, 13 Jul 2026 14:03:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 49D0443801C;
+	Mon, 13 Jul 2026 14:03:25 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8B19F438006;
-	Mon, 13 Jul 2026 14:03:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BCCAA437448;
+	Mon, 13 Jul 2026 14:03:23 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783951392; cv=none; b=UfuPOBwD57EQTL9gyCZE4C2VyKwasfqXkZxYoIa7BHcAixoHm1SyEQ1WgESkgTCJZLEFm0xaqd/r/Dnx2XtuZlTxSbPsZhWD8hQh0hTuzIVEWFcA3DBpiTVRKafS3FZgkLsf5SHOHkPW1VD2VTxjCCjZflgXpzuMY3rOofbWjWk=
+	t=1783951405; cv=none; b=I9og3vkfzVt+HSFdxXRAgTMXOvIVo6OzAV55yDUSH6LyuvDUHV0L2pIOkZJghCvtG6zMu41idNOeAIcfypmCjTJNgbJCU0a9sh/NNoZgOAluOUrOZ3K+qHVbUY0p5cZY4V/hXHG/ABY4sEZlOV1NeaFjVD5LgvrrjEP7CvAAeSI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783951392; c=relaxed/simple;
-	bh=ol7IsdSpR9IFlqcrKFYieMiq9FZeVGRrGFMQo0OPo8I=;
+	s=arc-20240116; t=1783951405; c=relaxed/simple;
+	bh=gAIMmlF71mzMP0yYJWwgqqjvoec5KnaBkukv+jUXMrU=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=TRVvnpvhuqu2oCgxgWVkDHuXwy8XcdsSyyFNEBe+uGdR7j2/kYZHA2RHXCV5muHfwQJEZ3cAnkKVY4XPWswIjl81fvBYwjwsaHdnRghJP0rYRm1ytiUATT67WHY9ekCTjdzd59Z/QUg99+NmR2YG+u44WZ2DetPTp0N8tW6d8Wk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=YTUUB7fF; arc=none smtp.client-ip=217.140.110.172
+	 MIME-Version; b=tK/avvfUo4iHOipKur/IbL/mdgnnesFQCKyTfoXlWN4hXHkBoPCODNHfJSV6GTu/7BEMVl/+7PW+Cm1rX9IsxzKPmXyue0Ug97qlBC5MOgbC4mgVt4XQFeqZAtWvHEZaNc1Ik1SWKp9LBbWybniJrmgfOqy677RgTL8n48nDVpo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=kFAmuy6H; arc=none smtp.client-ip=217.140.110.172
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8D5F62309;
-	Mon, 13 Jul 2026 07:03:06 -0700 (PDT)
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 19BE32309;
+	Mon, 13 Jul 2026 07:03:19 -0700 (PDT)
 Received: from e129823.cambridge.arm.com (e129823.arm.com [10.2.213.3])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 8FE1A3F7B4;
-	Mon, 13 Jul 2026 07:02:58 -0700 (PDT)
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 2BAB13F7B4;
+	Mon, 13 Jul 2026 07:03:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
-	t=1783951390; bh=ol7IsdSpR9IFlqcrKFYieMiq9FZeVGRrGFMQo0OPo8I=;
+	t=1783951403; bh=gAIMmlF71mzMP0yYJWwgqqjvoec5KnaBkukv+jUXMrU=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=YTUUB7fFZSADZ3nNnK5VIYq6XJ5LHipDLKVAO1Jr7GLVRn2lz0fP34mlfCdApi3Xo
-	 gr7DozS/TjpMi/YVQUgMBQlHH0BFjPQPoE9VdPst9IJGDMgzZvV47FgkPmMzAgwbE2
-	 xLEcrrtKDKAnhfxFiombDYvVgRp+548HsUjx2dmc=
+	b=kFAmuy6HCrMZ6tSuvjtTYo85hlb7PNx9Wx6sIRts9SRAquBqiQgqOfIlCRlJ9B4Tp
+	 d3jU1pzNDXQyK6LYap+DEJjC3rZKNQjaAN3bou87+5KbSGg+CkVydZQYAug8b2BRDO
+	 wVSck9EvYickuztkf+XvT3t4Mi2M0L8sZriC0bvI=
 From: Yeoreum Yun <yeoreum.yun@arm.com>
 To: linux-arm-kernel@lists.infradead.org,
 	linux-kernel@vger.kernel.org,
@@ -140,9 +140,9 @@ Cc: david@kernel.org,
 	jonas@southpole.se,
 	stefan.kristiansson@saunalahti.fi,
 	Yeoreum Yun <yeoreum.yun@arm.com>
-Subject: [RFC PATCH 32/34] openrisc/pgtable: drop __pmd_offset()
-Date: Mon, 13 Jul 2026 14:56:11 +0100
-Message-ID: <20260713135614.1618183-33-yeoreum.yun@arm.com>
+Subject: [RFC PATCH 33/34] mm/pgtable: catch abuse of folded dummy pgd_t/p4d_t/pud_t
+Date: Mon, 13 Jul 2026 14:56:12 +0100
+Message-ID: <20260713135614.1618183-34-yeoreum.yun@arm.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20260713135614.1618183-1-yeoreum.yun@arm.com>
 References: <20260713135614.1618183-1-yeoreum.yun@arm.com>
@@ -161,12 +161,12 @@ X-Spamd-Result: default: False [0.84 / 15.00];
 	DMARC_POLICY_ALLOW(-0.50)[arm.com,none];
 	R_MISSING_CHARSET(0.50)[];
 	R_DKIM_ALLOW(-0.20)[arm.com:s=foss];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	FREEMAIL_CC(0.00)[kernel.org,armlinux.org.uk,linux-foundation.org,oracle.com,gmail.com,xen0n.name,loongson.cn,aosc.io,alpha.franken.de,ziepe.ca,arm.com,arndb.de,soleen.com,linux.ibm.com,linux.alibaba.com,brainfault.org,linux.dev,dabbelt.com,eecs.berkeley.edu,ghiti.fr,linux.intel.com,infradead.org,redhat.com,alien8.de,zytor.com,cmpxchg.org,tencent.com,google.com,os.amperecomputing.com,zeniv.linux.org.uk,siemens-energy.com,iscas.ac.cn,pigmoral.tech,linutronix.de,intel.com,huawei.com,gaisler.com,suse.com,linux-m68k.org,southpole.se,saunalahti.fi];
-	TAGGED_FROM(0.00)[bounces-15849-lists,linux-mips=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-15850-lists,linux-mips=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
 	FORGED_SENDER(0.00)[yeoreum.yun@arm.com,linux-mips@vger.kernel.org];
 	MIME_TRACE(0.00)[0:+];
@@ -176,7 +176,7 @@ X-Spamd-Result: default: False [0.84 / 15.00];
 	FORWARDED(0.00)[lists@lfdr.de];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	DKIM_TRACE(0.00)[arm.com:+];
-	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
+	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
 	TO_DN_SOME(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
 	FORGED_SENDER_FORWARDING(0.00)[];
@@ -189,35 +189,180 @@ X-Spamd-Result: default: False [0.84 / 15.00];
 	RCPT_COUNT_GT_50(0.00)[95];
 	TAGGED_RCPT(0.00)[linux-mips];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[arm.com:from_mime,arm.com:mid,arm.com:email,arm.com:dkim,vger.kernel.org:from_smtp,sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,vger.kernel.org:from_smtp,arm.com:from_mime,arm.com:mid,arm.com:email,arm.com:dkim]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: EB87C74C368
+X-Rspamd-Queue-Id: 58A1174C574
 
 From: "David Hildenbrand (Arm)" <david@kernel.org>
 
-The macro is unused, and will collide with a folded page table helper.
-Let's just remove it.
+Let's catch and prevent all abuse with dummy values on the stack
+similar to:
+
+	pud_t pud = pudp_get(pudp);
+	pmd_t *pmdp = pud_offset(*pud, addr);
+
+While this approach relies on the compiler propagating constants, it
+should catch most of the issues in practice. It would have caught all
+the issues we found through manual inspection.
+
+To avoid build issues particularly on x86, where pgd_val() might not be
+around in some inclusion paths, perform the new checks from wrapper
+macros.
 
 Signed-off-by: David Hildenbrand (Arm) <david@kernel.org>
 Signed-off-by: Yeoreum Yun <yeoreum.yun@arm.com>
 ---
- arch/openrisc/include/asm/pgtable.h | 3 ---
- 1 file changed, 3 deletions(-)
+ include/asm-generic/pgtable-nop4d.h | 23 ++++++++++++++++++-----
+ include/asm-generic/pgtable-nopmd.h | 24 ++++++++++++++++++------
+ include/asm-generic/pgtable-nopud.h | 24 ++++++++++++++++++------
+ 3 files changed, 54 insertions(+), 17 deletions(-)
 
-diff --git a/arch/openrisc/include/asm/pgtable.h b/arch/openrisc/include/asm/pgtable.h
-index 6b89996d0b628..5a491cd0f0086 100644
---- a/arch/openrisc/include/asm/pgtable.h
-+++ b/arch/openrisc/include/asm/pgtable.h
-@@ -331,9 +331,6 @@ static inline unsigned long pmd_page_vaddr(pmd_t pmd)
- 	return ((unsigned long) __va(pmd_val(pmd) & PAGE_MASK));
+diff --git a/include/asm-generic/pgtable-nop4d.h b/include/asm-generic/pgtable-nop4d.h
+index 84a529df27ee3..fcd86aabc592c 100644
+--- a/include/asm-generic/pgtable-nop4d.h
++++ b/include/asm-generic/pgtable-nop4d.h
+@@ -31,7 +31,7 @@ static inline bool pgd_leaf(pgd_t pgd)		{ return false; }
+ 
+ #define set_pgd(pgdptr, pgdval)			BUILD_BUG()
+ 
+-static inline pgd_t pgdp_get(pgd_t *p4dp)
++static __always_inline pgd_t pgdp_get(pgd_t *p4dp)
+ {
+ 	pgd_t dummy = { 0 };
+ 
+@@ -39,17 +39,30 @@ static inline pgd_t pgdp_get(pgd_t *p4dp)
+ }
+ #define pgdp_get pgdp_get
+ 
+-static inline p4d_t *p4d_offset(pgd_t *pgd, unsigned long address)
++#define pgd_check_dummy(pgd) BUILD_BUG_ON(__builtin_constant_p(pgd_val(pgd)))
++
++static __always_inline p4d_t *__p4d_offset(pgd_t *pgdp, unsigned long address)
+ {
+-	return (p4d_t *)pgd;
++	return (p4d_t *)pgdp;
  }
  
--#define __pmd_offset(address) \
--	(((address) >> PMD_SHIFT) & (PTRS_PER_PMD-1))
--
- #define PFN_PTE_SHIFT		PAGE_SHIFT
- #define pte_pfn(x)		((unsigned long)(((x).pte)) >> PAGE_SHIFT)
- #define pfn_pte(pfn, prot)  __pte((((pfn) << PAGE_SHIFT)) | pgprot_val(prot))
+-static inline p4d_t *p4d_offset_lockless(pgd_t *pgdp, pgd_t pgd,
++#define p4d_offset(pgdp, address)					\
++({									\
++	pgd_check_dummy(*(pgdp));					\
++	__p4d_offset(pgdp, address);					\
++})
++
++static __always_inline p4d_t *__p4d_offset_lockless(pgd_t *pgdp, pgd_t pgd,
+ 		unsigned long address)
+ {
+ 	return (p4d_t *)pgdp;
+ }
+-#define p4d_offset_lockless p4d_offset_lockless
++
++#define p4d_offset_lockless(pgdp, pgd, address)				\
++({									\
++	pgd_check_dummy(*(pgdp));					\
++	__p4d_offset_lockless(pgdp, pgd, address);			\
++})
+ 
+ #define p4d_val(x)				(pgd_val((x).pgd))
+ #define __p4d(x)				((p4d_t) { __pgd(x) })
+diff --git a/include/asm-generic/pgtable-nopmd.h b/include/asm-generic/pgtable-nopmd.h
+index 96f3fccd22fda..ef6dd5895e7ba 100644
+--- a/include/asm-generic/pgtable-nopmd.h
++++ b/include/asm-generic/pgtable-nopmd.h
+@@ -40,7 +40,7 @@ static inline void pud_clear(pud_t *pud)	{ }
+ 
+ #define set_pud(pudptr, pudval)			BUILD_BUG()
+ 
+-static inline pud_t pudp_get(pud_t *pudp)
++static __always_inline pud_t pudp_get(pud_t *pudp)
+ {
+ 	pud_t dummy = { 0 };
+ 
+@@ -48,18 +48,30 @@ static inline pud_t pudp_get(pud_t *pudp)
+ }
+ #define pudp_get pudp_get
+ 
+-static inline pmd_t * pmd_offset(pud_t * pud, unsigned long address)
++#define pud_check_dummy(pud) BUILD_BUG_ON(__builtin_constant_p(pud_val(pud)))
++
++static __always_inline pmd_t *__pmd_offset(pud_t *pudp, unsigned long address)
+ {
+-	return (pmd_t *)pud;
++	return (pmd_t *)pudp;
+ }
+-#define pmd_offset pmd_offset
+ 
+-static inline pmd_t *pmd_offset_lockless(pud_t *pudp, pud_t pud,
++#define pmd_offset(pudp, address)					\
++({									\
++	pud_check_dummy(*(pudp));					\
++	__pmd_offset(pudp, address);					\
++})
++
++static __always_inline pmd_t *__pmd_offset_lockless(pud_t *pudp, pud_t pud,
+ 		unsigned long address)
+ {
+ 	return (pmd_t *)pudp;
+ }
+-#define pmd_offset_lockless pmd_offset_lockless
++
++#define pmd_offset_lockless(pudp, pud, address)				\
++({									\
++	pud_check_dummy(*(pudp));					\
++	__pmd_offset_lockless(pudp, pud, address);			\
++})
+ 
+ #define pmd_val(x)				(pud_val((x).pud))
+ #define __pmd(x)				((pmd_t) { __pud(x) } )
+diff --git a/include/asm-generic/pgtable-nopud.h b/include/asm-generic/pgtable-nopud.h
+index faa0233bcde80..873940f9d3f9b 100644
+--- a/include/asm-generic/pgtable-nopud.h
++++ b/include/asm-generic/pgtable-nopud.h
+@@ -38,7 +38,7 @@ static inline bool p4d_leaf(p4d_t p4d)		{ return false; }
+ 
+ #define set_p4d(p4dptr, p4dval)			BUILD_BUG()
+ 
+-static inline p4d_t p4dp_get(p4d_t *p4dp)
++static __always_inline p4d_t p4dp_get(p4d_t *p4dp)
+ {
+ 	p4d_t dummy = { 0 };
+ 
+@@ -46,18 +46,30 @@ static inline p4d_t p4dp_get(p4d_t *p4dp)
+ }
+ #define p4dp_get p4dp_get
+ 
+-static inline pud_t *pud_offset(p4d_t *p4d, unsigned long address)
++#define p4d_check_dummy(p4d) BUILD_BUG_ON(__builtin_constant_p(p4d_val(p4d)))
++
++static __always_inline pud_t *__pud_offset(p4d_t *p4dp, unsigned long address)
+ {
+-	return (pud_t *)p4d;
++	return (pud_t *)p4dp;
+ }
+-#define pud_offset pud_offset
+ 
+-static inline pud_t *pud_offset_lockless(p4d_t *p4dp, p4d_t p4d,
++#define pud_offset(p4dp, address)					\
++({									\
++	p4d_check_dummy(*(p4dp));					\
++	__pud_offset(p4dp, address);					\
++})
++
++static __always_inline pud_t *__pud_offset_lockless(p4d_t *p4dp, p4d_t p4d,
+ 		unsigned long address)
+ {
+ 	return (pud_t *)p4dp;
+ }
+-#define pud_offset_lockless pud_offset_lockless
++
++#define pud_offset_lockless(p4dp, p4d, address)				\
++({									\
++	p4d_check_dummy(*(p4dp));					\
++	__pud_offset_lockless(p4dp, p4d, address);			\
++})
+ 
+ #define pud_val(x)				(p4d_val((x).p4d))
+ #define __pud(x)				((pud_t) { __p4d(x) })
 -- 
 LEVI:{C3F47F37-75D8-414A-A8BA-3980EC8A46D7}
 
