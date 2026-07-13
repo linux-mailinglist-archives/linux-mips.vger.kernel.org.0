@@ -1,53 +1,53 @@
-Return-Path: <linux-mips+bounces-15863-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-15864-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id PdQrNPMNVWrJjQAAu9opvQ
-	(envelope-from <linux-mips+bounces-15863-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Mon, 13 Jul 2026 18:10:27 +0200
+	id mi/gDasSVWq0jgAAu9opvQ
+	(envelope-from <linux-mips+bounces-15864-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Mon, 13 Jul 2026 18:30:35 +0200
 X-Original-To: lists+linux-mips@lfdr.de
 Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0D0CA74D721
-	for <lists+linux-mips@lfdr.de>; Mon, 13 Jul 2026 18:10:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id D33C474D9DE
+	for <lists+linux-mips@lfdr.de>; Mon, 13 Jul 2026 18:30:34 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=kernel.org header.s=k20260515 header.b=BvAfS+kz;
-	spf=pass (mail.lfdr.de: domain of "linux-mips+bounces-15863-lists+linux-mips=lfdr.de@vger.kernel.org" designates 172.105.105.114 as permitted sender) smtp.mailfrom="linux-mips+bounces-15863-lists+linux-mips=lfdr.de@vger.kernel.org";
+	dkim=pass header.d=kernel.org header.s=k20260515 header.b="j/wWVPKT";
+	spf=pass (mail.lfdr.de: domain of "linux-mips+bounces-15864-lists+linux-mips=lfdr.de@vger.kernel.org" designates 172.105.105.114 as permitted sender) smtp.mailfrom="linux-mips+bounces-15864-lists+linux-mips=lfdr.de@vger.kernel.org";
 	dmarc=pass (policy=quarantine) header.from=kernel.org;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id D0BC13012CC7
-	for <lists+linux-mips@lfdr.de>; Mon, 13 Jul 2026 16:05:14 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 7CB8F302305C
+	for <lists+linux-mips@lfdr.de>; Mon, 13 Jul 2026 16:26:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E4BF1329C71;
-	Mon, 13 Jul 2026 16:05:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 132BB40B6EF;
+	Mon, 13 Jul 2026 16:26:35 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D679A30C17D;
-	Mon, 13 Jul 2026 16:05:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F321C336897;
+	Mon, 13 Jul 2026 16:26:33 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783958713; cv=none; b=KeqfhhtTYQXp+i5eAHq2jQZFXqxIYSJiVn0EdIs27i90Mww5TdFDsEKLNO+jaruJnm52+rRPQbPIUMW/P3e6wa0UNCzUThTAwaUONBrx/LWfwPXWBSHA1TIgo8uWcXyojoCxEFmq1it1ZjKYG2AqckJe59CfA61lMqn4SKAWHks=
+	t=1783959995; cv=none; b=N+qX7C2sIovLmknTfgCnNrxNS/OfK1lQ7IatwL4bqjZeYYnJIsVqKpPc0cKo+KPhi8m0AKxQuZ9NU0BngmVQG40UzFluRAkgYGZkb8fPwDUO/ZbBi8CZQPFC+SKW0jYFMu62bLwqDcQlbuTR5mpbEqTqxGeEQDdbHeuKzQmgfXc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783958713; c=relaxed/simple;
-	bh=oibnUKSYXikDF+73wKpPOWQmjAAJwAwVq1TqJiuicvU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=YeR16D/3TszwCadWsTmY9/muvkSjpFaiAmHfu8NEy5tyn7XOoo62ri+UOlk/Conv8BlQWSF3dhBlKAkwvo4ErVttPxieckEdJamt87ZXk5j3F9Rbw3dlWd/BmN8+hSp6bIgYKQgeQjEwtb+z4j1L3qXVIModSabGtRt8ZoPxuo8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BvAfS+kz; arc=none smtp.client-ip=100.103.45.18
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 224DD1F000E9;
-	Mon, 13 Jul 2026 16:04:55 +0000 (UTC)
+	s=arc-20240116; t=1783959995; c=relaxed/simple;
+	bh=LviTq6j8ZmJ3iPZeDtVUbGneWvQslN8Nbivsq2W4W3A=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=DRfG1PjbqgjmkTeMjU65iO36NgRLZplpw9YntJ6F0cbHDlNyK9G4mgTlxJygp/+vqYbhTEgBZWrnPMnHGl7jM1ILb17rZNQik2NqymR35rnnaDUvGe83vz+QGmbG1/QmwJr6lYiqlXKILkDmvvNBUSv7xJoCKWU1Yq9fGniUYBM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=j/wWVPKT; arc=none smtp.client-ip=100.103.45.18
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8AA4F1F000E9;
+	Mon, 13 Jul 2026 16:26:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1783958710;
-	bh=1ESM2SzSD3UynOgixO3ALqhK0K8aaLtWF+/LHsivKfc=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=BvAfS+kzALSX82y1Di2VtOQp38EMVYa/a0vHm/IjTpc7kf4jHjuOTM3sKo8R84O9c
-	 xOk4JPna7qvfy1PaukIZF3T6cPMAXfpfTSZDna4XE+oYrFfmsKMFc4d0xDKcU5/eKx
-	 U2YwGSZRSNFKcvP67THVBGvhPF76bHe3Vlejfo+krhMrjRfHJBFUB8U4uJ9SFX0fWQ
-	 Qts/DhSoySClKbyxe4FlftP3EjW4m8SF2SIajlKKylzaXj3KgTYmFpd3BWKFz00kdW
-	 b89lbYsbbXIQskkvAlEcQj7q/YxyAGkwddulKX1HhX8qMFejkF1bio8/BTAmHZMc7B
-	 eOM3fNCfKhXaw==
-Message-ID: <2858abeb-4134-4768-9a35-a569d5c86e10@kernel.org>
-Date: Mon, 13 Jul 2026 18:04:54 +0200
+	s=k20260515; t=1783959993;
+	bh=4oSo8Q8M/HDQKQiotqOthLA9NEMRzPw5zmVE4LKJDjI=;
+	h=Date:Subject:From:To:Cc:References:In-Reply-To;
+	b=j/wWVPKTi2yTT9K+qqP7blEbgxvBXpRJlGYEleVOdJY/ZkEhoBIwU1XYjxGWpoIdN
+	 mlS6Xlu2LM2QXPsfPsM+IAwCvbLnTk3PUIFLKAeSQKyasltc5nTKDN8FP+v5+XkUZt
+	 oMxHh/hBdgPEvK+o9M/a9XHrOuskaRHNBN+GAA2b23faueb2V+5Bzreu3fOlknCV3g
+	 X9mDV4OfSOsr58Xw+JFDKUJfvXypw26dMhAOyajWuLXAmB1PrYjlAOf7rtGN25iIL/
+	 rCzb4NMtDX3G/agbRDAIFbc/H1Uo5RS/e34Ox8O6QnOgt1x71EyMVCwAMkKzkgYZBB
+	 TIXI8gpq6Bz9A==
+Message-ID: <f1864767-8cbe-4f1e-ab73-81944d3b8f97@kernel.org>
+Date: Mon, 13 Jul 2026 18:26:16 +0200
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -56,6 +56,7 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [RFC PATCH 02/34] ARM: mm: make 2-level pgd_t a scalar
+From: "David Hildenbrand (Arm)" <david@kernel.org>
 To: Arnd Bergmann <arnd@arndb.de>, Yeoreum Yun <yeoreum.yun@arm.com>,
  linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
  loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
@@ -115,7 +116,7 @@ Cc: Russell King <linux@armlinux.org.uk>,
 References: <20260713135614.1618183-1-yeoreum.yun@arm.com>
  <20260713135614.1618183-3-yeoreum.yun@arm.com>
  <d57f5b18-583d-4848-9d74-65b15c93dcf8@app.fastmail.com>
-From: "David Hildenbrand (Arm)" <david@kernel.org>
+ <2858abeb-4134-4768-9a35-a569d5c86e10@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=david@kernel.org; keydata=
  xsFNBFXLn5EBEAC+zYvAFJxCBY9Tr1xZgcESmxVNI/0ffzE/ZQOiHJl6mGkmA1R7/uUpiCjJ
@@ -161,7 +162,7 @@ Autocrypt: addr=david@kernel.org; keydata=
  3iyY2Nsd7JxfKu1PRhCGwXzRw5TlfEsoRI7V9A8isUCoqE2Dzh3FvYHVeX4Us+bRL/oqareJ
  CIFqgYMyvHj7Q06kTKmauOe4Nf0l0qEkIuIzfoLJ3qr5UyXc2hLtWyT9Ir+lYlX9efqh7mOY
  qIws/H2t
-In-Reply-To: <d57f5b18-583d-4848-9d74-65b15c93dcf8@app.fastmail.com>
+In-Reply-To: <2858abeb-4134-4768-9a35-a569d5c86e10@kernel.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Rspamd-Action: no action
@@ -176,7 +177,7 @@ X-Spamd-Result: default: False [-3.66 / 15.00];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-15863-lists,linux-mips=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-15864-lists,linux-mips=lfdr.de];
 	RCVD_COUNT_THREE(0.00)[4];
 	FROM_HAS_DN(0.00)[];
 	TO_DN_EQ_ADDR_SOME(0.00)[];
@@ -203,79 +204,30 @@ X-Spamd-Result: default: False [-3.66 / 15.00];
 	TAGGED_RCPT(0.00)[linux-mips];
 	DBL_BLOCKED_OPENRESOLVER(0.00)[vger.kernel.org:from_smtp,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 0D0CA74D721
+X-Rspamd-Queue-Id: D33C474D9DE
 
-On 7/13/26 17:38, Arnd Bergmann wrote:
-> On Mon, Jul 13, 2026, at 15:55, Yeoreum Yun wrote:
->> From: "David Hildenbrand (Arm)" <david@kernel.org>
->>
->> We don't want pgd_t to be an array, as it prohibits returning it from a
->> function, like pgdp_get().
+
+>  * |        |
+>  * +--------+
+>  * |        |       +------------+ +0
+>  * +- - - - +       | Linux pt 0 |
+>  * |        |       +------------+ +1024
+>  * +--------+ +0    | Linux pt 1 |
+>  * |        |-----> +------------+ +2048
+>  * +- - - - + +4    |  h/w pt 0  |
+>  * |        |-----> +------------+ +3072
+>  * +--------+ +8    |  h/w pt 1  |
+>  * |        |       +------------+ +4096
+>  *
 > 
-> What should pgdp_get() return on ARM 2-stage page tables then?
-> Does it return just the first entry or concatenate the two?
-
-It is rather obscure what we do (below).
-
-This patch tries to keep the existing behavior.
-
+> So we interpret two 32bit entries as a pair (64bit value). Together they span
+> 2x256 values.
 > 
->> +typedef u64 pgdval_t;
+> Then we make PTRS_PER_PTE = 512, to iterate all of them (both pairs).
 > 
->> +static inline pmdval_t pgd_val(pgd_t pgd)
->> +{
->> +	return (*(pmdval_t (*)[2])&pgd)[0];
->> +}
-> 
-> This could use a comment to explain what this actually
-> returns and why the second entry is discarded.
+> Let me do some more digging to come up with something I can confidentially
 
-It's rather crazy. We have two page table levels, but fake that we have 3.
-
-
-There is some documentation in arch/arm/include/asm/pgtable-2level.h
-
-/*
- * Hardware-wise, we have a two level page table structure, where the first
- * level has 4096 entries, and the second level has 256 entries.  Each entry
- * is one 32-bit word.  Most of the bits in the second level entry are used
- * by hardware, and there aren't any "accessed" and "dirty" bits.
- *
- * Linux on the other hand has a three level page table structure, which can
- * be wrapped to fit a two level page table structure easily - using the PGD
- * and PTE only.  However, Linux also expects one "PTE" table per page, and
- * at least a "dirty" bit.
- *
- * Therefore, we tweak the implementation slightly - we tell Linux that we
- * have 2048 entries in the first level, each of which is 8 bytes (iow, two
- * hardware pointers to the second level.)  The second level contains two
- * hardware PTE tables arranged contiguously, preceded by Linux versions
- * which contain the state information Linux needs.  We, therefore, end up
- * with 512 entries in the "PTE" level.
- *
- * This leads to the page tables having the following layout:
- *
- *    pgd             pte
- * |        |
- * +--------+
- * |        |       +------------+ +0
- * +- - - - +       | Linux pt 0 |
- * |        |       +------------+ +1024
- * +--------+ +0    | Linux pt 1 |
- * |        |-----> +------------+ +2048
- * +- - - - + +4    |  h/w pt 0  |
- * |        |-----> +------------+ +3072
- * +--------+ +8    |  h/w pt 1  |
- * |        |       +------------+ +4096
- *
-
-So we interpret two 32bit entries as a pair (64bit value). Together they span
-2x256 values.
-
-Then we make PTRS_PER_PTE = 512, to iterate all of them (both pairs).
-
-Let me do some more digging to come up with something I can confidentially
-document here ... maybe I'll just refer to the comment in pgtable-2level.h.
+"with confidence", not confidentially :)
 
 -- 
 Cheers,
