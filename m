@@ -1,69 +1,69 @@
-Return-Path: <linux-mips+bounces-15801-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-15802-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id RQ20KtnRVGoWfQAAu9opvQ
-	(envelope-from <linux-mips+bounces-15801-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Mon, 13 Jul 2026 13:54:01 +0200
+	id ci91HOvRVGodfQAAu9opvQ
+	(envelope-from <linux-mips+bounces-15802-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Mon, 13 Jul 2026 13:54:19 +0200
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 14B8474A901
-	for <lists+linux-mips@lfdr.de>; Mon, 13 Jul 2026 13:54:01 +0200 (CEST)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id E5C1174A922
+	for <lists+linux-mips@lfdr.de>; Mon, 13 Jul 2026 13:54:18 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=redhat.com header.s=mimecast20190719 header.b=HxsvnAfg;
-	spf=pass (mail.lfdr.de: domain of "linux-mips+bounces-15801-lists+linux-mips=lfdr.de@vger.kernel.org" designates 172.105.105.114 as permitted sender) smtp.mailfrom="linux-mips+bounces-15801-lists+linux-mips=lfdr.de@vger.kernel.org";
+	dkim=pass header.d=redhat.com header.s=mimecast20190719 header.b=RJiFqrst;
+	spf=pass (mail.lfdr.de: domain of "linux-mips+bounces-15802-lists+linux-mips=lfdr.de@vger.kernel.org" designates 2600:3c09:e001:a7::12fc:5321 as permitted sender) smtp.mailfrom="linux-mips+bounces-15802-lists+linux-mips=lfdr.de@vger.kernel.org";
 	dmarc=pass (policy=quarantine) header.from=redhat.com;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 2270B30146AD
-	for <lists+linux-mips@lfdr.de>; Mon, 13 Jul 2026 11:54:00 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 3A639300E288
+	for <lists+linux-mips@lfdr.de>; Mon, 13 Jul 2026 11:54:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A87403F4DD7;
-	Mon, 13 Jul 2026 11:53:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DBE153F23AF;
+	Mon, 13 Jul 2026 11:54:17 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 455433EB7E5
-	for <linux-mips@vger.kernel.org>; Mon, 13 Jul 2026 11:53:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C0F03F484D
+	for <linux-mips@vger.kernel.org>; Mon, 13 Jul 2026 11:54:16 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783943639; cv=none; b=p+tv9oEhgIoSJtebBdnfEq2XmzAIvKpS9MME7obOi8bMBnsyDnhdMxXMF6GIUSe+A0O/B8R8ROJ+fspW1WzaVb8qI4zMYSDx3H4J3nMsrHQJPLh07/H6dO/PT/CzdJuAeQUoxrVQwIBmHT0SOoOVJWd890y4XxA1g5ThZbZeXWM=
+	t=1783943657; cv=none; b=IXIarNfyKZRptsmb14uBBIxRK7WcceL/cjvlL6aWtROcKmCf/V+CWkyZdGBCVmYzlzDtPQYlDBJPqWJuvqMerQ+TYf3SP2dFgRxRqs08atFuvqWmFR3sZdqcLm1bqDZ9sf3J+F6xRCDX4rJQjv/Df4Cp6veYFBETLYFUBgdBhTQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783943639; c=relaxed/simple;
-	bh=7ETe8CFt5XKIiFSTBOPt7a6t1tvKKB7JNYwUpYEimh4=;
+	s=arc-20240116; t=1783943657; c=relaxed/simple;
+	bh=D94C7nl3OfTTTUlxa92ZHQtC3f+/K8QFXjzTBntEVk0=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=CPFiqZUn9UThRV+L6Stq1YBPD88B8PhLo6BQsA54yF9QSNKG0z9oKDJym2DqjkKjBYoDQPOmSs2uOQfwnoQqSqBpYWMy4xh7nz8xbJFSJmE8C7qNH4Y57EUvegfcTZvgbK7BsmMXovtUoIOGHOrdqo6C1AWqN4G3c6zreZHoEYI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=HxsvnAfg; arc=none smtp.client-ip=170.10.133.124
+	 In-Reply-To:To:Cc; b=uvPbfJk2tbUbfzY9Pqxi8aX/V6sm1Edw1ASt71aH9IG08AvytIx4YceR3egFbq/tq+8jcsA7ytxiTMTpEu46sdKmYf0SpI18i3Z8wl3XFDAC14Uc0rZnr3slrWwC7Xb0Qvvm1gxGZW6E85YQRpESzDlw5Ek2UC5FdlzDpKOS2Ao=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=RJiFqrst; arc=none smtp.client-ip=170.10.129.124
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1783943637;
+	s=mimecast20190719; t=1783943655;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=NgFyIB4g392Dy+EScJnc+J4AoTxCRcd30Z9klgkdRhQ=;
-	b=HxsvnAfgCM1ZGm6BO5gyqsy0zffEpMCfG4NMtnBIsnjkAl2HY9kHH51PUT/ZaFTpsMbLaE
-	iRZUcKmCiWCOgAPEqWb7NcsH/L78AOtVX6w9kQ7TGqk0IFZ8KzrljR/1uy+jdrNku5nVvh
-	1mtObvcGHL0OIW56ZUTuKTCMbhRQ09g=
+	bh=AV+lo6yTPl7Izq8z7tbY9Iz9s4OdVpSfE8xhuKKoZ9s=;
+	b=RJiFqrstZKVhEUPiNLZnTD6fJypiTBAZfJOdvQ3DJGZ2w/hCiKfZiJgCQG9h+NxINhsxqc
+	soIPfijkEgMe4VVRiG9KTSHNddGPDhEvAHqxJNR/mWyJZK5O+a/qwjDBkOWSh3LAOId+lx
+	H92rl3JB2t70WzDkwRcdWlmWWlhZGWY=
 Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
  (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
  relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-648-iun2YU6jNKqoXgjYKzzttQ-1; Mon,
- 13 Jul 2026 07:53:54 -0400
-X-MC-Unique: iun2YU6jNKqoXgjYKzzttQ-1
-X-Mimecast-MFC-AGG-ID: iun2YU6jNKqoXgjYKzzttQ_1783943632
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-135-_41bh230N3-ZgHURFLlf5A-1; Mon,
+ 13 Jul 2026 07:54:10 -0400
+X-MC-Unique: _41bh230N3-ZgHURFLlf5A-1
+X-Mimecast-MFC-AGG-ID: _41bh230N3-ZgHURFLlf5A_1783943647
 Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 5CD9218052DD;
-	Mon, 13 Jul 2026 11:53:51 +0000 (UTC)
+	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 77FA318052F9;
+	Mon, 13 Jul 2026 11:54:06 +0000 (UTC)
 Received: from [192.168.1.153] (headnet04.pony-001.prod.iad2.dc.redhat.com [10.2.32.116])
-	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 55C011800595;
-	Mon, 13 Jul 2026 11:53:33 +0000 (UTC)
+	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id B9D201800586;
+	Mon, 13 Jul 2026 11:53:51 +0000 (UTC)
 From: Albert Esteve <aesteve@redhat.com>
-Date: Mon, 13 Jul 2026 13:53:04 +0200
-Subject: [PATCH v2 1/5] drm/panel: have drm_panel_add/remove manage a list
- reference
+Date: Mon, 13 Jul 2026 13:53:05 +0200
+Subject: [PATCH v2 2/5] drm/bridge/panel: hold a reference to the wrapped
+ panel
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -72,7 +72,7 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260713-drm_refcount_wiring-v2-1-d3bb61f4bd4d@redhat.com>
+Message-Id: <20260713-drm_refcount_wiring-v2-2-d3bb61f4bd4d@redhat.com>
 References: <20260713-drm_refcount_wiring-v2-0-d3bb61f4bd4d@redhat.com>
 In-Reply-To: <20260713-drm_refcount_wiring-v2-0-d3bb61f4bd4d@redhat.com>
 To: Neil Armstrong <neil.armstrong@linaro.org>, 
@@ -126,11 +126,11 @@ Cc: dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
  linux-stm32@st-md-mailman.stormreply.com, linux-sunxi@lists.linux.dev, 
  linux-samsung-soc@vger.kernel.org, linux-tegra@vger.kernel.org, 
  Albert Esteve <aesteve@redhat.com>
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1783943594; l=1577;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1783943594; l=2238;
  i=aesteve@redhat.com; s=20260303; h=from:subject:message-id;
- bh=7ETe8CFt5XKIiFSTBOPt7a6t1tvKKB7JNYwUpYEimh4=;
- b=lgm6WYGzEa5cY2/2dWmhsWCYfvwJ+EQT45NMlusojBnvAwrv8eT+DunBt732/G3xFam8iaDGy
- rmYQIHe7THDAErVwIMiHtj2DyMaLCAlPiETerk/jH2KwMY2hPaPFqe3
+ bh=D94C7nl3OfTTTUlxa92ZHQtC3f+/K8QFXjzTBntEVk0=;
+ b=H+H0lwiIuyc7pIIA67x3DnJ6AvDwZQe2byCuCRpgEzKUvN4oax64GGQvap0g65TQkQxwN4Tg1
+ CDFh/zYmJiXDj6bn9RQB4XGp3SAFLKt9mCcizgJs8HSQg06SGzqIEoD
 X-Developer-Key: i=aesteve@redhat.com; a=ed25519;
  pk=YSFz6sOHd2L45+Fr8DIvHTi6lSIjhLZ5T+rkxspJt1s=
 X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
@@ -140,11 +140,11 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[redhat.com,quarantine];
 	R_DKIM_ALLOW(-0.20)[redhat.com:s=mimecast20190719];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-15801-lists,linux-mips=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-15802-lists,linux-mips=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
 	FROM_HAS_DN(0.00)[];
 	FORGED_RECIPIENTS(0.00)[m:neil.armstrong@linaro.org,m:jesszhan0024@gmail.com,m:maarten.lankhorst@linux.intel.com,m:mripard@kernel.org,m:tzimmermann@suse.de,m:airlied@gmail.com,m:simona@ffwll.ch,m:andrzej.hajda@intel.com,m:rfoss@kernel.org,m:Laurent.pinchart@ideasonboard.com,m:jonas@kwiboo.se,m:jernej.skrabec@gmail.com,m:luca.ceresoli@bootlin.com,m:inki.dae@samsung.com,m:jagan@amarulasolutions.com,m:m.szyprowski@samsung.com,m:laurentiu.palcu@oss.nxp.com,m:l.stach@pengutronix.de,m:Frank.Li@nxp.com,m:s.hauer@pengutronix.de,m:kernel@pengutronix.de,m:festevam@gmail.com,m:paul@crapouillou.net,m:linusw@kernel.org,m:marex@denx.de,m:stefan@agner.ch,m:tomi.valkeinen@ideasonboard.com,m:laurent.pinchart+renesas@ideasonboard.com,m:kieran.bingham+renesas@ideasonboard.com,m:geert+renesas@glider.be,m:magnus.damm@gmail.com,m:biju.das.jz@bp.renesas.com,m:hjc@rock-chips.com,m:heiko@sntech.de,m:andy.yan@rock-chips.com,m:yannick.fertre@foss.st.com,m:raphael.gallais-pou@foss.st.com,m:philippe.cornu@foss.
@@ -155,7 +155,7 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	FORWARDED(0.00)[lists@lfdr.de];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	DKIM_TRACE(0.00)[redhat.com:+];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
 	MISSING_XM_UA(0.00)[];
 	FORGED_SENDER_FORWARDING(0.00)[];
 	RCVD_COUNT_FIVE(0.00)[6];
@@ -168,49 +168,74 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	ALIAS_RESOLVED(0.00)[];
 	TAGGED_RCPT(0.00)[linux-mips,renesas];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[vger.kernel.org:from_smtp,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[vger.kernel.org:from_smtp,sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 14B8474A901
+X-Rspamd-Queue-Id: E5C1174A922
 
-The global panel_list holds raw pointers to drm_panel objects.
-Nothing prevents a panel from being freed while it is still linked
-in the list: if a driver's probe calls drm_panel_add() and then
-fails at a later step, panel->list remains in panel_list. Any
-subsequent call to of_drm_find_panel() that iterates the list will
-dereference freed memory.
+drm_panel_bridge_add_typed() stores a pointer to the drm_panel it
+wraps, but never acquires a reference to it. If the panel device
+goes away while a panel_bridge still exists, the dangling pointer can
+be dereferenced through panel_bridge->panel.
 
-Have drm_panel_add() acquire a reference via drm_panel_get() before
-inserting the panel into the list, and have drm_panel_remove() drop
-it via drm_panel_put() after removing the panel from the list. The
-global registry now holds a counted reference for as long as the
-panel is listed, ensuring the object outlives any concurrent lookup.
+Acquire a reference in drm_panel_bridge_add_typed() with drm_panel_get()
+and release it in each teardown path.
 
 Reviewed-by: Maxime Ripard <mripard@kernel.org>
 Signed-off-by: Albert Esteve <aesteve@redhat.com>
 ---
- drivers/gpu/drm/drm_panel.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/gpu/drm/bridge/panel.c | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/gpu/drm/drm_panel.c b/drivers/gpu/drm/drm_panel.c
-index 2c5649e433dfb..545fe93dc28fe 100644
---- a/drivers/gpu/drm/drm_panel.c
-+++ b/drivers/gpu/drm/drm_panel.c
-@@ -81,6 +81,7 @@ static void drm_panel_init(struct drm_panel *panel, struct device *dev,
-  */
- void drm_panel_add(struct drm_panel *panel)
+diff --git a/drivers/gpu/drm/bridge/panel.c b/drivers/gpu/drm/bridge/panel.c
+index 4978ec98a0828..6b98ad19508df 100644
+--- a/drivers/gpu/drm/bridge/panel.c
++++ b/drivers/gpu/drm/bridge/panel.c
+@@ -294,7 +294,7 @@ struct drm_bridge *drm_panel_bridge_add_typed(struct drm_panel *panel,
+ 		return (void *)panel_bridge;
+ 
+ 	panel_bridge->connector_type = connector_type;
+-	panel_bridge->panel = panel;
++	panel_bridge->panel = drm_panel_get(panel);
+ 
+ 	panel_bridge->bridge.of_node = panel->dev->of_node;
+ 	panel_bridge->bridge.ops = DRM_BRIDGE_OP_MODES;
+@@ -316,6 +316,7 @@ EXPORT_SYMBOL(drm_panel_bridge_add_typed);
+ void drm_panel_bridge_remove(struct drm_bridge *bridge)
  {
-+	drm_panel_get(panel);
- 	mutex_lock(&panel_lock);
- 	list_add_tail(&panel->list, &panel_list);
- 	mutex_unlock(&panel_lock);
-@@ -98,6 +99,7 @@ void drm_panel_remove(struct drm_panel *panel)
- 	mutex_lock(&panel_lock);
- 	list_del_init(&panel->list);
- 	mutex_unlock(&panel_lock);
+ 	struct panel_bridge *panel_bridge;
++	struct drm_panel *panel;
+ 
+ 	if (!bridge)
+ 		return;
+@@ -326,10 +327,12 @@ void drm_panel_bridge_remove(struct drm_bridge *bridge)
+ 	}
+ 
+ 	panel_bridge = drm_bridge_to_panel_bridge(bridge);
++	panel = panel_bridge->panel;
+ 
+ 	drm_bridge_remove(bridge);
+ 	/* TODO remove this after reworking panel_bridge lifetime */
+-	devm_drm_put_bridge(panel_bridge->panel->dev, bridge);
++	devm_drm_put_bridge(panel->dev, bridge);
 +	drm_panel_put(panel);
  }
- EXPORT_SYMBOL(drm_panel_remove);
+ EXPORT_SYMBOL(drm_panel_bridge_remove);
  
+@@ -357,11 +360,14 @@ EXPORT_SYMBOL(drm_panel_bridge_set_orientation);
+ static void devm_drm_panel_bridge_release(struct device *dev, void *res)
+ {
+ 	struct drm_bridge *bridge = *(struct drm_bridge **)res;
++	struct panel_bridge *panel_bridge;
+ 
+ 	if (!bridge)
+ 		return;
+ 
++	panel_bridge = drm_bridge_to_panel_bridge(bridge);
+ 	drm_bridge_remove(bridge);
++	drm_panel_put(panel_bridge->panel);
+ }
+ 
+ /**
 
 -- 
 2.54.0
