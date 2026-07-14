@@ -1,190 +1,171 @@
-Return-Path: <linux-mips+bounces-15876-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-15877-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id 42QNC2bIVWoXtAAAu9opvQ
-	(envelope-from <linux-mips+bounces-15876-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Tue, 14 Jul 2026 07:25:58 +0200
+	id 7BP3DoThVWrWugAAu9opvQ
+	(envelope-from <linux-mips+bounces-15877-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Tue, 14 Jul 2026 09:13:08 +0200
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id 249F57511E4
-	for <lists+linux-mips@lfdr.de>; Tue, 14 Jul 2026 07:25:57 +0200 (CEST)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2FDB0751C0D
+	for <lists+linux-mips@lfdr.de>; Tue, 14 Jul 2026 09:13:07 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=intel.com header.s=Intel header.b=R4QERsU8;
-	spf=pass (mail.lfdr.de: domain of "linux-mips+bounces-15876-lists+linux-mips=lfdr.de@vger.kernel.org" designates 104.64.211.4 as permitted sender) smtp.mailfrom="linux-mips+bounces-15876-lists+linux-mips=lfdr.de@vger.kernel.org";
-	dmarc=pass (policy=none) header.from=intel.com;
+	dkim=pass header.d=arndb.de header.s=fm1 header.b=b+Mk3si1;
+	dkim=pass header.d=messagingengine.com header.s=fm2 header.b="b hfPs3j";
+	spf=pass (mail.lfdr.de: domain of "linux-mips+bounces-15877-lists+linux-mips=lfdr.de@vger.kernel.org" designates 2600:3c09:e001:a7::12fc:5321 as permitted sender) smtp.mailfrom="linux-mips+bounces-15877-lists+linux-mips=lfdr.de@vger.kernel.org";
+	dmarc=pass (policy=none) header.from=arndb.de;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 427DC300139C
-	for <lists+linux-mips@lfdr.de>; Tue, 14 Jul 2026 05:25:54 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 9F13F3008C07
+	for <lists+linux-mips@lfdr.de>; Tue, 14 Jul 2026 07:13:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2AA51327BFA;
-	Tue, 14 Jul 2026 05:25:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 926303EB7F0;
+	Tue, 14 Jul 2026 07:13:04 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
+Received: from fhigh-b5-smtp.messagingengine.com (fhigh-b5-smtp.messagingengine.com [202.12.124.156])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7539320CD3;
-	Tue, 14 Jul 2026 05:25:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9DA923033E6;
+	Tue, 14 Jul 2026 07:13:02 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784006752; cv=none; b=ZsdaBOqxziHjj3G8lc5Jm/zdmhYR6ayFWvYrd7v1cNY3/0mz7CDDmg1k8ARttkASCK4+tCBtoJyo9CD+Fa5gtF2NWGbe5yhaXgVuCxd56WqW1HBDowRtPKLvf/D6Su51FIfq+cinIgKag9nRj+8+W6EXNPHjLHdIL/c2rxWaNE0=
+	t=1784013184; cv=none; b=aDQPq1T9FJD2ODUkL43CI6Z2ofPwX9cdsm9ts6HYgHgxTWal+J88X4uq5K4cNvET/VuquYX3yDW6U2b+C93tsTiv0EqHjK6M0sdwXvIXy7clEdy9lKwtcfk9n58b4+hdG3sNUbIeTKX9bfJlizLN2CotKO/Yi3Dpo2zE27s/3mU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784006752; c=relaxed/simple;
-	bh=nvUp6ixQ/4WO1OpQur/BaHDEnmJshINP5l4vlNHwZLQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=E1ArbopyttnJ6Ly3ecIHSD4RE1DQ1mk216QJZo20YKraBnyS0we+FB4xKcu5/fsZWgWrLBekds7Ln2CTDo55UCx9qvP+lG2KOeKmjdnnfzVepUlpaWeiLfJxzkHTT1gtDBkxWzofRq3t/iDg+hGPvzt2ehhmAsStcQvU3schr0A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=R4QERsU8; arc=none smtp.client-ip=198.175.65.19
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1784006750; x=1815542750;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=nvUp6ixQ/4WO1OpQur/BaHDEnmJshINP5l4vlNHwZLQ=;
-  b=R4QERsU8RS0GjehHw65G9hMQISGMMXokVI4xaMMSs+bOu9blneZkwnd6
-   QNmnoujEGVfkWnB8P4azE3YuxkHgmiQaqdIKPPC+/yntrdKiQ/qu4AJDn
-   y1WHUr0pekFjz0MzMtBf+fFxEWNcbPj03PVGoHcSDGALkVQ8AofMev/C+
-   W+d7bfCzZo9ary/yp82+PeJXpkMjkf86la1/3alb0xl0VwceUvzAOaEwB
-   FcFbnSjW4AZqWxU5a4Z4o6Mdu4Z/5GbISn56zMFBFCpdglX7ojsWKG/Gd
-   ddpk41P0ipGOceLPeJMScfSSypXynLSp3MxJhlwk0+mBpcJ8S1y1Bki0Y
-   g==;
-X-CSE-ConnectionGUID: 8abq/H3/RguevLrjiOw64Q==
-X-CSE-MsgGUID: w6gzDah7T9mHmJ2ILezqrQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11846"; a="84583596"
-X-IronPort-AV: E=Sophos;i="6.25,163,1779174000"; 
-   d="scan'208";a="84583596"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jul 2026 22:25:48 -0700
-X-CSE-ConnectionGUID: b7VVUikhRGC8aHkOs9IFiw==
-X-CSE-MsgGUID: Jy/VK4toSbSQTUtrikKzFA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.25,163,1779174000"; 
-   d="scan'208";a="280169706"
-Received: from fdefranc-mobl3.ger.corp.intel.com (HELO localhost) ([10.245.246.248])
-  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jul 2026 22:25:36 -0700
-Date: Tue, 14 Jul 2026 08:25:32 +0300
-From: Tony Lindgren <tony.lindgren@linux.intel.com>
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc: Tony Lindgren <tony@atomide.com>,
-	Praveen Talari <praveen.talari@oss.qualcomm.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Jiri Slaby <jirislaby@kernel.org>,
-	Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-	Matthias Brugger <matthias.bgg@gmail.com>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	Richard Genoud <richard.genoud@bootlin.com>,
-	Nicolas Ferre <nicolas.ferre@microchip.com>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	Claudiu Beznea <claudiu.beznea@tuxon.dev>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Peter Griffin <peter.griffin@linaro.org>,
-	Alim Akhtar <alim.akhtar@samsung.com>,
-	Orson Zhai <orsonzhai@gmail.com>,
-	Baolin Wang <baolin.wang@linux.alibaba.com>,
-	Chunyan Zhang <zhang.lyra@gmail.com>,
-	Patrice Chotard <patrice.chotard@foss.st.com>,
-	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-	Alexandre Torgue <alexandre.torgue@foss.st.com>,
-	Peter Korsgaard <jacmet@sunsite.dk>,
-	Michal Simek <michal.simek@amd.com>,
-	Aaro Koskinen <aaro.koskinen@iki.fi>,
-	Janusz Krzysztofik <jmkrzyszt@gmail.com>,
-	Russell King <linux@armlinux.org.uk>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	bjorn.andersson@oss.qualcomm.com,
-	Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>,
-	linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
-	linux-samsung-soc@vger.kernel.org,
-	linux-stm32@st-md-mailman.stormreply.com,
-	linux-omap@vger.kernel.org, linux-mips@vger.kernel.org,
-	Mukesh Kumar Savaliya <mukesh.savaliya@oss.qualcomm.com>,
-	aniket.randive@oss.qualcomm.com,
-	chandana.chiluveru@oss.qualcomm.com
-Subject: Re: [PATCH 0/6] tty: serial: propagate errors from uart_ops.pm
- callback
-Message-ID: <alXITHzkv4TlvwcT@tlindgre-MOBL1>
-References: <20260709-add_return_check_for_uart_change_pm-v1-0-e85c6ffa8ec4@oss.qualcomm.com>
- <ak9OPNcVAhkfxHvZ@ashevche-desk.local>
- <20260710043746.GM30058@atomide.com>
- <alSv8BPCOiyKvOI2@tlindgre-MOBL1>
- <alTKNEk97jkVGfML@ashevche-desk.local>
+	s=arc-20240116; t=1784013184; c=relaxed/simple;
+	bh=hjMnmBy5eiiroY+WM19jerjrD4NSfqSbySltKRYbT18=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=jRyCofIY8n8TmgVi6hIXg6n0ZQLoBrvluEOev/q/93JmTjrMDazStTMzknUEGsBCp3Q4y7YhAZ57IN8/CPJ/pzS+kzRtaZ4Cwh5Ud3s4+mn2CJVz5DdjjIUcWhQZVfc2slZTnDiW5dr1MWkt71J46IaUjYooN/r5LEE4CcJQV3c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=b+Mk3si1; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=bhfPs3jA; arc=none smtp.client-ip=202.12.124.156
+Received: from phl-compute-04.internal (phl-compute-04.internal [10.202.2.44])
+	by mailfhigh.stl.internal (Postfix) with ESMTP id 77AD47A0145;
+	Tue, 14 Jul 2026 03:13:01 -0400 (EDT)
+Received: from phl-imap-05 ([10.202.2.95])
+  by phl-compute-04.internal (MEProxy); Tue, 14 Jul 2026 03:13:01 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm1; t=1784013181;
+	 x=1784099581; bh=U2JleBMEyaN4TrOpJxl78gYeo4UTolhpSNMUutN3PbQ=; b=
+	b+Mk3si1dnGvDUxCX9dTarczfqQV3U7abc1fyV2eDgAIbKaUw3MjuSXk2Oqq7tmY
+	UpIWr83ATb+ggnNsoltuRUOSQYeYEeVOHoz58QR6l69cZqBJNxjyrMr3Z8lAR7eO
+	MFAAoSnYXp3GU/GafGxwRrWxxjwkhI86zUXTZTqu1nyG4WMOvn3W85pdzf0TFYKa
+	dx1NNAokYbrd9ijeY22UPlKYfeTbl5yMKPAeRnNDCWFlAlLyGD4QU6qj8ay9804a
+	JMbcyyMN6j9BmM4Y5QrQDhUXO+4GCGEeuJq/GYge/YAvIQxu+xfc6J12teCW6l+D
+	/DHvHQ6ZbYdAjQ5EsQZCtw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1784013181; x=
+	1784099581; bh=U2JleBMEyaN4TrOpJxl78gYeo4UTolhpSNMUutN3PbQ=; b=b
+	hfPs3jAdSBOSwUdaX0N7VbhDiPF8bSclHADKfVOLu6xGnOFzGNs5+B5UnMIQg6r3
+	YqnZDfDfjg4vQghwz6hERGqzCedtPGWn2I/9bCF0WX80CQ9wwTZ1qylm9yWY491n
+	F+2HikMrt6YL7iFpxnqjjpWdC7KN+vqB222T3ZdWnaj37Z389p7GoVp5oWVusilN
+	btuiMGhNgKtSy5OppNp764PmYtbw3XbhczRKw5UkHuXI9DOYJPp7LPz8A42icZL3
+	ToHG8ZnHlM/KsLf77njfG3c/kpcPGGdRVpAq12tx3w50f866aGA6+fd1/2zH50f7
+	wFWiriK+5mu3gooWbEQXQ==
+X-ME-Sender: <xms:e-FValZnF0Gh6-pAID_JiLxPlTDjBGclM6GAV3G27FnNXk-IpL90Eg>
+    <xme:e-FVanMXpXC3qqZNUcvWp7yEN8J7RcjhXA-2zOnvib5prccOgarvRWUCASpm_We4P
+    yb2h3rl5oXJs_Ot5cs1dErZtofN0Hlui9IuH5qEDGf3S3Y1npf8DT0>
+X-ME-Proxy-Cause: dmFkZTEi623NeAIToclec5fEpZtjqETttKPLxvck5S7cX8ia4shMWBc5B04a00kNzETMhG
+    nd8QZoxSuQqg7t9Lydv4FxzZSEPTOxk12aNxSKOoFr8X/jY9bz1l2ODa4aRqaT1RVYvKcQ
+    XxIM/PA7ZmApHQNm17gbEVR51QX4FHkwHHLN3uDYfaNEFMnvcj01jbxs/9NRZGYpones3u
+    b6rYdbijILeHfskKZWrZo2NNC+vK8LvenPGViV5grJFIWAjmoWKnWboj1Q7en0ruyiKaNd
+    Xj1vnDHRJfz5hZo2LJcQUP9TzxdEsmVLW0LMiySucSZVvHlawGdj0/xaB9FbPkk1YbjJpO
+    oXt7Ggj0nQHoVszgKLkHzX7luk1W+CiwVOazhwL5uk2ETUvbcfA5J4MOxeM0q/RkWYFQ9L
+    Cyul8AJvkw/t3xrpM0w4ur3qe8mmQozCI9nKwHmCR9wxr4lLVqNfWA896ccQv/E1gcEzzT
+    iPqBxORi1I1T3QskB63RB5IFIlQAYC0GtoqHrnMqNgwl4BJ1gkckjEtv0RIHyKA2AXQx0f
+    MsrxvKjJT4FUiec7RvpZg89kjBNFWNoQGX5DFrteQzwzeyR1aTnxs7fdSJYqIYC9IrVXNZ
+    v+C+24/ozwlT37VRZ6OdZA7LLPmbLRPtmj3P35V88MnbZE0MiTUXBibyX8JA
+X-ME-Proxy: <xmx:e-FVakTFdwwuk9BuBWXPFofooOE_sma9W5OC_u-qDa5tc3ti212pbg>
+    <xmx:e-FVap7n6Oe8ZBc0gMm-Kh4GWMsLF8uSxoiT6U4_mEM0EssT5lat9w>
+    <xmx:e-FVahWgg1FTAP2U9xYwa12ptUfo8srFJhw05lTZ0nCrRO3NDd93zg>
+    <xmx:e-FVan-FpBLhrhR3yWTq29pa26fYrkkP4IuzjJdcha-QFXqVcufTKA>
+    <xmx:feFVagmAILd35LAyioF_Mgc-izHf2yIj0Bq0ei8Aw_o1BO44NB9ATcaK>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id D17C4182007E; Tue, 14 Jul 2026 03:12:59 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <alTKNEk97jkVGfML@ashevche-desk.local>
+X-ThreadId: AR7AWmfjl_6V
+Date: Tue, 14 Jul 2026 09:12:39 +0200
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Dmitry Torokhov" <dmitry.torokhov@gmail.com>,
+ =?UTF-8?Q?Rafa=C5=82_Mi=C5=82ecki?= <zajec5@gmail.com>,
+ =?UTF-8?Q?Michael_B=C3=BCsch?= <m@bues.ch>,
+ "Hauke Mehrtens" <hauke@hauke-m.de>,
+ "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
+ "Waldemar Brodkorb" <wbx@openadk.org>
+Cc: "Bartosz Golaszewski" <brgl@kernel.org>, linux-wireless@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
+ "Bartosz Golaszewski" <bartosz.golaszewski@oss.qualcomm.com>
+Message-Id: <4a8d64e1-5f8c-4ac0-afb0-2d68c3f53ada@app.fastmail.com>
+In-Reply-To: <20260713-b4-bcm47xx-swnode-v2-0-2b879f0c193c@gmail.com>
+References: <20260713-b4-bcm47xx-swnode-v2-0-2b879f0c193c@gmail.com>
+Subject: Re: [PATCH v2 0/3] MIPS: BCM47XX: convert buttons to software nodes
+Content-Type: text/plain
+Content-Transfer-Encoding: 7bit
 X-Rspamd-Action: no action
-X-Spamd-Result: default: False [-3.16 / 15.00];
-	WHITELIST_SPF_DKIM(-3.00)[intel.com:d:+,kernel.org:s:+];
+X-Spamd-Result: default: False [-0.65 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
-	MID_RHS_NOT_FQDN(0.50)[];
-	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
-	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
+	DMARC_POLICY_ALLOW(-0.50)[arndb.de,none];
+	R_DKIM_ALLOW(-0.20)[arndb.de:s=fm1,messagingengine.com:s=fm2];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
+	XM_UA_NO_VERSION(0.01)[];
+	FORGED_RECIPIENTS(0.00)[m:dmitry.torokhov@gmail.com,m:zajec5@gmail.com,m:m@bues.ch,m:hauke@hauke-m.de,m:tsbogend@alpha.franken.de,m:wbx@openadk.org,m:brgl@kernel.org,m:linux-wireless@vger.kernel.org,m:linux-kernel@vger.kernel.org,m:linux-mips@vger.kernel.org,m:bartosz.golaszewski@oss.qualcomm.com,m:dmitrytorokhov@gmail.com,s:lists@lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-15876-lists,linux-mips=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-15877-lists,linux-mips=lfdr.de];
+	FORGED_SENDER(0.00)[arnd@arndb.de,linux-mips@vger.kernel.org];
 	MIME_TRACE(0.00)[0:+];
-	FORGED_RECIPIENTS(0.00)[m:andriy.shevchenko@linux.intel.com,m:tony@atomide.com,m:praveen.talari@oss.qualcomm.com,m:gregkh@linuxfoundation.org,m:jirislaby@kernel.org,m:ilpo.jarvinen@linux.intel.com,m:matthias.bgg@gmail.com,m:angelogioacchino.delregno@collabora.com,m:richard.genoud@bootlin.com,m:nicolas.ferre@microchip.com,m:alexandre.belloni@bootlin.com,m:claudiu.beznea@tuxon.dev,m:krzk@kernel.org,m:peter.griffin@linaro.org,m:alim.akhtar@samsung.com,m:orsonzhai@gmail.com,m:baolin.wang@linux.alibaba.com,m:zhang.lyra@gmail.com,m:patrice.chotard@foss.st.com,m:mcoquelin.stm32@gmail.com,m:alexandre.torgue@foss.st.com,m:jacmet@sunsite.dk,m:michal.simek@amd.com,m:aaro.koskinen@iki.fi,m:jmkrzyszt@gmail.com,m:linux@armlinux.org.uk,m:tsbogend@alpha.franken.de,m:bjorn.andersson@oss.qualcomm.com,m:konrad.dybcio@oss.qualcomm.com,m:linux-kernel@vger.kernel.org,m:linux-serial@vger.kernel.org,m:linux-arm-kernel@lists.infradead.org,m:linux-mediatek@lists.infradead.org,m:linux-arm-msm@vger.kernel.org,
- m:linux-samsung-soc@vger.kernel.org,m:linux-stm32@st-md-mailman.stormreply.com,m:linux-omap@vger.kernel.org,m:linux-mips@vger.kernel.org,m:mukesh.savaliya@oss.qualcomm.com,m:aniket.randive@oss.qualcomm.com,m:chandana.chiluveru@oss.qualcomm.com,m:matthiasbgg@gmail.com,m:zhanglyra@gmail.com,m:mcoquelinstm32@gmail.com,s:lists@lfdr.de];
-	FORGED_SENDER(0.00)[tony.lindgren@linux.intel.com,linux-mips@vger.kernel.org];
-	RCPT_COUNT_TWELVE(0.00)[41];
+	FREEMAIL_TO(0.00)[gmail.com,bues.ch,hauke-m.de,alpha.franken.de,openadk.org];
 	FORWARDED(0.00)[lists@lfdr.de];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	FROM_HAS_DN(0.00)[];
-	DKIM_TRACE(0.00)[intel.com:+];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	TO_DN_SOME(0.00)[];
 	FORGED_SENDER_FORWARDING(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
+	RCVD_COUNT_FIVE(0.00)[6];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[tony.lindgren@linux.intel.com,linux-mips@vger.kernel.org];
-	FREEMAIL_CC(0.00)[atomide.com,oss.qualcomm.com,linuxfoundation.org,kernel.org,linux.intel.com,gmail.com,collabora.com,bootlin.com,microchip.com,tuxon.dev,linaro.org,samsung.com,linux.alibaba.com,foss.st.com,sunsite.dk,amd.com,iki.fi,armlinux.org.uk,alpha.franken.de,vger.kernel.org,lists.infradead.org,st-md-mailman.stormreply.com];
+	FROM_NEQ_ENVFROM(0.00)[arnd@arndb.de,linux-mips@vger.kernel.org];
+	DKIM_TRACE(0.00)[arndb.de:+,messagingengine.com:+];
 	ALIAS_RESOLVED(0.00)[];
-	TAGGED_RCPT(0.00)[linux-mips];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
-	MISSING_XM_UA(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[intel.com:email,intel.com:dkim,linux.intel.com:from_mime,vger.kernel.org:from_smtp,sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns]
+	RCPT_COUNT_SEVEN(0.00)[11];
+	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
+	TAGGED_RCPT(0.00)[linux-mips];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,vger.kernel.org:from_smtp,app.fastmail.com:mid,messagingengine.com:dkim]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 249F57511E4
+X-Rspamd-Queue-Id: 2FDB0751C0D
 
-On Mon, Jul 13, 2026 at 02:21:24PM +0300, Andy Shevchenko wrote:
-> On Mon, Jul 13, 2026 at 12:29:20PM +0300, Tony Lindgren wrote:
-> > On Fri, Jul 10, 2026 at 07:37:46AM +0300, Tony Lindgren wrote:
-> > > * Andy Shevchenko <andriy.shevchenko@linux.intel.com> [260709 10:38]:
-> > > > Note, that Tony (you have him in the Cc list) did a lot for some corner cases
-> > > > with that and we still have them IIRC. Tony, do you know what is the state of
-> > > > affairs with runtime PM for UART?
-> > > 
-> > > The RX side of things should work for hardware that can wake up to an incoming
-> > > event. Linux for sure needs more work to properly handle the various corner case
-> > > TX wake-up of a PM runtime idled UART. I'm mostly offline until Monday though,
-> > > will check my notes for more details next week.
-> > 
-> > For the TX side handling, my understanding is that at least uart_update_mctrl()
-> > needs to call PM runtime resume and put autosuspend. And we should assume
-> > uart_update_mctrl() can sleep to resume the PM runtime suspended serial port.
-> > 
-> > For drivers, the callers of uport->ops->get/set_mctrl() should be updated
-> > to use uart_update_mctrl() where possible. And the remaining ones that cannot
-> > sleep should be fixed so they can sleep or have PM runtime disabled.
-> > 
-> > Anybody have better ideas?
-> 
-> I don't, but the above sounds like a plan. Is it a big task? I can help with
-> something in that area, perhaps Ilpo also would be able to participate.
+On Mon, Jul 13, 2026, at 23:58, Dmitry Torokhov wrote:
+> This series converts the legacy gpio-keys platform device on BCM47XX
+> boards to use software nodes and static properties.
+>
+> To do this properly without relying on legacy name-based matching
+> (which is being removed from gpiolib), we introduce and register
+> software nodes for the underlying GPIO controllers (BCMA and SSB)
+> and reference them in the button properties.
+>
+> The first two patches add the software nodes to bcma-gpio and
+> ssb-gpio respectively. The third patch performs the conversion
+> for the BCM47XX buttons.
+>
+> Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+> ---
+> As Johannes mentioned on v1 this best should go through MIPS tree.
 
-Not sure how much changes are involved. Maybe it's safer to set up a
-runtime PM enabled wrapper for uart_update_mctrl() and then start updating
-the uart_update_mctrl() and get/set_mctrl() callers one at a time to make
-them runtime PM aware.
+Adding Waldemar to Cc. He has recently done some work to
+get this platform working again in FreeWRT and should
+be able to test your patches on hardware.
+
+       Arnd
 
