@@ -1,50 +1,50 @@
-Return-Path: <linux-mips+bounces-15902-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-15903-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id KOQNJcR5VmqM6gAAu9opvQ
-	(envelope-from <linux-mips+bounces-15902-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Tue, 14 Jul 2026 20:02:44 +0200
+	id bDxQIPt/Vmot7gAAu9opvQ
+	(envelope-from <linux-mips+bounces-15903-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Tue, 14 Jul 2026 20:29:15 +0200
 X-Original-To: lists+linux-mips@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 15580757B1B
-	for <lists+linux-mips@lfdr.de>; Tue, 14 Jul 2026 20:02:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 225AE757D64
+	for <lists+linux-mips@lfdr.de>; Tue, 14 Jul 2026 20:29:15 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=arm.com header.s=foss header.b=Sy24kfg6;
-	spf=pass (mail.lfdr.de: domain of "linux-mips+bounces-15902-lists+linux-mips=lfdr.de@vger.kernel.org" designates 2600:3c0a:e001:db::12fc:5321 as permitted sender) smtp.mailfrom="linux-mips+bounces-15902-lists+linux-mips=lfdr.de@vger.kernel.org";
+	dkim=pass header.d=arm.com header.s=foss header.b=qQBkYOYv;
+	spf=pass (mail.lfdr.de: domain of "linux-mips+bounces-15903-lists+linux-mips=lfdr.de@vger.kernel.org" designates 2600:3c0a:e001:db::12fc:5321 as permitted sender) smtp.mailfrom="linux-mips+bounces-15903-lists+linux-mips=lfdr.de@vger.kernel.org";
 	dmarc=pass (policy=none) header.from=arm.com;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 95DDE30376A2
-	for <lists+linux-mips@lfdr.de>; Tue, 14 Jul 2026 17:59:18 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 58CB43035AA4
+	for <lists+linux-mips@lfdr.de>; Tue, 14 Jul 2026 18:29:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4D4CF335555;
-	Tue, 14 Jul 2026 17:59:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AEB8B331A61;
+	Tue, 14 Jul 2026 18:29:11 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 189CC417BEA;
-	Tue, 14 Jul 2026 17:59:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B47132DB79F;
+	Tue, 14 Jul 2026 18:29:09 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784051957; cv=none; b=DtRMVCpMq9Id/SmpEchUvr8TikKbnWj3p5FSN4Qemo5PDJ9fxlfaRkGM4iiWKRWiMbY4x3bHPqzGtB+Kj4ct4i0rFwBSyAzL9d1kMKG9J8+elMhcVaU1dGlwyjVOBupdmFhumWtum+oRBU902a6Ot2EXIOUure9XMBbleFR9cOY=
+	t=1784053751; cv=none; b=Z79FbCgLCneGN+T6qt1sWY2YgbPGnwM9kQvPPLdDzPCnFYeV8AIhy8Eno80+TvqkYd9fsm5mAkr5XeAYIyljrJXUIXDnlXyvWCaHiAsUWQlv0ieFAXVe1T872jrwjaQP0hwfqRjY1nNQdE+xjRVTV4zAttksjxuqKKoDl/jidAU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784051957; c=relaxed/simple;
-	bh=YLSO3cj4uznp59HTo6K3Y3qLIJ+ISsuvzTFqOw8DO8w=;
+	s=arc-20240116; t=1784053751; c=relaxed/simple;
+	bh=Q1RaqZFJWDyzCpzM1YydwuIkdx6+prWZv8uRlRqjdPI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=oeQoaLdyCMb5JG3lyYNQI6W2JQG4BPLy1ZexAcE4X+NLl2Wk+hhE5zGSngzNn8BdytCjr2RrUuE1HXgGnEnGaNW+J+yGncxB9s+dqNVeoIluCSDBD5S7Z5O4aYpiHGZKmQXfgcI16TaF1H+oUAHJV23y/oTxSWq9mbjiGGZ1Phk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=Sy24kfg6; arc=none smtp.client-ip=217.140.110.172
+	 Content-Type:Content-Disposition:In-Reply-To; b=Zdz+GkH3ONs/ics7G0RP/NrhsM3l7m7B4A6IwD+sw04brI6m8Cp2KLcYJVHE3Wr4FnPo7i0oSbz3GJe0y8f5yhoDhCnIhfUlBGiAuQT/L3uDvunxec0bxzcnIL5QzoEnGFAPLQ/bMx+DqPjmIsDqGTsdsmwWFpZSxyv6jDT9S+M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=qQBkYOYv; arc=none smtp.client-ip=217.140.110.172
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 27E89339;
-	Tue, 14 Jul 2026 10:59:06 -0700 (PDT)
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id CECC5339;
+	Tue, 14 Jul 2026 11:29:04 -0700 (PDT)
 Received: from e129823.arm.com (e129823.arm.com [10.2.213.3])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 13F4F3F915;
-	Tue, 14 Jul 2026 10:58:59 -0700 (PDT)
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B86773F7D8;
+	Tue, 14 Jul 2026 11:28:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
-	t=1784051950; bh=YLSO3cj4uznp59HTo6K3Y3qLIJ+ISsuvzTFqOw8DO8w=;
+	t=1784053749; bh=Q1RaqZFJWDyzCpzM1YydwuIkdx6+prWZv8uRlRqjdPI=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Sy24kfg6zd8pNJNRop/ip6vK3z44QuvSe+ei7yBDMgOJ+AmuCVqSqQsYm6AbuGoqC
-	 lZJ+hB5IynonlF0Xd5xFhRT6j05I3fGK7eqV9iwp4S7UfNaW857WlXcvL4lT3vU6jA
-	 Qslx6H13Q5aAiK/4ThVrFPZNAc560M7EpnY0APes=
-Date: Tue, 14 Jul 2026 18:58:57 +0100
+	b=qQBkYOYvll6kV7ChEqyEs9q4KbHl0/kv64+7ai5nhYymyDIN8BvOvG1HzfhI1sCcI
+	 qnEtCqga3FrW8+7FXBrXN5emMU1ez24iSDr20rEKRSLvtMZ9oCz/5VlGhBuCnHlKFi
+	 ME8BD+bOTZVCgK3PWVNAk87A3Vsa2vT+e5mfIs0s=
+Date: Tue, 14 Jul 2026 19:28:56 +0100
 From: Yeoreum Yun <yeoreum.yun@arm.com>
 To: "David Hildenbrand (Arm)" <david@kernel.org>
 Cc: Yeoreum Yun <yeoreum.yun@arm.com>, Dave Hansen <dave.hansen@intel.com>,
@@ -85,8 +85,9 @@ Cc: Yeoreum Yun <yeoreum.yun@arm.com>, Dave Hansen <dave.hansen@intel.com>,
 	stefan.kristiansson@saunalahti.fi
 Subject: Re: [RFC PATCH 10/34] x86: mm: carve out the generic compile-time
  folded pgtable case in effective_prot()
-Message-ID: <alZ44XdgTEVFX6jU@e129823.arm.com>
-References: <3ea30f8a-bb29-4bf5-8400-1c4840d46a88@kernel.org>
+Message-ID: <alZ_6HFc56zC7tt0@e129823.arm.com>
+References: <32d459d1-ad19-4baf-bbb1-0565458001d2@intel.com>
+ <3ea30f8a-bb29-4bf5-8400-1c4840d46a88@kernel.org>
  <7e84b200-25eb-43a6-b5e2-5f27f2d82a77@intel.com>
  <31988089-095a-4eed-b5e2-c677c70f79f6@kernel.org>
  <14e250db-1641-4085-8d13-02f819657d5f@intel.com>
@@ -94,8 +95,7 @@ References: <3ea30f8a-bb29-4bf5-8400-1c4840d46a88@kernel.org>
  <alYgMxKqRnF6_X0A@e129823.arm.com>
  <6df814c9-405c-48d8-96ea-929c4b28949b@intel.com>
  <alZe-Cu7yQw9qRXU@e129823.arm.com>
- <alZo9feSrSB_StfO@e129823.arm.com>
- <7cff02d6-d3ce-4315-b667-34911fc6f321@kernel.org>
+ <2d51a1ad-85be-46bf-ac36-18eca199b449@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -104,7 +104,7 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <7cff02d6-d3ce-4315-b667-34911fc6f321@kernel.org>
+In-Reply-To: <2d51a1ad-85be-46bf-ac36-18eca199b449@kernel.org>
 X-Rspamd-Action: no action
 X-Spamd-Result: default: False [-0.66 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
@@ -115,20 +115,21 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FROM_HAS_DN(0.00)[];
 	FREEMAIL_CC(0.00)[arm.com,intel.com,lists.infradead.org,vger.kernel.org,lists.linux.dev,kernel.org,kvack.org,googlegroups.com,lists.linux-m68k.org,armlinux.org.uk,linux-foundation.org,oracle.com,gmail.com,xen0n.name,loongson.cn,aosc.io,alpha.franken.de,ziepe.ca,arndb.de,soleen.com,linux.ibm.com,linux.alibaba.com,brainfault.org,linux.dev,dabbelt.com,eecs.berkeley.edu,ghiti.fr,linux.intel.com,infradead.org,redhat.com,alien8.de,zytor.com,cmpxchg.org,tencent.com,google.com,os.amperecomputing.com,zeniv.linux.org.uk,siemens-energy.com,iscas.ac.cn,pigmoral.tech,linutronix.de,huawei.com,gaisler.com,suse.com,linux-m68k.org,southpole.se,saunalahti.fi];
-	TAGGED_FROM(0.00)[bounces-15902-lists,linux-mips=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-15903-lists,linux-mips=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
+	FROM_HAS_DN(0.00)[];
 	FORGED_RECIPIENTS(0.00)[m:david@kernel.org,m:yeoreum.yun@arm.com,m:dave.hansen@intel.com,m:linux-arm-kernel@lists.infradead.org,m:linux-kernel@vger.kernel.org,m:loongarch@lists.linux.dev,m:linux-mips@vger.kernel.org,m:linux-arch@vger.kernel.org,m:kvm-riscv@lists.infradead.org,m:linux-riscv@lists.infradead.org,m:x86@kernel.org,m:linux-mm@kvack.org,m:kasan-dev@googlegroups.com,m:linux-csky@vger.kernel.org,m:linux-m68k@lists.linux-m68k.org,m:linux-openrisc@vger.kernel.org,m:linux@armlinux.org.uk,m:akpm@linux-foundation.org,m:ankur.a.arora@oracle.com,m:rppt@kernel.org,m:linmag7@gmail.com,m:chleroy@kernel.org,m:klarasmodin@gmail.com,m:chenhuacai@kernel.org,m:kernel@xen0n.name,m:kas@kernel.org,m:zhangtianyang@loongson.cn,m:wangyuli@aosc.io,m:tsbogend@alpha.franken.de,m:ljs@kernel.org,m:jgg@ziepe.ca,m:catalin.marinas@arm.com,m:will@kernel.org,m:arnd@arndb.de,m:ryan.roberts@arm.com,m:pasha.tatashin@soleen.com,m:rmclure@linux.ibm.com,m:baolin.wang@linux.alibaba.com,m:tj@kernel.org,m:kevin.br
  odsky@arm.com,m:anup@brainfault.org,m:atish.patra@linux.dev,m:pjw@kernel.org,m:palmer@dabbelt.com,m:aou@eecs.berkeley.edu,m:alex@ghiti.fr,m:dave.hansen@linux.intel.com,m:luto@kernel.org,m:peterz@infradead.org,m:tglx@kernel.org,m:mingo@redhat.com,m:bp@alien8.de,m:hpa@zytor.com,m:hannes@cmpxchg.org,m:mhocko@kernel.org,m:qi.zheng@linux.dev,m:shakeel.butt@linux.dev,m:kasong@tencent.com,m:baohua@kernel.org,m:axelrasmussen@google.com,m:yuanchu@google.com,m:weixugc@google.com,m:ryabinin.a.a@gmail.com,m:glider@google.com,m:andreyknvl@gmail.com,m:dvyukov@google.com,m:vincenzo.frascino@arm.com,m:anshuman.khandual@arm.com,m:yang@os.amperecomputing.com,m:chaitanyas.prakash@arm.com,m:ardb@kernel.org,m:guoren@kernel.org,m:yang.li85200@gmail.com,m:viro@zeniv.linux.org.uk,m:dinguyen@kernel.org,m:schuster.simon@siemens-energy.com,m:wangruikang@iscas.ac.cn,m:junhui.liu@pigmoral.tech,m:muchun.song@linux.dev,m:vishal.moola@gmail.com,m:namcao@linutronix.de,m:pavel@kernel.org,m:djbw@kernel.org,m:yu-cheng
  .yu@intel.com,m:baolu.lu@linux.intel.com,m:Jonathan.Cameron@huawei.com,m:coxu@redhat.com,m:andreas@gaisler.com,m:liam@infradead.org,m:vbabka@kernel.org,m:surenb@google.com,m:mhocko@suse.com,m:geert@linux-m68k.org,m:shorne@gmail.com,m:jonas@southpole.se,m:stefan.kristiansson@saunalahti.fi,s:lists@lfdr.de];
-	FORWARDED(0.00)[lists@lfdr.de];
+	MIME_TRACE(0.00)[0:+];
 	DKIM_TRACE(0.00)[arm.com:+];
-	FORGED_SENDER_MAILLIST(0.00)[];
+	FORWARDED(0.00)[lists@lfdr.de];
 	FORGED_SENDER(0.00)[yeoreum.yun@arm.com,linux-mips@vger.kernel.org];
+	FORGED_SENDER_MAILLIST(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
 	MISSING_XM_UA(0.00)[];
+	TO_DN_SOME(0.00)[];
 	FORGED_SENDER_FORWARDING(0.00)[];
 	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
@@ -136,62 +137,47 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
 	RCPT_COUNT_GT_50(0.00)[96];
 	MID_RHS_MATCH_FROMTLD(0.00)[];
-	MIME_TRACE(0.00)[0:+];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
 	ALIAS_RESOLVED(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-mips];
-	TO_DN_SOME(0.00)[]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[e129823.arm.com:mid,arm.com:from_mime,arm.com:dkim,vger.kernel.org:from_smtp,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 15580757B1B
+X-Rspamd-Queue-Id: 225AE757D64
 
-On Tue, Jul 14, 2026 at 07:29:38PM +0200, David Hildenbrand (Arm) wrote:
-> On 7/14/26 18:51, Yeoreum Yun wrote:
-> > On Tue, Jul 14, 2026 at 05:08:24PM +0100, Yeoreum Yun wrote:
-> >> On Tue, Jul 14, 2026 at 07:35:19AM -0700, Dave Hansen wrote:
-> >>>
-> >>> This is indeed an improvement and a step in the right direction! Thanks
-> >>> for looking at this.
-> >>>
-> >>> But one of my test for whether it's good x86 code is whether there's any
-> >>> actually x86-specific logic in it. Isn't this basically a translation
-> >>> between the integer level number and whether it is folded?
-> >>>
-> >>> That seems like a common helper that more than one arch could use. Could
-> >>> this be stuck in a helper so that all arch/x86 has to do is:
-> >>>
-> >>> 	if (mm_pt_level_folded(mm, level))
-> >>> 		return;
-> >>
-> >> Yes. at least the level semantic in ptdump (pgd is level 0,
-> >> p4d is level 1, ...) is same to all archs where use ptdump.
-> >> So It seems reasonable to add this common helper in ptdump.c
-> >>
-> > 
-> > Furthermore, the effective_prot() need to require to identify whether
-> > it's the first pgtable to prevent the inheriting from dummy value.
-> > So I think it seems to make a ptdump_pt_level_first() like:
-> > 
-> > diff --git a/mm/ptdump.c b/mm/ptdump.c
-> > index 973020000096c..2ec5700e4be5e 100644
-> > --- a/mm/ptdump.c
-> > +++ b/mm/ptdump.c
-> > @@ -190,6 +190,23 @@ void ptdump_walk_pgd(struct ptdump_state *st, struct mm_struct *mm, pgd_t *pgd)
-> >         st->note_page_flush(st);
-> >  }
-> > 
-> > +bool pdtump_pt_level_first(struct mm_struct *mm, int level)
-> > +{
-> > +       if (!mm || level > CONFIG_PGTABLE_LEVELS)
-> > +               return false;
+On Tue, Jul 14, 2026 at 06:31:22PM +0200, David Hildenbrand (Arm) wrote:
 > 
-> Do we actually ever get !mm ?
+> >> This makes a *ton* of sense in effective_prot() especially. Its entire
+> >> job is mirroring the hardware's job of inheriting permissions from
+> >> higher levels of the page tables and enforcing them on lower level leaf
+> >> entries. If a higher level is folded, there's nothing to inherit.
+> >>
+> >> I also think it's worth taking a brief pause on the coding to think
+> >> about what kind of design would actually be nice here. If the design
+> >> really is that the pgd is folded, the 'struct mm_walk_ops' code would
+> >> ideally not even call ->pgd_entry(). It would just (for example) *start*
+> >> at ->pud_entry() for a 3-level hardware page table.
+> >>
+> >> If there are no pgds, why bother calling ->pgd_entry()? It couldn't be
+> >> done transparently to mm_walk users of course but it could be done
+> >> incrementally where users move one at a time over to a new scheme.
+> > 
+> > Agree. Calling a pXd_entry() about folded one seems meaningless.
+> > But seems enough to check mm_pXd_folded() before calling pXd_entry()
+> > in each walk_pXd_range().
+> 
+> Needs some double-checking that callers can handle it (like effective_prot()
+> would currently not), but certainly something to look into!
 
-Yes. for the case of s390 use mm anyway for folded check.
-> 
-> -- 
-> Cheers,
-> 
-> David
+Most of mm_walk_ops *implicitly* handles the folded pgtable case
+(e.x) pXd_none() / pXd_present() and other can handle explicitly in
+its own handler.
+
+But, IMHO, It would be better to skip calling pXd_entry() in the
+walk_pXd_range() by checking the folded and this is clearer conceptually.
+
+For this, it  requires the rewrite the walk_mm() where use only *p4d_entry()*
+to gather the leaf/non-leaf information for MGLRU.
 
 -- 
 Sincerely,
