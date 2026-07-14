@@ -1,79 +1,79 @@
-Return-Path: <linux-mips+bounces-15890-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-15891-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id ilgbHHk6VmpX1wAAu9opvQ
-	(envelope-from <linux-mips+bounces-15890-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Tue, 14 Jul 2026 15:32:41 +0200
+	id 0Pv4HnM5VmoB1wAAu9opvQ
+	(envelope-from <linux-mips+bounces-15891-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Tue, 14 Jul 2026 15:28:19 +0200
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id CD4BC7552BA
-	for <lists+linux-mips@lfdr.de>; Tue, 14 Jul 2026 15:32:40 +0200 (CEST)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 056037551A1
+	for <lists+linux-mips@lfdr.de>; Tue, 14 Jul 2026 15:28:19 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=qq.com header.s=s201512 header.b=fcGv2ri+;
-	spf=pass (mail.lfdr.de: domain of "linux-mips+bounces-15890-lists+linux-mips=lfdr.de@vger.kernel.org" designates 172.105.105.114 as permitted sender) smtp.mailfrom="linux-mips+bounces-15890-lists+linux-mips=lfdr.de@vger.kernel.org";
+	dkim=pass header.d=qq.com header.s=s201512 header.b=Fc9Mj6VZ;
+	spf=pass (mail.lfdr.de: domain of "linux-mips+bounces-15891-lists+linux-mips=lfdr.de@vger.kernel.org" designates 2600:3c09:e001:a7::12fc:5321 as permitted sender) smtp.mailfrom="linux-mips+bounces-15891-lists+linux-mips=lfdr.de@vger.kernel.org";
 	dmarc=pass (policy=quarantine) header.from=qq.com;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id ECBDC30ACC5B
-	for <lists+linux-mips@lfdr.de>; Tue, 14 Jul 2026 13:27:20 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 599B630310EC
+	for <lists+linux-mips@lfdr.de>; Tue, 14 Jul 2026 13:27:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EDC4F34EF0F;
-	Tue, 14 Jul 2026 13:27:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6C5E833C192;
+	Tue, 14 Jul 2026 13:27:21 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
-Received: from xmbghk7.mail.qq.com (xmbghk7.mail.qq.com [43.163.128.43])
+Received: from xmbghk7.mail.qq.com (xmbghk7.mail.qq.com [43.163.128.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37FD43264CB;
-	Tue, 14 Jul 2026 13:27:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECB18320A00;
+	Tue, 14 Jul 2026 13:27:18 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784035634; cv=none; b=K6yNPCeFzU3sa7Ns2hpjGZ8jsKEvOgp+VpDThN83/O0iUGu+kMBm7MbYZ+hN36NTDO/pqIdx7+3n+aAwq0bhUKLBHd5kl2xca5U1QfRY4fJfA1ET36+hAiq+DT5Zh3a2VSE780gnEHNBuG0GhX4fEWGAOf29KqXKj9+TZvOm4Ms=
+	t=1784035641; cv=none; b=qJcm+taGWNQm27wkmcOjE8ECxSVWvzdjPmrp6ICHO81mxyj3ODhKKx6FpyxmhqPgjLkyUEp6iGWg7lAhc4iXtTGTZYXVBDZAXWQlB3KJoVWqUeXmpSVjQwKwcFVrARg9RZc4dTfnD1M2FjM+4ENq1gslWT1X0OC6qg5KsiFtks0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784035634; c=relaxed/simple;
-	bh=xIsHOWUKxadvtIEGip6zrjNf+E29BkcfX0rRZGqm9l4=;
+	s=arc-20240116; t=1784035641; c=relaxed/simple;
+	bh=4i97sHnRdcBMn80oOpRJUBaNQ2/m+4B5wFnrGzvFdPg=;
 	h=Message-ID:From:To:Cc:Subject:Date:In-Reply-To:References:
-	 MIME-Version; b=eauGmOftiZh0v2fNDvBEQbwgwlksiWJw54Qa99PV6bkazUBBiqxkE8v4jXzRk4FW3QyhU8pOYTuSVxIKWxVuOMLNz4d8L9kySTlsRJATVCcvvqnnA30HGEZBCsjLT/A7d/x2z+lqe5MZm4DyoophyKEhvN0MASQA412v+fllkzw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com; spf=pass smtp.mailfrom=qq.com; dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b=fcGv2ri+; arc=none smtp.client-ip=43.163.128.43
+	 MIME-Version; b=W7lbvInr7Zx9gRT/24jkesUNmjWYpqfFKnR87kd0cqaOiRAWF5gh71e+TCH8kv8CJrs6MejxIIDKxZVtbKKe0LbUYy8LmpSlJetp78ExM//OfqYBCXiQNXI5ng4UA7M4lb/t/7d5KvS4YyyvV0Knkq9+2NyWEimK54va4j+g0z4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com; spf=pass smtp.mailfrom=qq.com; dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b=Fc9Mj6VZ; arc=none smtp.client-ip=43.163.128.48
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qq.com; s=s201512;
-	t=1784035629; bh=Bkr7bUSX+wY2/1NqyzOVaFukQQvVCQWr1/e9kn3/gj4=;
+	t=1784035631; bh=wTTgYT/GKI+J9GH5+zU2+pgP2YmoSh3DBk0NqAAJ+RA=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=fcGv2ri+92wtIn1H4eplLFtOuLvJY+jx6d9NPjwOJ219TuIpLK+RFpNcjrK+K+9jn
-	 PWCwdUvxfQKtpZ5gTSqCiycor/25Lr/oSl+HPYfQ9tDKDED+0kTOAaNKT7XBO4EJOA
-	 L95yI1gtjxR1v5kRQYkxuEXmQjEOvAlV2gx6Umlk=
+	b=Fc9Mj6VZEQlH196tP1SsLL3W1nigogmryodgKA/5sloRSmVPvhImEYePhBrId3JG9
+	 tjAhi+dwwUxsGp5RaNM0B4MnUY6TnKMXFdrLhwmRH1r1x1Wskigkbk55rjC1E/sRyF
+	 Hu305f8QTbp4l86DA/ngtED8Z5/2swxGSt8McVuo=
 Received: from localhost.localdomain ([116.128.244.169])
 	by newxmesmtplogicsvrsza73-0.qq.com (NewEsmtp) with SMTP
 	id 6C79CE09; Tue, 14 Jul 2026 21:27:07 +0800
-X-QQ-mid: xmsmtpt1784035627tfwpedvel
-Message-ID: <tencent_BE6F86AC74FBD69E73A00D9B3552D1C06A06@qq.com>
-X-QQ-XMAILINFO: Mp62enUr7azuxsrGGvCPIOOWBS+l4ebWGw+VzhZrAlIVtHfPAORLYL2viIis5L
-	 JTAKVeS1LSN0ZY0qg0OOYbuvs0T/SAyj7evdpa9ukbGVzowWYFygADl2bCBiuedd/US+zUFSImd0
-	 LNUo+WxOha6EZ8FkM18+ZbLcO8GfIelpkS6aEgYlirWVP208B3Wv79PYg7qUW9gCeT1v9K7z6v5c
-	 TxNmZCTQmmoHcgyY5/RpgE36+ldE0AMG09/kF+jeJNaG/xq/xtSzWmGC3NSBjQ8XS+NZ1v+a+79o
-	 wFkRbn6Ft6QPjbq0vlmuqyRLBwKq5gHJAFgL39hWgQYswNpHzmfegLJR4C7ttWUC0ymI1bWd8zTx
-	 zuv/8R4Ri0go/nnKwkyn/uYCVP/uEJHg810xfVeiOLo4ldA3iZvKr57Mm8dgmCI8Nlq6TiWJrVPE
-	 S0I3P10Pcsz9byiihVkK/MWybE3d51aM2d7m+xe+YEpwPI0z91I4Et3ZPGhLokkKfIoMo3ERr702
-	 304V2HE+c1BfE19VFL4U7/0YQD5RoxL8dyl3pVyHJLE/ZI1ioSm8YBBbSA+AfO4Ux/9r93QRZv7S
-	 bFFZ46EK+qj2M3nVGcsYHUThyAJUHZcoeOS1SS/rSMmlQN5FIZO4Q48UPxGiW80DUvq9Y9j1SlK6
-	 ZWBY05abY/hBsrgtUqe1ntgrafrTred+4QaSVvyMgU5aMUqFCknO0wRrJsShsdXF1J0CQCeFT+Ls
-	 BAQrAyPATRDZFiCEEtX6EDpb876j2lOslmtIygP1FJidYewTTBKzNu8ZE89ciYqAsyRYllcFWWbv
-	 Gd/Ys9lZdgDmUvY6UJMfqJva4nwcn6oD3hXAUNEj5WSPwpJVlK7qjkgAC/WTsnRr5InH47EXF4zd
-	 ZokIeb/2YhHWW9a6HMAPRZ0vknkVqYyd3+Y+J7jCCK7yXTcqvm3GMCPFGiYgWlvBvCGlsaIS7GCj
-	 zEoIjPjlI8oUf2fmNxwR1HNV/qtZqg5H0UEsyYdEQYkpDfXIPz3P0Jm4EFHAxrIxCF8CuKd08NwW
-	 DmkAOAiBA66CRoS7fEfO7mf9BrLaowOUCoiyM1ClAAhlsCiOMPwldOt0ZJ/3ZPywx5mmo4HKuAjt
-	 k0RCN6
-X-QQ-XMRINFO: NS+P29fieYNwqS3WCnRCOn9D1NpZuCnCRA==
+X-QQ-mid: xmsmtpt1784035628toq62m0kn
+Message-ID: <tencent_63B40FEEA9049AB3A522A50D2CF58ECA560A@qq.com>
+X-QQ-XMAILINFO: NnYhxYSyuBnLwgQ0nK3Q0H2kHigMnu2T6fAf4Q6mlndh10ZmwdS2XRkj2NWveI
+	 xa+S5GEuVzESB5WZmjBuHxBCn300L5ZUreQbXxR2Y0716oFGe96AeX8/aOZGkoSXOKiYDfxln+nz
+	 vZpUe2Azx5jR1kEcs/uHcuyhpO9MWnPIU3AyPtQNul0X2yC14GuTynOxzSPuPn1if3axqbScJYIJ
+	 T92385EpnrF6nl0RPdciuYeGo4jkjsdQFb2jIJGWTWlNqklW4C6OC659LHpcCsj3kQEqB8ZlPSj7
+	 C8WbakBoGy5usoJgMe8p50Tfg+nu14u7pH58O9z/wfK05Fm1XelrI8Tgs5H1KhxC8mxCCnvkPoZH
+	 mXm9dU5OatZpouzZ71JuExJxxoZEB6ZxGcvKwNKjmk5xvX79sdsu695w6CmfPl/Xl+y8F98VWSvK
+	 ut667R9GmCQRxFUykOCetj0TVhofNQypZkJp8w1GJUIjLtkzXIVA/rWJaWLgHZFG6LIieZKVcB3m
+	 5hg1Z3dLcn7rnjv+/Wl+hggcMCAyd3FBsXj1++Ss5e1X+weFKEyG1uRCm2eYzUvdjtihConQ+a3I
+	 A/efv9dYKl0n3QQsMt8ctkxeMB9+4LQ+m8r6N70ItdX2m/RVA9yqjV4Wr37G1imgbe8dNrzUwR4n
+	 BZ07B/jW4AS0V4DDHy7e3DK+oP7QSTiiDylLA873hff1LEywZW0hTrhmpSgkTU3toD9KsW3NsYSG
+	 E2P0xwmo5MQOD5BVLt3lHurhTyCILfItv24ddFqazdGZ3mabox4Ygy6iL1087piKzrsXyCAaQ7z9
+	 /NnQFohe9sYYPzFdsTp+U0VwTilR7tbgRUQ6zaLFhZ5pHNFAFYO/7poD5C4JgdLKRRZ0E8x7Zj9T
+	 oAPAQox3sNDQ558RcEjW0LyOGVWyhFZ5eBULACaH3WFXw8M93vWe0XAexSPP12LK+bFQj/2vyDwz
+	 wDCrbEraJGQEhuMY1N4XnqE+Kr4YCHgnS3bGNJAz3NG8o0LB0Q7vJM/MUnvkvGt9zoysE8aztojp
+	 mkl2TjL6sch+EEqgb/3qqNX860QIh/iYa+6WpiVWtJPnbY2KVAx9cBDXACO2nylVKcpi8pFFHknR
+	 GCaM2p
+X-QQ-XMRINFO: OD9hHCdaPRBwH5bRRRw8tsiH4UAatJqXfg==
 From: Haofeng Li <920484857@qq.com>
 To: tglx@kernel.org
 Cc: linux-kernel@vger.kernel.org,
 	Haofeng Li <13266079573@163.com>,
 	Haofeng Li <lihaofeng@kylinos.cn>,
 	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Samuel Holland <samuel@sholland.org>,
 	Marc Zyngier <maz@kernel.org>,
-	Paul Burton <paulburton@kernel.org>,
 	linux-mips@vger.kernel.org
-Subject: [PATCH 07/16] irqchip/mips-gic: clean up IRQ domain creation failure
-Date: Tue, 14 Jul 2026 21:24:43 +0800
-X-OQ-MSGID: <20260714132453.3302672-5-920484857@qq.com>
+Subject: [PATCH 08/16] irqchip/mips-gic: clean up if IPI domain registration fails
+Date: Tue, 14 Jul 2026 21:24:44 +0800
+X-OQ-MSGID: <20260714132453.3302672-6-920484857@qq.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20260714132453.3302672-1-920484857@qq.com>
 References: <20260714122351.3274006-1-lihaofeng@kylinos.cn>
@@ -91,19 +91,19 @@ X-Spamd-Result: default: False [-1.66 / 15.00];
 	R_MISSING_CHARSET(0.50)[];
 	DMARC_POLICY_ALLOW(-0.50)[qq.com,quarantine];
 	R_DKIM_ALLOW(-0.20)[qq.com:s=s201512];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	TO_DN_SOME(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-15890-lists,linux-mips=lfdr.de];
-	FORGED_RECIPIENTS(0.00)[m:tglx@kernel.org,m:linux-kernel@vger.kernel.org,m:13266079573@163.com,m:lihaofeng@kylinos.cn,m:tsbogend@alpha.franken.de,m:maz@kernel.org,m:paulburton@kernel.org,m:linux-mips@vger.kernel.org,s:lists@lfdr.de];
+	TAGGED_FROM(0.00)[bounces-15891-lists,linux-mips=lfdr.de];
 	RCVD_COUNT_THREE(0.00)[4];
+	FORGED_RECIPIENTS(0.00)[m:tglx@kernel.org,m:linux-kernel@vger.kernel.org,m:13266079573@163.com,m:lihaofeng@kylinos.cn,m:tsbogend@alpha.franken.de,m:samuel@sholland.org,m:maz@kernel.org,m:linux-mips@vger.kernel.org,s:lists@lfdr.de];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER(0.00)[920484857@qq.com,linux-mips@vger.kernel.org];
-	FREEMAIL_CC(0.00)[vger.kernel.org,163.com,kylinos.cn,alpha.franken.de,kernel.org];
+	FREEMAIL_CC(0.00)[vger.kernel.org,163.com,kylinos.cn,alpha.franken.de,sholland.org,kernel.org];
 	FORWARDED(0.00)[lists@lfdr.de];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
@@ -116,81 +116,47 @@ X-Spamd-Result: default: False [-1.66 / 15.00];
 	MID_RHS_MATCH_FROM(0.00)[];
 	FREEMAIL_FROM(0.00)[qq.com];
 	RCPT_COUNT_SEVEN(0.00)[8];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
 	TAGGED_RCPT(0.00)[linux-mips];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,qq.com:from_mime,qq.com:dkim,qq.com:mid,kylinos.cn:email,vger.kernel.org:from_smtp]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[qq.com:from_mime,qq.com:dkim,qq.com:mid,kylinos.cn:email,vger.kernel.org:from_smtp]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: CD4BC7552BA
+X-Rspamd-Queue-Id: 056037551A1
 
 From: Haofeng Li <lihaofeng@kylinos.cn>
 
-After mapping the register base, irq_domain_create_simple() failure
-returns without unmapping it.
+If gic_register_ipi_domain() fails, the primary IRQ domain and the
+mapped register base are left allocated.
 
-The CPU chained or VEIC handler is also installed before either IRQ
-domain is ready. Unmapping the registers while that handler remains
-published would leave a path to unmapped MMIO, and a later IPI domain
-failure would expose a half-initialized controller.
+At this point the CPU interrupt handler has not yet been published.
+Remove the primary domain, unmap the register base, and clear both
+global pointers before returning the error.
 
-Unmap and clear the register base when primary domain creation fails,
-and publish the CPU interrupt handler only after both domains have
-been created successfully.
-
-Fixes: fbea754123ae ("irqchip: mips-gic: Inline __gic_init()")
+Fixes: 8190cc572981 ("irqchip/mips-gic: Only register IPI domain when SMP is enabled")
 
 Signed-off-by: Haofeng Li <lihaofeng@kylinos.cn>
 ---
- drivers/irqchip/irq-mips-gic.c | 24 +++++++++++++-----------
- 1 file changed, 13 insertions(+), 11 deletions(-)
+ drivers/irqchip/irq-mips-gic.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/irqchip/irq-mips-gic.c b/drivers/irqchip/irq-mips-gic.c
-index 19a57c5e2b2e..85fe0d8a34c5 100644
+index 85fe0d8a34c5..2f2ba54f227f 100644
 --- a/drivers/irqchip/irq-mips-gic.c
 +++ b/drivers/irqchip/irq-mips-gic.c
-@@ -956,23 +956,14 @@ static int __init gic_of_init(struct device_node *node,
- 	gic_shared_intrs = FIELD_GET(GIC_CONFIG_NUMINTERRUPTS, gicconfig);
- 	gic_shared_intrs = (gic_shared_intrs + 1) * 8;
- 
--	if (cpu_has_veic) {
--		/* Always use vector 1 in EIC mode */
--		gic_cpu_pin = 0;
--		set_vi_handler(gic_cpu_pin + GIC_PIN_TO_VEC_OFFSET,
--			       __gic_irq_dispatch);
--	} else {
--		gic_cpu_pin = cpu_vec - GIC_CPU_PIN_OFFSET;
--		irq_set_chained_handler(MIPS_CPU_IRQ_BASE + cpu_vec,
--					gic_irq_dispatch);
--	}
--
- 	gic_irq_domain = irq_domain_create_simple(of_fwnode_handle(node),
- 						  GIC_NUM_LOCAL_INTRS +
- 						  gic_shared_intrs, 0,
- 						  &gic_irq_domain_ops, NULL);
- 	if (!gic_irq_domain) {
- 		pr_err("Failed to add IRQ domain");
-+		iounmap(mips_gic_base);
-+		mips_gic_base = NULL;
- 		return -ENXIO;
+@@ -968,8 +968,13 @@ static int __init gic_of_init(struct device_node *node,
  	}
  
-@@ -980,6 +971,17 @@ static int __init gic_of_init(struct device_node *node,
- 	if (ret)
+ 	ret = gic_register_ipi_domain(node);
+-	if (ret)
++	if (ret) {
++		irq_domain_remove(gic_irq_domain);
++		gic_irq_domain = NULL;
++		iounmap(mips_gic_base);
++		mips_gic_base = NULL;
  		return ret;
- 
-+	if (cpu_has_veic) {
-+		/* Always use vector 1 in EIC mode */
-+		gic_cpu_pin = 0;
-+		set_vi_handler(gic_cpu_pin + GIC_PIN_TO_VEC_OFFSET,
-+			       __gic_irq_dispatch);
-+	} else {
-+		gic_cpu_pin = cpu_vec - GIC_CPU_PIN_OFFSET;
-+		irq_set_chained_handler(MIPS_CPU_IRQ_BASE + cpu_vec,
-+					gic_irq_dispatch);
 +	}
-+
- 	board_bind_eic_interrupt = &gic_bind_eic_interrupt;
  
- 	/*
+ 	if (cpu_has_veic) {
+ 		/* Always use vector 1 in EIC mode */
 -- 
 2.25.1
 
