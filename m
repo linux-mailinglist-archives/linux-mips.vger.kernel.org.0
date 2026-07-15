@@ -1,53 +1,53 @@
-Return-Path: <linux-mips+bounces-15920-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-15921-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id urgyIzNXV2pwKAEAu9opvQ
-	(envelope-from <linux-mips+bounces-15920-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Wed, 15 Jul 2026 11:47:31 +0200
+	id OqAkBcBXV2qKKAEAu9opvQ
+	(envelope-from <linux-mips+bounces-15921-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Wed, 15 Jul 2026 11:49:52 +0200
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 46E3175CAD5
-	for <lists+linux-mips@lfdr.de>; Wed, 15 Jul 2026 11:47:31 +0200 (CEST)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0983E75CB0B
+	for <lists+linux-mips@lfdr.de>; Wed, 15 Jul 2026 11:49:51 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=kernel.org header.s=k20260515 header.b=DBliIrs1;
-	spf=pass (mail.lfdr.de: domain of "linux-mips+bounces-15920-lists+linux-mips=lfdr.de@vger.kernel.org" designates 2600:3c04:e001:36c::12fc:5321 as permitted sender) smtp.mailfrom="linux-mips+bounces-15920-lists+linux-mips=lfdr.de@vger.kernel.org";
+	dkim=pass header.d=kernel.org header.s=k20260515 header.b=gRbAD1iK;
+	spf=pass (mail.lfdr.de: domain of "linux-mips+bounces-15921-lists+linux-mips=lfdr.de@vger.kernel.org" designates 104.64.211.4 as permitted sender) smtp.mailfrom="linux-mips+bounces-15921-lists+linux-mips=lfdr.de@vger.kernel.org";
 	dmarc=pass (policy=quarantine) header.from=kernel.org;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 1930330A1C79
-	for <lists+linux-mips@lfdr.de>; Wed, 15 Jul 2026 09:43:52 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 24529300E6B4
+	for <lists+linux-mips@lfdr.de>; Wed, 15 Jul 2026 09:45:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1FAE443848C;
-	Wed, 15 Jul 2026 09:43:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0A24543A7F4;
+	Wed, 15 Jul 2026 09:45:23 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4CA9043A7E1;
-	Wed, 15 Jul 2026 09:43:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BA5E43A810;
+	Wed, 15 Jul 2026 09:45:09 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784108628; cv=none; b=Jmb75ZWSLREpgjrDGwRJ4cvSb/aHEPUZx4SDxpMgxaMNDrj9hVEyt1xlbc3UIHtRGMD7LMvNyERXftLc8UVQn44441X531aWNWEErnwLW+y5hE/iTZ3avXYGoLKbx17cfXCl7P2+1anh27hSKwmBv0M2kAhKlTYRj+wx2WSp9ig=
+	t=1784108720; cv=none; b=pEE+xbYa3lyqcRFzxygwEJla+zLLcLjbyNGOkDQmO5oHhhr8AG/JXWyersl9yiYbigHA3efTeC8lqYgCv1UByWa6iZZnfGWvHkp/2fQTFFkuhAbFZXHE8d92AN2rc1dUH2ykcRDHQ8YkzAY+yPleFfAiYYso5aodDJNKXlumFZc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784108628; c=relaxed/simple;
-	bh=u3wwU/z4C89zqWRgwncGfnBh+kphBpJ0n+qjY6S/8oY=;
+	s=arc-20240116; t=1784108720; c=relaxed/simple;
+	bh=GjPm0PZsz7Yv0WXVjSPtGDBSmUAdQb8nKdaUKqyWd5g=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=U9+3+tQxqf0vhSiK+sRm55Nj0OtOSVkp1rOpZhLGxJ5AqfYVE+1NVhnJk9Dr0C3KyVMtpLAHdV/SRIXdUi4i9cMCayU3PdizLXsw0g3IGX84+tWvnFaxYYhdqDsqMlWDuc+SuBYke/90OJurAonqNRvkQJbr8eQKtXnBFlMyv6g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DBliIrs1; arc=none smtp.client-ip=100.103.45.18
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 464261F000E9;
-	Wed, 15 Jul 2026 09:43:21 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=ZTubGMAmCYehSDmSjskKPiGhO1wCRT+6MFAAcQ/CvUtnXz9fB7MQzXX/bOtmyXMs+Rv5RFcgPUMrKLwrMuVQaiAXFrqiOs04aG6La/lyxfzTnmlKG2RloYKnoxRSujPZrAflwbmMwRKIv9lVxZEjyKKcuofQEqTCpPB/5pXVSMM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gRbAD1iK; arc=none smtp.client-ip=100.103.45.18
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 854EF1F000E9;
+	Wed, 15 Jul 2026 09:44:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1784108616;
-	bh=CC+e/Z0BaeZIfuy0GA+8f2VQ0SUjP7mL+FiN+wpHZDM=;
+	s=k20260515; t=1784108706;
+	bh=LuVl8Gp4FOi0jul12AJHuxapg87GtfqNqhigUNaC5y0=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=DBliIrs1Vie421HB7pFithfaf6+UeS3O6z2aoh/aN1WWGPjXflmiUACQdZ3xpskBY
-	 xMfYSp2UqXDvXFvK55J+NuyWH3rQs+JwYDOnaQ0FnmpRHN6bsvs75KwaUdohNozQJj
-	 XSf940SX0+vO09aO3jHGkAXGyO7J8nwLLVm3PGMTkrAf2Uj/RNJe0WW9mYrpDx4w16
-	 2hht1+fq5ju7pSYbsa+Git3edPTDAqecJ+sV2mJ0+WNWq7ptmUxMNEQvPoQ3QcSlCp
-	 m9Teaq/0qIGpP303+Rl9w/iFPHMOESoof6nsGY/ZidS26od+bMOS/kWhVtaM7LyALb
-	 j4kx/9RfCKujg==
-Message-ID: <14019379-1725-4cad-8158-322714b19ace@kernel.org>
-Date: Wed, 15 Jul 2026 11:43:20 +0200
+	b=gRbAD1iKDkw8yDV8gg3Q5r0WLx5WQmVYoXzpFDvbOAHPayy6Xnl1W1FB43wZImKG+
+	 Ao3GuNYf6pHDWn7/p8Z3OzNqxyoIMoMBrrcCFfTg2a2SinBtcEIfX+OC10qnOewNUT
+	 pEdW/nlFbFU1rQO82xZ+Ybr1ChhKGliB1ExbjfzzKQ3sJxpFICyYAsPOMko2zRfLxI
+	 VxuwLDhn+wRc63Fnf/SxkJCL90jXU+8tH4qlSqSR8Ga8erwhGTPzRRJK+9BUojazIW
+	 zwBuRZVN6wEIFyxddHMo+ITnMYgb3u05rViivHqtYGfoH1BGZtIX94KYyszByXrhcK
+	 Lk3hWyndjrjvQ==
+Message-ID: <a7e6a281-d1a4-42a6-9672-b1304107f888@kernel.org>
+Date: Wed, 15 Jul 2026 11:44:51 +0200
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -92,17 +92,16 @@ Cc: Dave Hansen <dave.hansen@intel.com>,
  liam@infradead.org, vbabka@kernel.org, surenb@google.com, mhocko@suse.com,
  geert@linux-m68k.org, shorne@gmail.com, jonas@southpole.se,
  stefan.kristiansson@saunalahti.fi
-References: <32d459d1-ad19-4baf-bbb1-0565458001d2@intel.com>
- <3ea30f8a-bb29-4bf5-8400-1c4840d46a88@kernel.org>
+References: <3ea30f8a-bb29-4bf5-8400-1c4840d46a88@kernel.org>
  <7e84b200-25eb-43a6-b5e2-5f27f2d82a77@intel.com>
  <31988089-095a-4eed-b5e2-c677c70f79f6@kernel.org>
  <14e250db-1641-4085-8d13-02f819657d5f@intel.com>
  <d83c76b3-ea4d-4c41-b4c5-f5ae558ace55@kernel.org>
  <alYgMxKqRnF6_X0A@e129823.arm.com>
  <6df814c9-405c-48d8-96ea-929c4b28949b@intel.com>
- <alZe-Cu7yQw9qRXU@e129823.arm.com>
- <2d51a1ad-85be-46bf-ac36-18eca199b449@kernel.org>
- <alZ_6HFc56zC7tt0@e129823.arm.com>
+ <alZe-Cu7yQw9qRXU@e129823.arm.com> <alZo9feSrSB_StfO@e129823.arm.com>
+ <7cff02d6-d3ce-4315-b667-34911fc6f321@kernel.org>
+ <alZ44XdgTEVFX6jU@e129823.arm.com>
 From: "David Hildenbrand (Arm)" <david@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=david@kernel.org; keydata=
@@ -149,7 +148,7 @@ Autocrypt: addr=david@kernel.org; keydata=
  3iyY2Nsd7JxfKu1PRhCGwXzRw5TlfEsoRI7V9A8isUCoqE2Dzh3FvYHVeX4Us+bRL/oqareJ
  CIFqgYMyvHj7Q06kTKmauOe4Nf0l0qEkIuIzfoLJ3qr5UyXc2hLtWyT9Ir+lYlX9efqh7mOY
  qIws/H2t
-In-Reply-To: <alZ_6HFc56zC7tt0@e129823.arm.com>
+In-Reply-To: <alZ44XdgTEVFX6jU@e129823.arm.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Rspamd-Action: no action
@@ -158,12 +157,12 @@ X-Spamd-Result: default: False [-3.66 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
 	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20260515];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-15920-lists,linux-mips=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-15921-lists,linux-mips=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
 	RCVD_COUNT_THREE(0.00)[4];
 	FREEMAIL_CC(0.00)[intel.com,lists.infradead.org,vger.kernel.org,lists.linux.dev,kernel.org,kvack.org,googlegroups.com,lists.linux-m68k.org,armlinux.org.uk,linux-foundation.org,oracle.com,gmail.com,xen0n.name,loongson.cn,aosc.io,alpha.franken.de,ziepe.ca,arm.com,arndb.de,soleen.com,linux.ibm.com,linux.alibaba.com,brainfault.org,linux.dev,dabbelt.com,eecs.berkeley.edu,ghiti.fr,linux.intel.com,infradead.org,redhat.com,alien8.de,zytor.com,cmpxchg.org,tencent.com,google.com,os.amperecomputing.com,zeniv.linux.org.uk,siemens-energy.com,iscas.ac.cn,pigmoral.tech,linutronix.de,huawei.com,gaisler.com,suse.com,linux-m68k.org,southpole.se,saunalahti.fi];
@@ -184,36 +183,42 @@ X-Spamd-Result: default: False [-3.66 / 15.00];
 	DKIM_TRACE(0.00)[kernel.org:+];
 	ALIAS_RESOLVED(0.00)[];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
 	MID_RHS_MATCH_FROM(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-mips];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,vger.kernel.org:from_smtp]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,vger.kernel.org:from_smtp]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 46E3175CAD5
+X-Rspamd-Queue-Id: 0983E75CB0B
 
-On 7/14/26 20:28, Yeoreum Yun wrote:
-> On Tue, Jul 14, 2026 at 06:31:22PM +0200, David Hildenbrand (Arm) wrote:
->>
+On 7/14/26 19:58, Yeoreum Yun wrote:
+> On Tue, Jul 14, 2026 at 07:29:38PM +0200, David Hildenbrand (Arm) wrote:
+>> On 7/14/26 18:51, Yeoreum Yun wrote:
 >>>
->>> Agree. Calling a pXd_entry() about folded one seems meaningless.
->>> But seems enough to check mm_pXd_folded() before calling pXd_entry()
->>> in each walk_pXd_range().
+>>> Furthermore, the effective_prot() need to require to identify whether
+>>> it's the first pgtable to prevent the inheriting from dummy value.
+>>> So I think it seems to make a ptdump_pt_level_first() like:
+>>>
+>>> diff --git a/mm/ptdump.c b/mm/ptdump.c
+>>> index 973020000096c..2ec5700e4be5e 100644
+>>> --- a/mm/ptdump.c
+>>> +++ b/mm/ptdump.c
+>>> @@ -190,6 +190,23 @@ void ptdump_walk_pgd(struct ptdump_state *st, struct mm_struct *mm, pgd_t *pgd)
+>>>         st->note_page_flush(st);
+>>>  }
+>>>
+>>> +bool pdtump_pt_level_first(struct mm_struct *mm, int level)
+>>> +{
+>>> +       if (!mm || level > CONFIG_PGTABLE_LEVELS)
+>>> +               return false;
 >>
->> Needs some double-checking that callers can handle it (like effective_prot()
->> would currently not), but certainly something to look into!
+>> Do we actually ever get !mm ?
 > 
-> Most of mm_walk_ops *implicitly* handles the folded pgtable case
-> (e.x) pXd_none() / pXd_present() and other can handle explicitly in
-> its own handler.
-> 
-> But, IMHO, It would be better to skip calling pXd_entry() in the
-> walk_pXd_range() by checking the folded and this is clearer conceptually.
-> 
-> For this, it  requires the rewrite the walk_mm() where use only *p4d_entry()*
-> to gather the leaf/non-leaf information for MGLRU.
+> Yes. for the case of s390 use mm anyway for folded check.
+That's not what I meant, let me clarify.
 
-Yeah, this needs a thought indeed.
+I think in ptdump_walk_pgd() it is guaranteed that mm != NULL, so I am wondering
+why you are handling mm == NULL.
 
 -- 
 Cheers,
