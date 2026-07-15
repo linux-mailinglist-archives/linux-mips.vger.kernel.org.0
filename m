@@ -1,426 +1,262 @@
-Return-Path: <linux-mips+bounces-15906-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-15907-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id c6z/MX2+VmoJAwEAu9opvQ
-	(envelope-from <linux-mips+bounces-15906-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Wed, 15 Jul 2026 00:55:57 +0200
+	id rJuyJSQkV2pWFwEAu9opvQ
+	(envelope-from <linux-mips+bounces-15907-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Wed, 15 Jul 2026 08:09:40 +0200
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id BB1637594BE
-	for <lists+linux-mips@lfdr.de>; Wed, 15 Jul 2026 00:55:56 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id E906C75AD82
+	for <lists+linux-mips@lfdr.de>; Wed, 15 Jul 2026 08:09:39 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=none ("invalid DKIM record") header.d=openadk.org header.s=2022 header.b=AHF58Gbf;
-	spf=pass (mail.lfdr.de: domain of "linux-mips+bounces-15906-lists+linux-mips=lfdr.de@vger.kernel.org" designates 2600:3c15:e001:75::12fc:5321 as permitted sender) smtp.mailfrom="linux-mips+bounces-15906-lists+linux-mips=lfdr.de@vger.kernel.org";
-	dmarc=none;
+	dkim=pass header.d=gmail.com header.s=20251104 header.b=p98vovTq;
+	spf=pass (mail.lfdr.de: domain of "linux-mips+bounces-15907-lists+linux-mips=lfdr.de@vger.kernel.org" designates 2600:3c0a:e001:db::12fc:5321 as permitted sender) smtp.mailfrom="linux-mips+bounces-15907-lists+linux-mips=lfdr.de@vger.kernel.org";
+	dmarc=pass (policy=none) header.from=gmail.com;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id C53833002F54
-	for <lists+linux-mips@lfdr.de>; Tue, 14 Jul 2026 22:55:53 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 84E8630103B5
+	for <lists+linux-mips@lfdr.de>; Wed, 15 Jul 2026 06:09:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 461FE37205D;
-	Tue, 14 Jul 2026 22:55:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 19A8E317155;
+	Wed, 15 Jul 2026 06:09:15 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
-Received: from helium.openadk.org (helium.openadk.org [89.238.66.15])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f178.google.com (mail-pg1-f178.google.com [209.85.215.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF84E38F239;
-	Tue, 14 Jul 2026 22:55:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 956203093CF
+	for <linux-mips@vger.kernel.org>; Wed, 15 Jul 2026 06:09:13 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784069751; cv=none; b=KahI/yw4+joG5irsN5oVj8OzdhwyOuKdy3ZqqEW0Qh5m6dHQbojFCGufZ9bh/F1E/A/UNMLmNYHe6dAkt1ejvLdSAz2QovLIH8qLTgE+dAUd5iSCRbh6bp1P2slzCCE5maYdfuqZ8e78si37DBulRjMZZNJ+XE21nCA7AJnTnNk=
+	t=1784095754; cv=none; b=iW/9h/QVQtT3GCNLP34rYCB3TF8qBw+UGpIzNTv/ivwsrx4MdBU0BDdYBK32dTbNu6t69QAXk3NGDDTCzT5FfNi70trB6t8IcnXZy95p2Jz1fPnB73Vf68lrDkARttl2WUDmG6kli3qs4WQdJZpJPqKFjZNB49m6uF2+3AQFOQM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784069751; c=relaxed/simple;
-	bh=xhgwkEdXhCqDcV36fXEX35GRvnsb+U6Mit9B+SmcfoE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Gxb9NglhCoP6I8YlHSSzPfDSjs6eJBmifgrQiAzmMfJJ0DgEooIz8RzA1zMnJOKAtl1i5OAhzMR525xYrGOiZbVBLFh/58Ih1n//ztNdqgCBMzpT187YV9OP6mCT/yNWOUXSmj1u9X6M3NkdSfVx0BsGY/wJchXZERxPdYb83Eo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=openadk.org; spf=pass smtp.mailfrom=openadk.org; dkim=fail (0-bit key) header.d=openadk.org header.i=@openadk.org header.b=AHF58Gbf reason="key not found in DNS"; arc=none smtp.client-ip=89.238.66.15
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=openadk.org; s=2022;
-	t=1784069388; bh=xhgwkEdXhCqDcV36fXEX35GRvnsb+U6Mit9B+SmcfoE=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=AHF58Gbf2DRAM/D9upKEybQOOCd9Cyneyi/OGagE82FKhi37/D3DndZ2Zg7H500lJ
-	 DjL600HUmDDmnAacPJEdEJe8H4lE+7u3dnib7BxJbP5vDdnak2Y56f+pjJpw0w+SSe
-	 txlz7AYHOHf+olvkH566kr+v3ggCse4palM1b0eXxo12a31Sz2B6CYYeaPi431Xo+Z
-	 JTj2vyqLZJuGRc5SIS9Az/NEoMAbQQKuz61exIQuTRtg1QxFlq6bFrErox+rxNoXsz
-	 BdwLjQjjIp7cVoIBiv8KOsLsx4c4ttMZjEtW6Q4FWRGXDfa6Fq8Xd/hUaCEujkap3y
-	 MCAhq7knEVZig==
-Received: by helium.openadk.org (Postfix, from userid 1000)
-	id 0BE4031E0BB6; Wed, 15 Jul 2026 00:49:47 +0200 (CEST)
-Date: Wed, 15 Jul 2026 00:49:47 +0200
-From: Waldemar Brodkorb <wbx@openadk.org>
-To: Arnd Bergmann <arnd@arndb.de>
-Cc: Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-	=?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
-	Michael =?utf-8?B?QsO8c2No?= <m@bues.ch>,
-	Hauke Mehrtens <hauke@hauke-m.de>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	Waldemar Brodkorb <wbx@openadk.org>,
-	Bartosz Golaszewski <brgl@kernel.org>,
-	linux-wireless@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-mips@vger.kernel.org,
+	s=arc-20240116; t=1784095754; c=relaxed/simple;
+	bh=hhbkVFWqfeb6wr5PFPqn4mpOBnm0ya1NeenK6+bGYOw=;
+	h=Date:From:To:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Woo/CsLe4SZT7DcmeRVkUJvmgP6oGrbcsXDOr3a0unQz41ietaA8MT2Hw6oOp7qgb3mWsSEadGPQ9NUQevmn6wYqz/duJ2KtIUkv0F06/xuqruVWYg9VQ7PcFf5DrG0RVDLdIVSE3TmoSPwRKnKFqXJKT2P3nmygcnxiHCOPA7A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=p98vovTq; arc=none smtp.client-ip=209.85.215.178
+Received: by mail-pg1-f178.google.com with SMTP id 41be03b00d2f7-c981c2c37cbso3011287a12.0
+        for <linux-mips@vger.kernel.org>; Tue, 14 Jul 2026 23:09:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1784095753; x=1784700553; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=/Lh6JTO9nCo+UydcGPYZiKr3ZrK/RHTWgrneFQPjvC0=;
+        b=p98vovTqCJiVS+/z5CqVZwUFLuNTPWVFLz9Ld4ZxXvW0AH9F5nT90AIGkcyjQqbAvE
+         PASg/wdzsyMU7lnzpHm6BoE0DJ2VoqAKjt0Y3wJjS7TdhzH9wXTewkRuSOB63KnZjwVZ
+         8XUxdjum+xiyAv9m1uWVcBg+GjWdRprCmwKG7tBvMq6ySwl1WTtnUFg5KSSB+gkx2KRv
+         OJsipStecCXuFjBT5OPQtcjuWlzrMwIMK7ZWFaNSmY/25iCGDKi7kY73PNF8TfMOhgQt
+         EpAhjB18oj2rVDV8HQRS9Z2m4jAr0AST5Qg2iLxV+/bM6z4D/J5F93tD6ps+A+T+jd+P
+         EkCw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1784095753; x=1784700553;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=/Lh6JTO9nCo+UydcGPYZiKr3ZrK/RHTWgrneFQPjvC0=;
+        b=SyhnMWIaSa+ky7U+5RD5sb7uw5/cHXPnaFBlrppFI9NYReFE417K9x1pkt6qsKMG6P
+         fpUnl0D0NNgYODRV0O8nNQxADcVoESFlbLBLPVZlKWqW9w9jaJ7AXb2Lm4+y/qVwzZ2E
+         K2IFqjLhIWYvl0KKnu9yF5QI5oofoyfS4hF7fgY/Xh7OKFfM7jY3KdZOhVmD5P+dvd84
+         W7NGieRTbJQDn6//FpQeVNvmUuBCio1mWyO7NLADDYNGkKDySnNyowk2amX9U7OhNZ7w
+         75s2RtseMDnqB30tCqPmU0YqubHg32EHVyuLHUnWatGZGEGklZgsW1jYkJwGMuqD5pFn
+         19lw==
+X-Forwarded-Encrypted: i=1; AHgh+Rr/gdGFOfEE8I+ma9Rh1dYq602vcbggx3WM6R5GEQs5KUH6po2nFJKPzA9eHnwZPc0SZnOx7h6TffFr@vger.kernel.org
+X-Gm-Message-State: AOJu0YzmtNe6F9FVQGVVt38tORFF4AB4/xll+LEgY9++KwBuX52SlPVp
+	UsMgLRFV8yJpXILA8ttIQtKAdF6QR2omqPkmR2YCNKxHT5EhU7qq4949
+X-Gm-Gg: AfdE7cndLrRVIM4UQqDff8HwpXwGZp5gUnkj28ieWLzJ8kePLjewxJwck6N8RCPw0n1
+	QgVhxy9wDyVbOLKpj/B4qsoWqG46dTf2y8t8Vg99KvQWmOKH8j/N3PBMv/9dmDYdNWwd6wo8kOW
+	J+WisyUQyq4Hz4kRiiIad2/RX/At0f364wdQlb9KdKiorcaXTzpmkkeSaGeCJqUhZhH/cvlvo3m
+	+pcP2sIuePg9j6YX65vf3sEbsjkKzbGHVJxvwZqs4XwlzLRzvt+eeiM+37lxv1L/3heIp6kc/HJ
+	YgtQdf+wKA7atxSem99mNVXUZ/scXu/gpHjEygm3i6OLqF3dSa4/A9cF+TB5RPj4YDmqFlwpxWq
+	GwMUJayrifI4d8+llgAJIH/C1PhksI5zmoojVltVa1FNmZQ2P8h2M98QnCsLqL2dEtNySn3+3mB
+	LDJlzOXDquprqB6AgVtUPgOKd60aGPCsZX1mx8DIfXzSTOQ+D8wL0=
+X-Received: by 2002:a05:6a21:7905:b0:3c0:9c18:d5a1 with SMTP id adf61e73a8af0-3c35725cfb1mr4795350637.62.1784095752812;
+        Tue, 14 Jul 2026 23:09:12 -0700 (PDT)
+Received: from google.com ([2a00:79e0:2ebe:8:93:a597:7931:c950])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-311935fd091sm63352902eec.24.2026.07.14.23.09.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Jul 2026 23:09:12 -0700 (PDT)
+Date: Tue, 14 Jul 2026 23:09:09 -0700
+From: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+To: Arnd Bergmann <arnd@arndb.de>, 
+	=?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>, Michael =?utf-8?B?QsO8c2No?= <m@bues.ch>, 
+	Hauke Mehrtens <hauke@hauke-m.de>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
+	Waldemar Brodkorb <wbx@openadk.org>, Bartosz Golaszewski <brgl@kernel.org>, 
+	linux-wireless@vger.kernel.org, linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org, 
 	Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>
 Subject: Re: [PATCH v2 0/3] MIPS: BCM47XX: convert buttons to software nodes
-Message-ID: <ala9C6XMB3-ywpph@waldemar-brodkorb.de>
-Mail-Followup-To: Arnd Bergmann <arnd@arndb.de>,
-	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-	=?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
-	Michael =?utf-8?B?QsO8c2No?= <m@bues.ch>,
-	Hauke Mehrtens <hauke@hauke-m.de>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	Waldemar Brodkorb <wbx@openadk.org>,
-	Bartosz Golaszewski <brgl@kernel.org>,
-	linux-wireless@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-mips@vger.kernel.org,
-	Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>
+Message-ID: <alci_45CzdVznaN2@google.com>
 References: <20260713-b4-bcm47xx-swnode-v2-0-2b879f0c193c@gmail.com>
  <4a8d64e1-5f8c-4ac0-afb0-2d68c3f53ada@app.fastmail.com>
+ <ala9C6XMB3-ywpph@waldemar-brodkorb.de>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="9kW8CJV7xqmYdQZn"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <4a8d64e1-5f8c-4ac0-afb0-2d68c3f53ada@app.fastmail.com>
-X-Operating-System: Linux 6.12.90+deb13.1-amd64 x86_64
+In-Reply-To: <ala9C6XMB3-ywpph@waldemar-brodkorb.de>
 X-Rspamd-Action: no action
-X-Spamd-Result: default: False [0.04 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
-	MIME_GOOD(-0.10)[multipart/mixed,text/plain];
+	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-15906-lists,linux-mips=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	DMARC_NA(0.00)[openadk.org];
-	FORGED_RECIPIENTS(0.00)[m:arnd@arndb.de,m:dmitry.torokhov@gmail.com,m:zajec5@gmail.com,m:m@bues.ch,m:hauke@hauke-m.de,m:tsbogend@alpha.franken.de,m:wbx@openadk.org,m:brgl@kernel.org,m:linux-wireless@vger.kernel.org,m:linux-kernel@vger.kernel.org,m:linux-mips@vger.kernel.org,m:bartosz.golaszewski@oss.qualcomm.com,m:dmitrytorokhov@gmail.com,s:lists@lfdr.de];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	R_DKIM_PERMFAIL(0.00)[openadk.org:s=2022];
-	RCPT_COUNT_TWELVE(0.00)[12];
-	RCVD_COUNT_THREE(0.00)[4];
-	MIME_TRACE(0.00)[0:+,1:+,2:+,3:+];
-	FORGED_SENDER(0.00)[wbx@openadk.org,linux-mips@vger.kernel.org];
-	FORWARDED(0.00)[lists@lfdr.de];
-	FREEMAIL_CC(0.00)[gmail.com,bues.ch,hauke-m.de,alpha.franken.de,openadk.org,kernel.org,vger.kernel.org,oss.qualcomm.com];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	DKIM_TRACE(0.00)[openadk.org:~];
-	PRECEDENCE_BULK(0.00)[];
-	FORGED_SENDER_FORWARDING(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[wbx@openadk.org,linux-mips@vger.kernel.org];
+	TAGGED_FROM(0.00)[bounces-15907-lists,linux-mips=lfdr.de];
+	FORGED_RECIPIENTS(0.00)[m:arnd@arndb.de,m:zajec5@gmail.com,m:m@bues.ch,m:hauke@hauke-m.de,m:tsbogend@alpha.franken.de,m:wbx@openadk.org,m:brgl@kernel.org,m:linux-wireless@vger.kernel.org,m:linux-kernel@vger.kernel.org,m:linux-mips@vger.kernel.org,m:bartosz.golaszewski@oss.qualcomm.com,s:lists@lfdr.de];
 	FROM_HAS_DN(0.00)[];
-	HAS_ATTACHMENT(0.00)[];
-	ALIAS_RESOLVED(0.00)[];
-	TAGGED_RCPT(0.00)[linux-mips];
+	FORGED_SENDER(0.00)[dmitrytorokhov@gmail.com,linux-mips@vger.kernel.org];
 	TO_DN_SOME(0.00)[];
-	FORGED_RECIPIENTS_FORWARDING(0.00)[];
+	FREEMAIL_TO(0.00)[arndb.de,gmail.com,bues.ch,hauke-m.de,alpha.franken.de,openadk.org,kernel.org,vger.kernel.org,oss.qualcomm.com];
+	MIME_TRACE(0.00)[0:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	FORWARDED(0.00)[lists@lfdr.de];
+	DKIM_TRACE(0.00)[gmail.com:+];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
 	MISSING_XM_UA(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,vger.kernel.org:from_smtp,openadk.org:from_mime]
+	FORGED_SENDER_FORWARDING(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[5];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[dmitrytorokhov@gmail.com,linux-mips@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	ALIAS_RESOLVED(0.00)[];
+	FORGED_RECIPIENTS_FORWARDING(0.00)[];
+	FREEMAIL_FROM(0.00)[gmail.com];
+	RCPT_COUNT_SEVEN(0.00)[11];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TAGGED_RCPT(0.00)[linux-mips];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[vger.kernel.org:from_smtp,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: BB1637594BE
+X-Rspamd-Queue-Id: E906C75AD82
 
+Hi Waldemar,
 
---9kW8CJV7xqmYdQZn
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-
-Hi,
-Arnd Bergmann wrote,
-
-> On Mon, Jul 13, 2026, at 23:58, Dmitry Torokhov wrote:
-> > This series converts the legacy gpio-keys platform device on BCM47XX
-> > boards to use software nodes and static properties.
-> >
-> > To do this properly without relying on legacy name-based matching
-> > (which is being removed from gpiolib), we introduce and register
-> > software nodes for the underlying GPIO controllers (BCMA and SSB)
-> > and reference them in the button properties.
-> >
-> > The first two patches add the software nodes to bcma-gpio and
-> > ssb-gpio respectively. The third patch performs the conversion
-> > for the BCM47XX buttons.
-> >
-> > Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-> > ---
-> > As Johannes mentioned on v1 this best should go through MIPS tree.
+On Wed, Jul 15, 2026 at 12:49:47AM +0200, Waldemar Brodkorb wrote:
+> Hi,
+> Arnd Bergmann wrote,
 > 
-> Adding Waldemar to Cc. He has recently done some work to
-> get this platform working again in FreeWRT and should
-> be able to test your patches on hardware.
+> > On Mon, Jul 13, 2026, at 23:58, Dmitry Torokhov wrote:
+> > > This series converts the legacy gpio-keys platform device on BCM47XX
+> > > boards to use software nodes and static properties.
+> > >
+> > > To do this properly without relying on legacy name-based matching
+> > > (which is being removed from gpiolib), we introduce and register
+> > > software nodes for the underlying GPIO controllers (BCMA and SSB)
+> > > and reference them in the button properties.
+> > >
+> > > The first two patches add the software nodes to bcma-gpio and
+> > > ssb-gpio respectively. The third patch performs the conversion
+> > > for the BCM47XX buttons.
+> > >
+> > > Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+> > > ---
+> > > As Johannes mentioned on v1 this best should go through MIPS tree.
+> > 
+> > Adding Waldemar to Cc. He has recently done some work to
+> > get this platform working again in FreeWRT and should
+> > be able to test your patches on hardware.
+> 
+> I normally use LTS kernel on the hardware (Linksys WRT54GS v1.0).
+> But for testing I updated to 7.1.3. Attached is the dmesg without
+> Dmitry's patches.  Button works, I can go into failsafe mode after
+> pressing the reset button on bootup.
+> 
+> With Dmitry's three patches applied I directly getting into failsafe
+> mode without pressing any button. Dmesg looks similar, but I get
+> following kernel message:
+> platform gpio-keys.0: deferred probe pending: gpio-keys: failed to get gpio
+> 
+> Looking at /dev I see no /dev/input/event0 device node anymore.
+> 
+> Attached is the small failsafe script I use on bootup.
+> Hope this helps.
+> 
+> Do I need to change my failsafe script for the new stuff or is
+> something else broken now? Do I miss some new kernel config option?
+> Or is the patch only for latest Linus git repo.
 
-I normally use LTS kernel on the hardware (Linksys WRT54GS v1.0).
-But for testing I updated to 7.1.3. Attached is the dmesg without
-Dmitry's patches.  Button works, I can go into failsafe mode after
-pressing the reset button on bootup.
-
-With Dmitry's three patches applied I directly getting into failsafe
-mode without pressing any button. Dmesg looks similar, but I get
-following kernel message:
-platform gpio-keys.0: deferred probe pending: gpio-keys: failed to get gpio
-
-Looking at /dev I see no /dev/input/event0 device node anymore.
-
-Attached is the small failsafe script I use on bootup.
-Hope this helps.
-
-Do I need to change my failsafe script for the new stuff or is
-something else broken now? Do I miss some new kernel config option?
-Or is the patch only for latest Linus git repo.
-
-best regards
- Waldemar
-
-
---9kW8CJV7xqmYdQZn
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: attachment; filename="dmesg.txt"
-
-Linux version 7.1.3 (wbx@macbook) (mipsel-freewrt-linux-uclibc-gcc (GCC) 16.1.0, GNU ld (GNU Binutils) 2.46.1) #1 Tue Jul 14 22:54:31 CEST 2026
-printk: legacy bootconsole [early0] enabled
-CPU0 revision is: 00029007 (Broadcom BMIPS3300)
-bcm47xx: Using ssb bus
-ssb: Found chip with id 0x4712, rev 0x01 and package 0x00
-can not parse nvram name (null)ag0(null) with value 255 got -34
-ssb: Sonics Silicon Backplane found at address 0x18000000
-Primary instruction cache 8kB, VIPT, 2-way, linesize 16 bytes.
-Primary data cache 4kB, 2-way, VIPT, no aliases, linesize 16 bytes
-Zone ranges:
-  Normal   [mem 0x0000000000000000-0x0000000001ffffff]
-Movable zone start for each node
-Early memory node ranges
-  node   0: [mem 0x0000000000000000-0x0000000001ffffff]
-Initmem setup node 0 [mem 0x0000000000000000-0x0000000001ffffff]
-pcpu-alloc: s0 r0 d32768 u32768 alloc=1*32768
-pcpu-alloc: [0] 0 
-Kernel command line: root=/dev/mtdblock4 rootfstype=squashfs init=/etc/preinit noinitrd console=ttyS0,115200
-Unknown kernel command line parameters "noinitrd", will be passed to user space.
-printk: log buffer data + meta data: 131072 + 409600 = 540672 bytes
-Dentry cache hash table entries: 4096 (order: 2, 16384 bytes, linear)
-Inode-cache hash table entries: 2048 (order: 1, 8192 bytes, linear)
-Built 1 zonelists, mobility grouping on.  Total pages: 8192
-mem auto-init: stack:all(zero), heap alloc:off, heap free:off
-SLUB: HWalign=32, Order=0-3, MinObjects=0, CPUs=1, Nodes=1
-NR_IRQS: 256
-MIPS: machine is Linksys WRT54G/GS/GL
-clocksource: MIPS: mask: 0xffffffff max_cycles: 0xffffffff, max_idle_ns: 19112604467 ns
-sched_clock: 32 bits at 100MHz, resolution 10ns, wraps every 21474836475ns
-Console: colour dummy device 80x25
-Calibrating delay loop... 198.65 BogoMIPS (lpj=397312)
-pid_max: default: 32768 minimum: 301
-Mount-cache hash table entries: 1024 (order: 0, 4096 bytes, linear)
-Mountpoint-cache hash table entries: 1024 (order: 0, 4096 bytes, linear)
-VFS: Finished mounting rootfs on nullfs
-Memory: 25676K/32768K available (4010K kernel code, 555K rwdata, 956K rodata, 228K init, 268K bss, 6348K reserved, 0K cma-reserved)
-devtmpfs: initialized
-clocksource: jiffies: mask: 0xffffffff max_cycles: 0xffffffff, max_idle_ns: 7645041785100000 ns
-posixtimers hash table entries: 512 (order: 0, 2048 bytes, linear)
-futex hash table entries: 256 (4096 bytes on 1 NUMA nodes, total 4 KiB, linear).
-NET: Registered PF_NETLINK/PF_ROUTE protocol family
-clocksource: Switched to clocksource MIPS
-PCI host bridge to bus 0000:00
-pci_bus 0000:00: root bus resource [mem 0x40000000-0x7fffffff]
-pci_bus 0000:00: root bus resource [io  0x0100-0x07ff]
-pci_bus 0000:00: No busn resource found for root bus, will use [bus 00-ff]
-pci 0000:00:00.0: PCI: Fixing up bridge 0000:00:00.0
-pci 0000:00:00.0: PCI: Fixing up device 0000:00:00.0
-pci 0000:00:00.0: PCI: Fixing latency timer of device 0000:00:00.0 to 168
-pci 0000:00:00.0: ssb_pcicore_fixup_pcibridge+0x0/0xf8 took 17926 usecs
-pci 0000:00:00.0: [14e4:4712] type 00 class 0x060000 conventional PCI endpoint
-pci 0000:00:00.0: BAR 0 [mem 0x00000000-0x00001fff]
-pci 0000:00:00.0: BAR 1 [mem 0x00000000-0x07ffffff pref]
-pci 0000:00:01.0: [14e4:4712] type 00 class 0x060000 conventional PCI endpoint
-pci 0000:00:01.0: BAR 0 [mem 0x00000000-0x00001fff]
-pci 0000:00:01.0: BAR 1 [mem 0x00000000-0x07ffffff pref]
-pci 0000:00:02.0: [14e4:4712] type 00 class 0x060000 conventional PCI endpoint
-pci 0000:00:02.0: BAR 0 [mem 0x00000000-0x00001fff]
-pci 0000:00:02.0: BAR 1 [mem 0x00000000-0x07ffffff pref]
-pci 0000:00:03.0: [14e4:4712] type 00 class 0x060000 conventional PCI endpoint
-pci 0000:00:03.0: BAR 0 [mem 0x00000000-0x00001fff]
-pci 0000:00:03.0: BAR 1 [mem 0x00000000-0x07ffffff pref]
-pci 0000:00:04.0: [14e4:4712] type 00 class 0x060000 conventional PCI endpoint
-pci 0000:00:04.0: BAR 0 [mem 0x00000000-0x00001fff]
-pci 0000:00:04.0: BAR 1 [mem 0x00000000-0x07ffffff pref]
-pci 0000:00:05.0: [14e4:4712] type 00 class 0x060000 conventional PCI endpoint
-pci 0000:00:05.0: BAR 0 [mem 0x00000000-0x00001fff]
-pci 0000:00:05.0: BAR 1 [mem 0x00000000-0x07ffffff pref]
-pci 0000:00:06.0: [14e4:4712] type 00 class 0x060000 conventional PCI endpoint
-pci 0000:00:06.0: BAR 0 [mem 0x00000000-0x00001fff]
-pci 0000:00:06.0: BAR 1 [mem 0x00000000-0x07ffffff pref]
-pci 0000:00:07.0: [14e4:4712] type 00 class 0x060000 conventional PCI endpoint
-pci 0000:00:07.0: BAR 0 [mem 0x00000000-0x00001fff]
-pci 0000:00:07.0: BAR 1 [mem 0x00000000-0x07ffffff pref]
-pci 0000:00:08.0: [14e4:4712] type 00 class 0x060000 conventional PCI endpoint
-pci 0000:00:08.0: BAR 0 [mem 0x00000000-0x00001fff]
-pci 0000:00:08.0: BAR 1 [mem 0x00000000-0x07ffffff pref]
-pci 0000:00:09.0: [14e4:4712] type 00 class 0x060000 conventional PCI endpoint
-pci 0000:00:09.0: BAR 0 [mem 0x00000000-0x00001fff]
-pci 0000:00:09.0: BAR 1 [mem 0x00000000-0x07ffffff pref]
-pci 0000:00:0a.0: [14e4:4712] type 00 class 0x060000 conventional PCI endpoint
-pci 0000:00:0a.0: BAR 0 [mem 0x00000000-0x00001fff]
-pci 0000:00:0a.0: BAR 1 [mem 0x00000000-0x07ffffff pref]
-pci 0000:00:0b.0: [14e4:4712] type 00 class 0x060000 conventional PCI endpoint
-pci 0000:00:0b.0: BAR 0 [mem 0x00000000-0x00001fff]
-pci 0000:00:0b.0: BAR 1 [mem 0x00000000-0x07ffffff pref]
-pci 0000:00:0c.0: [14e4:4712] type 00 class 0x060000 conventional PCI endpoint
-pci 0000:00:0c.0: BAR 0 [mem 0x00000000-0x00001fff]
-pci 0000:00:0c.0: BAR 1 [mem 0x00000000-0x07ffffff pref]
-pci 0000:00:0d.0: [14e4:4712] type 00 class 0x060000 conventional PCI endpoint
-pci 0000:00:0d.0: BAR 0 [mem 0x00000000-0x00001fff]
-pci 0000:00:0d.0: BAR 1 [mem 0x00000000-0x07ffffff pref]
-pci 0000:00:0e.0: [14e4:4712] type 00 class 0x060000 conventional PCI endpoint
-pci 0000:00:0e.0: BAR 0 [mem 0x00000000-0x00001fff]
-pci 0000:00:0e.0: BAR 1 [mem 0x00000000-0x07ffffff pref]
-pci 0000:00:0f.0: [14e4:4712] type 00 class 0x060000 conventional PCI endpoint
-pci 0000:00:0f.0: BAR 0 [mem 0x00000000-0x00001fff]
-pci 0000:00:0f.0: BAR 1 [mem 0x00000000-0x07ffffff pref]
-pci_bus 0000:00: busn_res: [bus 00-ff] end is updated to 00
-gpio gpiochip0: Static allocation of GPIO base is deprecated, use dynamic allocation.
-NET: Registered PF_INET protocol family
-IP idents hash table entries: 2048 (order: 2, 16384 bytes, linear)
-tcp_listen_portaddr_hash hash table entries: 1024 (order: 0, 4096 bytes, linear)
-Table-perturb hash table entries: 65536 (order: 6, 262144 bytes, linear)
-TCP established hash table entries: 1024 (order: 0, 4096 bytes, linear)
-TCP bind hash table entries: 1024 (order: 1, 8192 bytes, linear)
-TCP: Hash tables configured (established 1024 bind 1024)
-UDP hash table entries: 256 (order: 1, 8192 bytes, linear)
-NET: Registered PF_UNIX/PF_LOCAL protocol family
-PCI: CLS 0 bytes, default 16
-Initialise system trusted keyrings
-workingset: timestamp_bits=30 (anon: 26) max_order=13 bucket_order=0 (anon: 0)
-squashfs: version 4.0 (2009/01/31) Phillip Lougher
-Key type asymmetric registered
-Asymmetric key parser 'x509' registered
-io scheduler mq-deadline registered
-Serial: 8250/16550 driver, 2 ports, IRQ sharing disabled
-printk: legacy console [ttyS0] disabled
-serial8250.0: ttyS0 at MMIO 0xb8000300 (irq = 3, base_baud = 3125000) is a 16550A
-printk: legacy console [ttyS0] enabled
-printk: legacy bootconsole [early0] disabled
-serial8250.0: ttyS1 at MMIO 0xb8000400 (irq = 3, base_baud = 3125000) is a 16550A
-physmap-flash physmap-flash.0: physmap platform flash device: [mem 0x1c000000-0x1e000000]
-physmap-flash.0: Found 1 x16 devices at 0x0 in 16-bit bank. Manufacturer ID 0x000089 Chip ID 0x000017
-physmap-flash.0: Found an alias at 0x800000 for the chip at 0x0
-physmap-flash.0: Found an alias at 0x1000000 for the chip at 0x0
-physmap-flash.0: Found an alias at 0x1800000 for the chip at 0x0
-Intel/Sharp Extended Query Table at 0x0031
-Intel/Sharp Extended Query Table at 0x0031
-Using buffer write method
-cfi_cmdset_0001: Erase suspend on write enabled
-erase region 0: offset=0x0,size=0x20000,blocks=64
-4 bcm47xxpart partitions found on MTD device physmap-flash.0
-Creating 4 MTD partitions on "physmap-flash.0":
-0x000000000000-0x000000040000 : "boot"
-0x000000040000-0x0000007c0000 : "firmware"
-failed to parse "brcm,trx-magic" DT attribute, using default: -89
-3 trx partitions found on MTD device firmware
-Creating 3 MTD partitions on "firmware":
-0x00000000001c-0x000000000938 : "loader"
-mtd: partition "loader" doesn't start on an erase/write block boundary -- force read-only
-0x000000000938-0x0000001c0800 : "linux"
-mtd: partition "linux" doesn't start on an erase/write block boundary -- force read-only
-0x0000001c0800-0x000000780000 : "rootfs"
-mtd: partition "rootfs" doesn't start on an erase/write block boundary -- force read-only
-0x0000007c0000-0x0000007e0000 : "fwcf"
-0x0000007e0000-0x000000800000 : "nvram"
-b44 ssb0:1: could not find PHY at 30, use fixed one
-Generic PHY fixed-0:00: attached PHY driver (mii_bus:phy_addr=fixed-0:00, irq=POLL)
-b44 ssb0:1 eth0: Broadcom 44xx/47xx 10/100 PCI ethernet driver 00:0f:66:c8:74:47
-NET: Registered PF_PACKET protocol family
-8021q: 802.1Q VLAN Support v1.8
-Loading compiled-in X.509 certificates
-input: gpio-keys as /devices/platform/gpio-keys.0/input/input0
-VFS: Mounted root (squashfs filesystem) readonly on device 31:4.
-devtmpfs: mounted
-VFS: Pivoted into new rootfs
-Freeing unused kernel image (initmem) memory: 228K
-This architecture does not have kernel memory protection.
-Run /etc/preinit as init process
-  with arguments:
-    /etc/preinit
-    noinitrd
-  with environment:
-    HOME=/
-    TERM=linux
-random: crng init done
-b44 ssb0:1 eth0: Link is up at 100 Mbps, half duplex
-b44 ssb0:1 eth0: Flow control is off for TX and off for RX
-b44 ssb0:1 eth0: Link is Up - 100Mbps/Full - flow control off
-cfg80211: Loading compiled-in X.509 certificates for regulatory database
-Loaded X.509 cert 'sforshee: 00b28ddf47aef9cea7'
-Loaded X.509 cert 'wens: 61c038651aabdcf94bd0ac7ff06c7248db18c600'
-faux_driver regulatory: Direct firmware load for regulatory.db failed with error -2
-cfg80211: failed to load regulatory.db
-adm6996: adm6996_gpio: ADM6996L model PHY found.
-b43-phy0: Broadcom 4712 WLAN found (core revision 7)
-b43-phy0: Found PHY: Analog 2, Type 2 (G), Revision 2
-b43-phy0: Found Radio: Manuf 0x17F, ID 0x2050, Revision 2, Version 0
-Broadcom 43xx driver loaded [ Features: PL ]
-ieee80211 phy0: Selected rate control algorithm 'minstrel_ht'
-
---9kW8CJV7xqmYdQZn
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: attachment; filename=failsafe
-
-#!/bin/sh
-
-# detect router
-id=$(nvram get productid)
-
-case "$id" in
-  WL500*)
-    LED_PATH="/sys/class/leds/bcm47xx:unk:power"
-    ;;
-  *)
-    LED_PATH="/sys/class/leds/bcm47xx:green:dmz"
-    ;;
-esac
-
-# CONFIGURE
-EVENT_DEV="/dev/input/event0"    # change if your reset button is on a different event device
-KEY_CODE="KEY_RESTART"           # as reported by evtest
-FAILSAFE_IP="192.168.1.1"
-FAILSAFE_BCAST="192.168.1.255"
-
-# Bring up LAN
-ip link set up dev eth0
-ip addr add ${FAILSAFE_IP}/24 broadcast ${FAILSAFE_BCAST} dev eth0
-
-# Warn the user
-netmsg ${FAILSAFE_BCAST} "Press reset now, to enter Failsafe!"
-echo "Press reset now to enter Failsafe!"
-sleep 2 &
-
-# Check for reset press during the 2s window
-# We'll read the event stream for KEY_RESTART with value 1 (press)
-pressed=0
-timeout 2 sh -c "
-    evtest ${EVENT_DEV} 2>/dev/null | \
-    grep -m1 '${KEY_CODE}.*value 1' && exit 0 || exit 1
-"
-if [ $? -eq 0 ]; then
-    pressed=1
-fi
-
-if [ "$pressed" -eq 1 ]; then
-    # Blink LED in background
-    (
-        while :; do
-            echo 1 > ${LED_PATH}/brightness
-            sleep 0.5
-            echo 0 > ${LED_PATH}/brightness
-            sleep 0.5
-        done
-    ) &
-
-    netmsg ${FAILSAFE_BCAST} "Entering Failsafe!"
-    telnetd -l /bin/sh
-    exit 1
-else
-    ip addr flush dev eth0
-    killall evtest
-fi
+Thank you very much for testing. I think 7.1 should work. Could you
+please apply the test patch below and send me new dmesg? Hopefully I'll
+be able to figure out where I messed up.
 
 
---9kW8CJV7xqmYdQZn--
+diff --git a/arch/mips/bcm47xx/buttons.c b/arch/mips/bcm47xx/buttons.c
+index 151a4ee2803f..72524dc390dd 100644
+--- a/arch/mips/bcm47xx/buttons.c
++++ b/arch/mips/bcm47xx/buttons.c
+@@ -521,6 +521,9 @@ bcm47xx_buttons_add(const struct bcm47xx_gpio_key *buttons, int nbuttons)
+ 		return -ENODEV;
+ 	}
+ 
++	pr_info("XXX: bcm47xx_buttons_add called, bus_type=%d, gpio_swnode=%p (&ssb_gpio_swnode=%p)\n",
++		bcm47xx_bus_type, gpio_swnode, &ssb_gpio_swnode);
++
+ 	/* 1 node for gpio-keys device, 1 node for each button, 1 terminator */
+ 	const struct software_node **node_group __free(kfree) =
+ 		kcalloc(1 + nbuttons + 1, sizeof(*node_group), GFP_KERNEL);
+diff --git a/drivers/base/swnode.c b/drivers/base/swnode.c
+index 869228a65cb3..20f89e6a57f6 100644
+--- a/drivers/base/swnode.c
++++ b/drivers/base/swnode.c
+@@ -561,8 +561,11 @@ software_node_get_reference_args(const struct fwnode_handle *fwnode,
+ 	else
+ 		return -EINVAL;
+ 
+-	if (!refnode)
++	if (!refnode) {
++		pr_info("XXX: software_node_get_reference_args: refnode is NULL for swnode=%p (%s), fwnode=%p\n",
++			ref->swnode, ref->swnode ? ref->swnode->name : "none", ref->fwnode);
+ 		return -ENOTCONN;
++	}
+ 
+ 	if (nargs_prop) {
+ 		error = fwnode_property_read_u32(refnode, nargs_prop, &nargs_prop_val);
+diff --git a/drivers/ssb/driver_gpio.c b/drivers/ssb/driver_gpio.c
+index 87922479946c..28de62a42140 100644
+--- a/drivers/ssb/driver_gpio.c
++++ b/drivers/ssb/driver_gpio.c
+@@ -238,8 +238,10 @@ static int ssb_gpio_chipco_init(struct ssb_bus *bus)
+ 	chip->to_irq		= ssb_gpio_to_irq;
+ #endif
+ 	chip->ngpio		= 16;
+-	if (bus->bustype == SSB_BUSTYPE_SSB)
++	if (bus->bustype == SSB_BUSTYPE_SSB) {
+ 		chip->fwnode	= software_node_fwnode(&ssb_gpio_swnode);
++		pr_info("XXX: chipcommon chip->fwnode set to %p\n", chip->fwnode);
++	}
+ 	/* There is just one SoC in one device and its GPIO addresses should be
+ 	 * deterministic to address them more easily. The other buses could get
+ 	 * a random base number.
+@@ -444,6 +446,7 @@ static int ssb_gpio_extif_init(struct ssb_bus *bus)
+ 	if (bus->bustype == SSB_BUSTYPE_SSB) {
+ 		chip->base	= 0;
+ 		chip->fwnode	= software_node_fwnode(&ssb_gpio_swnode);
++		pr_info("XXX: extif chip->fwnode set to %p\n", chip->fwnode);
+ 	} else {
+ 		chip->base	= -1;
+ 	}
+@@ -481,8 +484,10 @@ int ssb_gpio_init(struct ssb_bus *bus)
+ 	 * one SoC instance in the system, so there are no concerns with
+ 	 * registration conflicts.
+ 	 */
++	pr_info("XXX: ssb_gpio_init called, bustype=%d\n", bus->bustype);
+ 	if (bus->bustype == SSB_BUSTYPE_SSB) {
+ 		err = software_node_register(&ssb_gpio_swnode);
++		pr_info("XXX: software_node_register(&ssb_gpio_swnode) returned %d\n", err);
+ 		if (err)
+ 			return err;
+ 	}
+
+
+Thanks.
+
+-- 
+Dmitry
 
